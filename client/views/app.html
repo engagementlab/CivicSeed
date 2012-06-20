@@ -1,24 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <SocketStream>
-    <meta charset="utf-8"/>
-    <title>Welcome</title>
-  </head>
-  <body>
-    <div id="content">
-      <a href="https://github.com/socketstream/socketstream">
-        <img src="/images/logo.png" alt="SocketStream Logo" width="160" height="160">
-      </a>
-      <h1>Welcome to your new realtime app!</h1>
+{{> header}}
 
-      <!-- QUICK CHAT DEMO-->
-      <form id="demo" onsubmit="return false">
-        <h3>Quick Chat Demo</h3>
-        <h5>Open this page in multiple tabs or browsers and type a message below</h5>
-        <div id="chatlog"></div>
-        <input id="myMessage" type="text" autocomplete="off">
-      </form>
-    </div>
-  </body>
+	<header role="banner" class="clearfix header">
+		<hgroup>
+			<a href="" rel="home">
+				<h1 class="logo"><img src="" alt="Civic Seed" /></h1>
+				<h2 class="slug">Civic seed slug here...</h2>
+			</a>
+		</hgroup>
+		<nav role="navigation" class="ancillaryNav">
+			<ul>
+				<li><a href="">Lorem ipsum</a></li>
+				<li><a href="">Lorem ipsum</a></li>
+				<li><a href="">Lorem ipsum</a></li>
+			</ul>
+		</nav>
+		<nav role="navigation" class="navigation">
+			<div class="skip-links">
+				<h3 class="assistive-text">Main menu</h3>
+				<a class="assistive-text" href="#content" title="Skip to primary content">Skip to primary content</a>
+				<a class="assistive-text" href="#secondary" title="Skip to secondary content">Skip to secondary content</a>
+			</div>
+		</nav>
+	</header>
+
+	<form id="demo" onsubmit="return false">
+		<div id="chatlog"></div>
+		<!-- <input id="myMessage" type="text" autocomplete="off"> -->
+		<input id="myMessage" type="text" autocomplete="off">
+	</form>
+
+	<SocketStream>
+</body>
 </html>

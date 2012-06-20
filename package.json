@@ -1,13 +1,32 @@
 {
 	"name": "CivicSeed",
-	"description": "An awesome real time application",
+	"authors": ["Robert Hall <@americanyak>", "Russell Goldenberg"],
+	"description": "Social gaming for civic training at Emerson.",
 	"version": "0.0.1",
-	"author": "Me <me@mydomain.com>",
+	"keywords": ["social", "civic", "training"],
 	"private": true,
-	"engines": { "node": ">= 0.6.0" },
+	"homepage": "http://yettocome.com",
+	"main": "./app.js",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/americanyak/Civic-Social-Training.git"
+	},
+	"engines": {
+		"node": ">= 0.6.15"
+	},
 	"dependencies": {
 		"socketstream": "0.3.x",
 		"ss-stylus": "0.1.x",
-		"ss-hogan": "0.1.x"
+		"ss-hogan": "0.1.x",
+		"consolidate": ">= 0.3.0",
+		"express": ">= 3.0.0alpha2",
+		"express-messages": ">= 0.0.2",
+		"handlebars": ">= 1.0.5beta",
+		"mongoose": ">= 2.6.0",
+		"stylus": ">= 0.25.0",
+		"redis": ">= 0.7.1",
+		"underscore": ">= 1.3.3"
+	},
+	"devDependencies": {
 	}
 }
