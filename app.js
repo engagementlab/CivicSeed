@@ -6,30 +6,35 @@ app = module.exports = express(),
 environment = require('./environment.js'),
 service = require('./service.js');
 
-// Mongoose db hookup
+// Setup the environment
 service.init(environment);
 
-// require('./configuration.js')(app, express);
+// Configuration
+require('./configuration.js')(app, express, ss);
+
+// // Controllers?
 // require('./controllers.js')(app, service, environment);
 
 // // use redis
 // ss.session.store.use('redis');
 // ss.publish.transport.use('redis');
 
-// Code Formatters
-ss.client.formatters.add(require('ss-stylus'));
-
-// ss.client.templateEngine.use('angular');
-ss.client.templateEngine.use(require('ss-hogan'));
 
 // ss.tmpl['app'].render({name:'matthias'}, ss.tmpl);
-console.log(ss.client.define);
+// console.log(ss.client.define);
+// console.log('asdf');
 
 // Define a single-page client
 ss.client.define('main', {
-	view: 'app.html',
+	view: 'game.html',
 	css:  ['libs', 'app.styl'],
-	code: ['libs', 'app'],
+	code: [
+		'libs/jquery-1.7.2.min.js',
+		'libs/angular-1.0.1.min.js',
+		// 'libs/civicseed.js',
+		'app/app.js',
+		'app/entry.js'
+	],
 	tmpl: '*'
 });
 

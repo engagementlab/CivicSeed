@@ -1,3 +1,31 @@
+(function(w, d, $) {
+
+	var CIVIC = {
+
+	};
+
+	// console.log(w, d, $);
+	w.CIVIC = CIVIC;
+
+})
+(window, document, jQuery);
+
+
+// var myApp = angular.module("myApp",[]);
+
+// myApp.controller("OrderListCtrl", function($scope) {
+// 	$scope.orders = [
+// 	{"symbol": "ABC",
+// 	"summary": "SELL"}
+// 	];
+// });
+
+
+
+
+
+
+
 /* QUICK CHAT DEMO */
 
 // Delete this file once you've seen how the demo works

@@ -45,3 +45,5 @@ public/gen
 # IGNORING
 .monitor
 node_modules
+CivicSeed.sublime-project
+CivicSeed.sublime-workspace
