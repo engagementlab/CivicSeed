@@ -1,3 +1,7 @@
+ss.rpc('example.start', function() {});
+
+
+
 (function(w, d, $) {
 
 	var CIVIC = {

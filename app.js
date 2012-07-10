@@ -31,8 +31,11 @@ ss.client.define('main', {
 	code: [
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
+		'libs/rpc.js', // ???????
+		'libs/pubsub.js', // ?????????
 		// 'libs/civicseed.js',
 		'app/app.js',
+		'app/controllers.js',
 		'app/entry.js'
 	],
 	tmpl: '*'

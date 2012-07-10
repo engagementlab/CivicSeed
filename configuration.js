@@ -15,8 +15,8 @@ module.exports = function(app, express, ss) {
 	// Code Formatters
 	ss.client.formatters.add(require('ss-stylus'));
 
-	// ss.client.templateEngine.use('angular');
-	ss.client.templateEngine.use(require('ss-hogan'));
+	// // ss.client.templateEngine.use('angular');
+	// ss.client.templateEngine.use(require('ss-hogan'));
 
 
 
