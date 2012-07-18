@@ -26,17 +26,16 @@ require('./configuration.js')(app, express, ss);
 
 // Define a single-page client
 ss.client.define('main', {
-	view: 'game.html',
+	view: 'app.html',
 	css:  ['libs', 'app.styl'],
 	code: [
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
-		'libs/rpc.js', // ???????
-		'libs/pubsub.js', // ?????????
-		// 'libs/civicseed.js',
-		'app/app.js',
+		'libs/ssAngular.js',
+		// 'app'
 		'app/controllers.js',
-		'app/entry.js'
+		'app/entry.js',
+		'app/app.js'
 	],
 	tmpl: '*'
 });

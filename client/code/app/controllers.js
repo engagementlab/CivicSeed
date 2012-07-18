@@ -1,9 +1,22 @@
-angular.module('civicSeedApp', ['ssAngular'])
-.controller('SSCtrl', function($scope, pubsub) {
-	pubsub($scope);
+angular.module('exampleApp', ['ssAngular'])
+  .controller('SSCtrl',function($scope,pubsub,rpc) {
+    $scope.messages = []
+    $scope.streaming = false;
+    $scope.status = "";
 
-	$scope.messages = [];
-	$scope.$on('ss-example', function(event, msg) {
-		$scope.messages.push(msg);
-	});
-});
+    $scope.$on('ss-example', function(event,msg) {
+      $scope.messages.push(msg);
+    });
+
+    $scope.toggleData = function() {
+      if(!$scope.streaming) {
+        $scope.streaming = true;
+        $scope.status = rpc('example.on');
+      }
+      else {
+        $scope.streaming = false;
+        $scope.messages = [];
+        $scope.status = rpc('example.off', 'Too random');
+      }
+    };
+  });
