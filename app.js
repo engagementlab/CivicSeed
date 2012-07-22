@@ -32,7 +32,6 @@ ss.client.define('main', {
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
 		'libs/ssAngular.js',
-		// 'app'
 		'app/controllers.js',
 		'app/entry.js',
 		'app/app.js'
