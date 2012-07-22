@@ -4,20 +4,20 @@
 window.ss = require('socketstream');
 
 ss.server.on('disconnect', function(){
-  console.log('Connection down :-(');
+	console.log('Connection down :-(');
 });
 
 ss.server.on('reconnect', function(){
-  console.log('Connection back up :-)');
+	console.log('Connection back up :-)');
 });
 
 require('/controllers');
 ss.server.on('ready', function(){
 
-  jQuery(function(){
-    
-    require('/app');
+	jQuery(function(){
+		
+		require('/app');
 
-  });
+	});
 
 });
