@@ -4,16 +4,12 @@ ss = require('socketstream'),
 express = require('express'),
 app = module.exports = express(),
 environment = require('./environment.js'),
-service = require('./service.js');
+service = require('./service.js'),
+config = require('./configuration.js')(app, express, ss),
+control = require('./controllers.js')(app, service, environment);
 
 // Setup the environment
 service.init(environment);
-
-// Configuration
-require('./configuration.js')(app, express, ss);
-
-// // Controllers?
-// require('./controllers.js')(app, service, environment);
 
 // // use redis
 // ss.session.store.use('redis');
@@ -32,7 +28,6 @@ ss.client.define('main', {
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
 		'libs/ssAngular.js',
-		// 'app'
 		'app/controllers.js',
 		'app/entry.js',
 		'app/app.js'
