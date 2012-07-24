@@ -23,7 +23,7 @@ service.init(environment);
 // Define a single-page client
 ss.client.define('main', {
 	view: 'app.html',
-	css:  ['libs', 'app.styl'],
+	css:  ['app.less'],
 	code: [
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
