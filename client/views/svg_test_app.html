@@ -1,14 +1,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Palabra</title>
+    <title>Civic Seed</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
     <link rel="stylesheet" href="css/app.css">
-
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -30,7 +29,7 @@
 
   </head>
 
-<body ng-app="exampleApp">
+<body ng-app="multiPlayer">
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
@@ -52,8 +51,14 @@
       </div>
     </div>
 	
-	<div ng-controller="SSCtrl">
-		<div class="row">
+	<div ng-controller="PlayerController">
+    <div class="row">
+      <div class="span2">
+        <p>number of players: {{playerCount}}</p>
+        <p>my id: {{infos.id}}</p>
+      </div>
+    </div>
+<!-- 		<div class="row">
 			<div class="span4 offset4">
 				<h3><a href="#" rel="tooltip" title="Just an angular data bind">Streaming (from angular)</a></h3>
 			</div>
@@ -85,9 +90,22 @@
 					</li>
 				</ul>
 			</div>
-		</div>
+		</div> -->
+      <svg>
+
+  <rect ng-repeat="player in players" x="{{player.x}}" y="{{player.y}}" width="32" height="32" stroke="black" stroke-width="0" fill="rgb({{player.r}},{{player.g}},{{player.b}})"></rect>
+  </svg>
+
+
 	</div>
+  
+  <!--  <div ng-contoller="Gnometroller">
+   <svg>
 
-
+  <circle cx="{{cx}}" cy="{{cy}}" r="40" stroke="black"
+  stroke-width="2" fill="red" />
+  </svg>
+</div>
+ -->
 </body>
 </html>
