@@ -22,18 +22,19 @@ service.init(environment);
 
 // Define a single-page client
 ss.client.define('main', {
-	view: 'app.html',
-	css:  ['libs', 'app.styl'],
+	view: 'svg_test_app.html',
+	css:  ['app.less'],
 	code: [
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
 		'libs/ssAngular.js',
 		'app/controllers.js',
 		'app/entry.js',
-		'app/app.js'
+		'app/app.js',
 	],
 	tmpl: '*'
 });
+
 
 // Serve this client on the root URL
 ss.http.route('/', function(req, res) {

@@ -18,6 +18,7 @@ exports.actions = function(req, res, ss) {
 			console.log("Received reason: %s", reason);
 			clearInterval(intervalId);
 			setTimeout(function() {
+				ss.publish.all('ss-example', reason);
 				res("Ignoring SpaceMail");
 			}, 2000);
 		}
