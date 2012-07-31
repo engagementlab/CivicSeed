@@ -47,3 +47,7 @@ public/gen
 node_modules
 CivicSeed.sublime-project
 CivicSeed.sublime-workspace
+_RESOURCES/
+_OLDPUBLIC/
+info.txt
+controllers_NEW/

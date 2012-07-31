@@ -18,6 +18,7 @@ if(databaseEnv === 'production') {
 	console.log('  DATABASE CONNECTION INFORMATION MISSING  '.red.inverse);
 }
 
+// environment variables
 module.exports = {
 	app: {
 		name: 'Civic Seed',
@@ -27,4 +28,4 @@ module.exports = {
 		environment: databaseEnv,
 		URL: databaseURL,
 	}
-}
+};

@@ -16,13 +16,9 @@ service.init(environment);
 // ss.publish.transport.use('redis');
 
 
-// ss.tmpl['app'].render({name:'matthias'}, ss.tmpl);
-// console.log(ss.client.define);
-// console.log('asdf');
-
 // Define a single-page client
 ss.client.define('main', {
-	view: 'svg_test_app.html',
+	view: 'game.html',
 	css:  ['app.less'],
 	code: [
 		'libs/jquery-1.7.2.min.js',
@@ -35,11 +31,10 @@ ss.client.define('main', {
 	tmpl: '*'
 });
 
-
 // Serve this client on the root URL
-ss.http.route('/', function(req, res) {
+ss.http.route('/game', function(req, res) {
 	res.serveClient('main');
-})
+});
 
 // Minimize and pack assets if you type: SS_ENV=production node app.js
 if(ss.env == 'production') {
