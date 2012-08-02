@@ -9,9 +9,6 @@ control;
 
 console.log('\n\n   * * * * * * * * * * * *   Starting the Civic Seed Game Engine   * * * * * * * * * * * *   \n\n'.yellow)
 
-// Append SocketStream middleware to the stack
-app.stack = app.stack.concat(ss.http.middleware.stack);
-
 // Configuration and environmental files, etc.
 environment = require('./environment.js');
 service = require('./service.js');
@@ -40,20 +37,31 @@ ss.client.define('main', {
 	tmpl: '*'
 });
 
-// THESE ROUTES EVENTUALLY NEED TO GO INTO CONTROLLERS
-// BUT PLACING THEM HERE FOR NOW
-function routes(app) {
+// // THESE ROUTES EVENTUALLY NEED TO GO INTO CONTROLLERS
+// // BUT PLACING THEM HERE FOR NOW
+// function routes(app) {
 
-	// express routes go like this
-	app.get('/', function (req, res) {
-		res.serve('main')
-	});
+// 	// express routes go like this
+// 	app.get('/', function (req, res) {
+// 		res.serve('main')
+// 	});
 
-	// socketstream routes go like this
-	ss.http.route('/game', function(req, res) {
-		res.serveClient('main');
-	});
-}
+// 	// socketstream routes go like this
+// 	ss.http.route('/game', function(req, res) {
+// 		res.serveClient('main');
+// 	});
+// }
+
+// // express routes go like this
+// app.get('/', function (req, res) {
+// 	res.serve('main');
+// });
+// Serve this client on the root URL
+app.get('/game', function(req, res) {
+	res.serveClient('main');
+});
+
+
 
 // Minimize and pack assets if you type: SS_ENV=production node app.js
 if(ss.env == 'production') {
@@ -68,3 +76,6 @@ server = app.listen(3000, function() {
 
 // Start SocketStream
 ss.start(server);
+
+// Append SocketStream middleware to the stack
+app.stack = app.stack.concat(ss.http.middleware.stack);
