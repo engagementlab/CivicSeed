@@ -8,23 +8,25 @@ handlebars = require('handlebars');
 
 //configuration module 
 //All express and connect configuration must there
-module.exports = function(app, express, ss) {
+module.exports = function(app, express, ss, passport) {
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 		app.set('views', __dirname + '/views');
 		// app.set('view options', {layout: false});
 		// app.set('view engine', 'handlebars');
-		app.engine('.html', consolidate.handlebars);
-		app.use(express.logger(':method :url :status'));
-		app.use(express.bodyParser());
-		app.use(express.methodOverride());
+		app.engine('html', consolidate.handlebars);
+// app.use(express.logger(':method :url :status'));
+// app.use(express.bodyParser());
+// app.use(express.methodOverride());
 
+		app.use(passport.initialize());
+    	app.use(passport.session());
 		// app.use(express.cookieParser());
 
 		// app.use(express.session({secret: 'secret'}));
 		// app.use(express.compiler({src: __dirname + '/wwwroot', enable: ['stylus']}));
-		app.use(app.router);
+//app.use(app.router);
 		// app.use(express.static(__dirname + '/wwwroot'));
 		console.log('CS: Config: Default configurations set up.'.blue)
 	});

@@ -11,7 +11,6 @@ module.exports = function (app, service) {
 	// 	res.render('index.html', { title: "Index" });
 	// });
 
-
 	app.get('/canvasdemo', function(req, res) {
 		res.render('canvasdemo.html', {
 			title: ":: Canvas Demo ::"

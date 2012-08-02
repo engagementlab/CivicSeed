@@ -26,10 +26,10 @@ module.exports = function(app, service, environment) {
 			}
 		});
 		require('./controllers/user-control')(app, service);
-		// require('./controllers/map-control')(app, service);
+		//require('./controllers/map-control')(app, service);
 
 
-		// require('./controllers/homeController')(app, service);
+		//require('./controllers/homeController')(app, service);
 		// require('./controllers/accountController')(app, service);
 	});
 };

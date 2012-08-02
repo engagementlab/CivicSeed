@@ -27,6 +27,8 @@
 		"redis": ">= 0.7.1",
 		"underscore": ">= 1.3.3",
 		"colors": ">= 0.6.0",
+		"passport": ">= 0.1.8",
+    	"passport-local": ">= 0.1.2",
 		"nodemailer": ">=0.3.21",
     	"password-hash": ">=1.2.1"
 	},

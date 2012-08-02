@@ -22,6 +22,34 @@ module.exports.init = function(env) {
 
 
 
+
+var hash = require('password-hash');
+
+
+exports.login = function(name,pass,callback){
+	UserModel.findOne({email:name},function(err,user){
+		if(!user){
+			return callback("you don't belong here.",null);
+		}
+		else{
+			var hashedPassword = user.password;
+			if(hash.verify(pass, hashedPassword)){
+				return callback(null,user);
+			}
+			else{
+				return  callback("wrong! try again.",null);
+			}
+		}
+	});
+};
+
+
+
+
+
+
+
+
 // module.exports.useModel = function (modelName) {
 // 	var checkConnectionExists = (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2);
 // 	if(!checkConnectionExists) {
