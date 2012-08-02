@@ -1,6 +1,7 @@
 var ss = require('socketstream'),
 express = require('express'),
 app = module.exports = express(),
+// app = express.createServer(),
 server,
 environment,
 service,
@@ -22,45 +23,48 @@ service.init(environment);
 // ss.session.store.use('redis');
 // ss.publish.transport.use('redis');
 
+// Code Formatters
+ss.client.formatters.add(require('ss-less'));
+
+// // Use server-side compiled Hogan (Mustache) templates. Others engines available
+// ss.client.templateEngine.use(require('ss-hogan'));
+
 // Define a single-page client
 ss.client.define('main', {
 	view: 'game.html',
-	css:  ['app.less'],
+	css: 'app.less',
 	code: [
 		'libs/jquery-1.7.2.min.js',
 		'libs/angular-1.0.1.min.js',
 		'libs/ssAngular.js',
 		'app/controllers.js',
 		'app/entry.js',
-		'app/app.js',
+		'app/app.js'
 	],
 	tmpl: '*'
 });
 
-// // THESE ROUTES EVENTUALLY NEED TO GO INTO CONTROLLERS
-// // BUT PLACING THEM HERE FOR NOW
-// function routes(app) {
-
-// 	// express routes go like this
-// 	app.get('/', function (req, res) {
-// 		res.serve('main')
-// 	});
-
-// 	// socketstream routes go like this
-// 	ss.http.route('/game', function(req, res) {
-// 		res.serveClient('main');
-// 	});
-// }
-
-// // express routes go like this
+// Use Express to route requests
 // app.get('/', function (req, res) {
 // 	res.serve('main');
 // });
-// Serve this client on the root URL
+// app.get('/', function(req, res) {
+// 	res.serveClient('main');
+// });
+// Routing Example
+// app.get('/', function(req, res) {
+// 	// if(user_signed_in(req) !== true) {
+// 	// 	res.serve('login');
+// 	// } else {
+// 	// 	res.serve('top');
+// 	// }
+// 	// res.serve('login');
+// });
+
+// socketstream routes go like this
 app.get('/game', function(req, res) {
 	res.serveClient('main');
 });
-
 
 
 // Minimize and pack assets if you type: SS_ENV=production node app.js

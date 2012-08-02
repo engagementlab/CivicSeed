@@ -10,22 +10,18 @@ handlebars = require('handlebars');
 //All express and connect configuration must there
 module.exports = function(app, express, ss) {
 
-	// Code Formatters
-	ss.client.formatters.add(require('ss-less'));
-
-	// // ss.client.templateEngine.use('angular');
-	// ss.client.templateEngine.use(require('ss-hogan'));
-
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
-		// app.set('views', __dirname + '/views');
+		app.set('views', __dirname + '/views');
 		// app.set('view options', {layout: false});
 		// app.set('view engine', 'handlebars');
 		app.engine('.html', consolidate.handlebars);
 		app.use(express.logger(':method :url :status'));
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());
-		app.use(express.cookieParser());
+
+		// app.use(express.cookieParser());
+
 		// app.use(express.session({secret: 'secret'}));
 		// app.use(express.compiler({src: __dirname + '/wwwroot', enable: ['stylus']}));
 		app.use(app.router);

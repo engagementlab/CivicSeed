@@ -19,7 +19,7 @@
 		"ss-less": "0.1.x",
 		"ss-hogan": "0.1.x",
 		"consolidate": ">= 0.3.0",
-		"express": ">= 3.0.0alpha2",
+		"express": ">= 3.0.0rc1",
 		"express-messages": ">= 0.0.2",
 		"handlebars": ">= 1.0.5beta",
 		"mongoose": ">= 2.7.2",
