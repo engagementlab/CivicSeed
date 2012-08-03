@@ -1,35 +1,26 @@
-var fs = require('fs');
+var fs = require('fs'),
+hbs = require('handlebars');
 
 module.exports = function(app, service, environment) {
 
-	// console.log('----------------------------------------------'.rainbow);
-	// console.log(app.get);
-	// console.log('----------------------------------------------'.rainbow);
-	// console.log(service);
-	// console.log('----------------------------------------------'.rainbow);
-	// console.log(environment);
-	// console.log('----------------------------------------------'.rainbow);
-
-
 	fs.readdir(__dirname + '/controllers', function(err, files) {
-		var isJs = /\.js$/g;
+		var isJs = /\.js$/g,
+		hidden = /^\_/g;
 		if(err) {
 			throw err;
 		}
 		files.forEach(function(file) {
 			// var name = '';
-			// var name = file.replace('.js', '');
+			var name = file.replace('.js', '');
 			if(file.match(isJs)) {
-				// console.log(name);
-				// require('./controllers/' + name)(app, service);
-				// console.log(file.red);
+				if(!file.match(hidden)) {
+					require('./controllers/' + file)(app, service, hbs);
+					console.log('CS: '.blue + 'Initialize controller file: '.blue + file.yellow.underline);
+				}
 			}
 		});
-		require('./controllers/user-control')(app, service);
-		//require('./controllers/map-control')(app, service);
+		// if we want to explicitly require controllers, do it here:
+		// require('./...controller-file.js...')(app, service);
 
-
-		//require('./controllers/homeController')(app, service);
-		// require('./controllers/accountController')(app, service);
 	});
 };

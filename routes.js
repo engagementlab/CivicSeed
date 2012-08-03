@@ -1,13 +1,3 @@
-exports.index = function(req,res){
-	// if(req.user==undefined){
-	// 	res.redirect('/login');
-	// }
-	// else{
-	// 	res.redirect('/profile');
-	// }
-	console.log("test");
-	res.render('index.html');
-};
 
 
 // exports.invite = function(req,res){
