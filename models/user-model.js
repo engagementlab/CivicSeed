@@ -40,10 +40,11 @@ var Invitee = new Schema({
 	random: String
 });
 
+//the third param specifies an exact collection to look for in the DB
 var UserModel = mongoose.model('User', User,'users');
 var InviteeModel = mongoose.model('Invitee',Invitee,'invitees');
 
-
+return UserModel;
 	// user.schema.pre('save', function (next) {
 	// 	if (!validatePresenceOf(this.password)) {
 	// 		next(new Error('Invalid password'));
@@ -73,7 +74,7 @@ var InviteeModel = mongoose.model('Invitee',Invitee,'invitees');
 	// 	return this.encryptPassword(password) === this.hashedPassword;
 	// };
 
-	user.model = mongoose.model('User', user.schema);
+	// user.model = mongoose.model('User', user.schema);
 
 	// ????
 	// var user = new userModel();
@@ -81,7 +82,7 @@ var InviteeModel = mongoose.model('Invitee',Invitee,'invitees');
 	// user.title = 'Old Man Coder';
 
 
-	return user;
+	// return user;
 
 
 
