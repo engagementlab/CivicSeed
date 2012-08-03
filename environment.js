@@ -2,7 +2,7 @@
 // also, to run a specific database, set the ALT_DB variable on run:
 // example: 'NODE_ENV=local ALT_DB=testing nodemon app.js'
 // production is default/fallback where nothing is set
-var nodeEnv = process.env.NODE_ENV || 'production',
+var nodeEnv = process.env.NODE_ENV || 'local',
 databaseEnv = process.env.ALT_DB || nodeEnv,
 databaseURL;
 
