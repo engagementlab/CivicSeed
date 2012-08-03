@@ -67,7 +67,7 @@ module.exports = function (app, service) {
 
 
 	app.get('/login',  function(req, res) {
-		res.render('login.html', {
+		res.render('login.hbs', {
 			title: ' {:: Civic Seed - Login ::} '
 		});
 			// if(req.user==undefined){

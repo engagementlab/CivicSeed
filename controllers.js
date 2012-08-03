@@ -1,5 +1,5 @@
 var fs = require('fs'),
-hbs = require('handlebars');
+hbs = require('hbs');
 
 module.exports = function(app, service, environment) {
 

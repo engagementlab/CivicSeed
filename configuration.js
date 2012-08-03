@@ -1,7 +1,8 @@
 var passport = require('passport'),
-consolidate = require('consolidate'),
+// consolidate = require('consolidate'),
 // hulk = require('hulk-hogan'),
-handlebars = require('handlebars');
+hbs = require('hbs'),
+blocks = {};
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
 
@@ -12,7 +13,21 @@ module.exports = function(app, express, ss) {
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 		app.set('views', __dirname + '/client/views');
-		app.engine('html', consolidate.handlebars);
+		app.set('view engine', 'hbs');
+		hbs.registerHelper('extend', function(name, context) {
+			var block = blocks[name];
+			if(!block) {
+				block = blocks[name] = [];
+			}
+			block.push(context(this));
+		});
+		hbs.registerHelper('block', function(name) {
+			var val = (blocks[name] || []).join('\n');
+			blocks[name] = [];
+			return val;
+		});
+		// app.set('view engine', 'html');
+		// app.engine('html', require('hbs').__express);
 		app.use(express.logger(':method :url :status'));
 		app.use(express.bodyParser());
 		app.use(express.methodOverride());

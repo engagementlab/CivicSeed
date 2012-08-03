@@ -23,7 +23,7 @@ module.exports = function (app, service, hbs) {
 		// else{
 		// 	res.redirect('/profile');
 		// }
-		res.render('index.html', {
+		res.render('home.hbs', {
 			title: ' {:: Civic Seed ::} '
 		});
 	});

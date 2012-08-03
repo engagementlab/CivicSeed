@@ -21,7 +21,7 @@
 		"consolidate": ">= 0.3.0",
 		"express": ">= 3.0.0rc1",
 		"express-messages": ">= 0.0.2",
-		"handlebars": ">= 1.0.5beta",
+		"hbs": ">= 1.0.5",
 		"mongoose": ">= 2.7.2",
 		"less-middleware": "*",
 		"redis": ">= 0.7.1",
