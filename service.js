@@ -20,11 +20,7 @@ module.exports.init = function(env) {
 };
 
 
-
-
-
 var hash = require('password-hash');
-
 
 exports.login = function(name,pass,callback){
 	UserModel.findOne({email:name},function(err,user){

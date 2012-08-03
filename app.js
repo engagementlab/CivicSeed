@@ -13,7 +13,7 @@ console.log('\n\n   * * * * * * * * * * * *   Starting the Civic Seed Game Engin
 // Configuration and environmental files, etc.
 environment = require('./environment.js');
 service = require('./service.js');
-config = require('./configuration.js')(app, express, ss);
+config = require('./configuration.js')(app, express, ss, environment);
 control = require('./controllers.js')(app, service, environment);
 //passportConfig = require('./passportconfig.js')(app, service);
 

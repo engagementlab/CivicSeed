@@ -9,7 +9,9 @@ blocks = {};
 
 //configuration module 
 //All express and connect configuration must there
-module.exports = function(app, express, ss) {
+module.exports = function(app, express, ss, env) {
+
+	console.log(env);
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
@@ -42,24 +44,24 @@ module.exports = function(app, express, ss) {
 		console.log('CS: Config: Default configurations set up.'.blue)
 	});
 
-	// local config
-	// runner: 'NODE_ENV=local nodemon app.js'
-	app.configure('local', function() {
+	// development config
+	// runner: 'NODE_ENV=development nodemon app.js' or just 'nodemon app.js'
+	app.configure('development', function() {
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + process.env.NODE_ENV + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
 
 	// testing config
 	// runner: 'NODE_ENV=testing nodemon app.js'
 	app.configure('testing', function() {
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + process.env.NODE_ENV + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
 
 	// staging config ???DO WE EVEN NEED A STAGING ENVIRONMENT???
 	// runner: 'NODE_ENV=staging node app.js'
 	app.configure('staging', function() {
-		console.log('CS: Config: Running in '.blue + process.env.NODE_ENV + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
 
 	// live config
@@ -68,7 +70,7 @@ module.exports = function(app, express, ss) {
 		// var oneYear = 31557600000;
 		// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 		// app.use(express.errorHandler()); 
-		console.log('CS: Config: Running in '.blue + process.env.NODE_ENV + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
 
 
