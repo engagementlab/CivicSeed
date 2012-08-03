@@ -2,6 +2,7 @@ var passport = require('passport'),
 // consolidate = require('consolidate'),
 // hulk = require('hulk-hogan'),
 hbs = require('hbs'),
+flash = require('connect-flash'),
 blocks = {};
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
@@ -34,7 +35,7 @@ module.exports = function(app, express, ss) {
 		// app.use(express.cookieParser());
 		// app.use(express.session({secret: 'secret'}));
 		// app.use(express.compiler({src: __dirname + '/wwwroot', enable: ['stylus']}));
-
+		app.use(flash());
 		app.use(passport.initialize());
     	app.use(passport.session());
 

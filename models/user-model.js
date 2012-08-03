@@ -1,26 +1,47 @@
+var hash = require('password-hash');
+
 module.exports = function(mongoose) {
 
-	// var crypto = require('crypto');
-	var user = {};
+	// // var crypto = require('crypto');
+	// var user = {};
 
-	// function validatePresenceOf(value) {
-	// 	return value && value.length;
-	// }
+	// // function validatePresenceOf(value) {
+	// // 	return value && value.length;
+	// // }
 
-	user.schema = new mongoose.Schema({
-		// email: { type: String, validate: [validatePresenceOf, 'An email is required'], match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,  index: { unique: true } },
-		// hashedPassword: String,
-		// salt: String,
-		// role: { type: String, default: 'user', enum: ['user', 'admin'] },
+	// user.schema = new mongoose.Schema({
+	// 	// email: { type: String, validate: [validatePresenceOf, 'An email is required'], match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,  index: { unique: true } },
+	// 	// hashedPassword: String,
+	// 	// salt: String,
+	// 	// role: { type: String, default: 'user', enum: ['user', 'admin'] },
 
-		username: String,
-		title: String
+	// 	username: String,
+	// 	title: String
 
-	});
-
-
+	// });
 
 
+
+
+
+//RUSSELLS ATTEMPT _______________________________
+
+//var ph = require('./lib/password-hash');
+var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
+
+var User = new Schema({
+	name: String,
+	password: String
+});
+
+var Invitee = new Schema({
+	email: String,
+	accepted: Boolean,
+	random: String
+});
+
+var UserModel = mongoose.model('User', User,'users');
+var InviteeModel = mongoose.model('Invitee',Invitee,'invitees');
 
 
 	// user.schema.pre('save', function (next) {

@@ -3,7 +3,7 @@ module.exports = function (app, service) {
 	var redirectIfLogined = service.useModule('middleware/account').redirectIfLogined;
 
 	app.get('/login', redirectIfLogined, function(req, res){
-		res.render('account/login', { title: "Login", redir: req.query.redir});
+		res.render('account/login', { title: "Testing Login", redir: req.query.redir});
 	});
 
 	app.get('/register', redirectIfLogined, function(req, res) {
