@@ -15,6 +15,34 @@ module.exports = function(app, express, ss, env) {
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
+
+		// SOCKET STREAM
+		// Code Formatters
+		ss.client.formatters.add(require('ss-less'));
+
+		// // use redis
+		// ss.session.store.use('redis');
+		// ss.publish.transport.use('redis');
+
+		// // Use server-side compiled Hogan (Mustache) templates. Others engines available
+		// ss.client.templateEngine.use(require('ss-hogan'));
+
+		// Define a single-page client
+		ss.client.define('main', {
+			view: 'game.html',
+			css: 'game.less',
+			code: [
+				'libs/jquery-1.7.2.min.js',
+				'libs/angular-1.0.1.min.js',
+				'libs/ssAngular.js',
+				'game/controllers.js',
+				'game/entry.js',
+				'game/app.js'
+			],
+			tmpl: '*'
+		});
+
+		// EXPRESS
 		app.set('views', __dirname + '/client/views');
 		app.set('view engine', 'hbs');
 		hbs.registerHelper('extend', function(name, context) {
@@ -47,6 +75,8 @@ module.exports = function(app, express, ss, env) {
 	// development config
 	// runner: 'NODE_ENV=development nodemon app.js' or just 'nodemon app.js'
 	app.configure('development', function() {
+		// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?
+		// ss.client.packAssets();
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
@@ -61,12 +91,14 @@ module.exports = function(app, express, ss, env) {
 	// staging config ???DO WE EVEN NEED A STAGING ENVIRONMENT???
 	// runner: 'NODE_ENV=staging node app.js'
 	app.configure('staging', function() {
+		ss.client.packAssets();
 		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
 	});
 
 	// live config
 	// runner: 'NODE_ENV=production node app.js'
 	app.configure('production', function() {
+		ss.client.packAssets();
 		// var oneYear = 31557600000;
 		// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 		// app.use(express.errorHandler()); 

@@ -12,6 +12,9 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
+	<!-- should work on this to use bootstrap and less? -->
+	<!-- also, can bootstrap work on stylus??? -->
+	<link rel="stylesheet" href="/css/app.css"/>
 	{{{block "stylesheets"}}}
 
 	<script src="/js/modernizr-2.6.1.min.js"></script>
@@ -19,7 +22,9 @@
 </head>
 <body>
 
-	{{{body}}}
+	<div id="content">
+		{{{body}}}
+	</div>
 
 	{{{block "scripts"}}}
 
