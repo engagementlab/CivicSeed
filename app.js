@@ -22,7 +22,7 @@ config = require('./configuration.js')(app, express, ss, environment);
 //passportConfig = require('./passportconfig.js')(app, service);
 
 // Start web server
-server = app.listen(3000, function() {
+server = app.listen(process.env['app_port'] || 3000, function() {
 	var local = server.address();
 	console.log("Express server listening @ http://%s:%d/ in %s mode", local.address, local.port, app.settings.env);
 });

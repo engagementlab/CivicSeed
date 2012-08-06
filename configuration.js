@@ -2,7 +2,8 @@ var passport = require('passport'),
 // consolidate = require('consolidate'),
 // hulk = require('hulk-hogan'),
 hbs = require('hbs'),
-flash = require('connect-flash'),	
+flash = require('connect-flash'),
+fs = require('fs'),
 blocks = {};
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
@@ -41,6 +42,11 @@ module.exports = function(app, express, ss, env) {
 			],
 			tmpl: '*'
 		});
+
+
+		//Partials working?
+  		headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
+  		hbs.registerPartial('headPartial', headerTemplate); 
 
 		// EXPRESS
 		app.set('views', __dirname + '/client/views');

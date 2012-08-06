@@ -4,20 +4,20 @@
 {{#extend "scripts"}}{{/extend}}
 
     <div class="span8 offset2">
-        <form class="form-horizontal" id="loginForm" method="post" action="">
+        <form class="form-horizontal" id="inviteForm" method="post" action="">
             <fieldset>
-                <legend>Sign In</legend>
+                <legend>Get Invited</legend>
                 <div class="alert">{{message}}</div>
                 <div class="control-group">
                     <label class="control-label">Email</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="username" name="username" rel="popover" data-content="Enter your email." data-original-title="Email Address">
+                        <input type="text" class="input-xlarge" id="email" name="email" rel="popover" data-content="Enter your email." data-original-title="Email Address">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label">Password</label>
+                    <label class="control-label">Secret Code</label>
                     <div class="controls">
-                        <input type="password" class="input-xlarge" id="password" name="password" rel="popover" data-content="Super secret password." data-original-title="Password">
+                        <input type="text" class="input-xlarge" id="secret" name="secret" rel="popover" data-content="Super secret code." data-original-title="secret">
                     </div>
                 </div>
 
@@ -25,7 +25,7 @@
                 <div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
-                        <button type="submit" class="btn btn-large btn-success" >Sign In</button>
+                        <button type="submit" class="btn btn-large btn-success" >Join!</button>
                     </div>
                 </div>
 
