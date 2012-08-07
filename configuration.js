@@ -11,8 +11,6 @@ blocks = {};
 //All express and connect configuration must there
 module.exports = function(app, express, ss, env) {
 
-	console.log(env);
-
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
