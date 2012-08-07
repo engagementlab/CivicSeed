@@ -2,34 +2,35 @@
 
 {{#extend "stylesheets"}}{{/extend}}
 {{#extend "scripts"}}{{/extend}}
-
-    <div class="span8 offset2">
-        <form class="form-horizontal" id="inviteForm" method="post" action="">
-            <fieldset>
-                <legend>Get Invited</legend>
-                <div class="alert">{{message}}</div>
-                <div class="control-group">
-                    <label class="control-label">Email</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="email" name="email" rel="popover" data-content="Enter your email." data-original-title="Email Address">
+    <div class="row">
+        <div class="span8 offset2">
+            <form class="form-horizontal" id="inviteForm" method="post" action="">
+                <fieldset>
+                    <legend>Get Invited</legend>
+                    <div class="alert">{{message}}</div>
+                    <div class="control-group">
+                        <label class="control-label">Email</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="email" name="email" rel="popover" data-content="Enter your email." data-original-title="Email Address">
+                        </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Secret Code</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="secret" name="secret" rel="popover" data-content="Super secret code." data-original-title="secret">
+                    <div class="control-group">
+                        <label class="control-label">Secret Code</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="secret" name="secret" rel="popover" data-content="Super secret code." data-original-title="secret">
+                        </div>
                     </div>
-                </div>
 
 
-                <div class="control-group">
-                    <label class="control-label"></label>
-                    <div class="controls">
-                        <button type="submit" class="btn btn-large btn-success" >Join!</button>
+                    <div class="control-group">
+                        <label class="control-label"></label>
+                        <div class="controls">
+                            <button type="submit" class="btn btn-large btn-success" >Join!</button>
+                        </div>
                     </div>
-                </div>
 
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
 
