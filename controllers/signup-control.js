@@ -8,14 +8,25 @@ module.exports = function (app, service) {
         );
     });
 
-    app.post('/signup',  function(req, res){
+    app.post('/signup/:email/:random',  function(req, res){
 
-        var email = req.body.email,
-        firstName = req.body.firstName,
-        lastName = req.body.lastName,
-        password = req.body.password,
-        confirmPassword = req.body.confirmPassword;
+    	var newUser = {
+    		email: req.body.email,
+        	firstName: req.body.firstName,
+        	lastName: req.body.lastName,
+        	password: req.body.password,
+        	confirmPassword: req.body.confirmPassword,
+        	joined: new Date()
+    	}
 
+		addUser(newUser,function(err,result){
+			if(err){
+				res.render('signup',{message:err});
+			}
+			else{
+				res.redirect('profile/'+result.uniqueUrl+"/welcome");
+			}
+		});        
         // addUser(email,firstName,lastName,password,confirmPassword,function(err,result){
         // 	//render something
         // });
@@ -23,23 +34,12 @@ module.exports = function (app, service) {
     });
 
     //insert into DB
-	addUser = function(email,first,last,pass,pass2){
-		// console.log(req.body.email);
-		// db.newUser(req.body,function(result){
-		// 	if(result){
-		// 		mail.sendInvite(req.body.email,function(err,response){
-		// 			if(!err){
-		// 				res.render('joined',{name: req.body.first});	
-		// 			}
-		// 			else{
-		// 				console.log("nooooooo!");
-		// 			}
-		// 		});	
-		// 	}
-		// 	else{
-		// 		res.render('signup',{message: 'sorry kid, that email is used.'})
-		// 	}
-		// });
+	addUser = function(user,callback){
+		//find ONE
+		//if that email is in the DB (from invite) and it is pending,
+		//query DB for profile url (first+last)
+		//update information in DB, change pending to false, 
+		//else, return error
 	};
 
 };

@@ -2,8 +2,8 @@
 
 {{#extend "stylesheets"}}{{/extend}}
 {{#extend "scripts"}}{{/extend}}
-
-    <div class="span8 offset2">
+<div class="row">
+   <div class="span4 offset4">
         <form class="form-horizontal" id="signupForm" method="post" action="">
             <fieldset>
                 <legend>Sign Up</legend>
@@ -11,7 +11,7 @@
                 <div class="control-group">
                     <label class="control-label">Email</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="email" name="email" rel="popover" data-content="email" data-original-title="Email Address" placeholder={{eMail}}>
+                        <input type="text" class="input-xlarge disabled" id="email" name="email" disabled="" rel="popover" data-content="email" data-original-title="Email Address" placeholder={{eMail}}>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                 <div class="control-group">
                     <label class="control-label">Confirm Password</label>
                     <div class="controls">
-                        <input type="password" class="input-xlarge" id="confirmPassword" name="password" rel="popover" data-content="Super secret password." data-original-title="confirmPassword">
+                        <input type="password" class="input-xlarge" id="confirmPassword" name="confirmPassword" rel="popover" data-content="Super secret password." data-original-title="confirmPassword">
                     </div>
                 </div>
 
@@ -53,5 +53,11 @@
 
             </fieldset>
         </form>
-    </div>
+    </div> 
+</div>
+
+ 
+
+    
+   
 
