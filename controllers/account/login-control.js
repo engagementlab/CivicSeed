@@ -5,6 +5,7 @@ LocalStrategy = require('passport-local').Strategy;
 module.exports = function (app, service) {
 
 	// 	var accountMiddleware = service.useModule('middleware/account');
+    var users = service.useModel('user');
 
 	// 	// app.get('/', accountMiddleware.requireRole('user'), function(req, res){
 	// 	// 	res.render('index', { title: "Index" });
@@ -84,7 +85,6 @@ module.exports = function (app, service) {
         });
     };
 
-    var users = service.useModel('user-model');
 
 
 	app.get('/login',  function(req, res) {

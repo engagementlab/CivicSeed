@@ -1,6 +1,6 @@
 module.exports = function (app, service) {
 
-	var users = service.useModel('user-model');
+	var users = service.useModel('user');
 
     app.get('/signup/:email/:random',  function(req, res) {
         res.render('signup.hbs', {
@@ -19,7 +19,7 @@ module.exports = function (app, service) {
         	joined: new Date()
     	}
 
-		addUser(newUser,function(err,result){
+		addUser(newUser, function(err,result){
 			if(err){
 				res.render('signup',{message:err});
 			}
@@ -34,7 +34,7 @@ module.exports = function (app, service) {
     });
 
     //insert into DB
-	addUser = function(user,callback){
+	addUser = function(user, callback) {
 		//find ONE
 		//if that email is in the DB (from invite) and it is pending,
 		//query DB for profile url (first+last)
