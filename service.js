@@ -3,16 +3,35 @@ connected = (mongoose.connection.readyState === 1 || mongoose.connection.readySt
 // hash = require('password-hash'),
 Schema = mongoose.Schema,
 ObjectId = Schema.ObjectId,
-env;
+useModel,
+useModule,
+env,
+nodeEnv;
 
 module.exports.init = function(environment) {
+
+	console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow)
+
 	env = environment; // for use throughout this file
+	nodeEnv = env.app.nodeEnv;
 
 	// connect to database
 	if(!connected) {
 		mongoose.connect(env.database.URL);
 		console.log('CS: Database: connection to '.blue + env.database.environment);
 	}
+
+	// require models and load setup data
+	var users = useModel('user', 'preload');
+
+	if(nodeEnv === 'production') {
+	} else if(nodeEnv === 'staging') {
+	} else if(nodeEnv === 'testing') {
+	} else if(nodeEnv === 'development') {
+	} else {
+		console.log('  NODE_ENV VARIABLE CONNECTION ERROR: cannot use for preloading data   '.red.inverse);
+	}
+
 };
 
 
@@ -36,15 +55,19 @@ module.exports.init = function(environment) {
 // };
 
 
-module.exports.useModel = function(modelName) {
+useModel = module.exports.useModel = function(modelName, state) {
 	var checkConnectionExists = (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2);
 	if(!checkConnectionExists) {
 		mongoose.connect(env.db.URL);
 	}
-	console.log('CS: '.blue + 'Import model '.blue + modelName.yellow.underline + ' into following controller: '.blue);
+	if(state === 'preload') {
+		console.log('CS: '.blue + 'Initializing database by using model '.blue + modelName.yellow.underline);
+	} else {
+		console.log('CS: '.blue + 'Import model '.blue + modelName.yellow.underline + ' into following controller: '.blue);
+	}
 	return require("./models/" + modelName + '-model')(mongoose);
 };
 
-module.exports.useModule = function (moduleName) {
+useModule = module.exports.useModule = function (moduleName, state) {
 	return require("./modules/" + moduleName);
 };

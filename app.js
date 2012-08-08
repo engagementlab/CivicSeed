@@ -14,7 +14,7 @@ console.log('\n\n   * * * * * * * * * * * *   Starting the Civic Seed Game Engin
 environment = require('./environment.js');
 service = require('./service.js');
 
-// Setup the environment
+// Setup database services, based on the environment
 service.init(environment);
 
 control = require('./controllers.js')(app, service, environment);

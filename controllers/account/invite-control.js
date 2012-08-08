@@ -8,7 +8,7 @@ module.exports = function (app, service) {
 
 	// getUserByEmail
 	var checkEmail = function(email, callback) {
-		var users = service.useModel('user-model');
+		var users = service.useModel('user');
 		users.findOne({name:email},function(err,user){
 			console.log(err+" :: "+user);
 			if(err){
