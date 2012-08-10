@@ -20,12 +20,12 @@ exports.actions = function(req, res, ss) {
 		// 		res("Ignoring SpaceMail");
 		// 	}, 2000);
 		// },
-		checkIn: function(){
+		checkIn: function() {
 			numPlayers++;
 			ss.publish.all('ss-count',numPlayers);
 			res(numPlayers);
 		},
-		addMe: function(player){
+		addMe: function(player) {
 			players.push(player);
 			ss.publish.all('ss-allPlayers',players);
 		},
