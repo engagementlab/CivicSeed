@@ -59,6 +59,7 @@ module.exports.init = function(environment, callback) {
 
 };
 
+module.exports.db = db;
 
 // var hash = require('password-hash');
 

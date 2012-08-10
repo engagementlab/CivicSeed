@@ -20,7 +20,7 @@ service = require('./service.js');
 service.init(environment, function() {
 
 	control = require('./controllers.js')(app, service, environment);
-	config = require('./configuration.js')(app, express, ss, environment);
+	config = require('./configuration.js')(app, express, ss, environment, service.db);
 	//passportConfig = require('./passportconfig.js')(app, service);
 
 	// Start web server
