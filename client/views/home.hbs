@@ -7,21 +7,40 @@
     	<div class="row">
 			<div class="span7">
         		<h1>Welcome to Civic Seed!</h1>
-        		<h3>Prepare for civic engagement and connect with other like-minded individuals.  All while having fun!</h3>
-        		<div style="font-size: 36px;">
+        		<h4>Where civic engagement meets social gaming.</h4>
+        		<p><br>Civic Seed is a new platform that facilitates civic engagement through a unique combination of game play and social networking.  We believe that the most effective way to learn is when you actual enjoy the process.</p>
+        		<div style="font-size: 28px;" class="iconInfo">
+        			<p><br>
+  						<i class="icon-book icon-large"></i><span style="font-size:20px">   Equip yourself with the necessary knowledge.</span></p>
+					</p>
+				</div>
+				<div style="font-size: 28px;" class="iconInfo">
         			<p>
-  						<i class="icon-camera-retro icon-large"></i> icon-camera-retro
+  						<i class="icon-group icon-large"></i><span style="font-size:20px">   Connect with like-minded individuals.</span></p>
+					</p>
+				</div>
+				<div style="font-size: 28px;" class="iconInfo">
+        			<p>
+  						<i class="icon-trophy icon-large"></i><span style="font-size:20px">   Have fun while learning!</span></p>
 					</p>
 				</div>
         		<p></p>
-	    		<p><a class="btn btn-primary btn-large">Join Now!</a></p>
+	    		<p><a class="btn btn-primary btn-large" href="/invite">Join Now!</a></p>
 			</div>
         	<div class="span4 offset1">
-	    		<form class="well">
+	    		<form class="well" id="loginForm" method="post" action="">
 	    			<h2>Sign In: </h2>
-	    			<br>
-					<input type="text" class="input-large" placeholder="Email">
-					<input type="password" class="input-large" placeholder="Password">
+	    			<p>{{message}}</p>
+	    			<div class="control-group">
+	    				<div class="controls">
+							<input type="text" class="input-large" id="username" name="username" rel="popover" data-content="Enter your email." data-original-title="Email Address" placeholder="Email">
+						</div>
+					</div>
+					<div class="control-group">
+	    				<div class="controls">
+							<input type="password" class="input-large" id="password" name="password" rel="popover" data-content="Super secret password." data-original-title="Password" placeholder="Password">
+						</div>
+					</div>
 					<button type="submit" class="btn btn-primary btn-large moreTopMargin">Sign In</button>
 					<p class="moreTopMargin"><a href="/forgot">Forget your password?</a></p>
 				</form>
