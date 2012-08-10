@@ -17,7 +17,7 @@ module.exports = function(app, express, ss, env) {
 
 		// SOCKET STREAM
 		// Code Formatters
-		ss.client.formatters.add(require('ss-less'));
+		ss.client.formatters.add(require('ss-stylus'));
 
 		// // use redis
 		// ss.session.store.use('redis');
@@ -29,7 +29,7 @@ module.exports = function(app, express, ss, env) {
 		// Define a single-page client
 		ss.client.define('main', {
 			view: 'game.html',
-			css: 'game.less',
+			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.7.2.min.js',
 				'libs/angular-1.0.1.min.js',
@@ -40,7 +40,6 @@ module.exports = function(app, express, ss, env) {
 			],
 			tmpl: '*'
 		});
-
 
 		//Partials working?
   		headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');

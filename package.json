@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "socketstream": "0.3.x",
-    "ss-less": "0.1.x",
+    "ss-stylus": ">= 0.1.5",
     "ss-hogan": "0.1.x",
     "consolidate": ">= 0.3.0",
     "express": ">= 3.0.0rc1",
