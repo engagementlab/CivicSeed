@@ -1,5 +1,9 @@
 angular.module('multiPlayer', ['ssAngular'])
-.controller('PlayerController',function($scope,pubsub,rpc) {
+.controller('PlayerController',function($scope,$http,pubsub,rpc) {
+	$http.get('data/development/map.json').success(function(data) {
+    	console.log(data);
+  	});
+
 	$scope.players;
 	$scope.infos = 
 	{
