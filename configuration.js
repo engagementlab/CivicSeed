@@ -2,27 +2,29 @@ var passport = require('passport'),
 // consolidate = require('consolidate'),
 // hulk = require('hulk-hogan'),
 hbs = require('hbs'),
-flash = require('connect-flash'),	
+flash = require('connect-flash'),
+fs = require('fs'),
 blocks = {};
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
 
 //configuration module 
 //All express and connect configuration must there
-module.exports = function(app, express, ss, env) {
-
-	console.log(env);
+module.exports = function(app, express, ss, env, db) {
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
 		// SOCKET STREAM
 		// Code Formatters
-		ss.client.formatters.add(require('ss-less'));
+		ss.client.formatters.add(require('ss-stylus'));
 
 		// // use redis
 		// ss.session.store.use('redis');
 		// ss.publish.transport.use('redis');
+
+		// connect mongoose to ss internal API
+		ss.api.add('db', db);
 
 		// // Use server-side compiled Hogan (Mustache) templates. Others engines available
 		// ss.client.templateEngine.use(require('ss-hogan'));
@@ -30,7 +32,7 @@ module.exports = function(app, express, ss, env) {
 		// Define a single-page client
 		ss.client.define('main', {
 			view: 'game.html',
-			css: 'game.less',
+			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.7.2.min.js',
 				'libs/angular-1.0.1.min.js',
@@ -41,6 +43,10 @@ module.exports = function(app, express, ss, env) {
 			],
 			tmpl: '*'
 		});
+
+		//Partials working?
+  		headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
+  		hbs.registerPartial('headPartial', headerTemplate); 
 
 		// EXPRESS
 		app.set('views', __dirname + '/client/views');

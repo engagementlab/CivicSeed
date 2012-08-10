@@ -1,5 +1,13 @@
 # CivicSeed
 
+### Compiling CSS
+
+Download http://incident57.com/less/
+Drag folder client/static/css to app
+uncheck everything EXCEPT style.less
+make changes to any less file in the /bootstrap folder
+save the style.less folder and it will auto re-compile style.css
+
 ## Setup/Installation
 
 ### Install SocketStream as a global dependency

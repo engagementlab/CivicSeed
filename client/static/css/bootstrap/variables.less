@@ -7,6 +7,16 @@
 // GLOBAL VALUES
 // --------------------------------------------------
 
+//CIVIC SEED VALUES
+@csYellow: 		#DCE12f; 
+@csLightGreen:	#7CCAB0;
+@csDarkGreen:	#099B7E;
+@csPurple: 		#2C345B;
+@csOrange:		#E6742E; 
+
+//font
+@import url(http://fonts.googleapis.com/css?family=Noticia+Text);
+
 
 // Grays
 // -------------------------
@@ -39,25 +49,25 @@
 
 // Links
 // -------------------------
-@linkColor:             #08c;
+@linkColor:             @csOrange;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
 // Typography
 // -------------------------
 @sansFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
-@serifFontFamily:       Georgia, "Times New Roman", Times, serif;
+@serifFontFamily:       "Noticia Text", Georgia, "Times New Roman", Times, serif;
 @monoFontFamily:        Menlo, Monaco, Consolas, "Courier New", monospace;
 
-@baseFontSize:          13px;
+@baseFontSize:          15px;
 @baseFontFamily:        @sansFontFamily;
-@baseLineHeight:        18px;
+@baseLineHeight:        24px;
 @altFontFamily:         @serifFontFamily;
 
-@headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
+@headingsFontFamily:    @serifFontFamily; // empty to use BS default
 @headingsFontWeight:    bold;    // instead of browser default, bold
-@headingsColor:         inherit; // empty to use BS default, @textColor
-
+@headingsColor:         @csDarkGreen; // empty to use BS default, @textColor
+@headingsColor2:		@csPurple;
 
 // Tables
 // -------------------------
@@ -73,8 +83,8 @@
 @btnBackgroundHighlight:            darken(@white, 10%);
 @btnBorder:                         #ccc;
 
-@btnPrimaryBackground:              @linkColor;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 15%);
+@btnPrimaryBackground:              @csOrange;
+@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 5%);
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
@@ -102,9 +112,9 @@
 
 // Dropdowns
 // -------------------------
-@dropdownBackground:            @white;
-@dropdownBorder:                rgba(0,0,0,.2);
-@dropdownLinkColor:             @grayDark;
+@dropdownBackground:            @csOrange;
+@dropdownBorder:                rgba(0,0,0,.4);
+@dropdownLinkColor:             @grayLighter;
 @dropdownLinkColorHover:        @white;
 @dropdownLinkBackgroundHover:   @linkColor;
 @dropdownDividerTop:            #e5e5e5;
@@ -145,14 +155,14 @@
 
 // Navbar
 // -------------------------
-@navbarHeight:                    40px;
-@navbarBackground:                @grayDarker;
-@navbarBackgroundHighlight:       @grayDark;
+@navbarHeight:                    50px;
+@navbarBackground:                @gray;
+@navbarBackgroundHighlight:       @gray;
 
-@navbarText:                      @grayLight;
-@navbarLinkColor:                 @grayLight;
-@navbarLinkColorHover:            @white;
-@navbarLinkColorActive:           @navbarLinkColorHover;
+@navbarText:                      @white;
+@navbarLinkColor:                 @white;
+@navbarLinkColorHover:            @csOrange;
+@navbarLinkColorActive:           @csYellow;
 @navbarLinkBackgroundHover:       transparent;
 @navbarLinkBackgroundActive:      @navbarBackground;
 
@@ -165,9 +175,9 @@
 
 // Hero unit
 // -------------------------
-@heroUnitBackground:              @grayLighter;
-@heroUnitHeadingColor:            inherit;
-@heroUnitLeadColor:               inherit;
+@heroUnitBackground:              @csPurple;
+@heroUnitHeadingColor:            white;
+@heroUnitLeadColor:               #ccc;
 
 
 // Form states and alerts

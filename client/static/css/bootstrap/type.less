@@ -27,7 +27,6 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: @headingsFontFamily;
   font-weight: @headingsFontWeight;
-  color: @headingsColor;
   text-rendering: optimizelegibility; // Fix the character spacing for headings
   small {
     font-weight: normal;
@@ -35,40 +34,44 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 h1 {
-  font-size: 30px;
+  color: @headingsColor;
+  font-size: 38px;
   line-height: @baseLineHeight * 2;
   small {
     font-size: 18px;
   }
 }
 h2 {
-  font-size: 24px;
+  color: @headingsColor2;
+  font-size: 32px;
   line-height: @baseLineHeight * 2;
   small {
     font-size: 18px;
   }
 }
 h3 {
-  font-size: 18px;
+  color: @headingsColor2;
+  font-size: 26px;
   line-height: @baseLineHeight * 1.5;
   small {
     font-size: 14px;
   }
 }
 h4, h5, h6 {
+  color: @headingsColor2;
   line-height: @baseLineHeight;
 }
 h4 {
-  font-size: 14px;
+  font-size: 20px;
   small {
     font-size: 12px;
   }
 }
 h5 {
-  font-size: 12px;
+  font-size: 16px;
 }
 h6 {
-  font-size: 11px;
+  font-size: 12px;
   color: @grayLight;
   text-transform: uppercase;
 }

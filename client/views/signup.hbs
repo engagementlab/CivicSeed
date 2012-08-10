@@ -1,0 +1,63 @@
+
+
+{{#extend "stylesheets"}}{{/extend}}
+{{#extend "scripts"}}{{/extend}}
+<div class="row">
+   <div class="span4 offset4">
+        <form class="form-horizontal" id="signupForm" method="post" action="">
+            <fieldset>
+                <legend>Sign Up</legend>
+                <div class="alert">{{message}}</div>
+                <div class="control-group">
+                    <label class="control-label">Email</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge disabled" id="email" name="email" disabled="" rel="popover" data-content="email" data-original-title="Email Address" placeholder={{eMail}}>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Firt Name</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="firstName" name="firstName" rel="popover" data-content="firstName" data-original-title="First Name">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Last Name</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="lastName" name="lastName" rel="popover" data-content="Last Name" data-original-title="Last Name">
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label">Password</label>
+                    <div class="controls">
+                        <input type="password" class="input-xlarge" id="password" name="password" rel="popover" data-content="Super secret password." data-original-title="Password">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Confirm Password</label>
+                    <div class="controls">
+                        <input type="password" class="input-xlarge" id="confirmPassword" name="confirmPassword" rel="popover" data-content="Super secret password." data-original-title="confirmPassword">
+                    </div>
+                </div>
+
+
+                <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <button type="submit" class="btn btn-large btn-success" >Sign Up</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div> 
+</div>
+
+ 
+
+    
+   
+

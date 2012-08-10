@@ -1,6 +1,22 @@
 var hash = require('password-hash');
 
-module.exports = function(mongoose) {
+module.exports = function(mongoose, db) {
+
+	var Schema = mongoose.Schema;
+	var ObjectId = Schema.ObjectId;
+	var InviteeSchema = new Schema({
+		email: String,
+		accepted: Boolean,
+		random: String
+	});
+	var UserSchema = new Schema({
+		name: String,
+		password: String
+	});
+
+	//the third param specifies an exact collection to look for in the DB
+	var InviteeModel = db.model('Invitee', InviteeSchema, 'invitees');
+	var UserModel = db.model('User', UserSchema, 'users');
 
 	// // var crypto = require('crypto');
 	// var user = {};
@@ -27,22 +43,9 @@ module.exports = function(mongoose) {
 //RUSSELLS ATTEMPT _______________________________
 
 //var ph = require('./lib/password-hash');
-var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
 
-var User = new Schema({
-	name: String,
-	password: String
-});
 
-var Invitee = new Schema({
-	email: String,
-	accepted: Boolean,
-	random: String
-});
 
-//the third param specifies an exact collection to look for in the DB
-var UserModel = mongoose.model('User', User,'users');
-var InviteeModel = mongoose.model('Invitee',Invitee,'invitees');
 
 return UserModel;
 	// user.schema.pre('save', function (next) {
@@ -88,7 +91,16 @@ return UserModel;
 
 };
 
+module.exports.createAndSaveUser = function(jsonArray) {
 
+	console.log('model');
+
+	// model.create(jsonArray, function (err) {
+	// 	if(err) {
+
+	// 	}
+	// });
+};
 
 
 
