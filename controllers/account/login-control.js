@@ -98,7 +98,7 @@ module.exports = function (app, service) {
 			// 	res.redirect('/profile');
 			// }
 	});
-	app.post('/login', 
+	app.post('/', 
 	  passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
 	  function(req, res) {
         console.log("yaaay");

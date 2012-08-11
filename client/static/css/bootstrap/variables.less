@@ -61,13 +61,13 @@
 
 @baseFontSize:          15px;
 @baseFontFamily:        @sansFontFamily;
-@baseLineHeight:        20px;
+@baseLineHeight:        24px;
 @altFontFamily:         @serifFontFamily;
 
 @headingsFontFamily:    @serifFontFamily; // empty to use BS default
 @headingsFontWeight:    bold;    // instead of browser default, bold
-@headingsColor:         inherit; // empty to use BS default, @textColor
-
+@headingsColor:         @csDarkGreen; // empty to use BS default, @textColor
+@headingsColor2:		@csPurple;
 
 // Tables
 // -------------------------
@@ -83,8 +83,8 @@
 @btnBackgroundHighlight:            darken(@white, 10%);
 @btnBorder:                         #ccc;
 
-@btnPrimaryBackground:              @linkColor;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 15%);
+@btnPrimaryBackground:              @csOrange;
+@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 5%);
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
@@ -112,9 +112,9 @@
 
 // Dropdowns
 // -------------------------
-@dropdownBackground:            @csDarkGreen;
-@dropdownBorder:                rgba(0,0,0,.2);
-@dropdownLinkColor:             @grayDark;
+@dropdownBackground:            @csOrange;
+@dropdownBorder:                rgba(0,0,0,.4);
+@dropdownLinkColor:             @grayLighter;
 @dropdownLinkColorHover:        @white;
 @dropdownLinkBackgroundHover:   @linkColor;
 @dropdownDividerTop:            #e5e5e5;
@@ -156,8 +156,8 @@
 // Navbar
 // -------------------------
 @navbarHeight:                    50px;
-@navbarBackground:                @csDarkGreen;
-@navbarBackgroundHighlight:       @csDarkGreen;
+@navbarBackground:                @gray;
+@navbarBackgroundHighlight:       @gray;
 
 @navbarText:                      @white;
 @navbarLinkColor:                 @white;
