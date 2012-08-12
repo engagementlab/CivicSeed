@@ -17,10 +17,10 @@ environment = require('./environment.js');
 service = require('./service.js');
 
 // Setup database services, based on the environment
-service.init(environment, function() {
+service.init(environment, function(databases) {
 
 	control = require('./controllers.js')(app, service, environment);
-	config = require('./configuration.js')(app, express, ss, environment, service.db);
+	config = require('./configuration.js')(app, express, ss, environment, databases.mongooseDb);
 	//passportConfig = require('./passportconfig.js')(app, service);
 
 	// Start web server

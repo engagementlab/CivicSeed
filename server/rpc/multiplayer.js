@@ -2,6 +2,10 @@ var intervalId = {};
 var numPlayers = 0;
 var players = [];
 exports.actions = function(req, res, ss) {
+
+	// Russ, it's all hooked up. Access the db via ss.db
+	// console.log(ss.db);
+
 	return {
 		// on: function() {
 		// 	intervalId = setInterval(function() {

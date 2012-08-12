@@ -19,7 +19,7 @@ module.exports.init = function(environment, callback) {
 	// connect to database
 	if(!connected) {
 		db = mongoose.createConnection(env.database.URL);
-		db.on('error', console.error.bind(console, 'connection error: '));
+		db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 		db.once('open', function () {
 			console.log('CS:'.blue + ' Database: connection to '.green + env.database.environment);
 			
@@ -53,13 +53,11 @@ module.exports.init = function(environment, callback) {
 
 			})();
 
-			callback();
+			callback({ mongooseDb: db });
 		});
 	}
 
 };
-
-module.exports.db = db;
 
 // var hash = require('password-hash');
 
