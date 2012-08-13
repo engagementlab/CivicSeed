@@ -99,7 +99,7 @@ module.exports = function (app, service) {
 			// }
 	});
 	app.post('/', 
-	  passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
+	  passport.authenticate('local', { failureRedirect: '/', failureFlash: true }),
 	  function(req, res) {
         console.log("yaaay");
 	    res.redirect('/game');
