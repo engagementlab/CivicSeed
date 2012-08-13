@@ -4,14 +4,17 @@ module.exports = function(mongoose, db) {
 
 	var Schema = mongoose.Schema;
 	var ObjectId = Schema.ObjectId;
+
 	var InviteeSchema = new Schema({
 		email: String,
 		accepted: Boolean,
 		random: String
 	});
+
 	var UserSchema = new Schema({
 		name: String,
-		password: String
+		password: String,
+		email: String
 	});
 
 	//the third param specifies an exact collection to look for in the DB

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose'),
 connected = (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2),
-// hash = require('password-hash'),
 Schema = mongoose.Schema,
 ObjectId = Schema.ObjectId,
 useModel,
@@ -11,7 +10,7 @@ db;
 
 module.exports.init = function(environment, callback) {
 
-	console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow)
+	console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
 
 	env = environment; // for use throughout this file
 	nodeEnv = env.app.nodeEnv;
@@ -22,37 +21,6 @@ module.exports.init = function(environment, callback) {
 		db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 		db.once('open', function () {
 			console.log('CS:'.blue + ' Database: connection to '.green + env.database.environment);
-			
-			// require models and load setup data
-			// just creating some scope for easy declaration of variables
-			(function() {
-				var map,
-				user = useModel('user', 'preload');
-
-				if(nodeEnv === 'production') {
-				} else if(nodeEnv === 'staging') {
-				} else if(nodeEnv === 'testing') {
-				} else if(nodeEnv === 'development') {
-
-					// user.create([{name:'Robert',password:'temp'},], function (err) {
-					// 	if(err) {
-
-					// 	}
-					// });
-
-					// user.find(function (err, users) {
-					// 	if(err) {
-
-					// 	}
-					// 	console.log(users)
-					// });
-
-				} else {
-					console.log('  NODE_ENV VARIABLE CONNECTION ERROR: cannot use for preloading data   '.red.inverse);
-				}
-
-			})();
-
 			callback({ mongooseDb: db });
 		});
 	}
@@ -78,6 +46,9 @@ module.exports.init = function(environment, callback) {
 // 	});
 // };
 
+module.exports.loadEnvironment = function() {
+	return env;
+};
 
 useModel = module.exports.useModel = function(modelName, state) {
 	var checkConnectionExists = (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2);

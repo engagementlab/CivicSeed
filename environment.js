@@ -23,6 +23,7 @@ module.exports = {
 	app: {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
+		initialized: false
 	},
 	database: {
 		environment: databaseEnv,
