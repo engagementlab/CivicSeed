@@ -29,7 +29,7 @@ module.exports = function (app, service) {
 
 	// genericize to match that actual code
 	var checkCode = function(code, callback){
-		if(code==="goat"){
+		if(code==="tufts"){
 			return callback(true);
 		}
 		else{
@@ -57,7 +57,7 @@ module.exports = function (app, service) {
 				if(emptySpot) {
 					checkCode(code, function(result) {
 						if(result) {
-							emailUtil.sendInvite(email, 'cheese', function(err) {
+							emailUtil.sendInvite(email, 'jumbos', function(err) {
 								if(err){
 									res.render('invite.hbs', { message: 'issue sending mail. We tried, really.' });
 								}
@@ -67,13 +67,13 @@ module.exports = function (app, service) {
 							});
 						}
 						else {
-							res.render('invite.hbs', {message: 'NO SOUP FOR YOU.'});
+							res.render('invite.hbs', {message: 'wrong code, try again.'});
 						}
 					});
 
 				}
 				else{
-					res.render('invite.hbs', {message: 'are you a clone?'});
+					res.render('invite.hbs', {message: 'it appears you already did this.'});
 				}
 			}
 		});

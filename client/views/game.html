@@ -50,37 +50,34 @@
       </div>
     </div>
 
-    <!-- bootstrap stuff -->
     
-		<div class="gameboard">
-		</div>
-    <div class="container">
+	<div class="gameboard">
+	</div>
+
+ 	<!-- HUD -->
+    <div class="container hud">
         <div class="row">
-            <div class="span12 hud">
-            	<div class="hudContent" style="font-size: 22px;">
-            		<div class="row">
-	            		<div class="span2">
-		            		<i class="icon-briefcase icon-large"></i>
-		            		<i class="icon-leaf icon-large"></i>
-		            		<i class="icon-trophy icon-large"></i>
-						</div>
-	            		<div class="span3 bump">	
-	            			<i class="icon-group icon-large"></i>
-	            			<span>3 active players</span>
-	            		</div>
-	            		<div class="span5 bump">
-	            			<form class="form-inline">
-  								<input type="text" class="input-xlarge" placeholder="say something...">
-  								<button type="submit" class="btn">Chat</button>
-							</form>
-	            		</div>
-	            		<div class="span1 bump pull-right">
-	            			<i class="icon-question-sign icon-large"></i>
-	            		</div>    		
-            		</div>
- 	         	</div>
-      		</div>      
-    	</div>
+        	<div style="font-size: 22px;">
+        		<div class="span2 offset1">
+            		<i class="icon-briefcase icon-large"></i>
+            		<i class="icon-leaf icon-large"></i>
+            		<i class="icon-trophy icon-large"></i>
+				</div>
+        		<div class="span3">	
+        			<i class="icon-group icon-large"></i>
+        			<span>3 active players</span>
+        		</div>
+        		<div class="span5">
+        			<form class="form-inline">
+							<input type="text" class="input-xlarge" placeholder="say something...">
+							<button type="submit" class="btn">Chat</button>
+					</form>
+        		</div>
+        		<div class="span1">
+        			<i class="icon-question-sign icon-large"></i>
+        		</div>    		
+        	</div>
+	    </div>
     </div>
 
       
@@ -95,11 +92,11 @@
 
 	
 	<div ng-controller="PlayerController">
-		<div class="row">
+		<!-- <div class="row">
 			<div class="span2">
 				<p>number of players: {{playerCount}}</p>
 				<p>my id: {{infos.id}}</p>
-			</div>
+			</div> -->
 		</div>
 
 		
