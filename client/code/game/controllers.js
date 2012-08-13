@@ -32,7 +32,6 @@ angular.module('multiPlayer', ['ssAngular'])
 
 	//player movement
 	$(window).keydown(function(event) {
-		event.preventDefault();
 		//left
   		if(event.which == 37) {
    			$scope.infos.x-=32;
@@ -91,7 +90,7 @@ angular.module('multiPlayer', ['ssAngular'])
 		});
    		//super inefficient
    		rpc('multiplayer.playerMoved',$scope.infos);
-   		//return false;
+   		return false;
 	});
 	
 });
