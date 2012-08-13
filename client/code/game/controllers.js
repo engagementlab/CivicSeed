@@ -1,13 +1,3 @@
-$(document).ready(function(){
-
-
-
-
-
-
-
-
-});
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
 	$http.get('data/development/map.json').success(function(data) {
@@ -42,21 +32,66 @@ angular.module('multiPlayer', ['ssAngular'])
 
 	//player movement
 	$(window).keydown(function(event) {
+		event.preventDefault();
+		//left
   		if(event.which == 37) {
    			$scope.infos.x-=32;
-   		}
-   		if(event.which == 38) {
-   			$scope.infos.y-=32;
-   		}
-   		if(event.which == 39) {
-   			$scope.infos.x+=32;
-   		}
-   		if(event.which == 40) {
-   			$scope.infos.y+=32;
+   			$(".gameboard").addClass("gameboard-left");
+			var x = parseInt($(".gameboard").css("background-position-x"))+896;
+			var y = parseInt($(".gameboard").css("background-position-y"));
+			$(".gameboard-left").css({
+				"background-position-x":x+"px",
+				"background-position-y":y+"px"
+			});
    		}
 
+   		//up
+   		if(event.which == 38) {
+   			$scope.infos.y-=32;
+   			$(".gameboard").addClass("gameboard-up");
+			var x = parseInt($(".gameboard").css("background-position-x"));
+			var y = parseInt($(".gameboard").css("background-position-y"))+416;
+			$(".gameboard-up").css({
+				"background-position-x":x+"px",
+				"background-position-y":y+"px"
+			});
+   		}
+
+   		//right
+   		if(event.which == 39) {
+   			$scope.infos.x+=32;
+   			$(".gameboard").addClass("gameboard-right");
+			var x = parseInt($(".gameboard").css("background-position-x"))-896;
+			var y = parseInt($(".gameboard").css("background-position-y"));
+			$(".gameboard-right").css({
+				"background-position-x":x+"px",
+				"background-position-y":y+"px"
+			});
+   		}
+
+   		//down
+   		if(event.which == 40) {
+   			$scope.infos.y+=32;
+   			$(".gameboard").addClass("gameboard-down");
+			var x = parseInt($(".gameboard").css("background-position-x"));
+			var y = parseInt($(".gameboard").css("background-position-y"))-416;
+			$(".gameboard-down").css({
+				"background-position-x":x+"px",
+				"background-position-y":y+"px"
+			});
+   		}
+
+   		$(".gameboard").bind('transitionend webkitTransitionEnd', function() { 
+			
+			$(this).removeClass(".gameboard-left");
+			$(this).removeClass(".gameboard-right");
+			$(this).removeClass(".gameboard-up");
+			$(this).removeClass(".gameboard-down");
+
+		});
    		//super inefficient
    		rpc('multiplayer.playerMoved',$scope.infos);
+   		//return false;
 	});
 	
 });

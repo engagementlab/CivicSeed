@@ -4483,6 +4483,62 @@ a.badge:hover {
 .invisible {
   visibility: hidden;
 }
+.gameboard {
+  width: 960px;
+  height: 480px;
+  background: url(../img/game/world.png);
+  margin: 0 auto;
+  background-position-x: 2000px;
+  background-position-y: 2000px;
+  transition-property: background-position-y, background-position-x;
+  transition-duration: 1s;
+  transition-timing: linear;
+  -webkit-transition-property: background-position-y, background-position-x;
+  -webkit-transition-duration: 1s;
+  -webkit-transition-timing: linear;
+  -moz-transition-property: background-position-y, background-position-x;
+  -moz-transition-duration: 1s;
+  -moz-transition-timing: linear;
+}
+.gameboard-left {
+  background-position-x: 2000px;
+  background-position-y: 2000px;
+}
+.gameboard-right {
+  background-position-x: 2000px;
+  background-position-y: 2000px;
+}
+.gameboard-up {
+  background-position-x: 2000px;
+  background-position-y: 2300px;
+}
+.gameboard-down {
+  background-position-x: 2000px;
+  background-position-y: 2000px;
+}
+.hud {
+  background: #333;
+  height: 40px;
+  border: 10px solid #000;
+  margin-left: 10px;
+  color: #ccc;
+}
+.hudContent {
+  padding: 10px;
+}
+.hudContent p {
+  float: left;
+  font-size: 16px;
+}
+.hudContent i {
+  padding: 0 7px;
+}
+.hudContent form {
+  margin-top: -7px;
+}
+.bump {
+  margin-left: 10px;
+}
 body {
   padding-top: 80px;
 }
