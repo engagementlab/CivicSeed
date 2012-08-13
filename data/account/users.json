@@ -1,0 +1,17 @@
+[{
+	"name": "admin",
+	"password": "password",
+	"email": "something@something.com"
+}, {
+	"name": "Robert Hall",
+	"password": "password",
+	"email": "langbert@gmail.com"
+}, {
+	"name": "Russell Goldenberg",
+	"password": "password",
+	"email": "russellgoldenberg@gmail.com"
+}, {
+	"name": "Jon Dutko",
+	"password": "password",
+	"email": "jondutko@gmail.com???fixme"
+}]
