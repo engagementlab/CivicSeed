@@ -44,9 +44,9 @@ module.exports = function(app, express, ss, env, mongooseDb) {
 			tmpl: '*'
 		});
 
-		//Partials working?
-  		headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
-  		hbs.registerPartial('headPartial', headerTemplate); 
+		// //Partials working?
+		// headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
+		// hbs.registerPartial('headPartial', headerTemplate); 
 
 		// EXPRESS
 		app.set('views', __dirname + '/client/views');
