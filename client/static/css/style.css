@@ -4486,13 +4486,20 @@ a.badge:hover {
 .gameboard {
   width: 960px;
   height: 480px;
-  background: url(../img/game/world.png);
+  margin: 0 auto;
+  position: relative;
+  background: #333;
+}
+.map {
+  width: 960px;
+  height: 480px;
+  background: #333333 url(../img/game/world.png);
   margin: 0 auto;
   background-position-x: 0px;
   background-position-y: 0px;
   background-repeat: no-repeat;
   border-radius: 5px;
-  position: relative;
+  position: absolute;
   transition-property: background-position-y, background-position-x;
   transition-duration: 1s;
   transition-timing: linear;
@@ -4503,19 +4510,19 @@ a.badge:hover {
   -moz-transition-duration: 1s;
   -moz-transition-timing: linear;
 }
-.gameboard-left {
+.map-left {
   background-position-x: 2000px;
   background-position-y: 2000px;
 }
-.gameboard-right {
+.map-right {
   background-position-x: 2000px;
   background-position-y: 2000px;
 }
-.gameboard-up {
+.map-up {
   background-position-x: 2000px;
   background-position-y: 2300px;
 }
-.gameboard-down {
+.map-down {
   background-position-x: 2000px;
   background-position-y: 2000px;
 }
@@ -4527,10 +4534,14 @@ a.badge:hover {
   height: 28px;
   border: 2px dashed #e6742e;
   position: absolute;
+  z-index: 999;
 }
 .debug p {
   float: left;
   margin-left: 20px;
+}
+.nogo {
+  z-index: 0;
 }
 body {
   padding-top: 80px;

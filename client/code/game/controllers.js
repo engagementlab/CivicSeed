@@ -12,15 +12,33 @@
 	$(".gameboard").mousemove(function(m) {
 		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
 			$(".debug .coords").text(x*32+", "+y*32);
+			
+			//no go cursor
+			var tileIndex = (y-1)*28+(x-1);
+			var tempColor = "white";
+			if(tileIndex>-1 && tileIndex<364){
+				if(quad1.tiles[tileIndex].nogo){
+				tempColor = "red";
+				}	
+			}
+			else{
+				tempColor= "red";
+			}
+
+			//change cursor style and location
 			$(".cursor").css({
 				'left': x*32,
-				'top': y*32
+				'top': y*32,
+				'border-color': tempColor
 			});
+			$(".debug .tile").text(x+", "+y);
+
 		});
  	});
+
+ 	//******* moving player on click for now (only on edge of screen)
 	$(".gameboard").click(function(m){
 		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
-			$(".debug .tile").text(x+", "+y);
 			//for now if they click in a corner, left right overides
 			//modularize movement
 			//change Game.x to quadrant check
@@ -28,10 +46,10 @@
 
 			if(x<1){
 				console.log("ya");
-				$(".gameboard").addClass("gameboard-left");
-				var newX = parseInt($(".gameboard").css("background-position-x"))+896;
-				var newY = parseInt($(".gameboard").css("background-position-y"));
-				$(".gameboard-left").css({
+				$(".map").addClass("map-left");
+				var newX = parseInt($(".map").css("background-position-x"))+896;
+				var newY = parseInt($(".map").css("background-position-y"));
+				$(".map-left").css({
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
@@ -39,40 +57,40 @@
 			}
 			//right
 			else if(x>28){
-				$(".gameboard").addClass("gameboard-right");
-				var newX = parseInt($(".gameboard").css("background-position-x"))-896;
-				var newY = parseInt($(".gameboard").css("background-position-y"));
-				$(".gameboard-right").css({
+				$(".map").addClass("map-right");
+				var newX = parseInt($(".map").css("background-position-x"))-896;
+				var newY = parseInt($(".map").css("background-position-y"));
+				$(".map-right").css({
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
 			}
 			//up
 			else if(y<1){
-				$(".gameboard").addClass("gameboard-up");
-				var newX = parseInt($(".gameboard").css("background-position-x"));
-				var newY = parseInt($(".gameboard").css("background-position-y"))+416;
-				$(".gameboard-up").css({
+				$(".map").addClass("map-up");
+				var newX = parseInt($(".map").css("background-position-x"));
+				var newY = parseInt($(".map").css("background-position-y"))+416;
+				$(".map-up").css({
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
 			}
 			//down
 			else if(y>13){
-				$(".gameboard").addClass("gameboard-down");
-				var newX = parseInt($(".gameboard").css("background-position-x"));
-				var newY = parseInt($(".gameboard").css("background-position-y"))-416;
-				$(".gameboard-down").css({
+				$(".map").addClass("map-down");
+				var newX = parseInt($(".map").css("background-position-x"));
+				var newY = parseInt($(".map").css("background-position-y"))-416;
+				$(".map-down").css({
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
 			}
 			//reset 
-			$(".gameboard").bind('transitionend webkitTransitionEnd', function() { 
-				$(this).removeClass(".gameboard-left");
-				$(this).removeClass(".gameboard-right");
-				$(this).removeClass(".gameboard-up");
-				$(this).removeClass(".gameboard-down");
+			$(".map").bind('transitionend webkitTransitionEnd', function() { 
+				$(this).removeClass(".map-left");
+				$(this).removeClass(".map-right");
+				$(this).removeClass(".map-up");
+				$(this).removeClass(".map-down");
 				var temp = $(this).css('background-position-x');
 				console.log(temp);
 			});
@@ -82,9 +100,9 @@
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
-	$http.get('data/development/map.json').success(function(data) {
-    	console.log(data);
-  	});
+	// $http.get('data/development/map.json').success(function(data) {
+ //    	console.log(data);
+ //  	});
 
 	$scope.players;
 	$scope.infos = 
