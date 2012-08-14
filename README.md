@@ -135,6 +135,8 @@ Running "node --version" should return:
 
 ## Front End
 
+### Map Information
+
 ### Front End Dependencies
 
 ### Compiling CSS
