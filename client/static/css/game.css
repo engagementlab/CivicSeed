@@ -3,9 +3,11 @@
   height: 480px;
   background: url(../img/game/world.png);
   margin: 0 auto;
-  background-position-x: 2000px;
-  background-position-y: 2000px;
+  background-position-x: 0px;
+  background-position-y: 0px;
+  background-repeat: no-repeat;
   border-radius: 5px;
+  position: relative;
   transition-property: background-position-y, background-position-x;
   transition-duration: 1s;
   transition-timing: linear;
@@ -34,4 +36,10 @@
 }
 .hud {
   margin-top: 20px;
+}
+.cursor {
+  width: 28px;
+  height: 28px;
+  border: 2px dashed red;
+  position: absolute;
 }

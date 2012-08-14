@@ -1,3 +1,28 @@
+
+	// Game.initialize();
+	
+	calculateMouse = function(a,b,oa,ob,callback){
+		var x = a - oa;
+		var y = b - ob;
+		var snapX = Math.floor(x/32);
+		var snapY = Math.floor(y/32);
+		return callback(snapX,snapY);
+	};
+	$(".gameboard").mousemove(function(m) {
+		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
+			$(".debug .coords").text(x*32+", "+y*32);
+			$(".cursor").css({
+				'left': x*32,
+				'top': y*32
+			});
+		});
+ 	});
+	$(".gameboard").click(function(m){
+		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
+			$(".debug .tile").text(x+", "+y);
+		});
+	});
+
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
 	$http.get('data/development/map.json').success(function(data) {
