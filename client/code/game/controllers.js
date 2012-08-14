@@ -1,6 +1,7 @@
-
-	// Game.initialize();
-	
+	$(document).ready(function(){
+		Game.init();
+	});
+//******************** mouse interaction with grid 
 	calculateMouse = function(a,b,oa,ob,callback){
 		var x = a - oa;
 		var y = b - ob;
@@ -20,8 +21,64 @@
 	$(".gameboard").click(function(m){
 		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
 			$(".debug .tile").text(x+", "+y);
+			//for now if they click in a corner, left right overides
+			//modularize movement
+			//change Game.x to quadrant check
+			//scroll left
+
+			if(x<1){
+				console.log("ya");
+				$(".gameboard").addClass("gameboard-left");
+				var newX = parseInt($(".gameboard").css("background-position-x"))+896;
+				var newY = parseInt($(".gameboard").css("background-position-y"));
+				$(".gameboard-left").css({
+					"background-position-x":newX+"px",
+					"background-position-y":newY+"px"
+				});
+
+			}
+			//right
+			else if(x>28){
+				$(".gameboard").addClass("gameboard-right");
+				var newX = parseInt($(".gameboard").css("background-position-x"))-896;
+				var newY = parseInt($(".gameboard").css("background-position-y"));
+				$(".gameboard-right").css({
+					"background-position-x":newX+"px",
+					"background-position-y":newY+"px"
+				});
+			}
+			//up
+			else if(y<1){
+				$(".gameboard").addClass("gameboard-up");
+				var newX = parseInt($(".gameboard").css("background-position-x"));
+				var newY = parseInt($(".gameboard").css("background-position-y"))+416;
+				$(".gameboard-up").css({
+					"background-position-x":newX+"px",
+					"background-position-y":newY+"px"
+				});
+			}
+			//down
+			else if(y>13){
+				$(".gameboard").addClass("gameboard-down");
+				var newX = parseInt($(".gameboard").css("background-position-x"));
+				var newY = parseInt($(".gameboard").css("background-position-y"))-416;
+				$(".gameboard-down").css({
+					"background-position-x":newX+"px",
+					"background-position-y":newY+"px"
+				});
+			}
+			//reset 
+			$(".gameboard").bind('transitionend webkitTransitionEnd', function() { 
+				$(this).removeClass(".gameboard-left");
+				$(this).removeClass(".gameboard-right");
+				$(this).removeClass(".gameboard-up");
+				$(this).removeClass(".gameboard-down");
+				var temp = $(this).css('background-position-x');
+				console.log(temp);
+			});
 		});
 	});
+	//********************mouse interaction end ******
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
@@ -55,68 +112,6 @@ angular.module('multiPlayer', ['ssAngular'])
 		$scope.players = nubes;
 	});
 
-	//player movement
-	$(window).keydown(function(event) {
-		//left
-  		if(event.which == 37) {
-   			$scope.infos.x-=32;
-   			$(".gameboard").addClass("gameboard-left");
-			var x = parseInt($(".gameboard").css("background-position-x"))+896;
-			var y = parseInt($(".gameboard").css("background-position-y"));
-			$(".gameboard-left").css({
-				"background-position-x":x+"px",
-				"background-position-y":y+"px"
-			});
-   		}
-
-   		//up
-   		if(event.which == 38) {
-   			$scope.infos.y-=32;
-   			$(".gameboard").addClass("gameboard-up");
-			var x = parseInt($(".gameboard").css("background-position-x"));
-			var y = parseInt($(".gameboard").css("background-position-y"))+416;
-			$(".gameboard-up").css({
-				"background-position-x":x+"px",
-				"background-position-y":y+"px"
-			});
-   		}
-
-   		//right
-   		if(event.which == 39) {
-   			$scope.infos.x+=32;
-   			$(".gameboard").addClass("gameboard-right");
-			var x = parseInt($(".gameboard").css("background-position-x"))-896;
-			var y = parseInt($(".gameboard").css("background-position-y"));
-			$(".gameboard-right").css({
-				"background-position-x":x+"px",
-				"background-position-y":y+"px"
-			});
-   		}
-
-   		//down
-   		if(event.which == 40) {
-   			$scope.infos.y+=32;
-   			$(".gameboard").addClass("gameboard-down");
-			var x = parseInt($(".gameboard").css("background-position-x"));
-			var y = parseInt($(".gameboard").css("background-position-y"))-416;
-			$(".gameboard-down").css({
-				"background-position-x":x+"px",
-				"background-position-y":y+"px"
-			});
-   		}
-
-   		$(".gameboard").bind('transitionend webkitTransitionEnd', function() { 
-			
-			$(this).removeClass(".gameboard-left");
-			$(this).removeClass(".gameboard-right");
-			$(this).removeClass(".gameboard-up");
-			$(this).removeClass(".gameboard-down");
-
-		});
-   		//super inefficient
-   		rpc('multiplayer.playerMoved',$scope.infos);
-   		return false;
-	});
 	
 });
 // angular.module('exampleApp', ['ssAngular'])
