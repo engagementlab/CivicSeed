@@ -14,7 +14,8 @@ module.exports = function(mongoose, db) {
 	var UserSchema = new Schema({
 		name: String,
 		password: String,
-		email: String
+		email: String,
+		type: String
 	});
 
 	//the third param specifies an exact collection to look for in the DB

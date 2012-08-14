@@ -6,9 +6,6 @@ module.exports = function (app, service) {
 	nodeEnv = environment.app.nodeEnv,
 	initialized = environment.app.initialized;
 
-
- 
-
 	app.get('/startup', function(req, res) {
 
 		var user,
