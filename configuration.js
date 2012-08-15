@@ -10,7 +10,7 @@ blocks = {};
 
 //configuration module 
 //All express and connect configuration must there
-module.exports = function(app, express, ss, env, mongooseDb) {
+module.exports = function(app, express, ss, env, service, mongooseDb) {
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
@@ -25,6 +25,9 @@ module.exports = function(app, express, ss, env, mongooseDb) {
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', mongooseDb);
+
+		// make the models accessible to Socket Stream
+		ss.api.add('service', service);
 
 		// // Use server-side compiled Hogan (Mustache) templates. Others engines available
 		// ss.client.templateEngine.use(require('ss-hogan'));

@@ -48,7 +48,7 @@ module.exports = function(mongoose, db) {
 				attractiveness: Number,
 				persuasiveness: Number,
 				personalMagnetism: Number
-			},
+			}
 		}
 
 

@@ -57,6 +57,8 @@ useModel = module.exports.useModel = function(modelName, state) {
 	}
 	if(state === 'preload') {
 		console.log('CS: '.blue + 'Initializing database by using model '.green + modelName.yellow.underline);
+	} else if(state === 'ss') {
+		console.log('CS: '.blue + 'Importing model '.magenta + modelName.yellow.underline + ' into socket stream RPC.'.magenta);
 	} else {
 		console.log('CS: '.blue + 'Import model '.blue + modelName.yellow.underline + ' into following controller: '.blue);
 	}

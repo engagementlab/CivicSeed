@@ -20,7 +20,7 @@ service = require('./service.js');
 service.init(environment, function(databases) {
 
 	control = require('./controllers.js')(app, service, environment);
-	config = require('./configuration.js')(app, express, ss, environment, databases.mongooseDb);
+	config = require('./configuration.js')(app, express, ss, environment, service, databases.mongooseDb);
 	//passportConfig = require('./passportconfig.js')(app, service);
 
 	// Start web server
