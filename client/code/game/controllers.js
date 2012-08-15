@@ -17,7 +17,7 @@
 			var tileIndex = (y-1)*28+(x-1);
 			var tempColor = "white";
 			if(tileIndex>-1 && tileIndex<364){
-				if(quad1.tiles[tileIndex].nogo){
+				if(Game.data.tiles[tileIndex].nogo){
 				tempColor = "red";
 				}	
 			}
@@ -98,13 +98,13 @@
 	});
 	//********************mouse interaction end ******
 
+
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
 
-	rpc('multiplayer.init',function(err,data){
-		console.log(data);
-	});
 	
+	
+
 	// $scope.players;
 	// $scope.infos = 
 	// {

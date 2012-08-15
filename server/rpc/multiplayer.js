@@ -36,7 +36,6 @@ exports.actions = function(req, res, ss) {
 			quadrants = service.useModel('map', 'ss');
 
 			quadrants.find({quadrantNumber: 0},function(err,quad){
-				console.log(quad);
 				res(err,quad);
 			});
 			// users.find(function (err, users) {
