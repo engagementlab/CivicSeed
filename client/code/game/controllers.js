@@ -100,35 +100,40 @@
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
-	// $http.get('data/development/map.json').success(function(data) {
- //    	console.log(data);
- //  	});
 
-	$scope.players;
-	$scope.infos = 
-	{
-		"id": 0,
-		"x": Math.floor(Math.random()*500),
-		"y": Math.floor(Math.random()*400+100),
-		"r": Math.floor(Math.random()*250),
-		"g": Math.floor(Math.random()*250),
-		"b": Math.floor(Math.random()*250)
-	}
-	var s = rpc('multiplayer.checkIn');
-	$scope.infos.id = s;
-	console.log($scope.infos);
-	rpc('multiplayer.addMe',$scope.infos);
-	$scope.messages = [];
-	$scope.streaming = false;
-	$scope.status = "";
-
-
-	$scope.$on('ss-count', function(event,num) {
-		$scope.playerCount = num;
+	rpc('multiplayer.init',function(err,data){
+		console.log(data);
 	});
-	$scope.$on('ss-allPlayers',function(event,nubes){
-		$scope.players = nubes;
-	});
+	
+	// $scope.players;
+	// $scope.infos = 
+	// {
+	// 	"id": 0,
+	// 	"x": Math.floor(Math.random()*500),
+	// 	"y": Math.floor(Math.random()*400+100),
+	// 	"r": Math.floor(Math.random()*250),
+	// 	"g": Math.floor(Math.random()*250),
+	// 	"b": Math.floor(Math.random()*250)
+	// }
+	// rpc('multiplayer.checkIn',function(s){
+	// 	$scope.infos.id = s;
+	// });
+	// console.log($scope.infos);
+	// rpc('multiplayer.addMe',$scope.infos);
+	// $scope.messages = [];
+	// $scope.streaming = false;
+	// $scope.status = "";
+	// var quadInView = rpc('multiplayer.getMapData',0,function(data){
+	// 	console.log(data);
+	// });
+
+
+	// $scope.$on('ss-count', function(event,num) {
+	// 	$scope.playerCount = num;
+	// });
+	// $scope.$on('ss-allPlayers',function(event,nubes){
+	// 	$scope.players = nubes;
+	// });
 
 	
 });

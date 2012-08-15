@@ -57,7 +57,7 @@ module.exports = function (app, service) {
 
 
 
-					fs.readdir(__dirname + '/../../data/map', function(err, files) {
+					fs.readdir(__dirname + '/../../data/generateMapJSON/data', function(err, files) {
 						if(err) {
 							throw err;
 						}
@@ -68,7 +68,7 @@ module.exports = function (app, service) {
 						files.forEach(function(file) {
 							if(file.match(isJson)) {
 
-								fs.readFile(__dirname + '/../../data/map/' + file, 'ascii', function(err, file) {
+								fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
 									if(err) {
 										console.error("Could not open file: %s", err);
 										process.exit(1);

@@ -5,6 +5,7 @@ var players = [];
 exports.actions = function(req, res, ss) {
 
 	var service, db, users;
+	
 
 	// Russ, it's all hooked up. Access the db via ss.db
 	//console.log(ss.db);
@@ -26,24 +27,30 @@ exports.actions = function(req, res, ss) {
 		// 		res("Ignoring SpaceMail");
 		// 	}, 2000);
 		// },
-		checkIn: function() {
 
+		init: function() {
 			// load models and database service only once
 			service = ss.service;
 			db = ss.db;
 			users = service.useModel('user', 'ss');
+			quadrants = service.useModel('map', 'ss');
 
-			numPlayers++;
-			ss.publish.all('ss-count',numPlayers);
-			res(numPlayers);
-
-			users.find(function (err, users) {
-				if (err) { return handleError(err); }
-				console.log(users);
-				console.log(users.length);
+			quadrants.find({quadrantNumber: 0},function(err,quad){
+				console.log(quad);
+				res(err,quad);
 			});
-
+			// users.find(function (err, users) {
+			// 	if (err) { return handleError(err); }
+			// 	console.log(users);
+			// 	console.log(users.length);
+			// });
 		},
+		getMapData: function(quadNumber){
+			quadrants.find({quadrantNumber: quadNumber},function(err,quad){
+				//console.log(quad);
+				res(quad);
+			});
+		},	
 		addMe: function(player) {
 			players.push(player);
 			ss.publish.all('ss-allPlayers',players);
