@@ -13,17 +13,25 @@
 		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
 			$(".debug .coords").text(x*32+", "+y*32);
 			
-			//no go cursor
-			var tileIndex = (y-1)*28+(x-1);
-			var tempColor = "white";
-			if(tileIndex>-1 && tileIndex<364){
-				if(Game.data.tiles[tileIndex].nogo){
-				tempColor = "red";
-				}	
+			var noGoValue = Game.getNoGo(x,y);
+			var tempColor;
+			if(noGoValue){
+				tempColor = 'red';
 			}
 			else{
-				tempColor= "red";
+				tempColor = 'white';
 			}
+			//no go cursor
+			// var tileIndex = (y-1)*28+(x-1);
+			// var tempColor = "white";
+			// if(tileIndex>-1 && tileIndex<364){
+			// 	if(Game.currentQuad.tiles[tileIndex].nogo){
+			// 	tempColor = "red";
+			// 	}	
+			// }
+			// else{
+			// 	tempColor= "red";
+			// }
 
 			//change cursor style and location
 			$(".cursor").css({
@@ -42,10 +50,10 @@
 			//for now if they click in a corner, left right overides
 			//modularize movement
 			//change Game.x to quadrant check
-			//scroll left
 
+			Game.info();
+			//scroll left
 			if(x<1){
-				console.log("ya");
 				$(".map").addClass("map-left");
 				var newX = parseInt($(".map").css("background-position-x"))+896;
 				var newY = parseInt($(".map").css("background-position-y"));
@@ -53,7 +61,8 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
-
+				//new quad is -1
+				Game.changeQuad(-1);
 			}
 			//right
 			else if(x>28){
@@ -64,6 +73,8 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+				//new quad is +1
+				Game.changeQuad(1);
 			}
 			//up
 			else if(y<1){
@@ -74,6 +85,8 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+				//new quad is -5
+				Game.changeQuad(-5);
 			}
 			//down
 			else if(y>13){
@@ -84,6 +97,8 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+				//new quad is +5
+				Game.changeQuad(5);
 			}
 			//reset 
 			$(".map").bind('transitionend webkitTransitionEnd', function() { 
@@ -91,8 +106,6 @@
 				$(this).removeClass(".map-right");
 				$(this).removeClass(".map-up");
 				$(this).removeClass(".map-down");
-				var temp = $(this).css('background-position-x');
-				console.log(temp);
 			});
 		});
 	});

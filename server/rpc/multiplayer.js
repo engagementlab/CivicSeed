@@ -35,19 +35,12 @@ exports.actions = function(req, res, ss) {
 			users = service.useModel('user', 'ss');
 			quadrants = service.useModel('map', 'ss');
 
-			quadrants.find({quadrantNumber: 0},function(err,quad){
-				res(err,quad);
-			});
-			// users.find(function (err, users) {
-			// 	if (err) { return handleError(err); }
-			// 	console.log(users);
-			// 	console.log(users.length);
-			// });
+			res(true);
+		
 		},
-		getMapData: function(quadNumber){
+		getMapData: function(index,quadNumber){
 			quadrants.find({quadrantNumber: quadNumber},function(err,quad){
-				//console.log(quad);
-				res(quad);
+				res(err,quad,index);
 			});
 		},	
 		addMe: function(player) {
