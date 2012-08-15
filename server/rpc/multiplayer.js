@@ -1,5 +1,5 @@
 var intervalId = {};
-var numPlayers = 0;
+var numActivePlayers = 0;
 var players = [];
 
 exports.actions = function(req, res, ss) {
@@ -34,19 +34,19 @@ exports.actions = function(req, res, ss) {
 			db = ss.db;
 			users = service.useModel('user', 'ss');
 			quadrants = service.useModel('map', 'ss');
-
-			res(true);
-		
+			res(true);	
+		},
+		checkIn: function(){
+			numActivePlayers++;
+			//players.push(player);
+			ss.publish.all('ss-numPlayers',numActivePlayers);
+			res(numActivePlayers);
 		},
 		getMapData: function(index,quadNumber){
 			quadrants.find({quadrantNumber: quadNumber},function(err,quad){
 				res(err,quad,index);
 			});
 		},	
-		addMe: function(player) {
-			players.push(player);
-			ss.publish.all('ss-allPlayers',players);
-		},
 		playerMoved: function(player){
 			console.log(player);
 			for(var p=0; p<players.length;p++){
@@ -63,5 +63,5 @@ exports.actions = function(req, res, ss) {
 			ss.publish.all('ss-allPlayers',players);
 		}
 
-	};
+	}
 }

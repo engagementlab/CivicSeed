@@ -23,8 +23,8 @@ Game.currentQuad,
 Game.neighborQuads=[];
 
 Game.init = function() {
-	Game.x = 32;
-	Game.y = 32;
+	Game.x = 0;
+	Game.y = 0;
 	$(".map").css({
 		"background-position-x":Game.x+"px",
 		"background-position-y":Game.y+"px"
@@ -147,7 +147,7 @@ Game.getNoGo = function(x,y){
 			currentIndex = topLeftIndex+((y-1)*quadWidthInTiles);
 			isNoGo = Game.neighborQuads[4].tiles[currentIndex].nogo;
 		}
-		console.log('rightedge: '+currentIndex);
+		console.log('rightedge');
 	}
 	//top (index 1)
 	else if(y==0){
@@ -173,13 +173,13 @@ Game.getNoGo = function(x,y){
 			currentIndex = topLeftIndex+x-1;
 			isNoGo = Game.neighborQuads[6].tiles[currentIndex].nogo;
 		}
-		console.log('bottomedge: '+currentIndex);
+		console.log('bottomedge');
 	}
 	
 	//middle (current quad)
 	else{
 		isNoGo = Game.currentQuad.tiles[currentIndex].nogo;
-		console.log('middle: '+currentIndex);
+		console.log('middle');
 	}
 
 	return isNoGo;

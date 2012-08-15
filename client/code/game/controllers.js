@@ -114,10 +114,21 @@
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
+	$scope.numPlayersRPC = 0;
+	$scope.numPlayersON = 0;
 
-	
-	
+	//THIS DOESN'T update numPlayers, allthough it logs the right num
+	ss.rpc('multiplayer.checkIn',function(num){
+		//$scope.info.id = num;
+		console.log("numRPC: "+num);
+		$scope.numPlayersRPC = num;
+		//console.log($scope.numPlayers);
+	});
 
+	$scope.$on('ss-numPlayers',function(event,num){
+		console.log("numON: "+num);
+		$scope.numPlayersON = num;
+	});
 	// $scope.players;
 	// $scope.infos = 
 	// {
@@ -128,9 +139,7 @@ angular.module('multiPlayer', ['ssAngular'])
 	// 	"g": Math.floor(Math.random()*250),
 	// 	"b": Math.floor(Math.random()*250)
 	// }
-	// rpc('multiplayer.checkIn',function(s){
-	// 	$scope.infos.id = s;
-	// });
+	
 	// console.log($scope.infos);
 	// rpc('multiplayer.addMe',$scope.infos);
 	// $scope.messages = [];
