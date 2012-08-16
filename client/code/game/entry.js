@@ -11,6 +11,9 @@ ss.server.on('reconnect', function(){
 	console.log('Connection back up :-)');
 });
 
+//new addition (ss-angular)
+//require('ssAngular');
+
 require('/controllers');
 ss.server.on('ready', function(){
 

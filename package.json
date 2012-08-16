@@ -18,6 +18,7 @@
 		"socketstream": "0.3.x",
 		"ss-stylus": ">= 0.1.5",
 		"ss-hogan": "0.1.x",
+		"ss-angular": "0.x.x",
 		"consolidate": ">= 0.3.0",
 		"express": ">= 3.0.0rc2",
 		"express-messages": ">= 0.0.2",

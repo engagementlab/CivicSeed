@@ -5,6 +5,111 @@
 	position: relative;
 	background: #333;
 	border-radius:5px;
+
+}
+.grids{
+	position:absolute;
+	border: 1px dashed purple;
+}
+.fullQuad{
+	width:894px;
+	height:414px;
+	margin: 0;
+	padding: 0;
+}
+.cornerQuad{
+	width:30px;
+	height:30px;
+	margin: 0;
+	padding: 0;
+}
+.verticalQuad{
+	width:30px;
+	height:414px;
+	margin: 0;
+	padding: 0;
+}
+.horizontalQuad{
+	width:894px;
+	height:30px;
+	margin: 0;
+	padding: 0;
+}
+.topLeft{
+	left:0px;
+	top:0px;
+}
+.topMiddle{
+	left:32px;
+	top:0px;
+}
+.topRight{
+	left:928px;
+	top:0px;
+}
+.middleLeft{
+	left:0px;
+	top:32px;
+}
+.middleMiddle{
+	position:absolute;
+	left:32px;
+	top:32px;
+}
+.cube{
+	position: absolute;
+	width:32px;
+	height:32px;
+	left:864px;
+	top:0px;
+	background: yellow;
+}
+.middleRight{
+	left:928px;
+	top:32px;
+}
+.bottomLeft{
+	left:0px;
+	top:448px;
+}
+.bottomMiddle{
+	left:32px;
+	top:448px;
+}
+.bottomRight{
+	left:928px;
+	top:448px;
+}
+.current{
+	width:960px;
+	height:480px;
+	margin:0;
+	position:absolute;
+	background:red;
+	top:0px;
+	left:0px;
+	transition-property:left, top;   
+	transition-duration: 1s;
+	transition-timing: linear;
+	-webkit-transition-property:left, top;   
+	-webkit-transition-duration: 1s;
+	-webkit-transition-timing: linear;
+}
+.shiftLeft{
+	left:-896px;
+	top:0px;
+}
+.shiftRight{
+	left:896px;
+	top:0px;
+}
+.shiftUp{
+	left:0px;
+	top:416px;
+}
+.shiftDown{
+	left:0px;
+	top:-416px;
 }
 .map{
 	width: 960px;

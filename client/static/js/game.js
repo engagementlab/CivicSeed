@@ -20,18 +20,26 @@ Game.y,
 Game.quadrant = 0,
 Game.tilesInView,
 Game.currentQuad,
-Game.neighborQuads=[];
+Game.neighborQuads=[],
+Game.currentTile;
+
 
 Game.init = function() {
 	Game.x = 0;
 	Game.y = 0;
+	Game.currentTile = {
+		"x": 0,
+		"y": 0,
+		"index": 0,
+		"nogo": true
+	}
 	$(".map").css({
 		"background-position-x":Game.x+"px",
 		"background-position-y":Game.y+"px"
 	});
 	ss.rpc('multiplayer.init',function(ready){
 		Game.getNewQuads(0);
-	});
+	});	
 };
 
 Game.getNewQuads = function(index){
@@ -50,6 +58,7 @@ Game.getNewQuads = function(index){
 			}
 		}
 	});
+
 };
 Game.draw = function() {
  
@@ -187,6 +196,42 @@ Game.getNoGo = function(x,y){
 
 Game.info = function(){
 	console.log(Game.neighborQuads);
+};
+
+Game.setCurrentTile = function(a,b){
+	Game.currentTile.index = b*quadWidthInTiles+a;
+	Game.currentTile.x = a;
+	Game.currentTile.y = b;
+	Game.currentTile.nogo = Game.getNoGo(a,b);
 }
+
+Game.createTiles = function(){
+	// //topLeft
+	// $(".topLeft").append('<div class="tile index'+bottomRightIndex+'"></div>');
+	// //topMiddle
+	// //topRight
+	// $(".topRight").append('<div class="tile index'+bottomLeftIndex+'"></div>');
+
+	// //middleLeft
+	// //middleMiddle
+	// for(var i=0;i<quadWidthInTiles*quadHeightInTiles;i++){
+	// 	var tempX = i%quadWidthInTiles;
+	// 	var tempY = Math.floor(i/quadWidthInTiles);
+		
+	// 	$(".middleMiddle").append('<div class="tile index'+i+'"></div>');
+	// 	$('.index'+i).css({
+	// 		'top': tempY*32,
+	// 		'left': tempX*32
+	// 	});
+	// }
+
+	// //middleRight
+	// //bottomLeft
+	// $(".bottomLeft").append('<div class="tile index'+topRightIndex+'"></div>');
+
+	// //bottomMiddle
+	// //bottomRight
+	// $(".bottomRight").append('<div class="tile index'+topLeftIndex+'"></div>');
+};
 
 

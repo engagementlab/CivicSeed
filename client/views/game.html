@@ -51,14 +51,40 @@
       </div>
     </div>
 
-  	<div class="debug">
-  		<p class="tile">0,0</p>
-  		<p class="coords">0,0</p>
-	</div>
-
 	<div ng-controller="PlayerController">
 		<div class="gameboard">
 			<div class="map"></div>
+
+
+			<!-- some hard coded testing of tiles -->
+			<div class="next">
+			</div>
+			<div class="current">
+				<div class="topLeft cornerQuad grids">
+				</div>
+				<div class="topMiddle horizontalQuad grids">
+				</div>
+				<div class="topRight cornerQuad grids">
+				</div>
+				<div class="middleLeft verticalQuad grids">
+				</div>
+				<div class="middleMiddle fullQuad grids">
+					<div class="cube">
+					</div>
+				</div>
+				<div class="middleRight verticalQuad grids">
+				</div>
+				<div class="bottomLeft cornerQuad grids">
+				</div>
+				<div class="bottomMiddle horizontalQuad grids">
+				</div>
+				<div class="bottomRight cornerQuad grids">
+				</div>
+			</div>
+				
+			<div class="players">
+				
+			</div>
 	    	<div class="cursor"></div>
 		</div>
 
@@ -73,7 +99,7 @@
 					</div>
 	        		<div class="span3">	
 	        			<i class="icon-group icon-large"></i>
-	        			<span>{{numPlayersRPC}} {{numPlayersON}} active players</span>
+	        			<span>{{numPlayers}} active players</span>
 	        		</div>
 	        		<div class="span5">
 	        			<form class="form-inline">

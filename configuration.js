@@ -15,6 +15,7 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
+		
 		// SOCKET STREAM
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
@@ -46,6 +47,9 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 			],
 			tmpl: '*'
 		});
+
+		//SS-Angular (breaks it)
+		//ss.responders.add(require('ss-angular'));
 
 		// //Partials working?
 		// headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');

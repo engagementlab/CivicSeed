@@ -39,7 +39,7 @@ exports.actions = function(req, res, ss) {
 		checkIn: function(){
 			numActivePlayers++;
 			//players.push(player);
-			ss.publish.all('ss-numPlayers',numActivePlayers);
+			//ss.publish.all('ss-numPlayers',numActivePlayers);
 			res(numActivePlayers);
 		},
 		getMapData: function(index,quadNumber){

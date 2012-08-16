@@ -11,9 +11,9 @@
 	};
 	$(".gameboard").mousemove(function(m) {
 		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
-			$(".debug .coords").text(x*32+", "+y*32);
 			
 			var noGoValue = Game.getNoGo(x,y);
+			Game.setCurrentTile(x,y);
 			var tempColor;
 			if(noGoValue){
 				tempColor = 'red';
@@ -21,39 +21,22 @@
 			else{
 				tempColor = 'white';
 			}
-			//no go cursor
-			// var tileIndex = (y-1)*28+(x-1);
-			// var tempColor = "white";
-			// if(tileIndex>-1 && tileIndex<364){
-			// 	if(Game.currentQuad.tiles[tileIndex].nogo){
-			// 	tempColor = "red";
-			// 	}	
-			// }
-			// else{
-			// 	tempColor= "red";
-			// }
-
 			//change cursor style and location
 			$(".cursor").css({
 				'left': x*32,
 				'top': y*32,
 				'border-color': tempColor
 			});
-			$(".debug .tile").text(x+", "+y);
-
 		});
  	});
 
  	//******* moving player on click for now (only on edge of screen)
 	$(".gameboard").click(function(m){
-		calculateMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
-			//for now if they click in a corner, left right overides
-			//modularize movement
-			//change Game.x to quadrant check
+		if(Game.currentTile.nogo==false){
 
-			Game.info();
-			//scroll left
-			if(x<1){
+			//left
+			if(Game.currentTile.x<1){
+				//move bg
 				$(".map").addClass("map-left");
 				var newX = parseInt($(".map").css("background-position-x"))+896;
 				var newY = parseInt($(".map").css("background-position-y"));
@@ -61,11 +44,21 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+
+				//move grid
+
+				$(".current").addClass("shiftRight");
+
 				//new quad is -1
 				Game.changeQuad(-1);
 			}
 			//right
-			else if(x>28){
+			else if(Game.currentTile.x>28){
+				$(".topRight").addClass("horizontalQuad").removeClass("cornerQuad");
+				$(".middleRight").addClass("fullQuad").removeClass("verticalQuad");
+				$(".bottomRight").addClass("horizontalQuad").removeClass("cornerQuad");
+				
+				//move bg
 				$(".map").addClass("map-right");
 				var newX = parseInt($(".map").css("background-position-x"))-896;
 				var newY = parseInt($(".map").css("background-position-y"));
@@ -73,11 +66,17 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+				
+				//move grid
+				$(".current").css("width","1856px");
+				$(".current").addClass("shiftLeft");
+				
 				//new quad is +1
 				Game.changeQuad(1);
 			}
 			//up
-			else if(y<1){
+			else if(Game.currentTile.y<1){
+
 				$(".map").addClass("map-up");
 				var newX = parseInt($(".map").css("background-position-x"));
 				var newY = parseInt($(".map").css("background-position-y"))+416;
@@ -85,11 +84,14 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+
+				//move grid
+				$(".current").addClass("shiftUp");
 				//new quad is -5
 				Game.changeQuad(-5);
 			}
 			//down
-			else if(y>13){
+			else if(Game.currentTile.y>13){
 				$(".map").addClass("map-down");
 				var newX = parseInt($(".map").css("background-position-x"));
 				var newY = parseInt($(".map").css("background-position-y"))-416;
@@ -97,38 +99,40 @@
 					"background-position-x":newX+"px",
 					"background-position-y":newY+"px"
 				});
+				//move grid
+				$(".current").addClass("shiftDown");
 				//new quad is +5
 				Game.changeQuad(5);
 			}
 			//reset 
 			$(".map").bind('transitionend webkitTransitionEnd', function() { 
-				$(this).removeClass(".map-left");
-				$(this).removeClass(".map-right");
-				$(this).removeClass(".map-up");
-				$(this).removeClass(".map-down");
+				$(this).removeClass("map-left");
+				$(this).removeClass("map-right");
+				$(this).removeClass("map-up");
+				$(this).removeClass("map-down");
+				$("topLeft").remove();
+				$(".current").css({
+					"width": "960px"
+					// "left": "0px"
+				});
+				//$(".current").removeClass("shiftLeft");
+				$(".middleMiddle").css({
+					"width":"32px",
+					"left": "896px"
+				});
+				$(".cube").css("left","0px");
+
 			});
-		});
+		}
+			Game.info();
 	});
 	//********************mouse interaction end ******
 
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
-	$scope.numPlayersRPC = 0;
-	$scope.numPlayersON = 0;
+	$scope.numPlayers= rpc('multiplayer.checkIn');
 
-	//THIS DOESN'T update numPlayers, allthough it logs the right num
-	ss.rpc('multiplayer.checkIn',function(num){
-		//$scope.info.id = num;
-		console.log("numRPC: "+num);
-		$scope.numPlayersRPC = num;
-		//console.log($scope.numPlayers);
-	});
-
-	$scope.$on('ss-numPlayers',function(event,num){
-		console.log("numON: "+num);
-		$scope.numPlayersON = num;
-	});
 	// $scope.players;
 	// $scope.infos = 
 	// {
