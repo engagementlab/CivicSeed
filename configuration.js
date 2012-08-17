@@ -42,6 +42,7 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 			code: [
 				'libs/jquery-1.7.2.min.js',
 				'libs/angular-1.0.1.min.js',
+				'libs/bootstrap.min.js',
 				'game/controllers.js',
 				'game/entry.js',
 				'game/app.js'
