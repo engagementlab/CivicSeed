@@ -115,6 +115,8 @@ Once the app is running you may visit `/startup` to initialize data in the app. 
     │ │   │ └── tinycolor@0.0.1 
     │ │   └── xmlhttprequest@1.2.2 
     │ └── uglify-js@1.2.6 
+    ├─┬ ss-angular@0.4.9 
+    │ └── apitree@1.1.0 
     ├─┬ ss-hogan@0.1.3 
     │ └── hogan.js@2.0.0 
     ├─┬ ss-stylus@0.1.5 

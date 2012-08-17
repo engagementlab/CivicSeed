@@ -7,7 +7,6 @@ fs = require('fs'),
 blocks = {};
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
-
 //configuration module 
 //All express and connect configuration must there
 module.exports = function(app, express, ss, env, service, mongooseDb) {
@@ -15,10 +14,13 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
-		
 		// SOCKET STREAM
+
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
+
+		// wrapper for ss-angular
+		ss.responders.add(require('ss-angular'));
 
 		// // use redis
 		// ss.session.store.use('redis');
@@ -40,7 +42,6 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 			code: [
 				'libs/jquery-1.7.2.min.js',
 				'libs/angular-1.0.1.min.js',
-				'libs/ssAngular.js',
 				'game/controllers.js',
 				'game/entry.js',
 				'game/app.js'
@@ -48,14 +49,12 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 			tmpl: '*'
 		});
 
-		//SS-Angular (breaks it)
-		//ss.responders.add(require('ss-angular'));
-
 		// //Partials working?
 		// headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
 		// hbs.registerPartial('headPartial', headerTemplate); 
 
 		// EXPRESS
+
 		app.set('views', __dirname + '/client/views');
 		app.set('view engine', 'hbs');
 		hbs.registerHelper('extend', function(name, context) {
