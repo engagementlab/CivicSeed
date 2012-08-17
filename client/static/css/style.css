@@ -4569,7 +4569,6 @@ a.badge:hover {
   height: 480px;
   margin: 0;
   position: absolute;
-  background: red;
   top: 0px;
   left: 0px;
   transition-property: left, top;

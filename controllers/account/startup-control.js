@@ -10,7 +10,9 @@ module.exports = function (app, service) {
 
 		var user,
 		quadrant,
+		tiles,
 		mapArray = [],
+		tileMapArray = [],
 		isJson = /\.json$/g,
 		consoleOutput = '';
 
@@ -24,6 +26,7 @@ module.exports = function (app, service) {
 
 				user = service.useModel('user', 'preload');
 				quadrant = service.useModel('map', 'preload');
+				tiles = service.useModel('tile', 'preload');
 
 				// loading default users
 				user.remove(function (err, users) {
@@ -52,12 +55,83 @@ module.exports = function (app, service) {
 				});
 
 				// loading default users
-				quadrant.remove(function (err, users) {
+				// quadrant.remove(function (err, users) {
+				// 	if (err) { return handleError(err); }
+
+
+
+				// 	fs.readdir(__dirname + '/../../data/generateMapJSON/data', function(err, files) {
+				// 		if(err) {
+				// 			throw err;
+				// 		}
+
+				// 		// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
+				// 		var mapLength = 0;
+
+				// 		files.forEach(function(file) {
+				// 			if(file.match(isJson)) {
+
+				// 				fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
+				// 					if(err) {
+				// 						console.error("Could not open file: %s", err);
+				// 						process.exit(1);
+				// 						throw err;
+				// 					}
+				// 					mapArray.push(JSON.parse(file));
+				// 					quadrant.create([JSON.parse(file)], function(err) {
+				// 						if(err) { return handleError(err); }
+				// 						// quadrant.find(function (err, quadrants) {
+				// 						// 	if (err) { return handleError(err); }
+				// 						// 	console.log(quadrants);
+				// 						// 	consoleOutput += quadrants;
+				// 						// });
+				// 						console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
+				// 					});
+				// 					// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
+				// 					mapLength += 1;
+				// 					// console.log(mapLength);
+				// 					if(mapLength === 50) {
+				// 						res.render('startup.hbs', {
+				// 							title: 'STARTUP',
+				// 							consoleOutput: consoleOutput
+				// 						});
+				// 					}
+				// 				});
+				// 			}
+				// 		});
+				// 	});
+
+
+
+
+				// 	// fs.readFile(__dirname + '/../../data/map/quadrant0.json', 'ascii', function(err, file) {
+				// 	// 	if(err) {
+				// 	// 		console.error("Could not open file: %s", err);
+				// 	// 		process.exit(1);
+				// 	// 		throw err;
+				// 	// 	}
+				// 	// 	quadrant.create([JSON.parse(file)], function(err) {
+				// 	// 		if (err) { return handleError(err); }
+				// 	// 		quadrant.find(function (err, quadrants) {
+				// 	// 			if (err) { return handleError(err); }
+				// 	// 			console.log(quadrants);
+				// 	// 			consoleOutput += quadrants;
+
+				// 	// 			res.render('startup.hbs', {
+				// 	// 				title: 'STARTUP',
+				// 	// 				consoleOutput: consoleOutput
+				// 	// 			});
+				// 	// 		});
+				// 	// 	});
+				// 	// });
+				// });
+
+				tiles.remove(function (err, users) {
 					if (err) { return handleError(err); }
 
 
 
-					fs.readdir(__dirname + '/../../data/generateMapJSON/data', function(err, files) {
+					fs.readdir(__dirname + '/../../data/generateMapJSON/data/tiles', function(err, files) {
 						if(err) {
 							throw err;
 						}
@@ -68,26 +142,24 @@ module.exports = function (app, service) {
 						files.forEach(function(file) {
 							if(file.match(isJson)) {
 
-								fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
+								fs.readFile(__dirname + '/../../data/generateMapJSON/data/tiles/' + file, 'ascii', function(err, file) {
 									if(err) {
 										console.error("Could not open file: %s", err);
 										process.exit(1);
 										throw err;
 									}
-									mapArray.push(JSON.parse(file));
-									quadrant.create([JSON.parse(file)], function(err) {
-										if(err) { return handleError(err); }
-										// quadrant.find(function (err, quadrants) {
-										// 	if (err) { return handleError(err); }
-										// 	console.log(quadrants);
-										// 	consoleOutput += quadrants;
-										// });
-										console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
-									});
+									tileMapArray.push(JSON.parse(file));
+									console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
+									for(var t=0; t<tileMapArray[0].length;t++){
+										tiles.create(tileMapArray[0][t], function(err) {
+											if(err) { return handleError(err); }
+											});
+									}
+									
 									// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
 									mapLength += 1;
 									// console.log(mapLength);
-									if(mapLength === 50) {
+									if(mapLength === 1) {
 										res.render('startup.hbs', {
 											title: 'STARTUP',
 											consoleOutput: consoleOutput
@@ -97,30 +169,6 @@ module.exports = function (app, service) {
 							}
 						});
 					});
-
-
-
-
-					// fs.readFile(__dirname + '/../../data/map/quadrant0.json', 'ascii', function(err, file) {
-					// 	if(err) {
-					// 		console.error("Could not open file: %s", err);
-					// 		process.exit(1);
-					// 		throw err;
-					// 	}
-					// 	quadrant.create([JSON.parse(file)], function(err) {
-					// 		if (err) { return handleError(err); }
-					// 		quadrant.find(function (err, quadrants) {
-					// 			if (err) { return handleError(err); }
-					// 			console.log(quadrants);
-					// 			consoleOutput += quadrants;
-
-					// 			res.render('startup.hbs', {
-					// 				title: 'STARTUP',
-					// 				consoleOutput: consoleOutput
-					// 			});
-					// 		});
-					// 	});
-					// });
 				});
 
 			} else if(nodeEnv === 'production') {
