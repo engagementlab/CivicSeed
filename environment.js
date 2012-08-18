@@ -19,7 +19,7 @@ if(databaseEnv === 'production') {
 }
 
 // environment variables
-module.exports = {
+var self = module.exports = {
 	app: {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,

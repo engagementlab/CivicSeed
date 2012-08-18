@@ -1,7 +1,4 @@
-module.exports = function(mongoose, db) {
-
-	var Schema = mongoose.Schema;
-	var ObjectId = Schema.ObjectId;
+module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var DialogSchema = new Schema({
 		name: String,
