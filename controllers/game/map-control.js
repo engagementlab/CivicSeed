@@ -1,7 +1,11 @@
-module.exports = function (app, service) {
+module.exports = {
 
-	app.get('/map/:x/:y', function(req, res) {
+	init: function (app, service) {
 
-	});
+		app.get('/map/:x/:y', function(req, res) {
+
+		});
+
+	}
 
 };

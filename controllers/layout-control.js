@@ -1,20 +1,24 @@
-module.exports = function (app, service, hbs) {
+module.exports = {
 
-	// hbs.registerHelper('helper_name', function(...) { ... });
+	init: function (app, service, hbs) {
 
-
-
-// hbs.registerPartial('menu_item', '<li><span id="{{id}}">{{name}}</span></li>');
-
-// var source = '<ul>{{#each menu_list}}{{> menu_item}}{{/each}}</ul>';
-// var template = hbs.compile(source);
-// var data = { "menu_list": [{id : "home", name : "Home"}, {id : "about", name : "About Us"}, {id : "contact", name : "Contact Us"}] };
-// template(data);
+		// hbs.registerHelper('helper_name', function(...) { ... });
 
 
 
-	// hbs.registerPartial('header', 'partial value');
+	// hbs.registerPartial('menu_item', '<li><span id="{{id}}">{{name}}</span></li>');
 
-	// console.log(hbs);
+	// var source = '<ul>{{#each menu_list}}{{> menu_item}}{{/each}}</ul>';
+	// var template = hbs.compile(source);
+	// var data = { "menu_list": [{id : "home", name : "Home"}, {id : "about", name : "About Us"}, {id : "contact", name : "Contact Us"}] };
+	// template(data);
+
+
+
+		// hbs.registerPartial('header', 'partial value');
+
+		// console.log(hbs);
+
+	}
 
 };

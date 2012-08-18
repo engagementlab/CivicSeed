@@ -1,86 +1,86 @@
 // password stuff
 // var mail = require('../../mail.js');
 
-module.exports = function (app, service) {
+module.exports = {
 
-	var emailUtil = service.useModule('utils/email');
+	init: function (app, service, hbs) {
+
+		var emailUtil = service.useModule('utils/email');
 
 
-	// getUserByEmail
-	var checkEmail = function(email, callback) {
-		var users = service.useModel('user');
-		users.findOne({name:email},function(err,user){
-			console.log(err+" :: "+user);
-			if(err){
-				return("looks like we messed up...",null);
+		// getUserByEmail
+		var checkEmail = function(email, callback) {
+			var users = service.useModel('user');
+			users.findOne({name:email},function(err,user){
+				console.log(err+" :: "+user);
+				if(err){
+					return("looks like we messed up...",null);
+				}
+				else{
+					if(!user){
+						//no user, good to go TRUE
+						return callback(null,true);
+					}
+					else{
+						//user exists
+						return callback(null,false);
+					}
+				}
+			});
+		};
+
+		// genericize to match that actual code
+		var checkCode = function(code, callback){
+			if(code==="tufts"){
+				return callback(true);
 			}
 			else{
-				if(!user){
-					//no user, good to go TRUE
-					return callback(null,true);
-				}
-				else{
-					//user exists
-					return callback(null,false);
-				}
+				return callback(false);
 			}
+		};
+
+		app.get('/invite',  function(req, res) {
+			res.render('invite.hbs', {
+				title: ' {:: Civic Seed - Invite ::} ',message:"come, join us."}
+				);
 		});
-	};
 
-	// genericize to match that actual code
-	var checkCode = function(code, callback){
-		if(code==="tufts"){
-			return callback(true);
-		}
-		else{
-			return callback(false);
-		}
-	};
+		app.post('/invite',  function(req, res){
 
-	app.get('/invite',  function(req, res) {
-		res.render('invite.hbs', {
-			title: ' {:: Civic Seed - Invite ::} ',message:"come, join us."}
-			);
-	});
+			var email = req.body.email;
+			var code = req.body.secret;
+			console.log(email);
 
-	app.post('/invite',  function(req, res){
-
-		var email = req.body.email;
-		var code = req.body.secret;
-		console.log(email);
-
-		checkEmail(email, function(err, emptySpot) {
-			if(err){
-				console.log("the error: "+err);       
-			}
-			else {
-				if(emptySpot) {
-					checkCode(code, function(result) {
-						if(result) {
-							emailUtil.sendInvite(email, 'jumbos', function(err) {
-								if(err){
-									res.render('invite.hbs', { message: 'issue sending mail. We tried, really.' });
-								}
-								else{
-									res.render('invite.hbs', { message: 'check your email.' });
-								}
-							});
-						}
-						else {
-							res.render('invite.hbs', {message: 'wrong code, try again.'});
-						}
-					});
-
+			checkEmail(email, function(err, emptySpot) {
+				if(err){
+					console.log("the error: "+err);       
 				}
-				else{
-					res.render('invite.hbs', {message: 'it appears you already did this.'});
+				else {
+					if(emptySpot) {
+						checkCode(code, function(result) {
+							if(result) {
+								emailUtil.sendInvite(email, 'jumbos', function(err) {
+									if(err){
+										res.render('invite.hbs', { message: 'issue sending mail. We tried, really.' });
+									}
+									else{
+										res.render('invite.hbs', { message: 'check your email.' });
+									}
+								});
+							}
+							else {
+								res.render('invite.hbs', {message: 'wrong code, try again.'});
+							}
+						});
+
+					}
+					else{
+						res.render('invite.hbs', {message: 'it appears you already did this.'});
+					}
 				}
-			}
+			});
 		});
-	});
+
+	}
 
 };
-
-
-
-

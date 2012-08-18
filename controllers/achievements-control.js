@@ -1,20 +1,19 @@
+module.exports = {
 
-module.exports = function (app, service) {
+	init: function (app, service) {
 
-	// 	var accountMiddleware = service.useModule('middleware/account');
+		// 	var accountMiddleware = service.useModule('middleware/account');
 
-	// 	// app.get('/', accountMiddleware.requireRole('user'), function(req, res){
-	// 	// 	res.render('index', { title: "Index" });
-	// 	// });
+		// 	// app.get('/', accountMiddleware.requireRole('user'), function(req, res){
+		// 	// 	res.render('index', { title: "Index" });
+		// 	// });
 
-
-
-
-
-	app.get('/achievements',  function(req, res) {
-		res.render('achievements.hbs', {
-			title: ' {:: Civic Seed - Login ::} '
+		app.get('/achievements',  function(req, res) {
+			res.render('achievements.hbs', {
+				title: ' {:: Civic Seed - Login ::} '
+			});
 		});
-	});
+
+	}
 
 };

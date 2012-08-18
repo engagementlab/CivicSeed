@@ -1,45 +1,49 @@
-module.exports = function (app, service) {
+module.exports = {
 
-	var users = service.useModel('user');
+	init: function (app, service, hbs) {
 
-    app.get('/signup/:email/:random',  function(req, res) {
-        res.render('signup.hbs', {
-            title: ' {:: Civic Seed - Sign Up ::} ',message:"One last step...",eMail:req.params.email}
-        );
-    });
+		var users = service.useModel('user');
 
-    app.post('/signup/:email/:random',  function(req, res){
+		app.get('/signup/:email/:random',  function(req, res) {
+			res.render('signup.hbs', {
+				title: ' {:: Civic Seed - Sign Up ::} ',message:"One last step...",eMail:req.params.email}
+				);
+		});
 
-    	var newUser = {
-    		email: req.body.email,
-        	firstName: req.body.firstName,
-        	lastName: req.body.lastName,
-        	password: req.body.password,
-        	confirmPassword: req.body.confirmPassword,
-        	joined: new Date()
-    	}
+		app.post('/signup/:email/:random',  function(req, res){
 
-		addUser(newUser, function(err,result){
-			if(err){
-				res.render('signup',{message:err});
+			var newUser = {
+				email: req.body.email,
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				password: req.body.password,
+				confirmPassword: req.body.confirmPassword,
+				joined: new Date()
 			}
-			else{
-				res.redirect('profile/'+result.uniqueUrl+"/welcome");
-			}
-		});        
-        // addUser(email,firstName,lastName,password,confirmPassword,function(err,result){
-        // 	//render something
-        // });
 
-    });
+			addUser(newUser, function(err,result){
+				if(err){
+					res.render('signup',{message:err});
+				}
+				else{
+					res.redirect('profile/'+result.uniqueUrl+"/welcome");
+				}
+			});
+            // addUser(email,firstName,lastName,password,confirmPassword,function(err,result){
+            //  //render something
+            // });
 
-    //insert into DB
-	addUser = function(user, callback) {
-		//find ONE
-		//if that email is in the DB (from invite) and it is pending,
-		//query DB for profile url (first+last)
-		//update information in DB, change pending to false, 
-		//else, return error
-	};
+		});
+
+		//insert into DB
+		addUser = function(user, callback) {
+			//find ONE
+			//if that email is in the DB (from invite) and it is pending,
+			//query DB for profile url (first+last)
+			//update information in DB, change pending to false, 
+			//else, return error
+		};
+
+	}
 
 };

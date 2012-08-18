@@ -4,6 +4,9 @@
 // console.log(user);
 
 
+module.exports = {
 
-module.exports = function(app, service) {
+	init: function(app, service, hbs) {
+	}
+
 };

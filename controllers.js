@@ -27,7 +27,7 @@ module.exports = function(app, service, environment) {
 				}
 				if(file.match(isJs)) {
 					if(!file.match(hidden)) {
-						require(newPath)(app, service, hbs);
+						require(newPath).init(app, service, hbs);
 						console.log('CS: '.blue + 'Initialize controller file: '.blue + file.yellow.underline);
 					}
 				}
