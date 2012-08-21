@@ -1,6 +1,19 @@
 var fs = require('fs');
 
-module.exports = {
+var handleError = function(message, err) {
+	if(err) {
+		if(message.length < 1) {
+			message = 'Error: %s'
+		}
+		console.error(message, err);
+		// process.exit(1);
+		throw err;
+	}
+};
+
+var self = module.exports = {
+
+	service: null,
 
 	init: function (app, service, hbs) {
 
@@ -8,13 +21,14 @@ module.exports = {
 		nodeEnv = environment.app.nodeEnv,
 		initialized = environment.app.initialized;
 
+		self.service = service;
+
 		app.get('/startup', function(req, res) {
 
 			var user,
 			quadrant,
-			tiles,
+			tile,
 			mapArray = [],
-			tileMapArray = [],
 			isJson = /\.json$/g,
 			consoleOutput = '';
 
@@ -28,124 +42,30 @@ module.exports = {
 
 					user = service.useModel('user', 'preload');
 					quadrant = service.useModel('map', 'preload');
-					tiles = service.useModel('tile', 'preload');
+					tile = service.useModel('tile', 'preload');
 
-
-					console.log(service.db);
 					res.render('startup.hbs', {
 						title: 'STARTUP',
 						consoleOutput: consoleOutput
 					});
 
-					// mongoose.connection.collections['collectionName'].drop( function(err), {
-					// 	console.log('collection dropped');
-					// });
-
-
-					// // loading default users
-					// user.remove(function (err, users) {
-					// 	if (err) { return handleError(err); }
-
-					// 	fs.readFile(__dirname + '/../../data/account/users.json', 'ascii', function(err, file) {
-					// 		if(err) {
-					// 			console.error("Could not open file: %s", err);
-					// 			process.exit(1);
-					// 			throw err;
-					// 		}
-					// 		user.create(JSON.parse(file), function(err) {
-					// 			if(err) { return handleError(err); }
-					// 			user.find(function (err, users) {
-					// 				if (err) { return handleError(err); }
-					// 				console.log(users);
-					// 				consoleOutput += users;
-
-					// 				// res.render('startup.hbs', {
-					// 				// 	title: 'STARTUP',
-					// 				// 	consoleOutput: consoleOutput
-					// 				// });
-					// 			});
-					// 		});
-					// 	});
-					// });
-
-					// // loading default users
-					// // quadrant.remove(function (err, users) {
-					// // 	if (err) { return handleError(err); }
-
-
-
-					// // 	fs.readdir(__dirname + '/../../data/generateMapJSON/data', function(err, files) {
-					// // 		if(err) {
-					// // 			throw err;
-					// // 		}
-
-					// // 		// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
-					// // 		var mapLength = 0;
-
-					// // 		files.forEach(function(file) {
-					// // 			if(file.match(isJson)) {
-
-					// // 				fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
-					// // 					if(err) {
-					// // 						console.error("Could not open file: %s", err);
-					// // 						process.exit(1);
-					// // 						throw err;
-					// // 					}
-					// // 					mapArray.push(JSON.parse(file));
-					// // 					quadrant.create([JSON.parse(file)], function(err) {
-					// // 						if(err) { return handleError(err); }
-					// // 						// quadrant.find(function (err, quadrants) {
-					// // 						// 	if (err) { return handleError(err); }
-					// // 						// 	console.log(quadrants);
-					// // 						// 	consoleOutput += quadrants;
-					// // 						// });
-					// // 						console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
-					// // 					});
-					// // 					// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
-					// // 					mapLength += 1;
-					// // 					// console.log(mapLength);
-					// // 					if(mapLength === 50) {
-					// // 						res.render('startup.hbs', {
-					// // 							title: 'STARTUP',
-					// // 							consoleOutput: consoleOutput
-					// // 						});
-					// // 					}
-					// // 				});
-					// // 			}
-					// // 		});
-					// // 	});
+					self.dropCollection('users', function() {
+						fs.readFile(__dirname + '/../../data/account/users.json', 'ascii', function(err, file) {
+							// handleError('Could not open file: %s', err);
+							self.saveDocuments(user, JSON.parse(file));
+						});
+					});
 
 
 
 
-					// // 	// fs.readFile(__dirname + '/../../data/map/quadrant0.json', 'ascii', function(err, file) {
-					// // 	// 	if(err) {
-					// // 	// 		console.error("Could not open file: %s", err);
-					// // 	// 		process.exit(1);
-					// // 	// 		throw err;
-					// // 	// 	}
-					// // 	// 	quadrant.create([JSON.parse(file)], function(err) {
-					// // 	// 		if (err) { return handleError(err); }
-					// // 	// 		quadrant.find(function (err, quadrants) {
-					// // 	// 			if (err) { return handleError(err); }
-					// // 	// 			console.log(quadrants);
-					// // 	// 			consoleOutput += quadrants;
-
-					// // 	// 			res.render('startup.hbs', {
-					// // 	// 				title: 'STARTUP',
-					// // 	// 				consoleOutput: consoleOutput
-					// // 	// 			});
-					// // 	// 		});
-					// // 	// 	});
-					// // 	// });
-					// // });
-
-					// tiles.remove(function (err, users) {
+					// loading default users
+					// quadrant.remove(function (err, users) {
 					// 	if (err) { return handleError(err); }
 
 
 
-					// 	fs.readdir(__dirname + '/../../data/generateMapJSON/data/tiles', function(err, files) {
+					// 	fs.readdir(__dirname + '/../../data/generateMapJSON/data', function(err, files) {
 					// 		if(err) {
 					// 			throw err;
 					// 		}
@@ -156,24 +76,26 @@ module.exports = {
 					// 		files.forEach(function(file) {
 					// 			if(file.match(isJson)) {
 
-					// 				fs.readFile(__dirname + '/../../data/generateMapJSON/data/tiles/' + file, 'ascii', function(err, file) {
+					// 				fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
 					// 					if(err) {
 					// 						console.error("Could not open file: %s", err);
 					// 						process.exit(1);
 					// 						throw err;
 					// 					}
-					// 					tileMapArray.push(JSON.parse(file));
-					// 					console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
-					// 					for(var t=0; t<tileMapArray[0].length;t++){
-					// 						tiles.create(tileMapArray[0][t], function(err) {
-					// 							if(err) { return handleError(err); }
-					// 							});
-					// 					}
-										
+					// 					mapArray.push(JSON.parse(file));
+					// 					quadrant.create([JSON.parse(file)], function(err) {
+					// 						if(err) { return handleError(err); }
+					// 						// quadrant.find(function (err, quadrants) {
+					// 						// 	if (err) { return handleError(err); }
+					// 						// 	console.log(quadrants);
+					// 						// 	consoleOutput += quadrants;
+					// 						// });
+					// 						console.log('CS: '.blue + 'Importing map data file into mongodb: '.green + file.substr(0,50).yellow.underline + '...'.yellow.underline);
+					// 					});
 					// 					// FIXME: THIS COUNT IS NOT RELIABLE!!! NEED A BETTER WAY!!!
 					// 					mapLength += 1;
 					// 					// console.log(mapLength);
-					// 					if(mapLength === 1) {
+					// 					if(mapLength === 50) {
 					// 						res.render('startup.hbs', {
 					// 							title: 'STARTUP',
 					// 							consoleOutput: consoleOutput
@@ -183,7 +105,56 @@ module.exports = {
 					// 			}
 					// 		});
 					// 	});
+
+
+
+
+					// 	// fs.readFile(__dirname + '/../../data/map/quadrant0.json', 'ascii', function(err, file) {
+					// 	// 	if(err) {
+					// 	// 		console.error("Could not open file: %s", err);
+					// 	// 		process.exit(1);
+					// 	// 		throw err;
+					// 	// 	}
+					// 	// 	quadrant.create([JSON.parse(file)], function(err) {
+					// 	// 		if (err) { return handleError(err); }
+					// 	// 		quadrant.find(function (err, quadrants) {
+					// 	// 			if (err) { return handleError(err); }
+					// 	// 			console.log(quadrants);
+					// 	// 			consoleOutput += quadrants;
+
+					// 	// 			res.render('startup.hbs', {
+					// 	// 				title: 'STARTUP',
+					// 	// 				consoleOutput: consoleOutput
+					// 	// 			});
+					// 	// 		});
+					// 	// 	});
+					// 	// });
 					// });
+
+
+					self.dropCollection('tiles', function() {
+
+						var i,
+						tileMapArray = [],
+						arrayLength;
+
+						fs.readFile(__dirname + '/../../data/generateMapJSON/data/tiles/world.json', 'ascii', function(err, file) {
+							if(err) {
+								console.error("Could not open file: %s", err);
+								process.exit(1);
+								throw err;
+							}
+							tileMapArray.push(JSON.parse(file));
+							arrayLength = tileMapArray[0].length;
+							for(i = 0; i < arrayLength; i++) {
+								if(i === arrayLength - 1) {
+									self.saveDocuments(tile, tileMapArray[0][i], arrayLength);
+								} else {
+									self.saveDocuments(tile, tileMapArray[0][i], false);
+								}
+							}
+						});
+					});
 
 				} else if(nodeEnv === 'production') {
 					initialized = true;
@@ -213,6 +184,57 @@ module.exports = {
 		// 	res.redirect('/login');
 		// });
 
+	},
+
+	dropCollection: function(collection, callback) {
+		var dbCollections = self.service.db.collections;
+		dbCollections[collection].drop(function(err) {
+			if(err) {
+				console.error('  Could not drop database collection: %s  '.yellow.inverse, err);
+				// process.exit(1);
+				// throw err;
+			} else {
+				console.log('CS: '.blue + 'Database collection dropped: '.magenta + collection.yellow.underline);
+			}
+			callback();
+		});
+	},
+
+	saveDocuments: function(model, documents, count, callback) {
+		var collectionName = model.collection.collection.collectionName;
+		if(typeof count === 'function') {
+			callback = count;
+		}
+		model.create(documents, function(err) {
+			if(err) {
+				console.error('  Could not parse and create documents/JSON file: %s  '.yellow.inverse, err);
+				// process.exit(1);
+				// throw err;
+			} else {
+				// // do some finding and logging here to validate data was pushed???
+				// user.find(function (err, users) {
+				// 	// handleError('Could not find document: %s', err);
+				// 	// if (err) { return handleError(err); }
+					
+				// 	console.log(users);
+				// 	consoleOutput += users;
+
+				// 	// res.render('startup.hbs', {
+				// 	// 	title: 'STARTUP',
+				// 	// 	consoleOutput: consoleOutput
+				// 	// });
+				// });
+
+				if(typeof count === 'number') {
+					console.log('CS: '.blue + String(count).magenta + ' ' + collectionName.yellow.underline + ' document(s) created and saved to database.'.magenta);
+				} else if (typeof count === 'undefined') {
+					console.log('CS: '.blue + collectionName.yellow.underline + ' document(s) created and saved to database.'.magenta);
+				}
+			}
+			if(typeof callback === 'function') {
+				callback();
+			}
+		});
 	}
 
 };
