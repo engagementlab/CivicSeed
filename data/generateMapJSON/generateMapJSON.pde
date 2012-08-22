@@ -61,6 +61,10 @@ void setup(){
 		tile.put("nogo",no);
 		tile.put("isWorldEdge",isWorldEdge);
 
+		//image refs 
+		tile.put("background",background[i]);
+		tile.put("background2",background2[i]);
+		tile.put("foreground",foreground[i]);
 		//possibly easier way to directly access tile, will be unique
 		tile.put("worldIndex", i);
 
