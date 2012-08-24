@@ -145,6 +145,7 @@ var Game = {
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
+	rpc('multiplayer.init');
 	$scope.numPlayers= rpc('multiplayer.checkIn');
 
 	// $scope.players;

@@ -40,6 +40,9 @@ exports.actions = function(req, res, ss) {
 			numActivePlayers++;
 			//players.push(player);
 			//ss.publish.all('ss-numPlayers',numActivePlayers);
+			users.find({name: 'admin'},function(err,result){
+				console.log(result);
+			});
 			res(numActivePlayers);
 		},
 		getMapData: function(index,quadNumber){
