@@ -1,3 +1,17 @@
+// RUSS: do all your functions and members to "Game" in here
+var Game = {
+
+	init: function() {
+		// Game initialization
+	},
+
+	etc: function() {
+		
+	}
+
+};
+
+
 	$(document).ready(function(){
 		Game.init();
 	});
