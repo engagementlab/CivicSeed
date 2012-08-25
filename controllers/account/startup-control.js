@@ -46,6 +46,7 @@ var self = module.exports = {
 
 					res.render('startup.hbs', {
 						title: 'STARTUP',
+						bodyClass: 'startup',
 						consoleOutput: consoleOutput
 					});
 

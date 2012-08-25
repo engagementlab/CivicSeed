@@ -1,4 +1,4 @@
-module.exports = {
+var self = module.exports = {
 
 	init: function (app, service, hbs) {
 

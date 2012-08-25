@@ -2,7 +2,7 @@
 var passport = require('passport'),
 LocalStrategy = require('passport-local').Strategy;
 
-module.exports = {
+var self = module.exports = {
 
     init: function (app, service, hbs) {
 
@@ -91,7 +91,9 @@ module.exports = {
 
         app.get('/login',  function(req, res) {
             res.render('login.hbs', {
-                title: ' {:: Civic Seed - Login ::} ',message:req.flash('error')
+                title: 'Login',
+                bodyClass: 'login',
+                message: req.flash('error')
             });
                 // if(req.user==undefined){
                 //  res.redirect('/login');

@@ -1,4 +1,4 @@
-module.exports = {
+var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
@@ -24,7 +24,7 @@ module.exports = {
 			// 	res.redirect('/profile');
 			// }
 			res.render('home.hbs', {
-				title: ' {:: Civic Seed ::} '
+				bodyClass: 'home'
 			});
 		});
 

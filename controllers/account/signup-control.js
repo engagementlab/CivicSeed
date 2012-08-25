@@ -1,4 +1,4 @@
-module.exports = {
+var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
@@ -6,8 +6,11 @@ module.exports = {
 
 		app.get('/signup/:email/:random',  function(req, res) {
 			res.render('signup.hbs', {
-				title: ' {:: Civic Seed - Sign Up ::} ',message:"One last step...",eMail:req.params.email}
-				);
+				title: 'Sign Up',
+				bodyClass: 'signup',
+				message: 'One last step...',
+				eMail: req.params.email
+			});
 		});
 
 		app.post('/signup/:email/:random',  function(req, res){

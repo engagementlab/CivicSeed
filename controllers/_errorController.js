@@ -1,4 +1,4 @@
-module.exports = function (app, service) {
+module.exports = function (app, service, hbs) {
 	var NotFound = service.useModule('utils/errors').NotFound;
 
 	app.error(function(err, req, res, next) {

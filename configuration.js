@@ -3,13 +3,14 @@ var passport = require('passport'),
 // hulk = require('hulk-hogan'),
 hbs = require('hbs'),
 flash = require('connect-flash'),
-fs = require('fs'),
-blocks = {};
+fs = require('fs');
 // _ = require('underscore')._; // this odd little ditty is the "underscore" library
 
 //configuration module 
 //All express and connect configuration must there
 module.exports = function(app, express, ss, env, service, mongooseDb) {
+
+	var hbsHelpers = service.useModule('middleware/hbs-helpers');
 
 	app.configure(function() {
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
@@ -43,8 +44,8 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 				'libs/jquery-1.7.2.min.js',
 				'libs/angular-1.0.1.min.js',
 				'libs/bootstrap.min.js',
-				'game/controllers.js',
 				'game/entry.js',
+				'game/controllers.js',
 				'game/app.js'
 			],
 			tmpl: '*'
@@ -58,18 +59,7 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 
 		app.set('views', __dirname + '/client/views');
 		app.set('view engine', 'hbs');
-		hbs.registerHelper('extend', function(name, context) {
-			var block = blocks[name];
-			if(!block) {
-				block = blocks[name] = [];
-			}
-			block.push(context(this));
-		});
-		hbs.registerHelper('block', function(name) {
-			var val = (blocks[name] || []).join('\n');
-			blocks[name] = [];
-			return val;
-		});
+		hbsHelpers.registerConfigurationHelpers(hbs);
 		// app.set('view engine', 'html');
 		// app.engine('html', require('hbs').__express);
 		app.use(express.logger(':method :url :status'));

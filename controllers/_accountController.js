@@ -1,4 +1,4 @@
-module.exports = function (app, service) {
+module.exports = function (app, service, hbs) {
 	var User = service.useModel('userModel').model;
 	var redirectIfLogined = service.useModule('middleware/account').redirectIfLogined;
 

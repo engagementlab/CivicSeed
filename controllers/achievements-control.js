@@ -1,6 +1,6 @@
-module.exports = {
+var self = module.exports = {
 
-	init: function (app, service) {
+	init: function (app, service, hbs) {
 
 		// 	var accountMiddleware = service.useModule('middleware/account');
 
@@ -10,7 +10,8 @@ module.exports = {
 
 		app.get('/achievements',  function(req, res) {
 			res.render('achievements.hbs', {
-				title: ' {:: Civic Seed - Login ::} '
+				title: 'Achievements',
+				bodyClass: 'achievements'
 			});
 		});
 

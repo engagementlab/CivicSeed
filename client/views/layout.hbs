@@ -20,7 +20,7 @@
 	<script src="/js/modernizr-2.6.1.min.js"></script>
 
 </head>
-<body>
+<body class="{{#if isAdmin}}adminPage {{/if}}{{#if bodyClass}}{{bodyClass}}Page{{/if}}">
 
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
@@ -48,6 +48,7 @@
 						<li><a href="#about">About</a></li>
 						<li><a href="#game">Profiles</a></li>
 						<li><a href="#contact">Contact Us</a></li>
+						{{#if isAdmin}}<li class="admin"><a href="/admin">Admin</a></li>{{/if}}
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>

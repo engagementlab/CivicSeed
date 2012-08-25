@@ -1,4 +1,4 @@
-module.exports = function (app, service) {
+module.exports = function (app, service, hbs) {
 	var dynamicHelpers = {  
 		userPanel: function(req, res) {
 			if(req.session.user){
