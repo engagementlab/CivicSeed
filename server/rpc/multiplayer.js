@@ -41,25 +41,29 @@ var self = module.exports = {
 			checkIn: function(player) {
 				numActivePlayers++;
 				players.push(player);
-				ss.publish.all('ss-numPlayers',numActivePlayers);
-				userModel.find({name: 'admin'},function(err,result){
+				ss.publish.all('ss-numPlayers', numActivePlayers);
+				// it's working now!
+				userModel.find({ name: 'admin' }, function(err,result) {
+					console.log(result);
+				});
+				userModel.find({ name: 'Robert Hall' }, function(err,result) {
 					console.log(result);
 				});
 				res(numActivePlayers);
 			},
 			getMapData: function(index,quadNumber) {
-				quadrants.find({quadrantNumber: quadNumber},function(err,quad){
-					res(err,quad,index);
+				quadrants.find({ quadrantNumber: quadNumber }, function(err, quad) {
+					res(err, quad, index);
 				});
-			},	
+			},
 			playerMoved: function(player) {
 				console.log(player);
-				for(var p=0; p<players.length;p++){
+				for(var p = 0; p < players.length; p++) {
 					//console.log("in array: "+p.id);
 					console.log(players[p]);
 
 					//ridic stupid way to check if it's the right one (id isn't working)
-					if(players[p].r ==player.r && players[p].g ==player.g){
+					if(players[p].r ==player.r && players[p].g ==player.g) {
 						players[p].x = player.x;
 						players[p].y = player.y;
 						continue;

@@ -54,3 +54,6 @@ controllers_NEW/
 /client/static/assets/
 password.js
 /data/map/expanded/
+/models/_temp/
+/controllers/_temp/
+/controllers/game/_temp/
