@@ -50,6 +50,7 @@ var self = module.exports = {
 						consoleOutput: consoleOutput
 					});
 
+					// adding users to database
 					self.dropCollection('users', function() {
 						fs.readFile(__dirname + '/../../data/account/users.json', 'ascii', function(err, file) {
 							// handleError('Could not open file: %s', err);
@@ -79,7 +80,7 @@ var self = module.exports = {
 
 					// 				fs.readFile(__dirname + '/../../data/generateMapJSON/data/' + file, 'ascii', function(err, file) {
 					// 					if(err) {
-					// 						console.error("Could not open file: %s", err);
+					// 						console.error('Could not open file: %s', err);
 					// 						process.exit(1);
 					// 						throw err;
 					// 					}
@@ -112,7 +113,7 @@ var self = module.exports = {
 
 					// 	// fs.readFile(__dirname + '/../../data/map/quadrant0.json', 'ascii', function(err, file) {
 					// 	// 	if(err) {
-					// 	// 		console.error("Could not open file: %s", err);
+					// 	// 		console.error('Could not open file: %s', err);
 					// 	// 		process.exit(1);
 					// 	// 		throw err;
 					// 	// 	}
@@ -133,6 +134,7 @@ var self = module.exports = {
 					// });
 
 
+					// creation and use of tiles
 					self.dropCollection('tiles', function() {
 
 						var i,
@@ -141,7 +143,7 @@ var self = module.exports = {
 
 						fs.readFile(__dirname + '/../../data/generateMapJSON/data/tiles/world.json', 'ascii', function(err, file) {
 							if(err) {
-								console.error("Could not open file: %s", err);
+								console.error('Could not open file: %s', err);
 								process.exit(1);
 								throw err;
 							}
@@ -156,6 +158,100 @@ var self = module.exports = {
 							}
 						});
 					});
+
+
+					// sandboxing for now
+					(function() {
+
+						var numberOfTiles = 20300,
+						widthInTiles = 145,
+						heightInTiles = 140,
+						tiles = [],
+						i,
+						worldX,
+						worldY,
+						isWorldEdge,
+						no,
+
+						background,
+						background2,
+						foreground,
+						nogo;
+
+						for(i = 0; i < numberOfTiles; i++) {
+							worldX = i % widthInTiles;
+							worldY = Math.floor(i / widthInTiles);
+
+							//calculate if the tile is on the edge of the map
+							if (worldX === 0 || worldY === 0 || worldX === widthInTiles - 1 || worldY === heightInTiles - 1) {
+								isWorldEdge = true;
+							} else {
+								isWorldEdge = false;
+							}
+
+							//
+							if (localX == 0 || localX == numCols - 1 || localY == 0 || localY == numRows - 1) {
+								isQuadEdge = true;
+							}
+
+							//look at the nogo array, if it is 0 then nogo = false (you CAN go)
+							if (nogo[i] > 0) {
+								no = true;
+							} else {
+								no = false;
+							}
+
+							//tile will have more things than listed here, will need to be fleshed out (see below)
+							JSONObject tile = new JSONObject();
+							//REPRESENTS DOCUMENT IN DB
+							//REPRESENTS TILE IN DB
+							tile.push('x', worldX);
+							tile.push('y', worldY);
+							tile.push('nogo', no);
+							tile.push('isWorldEdge', isWorldEdge);
+
+							//image refs 
+							tile.push('background', background[i]);
+							tile.push('background2', background2[i]);
+							tile.push('foreground', foreground[i]);
+							//possibly easier way to directly access tile, will be unique
+							tile.push('worldIndex', i);
+
+							//color
+							//owner
+							//has npc 
+							//add the tile to the array
+							tiles.push(tile);
+
+						}
+
+						// //create the file for the quadrant
+						// File file = new File(dataPath('tiles') + File.separator + 'world.json');
+						// // Create the data directory if it does not exist
+						// file.getParentFile().mkdirs();
+						// try {
+						// 	// If the file already exists, it will be overwritten
+						// 	FileWriter fstream = new FileWriter(file, false);
+						// 	// Use this instead if you want to append the data to the file
+						// 	//FileWriter fstream = new FileWriter(file, true);    
+						// 	BufferedWriter out = new BufferedWriter(fstream);
+						// 	// do the actual writing
+						// 	tiles.write(out);
+						// 	// Close the stream
+						// 	out.close();
+						// } catch (Exception e) {
+						// 	System.err.println('Error writing the JSON file: ' + e.getMessage());
+						// }
+
+					})();
+
+
+
+
+
+
+
+
 
 				} else if(nodeEnv === 'production') {
 					initialized = true;
