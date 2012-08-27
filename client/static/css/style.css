@@ -4484,151 +4484,27 @@ a.badge:hover {
   visibility: hidden;
 }
 .gameboard {
-  width: 960px;
-  height: 480px;
-  margin: 0 auto;
   position: relative;
-  background: #333;
-  border-radius: 5px;
-}
-.grids {
-  position: absolute;
-  border: 1px dashed purple;
-}
-.fullQuad {
-  width: 894px;
-  height: 414px;
-  margin: 0;
-  padding: 0;
-}
-.cornerQuad {
-  width: 30px;
-  height: 30px;
-  margin: 0;
-  padding: 0;
-}
-.verticalQuad {
-  width: 30px;
-  height: 414px;
-  margin: 0;
-  padding: 0;
-}
-.horizontalQuad {
-  width: 894px;
-  height: 30px;
-  margin: 0;
-  padding: 0;
-}
-.topLeft {
-  left: 0px;
-  top: 0px;
-}
-.topMiddle {
-  left: 32px;
-  top: 0px;
-}
-.topRight {
-  left: 928px;
-  top: 0px;
-}
-.middleLeft {
-  left: 0px;
-  top: 32px;
-}
-.middleMiddle {
-  position: absolute;
-  left: 32px;
-  top: 32px;
-}
-.cube {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  left: 864px;
-  top: 0px;
-  background: yellow;
-}
-.middleRight {
-  left: 928px;
-  top: 32px;
-}
-.bottomLeft {
-  left: 0px;
-  top: 448px;
-}
-.bottomMiddle {
-  left: 32px;
-  top: 448px;
-}
-.bottomRight {
-  left: 928px;
-  top: 448px;
-}
-.current {
-  width: 960px;
-  height: 480px;
-  margin: 0;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  transition-property: left, top;
-  transition-duration: 1s;
-  transition-timing: linear;
-  -webkit-transition-property: left, top;
-  -webkit-transition-duration: 1s;
-  -webkit-transition-timing: linear;
-}
-.shiftLeft {
-  left: -896px;
-  top: 0px;
-}
-.shiftRight {
-  left: 896px;
-  top: 0px;
-}
-.shiftUp {
-  left: 0px;
-  top: 416px;
-}
-.shiftDown {
-  left: 0px;
-  top: -416px;
-}
-.map {
-  width: 960px;
-  height: 480px;
-  background: #333333 url(../img/game/world.png);
   margin: 0 auto;
-  background-position-x: 0px;
-  background-position-y: 0px;
-  background-repeat: no-repeat;
-  position: absolute;
+  width: 960px;
+  height: 480px;
+  padding: 0;
   border-radius: 5px;
-  transition-property: background-position-y, background-position-x;
-  transition-duration: 1s;
-  transition-timing: linear;
-  -webkit-transition-property: background-position-y, background-position-x;
-  -webkit-transition-duration: 1s;
-  -webkit-transition-timing: linear;
-  -moz-transition-property: background-position-y, background-position-x;
-  -moz-transition-duration: 1s;
-  -moz-transition-timing: linear;
+  border: 2px solid #222;
 }
-.map-left {
-  background-position-x: 2000px;
-  background-position-y: 2000px;
+#background,
+#foreground,
+#characters {
+  position: absolute;
 }
-.map-right {
-  background-position-x: 2000px;
-  background-position-y: 2000px;
+#background {
+  z-index: 0;
 }
-.map-up {
-  background-position-x: 2000px;
-  background-position-y: 2300px;
+#characters {
+  z-index: 1;
 }
-.map-down {
-  background-position-x: 2000px;
-  background-position-y: 2000px;
+#foreground {
+  z-index: 2;
 }
 .hud {
   margin-top: 20px;
@@ -4643,9 +4519,6 @@ a.badge:hover {
 .debug p {
   float: left;
   margin-left: 20px;
-}
-.nogo {
-  z-index: 0;
 }
 body {
   padding-top: 80px;
