@@ -4501,10 +4501,10 @@ a.badge:hover {
   z-index: 0;
 }
 #characters {
-  z-index: 1;
+  z-index: 2;
 }
 #foreground {
-  z-index: 2;
+  z-index: 3;
 }
 .hud {
   margin-top: 20px;
@@ -4514,7 +4514,7 @@ a.badge:hover {
   height: 28px;
   border: 2px dashed #e6742e;
   position: absolute;
-  z-index: 999;
+  z-index: 1;
 }
 .debug p {
   float: left;
