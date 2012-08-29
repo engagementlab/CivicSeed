@@ -1,53 +1,17 @@
-[{
-	name: 'Winter Gnome',
-	points: {},
-	hitPoints: {},
-	armorClass: {},
-	defenses: {},
-	attacks: {},
-	attributes: {
-		strength: {
-			muscle: 2,
-			endurance: 3,
-			stamina: 4
-		},
-		dexterity: {
-			handEyeCoordination: 0,
-			agility: 0,
-			reflexes: 0,
-			fineMotorSkills: 0,
-			balance: 0,
-			speed: 23
-		},
-		constitution: {
-			physique: 0,
-			toughness: 0,
-			health: 0,
-			resistanceToDiseaseAndPoison: 0
-		},
-		intelligence: {
-			iq: 0,
-			mnemonicAbility: 0,
-			reasoning: 0,
-			learningAbility: 0
-		},
-		wisdom: {
-			enlightenment: 0,
-			judgment: 0,
-			wile: 0,
-			willpower: 0,
-			intuitiveness: 0
-		},
-		charisma: {
-			attractiveness: 0,
-			persuasiveness: 0,
-			personalMagnetism: 0
-		},
+module.exports.global = [{
+	name: 'Gnome',
+	role: 'gnome',
+	attributes: {},
+	dialog: {
+		intro: ['I\'m the Gnome.', 'I can help you out.', 'If you solve these riddles, you can become a master gardner.'],
+		random: ['I\'m sure you believe everything you\'re saying.', 'If you believed something different, you wouldn\'t be sitting where you\'re sitting.', 'Stability means we run it.']
 	}
 }, {
-	name: 'Spring Gnome',
-}, {
-	name: 'Summer Gnome',
-}, {
-	name: 'Autumn Gnome',
-}]
+	name: 'Random NPC Gardner',
+	role: 'gardner',
+	attributes: {},
+	dialog: {
+		intro: ['I don\'t say much to start with, but I try.'],
+		random: ['I see you\'re back already!', 'I\'m just practicing planting seeds. You should try it too.']
+	}
+}];

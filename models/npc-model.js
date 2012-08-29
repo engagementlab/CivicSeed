@@ -1,60 +1,50 @@
 module.exports = function(mongoose, db, Schema, ObjectId) {
 
+	// var schema = new Schema({
+	// 	name:    String,
+	// 	binary:  Buffer,
+	// 	living:  Boolean,
+	// 	updated: { type: Date, default: Date.now }
+	// 	age:     { type: Number, min: 18, max: 65 }
+	// 	mixed:   Schema.Types.Mixed,
+	// 	_someId: Schema.Types.ObjectId,
+	// 	array:      [],
+	// 	ofString:   [String],
+	// 	ofNumber:   [Number],
+	// 	ofDates:    [Date],
+	// 	ofBuffer:   [Buffer],
+	// 	ofBoolean:  [Boolean],
+	// 	ofMixed:    [Schema.Types.Mixed],
+	// 	ofObjectId: [Schema.Types.ObjectId],
+	// 	nested: {
+	// 		stuff: { type: String, lowercase: true, trim: true }
+	// 	}
+	// });
+
 	var npcSchema = new Schema({
 		name: String,
 		role: String,
-		points: {},
-		hitPoints: {},
-		armorClass: {},
-		defenses: {},
-		attacks: {},
-		attributes: {
-			strength: {
-				muscle: Number,
-				endurance: Number,
-				stamina: Number
-			},
-			dexterity: {
-				handEyeCoordination: Number,
-				agility: Number,
-				reflexes: Number,
-				fineMotorSkills: Number,
-				balance: Number,
-				speed: Number
-			},
-			constitution: {
-				physique: Number,
-				toughness: Number,
-				health: Number,
-				resistanceToDiseaseAndPoison: Number
-			},
-			intelligence: {
-				iq: Number,
-				mnemonicAbility: Number,
-				reasoning: Number,
-				learningAbility: Number
-			},
-			wisdom: {
-				enlightenment: Number,
-				judgment: Number,
-				wile: Number,
-				willpower: Number,
-				intuitiveness: Number
-			},
-			charisma: {
-				attractiveness: Number,
-				persuasiveness: Number,
-				personalMagnetism: Number
-			}
+		attributes: {},
+		dialog: {
+			intro: [],
+			random: []
 		}
-
-
 
 	});
 
-	//the third param specifies an exact collection to look for in the DB
-	var npcModel = db.model('npc', npcSchema, 'npcs');
+	// NOT SURE HOW THIS IS GOING TO WORK YET...
+	var gnomeSchema = new Schema({
+		name: String,
+		role: String
+	});
 
-	return npcModel;
+	//the third param specifies an exact collection to look for in the DB
+	var NpcModel = db.model('npc', npcSchema, 'npcs');
+	var GnomeModel = db.model('gnome', gnomeSchema, 'gnomes');
+
+	return {
+		NpcModel: NpcModel,
+		GnomeModel: GnomeModel
+	};
 
 };

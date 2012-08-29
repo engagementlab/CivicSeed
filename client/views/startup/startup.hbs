@@ -1,0 +1,46 @@
+<!-- TODO: push this up to our stylesheets... -->
+<style>
+.console {
+	margin: 25px auto;
+	padding: 25px;
+	width: 800px;
+	background: #eee;
+	box-shadow: 3px 3px 3px #999;
+}
+.loaders {
+	margin: 12px 0;
+}
+</style>
+
+<div class="console">
+	<h1>Startup</h1>
+	<h2>Database Initialization</h2>
+	{{#if nodeEnv}}<h4>{{nodeEnv}} Environment</h4>{{/if}}
+	<div class="loaders">
+		<button id="userLoadBtn" class="btn" data-type="users">Preload Users</button>
+		<button id="tileLoadBtn" class="btn" data-type="tiles">Preload Tiles</button>
+		<button id="gnomeLoadBtn" class="btn" data-type="npcs">Preload Gnome &amp; NPCs</button>
+	</div>
+	<pre>{{consoleOutput}}</pre>
+</div>
+
+{{#extend "scripts"}}
+<script>
+(function($) {
+	$('.loaders').on('click', '.btn', function(event) {
+		var button = $(this),
+		dataType = button.data().type;
+		button.removeClass('btn-success');
+		$.ajax({
+			url: '/startup/' + dataType,
+			success: function(data) {
+				// $('.result').html(data);
+				// alert('Load was performed.');
+				console.log(data);
+				button.addClass('btn-success');
+			}
+		});
+	});
+})(jQuery);
+</script>
+{{/extend}}

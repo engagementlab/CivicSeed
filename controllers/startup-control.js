@@ -1,6 +1,4 @@
-var fs = require('fs'),
-userData = require('../data/users'),
-tileData = require('../data/tiles');
+var fs = require('fs');
 
 var handleError = function(message, err) {
 	if(err) {
@@ -27,12 +25,7 @@ var self = module.exports = {
 
 		app.get('/startup', function(req, res) {
 
-			var userModel,
-			quadrantModel,
-			tileModel,
-			mapArray = [],
-			isJson = /\.json$/g,
-			consoleOutput = '';
+			var consoleOutput;
 
 			// check for intialization of app
 			// NOTE: THE VARIABLE 'initialized' CAN ONLY BE SET 'true' IN PRODUCTION OR STAGING...
@@ -42,64 +35,11 @@ var self = module.exports = {
 
 					console.log('\n\n   * * * * * * * * * * * *   Initialization/Startup/Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
 
-					userModel = service.useModel('user', 'preload');
-					// quadrantModel = service.useModel('map', 'preload');
-					tileModel = service.useModel('tile', 'preload');
-
-					res.render('startup.hbs', {
+					res.render('startup/startup.hbs', {
 						title: 'STARTUP',
 						bodyClass: 'startup',
+						nodeEnv: nodeEnv,
 						consoleOutput: consoleOutput
-					});
-
-					// adding users to database
-					self.dropCollection('users', function() {
-						self.saveDocuments(userModel, userData.global);
-					});
-
-					// creation and use of tiles
-					self.dropCollection('tiles', function() {
-
-						var i,
-						tileObject = tileData.global,
-						backgroundArray = tileObject.backgroundArray,
-						background2Array = tileObject.background2Array,
-						foregroundArray = tileObject.foregroundArray,
-						nogoArray = tileObject.nogoArray,
-						numberOfTiles = backgroundArray.length,
-						mapTilesWidth = 145,
-						mapTilesHeight = 140,
-						mapX,
-						mapY,
-						tiles = [];
-
-						// self.saveDocuments(tileModel, tileData.global);
-
-						// (re)constructing tile data based on data dump from third party tool
-						for(i = 0; i < numberOfTiles; i++) {
-							mapX = i % mapTilesWidth;
-							mapY = Math.floor(i / mapTilesWidth);
-
-							//add the tile to the array
-							tiles.push({
-								x: mapX,
-								y: mapY,
-								nogo: (nogoArray[i] > 0) ? true : false,
-								isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
-								background: backgroundArray[i],
-								background2: background2Array[i],
-								foreground: foregroundArray[i],
-								mapIndex: i
-							});
-
-						}
-						self.saveDocuments(tileModel, tiles, numberOfTiles);
-						// console.log(tiles.length);
-						// console.log(tiles[0]);
-						// console.log(tiles[2]);
-						// console.log(tiles[3]);
-						// console.log(tiles[300]);
-
 					});
 
 				} else if(nodeEnv === 'production') {
@@ -119,8 +59,83 @@ var self = module.exports = {
 					consoleOutput: '...THE APP HAS ALREADY BEEN INITIALIZED...'
 				});
 			}
+		});
 
+		// adding users to database
+		app.get('/startup/users', function(req, res) {
+			if(nodeEnv) {
+				var userData = require('../data/users');
+				var userModel = service.useModel('user', 'preload');
+				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
+				self.dropCollection('users', function() {
+					self.saveDocuments(userModel, userData.global, function() {
+						res.send('Users loaded...');
+					});
+				});
+			}
+		});
 
+		// adding tiles to database
+		app.get('/startup/tiles', function(req, res) {
+			if(nodeEnv) {
+				var tileData = require('../data/tiles');
+				var tileModel = service.useModel('tile', 'preload');
+				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
+				self.dropCollection('tiles', function() {
+					var i,
+					tileObject = tileData.global,
+					backgroundArray = tileObject.backgroundArray,
+					background2Array = tileObject.background2Array,
+					foregroundArray = tileObject.foregroundArray,
+					nogoArray = tileObject.nogoArray,
+					numberOfTiles = backgroundArray.length,
+					mapTilesWidth = 145,
+					mapTilesHeight = 140,
+					mapX,
+					mapY,
+					tiles = [];
+
+					// self.saveDocuments(tileModel, tileData.global);
+
+					// (re)constructing tile data based on data dump from third party tool
+					for(i = 0; i < numberOfTiles; i++) {
+						mapX = i % mapTilesWidth;
+						mapY = Math.floor(i / mapTilesWidth);
+
+						//add the tile to the array
+						tiles.push({
+							x: mapX,
+							y: mapY,
+							nogo: (nogoArray[i] > 0) ? true : false,
+							isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
+							background: backgroundArray[i],
+							background2: background2Array[i],
+							foreground: foregroundArray[i],
+							mapIndex: i
+						});
+
+					}
+					self.saveDocuments(tileModel, tiles, numberOfTiles, function() {
+						res.send(numberOfTiles + ' tiles loaded...');
+					});
+				});
+			}
+		});
+
+		// adding gnome and npcs to database
+		app.get('/startup/npcs', function(req, res) {
+			if(nodeEnv) {
+				var npcData = require('../data/npcs');
+				// var gnomeData = require('../data/gnome');
+				var npcModel = service.useModel('npc', 'preload').NpcModel;
+				// var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
+				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
+				self.dropCollection('npcs', function() {
+					self.saveDocuments(npcModel, npcData.global, function() {
+						res.send('Gnome and NPCs loaded...');
+					});
+				});
+			}
 		});
 
 		// app.get('/sessions/destroy', function(req, res) {
