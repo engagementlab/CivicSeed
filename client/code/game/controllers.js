@@ -23,8 +23,8 @@ var Game = {
 	shiftArray: 0,
 	viewportWidthInTiles: 30,
 	viewportHeightInTiles: 15,
-	totalviewportWidthInTiles: 145,
-	totalviewportHeightInTiles: 140,
+	totalviewportWidthInTiles: 146,
+	totalviewportHeightInTiles: 141,
 	tileSize: 32,
 	tilesheet: null,
 	tilesheetWidth: 640/32,
@@ -70,7 +70,7 @@ var Game = {
 			Game.tilesheetContext.drawImage(Game.tilesheet,0,0);
 
 			//get all the tiles for the current viewport (default to 0,0)
-			Game._getTiles(Game.masterX,Game.masterY,function(){
+			Game._getTiles(Game.masterX,Game.masterY,Game.viewportWidthInTiles,Game.viewportHeightInTiles, function(){
 				//new tile data stored in nextTiles by default
 				//since this is the initial load w/ no transition, 
 				//copy them over to currentTiles instead of transitioning
@@ -96,17 +96,22 @@ var Game = {
 		callback();
 	},
 
-	_getTiles: function(x,y,callback) {
-		ss.rpc('multiplayer.getMapData',x,y,x+Game.viewportWidthInTiles,y+Game.viewportHeightInTiles,function(response){
+	_getTiles: function(x,y,x2,y2,callback) {
+		ss.rpc('multiplayer.getMapData',x,y,x+x2,y+y2,function(response){
 			//breakdown single array into 2d array
-			Game.nextTiles = new Array(Game.viewportWidthInTiles);
-			for(var i=0;i<Game.viewportWidthInTiles;i++){
-				Game.nextTiles[i] = new Array(Game.viewportHeightInTiles);
-				for(var j=0;j<Game.viewportHeightInTiles;j++){
-					var index = j*Game.viewportWidthInTiles + (i%Game.viewportWidthInTiles);
+			Game.nextTiles = new Array(x2);
+			for(var i=0;i<x2;i++){
+				Game.nextTiles[i] = new Array(y2);
+				for(var j=0;j<y2;j++){
+					var index = j*x2 + (i%x2);
 					Game.nextTiles[i][j] = response[index];
 				}
 			}
+			// console.log(Game.nextTiles[0][0]);
+			// console.log(Game.nextTiles[x2-1][0]);
+			// console.log(Game.nextTiles[0][y2-1]);
+			// console.log(Game.nextTiles[x2-1][y2-1]);
+			console.log(Game.nextTiles);
 			callback();
 		});
 	},
@@ -130,12 +135,18 @@ var Game = {
 			for(var j=0;j<Game.viewportHeightInTiles;j++){
 				//tilemap starts at 1 instead of 0
 				var index = Game.currentTiles[i][j].background-1;
+				var index2 = Game.currentTiles[i][j].background2-1;
 				var srcX = index % Game.tilesheetWidth;
 				var srcY = Math.floor(index / Game.tilesheetWidth);
 				//var destX = i % Game.viewportWidthInTiles; 
 				//var destY = Math.floor(i/Game.viewportWidthInTiles);
 				
 				Game._renderTile(index, srcX, srcY, i, j);
+				if(index2>-1){
+					var srcX2 = index2 % Game.tilesheetWidth;
+					var srcY2 = Math.floor(index2 / Game.tilesheetWidth);
+					Game._renderTile(index2,srcX2,srcY2,i,j);
+				}
 			}
 		}	
 	},
@@ -147,56 +158,71 @@ var Game = {
 		return noGoVal;
 	},
 
-	getMapEdge: function(x,y){
+	isMapEdge: function(x,y,callback){
 		//var i = y*Game.viewportWidthInTiles + (x%Game.viewportWidthInTiles);
 		var edge = Game.currentTiles[x][y].isMapEdge;
-		return edge;
+		callback(edge);
 	},
 
 	beginTransition: function(x,y){
-		var isEdge = Game.getMapEdge(x,y);
-		if(!isEdge){
-
-			//left
-			if(x==0){
-				Game.nextX = Game.masterX-Game.viewportWidthInTiles-1;
-				Game.stepX = -1;
-				Game.shiftArray = -1;
-				Game.numberOfSteps = 29;
-				Game.stepDirection = 'left';
-			}
-
-			//right
-			else if(x==Game.viewportWidthInTiles-1){
-				Game.nextX = Game.masterX+Game.viewportWidthInTiles-1;
-				Game.stepX = 1;
-				Game.shiftArray = 1;
-				Game.numberOfSteps = 29;
-				Game.stepDirection = 'right';
-			}
-
-			//up
-			else if(y==0){
-				Game.nextY = Game.masterY-Game.viewportHeightInTiles-1;
-				Game.stepY = -1;
-				Game.shiftArray = -Game.totalviewportHeightInTiles;
-				Game.numberOfSteps = 14;
-				Game.stepDirection = 'up';
-			}
-
-			//down
-			else if(y==Game.viewportHeightInTiles-1){
-				Game.nextY = Game.masterY+Game.viewportHeightInTiles-1;
-				Game.stepY = 1;
-				Game.shiftArray = Game.totalviewportHeightInTiles;
-				Game.numberOfSteps = 14;
-				Game.stepDirection = 'down';
-			}
-			Game.stepNumber = 0;
-			Game._getTiles(Game.nextX,Game.nextY,function(){
-				Game._stepTransition();
-			});
+		var getThisManyX,getThisManyY,getThisX,getThisY;
+		//left
+		if(x==0){
+			Game.nextX = Game.masterX-(Game.viewportWidthInTiles-1);
+			Game.stepX = -1;
+			Game.shiftArray = -1;
+			Game.numberOfSteps = 29;
+			Game.stepDirection = 'left';
+			getThisManyX = Game.viewportWidthInTiles-1;
+			getThisManyY = Game.viewportHeightInTiles;
+			getThisX = Game.nextX;
+			getThisY = Game.masterY;
 		}
+
+		//right
+		else if(x==Game.viewportWidthInTiles-1){
+			Game.nextX = Game.masterX+Game.viewportWidthInTiles-1;
+			Game.stepX = 1;
+			Game.shiftArray = 1;
+			Game.numberOfSteps = 29;
+			Game.stepDirection = 'right';
+			getThisManyX = Game.viewportWidthInTiles-1;
+			getThisManyY = Game.viewportHeightInTiles;
+			getThisX = Game.nextX+1;
+			getThisY = Game.masterY;
+		}
+
+		//up
+		else if(y==0){
+			Game.nextY = Game.masterY-(Game.viewportHeightInTiles-1);
+			Game.stepY = -1;
+			Game.shiftArray = -Game.totalviewportHeightInTiles;
+			Game.numberOfSteps = 14;
+			Game.stepDirection = 'up';
+			getThisManyX = Game.viewportWidthInTiles;
+			getThisManyY = Game.viewportHeightInTiles-1;
+			getThisX = Game.masterX;
+			getThisY = Game.nextY;
+		}
+
+		//down
+		else if(y==Game.viewportHeightInTiles-1){
+			Game.nextY = Game.masterY+Game.viewportHeightInTiles-1;
+			Game.stepY = 1;
+			Game.shiftArray = Game.totalviewportHeightInTiles;
+			Game.numberOfSteps = 14;
+			Game.stepDirection = 'down';
+			getThisManyX = Game.viewportWidthInTiles;
+			getThisManyY = Game.viewportHeightInTiles-1;
+			getThisX = Game.masterX;
+			getThisY = Game.nextY+1;
+		}
+		console.log(Game.masterX+", "+Game.masterY);
+		console.log(Game.nextX+", "+Game.nextY);
+		Game.stepNumber = 0;
+		Game._getTiles(getThisX,getThisY,getThisManyX,getThisManyY, function(){
+			Game._stepTransition();
+		});
 	},
 
 	_stepTransition: function(){
@@ -234,7 +260,7 @@ var Game = {
 			}
 			//shift a new column from the next array to the last spot
 			for(var j=0;j<Game.viewportHeightInTiles;j++){
-				Game.currentTiles[Game.viewportHeightInTiles-1][j] = Game.nextTiles[Game.stepNumber-1][j];
+				Game.currentTiles[Game.viewportWidthInTiles-1][j] = Game.nextTiles[Game.stepNumber-1][j];
 			}
 			Game.masterX += 1;
 		}
@@ -304,6 +330,20 @@ $(document).ready(function(){
 		var y = b - ob;
 		var snapX = Math.floor(x/32);
 		var snapY = Math.floor(y/32);
+		
+		//extremes(if at edge it will be just over)
+		if(snapX>29){
+			snapX= 29;
+		}
+		else if(snapX<0){
+			snapX = 0;
+		}
+		if(snapY>14){
+			snapX= 14;
+		}
+		else if(snapY<0){
+			snapX= 0;
+		} 
 		return callback(snapX,snapY);
 	};
 
@@ -325,9 +365,22 @@ $(document).ready(function(){
  	//figure out if we should transition (or do other stuff later)
  	$(".gameboard").click(function(m){
  		if(!inTransit){
- 			inTransit = true;
  			getXYFromMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function(x,y){
- 				Game.beginTransition(x,y);
+ 				Game.isMapEdge(x,y,function(reply){
+ 					if(!reply){
+ 						if(x==0 || x==29 || y==0 || y==14){
+ 							inTransit = true;
+ 							Game.beginTransition(x,y);
+ 						}
+ 						else{
+ 							console.log('think outside the box');
+ 						}
+ 					}	
+ 					else{
+ 						console.log("edge");
+ 					}
+ 				});
+ 				
  			});
  		}
  	});
