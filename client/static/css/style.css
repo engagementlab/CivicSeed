@@ -4512,7 +4512,8 @@ a.badge:hover {
 .cursor {
   width: 28px;
   height: 28px;
-  border: 2px dashed #e6742e;
+  border: 2px dashed white;
+  border-color: yellow;
   position: absolute;
   z-index: 1;
 }
