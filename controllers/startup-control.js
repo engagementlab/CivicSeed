@@ -89,8 +89,8 @@ var self = module.exports = {
 					foregroundArray = tileObject.foregroundArray,
 					nogoArray = tileObject.nogoArray,
 					numberOfTiles = backgroundArray.length,
-					mapTilesWidth = 146,
-					mapTilesHeight = 141,
+					mapTilesWidth = service.environment.map.mapTilesWidth,
+					mapTilesHeight = service.environment.map.mapTilesHeight,
 					mapX,
 					mapY,
 					tiles = [];
