@@ -17,13 +17,13 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		var environment = service.loadEnvironment(),
+		var environment = service.environment,
 		nodeEnv = environment.app.nodeEnv,
 		initialized = environment.app.initialized;
 
 		self.service = service;
 
-		app.get('/startup', function(req, res) {
+		app.get('/admin/startup', function(req, res) {
 
 			var consoleOutput;
 
@@ -35,7 +35,7 @@ var self = module.exports = {
 
 					console.log('\n\n   * * * * * * * * * * * *   Initialization/Startup/Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
 
-					res.render('startup/startup.hbs', {
+					res.render('admin/startup.hbs', {
 						title: 'STARTUP',
 						bodyClass: 'startup',
 						nodeEnv: nodeEnv,
@@ -54,7 +54,7 @@ var self = module.exports = {
 			} else {
 				// FIXME: THIS SHOULD ABSOLUTELY REDIRECT TO EITHER 404 OR HOME
 				console.log('  ...THE APP HAS ALREADY BEEN INITIALIZED...  '.red.inverse);
-				res.render('startup.hbs', {
+				res.render('admin/startup.hbs', {
 					title: 'ERROR',
 					consoleOutput: '...THE APP HAS ALREADY BEEN INITIALIZED...'
 				});
@@ -62,23 +62,25 @@ var self = module.exports = {
 		});
 
 		// adding users to database
-		app.get('/startup/users', function(req, res) {
+		app.get('/admin/startup/users', function(req, res) {
 			if(nodeEnv) {
-				var userData = require('../data/users');
-				var userModel = service.useModel('user', 'preload');
+				var userData = require('../../data/users');
+				var userModel = service.useModel('user', 'preload').UserModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
 				self.dropCollection('users', function() {
 					self.saveDocuments(userModel, userData.global, function() {
 						res.send('Users loaded...');
 					});
 				});
+			} else {
+				res.send('There was an error retrieiving any data...');
 			}
 		});
 
 		// adding tiles to database
-		app.get('/startup/tiles', function(req, res) {
+		app.get('/admin/startup/tiles', function(req, res) {
 			if(nodeEnv) {
-				var tileData = require('../data/tiles');
+				var tileData = require('../../data/tiles');
 				var tileModel = service.useModel('tile', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
 				self.dropCollection('tiles', function() {
@@ -89,8 +91,8 @@ var self = module.exports = {
 					foregroundArray = tileObject.foregroundArray,
 					nogoArray = tileObject.nogoArray,
 					numberOfTiles = backgroundArray.length,
-					mapTilesWidth = 146,
-					mapTilesHeight = 141,
+					mapTilesWidth = service.environment.map.mapTilesWidth,
+					mapTilesHeight = service.environment.map.mapTilesHeight,
 					mapX,
 					mapY,
 					tiles = [];
@@ -119,14 +121,16 @@ var self = module.exports = {
 						res.send(numberOfTiles + ' tiles loaded...');
 					});
 				});
+			} else {
+				res.send('There was an error retrieiving any data...');
 			}
 		});
 
 		// adding gnome and npcs to database
-		app.get('/startup/npcs', function(req, res) {
+		app.get('/admin/startup/npcs', function(req, res) {
 			if(nodeEnv) {
-				var npcData = require('../data/npcs');
-				// var gnomeData = require('../data/gnome');
+				var npcData = require('../../data/npcs');
+				// var gnomeData = require('../../data/gnome');
 				var npcModel = service.useModel('npc', 'preload').NpcModel;
 				// var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
@@ -135,6 +139,8 @@ var self = module.exports = {
 						res.send('Gnome and NPCs loaded...');
 					});
 				});
+			} else {
+				res.send('There was an error retrieiving any data...');
 			}
 		});
 
@@ -168,7 +174,7 @@ var self = module.exports = {
 		}
 		model.create(documents, function(err) {
 			if(err) {
-				console.error('  Could not parse and create documents/JSON file: %s  '.yellow.inverse, err);
+				console.error('  Could not create documents: %s  '.yellow.inverse, err);
 				// process.exit(1);
 				// throw err;
 			} else {
@@ -180,7 +186,7 @@ var self = module.exports = {
 				// 	console.log(users);
 				// 	consoleOutput += users;
 
-				// 	// res.render('startup.hbs', {
+				// 	// res.render('admin/startup.hbs', {
 				// 	// 	title: 'STARTUP',
 				// 	// 	consoleOutput: consoleOutput
 				// 	// });

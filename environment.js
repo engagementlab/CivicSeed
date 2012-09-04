@@ -18,15 +18,19 @@ if(databaseEnv === 'production') {
 	console.log('  DATABASE CONNECTION INFORMATION MISSING  '.red.inverse);
 }
 
-// environment variables
-var self = module.exports = {
+// environment/global variables
+var globals = module.exports = {
 	app: {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
-		initialized: false
+		initialized: false,
 	},
 	database: {
 		environment: databaseEnv,
 		URL: databaseURL,
+	},
+	map: {
+		mapTilesWidth: 146,
+		mapTilesHeight: 141,
 	}
 };
