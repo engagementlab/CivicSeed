@@ -31,10 +31,6 @@ var self = module.exports = {
 		}
 	},
 
-	loadEnvironment: function() {
-		return self.environment;
-	},
-
 	useModel: function(modelName, state) {
 		if(state === 'preload') {
 			console.log('CS: '.blue + 'Initializing database by using model '.green + modelName.yellow.underline);

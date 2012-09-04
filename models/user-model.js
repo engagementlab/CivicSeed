@@ -3,12 +3,14 @@ var hash = require('password-hash');
 module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var InviteeSchema = new Schema({
+		sessionName: String,
 		email: String,
 		accepted: Boolean,
-		random: String
+		code: String
 	});
 
 	var UserSchema = new Schema({
+		sessionName: String, // not sure what type this should be...
 		name: String,
 		password: String,
 		email: String,
@@ -45,10 +47,11 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 //var ph = require('./lib/password-hash');
 
+	return {
+		InviteeModel: InviteeModel,
+		UserModel: UserModel,
+	};
 
-
-
-return UserModel;
 	// user.schema.pre('save', function (next) {
 	// 	if (!validatePresenceOf(this.password)) {
 	// 		next(new Error('Invalid password'));

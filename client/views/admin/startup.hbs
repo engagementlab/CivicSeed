@@ -32,7 +32,7 @@
 		dataType = button.data().type;
 		button.removeClass('btn-success');
 		$.ajax({
-			url: '/startup/' + dataType,
+			url: '/admin/startup/' + dataType,
 			success: function(data) {
 				// $('.result').html(data);
 				// alert('Load was performed.');
