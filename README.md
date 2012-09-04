@@ -149,6 +149,21 @@ Running "node --version" should return:
 4. Make changes to any less file in the /bootstrap folder
 5. Save the style.less folder and it will auto re-compile style.css
 
+### Calculating Map Size
+
+1. The viewport displays a 30 x 15 tile grid.  A "quadrant" is really 29 x 14 because there is overlap.  
+
+2. Formula for exact dimensions where: 
+    - vX = width of viewport in tiles
+    - vY = height of viewport in tiles
+    - qX = number horizontal quadrants
+    - qY = number of vertical quadrants
+
+    #### total X tiles = (vX * qX) - qX + 1
+    #### total Y tiles = (vY * qY) - qY + 1
+
+    ### DON'T QUESTION THE FORMULA...
+
 ## Questions and Answers
 
     Question: Will Node.js scale?

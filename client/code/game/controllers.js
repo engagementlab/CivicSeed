@@ -1,14 +1,169 @@
- // shim layer with setTimeout fallback
-    window.requestAnimFrame = (function(){
-      return  window.requestAnimationFrame       || 
-              window.webkitRequestAnimationFrame || 
-              window.mozRequestAnimationFrame    || 
-              window.oRequestAnimationFrame      || 
-              window.msRequestAnimationFrame     || 
-              function( callback ){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+// top of game file
+(function() {
+
+	//PRIVATE VARS 
+	
+	
+	$game = {
+
+		//GLOBAL GAME VARS
+		masterX: 0,
+		masterY: 0,
+		nextX: 0,
+		nextY: 0,
+		stepX: 0,
+		stepY: 0,
+		currentTiles: [],
+		nextTiles: [],
+		shiftArray: 0,
+		stepNumber: 0,
+		numberOfSteps: 0,
+		stepDirection: null,
+		inTransit: false,
+	
+		//GLOBAL CONSTANTS
+		VIEWPORT_WIDTH: 30,
+		VIEWPORT_HEIGHT: 15,
+		TOTAL_WIDTH: 146,
+		TOTAL_HEIGHT: 141,
+		TILE_SIZE: 32,
+
+		//private functions
+
+	
+		init: function() {
+			$game.$map.init();
+		},
+
+		getTiles: function(x, y, x2, y2, callback) {
+			ss.rpc('multiplayer.getMapData', x, y, x + x2, y + y2, function(response) {
+				//breakdown single array into 2d array
+				$game.nextTiles = new Array(x2);
+				for(var i = 0; i < x2 ; i+=1) {
+					
+					$game.nextTiles[i] = new Array(y2);
+					
+					for(var j = 0; j < y2; j+=1) {
+
+						var index = j * x2 + (i % x2);
+						$game.nextTiles[i][j] = response[index];
+					}
+				}
+				callback();
+			});
+		},
+
+
+
+	};
+
+	window.$game = $game;
+
+})();
+
+// map file
+(function() {
+
+	_renderAll = function() {
+
+	};
+
+	$game.$map = {
+
+		init: function() {
+			console.log($game.not);
+		}
+
+	};
+
+})();
+
+// renderer file
+(function() {
+
+	//private render vars
+	_tilesheet: null,
+	_tilesheetWidthPx: 640;
+	_tilesheetHeightPx: 3136; 
+	_tilesheetWidth: _tilesheetWidthPx / $game.TILE_SIZE,
+	_tilesheetWidth: _tilesheetHeightPx / $game.TILE_SIZE,
+	_tilesheetCanvas: null,
+	_backgroundContext: null,
+	_foregroundContext: null,
+	_charactersContext: null,
+	_tilesheetContext: null,
+
+
+	$game.$renderer = {
+
+		init: function() {
+			_tilesheetCanvas = document.createElement('canvas');
+        	_tilesheetCanvas.setAttribute('width', _tilesheetWidth * $game.TILE_SIZE);
+        	_tilesheetCanvas.setAttribute('height', _tilesheetHeight * $game.TILE_SIZE);
+
+	        //initialize DB and let all players know there is a new active one
+			ss.rpc('multiplayer.init', function(response) {
+				console.log('rpc init: '+ response);
+			});
+
+			//load in tilesheet png
+			_tilesheet = new Image();
+			_tilesheet.src = 'img/game/tilesheet.png';
+			
+			//access the canvases for rendering
+			_backgroundContext = document.getElementById('background').getContext('2d');
+			_foregroundContext = document.getElementById('foreground').getContext('2d');
+			_charactersContext = document.getElementById('characters').getContext('2d');
+			_tilesheetContext = _tilesheetCanvas.getContext('2d');
+
+			//start doing stuff once the tilesheet png loads
+			_tilesheet.onload = function() {
+				console.log("ready to render");
+
+				//render out the whole tilesheet to the offscreen canvas
+				_tilesheetContext.drawImage(_tilesheet, 0, 0);
+
+				//get all the tiles for the current viewport (default to 0,0)
+				$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
+					
+						//new tile data stored in nextTiles by default
+						//since this is the initial load w/ no transition, 
+						//copy them over to currentTiles instead of transitioning
+						$game._copyTileArray(function() {
+
+							$game._renderAll();
+
+						});
+					});
+			};		
+				
+		}
+
+	};
+
+})();
+
+
+//init file
+$(function() {
+	$game.init();
+
+	
+});
+ 
+
 
 var inTransit = false;
 
@@ -49,8 +204,8 @@ var Game = {
         tilesheetCanvas.setAttribute('height', Game.tilesheetHeight * Game.tileSize);
 
         //initialize DB and let all players know there is a new active one
-		ss.rpc('multiplayer.init',function(response){
-			console.log("rpc init: "+response);
+		ss.rpc('multiplayer.init',function(response) {
+			console.log('rpc init: '+response);
 		});
 
 		//load in tilesheet png
@@ -67,7 +222,7 @@ var Game = {
 		Game.tilesheet.onload = function() {
 			
 			//render out the whole tilesheet to the offscreen canvas
-			Game.tilesheetContext.drawImage( Game.tilesheet, 0, 0);
+			Game.tilesheetContext.drawImage(Game.tilesheet, 0, 0);
 
 			//get all the tiles for the current viewport (default to 0,0)
 			Game._getTiles(Game.masterX,Game.masterY, Game.viewportWidthInTiles, Game.viewportHeightInTiles, function() {
@@ -75,7 +230,7 @@ var Game = {
 				//new tile data stored in nextTiles by default
 				//since this is the initial load w/ no transition, 
 				//copy them over to currentTiles instead of transitioning
-				Game._copyTileArray( function() {
+				Game._copyTileArray(function() {
 
 					Game._renderAll();
 
@@ -84,15 +239,15 @@ var Game = {
 		};
 	},
 
-	_copyTileArray: function( callback ) {
+	_copyTileArray: function(callback) {
 		
-		Game.currentTiles = new Array( Game.viewportWidthInTiles );
+		Game.currentTiles = new Array(Game.viewportWidthInTiles);
 		
-		for(var i = 0; i < Game.viewportWidthInTiles; i++ ) {	
-			Game.currentTiles[i] = new Array( Game.viewportHeightInTiles );
+		for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {	
+			Game.currentTiles[i] = new Array(Game.viewportHeightInTiles);
 			
 
-			for(var j = 0; j < Game.viewportHeightInTiles; j++ ) {
+			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
 				
 				Game.currentTiles[i][j] = Game.nextTiles[i][j];
 			
@@ -104,17 +259,17 @@ var Game = {
 		callback();
 	},
 
-	_getTiles: function( x, y, x2, y2, callback ) {
-		ss.rpc( 'multiplayer.getMapData', x, y, x+x2, y+y2, function( response ) {
+	_getTiles: function(x, y, x2, y2, callback) {
+		ss.rpc('multiplayer.getMapData', x, y, x + x2, y + y2, function( response) {
 			//breakdown single array into 2d array
 			Game.nextTiles = new Array(x2);
-			for(var i = 0; i < x2 ; i++) {
+			for(var i = 0; i < x2 ; i+=1) {
 				
 				Game.nextTiles[i] = new Array(y2);
 				
-				for(var j = 0; j < y2; j++) {
+				for(var j = 0; j < y2; j+=1) {
 
-					var index = j * x2 + ( i % x2 );
+					var index = j * x2 + (i % x2);
 					Game.nextTiles[i][j] = response[index];
 				}
 			}
@@ -122,7 +277,7 @@ var Game = {
 		});
 	},
 	
-	_renderTile: function( tileData ) {
+	_renderTile: function(tileData) {
 		Game.backgroundContext.drawImage(
 			Game.tilesheet, 
 			tileData.srcX * Game.tileSize,
@@ -137,9 +292,10 @@ var Game = {
 	},
 	
 	_renderAll: function() {
-		for(var i = 0; i < Game.viewportWidthInTiles; i++){
+		for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
 			
-			for(var j = 0; j < Game.viewportHeightInTiles; j++){
+			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
+				
 				var backIndex = Game.currentTiles[i][j].background - 1,
 					backIndex2 = Game.currentTiles[i][j].background2 - 1,
 					foreIndex = Game.currentTiles[i][j].foreground - 1,
@@ -149,7 +305,7 @@ var Game = {
 				//background tiles first
 				tileData = {
 					srcX: backIndex % Game.tilesheetWidth,
-					srcY: Math.floor( backIndex / Game.tilesheetWidth ),
+					srcY: Math.floor(backIndex / Game.tilesheetWidth),
 					destX: i,
 					destY: j
 				};
@@ -157,45 +313,45 @@ var Game = {
 				Game._renderTile(tileData);
 				
 				//second layer background tiles (not all have something)
-				if( backIndex2 > -1){
+				if( backIndex2 > -1) {
 					tileData.srcX = backIndex2 % Game.tilesheetWidth;
-					tileData.srcY = Math.floor( backIndex2 / Game.tilesheetWidth);
+					tileData.srcY = Math.floor(backIndex2 / Game.tilesheetWidth);
 					Game._renderTile( tileData );
 				}
 
 				//foreground tiles 
-				if( foreIndex > -1){
+				if(foreIndex > -1) {
 					tileData.srcX = foreIndex % Game.tilesheetWidth;
-					tileData.srcY = Math.floor( foreIndex / Game.tilesheetWidth);
-					Game._renderTile( tileData );
+					tileData.srcY = Math.floor(foreIndex / Game.tilesheetWidth);
+					Game._renderTile(tileData);
 				}
 
 			}
 		}	
 	},
 
-	getNoGo: function( x, y, callback ) {
+	getNoGo: function(x, y, callback) {
 		//var i = y*Game.viewportWidthInTiles + (x%Game.viewportWidthInTiles);
 		var noGoVal = Game.currentTiles[x][y].nogo;
-		//console.log(noGoVal);
-		callback( noGoVal );
+		// console.log(noGoVal + 'Get No Go Yo');
+		callback(noGoVal);
 	},
 
-	isMapEdge: function( x, y, callback) {
+	isMapEdge: function(x, y, callback) {
 		//var i = y*Game.viewportWidthInTiles + (x%Game.viewportWidthInTiles);
 		var edge = Game.currentTiles[x][y].isMapEdge;
 		callback(edge);
 	},
 
-	beginTransition: function( x, y) {
+	beginTransition: function(x, y) {
 		var getThisManyX,
 		getThisManyY,
 		getThisX,
 		getThisY;
 		
 		//left
-		if( x === 0 ) {
-			Game.nextX = Game.masterX - ( Game.viewportWidthInTiles - 1 );
+		if(x === 0) {
+			Game.nextX = Game.masterX - (Game.viewportWidthInTiles - 1);
 			Game.stepX = -1;
 			Game.shiftArray = -1;
 			Game.numberOfSteps = 29;
@@ -207,7 +363,7 @@ var Game = {
 		}
 
 		//right
-		else if( x === Game.viewportWidthInTiles - 1 ) {
+		else if(x === Game.viewportWidthInTiles - 1) {
 			Game.nextX = Game.masterX + Game.viewportWidthInTiles - 1;
 			Game.stepX = 1;
 			Game.shiftArray = 1;
@@ -220,8 +376,8 @@ var Game = {
 		}
 
 		//up
-		else if( y === 0 ) {
-			Game.nextY = Game.masterY - ( Game.viewportHeightInTiles - 1 );
+		else if(y === 0) {
+			Game.nextY = Game.masterY - (Game.viewportHeightInTiles - 1);
 			Game.stepY = -1;
 			Game.shiftArray = -Game.totalviewportHeightInTiles;
 			Game.numberOfSteps = 14;
@@ -233,7 +389,7 @@ var Game = {
 		}
 
 		//down
-		else if( y === Game.viewportHeightInTiles - 1 ) {
+		else if(y === Game.viewportHeightInTiles - 1) {
 			Game.nextY = Game.masterY+Game.viewportHeightInTiles - 1;
 			Game.stepY = 1;
 			Game.shiftArray = Game.totalviewportHeightInTiles;
@@ -246,13 +402,13 @@ var Game = {
 		}
 		
 		Game.stepNumber = 0;
-		Game._getTiles( getThisX, getThisY, getThisManyX, getThisManyY, function() {
+		Game._getTiles(getThisX, getThisY, getThisManyX, getThisManyY, function() {
 			Game._stepTransition();
 		});
 	},
 
 	_stepTransition: function() {
-		if( Game.stepNumber !== Game.numberOfSteps ) {
+		if(Game.stepNumber !== Game.numberOfSteps) {
 			Game._updateAndDraw();
 		}
 		// if(Game.masterX!=Game.nextX){
@@ -263,29 +419,29 @@ var Game = {
 		// 	Game.masterY+=Game.stepY;
 		// 	Game._updateAndDraw();
 		// }
-		else{
+		else {
 			Game._endTransition();
 		}
 	},
 
-	_endTransition: function(){
+	_endTransition: function() {
 		inTransit = false;
 	},
 
-	_updateAndDraw: function(){
+	_updateAndDraw: function() {
 		Game.stepNumber += 1;
 		//--------RIGHT------------
 		//go thru current array and shift everthing
-		if( Game.stepDirection === 'right' ) {
+		if(Game.stepDirection === 'right') {
 			//shift all except last column
-			for( var i = 0; i < Game.viewportWidthInTiles - 1; i++ ) {
-				for( var j = 0; j < Game.viewportHeightInTiles; j++ ){
+			for(var i = 0; i < Game.viewportWidthInTiles - 1; i+=1) {
+				for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
 					Game.currentTiles[i][j] = Game.currentTiles[ i + 1 ][j];
 				}
 			}
 			
 			//shift a new column from the next array to the last spot
-			for( var j = 0; j < Game.viewportHeightInTiles; j++ ) {
+			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
 				Game.currentTiles[Game.viewportWidthInTiles - 1][j] = Game.nextTiles[Game.stepNumber - 1][j];
 			}
 			Game.masterX += 1;
@@ -293,48 +449,48 @@ var Game = {
 
 		//--------LEFT------------
 		//go thru current array and shift everthing
-		if(Game.stepDirection === 'left' ) {
+		if(Game.stepDirection === 'left') {
 			//shift all except last column
-			for( var i = Game.viewportWidthInTiles - 1; i > 0; i-- ) {
-				for( var j = 0; j < Game.viewportHeightInTiles; j++) {
+			for(var i = Game.viewportWidthInTiles - 1; i > 0; i-=1) {
+				for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
 					Game.currentTiles[i][j] = Game.currentTiles[ i - 1 ][j];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for( var j = 0; j < Game.viewportHeightInTiles; j++) {
-				Game.currentTiles[0][j] = Game.nextTiles[ Game.nextTiles.length - Game.stepNumber ][j];
+			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
+				Game.currentTiles[0][j] = Game.nextTiles[Game.nextTiles.length - Game.stepNumber ][j];
 			}
 			Game.masterX -= 1;
 		}
 
 		//--------UP------------
 		//go thru current array and shift everthing
-		if( Game.stepDirection==='up' ) {
+		if(Game.stepDirection==='up') {
 			//shift all except last column
-			for( var j = Game.viewportHeightInTiles - 1; j > 0; j--) {
-				for( var i = 0; i < Game.viewportWidthInTiles; i++) {
-					Game.currentTiles[i][j] = Game.currentTiles[i][ j - 1 ];
+			for(var j = Game.viewportHeightInTiles - 1; j > 0; j-=1) {
+				for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
+					Game.currentTiles[i][j] = Game.currentTiles[i][j - 1];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for(var i = 0; i < Game.viewportWidthInTiles; i++) {
-				Game.currentTiles[i][0] = Game.nextTiles[i][ Game.nextTiles[0].length - Game.stepNumber ];
+			for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
+				Game.currentTiles[i][0] = Game.nextTiles[i][Game.nextTiles[0].length - Game.stepNumber];
 			}
 			Game.masterY -= 1;
 		}
 
 		//--------DOWN------------
 		//go thru current array and shift everthing
-		if( Game.stepDirection === 'down' ) {
+		if(Game.stepDirection === 'down') {
 			//shift all except last column
-			for( var j = 0; j < Game.viewportHeightInTiles - 1; j++) {
-				for( var i = 0; i < Game.viewportWidthInTiles; i++) {
-					Game.currentTiles[i][j] = Game.currentTiles[i][ j + 1 ];
+			for(var j = 0; j < Game.viewportHeightInTiles - 1; j+=1) {
+				for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
+					Game.currentTiles[i][j] = Game.currentTiles[i][j + 1];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for(var i = 0; i < Game.viewportWidthInTiles; i++) {
-				Game.currentTiles[i][ Game.viewportHeightInTiles - 1 ] = Game.nextTiles[i][ Game.stepNumber - 1 ];
+			for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
+				Game.currentTiles[i][Game.viewportHeightInTiles - 1] = Game.nextTiles[i][Game.stepNumber - 1];
 			}
 			Game.masterY += 1;
 		}
@@ -347,62 +503,85 @@ var Game = {
 	}
 };
 
-$(document).ready(function(){
+$(document).ready(function() {
 	
-	
-	//returns local x,y grid data based on mouse location
-	getXYFromMouse = function( a, b, oa, ob, callback ) {
-		var x = a - oa;
-		var y = b - ob;
-		var snapX = Math.floor(x/32);
-		var snapY = Math.floor(y/32);
-		
-		//extremes(if at edge it will be just over)
-		if(snapX>29){
-			snapX= 29;
-		}
-		else if(snapX<0){
-			snapX = 0;
-		}
-		if(snapY>14){
-			snapX= 14;
-		}
-		else if(snapY<0){
-			snapX= 0;
-		} 
-		return callback(snapX,snapY);
-	};
+	var Mouse = {
+		prevX: 0,
+		prevY: 0,
+		curX: 0,
+		curY: 0,
+		changed: false,
 
-	//change cursor on mouse move
-	$(".gameboard").mousemove(function( m ) {
-		getXYFromMouse(m.pageX,m.pageY,this.offsetLeft,this.offsetTop,function( x, y ) {
+		//returns local x,y grid data based on mouse location
+		updateMouse: function( a, b, oa, ob, callback) {
+			var x = a - oa;
+			var y = b - ob;
+			Mouse.prevX = Mouse.curX;
+			Mouse.prevY = Mouse.curY;
+
+			Mouse.curX = Math.floor(x/32);
+			Mouse.curY = Math.floor(y/32);
 			
-			Game.getNoGo( x, y, function( noGoValue ) {
-				$(".cursor").css({
-					'left': x * 32,
-					'top': y * 32,
-					'border-color': noGoValue ? 'red' : 'white',
+			//extremes(if at edge it will be just over)
+			if(Mouse.curX > 29) {
+				Mouse.curX = 29;
+			}
+			else if(Mouse.curX < 0) {
+				Mouse.curX = 0;
+			}
+			if(Mouse.curY > 14) {
+				Mouse.curY = 14;
+			}
+			else if(Mouse.curY < 0) {
+				Mouse.curY = 0;
+			}
+
+			//if the grid is different update boolean
+			if(Mouse.curX !== Mouse.prevX || Mouse.curY !== Mouse.prevY){
+				Mouse.changed = true;
+			}
+			else{
+				Mouse.changed = false;
+			}
+			callback(Mouse.curX,Mouse.curY,Mouse.changed);
+		}
+
+	};
+	
+	//change cursor on mouse move
+	$('.gameboard').mousemove(function(m) {
+		Mouse.updateMouse(m.pageX, m.pageY, this.offsetLeft, this.offsetTop,function(x, y, c) {
+			
+			//c is true if the mouse snaps to a new grid
+			if(c){
+				console.log("we different");
+				Game.getNoGo(x, y, function(noGoValue) {
+					$('.cursor').css({
+						'left': x * 32,
+						'top': y * 32,
+						'border-color': noGoValue ? 'red' : 'white',
+					});
 				});
-			});
+			}
 		});
  	});
 
  	//figure out if we should transition (or do other stuff later)
- 	$(".gameboard").click( function( m ) {
+ 	$('.gameboard').click(function(m) {
  		if( !inTransit ){
- 			getXYFromMouse( m.pageX, m.pageY, this.offsetLeft, this.offsetTop, function( x, y ) {
- 				Game.isMapEdge( x, y, function( reply ) {
- 					if( !reply ) {
- 						if( x === 0 || x === 29 || y === 0 || y === 14 ) {
+ 			Mouse.updateMouse(m.pageX, m.pageY, this.offsetLeft, this.offsetTop, function(x, y, c) {
+ 				Game.isMapEdge(x, y, function(reply) {
+ 					if(!reply) {
+ 						if(x === 0 || x === 29 || y === 0 || y === 14) {
  							inTransit = true;
- 							Game.beginTransition( x, y );
+ 							Game.beginTransition(x, y);
  						}
- 						else{
+ 						else {
  							console.log('think outside the box');
  						}
  					}	
- 					else{
- 						console.log("edge");
+ 					else {
+ 						console.log('edge');
  					}
  				});
  				
@@ -425,19 +604,19 @@ angular.module('multiPlayer', ['ssAngular'])
 	// $scope.players;
 	// $scope.infos = 
 	// {
-	// 	"id": 0,
-	// 	"x": Math.floor(Math.random()*500),
-	// 	"y": Math.floor(Math.random()*400+100),
-	// 	"r": Math.floor(Math.random()*250),
-	// 	"g": Math.floor(Math.random()*250),
-	// 	"b": Math.floor(Math.random()*250)
+	// 	'id': 0,
+	// 	'x': Math.floor(Math.random()*500),
+	// 	'y': Math.floor(Math.random()*400+100),
+	// 	'r': Math.floor(Math.random()*250),
+	// 	'g': Math.floor(Math.random()*250),
+	// 	'b': Math.floor(Math.random()*250)
 	// }
 	
 	// console.log($scope.infos);
 	// rpc('multiplayer.addMe',$scope.infos);
 	// $scope.messages = [];
 	// $scope.streaming = false;
-	// $scope.status = "";
+	// $scope.status = '';
 	// var quadInView = rpc('multiplayer.getMapData',0,function(data){
 	// 	console.log(data);
 	// });
@@ -456,7 +635,7 @@ angular.module('multiPlayer', ['ssAngular'])
 // .controller('SSCtrl',function($scope,pubsub,rpc) {
 // 	$scope.messages = []
 // 	$scope.streaming = false;
-// 	$scope.status = "";
+// 	$scope.status = '';
 // 	$scope.cx =40;
 // 	$scope.cy = 200;
 // 	$scope.$on('ss-example', function(event,msg) {
