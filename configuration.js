@@ -59,7 +59,7 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 
 		app.set('views', __dirname + '/client/views');
 		app.set('view engine', 'hbs');
-		hbsHelpers.registerConfigurationHelpers(hbs);
+		hbsHelpers.init();
 		// app.set('view engine', 'html');
 		// app.engine('html', require('hbs').__express);
 		app.use(express.logger(':method :url :status'));
