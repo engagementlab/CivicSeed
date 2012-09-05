@@ -1,0 +1,10 @@
+.console {
+	margin: 25px auto;
+	padding: 25px;
+	width: 800px;
+	background: #eee;
+	box-shadow: 3px 3px 3px #999;
+}
+.loaders {
+	margin: 12px 0;
+}

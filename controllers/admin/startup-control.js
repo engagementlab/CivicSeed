@@ -1,4 +1,8 @@
 var fs = require('fs');
+var environment;
+var nodeEnv;
+var User;
+var Invitee;
 
 var handleError = function(message, err) {
 	if(err) {
@@ -14,51 +18,36 @@ var handleError = function(message, err) {
 var self = module.exports = {
 
 	service: null,
+	// users: null,
+	// emailUtil: null,
 
 	init: function (app, service, hbs) {
 
-		var environment = service.environment,
-		nodeEnv = environment.app.nodeEnv,
-		initialized = environment.app.initialized;
+		environment = service.environment;
+		nodeEnv = environment.app.nodeEnv;
+		User = service.useModel('user').UserModel;
+		Invitee = service.useModel('user', 'preload').InviteeModel;
 
 		self.service = service;
 
 		app.get('/admin/startup', function(req, res) {
 
 			var consoleOutput;
-
-			// check for intialization of app
-			// NOTE: THE VARIABLE 'initialized' CAN ONLY BE SET 'true' IN PRODUCTION OR STAGING...
-			// ...THIS WAY, THE APP CAN BE (RE-)INITIALIZED MULTIPLE TIMES, IF NEEDS BE, IN DEVELOPMENT OR TESTING
-			if(!initialized) {
-				if(nodeEnv) {
-
-					console.log('\n\n   * * * * * * * * * * * *   Initialization/Startup/Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
-
-					res.render('admin/startup.hbs', {
-						title: 'STARTUP',
-						bodyClass: 'startup',
-						nodeEnv: nodeEnv,
-						consoleOutput: consoleOutput
-					});
-
-				} else if(nodeEnv === 'production') {
-					initialized = true;
-				} else if(nodeEnv === 'staging') {
-					initialized = true;
-				} else if(nodeEnv === 'testing') {
-				} else if(nodeEnv === 'development') {
-				} else {
-					console.log('  NODE_ENV VARIABLE CONNECTION ERROR: cannot use for preloading data   '.red.inverse);
+			Invitee.collection.distinct('sessionName', function(err, invitees) {
+				if(err) {
+					console.error('Could not find document: %s', err);
 				}
-			} else {
-				// FIXME: THIS SHOULD ABSOLUTELY REDIRECT TO EITHER 404 OR HOME
-				console.log('  ...THE APP HAS ALREADY BEEN INITIALIZED...  '.red.inverse);
+				// console.log(invitees);
 				res.render('admin/startup.hbs', {
-					title: 'ERROR',
-					consoleOutput: '...THE APP HAS ALREADY BEEN INITIALIZED...'
+					title: 'Startup',
+					bodyClass: 'admin startup',
+					nodeEnv: nodeEnv,
+					consoleOutput: consoleOutput,
+					message: 'Startup admin panel.',
+					invitees: invitees,
 				});
-			}
+			});
+
 		});
 
 		// adding users to database
@@ -150,6 +139,65 @@ var self = module.exports = {
 		// 	}
 		// 	res.redirect('/login');
 		// });
+
+		// create a set of codes
+		app.get('/admin/action/create-invite-codes/:sessionName', function(req, res) {
+			var i;
+			var inviteeGroup = [];
+			var inviteeObject;
+			var sessionName = req.params.sessionName;
+			function createCode() {
+				var codeArray = [];
+				var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.:;{}[]|-=_+()&^%$#@!?~`ç√∫¥';
+				for(var i=0; i < 50; i++) {
+					codeArray[i] = charSet.charAt(Math.floor(Math.random() * charSet.length));
+				}
+				return codeArray.join('');
+			};
+
+			// TODO: add in emails...???
+			for(i = 0; i < 30; i++) {
+				inviteeObject = {};
+				inviteeObject.sessionName = sessionName;
+				// inviteeObject.email = '???@???.???';
+				inviteeObject.accepted = false;
+				inviteeObject.code = createCode();
+				inviteeGroup.push(inviteeObject);
+			}
+
+			// console.log(inviteeGroup);
+
+			Invitee.create(inviteeGroup, function(err) {
+				if(err) {
+					console.error('  Could not create documents: %s  '.yellow.inverse, err);
+					res.send('Error creating invite codes...');
+				} else {
+
+					Invitee.find({ sessionName: sessionName }, 'code', function (err, codes) {
+						var length = codes.length;
+						var i;
+						var codesArray = [];
+						for(i = 0; i < length; i++) {
+							codesArray.push(codes[i].code);
+						}
+						// console.log(codesArray);
+						console.log('CS: '.blue + 'Invite codes created and saved to database: '.green);
+						res.send(codesArray);
+					});
+
+				}
+			});
+
+		});
+
+		// recreate/overwrite a set of existing session codes
+		app.get('/admin/action/recreate-invite-codes/:session', function(req, res) {
+			// res.render('admin/admin.hbs', {
+			// 	title: 'Admin',
+			// 	bodyClass: 'admin',
+			// 	message: req.params.session,
+			// });
+		});
 
 	},
 
