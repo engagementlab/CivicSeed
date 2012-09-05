@@ -432,10 +432,10 @@ window.requestAnimFrame = (function(){
 
 
 //player file
-(function() {
+(function($) {
 
-	var _currentX = 0,
- 		_currentY = 1,
+	var _currentX = 10,
+ 		_currentY = 12,
 
 
  	//return the distance "as the crow flies" between start and end
@@ -451,9 +451,11 @@ window.requestAnimFrame = (function(){
 	_lowestScoreInOpen = function(open) {
 		var lowIndex = 0;
 		var lowValue = 999;
+		
 		for(var i = 0; i<open.length; i++){
 			if(open[i].fScore < lowValue){
-				lowIndex = open[i].index;
+				lowValue = open[i].fScore;
+				lowIndex = i;
 			}
 		}
 		return lowIndex;
@@ -511,12 +513,11 @@ window.requestAnimFrame = (function(){
 		//private methods
 
 		init: function() {
-			//access the canvases for rendering
 				
 			var tileData = {
 				srcX: 0,
 				srcY: 0,
-				destX: 0,
+				destX: _currentX,
 				destY: _currentY-1,
 				prevX: 0,
 				prevY: 0
@@ -544,9 +545,9 @@ window.requestAnimFrame = (function(){
 
 				//clear current, then render new
 
-				// $game.$player.findPath(_currentX, _currentY, x, y, function(moves){
-				// 	console.log(moves);
-				// });
+				$game.$player.findPath(_currentX, _currentY, x, y, function(moves){
+					//animate the player using the series of moves!!!!!!
+				});
 
 				//temp jump the player
 				var tileData = {
@@ -592,93 +593,127 @@ window.requestAnimFrame = (function(){
 				start = {x: x, y: y, cameFrom: null, index: (y * $game.VIEWPORT_WIDTH) + x},
 				goal = {x: x2, y: y2, cameFrom: null, index: (y2 * $game.VIEWPORT_WIDTH) + x2},
 				open = [start],
-				orderedMoves = [],
+				orderedmovesedMoves = [],
+				pathFound = false,
+				
+				retracePath = function(lastTile) {
 
-				retracePath = function(lastTile){
-
-					if (latestTile.cameFrom != null){
+					if (lastTile.cameFrom != null) {
 						//add latestTile to the stack of orderedmoves?
-						orderedMoves.push(latestTile);
+						orderedMoves.push(lastTile);
 						//go to next until orig
-						retracePath(latestTile.cameFrom);
+						var nextTile = null;
+						for(var i = 0; i < closed.length; i += 1) {
+							if(closed[i].index === lastTile.cameFrom) {
+								nextTile = jQuery.extend(true, {}, closed[i]);	
+								continue;
+							}
+						}
+						retracePath(nextTile);
+					
+					}
+					//last one null is the FIRST tile, we are done.
+					else{
+						console.log("boom");
+						console.log(orderedMoves);
+						callback(orderedMoves);
 					}
 				};
+
+				// console.log(start);
+				// console.log(open);
 				
 				//the gscore of each Tile is the cost to reach it from the “start” tile.
 				//each Tile’s fscore ends up being a metric of fitness for inclusion in the final path; it is the sum of its gscore and the heuristic distance between it and the “goal”
 				start.gScore = 0;
 				start.fScore = start.gScore + _getHScore(start, goal);
-
-				while(open.length > 0) {
-					//get the lowest score in open tiles
+				
+				while(!pathFound) {
+					
+				//while(open.length > 0) {
+					//get the lowest score in open tiles'
+					// console.log("1");
+					// console.log(open);
 					var lowIndex = _lowestScoreInOpen(open),
-						copyThis = open[lowIndex],
-						currentTile = {
-							x: copyThis.x,
-							y: copyThis.y,
-							cameFrom: copyThis.cameFrom,
-							gScore: copyThis.gScore,
-							fScore: copyThis.fScore,
-							index: copyThis.index
-						};
-
-					console.log(copyThis.fScore);
+						currentTile = jQuery.extend(true, {}, open[lowIndex]);
 
 					//see if the lowest tile is the goal tile
-					if (currentTile.x === goal.x && currentTile.y === goal.y) {
-						//retracePath(currentTile);
-						callback("got moves");
+					if (currentTile.index === goal.index) {
+						pathFound = true;
+						retracePath(currentTile);
 					}
 
 					//take it off the open list
+					// console.log("open: "+open.length);
 					open.splice(lowIndex,1);
+					
 
 					//add it to the closed list 
 					closed.push(currentTile);
+					// console.log("closed: "+closed.length);
+					// console.log(closed);
 
 					//look at all the adjacent tiles
 					var neighbors = _adjacentTiles(currentTile);
-				
-					for(var n = 0; n < neighbors.length; n += 1) {
-						//if the neighbor is on the closed list, skip it, go to next neighb
-						for( var c = 0; c < closed.length; c +=1) {
-							if (closed[c].x === neighbors[n].x && closed[c].y === neighbors[n].y) {
-								continue;
-							}
-						}
-						
-						//possible g score
-						var tentativeGScore = currentTile.gScore + 1;
-
-						//if the neighor is NOT on the open list or the g score is less than the neighbors gscore
-						//add the neighbor to the openlist
-						//set its values
-						var gScoreDiff = tentativeGScore - neighbors[n].gScore,
-							notInOpen = true;
-
-						for(var o = 0; o < open.length; o +=1) {
-							if (open[o].x === neighbors[n].x && open[o].y === neighbors[n].y) {
-								notInOpen = false;
-								continue;
-							}
-						}
-
-						if(notInOpen) {
-							neighbors[n].cameFrom = currentTile.index;
-							neighbors[n].index = idCount;
-							neighbors[n].gScore = tentativeGScore;
-							neighbors[n].fScore = _getHScore(neighbors[n], goal);
-							open.push(neighbors[n]);
-							idCount += 1;
-						}
-						else if(gScoreDiff < 0){
-
-						}
-					}
 					
+
+					//go thru all neighbors, update their scores and put them in open if need be
+					for(var n = 0; n < neighbors.length; n += 1) {
+						var inClosed = false;
+						
+						//if the neighbor is on the closed list, skip it, go to next neighb
+						
+						for( var c = 0; c < closed.length; c +=1) {
+							if (closed[c].index === neighbors[n].index) {
+								inClosed = true;
+								continue;
+							}
+						}
+
+						if(!inClosed) {
+							//possible g score
+							var tentativeGScore = currentTile.gScore + 1;
+
+							//if the neighor is NOT on the open list or the g score is less than the neighbors gscore
+							//add the neighbor to the openlist
+							//set its values
+							var gScoreDiff = tentativeGScore - neighbors[n].gScore,
+								notInOpen = true;
+
+							//figure out if it is in open
+							for(var o = 0; o < open.length; o +=1) {
+								if (open[o].index === neighbors[n].index) {
+									notInOpen = false;
+									continue;
+								}
+							}
+
+							//add it to open
+
+							if(notInOpen) {
+								neighbors[n].cameFrom = currentTile.index;
+								neighbors[n].index = neighbors[n].y * $game.VIEWPORT_WIDTH + neighbors[n].x;
+								neighbors[n].gScore = tentativeGScore;
+								neighbors[n].fScore = _getHScore(neighbors[n], goal);
+								// console.log(neighbors[n]);
+								open.push(neighbors[n]);
+							}
+
+							//update the f score of the neighbor tile if its already in open
+							else if(gScoreDiff < 0){
+								for(var o = 0; o < open.length; o +=1) {
+									if (open[o].index === neighbors[n].index) {
+										open[o].gScore = tentativeGScore;
+										open[o].fScore = _getHScore(neighbors[n], goal);
+										continue;
+									}
+								}
+							}
+						}	
+					}				
 				}
 				//if we exhausted all options, return null
-				callback("no moves for you");
+				callback(null);
 
 		}
 	};
