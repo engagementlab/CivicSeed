@@ -367,6 +367,22 @@ window.requestAnimFrame = (function(){
 			);
 		},
 
+		renderPath: function(x, y) {
+			
+			_charactersContext.drawImage(
+			_tilesheet, 
+			13,
+			13,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE,
+			x * $game.TILE_SIZE,
+			y * $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE
+			);
+
+		},
+
 		renderPlayer: function(tileData) {
 			_charactersContext.clearRect(
 				tileData.prevX*$game.TILE_SIZE,
@@ -411,7 +427,7 @@ window.requestAnimFrame = (function(){
 					//second layer background tiles (not all have something)
 					if( backIndex2 > -1) {
 						tileData.srcX = backIndex2 % _tilesheetWidth;
-						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
+						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
 						$game.$renderer.renderTile(tileData);
 					}
 
@@ -532,7 +548,7 @@ window.requestAnimFrame = (function(){
 			$game.isMapEdge(x, y, function(isIt) {
 				var willTravel = false;
 				//if a transition is necessary, load new data
-				if(!isIt){
+				if(!isIt) {
 					if(x === 0 || x === 29 || y === 0 || y === 14) {
 						willTravel = true;
 						$game.calculateNext(x, y, function() {
@@ -543,29 +559,33 @@ window.requestAnimFrame = (function(){
 					}
 				}
 
-				//clear current, then render new
-
-				$game.$player.findPath(_currentX, _currentY, x, y, function(moves){
-					//animate the player using the series of moves!!!!!!
+				
+				//pass the patherfinder alogirthm the current and dest. coords
+				$game.$player.findPath(_currentX, _currentY, x, y, function(moves) {
+					
+					//for debugging, "draws" the path
+					console.log(moves.length);
+					for(var i = 0; i < moves.length; i += 1){
+						$game.$renderer.renderPath(moves[i].x, moves[i].y);
+					}	
+					
 				});
 
 				//temp jump the player
-				var tileData = {
-					srcX: 0,
-					srcY: 0,
-					destX: x,
-					destY: y-1,
-					prevX: _currentX,
-					prevY: _currentY-1
-				};
+				// var tileData = {
+				// 	srcX: 0,
+				// 	srcY: 0,
+				// 	destX: x,
+				// 	destY: y-1,
+				// 	prevX: _currentX,
+				// 	prevY: _currentY-1
+				// };
 
-				$game.$renderer.renderPlayer(tileData);
+				// $game.$renderer.renderPlayer(tileData);
 
-				_currentX = x,
-				_currentY = y;
+				// _currentX = x,
+				// _currentY = y;
 				
-
-				//begin pathfinding algorithm
 
 				//when the pathfinding is done, travel!
 				if(willTravel){
@@ -589,12 +609,14 @@ window.requestAnimFrame = (function(){
 		},
 
 		findPath: function(x, y, x2, y2, callback) {
+			
 			var closed = [],
 				start = {x: x, y: y, cameFrom: null, index: (y * $game.VIEWPORT_WIDTH) + x},
 				goal = {x: x2, y: y2, cameFrom: null, index: (y2 * $game.VIEWPORT_WIDTH) + x2},
 				open = [start],
-				orderedmovesedMoves = [],
-				pathFound = false,
+				orderedMoves = [],
+				pathFound = false;
+				
 				
 				retracePath = function(lastTile) {
 
@@ -614,26 +636,23 @@ window.requestAnimFrame = (function(){
 					}
 					//last one null is the FIRST tile, we are done.
 					else{
-						console.log("boom");
-						console.log(orderedMoves);
+						
+						// console.log(orderedMoves);
 						callback(orderedMoves);
 					}
 				};
 
-				// console.log(start);
-				// console.log(open);
-				
 				//the gscore of each Tile is the cost to reach it from the “start” tile.
 				//each Tile’s fscore ends up being a metric of fitness for inclusion in the final path; it is the sum of its gscore and the heuristic distance between it and the “goal”
+				
 				start.gScore = 0;
 				start.fScore = start.gScore + _getHScore(start, goal);
 				
-				while(!pathFound) {
-					
-				//while(open.length > 0) {
-					//get the lowest score in open tiles'
-					// console.log("1");
-					// console.log(open);
+				while(open.length > 0) {
+					console.log("open: ");
+					console.log(open);	
+					console.log("closed: ");	
+					console.log(closed);
 					var lowIndex = _lowestScoreInOpen(open),
 						currentTile = jQuery.extend(true, {}, open[lowIndex]);
 
@@ -641,6 +660,7 @@ window.requestAnimFrame = (function(){
 					if (currentTile.index === goal.index) {
 						pathFound = true;
 						retracePath(currentTile);
+						break;
 					}
 
 					//take it off the open list
@@ -689,7 +709,6 @@ window.requestAnimFrame = (function(){
 							}
 
 							//add it to open
-
 							if(notInOpen) {
 								neighbors[n].cameFrom = currentTile.index;
 								neighbors[n].index = neighbors[n].y * $game.VIEWPORT_WIDTH + neighbors[n].x;
