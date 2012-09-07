@@ -1,3 +1,190 @@
+// javascript-astar
+// http://github.com/bgrins/javascript-astar
+// Freely distributable under the MIT License.
+// Includes Binary Heap (with modifications) from Marijn Haverbeke. 
+// http://eloquentjavascript.net/appendix2.html
+
+var GraphNodeType = { 
+    OPEN: 1, 
+    WALL: 0 
+};
+
+// Creates a Graph class used in the astar search algorithm.
+function Graph(grid) {
+    var nodes = [];
+
+    for (var x = 0; x < grid.length; x++) {
+        nodes[x] = [];
+        
+        for (var y = 0, row = grid[x]; y < row.length; y++) {
+            nodes[x][y] = new GraphNode(x, y, row[y]);
+        }
+    }
+
+    this.input = grid;
+    this.nodes = nodes;
+}
+
+Graph.prototype.toString = function() {
+    var graphString = "\n";
+    var nodes = this.nodes;
+    var rowDebug, row, y, l;
+    for (var x = 0, len = nodes.length; x < len; x++) {
+        rowDebug = "";
+        row = nodes[x];
+        for (y = 0, l = row.length; y < l; y++) {
+            rowDebug += row[y].type + " ";
+        }
+        graphString = graphString + rowDebug + "\n";
+    }
+    return graphString;
+};
+
+function GraphNode(x,y,type) {
+    this.data = { };
+    this.x = x;
+    this.y = y;
+    this.pos = {
+        x: x, 
+        y: y
+    };
+    this.type = type;
+}
+
+GraphNode.prototype.toString = function() {
+    return "[" + this.x + " " + this.y + "]";
+};
+
+GraphNode.prototype.isWall = function() {
+    return this.type == GraphNodeType.WALL;
+};
+
+
+function BinaryHeap(scoreFunction){
+    this.content = [];
+    this.scoreFunction = scoreFunction;
+}
+
+BinaryHeap.prototype = {
+    push: function(element) {
+        // Add the new element to the end of the array.
+        this.content.push(element);
+
+        // Allow it to sink down.
+        this.sinkDown(this.content.length - 1);
+    },
+    pop: function() {
+        // Store the first element so we can return it later.
+        var result = this.content[0];
+        // Get the element at the end of the array.
+        var end = this.content.pop();
+        // If there are any elements left, put the end element at the
+        // start, and let it bubble up.
+        if (this.content.length > 0) {
+             this.content[0] = end;
+             this.bubbleUp(0);
+        }
+        return result;
+    },
+    remove: function(node) {
+        var i = this.content.indexOf(node);
+    
+        // When it is found, the process seen in 'pop' is repeated
+        // to fill up the hole.
+        var end = this.content.pop();
+
+        if (i !== this.content.length - 1) {
+            this.content[i] = end;
+            
+            if (this.scoreFunction(end) < this.scoreFunction(node)) {
+                this.sinkDown(i);
+            }
+            else {
+                this.bubbleUp(i);
+            }
+        }
+    },
+    size: function() {
+        return this.content.length;
+    },
+    rescoreElement: function(node) {
+        this.sinkDown(this.content.indexOf(node));
+    },
+    sinkDown: function(n) {
+        // Fetch the element that has to be sunk.
+        var element = this.content[n];
+
+        // When at 0, an element can not sink any further.
+        while (n > 0) {
+
+            // Compute the parent element's index, and fetch it.
+            var parentN = ((n + 1) >> 1) - 1,
+                parent = this.content[parentN];
+            // Swap the elements if the parent is greater.
+            if (this.scoreFunction(element) < this.scoreFunction(parent)) {
+                this.content[parentN] = element;
+                this.content[n] = parent;
+                // Update 'n' to continue at the new position.
+                n = parentN;
+            }
+
+            // Found a parent that is less, no need to sink any further.
+            else {
+                break;
+            }
+        }
+    },
+    bubbleUp: function(n) {
+        // Look up the target element and its score.
+        var length = this.content.length,
+            element = this.content[n],
+            elemScore = this.scoreFunction(element);
+        
+        while(true) {
+            // Compute the indices of the child elements.
+            var child2N = (n + 1) << 1, child1N = child2N - 1;
+            // This is used to store the new position of the element,
+            // if any.
+            var swap = null;
+            // If the first child exists (is inside the array)...
+            if (child1N < length) {
+            // Look it up and compute its score.
+            var child1 = this.content[child1N],
+                child1Score = this.scoreFunction(child1);
+
+            // If the score is less than our element's, we need to swap.
+            if (child1Score < elemScore)
+                swap = child1N;
+            }
+
+            // Do the same checks for the other child.
+            if (child2N < length) {
+                var child2 = this.content[child2N],
+                    child2Score = this.scoreFunction(child2);
+                if (child2Score < (swap === null ? elemScore : child1Score)) {
+                    swap = child2N;
+                }
+            }
+
+            // If the element needs to be moved, swap it, and continue.
+            if (swap !== null) {
+                this.content[n] = this.content[swap];
+                this.content[swap] = element;
+                n = swap;
+            }
+
+            // Otherwise, we are done.
+            else {
+                break;
+            }
+        }
+    }
+};
+
+
+
+
+
 // shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){
   return  window.requestAnimationFrame       || 
@@ -26,11 +213,13 @@ window.requestAnimFrame = (function(){
 		stepY: 0,
 		currentTiles: [],
 		nextTiles: [],
+		graphTiles: [],
 		shiftArray: 0,
 		stepNumber: 0,
 		numberOfSteps: 0,
 		stepDirection: null,
 		inTransit: false,
+		graph: null,
 	
 		//GLOBAL CONSTANTS
 		VIEWPORT_WIDTH: 30,
@@ -80,6 +269,35 @@ window.requestAnimFrame = (function(){
 			//reset array
 			$game.nextTiles.length = 0;
 
+			callback();
+		},
+
+		createPathGrid: function(callback) {
+						 // var graph = new Graph([
+    //     [1,1,1,1],
+    //     [0,1,1,0],
+    //     [0,0,1,1]
+    // ]);
+			$game.gridTiles = new Array($game.VIEWPORT_HEIGHT);
+
+			for(var y = 0; y < $game.VIEWPORT_HEIGHT; y += 1) {
+					
+				$game.gridTiles[y] = new Array($game.VIEWPORT_WIDTH);
+
+				for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {		
+					
+					//console.log(x+", "+ y);
+					$game.isNoGo(x, y, function(val) {
+						//console.log(val);
+						$game.gridTiles[y][x] = val ? 0 : 1;
+					});
+
+				}	
+			}
+
+			$game.graph = new Graph($game.gridTiles);
+			var st = $game.graph.toString();
+			console.log(st);
 			callback();
 		},
 
@@ -186,6 +404,12 @@ window.requestAnimFrame = (function(){
 
 		endTransition: function() {
 			$game.inTransit = false;
+
+			//now that the transition has ended, create a new grid
+			$game.createPathGrid(function() {
+				console.log("grid is ready for pathfinding");
+			});
+
 		},
 
 		updateAndDraw: function() {
@@ -205,6 +429,7 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = $game.nextTiles[$game.stepNumber - 1][j];
 				}
 				$game.masterX += 1;
+				
 			}
 
 			//--------LEFT------------
@@ -221,6 +446,7 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[0][j] = $game.nextTiles[$game.nextTiles.length - $game.stepNumber ][j];
 				}
 				$game.masterX -= 1;
+
 			}
 
 			//--------UP------------
@@ -256,8 +482,7 @@ window.requestAnimFrame = (function(){
 			}
 
 
-
-
+			$game.$player.slide();
 			$game.$renderer.renderAll();
 			requestAnimFrame($game.stepTransition); 
 		}
@@ -342,6 +567,9 @@ window.requestAnimFrame = (function(){
 						//copy them over to currentTiles instead of transitioning
 						$game.copyTileArray(function() {
 
+							$game.createPathGrid(function() {
+
+							});
 							$game.$renderer.renderAll();
 
 						});
@@ -368,11 +596,16 @@ window.requestAnimFrame = (function(){
 		},
 
 		renderPath: function(x, y) {
-			
+			// _charactersContext.clearRect(
+			// 	0,
+			// 	0,
+			// 	960,
+			// 	480
+			// );
 			_charactersContext.drawImage(
 			_tilesheet, 
-			13,
-			13,
+			3 * $game.TILE_SIZE, 
+			1 * $game.TILE_SIZE,
 			$game.TILE_SIZE,
 			$game.TILE_SIZE,
 			x * $game.TILE_SIZE,
@@ -385,8 +618,8 @@ window.requestAnimFrame = (function(){
 
 		renderPlayer: function(tileData) {
 			_charactersContext.clearRect(
-				tileData.prevX*$game.TILE_SIZE,
-				tileData.prevY*$game.TILE_SIZE,
+				tileData.prevX * $game.TILE_SIZE,
+				(tileData.prevY - 1) * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2
 			);
@@ -397,7 +630,7 @@ window.requestAnimFrame = (function(){
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2,
 				tileData.destX * $game.TILE_SIZE,
-				tileData.destY * $game.TILE_SIZE,
+				(tileData.destY - 1) * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2
 			);
@@ -448,79 +681,13 @@ window.requestAnimFrame = (function(){
 
 
 //player file
-(function($) {
+(function() {
 
 	var _currentX = 10,
  		_currentY = 12,
-
-
- 	//return the distance "as the crow flies" between start and end
-	//ie disregarding "nogo" tiles, the vertical + horizontal distance
-	//between the two passed tiles	
- 	_getHScore = function(a, b) {
- 		var dX = Math.abs(a.x-b.x);
- 		var dY = Math.abs(a.y-b.y);
- 		var dT = dX + dY;
- 		return dT;
-	},
-
-	_lowestScoreInOpen = function(open) {
-		var lowIndex = 0;
-		var lowValue = 999;
-		
-		for(var i = 0; i<open.length; i++){
-			if(open[i].fScore < lowValue){
-				lowValue = open[i].fScore;
-				lowIndex = i;
-			}
-		}
-		return lowIndex;
-	},
-
-	_adjacentTiles = function(currentTile) {
-		var tiles = [];
-		//top
-		//edge check
-		if(currentTile.y > 0){
-			$game.isNoGo(currentTile.x, currentTile.y, function(val){
-				if(!val){
-					var coords = {x: currentTile.x, y: currentTile.y - 1, gScore: 0};
-					tiles.push(coords);
-				}
-			});
-		}
-		//bottom
-		if(currentTile.y < 14){
-			$game.isNoGo(currentTile.x, currentTile.y, function(val){
-				if(!val){
-					var coords = {x: currentTile.x, y: currentTile.y + 1, gScore: 0};
-					tiles.push(coords);
-				}
-			});
-			
-		}
-		//left
-		if(currentTile.x > 0){
-			$game.isNoGo(currentTile.x, currentTile.y, function(val){
-				if(!val){
-					var coords = {x: currentTile.x - 1, y: currentTile.y, gScore: 0};
-					tiles.push(coords);
-				}
-			});
-			
-		}
-		//right
-		if(currentTile.x < 29){
-			$game.isNoGo(currentTile.x, currentTile.y, function(val){
-				if(!val){
-					var coords = {x: currentTile.x + 1, y: currentTile.y, gScore: 0};
-					tiles.push(coords);
-				}
-			});
-		}
-
-		return tiles;
-	}
+ 		_seriesOfMoves = null,
+ 		_currentMove = 0,
+ 		_willTravel = null;
 		
 	
 	$game.$player = {
@@ -534,7 +701,7 @@ window.requestAnimFrame = (function(){
 				srcX: 0,
 				srcY: 0,
 				destX: _currentX,
-				destY: _currentY-1,
+				destY: _currentY,
 				prevX: 0,
 				prevY: 0
 			}
@@ -543,197 +710,110 @@ window.requestAnimFrame = (function(){
 			console.log("render me");
 		},
 
-		move: function(x, y) {
+		move: function () {
+			//note: x and y are really flipped!!!
+			
+			_currentMove += 1;
+			if(_currentMove >= _seriesOfMoves.length) {
+				$game.$player.endMove();
+			}
+			else {
+				var playerInfo = {
+					srcX: 0,
+					srcY: 0,
+					destX: _seriesOfMoves[_currentMove].y,
+					destY:  _seriesOfMoves[_currentMove].x,
+					prevX: _currentX,
+					prevY: _currentY
+				}
+
+			
+				$game.$renderer.renderPlayer(playerInfo);
+
+				_currentX  = _seriesOfMoves[_currentMove].y;
+				_currentY  = _seriesOfMoves[_currentMove].x;
+
+				requestAnimFrame($game.$player.move);
+			}
+		},
+
+		endMove: function () {
+			console.log("travel time");
+			if(_willTravel){
+				var beginTravel = function(){
+					if($game.dataLoaded){
+						console.log("we have lift off");
+						$game.dataLoaded = false;
+						$game.beginTransition();
+					}	
+					else{
+						//keep tryin!
+						console.log("not yet...");
+						setTimeout(beginTravel,50);
+					}
+				};
+				beginTravel();
+			}
+		},
+
+		
+		beginMove: function(x, y) {
+
 			//check if it is an edge in here, to load data while moving player
 			$game.isMapEdge(x, y, function(isIt) {
-				var willTravel = false;
+				_willTravel = false;
 				//if a transition is necessary, load new data
 				if(!isIt) {
 					if(x === 0 || x === 29 || y === 0 || y === 14) {
-						willTravel = true;
+						_willTravel = true;
 						$game.calculateNext(x, y, function() {
 							//data is loaded!
-							console.log("data is loaded!");
- 							
+							console.log("next quadrant is loaded!");
+							// $game.$player.getPath();
 						});
 					}
 				}
 
-				
-				//pass the patherfinder alogirthm the current and dest. coords
-				$game.$player.findPath(_currentX, _currentY, x, y, function(moves) {
-					
-					//for debugging, "draws" the path
-					console.log(moves.length);
-					for(var i = 0; i < moves.length; i += 1){
-						$game.$renderer.renderPath(moves[i].x, moves[i].y);
-					}	
-					
-				});
+				//consider grouping this under a new function to call once 
+				//map stuff has loaded in case it hasn't
+				_currentMove = -1;
+				var start = $game.graph.nodes[_currentY][_currentX];
+  				var end = $game.graph.nodes[y][x];
+    			var result = $game.$astar.search($game.graph.nodes, start, end);
+    			_seriesOfMoves = new Array(result.length);
+    			_seriesOfMoves = result;
+    			$game.$player.move();	
 
-				//temp jump the player
-				// var tileData = {
-				// 	srcX: 0,
-				// 	srcY: 0,
-				// 	destX: x,
-				// 	destY: y-1,
-				// 	prevX: _currentX,
-				// 	prevY: _currentY-1
-				// };
-
-				// $game.$renderer.renderPlayer(tileData);
-
-				// _currentX = x,
-				// _currentY = y;
-				
-
-				//when the pathfinding is done, travel!
-				if(willTravel){
-					var beginTravel = function(){
-						if($game.dataLoaded){
-							console.log("we have lift off");
-							$game.dataLoaded = false;
-							$game.beginTransition();
-						}	
-						else{
-							//keep tryin!
-							console.log("not yet...");
-							setTimeout(beginTravel,50);
-						}
-					};
-					beginTravel();
-					
-				}
-				
 			});
 		},
 
-		findPath: function(x, y, x2, y2, callback) {
+		slide: function() {
+			var prevX  = _currentX,
+				prevY = _currentY;
+
+			if($game.stepDirection === 'right') {
+				_currentX -= 1;
+			}
+			else if($game.stepDirection === 'left') {
+				_currentX += 1;
+			}
+			else if($game.stepDirection === 'up') {
+				_currentY += 1;
+			}
+			else if($game.stepDirection === 'down') {
+				_currentY -= 1;
+			}
+
+			var playerInfo = {
+				srcX: 0,
+				srcY: 0,
+				destX: _currentX,
+				destY: _currentY,
+				prevX: prevX,
+				prevY: prevY
+			}
 			
-			var closed = [],
-				start = {x: x, y: y, cameFrom: null, index: (y * $game.VIEWPORT_WIDTH) + x},
-				goal = {x: x2, y: y2, cameFrom: null, index: (y2 * $game.VIEWPORT_WIDTH) + x2},
-				open = [start],
-				orderedMoves = [],
-				pathFound = false;
-				
-				
-				retracePath = function(lastTile) {
-
-					if (lastTile.cameFrom != null) {
-						//add latestTile to the stack of orderedmoves?
-						orderedMoves.push(lastTile);
-						//go to next until orig
-						var nextTile = null;
-						for(var i = 0; i < closed.length; i += 1) {
-							if(closed[i].index === lastTile.cameFrom) {
-								nextTile = jQuery.extend(true, {}, closed[i]);	
-								continue;
-							}
-						}
-						retracePath(nextTile);
-					
-					}
-					//last one null is the FIRST tile, we are done.
-					else{
-						
-						// console.log(orderedMoves);
-						callback(orderedMoves);
-					}
-				};
-
-				//the gscore of each Tile is the cost to reach it from the “start” tile.
-				//each Tile’s fscore ends up being a metric of fitness for inclusion in the final path; it is the sum of its gscore and the heuristic distance between it and the “goal”
-				
-				start.gScore = 0;
-				start.fScore = start.gScore + _getHScore(start, goal);
-				
-				while(open.length > 0) {
-					console.log("open: ");
-					console.log(open);	
-					console.log("closed: ");	
-					console.log(closed);
-					var lowIndex = _lowestScoreInOpen(open),
-						currentTile = jQuery.extend(true, {}, open[lowIndex]);
-
-					//see if the lowest tile is the goal tile
-					if (currentTile.index === goal.index) {
-						pathFound = true;
-						retracePath(currentTile);
-						break;
-					}
-
-					//take it off the open list
-					// console.log("open: "+open.length);
-					open.splice(lowIndex,1);
-					
-
-					//add it to the closed list 
-					closed.push(currentTile);
-					// console.log("closed: "+closed.length);
-					// console.log(closed);
-
-					//look at all the adjacent tiles
-					var neighbors = _adjacentTiles(currentTile);
-					
-
-					//go thru all neighbors, update their scores and put them in open if need be
-					for(var n = 0; n < neighbors.length; n += 1) {
-						var inClosed = false;
-						
-						//if the neighbor is on the closed list, skip it, go to next neighb
-						
-						for( var c = 0; c < closed.length; c +=1) {
-							if (closed[c].index === neighbors[n].index) {
-								inClosed = true;
-								continue;
-							}
-						}
-
-						if(!inClosed) {
-							//possible g score
-							var tentativeGScore = currentTile.gScore + 1;
-
-							//if the neighor is NOT on the open list or the g score is less than the neighbors gscore
-							//add the neighbor to the openlist
-							//set its values
-							var gScoreDiff = tentativeGScore - neighbors[n].gScore,
-								notInOpen = true;
-
-							//figure out if it is in open
-							for(var o = 0; o < open.length; o +=1) {
-								if (open[o].index === neighbors[n].index) {
-									notInOpen = false;
-									continue;
-								}
-							}
-
-							//add it to open
-							if(notInOpen) {
-								neighbors[n].cameFrom = currentTile.index;
-								neighbors[n].index = neighbors[n].y * $game.VIEWPORT_WIDTH + neighbors[n].x;
-								neighbors[n].gScore = tentativeGScore;
-								neighbors[n].fScore = _getHScore(neighbors[n], goal);
-								// console.log(neighbors[n]);
-								open.push(neighbors[n]);
-							}
-
-							//update the f score of the neighbor tile if its already in open
-							else if(gScoreDiff < 0){
-								for(var o = 0; o < open.length; o +=1) {
-									if (open[o].index === neighbors[n].index) {
-										open[o].gScore = tentativeGScore;
-										open[o].fScore = _getHScore(neighbors[n], goal);
-										continue;
-									}
-								}
-							}
-						}	
-					}				
-				}
-				//if we exhausted all options, return null
-				callback(null);
-
+			$game.$renderer.renderPlayer(playerInfo);	
 		}
 	};
 
@@ -792,8 +872,160 @@ $(function() {
 	};
 
 })();
-	
- 
+
+
+//courtesy of github/bgrins
+(function() {
+	$game.$astar = {
+	    init: function(grid) {
+	        for(var x = 0, xl = grid.length; x < xl; x++) {
+	            for(var y = 0, yl = grid[x].length; y < yl; y++) {
+	                var node = grid[x][y];
+	                node.f = 0;
+	                node.g = 0;
+	                node.h = 0;
+	                node.cost = node.type;
+	                node.visited = false;
+	                node.closed = false;
+	                node.parent = null;
+	            }
+	        }
+	    },
+	    heap: function() {
+	        return new BinaryHeap(function(node) { 
+	            return node.f; 
+	        });
+	    },
+	    search: function(grid, start, end, diagonal, heuristic) {
+	        $game.$astar.init(grid);
+	        heuristic = heuristic || $game.$astar.manhattan;
+	        diagonal = !!diagonal;
+
+	        var openHeap = $game.$astar.heap();
+
+	        openHeap.push(start);
+
+	        while(openHeap.size() > 0) {
+
+	            // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
+	            var currentNode = openHeap.pop();
+
+	            // End case -- result has been found, return the traced path.
+	            if(currentNode === end) {
+	                var curr = currentNode;
+	                var ret = [];
+	                while(curr.parent) {
+	                    ret.push(curr);
+	                    curr = curr.parent;
+	                }
+	                return ret.reverse();
+	            }
+
+	            // Normal case -- move currentNode from open to closed, process each of its neighbors.
+	            currentNode.closed = true;
+
+	            // Find all neighbors for the current node. Optionally find diagonal neighbors as well (false by default).
+	            var neighbors = $game.$astar.neighbors(grid, currentNode, diagonal);
+
+	            for(var i=0, il = neighbors.length; i < il; i++) {
+	                var neighbor = neighbors[i];
+
+	                if(neighbor.closed || neighbor.isWall()) {
+	                    // Not a valid node to process, skip to next neighbor.
+	                    continue;
+	                }
+
+	                // The g score is the shortest distance from start to current node.
+	                // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
+	                var gScore = currentNode.g + neighbor.cost;
+	                var beenVisited = neighbor.visited;
+
+	                if(!beenVisited || gScore < neighbor.g) {
+
+	                    // Found an optimal (so far) path to this node.  Take score for node to see how good it is.
+	                    neighbor.visited = true;
+	                    neighbor.parent = currentNode;
+	                    neighbor.h = neighbor.h || heuristic(neighbor.pos, end.pos);
+	                    neighbor.g = gScore;
+	                    neighbor.f = neighbor.g + neighbor.h;
+
+	                    if (!beenVisited) {
+	                        // Pushing to heap will put it in proper place based on the 'f' value.
+	                        openHeap.push(neighbor);
+	                    }
+	                    else {
+	                        // Already seen the node, but since it has been rescored we need to reorder it in the heap
+	                        openHeap.rescoreElement(neighbor);
+	                    }
+	                }
+	            }
+	        }
+
+	        // No result was found - empty array signifies failure to find path.
+	        return [];
+	    },
+	    manhattan: function(pos0, pos1) {
+	        // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+
+	        var d1 = Math.abs (pos1.x - pos0.x);
+	        var d2 = Math.abs (pos1.y - pos0.y);
+	        return d1 + d2;
+	    },
+	    neighbors: function(grid, node, diagonals) {
+	        var ret = [];
+	        var x = node.x;
+	        var y = node.y;
+
+	        // West
+	        if(grid[x-1] && grid[x-1][y]) {
+	            ret.push(grid[x-1][y]);
+	        }
+
+	        // East
+	        if(grid[x+1] && grid[x+1][y]) {
+	            ret.push(grid[x+1][y]);
+	        }
+
+	        // South
+	        if(grid[x] && grid[x][y-1]) {
+	            ret.push(grid[x][y-1]);
+	        }
+
+	        // North
+	        if(grid[x] && grid[x][y+1]) {
+	            ret.push(grid[x][y+1]);
+	        }
+
+	        if (diagonals) {
+
+	            // Southwest
+	            if(grid[x-1] && grid[x-1][y-1]) {
+	                ret.push(grid[x-1][y-1]);
+	            }
+
+	            // Southeast
+	            if(grid[x+1] && grid[x+1][y-1]) {
+	                ret.push(grid[x+1][y-1]);
+	            }
+
+	            // Northwest
+	            if(grid[x-1] && grid[x-1][y+1]) {
+	                ret.push(grid[x-1][y+1]);
+	            }
+
+	            // Northeast
+	            if(grid[x+1] && grid[x+1][y+1]) {
+	                ret.push(grid[x+1][y+1]);
+	            }
+
+	        }
+
+	        return ret;
+	    }
+	};
+
+})();
+
 
 // //old version (not modularized)
 // var inTransit = false;
@@ -1162,7 +1394,7 @@ $(document).ready(function() {
  				$game.isNoGo(x, y, function(resp) {
  					if(!resp) {
  						//it is a go, so move character, THEN transition if edge
- 						$game.$player.move(x, y);
+ 						$game.$player.beginMove(x, y);
  					}
  				
  				});
