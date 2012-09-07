@@ -16,16 +16,17 @@ var self = exports.actions = function(req, res, ss) {
 			players.push(player);
 			ss.publish.all('ss-allPlayers',players);
 		},
-		playerMoved: function(player){
-			for(var p=0; p<players.length;p++){
-				console.log(players[p].id);
-				if(players[p].r == player.r){
-					players[p].x = player.x;
-					players[p].y = player.y;
-					continue;
-				}
-			}
-			ss.publish.all('ss-allPlayers',players);
+		movePlayer: function(player){
+			// for(var p=0; p<players.length;p++){
+			// 	console.log(players[p].id);
+			// 	if(players[p].r == player.r){
+			// 		players[p].x = player.x;
+			// 		players[p].y = player.y;
+			// 		continue;
+			// 	}
+			// }
+			console.log(player);
+			ss.publish.all('ss-playerMoved',player);
 		}
 
 	};

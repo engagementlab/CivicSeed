@@ -273,11 +273,7 @@ window.requestAnimFrame = (function(){
 		},
 
 		createPathGrid: function(callback) {
-						 // var graph = new Graph([
-    //     [1,1,1,1],
-    //     [0,1,1,0],
-    //     [0,0,1,1]
-    // ]);
+	
 			$game.gridTiles = new Array($game.VIEWPORT_HEIGHT);
 
 			for(var y = 0; y < $game.VIEWPORT_HEIGHT; y += 1) {
@@ -374,6 +370,7 @@ window.requestAnimFrame = (function(){
 
 			$game.getTiles(getThisX, getThisY, getThisManyX, getThisManyY, function() {
 				$game.dataLoaded = true;
+				console.log(getThisX);
 				callback();					
 			});
 		},
@@ -685,13 +682,13 @@ window.requestAnimFrame = (function(){
 
 	var _currentX = 10,
  		_currentY = 12,
- 		_seriesOfMoves = null,
  		_currentMove = 0,
  		_willTravel = null;
 		
 	
 	$game.$player = {
 
+		seriesOfMoves: null,
 
 		//private methods
 
@@ -714,15 +711,15 @@ window.requestAnimFrame = (function(){
 			//note: x and y are really flipped!!!
 			
 			_currentMove += 1;
-			if(_currentMove >= _seriesOfMoves.length) {
+			if(_currentMove >= $game.$player.seriesOfMoves.length) {
 				$game.$player.endMove();
 			}
 			else {
 				var playerInfo = {
 					srcX: 0,
 					srcY: 0,
-					destX: _seriesOfMoves[_currentMove].y,
-					destY:  _seriesOfMoves[_currentMove].x,
+					destX: $game.$player.seriesOfMoves[_currentMove].y,
+					destY: $game.$player.seriesOfMoves[_currentMove].x,
 					prevX: _currentX,
 					prevY: _currentY
 				}
@@ -730,15 +727,15 @@ window.requestAnimFrame = (function(){
 			
 				$game.$renderer.renderPlayer(playerInfo);
 
-				_currentX  = _seriesOfMoves[_currentMove].y;
-				_currentY  = _seriesOfMoves[_currentMove].x;
+				_currentX  = $game.$player.seriesOfMoves[_currentMove].y;
+				_currentY  = $game.$player.seriesOfMoves[_currentMove].x;
 
 				requestAnimFrame($game.$player.move);
 			}
 		},
 
 		endMove: function () {
-			console.log("travel time");
+			//console.log("travel time");
 			if(_willTravel){
 				var beginTravel = function(){
 					if($game.dataLoaded){
@@ -780,9 +777,8 @@ window.requestAnimFrame = (function(){
 				var start = $game.graph.nodes[_currentY][_currentX];
   				var end = $game.graph.nodes[y][x];
     			var result = $game.$astar.search($game.graph.nodes, start, end);
-    			_seriesOfMoves = new Array(result.length);
-    			_seriesOfMoves = result;
-    			$game.$player.move();	
+    			
+    			ss.rpc('player.movePlayer', result);	
 
 			});
 		},
@@ -825,6 +821,7 @@ $(function() {
 	$game.init();
 });
 
+//mouse stufff
 (function() {
 
 	$game.$mouse = {
@@ -874,7 +871,7 @@ $(function() {
 })();
 
 
-//courtesy of github/bgrins
+//courtesy of github/bgrins, pathfinding algorithm
 (function() {
 	$game.$astar = {
 	    init: function(grid) {
@@ -1026,345 +1023,17 @@ $(function() {
 
 })();
 
+(function() {
+	ss.event.on('ss-playerMoved', function(moves){
+  		//check if that quad is relevant to the current player
+  		//this will also have the player info so as to id the appropriate one
+  		$game.$player.seriesOfMoves = new Array(moves.length);
+  		$game.$player.seriesOfMoves = moves;
+  		$game.$player.move();
 
-// //old version (not modularized)
-// var inTransit = false;
+	});
+})();
 
-// var Game = {
-	
-// 	masterX: 0,
-// 	masterY: 0,
-// 	nextX: 0,
-// 	nextY: 0,
-// 	stepX: 0,
-// 	stepY: 0,
-// 	shiftArray: 0,
-// 	viewportWidthInTiles: 30,
-// 	viewportHeightInTiles: 15,
-// 	totalviewportWidthInTiles: 146,
-// 	totalviewportHeightInTiles: 141,
-// 	tileSize: 32,
-// 	tilesheet: null,
-// 	tilesheetWidth: 640/32,
-// 	tilesheetHeight: 3136/32,
-// 	tilesheetCanvas: null,
-// 	backgroundContext: null,
-// 	foregroundContext: null,
-// 	charactersContext: null,
-// 	tilesheetContext: null,
-// 	currentTiles: [],
-// 	nextTiles: [],
-// 	stepNumber: 0,
-// 	numberOfSteps: 0,
-// 	stepDirection: null,
-
-// 	// Game initialization
-// 	init: function() {
-		
-// 		//create offscreen canvas for the tilesheet
-// 		tilesheetCanvas = document.createElement('canvas');
-//         tilesheetCanvas.setAttribute('width', Game.tilesheetWidth * Game.tileSize);
-//         tilesheetCanvas.setAttribute('height', Game.tilesheetHeight * Game.tileSize);
-
-//         //initialize DB and let all players know there is a new active one
-// 		ss.rpc('multiplayer.init',function(response) {
-// 			console.log('rpc init: '+response);
-// 		});
-
-// 		//load in tilesheet png
-// 		Game.tilesheet = new Image();
-// 		Game.tilesheet.src = 'img/game/tilesheet.png';
-		
-// 		//access the canvases for rendering
-// 		Game.backgroundContext = document.getElementById('background').getContext('2d');
-// 		Game.foregroundContext = document.getElementById('foreground').getContext('2d');
-// 		Game.charactersContext = document.getElementById('characters').getContext('2d');
-// 		Game.tilesheetContext = tilesheetCanvas.getContext('2d');
-
-// 		//start doing stuff once the tilesheet png loads
-// 		Game.tilesheet.onload = function() {
-			
-// 			//render out the whole tilesheet to the offscreen canvas
-// 			Game.tilesheetContext.drawImage(Game.tilesheet, 0, 0);
-
-// 			//get all the tiles for the current viewport (default to 0,0)
-// 			Game._getTiles(Game.masterX,Game.masterY, Game.viewportWidthInTiles, Game.viewportHeightInTiles, function() {
-				
-// 				//new tile data stored in nextTiles by default
-// 				//since this is the initial load w/ no transition, 
-// 				//copy them over to currentTiles instead of transitioning
-// 				Game._copyTileArray(function() {
-
-// 					Game._renderAll();
-
-// 				});
-// 			});
-// 		};
-// 	},
-
-// 	_copyTileArray: function(callback) {
-		
-// 		Game.currentTiles = new Array(Game.viewportWidthInTiles);
-		
-// 		for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {	
-// 			Game.currentTiles[i] = new Array(Game.viewportHeightInTiles);
-			
-
-// 			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-				
-// 				Game.currentTiles[i][j] = Game.nextTiles[i][j];
-			
-// 			}
-// 		}
-// 		//reset array
-// 		Game.nextTiles.length = 0;
-
-// 		callback();
-// 	},
-
-// 	_getTiles: function(x, y, x2, y2, callback) {
-// 		ss.rpc('multiplayer.getMapData', x, y, x + x2, y + y2, function( response) {
-// 			//breakdown single array into 2d array
-// 			Game.nextTiles = new Array(x2);
-// 			for(var i = 0; i < x2 ; i+=1) {
-				
-// 				Game.nextTiles[i] = new Array(y2);
-				
-// 				for(var j = 0; j < y2; j+=1) {
-
-// 					var index = j * x2 + (i % x2);
-// 					Game.nextTiles[i][j] = response[index];
-// 				}
-// 			}
-// 			callback();
-// 		});
-// 	},
-	
-// 	_renderTile: function(tileData) {
-// 		Game.backgroundContext.drawImage(
-// 			Game.tilesheet, 
-// 			tileData.srcX * Game.tileSize,
-// 			tileData.srcY * Game.tileSize,
-// 			Game.tileSize,
-// 			Game.tileSize,
-// 			tileData.destX * Game.tileSize,
-// 			tileData.destY * Game.tileSize,
-// 			Game.tileSize,
-// 			Game.tileSize
-// 		);
-// 	},
-	
-// 	_renderAll: function() {
-// 		for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
-			
-// 			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-				
-// 				var backIndex = Game.currentTiles[i][j].background - 1,
-// 					backIndex2 = Game.currentTiles[i][j].background2 - 1,
-// 					foreIndex = Game.currentTiles[i][j].foreground - 1,
-				
-// 				//tilemap starts at 1 instead of 0
-				
-// 				//background tiles first
-// 				tileData = {
-// 					srcX: backIndex % Game.tilesheetWidth,
-// 					srcY: Math.floor(backIndex / Game.tilesheetWidth),
-// 					destX: i,
-// 					destY: j
-// 				};
-				
-// 				Game._renderTile(tileData);
-				
-// 				//second layer background tiles (not all have something)
-// 				if( backIndex2 > -1) {
-// 					tileData.srcX = backIndex2 % Game.tilesheetWidth;
-// 					tileData.srcY = Math.floor(backIndex2 / Game.tilesheetWidth);
-// 					Game._renderTile( tileData );
-// 				}
-
-// 				//foreground tiles 
-// 				if(foreIndex > -1) {
-// 					tileData.srcX = foreIndex % Game.tilesheetWidth;
-// 					tileData.srcY = Math.floor(foreIndex / Game.tilesheetWidth);
-// 					Game._renderTile(tileData);
-// 				}
-
-// 			}
-// 		}	
-// 	},
-
-// 	getNoGo: function(x, y, callback) {
-// 		//var i = y*Game.viewportWidthInTiles + (x%Game.viewportWidthInTiles);
-// 		var noGoVal = Game.currentTiles[x][y].nogo;
-// 		// console.log(noGoVal + 'Get No Go Yo');
-// 		callback(noGoVal);
-// 	},
-
-// 	isMapEdge: function(x, y, callback) {
-// 		//var i = y*Game.viewportWidthInTiles + (x%Game.viewportWidthInTiles);
-// 		var edge = Game.currentTiles[x][y].isMapEdge;
-// 		callback(edge);
-// 	},
-
-// 	beginTransition: function(x, y) {
-// 		var getThisManyX,
-// 		getThisManyY,
-// 		getThisX,
-// 		getThisY;
-		
-// 		//left
-// 		if(x === 0) {
-// 			Game.nextX = Game.masterX - (Game.viewportWidthInTiles - 1);
-// 			Game.stepX = -1;
-// 			Game.shiftArray = -1;
-// 			Game.numberOfSteps = 29;
-// 			Game.stepDirection = 'left';
-// 			getThisManyX = Game.viewportWidthInTiles - 1;
-// 			getThisManyY = Game.viewportHeightInTiles;
-// 			getThisX = Game.nextX;
-// 			getThisY = Game.masterY;
-// 		}
-
-// 		//right
-// 		else if(x === Game.viewportWidthInTiles - 1) {
-// 			Game.nextX = Game.masterX + Game.viewportWidthInTiles - 1;
-// 			Game.stepX = 1;
-// 			Game.shiftArray = 1;
-// 			Game.numberOfSteps = 29;
-// 			Game.stepDirection = 'right';
-// 			getThisManyX = Game.viewportWidthInTiles - 1;
-// 			getThisManyY = Game.viewportHeightInTiles;
-// 			getThisX = Game.nextX + 1;
-// 			getThisY = Game.masterY;
-// 		}
-
-// 		//up
-// 		else if(y === 0) {
-// 			Game.nextY = Game.masterY - (Game.viewportHeightInTiles - 1);
-// 			Game.stepY = -1;
-// 			Game.shiftArray = -Game.totalviewportHeightInTiles;
-// 			Game.numberOfSteps = 14;
-// 			Game.stepDirection = 'up';
-// 			getThisManyX = Game.viewportWidthInTiles;
-// 			getThisManyY = Game.viewportHeightInTiles - 1;
-// 			getThisX = Game.masterX;
-// 			getThisY = Game.nextY;
-// 		}
-
-// 		//down
-// 		else if(y === Game.viewportHeightInTiles - 1) {
-// 			Game.nextY = Game.masterY+Game.viewportHeightInTiles - 1;
-// 			Game.stepY = 1;
-// 			Game.shiftArray = Game.totalviewportHeightInTiles;
-// 			Game.numberOfSteps = 14;
-// 			Game.stepDirection = 'down';
-// 			getThisManyX = Game.viewportWidthInTiles;
-// 			getThisManyY = Game.viewportHeightInTiles - 1;
-// 			getThisX = Game.masterX;
-// 			getThisY = Game.nextY + 1;
-// 		}
-		
-// 		Game.stepNumber = 0;
-// 		Game._getTiles(getThisX, getThisY, getThisManyX, getThisManyY, function() {
-// 			Game._stepTransition();
-// 		});
-// 	},
-
-// 	_stepTransition: function() {
-// 		if(Game.stepNumber !== Game.numberOfSteps) {
-// 			Game._updateAndDraw();
-// 		}
-// 		// if(Game.masterX!=Game.nextX){
-// 		// 	Game.masterX+=Game.stepX;
-// 		// 	Game._updateAndDraw();
-// 		// }
-// 		// else if(Game.masterY!=Game.nextY){
-// 		// 	Game.masterY+=Game.stepY;
-// 		// 	Game._updateAndDraw();
-// 		// }
-// 		else {
-// 			Game._endTransition();
-// 		}
-// 	},
-
-// 	_endTransition: function() {
-// 		inTransit = false;
-// 	},
-
-// 	_updateAndDraw: function() {
-// 		Game.stepNumber += 1;
-// 		//--------RIGHT------------
-// 		//go thru current array and shift everthing
-// 		if(Game.stepDirection === 'right') {
-// 			//shift all except last column
-// 			for(var i = 0; i < Game.viewportWidthInTiles - 1; i+=1) {
-// 				for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-// 					Game.currentTiles[i][j] = Game.currentTiles[ i + 1 ][j];
-// 				}
-// 			}
-			
-// 			//shift a new column from the next array to the last spot
-// 			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-// 				Game.currentTiles[Game.viewportWidthInTiles - 1][j] = Game.nextTiles[Game.stepNumber - 1][j];
-// 			}
-// 			Game.masterX += 1;
-// 		}
-
-// 		//--------LEFT------------
-// 		//go thru current array and shift everthing
-// 		if(Game.stepDirection === 'left') {
-// 			//shift all except last column
-// 			for(var i = Game.viewportWidthInTiles - 1; i > 0; i-=1) {
-// 				for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-// 					Game.currentTiles[i][j] = Game.currentTiles[ i - 1 ][j];
-// 				}
-// 			}
-// 			//shift a new column from the next array to the last spot
-// 			for(var j = 0; j < Game.viewportHeightInTiles; j+=1) {
-// 				Game.currentTiles[0][j] = Game.nextTiles[Game.nextTiles.length - Game.stepNumber ][j];
-// 			}
-// 			Game.masterX -= 1;
-// 		}
-
-// 		//--------UP------------
-// 		//go thru current array and shift everthing
-// 		if(Game.stepDirection==='up') {
-// 			//shift all except last column
-// 			for(var j = Game.viewportHeightInTiles - 1; j > 0; j-=1) {
-// 				for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
-// 					Game.currentTiles[i][j] = Game.currentTiles[i][j - 1];
-// 				}
-// 			}
-// 			//shift a new column from the next array to the last spot
-// 			for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
-// 				Game.currentTiles[i][0] = Game.nextTiles[i][Game.nextTiles[0].length - Game.stepNumber];
-// 			}
-// 			Game.masterY -= 1;
-// 		}
-
-// 		//--------DOWN------------
-// 		//go thru current array and shift everthing
-// 		if(Game.stepDirection === 'down') {
-// 			//shift all except last column
-// 			for(var j = 0; j < Game.viewportHeightInTiles - 1; j+=1) {
-// 				for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
-// 					Game.currentTiles[i][j] = Game.currentTiles[i][j + 1];
-// 				}
-// 			}
-// 			//shift a new column from the next array to the last spot
-// 			for(var i = 0; i < Game.viewportWidthInTiles; i+=1) {
-// 				Game.currentTiles[i][Game.viewportHeightInTiles - 1] = Game.nextTiles[i][Game.stepNumber - 1];
-// 			}
-// 			Game.masterY += 1;
-// 		}
-
-
-
-
-// 		Game._renderAll();
-// 		requestAnimFrame(Game._stepTransition); 
-// 	}
-// };
 
 $(document).ready(function() {
 		
@@ -1410,7 +1079,8 @@ angular.module('multiPlayer', ['ssAngular'])
 	$scope.$on('ss-numActivePlayers', function(event,num) {
 		$scope.numActivePlayers = num;
 	});
-	
+		
+
 	// $scope.players;
 	// $scope.infos = 
 	// {
