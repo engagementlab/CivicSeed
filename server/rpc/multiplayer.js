@@ -10,6 +10,10 @@ var self = module.exports = {
 
 	actions: function(req, res, ss) {
 
+		console.log('CS:'.blue + ' multiplayer RPC request ---->'.magenta);
+		console.log(req);
+
+
 		// Russ, it's all hooked up. Access the db via ss.db
 		//console.log(ss.db);
 		return {
