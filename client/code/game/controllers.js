@@ -322,12 +322,12 @@ window.requestAnimFrame = (function(){
 			
 			//left
 			if(x === 0) {
-				$game.nextX = $game.masterX - ($game.VIEWPORT_WIDTH - 1);
+				$game.nextX = $game.masterX - ($game.VIEWPORT_WIDTH - 2);
 				$game.stepX = -1;
 				$game.shiftArray = -1;
-				$game.numberOfSteps = 29;
+				$game.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
 				$game.stepDirection = 'left';
-				getThisManyX = $game.VIEWPORT_WIDTH - 1;
+				getThisManyX = $game.VIEWPORT_WIDTH - 2;
 				getThisManyY = $game.VIEWPORT_HEIGHT;
 				getThisX = $game.nextX;
 				getThisY = $game.masterY;
@@ -335,12 +335,12 @@ window.requestAnimFrame = (function(){
 
 			//right
 			else if(x === $game.VIEWPORT_WIDTH - 1) {
-				$game.nextX = $game.masterX + $game.VIEWPORT_WIDTH - 1;
+				$game.nextX = $game.masterX + $game.VIEWPORT_WIDTH - 2;
 				$game.stepX = 1;
 				$game.shiftArray = 1;
-				$game.numberOfSteps = 29;
+				$game.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
 				$game.stepDirection = 'right';
-				getThisManyX = $game.VIEWPORT_WIDTH - 1;
+				getThisManyX = $game.VIEWPORT_WIDTH - 2;
 				getThisManyY = $game.VIEWPORT_HEIGHT;
 				getThisX = $game.nextX + 1;
 				getThisY = $game.masterY;
@@ -348,26 +348,26 @@ window.requestAnimFrame = (function(){
 
 			//up
 			else if(y === 0) {
-				$game.nextY = $game.masterY - ($game.VIEWPORT_HEIGHT - 1);
+				$game.nextY = $game.masterY - ($game.VIEWPORT_HEIGHT - 2);
 				$game.stepY = -1;
 				$game.shiftArray = -$game.totalVIEWPORT_HEIGHT;
-				$game.numberOfSteps = 14;
+				$game.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
 				$game.stepDirection = 'up';
 				getThisManyX = $game.VIEWPORT_WIDTH;
-				getThisManyY = $game.VIEWPORT_HEIGHT - 1;
+				getThisManyY = $game.VIEWPORT_HEIGHT - 2;
 				getThisX = $game.masterX;
 				getThisY = $game.nextY;
 			}
 
 			//down
 			else if(y === $game.VIEWPORT_HEIGHT - 1) {
-				$game.nextY = $game.masterY+$game.VIEWPORT_HEIGHT - 1;
+				$game.nextY = $game.masterY+$game.VIEWPORT_HEIGHT - 2;
 				$game.stepY = 1;
 				$game.shiftArray = $game.totalVIEWPORT_HEIGHT;
-				$game.numberOfSteps = 14;
+				$game.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
 				$game.stepDirection = 'down';
 				getThisManyX = $game.VIEWPORT_WIDTH;
-				getThisManyY = $game.VIEWPORT_HEIGHT - 1;
+				getThisManyY = $game.VIEWPORT_HEIGHT - 2;
 				getThisX = $game.masterX;
 				getThisY = $game.nextY + 1;
 			}
