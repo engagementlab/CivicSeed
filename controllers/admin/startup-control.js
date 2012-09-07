@@ -1,4 +1,5 @@
 var fs = require('fs');
+var rootDir = process.cwd();
 var environment;
 var nodeEnv;
 var User;
@@ -53,7 +54,7 @@ var self = module.exports = {
 		// adding users to database
 		app.get('/admin/startup/users', function(req, res) {
 			if(nodeEnv) {
-				var userData = require('../../data/users');
+				var userData = require(rootDir + '/data/users');
 				var userModel = service.useModel('user', 'preload').UserModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
 				self.dropCollection('users', function() {
@@ -69,7 +70,7 @@ var self = module.exports = {
 		// adding tiles to database
 		app.get('/admin/startup/tiles', function(req, res) {
 			if(nodeEnv) {
-				var tileData = require('../../data/tiles');
+				var tileData = require(rootDir + '/data/tiles');
 				var tileModel = service.useModel('tile', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
 				self.dropCollection('tiles', function() {
@@ -118,8 +119,8 @@ var self = module.exports = {
 		// adding gnome and npcs to database
 		app.get('/admin/startup/npcs', function(req, res) {
 			if(nodeEnv) {
-				var npcData = require('../../data/npcs');
-				// var gnomeData = require('../../data/gnome');
+				var npcData = require(rootDir + '/data/npcs');
+				// var gnomeData = require(rootDir + '/data/gnome');
 				var npcModel = service.useModel('npc', 'preload').NpcModel;
 				// var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);

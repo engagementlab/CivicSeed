@@ -1,4 +1,5 @@
-// var user = require('../models/user-model.js');
+var rootDir = process.cwd();
+// var user = require(rootDir + '/models/user-model.js');
 
 
 // console.log(user);
