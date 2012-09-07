@@ -46,7 +46,9 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 				'libs/bootstrap.min.js',
 				'game/entry.js',
 				'game/controllers.js',
-				'game/app.js'
+				'game/map-control.js',
+				'game/npc-control.js',
+				'game/chat-control.js',
 			],
 			tmpl: '*'
 		});

@@ -17,7 +17,7 @@ ss.server.on('ready', function(){
 
 	jQuery(function(){
 		
-		require('/app');
+		// require('/app');
 
 	});
 
