@@ -21,20 +21,19 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		ss.client.formatters.add(require('ss-stylus'));
 
 		// wrapper for ss-angular
-		ss.responders.add(require('ss-angular'));
+		// ss.responders.add(require('ss-angular'));
+		// client side angular templating
+		ss.client.templateEngine.use('angular');
 
-		// // use redis
-		// ss.session.store.use('redis');
-		// ss.publish.transport.use('redis');
+		// use redis
+		ss.session.store.use('redis', env.redis);
+		ss.publish.transport.use('redis', env.redis);
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', mongooseDb);
 
 		// make the models accessible to Socket Stream
 		ss.api.add('service', service);
-
-		// // Use server-side compiled Hogan (Mustache) templates. Others engines available
-		// ss.client.templateEngine.use(require('ss-hogan'));
 
 		// Define a single-page client
 		ss.client.define('main', {

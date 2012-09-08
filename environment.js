@@ -4,6 +4,8 @@
 // production is default/fallback where nothing is set
 var nodeEnv = process.env.NODE_ENV || 'development',
 databaseEnv = process.env.ALT_DB || nodeEnv,
+redisPort,
+redisHost,
 databaseURL;
 
 // configure database according to environment
@@ -12,10 +14,14 @@ if(databaseEnv === 'production') {
 } else if(databaseEnv === 'staging') {
 } else if(databaseEnv === 'testing') {
 	databaseURL = 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev';
+	redisPort = 6379;
+	redisHost = 'localhost'; // ??????
 } else if(databaseEnv === 'development') {
 	databaseURL = 'mongodb://localhost/civic_dev_db';
+	redisPort = 6379;
+	redisHost = 'localhost';
 } else {
-	console.log('  DATABASE CONNECTION INFORMATION MISSING  '.red.inverse);
+	console.log('  MONGODB AND/OR REDIS CONNECTION INFORMATION MISSING OR INACCURATE  '.red.inverse);
 }
 
 // environment/global variables
@@ -24,6 +30,10 @@ var globals = module.exports = {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
 		initialized: false,
+	},
+	redis: {
+		port: redisPort,
+		host: redisHost,
 	},
 	database: {
 		environment: databaseEnv,

@@ -41,12 +41,11 @@ Once the app is running you may visit `/startup` to initialize data in the app. 
 ### List of Dependencies After Installation:
 
     npm list
-    ├── colors@0.6.0-1 
     ├── connect-flash@0.1.0 
-    ├── consolidate@0.3.1 
-    ├─┬ express@3.0.0rc2 
+    ├── consolidate@0.4.0 
+    ├─┬ express@3.0.0rc4 
     │ ├── commander@0.6.1 
-    │ ├─┬ connect@2.4.2 
+    │ ├─┬ connect@2.4.4 
     │ │ ├── bytes@0.1.0 
     │ │ ├── formidable@1.0.11 
     │ │ ├── pause@0.0.1 
@@ -58,7 +57,7 @@ Once the app is running you may visit `/startup` to initialize data in the app. 
     │ ├── methods@0.0.1 
     │ ├── mkdirp@0.3.3 
     │ ├── range-parser@0.0.4 
-    │ └─┬ send@0.0.3 
+    │ └─┬ send@0.0.4 
     │   └── mime@1.2.6 
     ├── express-messages@0.0.2 
     ├─┬ hbs@1.0.5 
@@ -66,15 +65,21 @@ Once the app is running you may visit `/startup` to initialize data in the app. 
     │   ├─┬ optimist@0.3.4 
     │   │ └── wordwrap@0.0.2 
     │   └── uglify-js@1.2.6 
-    ├─┬ mongoose@3.0.0 
+    ├─┬ mongoose@3.1.1 
     │ ├── hooks@0.2.1 
-    │ ├─┬ mongodb@1.1.2 
-    │ │ └── bson@0.1.1 
+    │ ├─┬ mongodb@1.1.6 
+    │ │ └── bson@0.1.3 
     │ └── ms@0.1.0 
-    ├─┬ nodemailer@0.3.21 
-    │ ├─┬ mailcomposer@0.1.15 
-    │ │ └── mimelib-noiconv@0.1.9 
-    │ └─┬ simplesmtp@0.1.18 
+    ├─┬ nodemailer@0.3.26 
+    │ ├─┬ mailcomposer@0.1.19 
+    │ │ └─┬ mimelib@0.2.4 
+    │ │   ├── addressparser@0.1.1 
+    │ │   └─┬ encoding@0.1.3 
+    │ │     ├── iconv@1.2.3 
+    │ │     └── iconv-lite@0.2.5 
+    │ ├─┬ optimist@0.3.4 
+    │ │ └── wordwrap@0.0.2 
+    │ └─┬ simplesmtp@0.1.21 
     │   └── rai@0.1.6 
     ├─┬ passport@0.1.12 
     │ └── pkginfo@0.2.3 
@@ -83,48 +88,46 @@ Once the app is running you may visit `/startup` to initialize data in the app. 
     ├── password-hash@1.2.1 
     ├─┬ redis@0.7.2 
     │ └── hiredis@0.1.14 
-    ├─┬ socketstream@0.3.0RC2 
-    │ ├── apitree@1.0.0 
-    │ ├─┬ clean-css@0.3.2 
-    │ │ └── optimist@0.1.9 
-    │ ├── colors@0.6.0-1 
-    │ ├── commander@0.5.2 
-    │ ├─┬ connect@2.0.3 
-    │ │ ├── crc@0.1.0 
+    ├─┬ socketstream@0.3.1 
+    │ ├── apitree@1.1.0 
+    │ ├── chokidar@0.4.0 
+    │ ├─┬ clean-css@0.4.2 
+    │ │ └─┬ optimist@0.3.4 
+    │ │   └── wordwrap@0.0.2 
+    │ ├── commander@0.6.1 
+    │ ├─┬ connect@2.4.2 
+    │ │ ├── bytes@0.1.0 
+    │ │ ├── cookie@0.0.4 
+    │ │ ├── crc@0.2.0 
     │ │ ├── debug@0.7.0 
-    │ │ ├── formidable@1.0.9 
-    │ │ ├── mime@1.2.4 
-    │ │ └── qs@0.4.2 
-    │ ├─┬ connect-redis@1.3.0 
-    │ │ ├── debug@0.7.0 
-    │ │ └─┬ redis@0.7.2 
-    │ │   └── hiredis@0.1.14 
+    │ │ ├── formidable@1.0.11 
+    │ │ ├── fresh@0.1.0 
+    │ │ ├── pause@0.0.1 
+    │ │ ├── qs@0.4.2 
+    │ │ └─┬ send@0.0.3 
+    │ │   ├── mime@1.2.6 
+    │ │   └── range-parser@0.0.4 
+    │ ├─┬ connect-redis@1.4.1 
+    │ │ └── debug@0.7.0 
     │ ├── eventemitter2@0.4.9 
-    │ ├── redis@0.7.1 
-    │ ├── semver@1.0.13 
-    │ ├─┬ socket.io@0.9.6 
+    │ ├── semver@1.0.14 
+    │ ├─┬ socket.io@0.9.8 
     │ │ ├── policyfile@0.0.4 
-    │ │ ├── redis@0.6.7 
-    │ │ └─┬ socket.io-client@0.9.6 
+    │ │ └─┬ socket.io-client@0.9.8 
     │ │   ├─┬ active-x-obfuscator@0.0.1 
     │ │   │ └── zeparser@0.0.5 
     │ │   ├── uglify-js@1.2.5 
     │ │   ├─┬ ws@0.4.21 
-    │ │   │ ├── commander@0.6.1 
     │ │   │ ├── options@0.0.3 
     │ │   │ └── tinycolor@0.0.1 
     │ │   └── xmlhttprequest@1.2.2 
-    │ └── uglify-js@1.2.6 
-    ├─┬ ss-angular@0.4.9 
-    │ └── apitree@1.1.0 
-    ├─┬ ss-hogan@0.1.3 
-    │ └── hogan.js@2.0.0 
+    │ └── uglify-js@1.3.3 
     ├─┬ ss-stylus@0.1.5 
-    │ ├── nib@0.7.0 
+    │ ├── nib@0.7.1 
     │ └─┬ stylus@0.28.2 
     │   ├── cssom@0.2.5 
     │   ├── debug@0.7.0 
-    │   └── mkdirp@0.3.3 
+    │   └── mkdirp@0.3.4 
     └── underscore@1.3.3 
 
 Global dependencies should include nodemon:
