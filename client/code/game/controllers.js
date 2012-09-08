@@ -235,7 +235,7 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
-			ss.rpc('multiplayer.getMapData', x, y, x + x2, y + y2, function(response) {
+			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
 				$game.nextTiles = new Array(x2);
 				for(var i = 0; i < x2 ; i+=1) {
@@ -531,7 +531,7 @@ window.requestAnimFrame = (function(){
         	_tilesheetCanvas.setAttribute('height', _tilesheetHeight * $game.TILE_SIZE);
 
 	        //initialize DB and let all players know there is a new active one
-			ss.rpc('multiplayer.init', function(response) {
+			ss.rpc('player.init', function(response) {
 				console.log('rpc init: '+ response);
 			});
 
@@ -1075,7 +1075,7 @@ $(document).ready(function() {
 
 angular.module('multiPlayer', ['ssAngular'])
 .controller('PlayerController',function($scope,$http,pubsub,rpc) {
-	//rpc('multiplayer.init');
+	//rpc('player.init');
 	$scope.$on('ss-numActivePlayers', function(event,num) {
 		$scope.numActivePlayers = num;
 	});
@@ -1093,11 +1093,11 @@ angular.module('multiPlayer', ['ssAngular'])
 	// }
 	
 	// console.log($scope.infos);
-	// rpc('multiplayer.addMe',$scope.infos);
+	// rpc('player.addMe',$scope.infos);
 	// $scope.messages = [];
 	// $scope.streaming = false;
 	// $scope.status = '';
-	// var quadInView = rpc('multiplayer.getMapData',0,function(data){
+	// var quadInView = rpc('player.getMapData',0,function(data){
 	// 	console.log(data);
 	// });
 
