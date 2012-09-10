@@ -12,7 +12,7 @@ var self = module.exports = {
 	actions: function(req, res, ss) {
 
 		console.log('CS:'.blue + ' player RPC request ---->'.magenta);
-		console.log(req);
+		console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 
 		// Russ, it's all hooked up. Access the db via ss.db
 		//console.log(ss.db);
@@ -101,7 +101,7 @@ var self = module.exports = {
 				// 			continue;
 				// 		}
 				// }
-				console.log(player);
+				// console.log(player);
 				ss.publish.all('ss-playerMoved', player);
 			},
 

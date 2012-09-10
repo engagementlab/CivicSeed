@@ -6,7 +6,7 @@ var db;
 var self = exports.actions = function(req, res, ss) {
 
 	console.log('CS:'.blue + ' npc RPC request ---->'.magenta);
-	console.log(req);
+	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 	// console.log(ss.db);
 
 	return {

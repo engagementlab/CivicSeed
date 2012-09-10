@@ -6,17 +6,24 @@ var nodeEnv = process.env.NODE_ENV || 'development',
 databaseEnv = process.env.ALT_DB || nodeEnv,
 redisPort,
 redisHost,
-databaseURL;
+databaseURL,
+siteUrl;
 
 // configure database according to environment
 // the order of configuration here is important
 if(databaseEnv === 'production') {
 } else if(databaseEnv === 'staging') {
+	siteUrl = 'http://civicseed-test.nodejitsu.com/';
+	databaseURL = 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev';
+	redisPort = 6379;
+	redisHost = 'localhost'; // ??????
 } else if(databaseEnv === 'testing') {
+	siteUrl = 'http://civicseed-test.nodejitsu.com/';
 	databaseURL = 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev';
 	redisPort = 6379;
 	redisHost = 'localhost'; // ??????
 } else if(databaseEnv === 'development') {
+	siteUrl = 'http://localhost:3000/';
 	databaseURL = 'mongodb://localhost/civic_dev_db';
 	redisPort = 6379;
 	redisHost = 'localhost';
@@ -30,6 +37,7 @@ var globals = module.exports = {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
 		initialized: false,
+		siteUrl: siteUrl,
 	},
 	redis: {
 		port: redisPort,

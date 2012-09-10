@@ -4,7 +4,7 @@ var intervalId = {};
 var self = exports.actions = function(req, res, ss) {
 
 	console.log('CS:'.blue + ' chat RPC request ---->'.magenta);
-	console.log(req);
+	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 
 	return {
 		on: function() {
