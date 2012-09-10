@@ -2,7 +2,7 @@
 
 // Make 'ss' available to all modules and the browser console
 window.ss = require('socketstream');
-require('ssAngular');
+// require('ssAngular');
 require('/controllers');
 
 ss.server.on('disconnect', function(){
