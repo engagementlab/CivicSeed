@@ -1073,44 +1073,44 @@ $(document).ready(function() {
 });
 
 
-angular.module('multiPlayer', ['ssAngular'])
-.controller('PlayerController',function($scope,$http,pubsub,rpc) {
-	//rpc('player.init');
-	$scope.$on('ss-numActivePlayers', function(event,num) {
-		$scope.numActivePlayers = num;
-	});
+// angular.module('multiPlayer', ['ssAngular'])
+// .controller('PlayerController',function($scope,$http,pubsub,rpc) {
+// 	//rpc('player.init');
+// 	$scope.$on('ss-numActivePlayers', function(event,num) {
+// 		$scope.numActivePlayers = num;
+// 	});
 		
 
-	// $scope.players;
-	// $scope.infos = 
-	// {
-	// 	'id': 0,
-	// 	'x': Math.floor(Math.random()*500),
-	// 	'y': Math.floor(Math.random()*400+100),
-	// 	'r': Math.floor(Math.random()*250),
-	// 	'g': Math.floor(Math.random()*250),
-	// 	'b': Math.floor(Math.random()*250)
-	// }
+// 	// $scope.players;
+// 	// $scope.infos = 
+// 	// {
+// 	// 	'id': 0,
+// 	// 	'x': Math.floor(Math.random()*500),
+// 	// 	'y': Math.floor(Math.random()*400+100),
+// 	// 	'r': Math.floor(Math.random()*250),
+// 	// 	'g': Math.floor(Math.random()*250),
+// 	// 	'b': Math.floor(Math.random()*250)
+// 	// }
 	
-	// console.log($scope.infos);
-	// rpc('player.addMe',$scope.infos);
-	// $scope.messages = [];
-	// $scope.streaming = false;
-	// $scope.status = '';
-	// var quadInView = rpc('player.getMapData',0,function(data){
-	// 	console.log(data);
-	// });
+// 	// console.log($scope.infos);
+// 	// rpc('player.addMe',$scope.infos);
+// 	// $scope.messages = [];
+// 	// $scope.streaming = false;
+// 	// $scope.status = '';
+// 	// var quadInView = rpc('player.getMapData',0,function(data){
+// 	// 	console.log(data);
+// 	// });
 
 
-	// $scope.$on('ss-count', function(event,num) {
-	// 	$scope.playerCount = num;
-	// });
-	// $scope.$on('ss-allPlayers',function(event,nubes){
-	// 	$scope.players = nubes;
-	// });
+// 	// $scope.$on('ss-count', function(event,num) {
+// 	// 	$scope.playerCount = num;
+// 	// });
+// 	// $scope.$on('ss-allPlayers',function(event,nubes){
+// 	// 	$scope.players = nubes;
+// 	// });
 
 	
-});
+// });
 // angular.module('exampleApp', ['ssAngular'])
 // .controller('SSCtrl',function($scope,pubsub,rpc) {
 // 	$scope.messages = []
