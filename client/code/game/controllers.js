@@ -237,9 +237,9 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
-			console.log("left: "+x+" top: "+y+" numX: "+x2+" numY: "+y2);
 			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
+				
 				$game.nextTiles = new Array(x2);
 				for(var i = 0; i < x2 ; i+=1) {
 					
@@ -249,14 +249,8 @@ window.requestAnimFrame = (function(){
 
 						var index = j * x2 + (i % x2);
 						$game.nextTiles[i][j] = response[index];
-						// if(j==4) {
-						// 	console.log(i+", "+j+": "+response[index].x+", "+response[index].y);
-						// 	console.log("index: " + index);
-						// 	console.log(response[index]);
-						// }
 					}
 				}
-				//console.log($game.nextTiles);
 				callback();
 			});
 		},
@@ -407,7 +401,7 @@ window.requestAnimFrame = (function(){
 
 		endTransition: function() {
 			$game.inTransit = false;
-			_isMoving = false;
+
 			//now that the transition has ended, create a new grid
 			$game.createPathGrid(function() {
 				console.log("path found");
@@ -692,8 +686,6 @@ window.requestAnimFrame = (function(){
  		_currentStepIncY = 0,
  		_prevStepX = 0,
  		_prevStepY = 0,
- 		_direction = 0,
- 		_isMoving = false,
  		_willTravel = null;
 		
 	
@@ -721,9 +713,8 @@ window.requestAnimFrame = (function(){
 
 		move: function () {
 			/** IMPORTANT note: x and y are really flipped!!! **/
-			//update the step
-
-			_isMoving = true;
+			//update the step 
+			
 
 			//reset and advance
 			if($game.$player.currentStep > _numSteps) {
@@ -751,20 +742,6 @@ window.requestAnimFrame = (function(){
 					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].x - _currentY;
 					_prevStepX = _currentX * $game.TILE_SIZE;
 					_prevStepY = _currentY * $game.TILE_SIZE;
-
-					//set direction for sprite sheets
-					if(_currentStepIncX === 1) {
-						_direction = 0;
-					}
-					else if(_currentStepIncX === -1) {
-						_direction = 0;
-					}
-					else if(_currentStepIncY === -1) {
-						_direction = 4;
-					}
-					else {
-						_direction = 7;
-					}
 				}
 
 				var moveX = (_currentX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
@@ -772,8 +749,8 @@ window.requestAnimFrame = (function(){
 
 				
 				var playerInfo = {
-					srcX: (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
-					srcY: _direction * $game.TILE_SIZE*2,
+					srcX: (($game.$player.currentStep-1)%5)*$game.TILE_SIZE*2,
+					srcY: 0,
 					destX: moveX,
 					destY: moveY,
 					prevX: _prevStepX,
@@ -791,7 +768,6 @@ window.requestAnimFrame = (function(){
 
 		endMove: function () {
 			//console.log("travel time");
-
 			if(_willTravel){
 				var beginTravel = function(){
 					if($game.dataLoaded){
@@ -805,41 +781,36 @@ window.requestAnimFrame = (function(){
 				};
 				beginTravel();
 			}
-			else {
-				_isMoving = false;
-			}
 		},
 
 		
 		beginMove: function(x, y) {
-			if(!_isMoving) {
-				//check if it is an edge in here, to load data while moving player
-				$game.isMapEdge(x, y, function(isIt) {
-					_willTravel = false;
-					//if a transition is necessary, load new data
-					if(!isIt) {
-						if(x === 0 || x === 29 || y === 0 || y === 14) {
-							_willTravel = true;
-							$game.calculateNext(x, y, function() {
-								//data is loaded!
-								console.log("next quadrant is loaded!");
-								// $game.$player.getPath();
-							});
-						}
+
+			//check if it is an edge in here, to load data while moving player
+			$game.isMapEdge(x, y, function(isIt) {
+				_willTravel = false;
+				//if a transition is necessary, load new data
+				if(!isIt) {
+					if(x === 0 || x === 29 || y === 0 || y === 14) {
+						_willTravel = true;
+						$game.calculateNext(x, y, function() {
+							//data is loaded!
+							console.log("next quadrant is loaded!");
+							// $game.$player.getPath();
+						});
 					}
+				}
 
-					//consider grouping this under a new function to call once 
-					//map stuff has loaded in case it hasn't
-					
-					var start = $game.graph.nodes[_currentY][_currentX];
-	  				var end = $game.graph.nodes[y][x];
-	    			var result = $game.$astar.search($game.graph.nodes, start, end);
-	    			
-	    			ss.rpc('player.movePlayer', result);	
+				//consider grouping this under a new function to call once 
+				//map stuff has loaded in case it hasn't
+				
+				var start = $game.graph.nodes[_currentY][_currentX];
+  				var end = $game.graph.nodes[y][x];
+    			var result = $game.$astar.search($game.graph.nodes, start, end);
+    			
+    			ss.rpc('player.movePlayer', result);	
 
-				});
-			}
-			
+			});
 		},
 
 		slide: function() {
