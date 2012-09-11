@@ -237,9 +237,9 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
+			console.log("left: "+x+" top: "+y+" numX: "+x2+" numY: "+y2);
 			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
-				
 				$game.nextTiles = new Array(x2);
 				for(var i = 0; i < x2 ; i+=1) {
 					
@@ -249,8 +249,14 @@ window.requestAnimFrame = (function(){
 
 						var index = j * x2 + (i % x2);
 						$game.nextTiles[i][j] = response[index];
+						// if(j==4) {
+						// 	console.log(i+", "+j+": "+response[index].x+", "+response[index].y);
+						// 	console.log("index: " + index);
+						// 	console.log(response[index]);
+						// }
 					}
 				}
+				//console.log($game.nextTiles);
 				callback();
 			});
 		},
