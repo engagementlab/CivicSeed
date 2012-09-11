@@ -192,7 +192,8 @@ window.requestAnimFrame = (function(){
           window.mozRequestAnimationFrame    || 
           window.oRequestAnimationFrame      || 
           window.msRequestAnimationFrame     || 
-          function( callback ){
+  		
+         function( callback ){
             window.setTimeout(callback, 1000 / 60);
           };
 })();
@@ -227,6 +228,7 @@ window.requestAnimFrame = (function(){
 		TOTAL_WIDTH: 142,
 		TOTAL_HEIGHT: 132,
 		TILE_SIZE: 32,
+		STEP_PIXELS: 8,
 
 
 		init: function() {
@@ -235,11 +237,9 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
-			console.log("left: "+x+" top: "+y+" numX: "+x2+" numY: "+y2);
 			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
-				console.log("num responses: "+response.length);
-				console.log(response);
+				
 				$game.nextTiles = new Array(x2);
 				for(var i = 0; i < x2 ; i+=1) {
 					
@@ -249,14 +249,8 @@ window.requestAnimFrame = (function(){
 
 						var index = j * x2 + (i % x2);
 						$game.nextTiles[i][j] = response[index];
-						// if(j==4) {
-						// 	console.log(i+", "+j+": "+response[index].x+", "+response[index].y);
-						// 	console.log("index: " + index);
-						// 	console.log(response[index]);
-						// }
 					}
 				}
-				//console.log($game.nextTiles);
 				callback();
 			});
 		},
@@ -291,9 +285,7 @@ window.requestAnimFrame = (function(){
 
 				for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {		
 					
-					//console.log(x+", "+ y);
 					$game.isNoGo(x, y, function(val) {
-						//console.log(val);
 						$game.gridTiles[y][x] = val ? 0 : 1;
 					});
 
@@ -548,7 +540,7 @@ window.requestAnimFrame = (function(){
 			_tilesheet.src = 'img/game/tilesheet.png';
 
 			_playerTilesheet = new Image();
-			_playerTilesheet.src = 'img/game/mario.png';
+			_playerTilesheet.src = 'img/game/player.png';
 			
 			
 			//access the canvases for rendering
@@ -622,20 +614,20 @@ window.requestAnimFrame = (function(){
 
 		renderPlayer: function(tileData) {
 			_charactersContext.clearRect(
-				tileData.prevX * $game.TILE_SIZE,
-				(tileData.prevY - 1) * $game.TILE_SIZE,
-				$game.TILE_SIZE,
+				tileData.prevX,
+				tileData.prevY - $game.TILE_SIZE,
+				$game.TILE_SIZE*2,
 				$game.TILE_SIZE*2
 			);
 			_charactersContext.drawImage(
 				_playerTilesheet, 
-				tileData.srcX * $game.TILE_SIZE,
-				tileData.srcY * $game.TILE_SIZE,
-				$game.TILE_SIZE,
+				tileData.srcX,
+				tileData.srcY,
 				$game.TILE_SIZE*2,
-				tileData.destX * $game.TILE_SIZE,
-				(tileData.destY - 1) * $game.TILE_SIZE,
-				$game.TILE_SIZE,
+				$game.TILE_SIZE*2,
+				tileData.destX,
+				tileData.destY - $game.TILE_SIZE,
+				$game.TILE_SIZE*2,
 				$game.TILE_SIZE*2
 			);
 		},
@@ -689,13 +681,19 @@ window.requestAnimFrame = (function(){
 
 	var _currentX = 10,
  		_currentY = 12,
- 		_currentMove = 0,
+ 		_numSteps = 4,
+ 		_currentStepIncX = 0,
+ 		_currentStepIncY = 0,
+ 		_prevStepX = 0,
+ 		_prevStepY = 0,
  		_willTravel = null;
 		
 	
 	$game.$player = {
 
 		seriesOfMoves: null,
+		currentMove: 0,
+		currentStep: 0,
 
 		//private methods
 
@@ -704,8 +702,8 @@ window.requestAnimFrame = (function(){
 			var tileData = {
 				srcX: 0,
 				srcY: 0,
-				destX: _currentX,
-				destY: _currentY,
+				destX: _currentX * $game.TILE_SIZE,
+				destY: _currentY * $game.TILE_SIZE,
 				prevX: 0,
 				prevY: 0
 			}
@@ -714,27 +712,55 @@ window.requestAnimFrame = (function(){
 		},
 
 		move: function () {
-			//note: x and y are really flipped!!!
+			/** IMPORTANT note: x and y are really flipped!!! **/
+			//update the step 
 			
-			_currentMove += 1;
-			if(_currentMove >= $game.$player.seriesOfMoves.length) {
-				$game.$player.endMove();
+
+			//reset and advance
+			if($game.$player.currentStep > _numSteps) {
+				$game.$player.currentStep = 0;
+				_currentX = $game.$player.seriesOfMoves[$game.$player.currentMove].y;
+				_currentY = $game.$player.seriesOfMoves[$game.$player.currentMove].x;
+				$game.$player.currentMove += 1;	
+
 			}
+
+			//if we done, finish
+			if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
+				$game.$player.endMove();
+				console.log("ended");
+			}
+
+
 			else {
-				var playerInfo = {
-					srcX: 0,
-					srcY: 0,
-					destX: $game.$player.seriesOfMoves[_currentMove].y,
-					destY: $game.$player.seriesOfMoves[_currentMove].x,
-					prevX: _currentX,
-					prevY: _currentY
+				
+			$game.$player.currentStep += 1;
+
+				//if it the first one, then figure out the direction
+				if($game.$player.currentStep === 1) {
+					_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].y - _currentX;
+					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].x - _currentY;
+					_prevStepX = _currentX * $game.TILE_SIZE;
+					_prevStepY = _currentY * $game.TILE_SIZE;
 				}
 
-			
+				var moveX = (_currentX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
+					moveY = (_currentY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
+
+				
+				var playerInfo = {
+					srcX: (($game.$player.currentStep-1)%5)*$game.TILE_SIZE*2,
+					srcY: 0,
+					destX: moveX,
+					destY: moveY,
+					prevX: _prevStepX,
+					prevY: _prevStepY
+				}
+
 				$game.$renderer.renderPlayer(playerInfo);
 
-				_currentX  = $game.$player.seriesOfMoves[_currentMove].y;
-				_currentY  = $game.$player.seriesOfMoves[_currentMove].x;
+				_prevStepX = moveX;
+				_prevStepY = moveY;
 
 				requestAnimFrame($game.$player.move);
 			}
@@ -777,7 +803,7 @@ window.requestAnimFrame = (function(){
 
 				//consider grouping this under a new function to call once 
 				//map stuff has loaded in case it hasn't
-				_currentMove = -1;
+				
 				var start = $game.graph.nodes[_currentY][_currentX];
   				var end = $game.graph.nodes[y][x];
     			var result = $game.$astar.search($game.graph.nodes, start, end);
@@ -807,10 +833,10 @@ window.requestAnimFrame = (function(){
 			var playerInfo = {
 				srcX: 0,
 				srcY: 0,
-				destX: _currentX,
-				destY: _currentY,
-				prevX: prevX,
-				prevY: prevY
+				destX: _currentX * $game.TILE_SIZE,
+				destY: _currentY * $game.TILE_SIZE,
+				prevX: prevX * $game.TILE_SIZE,
+				prevY: prevY * $game.TILE_SIZE
 			}
 			
 			$game.$renderer.renderPlayer(playerInfo);	
@@ -840,7 +866,6 @@ $(function() {
 		updateMouse: function( mouseInfo, callback) {
 			var x = mouseInfo.x - mouseInfo.offX;
 			var y = mouseInfo.y - mouseInfo.offY;
-
 
 			$game.$mouse.prevX = $game.$mouse.curX;
 			$game.$mouse.prevY = $game.$mouse.curY;
@@ -1040,6 +1065,8 @@ $(function() {
   		//this will also have the player info so as to id the appropriate one
   		$game.$player.seriesOfMoves = new Array(moves.length);
   		$game.$player.seriesOfMoves = moves;
+  		$game.$player.currentMove = 0;
+  		$game.$player.currentStep = 0;
   		$game.$player.move();
 
 	});
