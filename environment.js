@@ -48,7 +48,7 @@ var globals = module.exports = {
 		URL: databaseURL,
 	},
 	map: {
-		mapTilesWidth: 146,
-		mapTilesHeight: 141,
+		mapTilesWidth: 142,
+		mapTilesHeight: 132,
 	}
 };

@@ -224,19 +224,22 @@ window.requestAnimFrame = (function(){
 		//GLOBAL CONSTANTS
 		VIEWPORT_WIDTH: 30,
 		VIEWPORT_HEIGHT: 15,
-		TOTAL_WIDTH: 146,
-		TOTAL_HEIGHT: 141,
+		TOTAL_WIDTH: 142,
+		TOTAL_HEIGHT: 132,
 		TILE_SIZE: 32,
 
-	
+
 		init: function() {
 			
 			$game.$renderer.init();
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
+			console.log("left: "+x+" top: "+y+" numX: "+x2+" numY: "+y2);
 			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
+				console.log("num responses: "+response.length);
+				console.log(response);
 				$game.nextTiles = new Array(x2);
 				for(var i = 0; i < x2 ; i+=1) {
 					
@@ -246,8 +249,14 @@ window.requestAnimFrame = (function(){
 
 						var index = j * x2 + (i % x2);
 						$game.nextTiles[i][j] = response[index];
+						// if(j==4) {
+						// 	console.log(i+", "+j+": "+response[index].x+", "+response[index].y);
+						// 	console.log("index: " + index);
+						// 	console.log(response[index]);
+						// }
 					}
 				}
+				//console.log($game.nextTiles);
 				callback();
 			});
 		},
@@ -338,7 +347,7 @@ window.requestAnimFrame = (function(){
 				$game.stepDirection = 'right';
 				getThisManyX = $game.VIEWPORT_WIDTH - 2;
 				getThisManyY = $game.VIEWPORT_HEIGHT;
-				getThisX = $game.nextX + 1;
+				getThisX = $game.nextX + 2;
 				getThisY = $game.masterY;
 			}
 
@@ -365,13 +374,12 @@ window.requestAnimFrame = (function(){
 				getThisManyX = $game.VIEWPORT_WIDTH;
 				getThisManyY = $game.VIEWPORT_HEIGHT - 2;
 				getThisX = $game.masterX;
-				getThisY = $game.nextY + 1;
+				getThisY = $game.nextY + 2;
 			}
 
 			$game.getTiles(getThisX, getThisY, getThisManyX, getThisManyY, function() {
 				$game.dataLoaded = true;
-				console.log(getThisX);
-				callback();					
+				callback();
 			});
 		},
 
@@ -404,7 +412,7 @@ window.requestAnimFrame = (function(){
 
 			//now that the transition has ended, create a new grid
 			$game.createPathGrid(function() {
-				console.log("grid is ready for pathfinding");
+				console.log("path found");
 			});
 
 		},
@@ -551,7 +559,6 @@ window.requestAnimFrame = (function(){
 
 			//start doing stuff once the tilesheet png loads
 			_tilesheet.onload = function() {
-				console.log("ready to render");
 
 				//render out the whole tilesheet to the offscreen canvas
 				_tilesheetContext.drawImage(_tilesheet, 0, 0);
@@ -704,7 +711,6 @@ window.requestAnimFrame = (function(){
 			}
 			
 			$game.$renderer.renderPlayer(tileData);	
-			console.log("render me");
 		},
 
 		move: function () {
@@ -739,13 +745,11 @@ window.requestAnimFrame = (function(){
 			if(_willTravel){
 				var beginTravel = function(){
 					if($game.dataLoaded){
-						console.log("we have lift off");
 						$game.dataLoaded = false;
 						$game.beginTransition();
 					}	
 					else{
 						//keep tryin!
-						console.log("not yet...");
 						setTimeout(beginTravel,50);
 					}
 				};
@@ -833,14 +837,20 @@ $(function() {
 		changed: false,
 
 		//returns local x,y grid data based on mouse location
-		updateMouse: function( a, b, oa, ob, callback) {
-			var x = a - oa;
-			var y = b - ob;
+		updateMouse: function( mouseInfo, callback) {
+			var x = mouseInfo.x - mouseInfo.offX;
+			var y = mouseInfo.y - mouseInfo.offY;
+
+
 			$game.$mouse.prevX = $game.$mouse.curX;
 			$game.$mouse.prevY = $game.$mouse.curY;
 
 			$game.$mouse.curX = Math.floor(x/32);
 			$game.$mouse.curY = Math.floor(y/32);
+
+			if(mouseInfo.debug){
+				console.log($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY]);
+			}
 			
 			//extremes(if at edge it will be just over)
 			if($game.$mouse.curX > 29) {
@@ -863,6 +873,7 @@ $(function() {
 			else{
 				$game.$mouse.changed = false;
 			}
+
 			callback($game.$mouse.curX,$game.$mouse.curY,$game.$mouse.changed);
 		}
 
@@ -1039,10 +1050,19 @@ $(document).ready(function() {
 		
 	//change cursor on mouse move
 	$('.gameboard').mousemove(function(m) {
-		$game.$mouse.updateMouse(m.pageX, m.pageY, this.offsetLeft, this.offsetTop,function(x, y, c) {
+		var mInfo = {
+			x: m.pageX,
+			y: m.pageY,
+			offX: this.offsetLeft,
+			offY: this.offsetTop,
+			debug: false
+		};
+
+		$game.$mouse.updateMouse(mInfo,function(x, y, c) {
 			
 			//c is true if the mouse snaps to a new grid
 			if(c){
+
 				$game.isNoGo(x, y, function(noGoValue) {
 					$('.cursor').css({
 						'left': x * 32,
@@ -1056,8 +1076,17 @@ $(document).ready(function() {
 
  	//figure out if we should transition (or do other stuff later)
  	$('.gameboard').click(function(m) {
+ 	
+
  		if( !$game.inTransit ){
- 			$game.$mouse.updateMouse(m.pageX, m.pageY, this.offsetLeft, this.offsetTop, function(x, y, c) {
+ 			var mInfo = {
+				x: m.pageX,
+				y: m.pageY,
+				offX: this.offsetLeft,
+				offY: this.offsetTop,
+				debug: true
+			};
+ 			$game.$mouse.updateMouse(mInfo, function(x, y, c) {
  				
  				//if it ISN'T a no go, then do some stuff
  				$game.isNoGo(x, y, function(resp) {
