@@ -42,6 +42,7 @@ var self = module.exports = {
 				userModel = service.useModel('user', 'ss');
 				tileModel = service.useModel('tile', 'ss');
 				numActivePlayers++;
+				console.log(req.session);
 				//send the number of active players to angular
 				ss.publish.all('ss-numActivePlayers',numActivePlayers);
 				res(true);
@@ -71,9 +72,7 @@ var self = module.exports = {
 			getMapData: function(x1,y1,x2,y2) {
 				// tileModel.findOne(function(err,query){
 				// 	res(query);
-				// });
-				
-				
+				// });				
 				//tileModel.find().gte('x', x1).gte('y',y1).lt('x',x2).lt('y',y2);
 				tileModel
 				.where('x').gte(x1).lt(x2)
