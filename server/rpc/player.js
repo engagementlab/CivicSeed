@@ -78,6 +78,7 @@ var self = module.exports = {
 				tileModel
 				.where('x').gte(x1).lt(x2)
 				.where('y').gte(y1).lt(y2)
+				.sort('mapIndex')
 				.find(function (err, allTiles) {
  			 		if (err){
  			 			res(false);
