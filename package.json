@@ -9,7 +9,7 @@
 	"main": "./server.js",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/americanyak/CivicSeed.git/tree/testing"
+		"url": "git://github.com/americanyak/CivicSocial.git"
 	},
 	"engines": {
 		"node": ">= 0.8.2"
@@ -32,7 +32,7 @@
 		"connect-flash": ">= 0.1.0"
 	},
 	"devDependencies": {},
-	"subdomain": "civicseed-testing",
+	"subdomain": "civicseed-development",
 	"scripts": {
 		"start": "server.js"
 	}
