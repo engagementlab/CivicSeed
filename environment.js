@@ -1,5 +1,5 @@
 /*
- * ENVIRONMENT/GLOBAL VARIABLES for TESTING/LOCAL CONFIGURATION
+ * ENVIRONMENT/GLOBAL VARIABLES for DEVELOPMENT/LOCAL CONFIGURATION
  *
  * to run a specific environment, set the NODE_ENV variable on run:
  * also, to run a specific database, set the ALT_DB variable on run:
@@ -8,24 +8,22 @@
  *
  */
 
-var nodeEnv = process.env.NODE_ENV || 'testing';
+var nodeEnv = process.env.NODE_ENV || 'development';
 
 var self = module.exports = {
 	app: {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
 		initialized: false,
-		siteUrl: process.env.SITE_URL || 'http://civicseed-test.nodejitsu.com/',
+		siteUrl: process.env.SITE_URL || 'http://localhost:3000/',
 	},
 	redis: {
-		db: process.env.REDIS_DB || 'civicseed-testing',
-		pass: process.env.REDIS_PASS || 'a0e6935acbdd1e6f84e760d5d2c5720b',
-		host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
-		port: process.env.REDIS_PORT || 9098,
+		port: process.env.REDIS_PORT || 6379,
+		host: process.env.REDIS_HOST || 'localhost',
 	},
 	database: {
 		environment: process.env.ALT_ENV || nodeEnv,
-		URL: process.env.DATABASE_URL || 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev',
+		URL: process.env.DATABASE_URL || 'mongodb://localhost/civic_dev_db',
 	},
 	map: {
 		mapTilesWidth: 142,
