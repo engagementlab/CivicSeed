@@ -1,5 +1,5 @@
 /*
- * ENVIRONMENT/GLOBAL VARIABLES for DEVELOPMENT/LOCAL CONFIGURATION
+ * ENVIRONMENT/GLOBAL VARIABLES for TESTING/LOCAL CONFIGURATION
  *
  * to run a specific environment, set the NODE_ENV variable on run:
  * also, to run a specific database, set the ALT_DB variable on run:
@@ -8,14 +8,14 @@
  *
  */
 
-var nodeEnv = process.env.NODE_ENV || 'development';
+var nodeEnv = process.env.NODE_ENV || 'testing';
 
 var self = module.exports = {
 	app: {
 		name: 'Civic Seed',
 		nodeEnv: nodeEnv,
 		initialized: false,
-		siteUrl: process.env.SITE_URL || 'http://localhost:3000/',
+		siteUrl: process.env.SITE_URL || 'http://civicseed-test.nodejitsu.com/',
 	},
 	redis: {
 		port: process.env.REDIS_PORT || 6379,
@@ -23,7 +23,7 @@ var self = module.exports = {
 	},
 	database: {
 		environment: process.env.ALT_ENV || nodeEnv,
-		URL: process.env.DATABASE_URL || 'mongodb://localhost/civic_dev_db',
+		URL: process.env.DATABASE_URL || 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev',
 	},
 	map: {
 		mapTilesWidth: 142,
