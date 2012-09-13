@@ -303,7 +303,7 @@ window.requestAnimFrame = (function(){
 
 		isNoGo: function(x, y, callback) {
 			//var i = y*$game.viewportWidthInTiles + (x%$game.viewportWidthInTiles);
-			var noGoVal = $game.currentTiles[x][y].nogo;
+			var noGoVal = $game.currentTiles[x][y].tileState;
 			// console.log(noGoVal + 'Get No Go Yo');
 			callback(noGoVal);
 		},
