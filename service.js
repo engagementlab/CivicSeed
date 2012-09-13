@@ -31,6 +31,14 @@ var self = module.exports = {
 		}
 	},
 
+	connectRedis: function(callback) {
+		// var client = redis.createClient(9098, 'cowfish.redistogo.com');
+		// client.auth('[...pw...]', function (err) {
+		// 	if (err) { throw err; }
+		// 	// You are now connected to your redis.
+		// });
+	},
+
 	useModel: function(modelName, state) {
 		if(state === 'preload') {
 			console.log('CS: '.blue + 'Initializing database by using model '.green + modelName.yellow.underline);
