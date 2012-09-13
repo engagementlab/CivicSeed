@@ -1,4 +1,405 @@
 @import url(http://fonts.googleapis.com/css?family=Noticia+Text);
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> BASICS */
+::-moz-selection {
+  background: #f8d36f;
+  color: #000;
+  text-shadow: none;
+}
+::selection {
+  background: #f8d36f;
+  color: #000;
+  text-shadow: none;
+}
+a {
+  color: #4559ac;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:focus {
+  outline: thin dotted;
+}
+a:hover,
+a:active {
+  outline: 0;
+}
+b,
+strong {
+  font-weight: bold;
+}
+em,
+i {
+  font-style: italic;
+}
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+pre,
+code,
+kbd,
+samp {
+  font: 1em/1 monospace, sans-serif;
+  margin: 0 0 1em;
+  padding: 1em;
+}
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+ins {
+  background-color: #ff9;
+  color: #000;
+  text-decoration: none;
+}
+mark {
+  background-color: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+del {
+  text-decoration: line-through;
+}
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+dfn {
+  font-style: italic;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+small {
+  font-size: 85%;
+}
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HTML5 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+audio:not([controls]) {
+  display: none;
+}
+[hidden] {
+  display: none;
+}
+svg:not(:root) {
+  overflow: hidden;
+}
+figure {
+  margin: 0;
+}
+/* Addresses margin not present */
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> COMMON BLOCK TAGS */
+p {
+  margin: 0 0 1em;
+}
+.smallText {
+  font: 15px/21px Lato, Arial, sans-serif;
+}
+h1 {
+  margin: 0 0 24px;
+  font: 400 42px/1 Lato, Arial, sans-serif;
+  color: #4559ac;
+}
+.content h1 {
+  margin: 0 -170px 24px;
+  padding: 0 170px 30px;
+  background: url(../img/content_border.png) repeat-x 0 bottom transparent;
+}
+h2 {
+  margin: 0;
+  font: 32px/42px Lato, Arial, sans-serif;
+}
+h3 {
+  margin: 42px 0 10px;
+  font: 700 24px/32px Lato, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+h4 {
+  margin: 24px 0 3px;
+  font: 24px/42px Lato, Arial, sans-serif;
+  color: #999;
+}
+h5 {
+  margin: 24px 0 3px;
+  font: 700 18px/18px Lato, Arial, sans-serif;
+  color: #4559ac;
+}
+h6 {
+  margin: 24px 0 3px;
+  font: 900 italic 15px/1 Lato, Arial, sans-serif;
+}
+.image {
+  margin: 0 0 22px;
+  padding: 8px;
+  background-color: white;
+  border: 1px solid #d3d3d3;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 2px 2px 14px -10px #000000;
+  box-shadow: 2px 2px 14px -10px #000000;
+}
+.image.left {
+  margin: 5px 24px 22px -170px;
+}
+.image.right {
+  margin: 5px -170px 22px 24px;
+}
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+  line-height: 0;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+ul {
+  margin: 1em 18px;
+  padding: 0;
+  font: 18px/24px Lato, Arial, sans-serif;
+}
+ol {
+  margin: 1em 18px;
+  padding: 0;
+  list-style-type: decimal;
+  font: 18px/24px Lato, Arial, sans-serif;
+}
+ul ul {
+  margin: 6px 18px;
+}
+ul ol {
+  margin: 6px 18px;
+}
+ol ol {
+  margin: 6px 18px;
+}
+ol ul {
+  margin: 6px 18px;
+}
+nav {
+  margin: 0 0 1em;
+}
+nav ul {
+  list-style: none;
+  margin: 0;
+}
+nav ol {
+  list-style: none;
+  margin: 0;
+}
+dl {
+  margin: 0 0 1em;
+}
+dt {
+  margin: 1em 0 0;
+}
+/* ??? */
+dt:first-child {
+  margin: 0;
+}
+/* ??? */
+dt + dt {
+  margin: 0;
+}
+/* ??? */
+dd {
+  margin: 0 0 0 3em;
+}
+blockquote,
+q {
+  quotes: none;
+  margin: 1em 40px;
+  font: italic 18px/24px Lato, Arial, sans-serif;
+  color: #b3b3b3;
+}
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  margin: 0 0 18px;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: 0 none;
+  cursor: default;
+}
+.content table {
+  margin: 0 -85px 18px;
+  width: 830px !important;
+}
+caption {
+  margin: 0 0 8px;
+  padding: 0;
+  font: bold 14px/18px Lato, Arial, sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-align: left;
+  color: #67a4d8;
+}
+th {
+  padding: 8px 12px;
+  vertical-align: bottom;
+  background-color: #f9d573;
+  color: white;
+  font: 15px/21px Lato, Arial, sans-serif;
+  letter-spacing: 1.5px;
+  text-shadow: 0 -1px 3px #cccccc;
+  text-transform: uppercase;
+  text-align: left;
+  -webkit-transition: background-color ease 0.5s;
+  -moz-transition: background-color ease 0.5s;
+  transition: background-color ease 0.5s;
+}
+.content th:hover {
+  background-color: #f9ca49;
+}
+td {
+  padding: 6px 12px;
+  vertical-align: top;
+  font: 16px/20px Lato, Arial, sans-serif;
+  border-bottom: 1px solid #929efa;
+  -webkit-transition: background-color ease 0.5s;
+  -moz-transition: background-color ease 0.5s;
+  transition: background-color ease 0.5s;
+}
+.content tr:hover td {
+  background-color: #f6f6f6;
+}
+.console h1 {
+  margin: 15px 0 0;
+  font: 28px/36px Lato, Arial, sans-serif;
+  color: #3a3a3a;
+}
+.console hgroup h1 {
+  font-weight: 700;
+}
+.console hgroup h2 {
+  font: 28px/36px Lato, Arial, sans-serif;
+}
+.console header .button {
+  float: right;
+  margin: 3px 0 0;
+  width: 200px;
+}
+/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HELPER CLASSES AND ADDITIONAL TYPICAL STYLES */
+.nocallout {
+  -webkit-touch-callout: none;
+}
+/* prevent callout */
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Text overflow with ellipsis */
+.gifhidden {
+  position: absolute;
+  left: -100%;
+}
+/* A workaround for S60 3.x and 5.0 devices */
+.ir {
+  display: block;
+  border: 0;
+  text-indent: -999em;
+  overflow: hidden;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  text-align: left;
+  direction: ltr;
+}
+/* For image replacement */
+.ir br {
+  display: none;
+}
+.hidden {
+  display: none !important;
+  visibility: hidden;
+}
+/* Hide for both screenreaders and browsers: */
+/* Hide only visually, but have it available for screenreaders: by Jon Neal. www.webaim.org/techniques/css/invisiblecontent/ & j.mp/visuallyhidden */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: drupal.org/node/897638 */
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+.invisible {
+  visibility: hidden;
+}
+/* Hide visually and from screenreaders, but maintain layout */
+.clearfix:before,
+.clearfix:after {
+  content: "";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  zoom: 1;
+}
+.left {
+  float: left;
+}
+.mid {
+  float: left;
+}
+.right {
+  float: right;
+}
 /*!
  * Bootstrap v2.0.4
  *
@@ -151,6 +552,7 @@ a:hover {
 }
 .row {
   margin-left: -20px;
+  zoom: 1;
   *zoom: 1;
 }
 .row:before,
@@ -244,6 +646,7 @@ a:hover {
 }
 .row-fluid {
   width: 100%;
+  zoom: 1;
   *zoom: 1;
 }
 .row-fluid:before,
@@ -320,6 +723,7 @@ a:hover {
 .container {
   margin-right: auto;
   margin-left: auto;
+  zoom: 1;
   *zoom: 1;
 }
 .container:before,
@@ -333,6 +737,7 @@ a:hover {
 .container-fluid {
   padding-right: 20px;
   padding-left: 20px;
+  zoom: 1;
   *zoom: 1;
 }
 .container-fluid:before,
@@ -997,6 +1402,7 @@ select:focus:required:invalid:focus {
   margin-bottom: 24px;
   background-color: #f5f5f5;
   border-top: 1px solid #e5e5e5;
+  zoom: 1;
   *zoom: 1;
 }
 .form-actions:before,
@@ -1230,6 +1636,7 @@ legend + .control-group {
 }
 .form-horizontal .control-group {
   margin-bottom: 24px;
+  zoom: 1;
   *zoom: 1;
 }
 .form-horizontal .control-group:before,
@@ -2740,6 +3147,7 @@ input[type="submit"].btn.btn-mini {
 }
 .btn-group {
   position: relative;
+  zoom: 1;
   *zoom: 1;
   *margin-left: .3em;
 }
@@ -3015,6 +3423,7 @@ input[type="submit"].btn.btn-mini {
 }
 .nav-tabs,
 .nav-pills {
+  zoom: 1;
   *zoom: 1;
 }
 .nav-tabs:before,
@@ -3163,6 +3572,7 @@ input[type="submit"].btn.btn-mini {
   border-color: #999999;
 }
 .tabbable {
+  zoom: 1;
   *zoom: 1;
 }
 .tabbable:before,
@@ -3325,6 +3735,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-form {
   margin-bottom: 0;
+  zoom: 1;
   *zoom: 1;
 }
 .navbar-form:before,
@@ -3707,6 +4118,7 @@ input[type="submit"].btn.btn-mini {
   margin-bottom: 24px;
   list-style: none;
   text-align: center;
+  zoom: 1;
   *zoom: 1;
 }
 .pager:before,
@@ -3836,6 +4248,7 @@ input[type="submit"].btn.btn-mini {
   -webkit-box-shadow: inset 0 1px 0 #ffffff;
   -moz-box-shadow: inset 0 1px 0 #ffffff;
   box-shadow: inset 0 1px 0 #ffffff;
+  zoom: 1;
   *zoom: 1;
 }
 .modal-footer:before,
@@ -4024,6 +4437,7 @@ input[type="submit"].btn.btn-mini {
 .thumbnails {
   margin-left: -20px;
   list-style: none;
+  zoom: 1;
   *zoom: 1;
 }
 .thumbnails:before,
@@ -4516,6 +4930,7 @@ a.badge:hover {
   border-color: yellow;
   position: absolute;
   z-index: 1;
+  cursor: pointer;
 }
 .debug p {
   float: left;

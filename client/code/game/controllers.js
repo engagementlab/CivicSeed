@@ -1,3 +1,6 @@
+//map formula:
+//viewport width * numQuads in width - (numQuads in width-1 * 2)
+
 // javascript-astar
 // http://github.com/bgrins/javascript-astar
 // Freely distributable under the MIT License.
@@ -401,7 +404,7 @@ window.requestAnimFrame = (function(){
 
 		endTransition: function() {
 			$game.inTransit = false;
-			_isMoving = false;
+			$game.$player.isMoving = false;
 			//now that the transition has ended, create a new grid
 			$game.createPathGrid(function() {
 				console.log("path found");
@@ -482,6 +485,19 @@ window.requestAnimFrame = (function(){
 			$game.$player.slide();
 			$game.$renderer.renderAll();
 			requestAnimFrame($game.stepTransition); 
+		},
+
+		masterToLocal: function(index) {
+			//look through the currentTiles to find the same index and returns
+			//the local grid coords (because they shift)
+			for( var a = 0; a < $game.currentTiles.length; a += 1) {
+				for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
+					if(index === $game.currentTiles[a][b].mapIndex) {
+						var i = b * $game.VIEWPORT_WIDTH + a;
+						return i;
+					}
+				}	
+			}
 		}
 
 	};
@@ -520,6 +536,7 @@ window.requestAnimFrame = (function(){
 	_backgroundContext= null,
 	_foregroundContext= null,
 	_charactersContext= null,
+	_mouseContext = null,
 	_tilesheetContext= null;
 
 
@@ -547,6 +564,7 @@ window.requestAnimFrame = (function(){
 			_backgroundContext = document.getElementById('background').getContext('2d');
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
+
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
 			//start doing stuff once the tilesheet png loads
@@ -589,27 +607,6 @@ window.requestAnimFrame = (function(){
 			$game.TILE_SIZE,
 			$game.TILE_SIZE
 			);
-		},
-
-		renderPath: function(x, y) {
-			// _charactersContext.clearRect(
-			// 	0,
-			// 	0,
-			// 	960,
-			// 	480
-			// );
-			_charactersContext.drawImage(
-			_tilesheet, 
-			3 * $game.TILE_SIZE, 
-			1 * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE,
-			x * $game.TILE_SIZE,
-			y * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE
-			);
-
 		},
 
 		renderPlayer: function(tileData) {
@@ -669,6 +666,15 @@ window.requestAnimFrame = (function(){
 
 				}
 			}	
+		},
+
+		renderMouse: function(mouse) {
+		// 	_mouseContext.clearRect(mouse.pX *32, mouse.pY*32,32,32);
+		// 	_mouseContext.drawImage(_tilesheet, 256,32, 32,32, mouse.cX*32, mouse.cY*32, 32,32);
+			$('.cursor').css({
+				left: mouse.cX * 32,
+				top: mouse.cY * 32
+			});
 		}
 
 	};
@@ -687,15 +693,15 @@ window.requestAnimFrame = (function(){
  		_prevStepX = 0,
  		_prevStepY = 0,
  		_direction = 0,
- 		_isMoving = false,
  		_willTravel = null;
 		
 	
 	$game.$player = {
 
-		seriesOfMoves: null,
+			seriesOfMoves: null,
 		currentMove: 0,
 		currentStep: 0,
+		isMoving: false,
 
 		//private methods
 
@@ -716,8 +722,7 @@ window.requestAnimFrame = (function(){
 		move: function () {
 			/** IMPORTANT note: x and y are really flipped!!! **/
 			//update the step
-
-			_isMoving = true;
+			$game.$player.isMoving = true;
 
 			//reset and advance
 			if($game.$player.currentStep > _numSteps) {
@@ -786,7 +791,7 @@ window.requestAnimFrame = (function(){
 		endMove: function () {
 			//console.log("travel time");
 
-			if(_willTravel){
+			if(_willTravel) {
 				var beginTravel = function(){
 					if($game.dataLoaded){
 						$game.dataLoaded = false;
@@ -800,39 +805,39 @@ window.requestAnimFrame = (function(){
 				beginTravel();
 			}
 			else {
-				_isMoving = false;
+				$game.$player.isMoving = false;
 			}
 		},
 
 		
 		beginMove: function(x, y) {
-			if(!_isMoving) {
-				//check if it is an edge in here, to load data while moving player
-				$game.isMapEdge(x, y, function(isIt) {
-					_willTravel = false;
-					//if a transition is necessary, load new data
-					if(!isIt) {
-						if(x === 0 || x === 29 || y === 0 || y === 14) {
-							_willTravel = true;
-							$game.calculateNext(x, y, function() {
-								//data is loaded!
-								console.log("next quadrant is loaded!");
-								// $game.$player.getPath();
-							});
-						}
+			
+			//check if it is an edge in here, to load data while moving player
+			$game.isMapEdge(x, y, function(isIt) {
+				_willTravel = false;
+				//if a transition is necessary, load new data
+				if(!isIt) {
+					if(x === 0 || x === 29 || y === 0 || y === 14) {
+						_willTravel = true;
+						$game.calculateNext(x, y, function() {
+							//data is loaded!
+							console.log("next quadrant is loaded!");
+							// $game.$player.getPath();
+						});
 					}
+				}
 
-					//consider grouping this under a new function to call once 
-					//map stuff has loaded in case it hasn't
-					
-					var start = $game.graph.nodes[_currentY][_currentX];
-	  				var end = $game.graph.nodes[y][x];
-	    			var result = $game.$astar.search($game.graph.nodes, start, end);
-	    			
-	    			ss.rpc('player.movePlayer', result);	
+				//consider grouping this under a new function to call once 
+				//map stuff has loaded in case it hasn't
+				
+				var start = $game.graph.nodes[_currentY][_currentX];
+  				var end = $game.graph.nodes[y][x];
+    			var result = $game.$astar.search($game.graph.nodes, start, end);
+    			console.log(result);
+    			ss.rpc('player.movePlayer', result);	
 
-				});
-			}
+			});
+			
 			
 		},
 
@@ -886,7 +891,7 @@ $(function() {
 		changed: false,
 
 		//returns local x,y grid data based on mouse location
-		updateMouse: function( mouseInfo, callback) {
+		updateMouse: function(mouseInfo, clicked) {
 			var x = mouseInfo.x - mouseInfo.offX;
 			var y = mouseInfo.y - mouseInfo.offY;
 
@@ -916,13 +921,19 @@ $(function() {
 
 			//if the grid is different update boolean
 			if($game.$mouse.curX !== $game.$mouse.prevX || $game.$mouse.curY !== $game.$mouse.prevY){
-				$game.$mouse.changed = true;
-			}
-			else{
-				$game.$mouse.changed = false;
+				//render new
+				var mouseStuff = {
+					pX: $game.$mouse.prevX,
+					pY: $game.$mouse.prevY,
+					cX: $game.$mouse.curX,
+					cY: $game.$mouse.curY,
+				};
+				$game.$renderer.renderMouse(mouseStuff); 
 			}
 
-			callback($game.$mouse.curX,$game.$mouse.curY,$game.$mouse.changed);
+			if(clicked) {
+				$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
+			}		
 		}
 
 	};
@@ -944,6 +955,10 @@ $(function() {
 	                node.visited = false;
 	                node.closed = false;
 	                node.parent = null;
+
+	                //get masterX and masterY and put them inside node
+	                node.masterX = $game.currentTiles[y][x].x;
+	                node.masterY = $game.currentTiles[y][x].y;
 	            }
 	        }
 	    },
@@ -974,6 +989,7 @@ $(function() {
 	                    ret.push(curr);
 	                    curr = curr.parent;
 	                }
+	                ret.push(start);
 	                return ret.reverse();
 	            }
 
@@ -1088,7 +1104,7 @@ $(function() {
   		//this will also have the player info so as to id the appropriate one
   		$game.$player.seriesOfMoves = new Array(moves.length);
   		$game.$player.seriesOfMoves = moves;
-  		$game.$player.currentMove = 0;
+  		$game.$player.currentMove = 1;
   		$game.$player.currentStep = 0;
   		$game.$player.move();
 
@@ -1108,27 +1124,13 @@ $(document).ready(function() {
 			debug: false
 		};
 
-		$game.$mouse.updateMouse(mInfo,function(x, y, c) {
-			
-			//c is true if the mouse snaps to a new grid
-			if(c){
-
-				$game.isNoGo(x, y, function(noGoValue) {
-					$('.cursor').css({
-						'left': x * 32,
-						'top': y * 32,
-						'border-color': noGoValue ? 'red' : 'white',
-					});
-				});
-			}
-		});
+		$game.$mouse.updateMouse(mInfo, false); 
  	});
 
  	//figure out if we should transition (or do other stuff later)
  	$('.gameboard').click(function(m) {
  	
-
- 		if( !$game.inTransit ){
+ 		if( !$game.inTransit && !$game.$player.isMoving){
  			var mInfo = {
 				x: m.pageX,
 				y: m.pageY,
@@ -1136,17 +1138,7 @@ $(document).ready(function() {
 				offY: this.offsetTop,
 				debug: true
 			};
- 			$game.$mouse.updateMouse(mInfo, function(x, y, c) {
- 				
- 				//if it ISN'T a no go, then do some stuff
- 				$game.isNoGo(x, y, function(resp) {
- 					if(!resp) {
- 						//it is a go, so move character, THEN transition if edge
- 						$game.$player.beginMove(x, y);
- 					}
- 				
- 				});
- 			});
+ 			$game.$mouse.updateMouse(mInfo,true);
  		}
  	});
 });
