@@ -1,5 +1,5 @@
 {
-  "name": "CivicSeed",
+  "name": "CivicSeed-testing",
   "authors": [
     "Robert Hall <@americanyak>",
     "Russell Goldenberg <@russellgoldenberg>",
@@ -42,8 +42,8 @@
   "devDependencies": {},
   "subdomain": "civicseed-testing",
   "bundledDependencies": [
-  	"socketstream",
-	"redis"
+    "socketstream",
+    "redis"
   ],
   "scripts": {
     "start": "server.js"

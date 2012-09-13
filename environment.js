@@ -18,8 +18,10 @@ var self = module.exports = {
 		siteUrl: process.env.SITE_URL || 'http://civicseed-test.nodejitsu.com/',
 	},
 	redis: {
-		port: process.env.REDIS_PORT || 6379,
-		host: process.env.REDIS_HOST || 'localhost',
+		db: process.env.REDIS_DB || 'civicseed-testing',
+		pass: process.env.REDIS_PASS || 'a0e6935acbdd1e6f84e760d5d2c5720b',
+		host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
+		port: process.env.REDIS_PORT || 9098,
 	},
 	database: {
 		environment: process.env.ALT_ENV || nodeEnv,
