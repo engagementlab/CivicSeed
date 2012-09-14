@@ -85,6 +85,7 @@ var self = module.exports = {
 					mapTilesHeight = service.environment.map.mapTilesHeight,
 					mapX,
 					mapY,
+					tileStateVal,
 					tiles = [];
 
 					// self.saveDocuments(tileModel, tileData.global);
@@ -95,10 +96,22 @@ var self = module.exports = {
 						mapY = Math.floor(i / mapTilesWidth);
 
 						//add the tile to the array
+						//tileState: 0 if nothing, 1 if nogo, 2 if npc
+						//checking values are arbitrary right now,
+						//based on the image used in tiled map editor
+						if(tileStateArray[i] === 0) {
+							tileStateVal = 0;
+						}
+						else if(tileStateArray[i] < 5) {
+							tileStateVal = 2;
+						}  
+						else {
+							tileStateVal = 1;
+						}
 						tiles.push({
 							x: mapX,
 							y: mapY,
-							tileState: (tileStateArray[i] > 0) ? true : false,
+							tileState: tileStateVal,
 							isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
 							background: backgroundArray[i],
 							background2: background2Array[i],

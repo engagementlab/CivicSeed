@@ -287,9 +287,17 @@ window.requestAnimFrame = (function(){
 				$game.gridTiles[y] = new Array($game.VIEWPORT_WIDTH);
 
 				for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {		
-					
+				
 					$game.isNoGo(x, y, function(val) {
-						$game.gridTiles[y][x] = val ? 0 : 1;
+						//the pathfinding takes 1 means its clear 0 not
+						var tempNoGo;
+						if(val>0) {
+							tempNoGo = 0;
+						}	
+						else {
+							tempNoGo = 1;
+						}
+						$game.gridTiles[y][x] = tempNoGo;
 					});
 
 				}	
@@ -970,6 +978,7 @@ $(function() {
 	    search: function(grid, start, end, diagonal, heuristic) {
 	        $game.$astar.init(grid);
 	        heuristic = heuristic || $game.$astar.manhattan;
+
 	        diagonal = !!diagonal;
 
 	        var openHeap = $game.$astar.heap();
