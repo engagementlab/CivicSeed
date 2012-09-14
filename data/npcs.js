@@ -1,4 +1,12 @@
 module.exports.global = [{
+	id: '436',
+	spriteMap: [{
+		x: 8,
+		y: 2
+	}, {
+		x: 8,
+		y: 2
+	}],
 	name: 'Gnome',
 	role: 'gnome',
 	attributes: {},
@@ -7,8 +15,13 @@ module.exports.global = [{
 		random: ['I\'m sure you believe everything you\'re saying.', 'If you believed something different, you wouldn\'t be sitting where you\'re sitting.', 'Stability means we run it.']
 	}
 }, {
-	name: 'Random NPC Gardner',
+	name: 'Civic Gardner',
 	role: 'gardner',
+	id: '446',
+	spriteMap: [{
+		x: 8,
+		y: 2
+	}],
 	attributes: {},
 	dialog: {
 		intro: ['I don\'t say much to start with, but I try.'],
