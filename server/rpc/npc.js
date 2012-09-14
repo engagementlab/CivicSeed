@@ -25,8 +25,9 @@ var self = exports.actions = function(req, res, ss) {
 		// ss.rpc('npc.getNpcByName', 'Gnome', function(response) {
 		// 	console.log(response);
 		// });
-		getNpcByName: function(npcName) {
-			Npc.find({ name: npcName }, function (err, npc) {
+		
+		getNpcById: function(npcId) {
+			Npc.find({ id: npcId }, function (err, npc) {
 				res(npc);
 			});
 		},
