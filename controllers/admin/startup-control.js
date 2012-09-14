@@ -79,7 +79,7 @@ var self = module.exports = {
 					backgroundArray = tileObject.backgroundArray,
 					background2Array = tileObject.background2Array,
 					foregroundArray = tileObject.foregroundArray,
-					nogoArray = tileObject.nogoArray,
+					tileStateArray = tileObject.tileStateArray,
 					numberOfTiles = backgroundArray.length,
 					mapTilesWidth = service.environment.map.mapTilesWidth,
 					mapTilesHeight = service.environment.map.mapTilesHeight,
@@ -98,7 +98,7 @@ var self = module.exports = {
 						tiles.push({
 							x: mapX,
 							y: mapY,
-							nogo: (nogoArray[i] > 0) ? true : false,
+							tileState: (tileStateArray[i] > 0) ? true : false,
 							isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
 							background: backgroundArray[i],
 							background2: background2Array[i],
