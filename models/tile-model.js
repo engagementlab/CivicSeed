@@ -3,7 +3,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	var TileSchema = new Schema({
 		x: Number,
 		y: Number,
-		tileState: Boolean,
+		tileState: Number,
 		isMapEdge: Boolean,
 		background: Number,
 		background2: Number,

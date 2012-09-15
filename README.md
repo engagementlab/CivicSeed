@@ -154,7 +154,7 @@ Running "node --version" should return:
 
 ### Calculating Map Size
 
-1. The viewport displays a 30 x 15 tile grid.  A "quadrant" is really 29 x 14 because there is overlap.  
+1. The viewport displays a 30 x 15 tile grid.  A "quadrant" is really 28 x 13 because there is overlap.  
 
 2. Formula for exact dimensions where: 
     - vX = width of viewport in tiles
@@ -162,8 +162,8 @@ Running "node --version" should return:
     - qX = number horizontal quadrants
     - qY = number of vertical quadrants
 
-    #### total X tiles = (vX * qX) - qX + 1
-    #### total Y tiles = (vY * qY) - qY + 1
+    #### total X tiles = vX * qX - (qX-1 * 2)
+    #### total Y tiles =  vY * qY - (qY-1 * 2)
 
     ### DON'T QUESTION THE FORMULA...
 

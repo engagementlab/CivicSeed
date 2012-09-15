@@ -22,6 +22,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	// });
 
 	var npcSchema = new Schema({
+		id: Number,
+		spriteMap: {},
 		name: String,
 		role: String,
 		attributes: {},
