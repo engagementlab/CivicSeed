@@ -1,12 +1,12 @@
 {
-  "name": "CivicSeed",
+  "name": "CivicSeed-testing",
   "authors": [
     "Robert Hall <@americanyak>",
     "Russell Goldenberg <@russellgoldenberg>",
     "Jon Dutko <@jondutko>"
   ],
   "description": "Social gaming for civic training",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [
     "social",
     "civic",
@@ -23,14 +23,14 @@
     "node": ">= 0.8.2"
   },
   "dependencies": {
-    "socketstream": ">= 0.3.1",
+    "socketstream": ">= 0.3.2",
     "ss-stylus": ">= 0.1.5",
     "consolidate": ">= 0.3.0",
     "express": ">= 3.0.0rc4",
     "express-messages": ">= 0.0.2",
     "hbs": ">= 1.0.5",
     "mongoose": ">= 3.1.1",
-    "redis": ">= 0.7.2",
+    "redis": ">= 0.8.1",
     "underscore": ">= 1.3.3",
     "colors": ">= 0.6.0",
     "passport": ">= 0.1.12",
@@ -38,9 +38,9 @@
     "nodemailer": ">= 0.3.26",
     "password-hash": ">= 1.2.1",
     "connect-flash": ">= 0.1.0"
-    },
+  },
   "devDependencies": {},
-  "subdomain": "civicseed-development",
+  "subdomain": "civicseed-testing",
   "bundledDependencies": [
     "socketstream",
     "redis"
