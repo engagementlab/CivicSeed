@@ -18,8 +18,10 @@ var self = module.exports = {
 		siteUrl: process.env.SITE_URL || 'http://localhost:3000/',
 	},
 	redis: {
-		port: process.env.REDIS_PORT || 6379,
+		db: process.env.REDIS_DB || 'civic_dev_db',
+		pass: process.env.REDIS_PASS || '',
 		host: process.env.REDIS_HOST || 'localhost',
+		port: process.env.REDIS_PORT || 6379,
 	},
 	database: {
 		environment: process.env.ALT_ENV || nodeEnv,
