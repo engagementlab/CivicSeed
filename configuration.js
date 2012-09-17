@@ -25,9 +25,12 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		// client side angular templating
 		ss.client.templateEngine.use('angular');
 
-		// use redis
-		ss.session.store.use('redis', env.redis);
-		ss.publish.transport.use('redis', env.redis);
+		// // use redis
+		// ss.session.store.use('redis', env.redis);
+		// ss.publish.transport.use('redis', env.redis);
+		// // var redis = require('redis');
+		// // // var quitter = redis.quit();
+		// // // var client = redis.createClient(env.redis);
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', mongooseDb);

@@ -180,6 +180,14 @@ Running "node --version" should return:
 
     v0.8.2
 
+## Deployment
+
+Currently, we're deploying to NodeJitsu, based on support for MongoDB, Redis, and Sockets. (Note the ```.npmignore``` file is different than the ```.gitignore``` file, as it needs to include ```parameters.js``` and ```package.json```.)
+
+To deploy to NodeJitsu, from the root of the app just type:
+
+    jitsu deploy
+
 ## Front End
 
 ### Map Information
