@@ -201,6 +201,9 @@ window.requestAnimFrame = (function(){
           };
 })();
 
+
+
+
 // top of game file
 (function() {
 
@@ -223,7 +226,9 @@ window.requestAnimFrame = (function(){
 		numberOfSteps: 0,
 		stepDirection: null,
 		inTransit: false,
+		firstLaunch: true,
 		graph: null,
+		started: false,
 	
 		//GLOBAL CONSTANTS
 		VIEWPORT_WIDTH: 30,
@@ -231,13 +236,14 @@ window.requestAnimFrame = (function(){
 		TOTAL_WIDTH: 142,
 		TOTAL_HEIGHT: 132,
 		TILE_SIZE: 32,
-		STEP_PIXELS: 8,
+		STEP_PIXELS: 4,
 
 
 		init: function() {
-			
+		
 			$game.$renderer.init();
 			ss.rpc('npc.init');
+			$game.tick();
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
@@ -253,6 +259,7 @@ window.requestAnimFrame = (function(){
 
 						var index = j * x2 + (i % x2);
 						$game.nextTiles[i][j] = response[index];
+						
 					}
 				}
 				callback();
@@ -270,7 +277,7 @@ window.requestAnimFrame = (function(){
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					
 					$game.currentTiles[i][j] = $game.nextTiles[i][j];
-				
+					
 				}
 			}
 			//reset array
@@ -438,7 +445,8 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = $game.nextTiles[$game.stepNumber - 1][j];
 				}
 				$game.masterX += 1;
-				
+				$game.$player.slide(1,0);
+
 			}
 
 			//--------LEFT------------
@@ -455,7 +463,7 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[0][j] = $game.nextTiles[$game.nextTiles.length - $game.stepNumber ][j];
 				}
 				$game.masterX -= 1;
-
+				$game.$player.slide(-1,0);
 			}
 
 			//--------UP------------
@@ -472,6 +480,7 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[i][0] = $game.nextTiles[i][$game.nextTiles[0].length - $game.stepNumber];
 				}
 				$game.masterY -= 1;
+				$game.$player.slide(0,-1);
 			}
 
 			//--------DOWN------------
@@ -488,28 +497,38 @@ window.requestAnimFrame = (function(){
 					$game.currentTiles[i][$game.VIEWPORT_HEIGHT - 1] = $game.nextTiles[i][$game.stepNumber - 1];
 				}
 				$game.masterY += 1;
+				$game.$player.slide(0,1);
 			}
 
-
-			$game.$player.slide();
-			$game.$renderer.renderAll();
-			$game.$npc.slide();
+			//change the npc and players local positions 
+			//the tiles have been updated, now tell render to look over everything
+			//and re-render EVERYTHING
+			//$game.$renderer.renderAll();
 			requestAnimFrame($game.stepTransition); 
 		},
 
-		masterToLocal: function(index) {
+		masterToLocal: function(x, y, callback) {
 			//look through the currentTiles to find the same index and returns
 			//the local grid coords (because they shift)
 			for( var a = 0; a < $game.currentTiles.length; a += 1) {
 				for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
-					if(index === $game.currentTiles[a][b].mapIndex) {
-						var i = b * $game.VIEWPORT_WIDTH + a;
-						return i;
+					if(x === $game.currentTiles[a][b].x && y === $game.currentTiles[a][b].y) {
+						var local =  {
+							x: a,
+							y: b
+						};
+						callback(local);
 					}
 				}	
 			}
-		}
+		},				
 
+		tick: function() {
+            if($game.started) {
+            	$game.$renderer.renderFrame();   
+            }
+			requestAnimFrame($game.tick);
+		}
 	};
 
 	window.$game = $game;
@@ -602,7 +621,10 @@ window.requestAnimFrame = (function(){
 							//first time loading game stuff,
 							//init the npc!
 							$game.$npc.init();
-							$game.$renderer.renderAll();
+							
+							$game.started = true;		
+							//to be deleted
+							//$game.$renderer.renderAll();
 
 						});
 				});
@@ -611,6 +633,25 @@ window.requestAnimFrame = (function(){
 			
 
 			};		
+		},
+
+		renderFrame: function() {
+			//only re-render all the tiles if the viewport is tranisitioning
+			if($game.firstLaunch) {
+				$game.firstLaunch = false;
+				$game.$renderer.renderAllTiles();
+			}
+			else if($game.inTransit) {
+				//render tiles (bg,bg2, fg, and npcs)
+				$game.$renderer.renderAllTiles();
+				$game.$player.render();
+				//render player (client)
+				//render other players
+				//render colors
+			}
+			else if($game.$player.isMoving) {
+				$game.$player.render();
+			}
 		},
 
 		renderTile: function(tileData) {
@@ -628,23 +669,33 @@ window.requestAnimFrame = (function(){
 		},
 
 		renderPlayer: function(tileData) {
-			_charactersContext.clearRect(
-				tileData.prevX,
-				tileData.prevY - $game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				$game.TILE_SIZE*2
-			);
-			_charactersContext.drawImage(
-				_playerTilesheet, 
-				tileData.srcX,
-				tileData.srcY,
-				$game.TILE_SIZE*2,
-				$game.TILE_SIZE*2,
-				tileData.destX,
-				tileData.destY - $game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				$game.TILE_SIZE*2
-			);
+			// console.log(tileData);
+			//convert x y to local 
+			$game.masterToLocal(tileData.x, tileData.y, function(loc) {			
+				var prevX = loc.x * $game.TILE_SIZE + tileData.prevX * $game.STEP_PIXELS;
+					prevY = loc.y * $game.TILE_SIZE + tileData.prevY * $game.STEP_PIXELS;
+					curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
+					curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
+
+				_charactersContext.clearRect(
+					prevX,
+					prevY - $game.TILE_SIZE,
+					$game.TILE_SIZE*2,
+					$game.TILE_SIZE*2
+				);
+
+				_charactersContext.drawImage(
+					_playerTilesheet, 
+					tileData.srcX,
+					tileData.srcY,
+					$game.TILE_SIZE*2,
+					$game.TILE_SIZE*2,
+					curX,
+					curY - $game.TILE_SIZE,
+					$game.TILE_SIZE*2,
+					$game.TILE_SIZE*2
+				);
+			});
 		},
 	
 		renderAll: function() {
@@ -655,6 +706,7 @@ window.requestAnimFrame = (function(){
 					var backIndex = $game.currentTiles[i][j].background - 1,
 						backIndex2 = $game.currentTiles[i][j].background2 - 1,
 						foreIndex = $game.currentTiles[i][j].foreground - 1,
+						tileStateVal = $game.currentTiles[i][j].tileState;
 
 					//tilemap starts at 1 instead of 0
 					
@@ -681,53 +733,123 @@ window.requestAnimFrame = (function(){
 						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
 						$game.$renderer.renderTile(tileData);
 					}
+
+					if(tileStateVal === 2) {
+
+					}
 				}
-			}	
+			}		
 		},
 
-		renderNpc: function (npc) {
+		renderAllTiles: function() {
+			//not worried about clearing previous because every 
+			//tile is being overwritten
 
-			//draw the top half of body on the foreground
-			//bottom half on the background
-			//var prevIndex = $game.masterToLocal(npc.prevY * $game.TOTAL_WIDTH + npc.prevX);
-			
-			var i = $game.masterToLocal(npc.curY * $game.TOTAL_WIDTH + npc.curX);
+			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
+				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+					
+					//tilemap reference to images starts at 1 instead of 0
+					var backIndex = $game.currentTiles[i][j].background - 1,
+						backIndex2 = $game.currentTiles[i][j].background2 - 1,
+						foreIndex = $game.currentTiles[i][j].foreground - 1,
+						tileStateVal = $game.currentTiles[i][j].tileState;
 
-			var x = i % $game.VIEWPORT_WIDTH,
-				y = Math.floor(i / $game.VIEWPORT_WIDTH),
-				srcX = npc.spriteMap[0].x * $game.TILE_SIZE,
-				srcY = npc.spriteMap[0].y * $game.TILE_SIZE,
-				destX = x * $game.TILE_SIZE,
-				destY = y * $game.TILE_SIZE;
-				
-			_foregroundContext.drawImage(
-				_npcTilesheet, 
-				srcX,
-				srcY,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE,
-				destX,
-				destY-$game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE
-			);
+					//background tiles first
+					tileData = {
+						srcX: backIndex % _tilesheetWidth,
+						srcY: Math.floor(backIndex / _tilesheetWidth),
+						destX: i,
+						destY: j
+					};
+					
+					$game.$renderer.renderTile(tileData);
+					
+					//second layer background tiles (rocks, etc.)
+					if( backIndex2 > -1) {
+						tileData.srcX = backIndex2 % _tilesheetWidth;
+						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
+						$game.$renderer.renderTile(tileData);
+					}
+					
+					//npcs
+					if(tileStateVal === 2) {
+						//get npc spritesheet data, pass it to tiledata, render
+						//$game.$renderer.renderTile(tileData);
+						$game.$npc.render($game.currentTiles[i][j]);
+						console.log("render me dammit");
+					}	
+
+					//foreground tiles 
+					if(foreIndex > -1) {
+						tileData.srcX = foreIndex % _tilesheetWidth;
+						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
+						$game.$renderer.renderTile(tileData);
+					}
+
+						
+				}
+			}
+		},
+
+		renderNpc: function (npcData) {
 			_backgroundContext.drawImage(
 				_npcTilesheet, 
-				srcX,
-				srcY+$game.TILE_SIZE,
+				npcData.srcX * $game.TILE_SIZE,
+				npcData.srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
+				$game.TILE_SIZE*2,
+				npcData.x * $game.TILE_SIZE,
+				npcData.y * $game.TILE_SIZE,
 				$game.TILE_SIZE,
-				destX,
-				destY,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE
+				$game.TILE_SIZE*2
 			);
+		
+				
+
+			//old method 
+
+			// //draw the top half of body on the foreground
+			// //bottom half on the background
+			// //var prevIndex = $game.masterToLocal(npc.prevY * $game.TOTAL_WIDTH + npc.prevX);
+			// //console.log(npc.prevX+" : "+npc.curX);
+			// var preIndex = npc.curY * $game.TOTAL_WIDTH + npc.curX;
+			// console.log("master index: "+preIndex);
+			// var i = $game.masterToLocal(preIndex);
+			// console.log("local index: "+i);
+			// //var pi = $game.masterToLocal(npc.prevY * $game.TOTAL_WIDTH + npc.prevX);
+			// var x = i % $game.VIEWPORT_WIDTH,
+			// 	y = Math.floor(i / $game.VIEWPORT_WIDTH),
+			// 	srcX = npc.spriteMap[0].x * $game.TILE_SIZE,
+			// 	srcY = npc.spriteMap[0].y * $game.TILE_SIZE,
+			// 	destX = x * $game.TILE_SIZE,
+			// 	destY = y * $game.TILE_SIZE;
+			// console.log("local coords: "+x+", "+y)
+			// _backgroundContext.drawImage(
+			// 	_npcTilesheet, 
+			// 	srcX,
+			// 	srcY,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	destX,
+			// 	destY-$game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE
+			// );
+			// _backgroundContext.drawImage(
+			// 	_npcTilesheet, 
+			// 	srcX,
+			// 	srcY+$game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	destX,
+			// 	destY,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE
+			// );
 
 		},
 
 		renderMouse: function(mouse) {
-		// 	_mouseContext.clearRect(mouse.pX *32, mouse.pY*32,32,32);
-		// 	_mouseContext.drawImage(_tilesheet, 256,32, 32,32, mouse.cX*32, mouse.cY*32, 32,32);
 			$('.cursor').css({
 				left: mouse.cX * 32,
 				top: mouse.cY * 32
@@ -742,49 +864,72 @@ window.requestAnimFrame = (function(){
 //npc file
 (function() {
 
-	var _loaded = false;
+	var _loaded = false,
+	_allNpcs = [];
 
 	$game.$npc = {
 
-		onScreenNpcs: [],
+		//onScreenNpcs: [],
 
 		init: function() {
-			//load the npcs that are on the current screen
-			var idList = [];
-			for(var x = 0; x < $game.currentTiles.length; x+=1) {
-				for(var y = 0; y < $game.currentTiles[x].length; y+=1) {
-					if($game.currentTiles[x][y].tileState === 2) {
-						//add to list, the index, get it from db
-						idList.push($game.currentTiles[x][y].mapIndex);
-					}
-				}	
-			}
+			ss.rpc('npc.getNpcs', function(response) {
+				_allNpcs = response;
+				_loaded = true;
+			});
+			// 		var x = response[0].id % $game.TOTAL_WIDTH,
+			// 			y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
+			// 		response[0].prevX = x,
+			// 		response[0].prevY = y,
+			// 		response[0].curX = x,
+			// 		response[0].curY = y;
+			// 		$game.$npc.onScreenNpcs.push(response[0]);
+			// 		_loaded = true;
+			// 	});
+			// }
 
-			for(var i = 0; i<idList.length; i++) {
-				ss.rpc('npc.getNpcById', idList[i], function(response) {
-					var x = response[0].id % $game.TOTAL_WIDTH,
-						y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
-					response[0].prevX = x,
-					response[0].prevY = y,
-					response[0].curX = x,
-					response[0].curY = y;
-					$game.$npc.onScreenNpcs.push(response[0]);
-					_loaded = true;
-				});
-			}
+			//load all the npcs data and store it aqui
+
+			//old method
+
+			// //load the npcs that are on the current screen
+			// var idList = [];
+			// for(var x = 0; x < $game.currentTiles.length; x+=1) {
+			// 	for(var y = 0; y < $game.currentTiles[x].length; y+=1) {
+			// 		if($game.currentTiles[x][y].tileState === 2) {
+			// 			//add to list, the index, get it from db
+			// 			idList.push($game.currentTiles[x][y].mapIndex);
+			// 		}
+			// 	}	
+			// }
+
+			// //go through all the npcs who should be on the list
+			// //get their data, update their coords to local coords 
+			// //for prev and next movements 
+			// for(var i = 0; i<idList.length; i++) {
+			// 	ss.rpc('npc.getNpcById', idList[i], function(response) {
+			// 		var x = response[0].id % $game.TOTAL_WIDTH,
+			// 			y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
+			// 		response[0].prevX = x,
+			// 		response[0].prevY = y,
+			// 		response[0].curX = x,
+			// 		response[0].curY = y;
+			// 		$game.$npc.onScreenNpcs.push(response[0]);
+			// 		_loaded = true;
+			// 	});
+			// }
 
 			
 
-			var firstRender = function(){
-					if(_loaded){
-						$game.$npc.render();
-					}	
-					else{
-						setTimeout(firstRender,16);
-					}
-			};
+			// var firstRender = function(){
+			// 		if(_loaded){
+			// 			$game.$npc.render();
+			// 		}	
+			// 		else{
+			// 			setTimeout(firstRender,16);
+			// 		}
+			// };
 			
-			firstRender();
+			// firstRender();
 
 		},
 
@@ -820,21 +965,29 @@ window.requestAnimFrame = (function(){
 				$game.$npc.onScreenNpcs[i].curX += stepX;
 				$game.$npc.onScreenNpcs[i].curY += stepY;
 
-				var localIndex = $game.masterToLocal($game.$npc.onScreenNpcs[i].curY * $game.TOTAL_WIDTH + $game.$npc.onScreenNpcs[i].curX),
-				locX = localIndex % $game.VIEWPORT_WIDTH,
-				locY = Math.floor(localIndex / $game.VIEWPORT_WIDTH);
-				if(locX < 0 || locY < 0 || locX >= $game.VIEWPORT_WIDTH || locY >= $game.VIEWPORT_HEIGHT) { 
-					//$game.$npc.remove(i);
-				}
+				// var localIndex = $game.masterToLocal($game.$npc.onScreenNpcs[i].curY * $game.TOTAL_WIDTH + $game.$npc.onScreenNpcs[i].curX),
+				// locX = localIndex % $game.VIEWPORT_WIDTH,
+				// locY = Math.floor(localIndex / $game.VIEWPORT_WIDTH);
+				// if(locX < 0 || locY < 0 || locX >= $game.VIEWPORT_WIDTH || locY >= $game.VIEWPORT_HEIGHT) { 
+				// 	//$game.$npc.remove(i);
+				// }
 			}
 			//check if off screen using masterlocal
 
 			$game.$npc.render();
 		},
 
-		render: function() {
-			for(var i = 0; i < $game.$npc.onScreenNpcs.length; i += 1) {
-				$game.$renderer.renderNpc($game.$npc.onScreenNpcs[i]);
+		render: function(tile) {
+			
+			var data = {};
+			for(var z = 0; z < _allNpcs.length; z += 1) {
+				if(_allNpcs[z].id === tile.mapIndex) {
+					data.srcX = _allNpcs[z].spriteMap[0].x * $game.TILE_SIZE,
+					data.srcY = _allNpcs[z].spriteMap[0].y * $game.TILE_SIZE,
+					data.x = tile.x,
+					data.y = tile.y;
+					$game.$renderer.renderNpc(data);
+				}
 			}
 		}
  
@@ -845,13 +998,22 @@ window.requestAnimFrame = (function(){
 //player file
 (function() {
 
-	var _currentX = 10,
- 		_currentY = 12,
- 		_numSteps = 4,
+	//current values are there for the inbetween squares
+	//master is the most previously gridded position
+	
+ 	var	_masterX = 10,
+ 		_masterY = 10,
+ 		_offX = 0,
+ 		_offY = 0,
+ 		_prevOffX = 0,
+ 		_prevOffY = 0,
+ 		_srcX = 80,
+ 		_srcY = 0,
+ 		_numSteps = 8,
  		_currentStepIncX = 0,
  		_currentStepIncY = 0,
- 		_prevStepX = 0,
- 		_prevStepY = 0,
+ 		_prevStepX = 0, //deprecated
+ 		_prevStepY = 0, //deprecated
  		_direction = 0,
  		_willTravel = null;
 		
@@ -867,17 +1029,8 @@ window.requestAnimFrame = (function(){
 		//private methods
 
 		init: function() {
-				
-			var tileData = {
-				srcX: 0,
-				srcY: 0,
-				destX: _currentX * $game.TILE_SIZE,
-				destY: _currentY * $game.TILE_SIZE,
-				prevX: 0,
-				prevY: 0
-			}
 			
-			$game.$renderer.renderPlayer(tileData);	
+			$game.$player.render();
 		},
 
 		move: function () {
@@ -885,34 +1038,43 @@ window.requestAnimFrame = (function(){
 			//update the step
 			$game.$player.isMoving = true;
 
-			//reset and advance
-			if($game.$player.currentStep > _numSteps) {
+			//if the steps between the tiles has finished,
+			//update the master location, and reset steps to go on to next move 
+			if($game.$player.currentStep >= _numSteps) {
 				$game.$player.currentStep = 0;
-				_currentX = $game.$player.seriesOfMoves[$game.$player.currentMove].y;
-				_currentY = $game.$player.seriesOfMoves[$game.$player.currentMove].x;
-				$game.$player.currentMove += 1;	
+				_masterX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
+				_masterY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+				$game.$player.currentMove += 1;
 
 			}
 
 			//if we done, finish
 			if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
 				$game.$player.endMove();
-				console.log("ended");
 			}
 
-
+			//if we no done, then step through it yo.
 			else {
 				
-			$game.$player.currentStep += 1;
+				//increment the current step 
+				$game.$player.currentStep += 1;
 
-				//if it the first one, then figure out the direction
+				//if it the first one, then figure out the direction to face
 				if($game.$player.currentStep === 1) {
-					_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].y - _currentX;
-					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].x - _currentY;
-					_prevStepX = _currentX * $game.TILE_SIZE;
-					_prevStepY = _currentY * $game.TILE_SIZE;
+					_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _masterX;
+					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _masterY;
+					// _prevStepX = _currentX * $game.TILE_SIZE;
+					// _prevStepY = _currentY * $game.TILE_SIZE;
+					
+					//set the previous offsets to 0 because the last visit
+					//was the actual rounded master 
+					_prevOffX = 0;
+					_prevOffY = 0;
 
 					//set direction for sprite sheets
+					//direction refers to the y location on the sprite sheet
+					//since the character will be in different rows
+					//will be 0,1,2,3
 					if(_currentStepIncX === 1) {
 						_direction = 0;
 					}
@@ -927,24 +1089,25 @@ window.requestAnimFrame = (function(){
 					}
 				}
 
-				var moveX = (_currentX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
-					moveY = (_currentY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
-
-				
-				var playerInfo = {
-					srcX: (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
-					srcY: _direction * $game.TILE_SIZE*2,
-					destX: moveX,
-					destY: moveY,
-					prevX: _prevStepX,
-					prevY: _prevStepY
+				else {
+					_prevOffX = _offX;
+					_prevOffY = _offY;
 				}
+				
+				_offX = $game.$player.currentStep * _currentStepIncX;
+				_offY = $game.$player.currentStep * _currentStepIncY;
 
-				$game.$renderer.renderPlayer(playerInfo);
 
-				_prevStepX = moveX;
-				_prevStepY = moveY;
+				// _prevStepX = _currentX;
+				// _prevStepY = _currentY;
 
+				// _currentX = (_masterX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
+				// _currentY = (_masterY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
+
+				_srcX = (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
+				_srcY =  _direction * $game.TILE_SIZE*2;
+
+				//$game.$renderer.renderPlayer(playerInfo);
 				requestAnimFrame($game.$player.move);
 			}
 		},
@@ -973,11 +1136,19 @@ window.requestAnimFrame = (function(){
 				}
 				$game.$player.isMoving = false;
 			}
+			_offX = 0,
+			_offY = 0;
+
+			//put the character back to normal position
+			_srcX = 80,
+			_srcY =  _direction * $game.TILE_SIZE*2;
+			
 		},
 
 		
 		beginMove: function(x, y) {
-			
+			_offX = 0,
+			_offY = 0;
 			//check if it is an edge of the world
 			$game.isMapEdge(x, y, function(anEdge) {
 				_willTravel = false;
@@ -993,45 +1164,51 @@ window.requestAnimFrame = (function(){
 					}
 				}
 				
-				//figure out if it is
-				var start = $game.graph.nodes[_currentY][_currentX];
-  				var end = $game.graph.nodes[y][x];
-    			var result = $game.$astar.search($game.graph.nodes, start, end);
-    			console.log(result);
-    			ss.rpc('player.movePlayer', result);	
 
+				//calc local for start point for pathfinding
+				$game.masterToLocal(_masterX, _masterY, function(loc) {
+					var start = $game.graph.nodes[loc.y][loc.x],
+						end = $game.graph.nodes[y][x],
+						result = $game.$astar.search($game.graph.nodes, start, end);
+					ss.rpc('player.movePlayer', result);
+					console.log(result);
+				});
+			
+
+				
 			});
 			
 			
 		},
 
-		slide: function() {
-			var prevX  = _currentX,
-				prevY = _currentY;
+		slide: function(stepX, stepY) {
 
-			if($game.stepDirection === 'right') {
-				_currentX -= 1;
-			}
-			else if($game.stepDirection === 'left') {
-				_currentX += 1;
-			}
-			else if($game.stepDirection === 'up') {
-				_currentY += 1;
-			}
-			else if($game.stepDirection === 'down') {
-				_currentY -= 1;
-			}
+			_prevOffX = stepX * _numSteps;
+			_prevOffY = stepY * _numSteps;
+
+		},
+
+		render: function() {
+			// var playerInfo = {
+			// 	srcX: (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
+			// 	srcY: _direction * $game.TILE_SIZE*2,
+			// 	destX: _currentX,
+			// 	destY: _currentY,
+			// 	prevX: _prevStepX,
+			// 	prevY: _prevStepY
+			// }
 
 			var playerInfo = {
-				srcX: 0,
-				srcY: 0,
-				destX: _currentX * $game.TILE_SIZE,
-				destY: _currentY * $game.TILE_SIZE,
-				prevX: prevX * $game.TILE_SIZE,
-				prevY: prevY * $game.TILE_SIZE
+				srcX: _srcX,
+				srcY: _srcY,
+				x: _masterX,
+				y: _masterY,
+				offX: _offX,
+				offY: _offY,
+				prevX: _prevOffX,
+				prevY: _prevOffY
 			}
-			
-			$game.$renderer.renderPlayer(playerInfo);	
+			$game.$renderer.renderPlayer(playerInfo);
 		}
 	};
 
@@ -1113,7 +1290,7 @@ $(function() {
 						//(consistent so we leave that open in tilemap)
 						//also make sure it is not a transition tile
 						$game.$player.npcOnDeck = true;
-						$game.$player.beginMove($game.$mouse.curX-1,$game.$mouse.curY+1);
+						$game.$player.beginMove($game.$mouse.curX-1,$game.$mouse.curY+2);
 					}
 				});
 			}		

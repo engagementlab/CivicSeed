@@ -31,6 +31,11 @@ var self = exports.actions = function(req, res, ss) {
 				res(npc);
 			});
 		},
+		getNpcs: function() {
+			Npc.find(function (err, npcs) {
+				res(npcs);
+			});
+		},
 		movePlayer: function() {
 			res('I\'ve moved around a bit...');
 		},
