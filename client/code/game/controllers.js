@@ -238,12 +238,48 @@ window.requestAnimFrame = (function(){
 		TILE_SIZE: 32,
 		STEP_PIXELS: 4,
 
+		read: false,
 
 		init: function() {
-		
+			
+			//init everything:
+			//renderer loads all the image files 
 			$game.$renderer.init();
+			//npc loads the npc data from DB
+			$game.$npc.init();
+			//player WILL load its previous data from DB
+			$game.$player.init();
 			ss.rpc('npc.init');
-			$game.tick();
+
+			//games init must load the map info for current location
+			//in future, surrounding as well
+			$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
+				//new tile data stored in nextTiles by default
+				//since this is the initial load w/ no transition, 
+				//copy them over to currentTiles instead of transitioning
+				$game.copyTileArray(function() {
+					$game.createPathGrid(function() {
+						$game.ready = true;
+					});
+				});
+			});
+			//trigger the game to start, only when everything is loaded
+			var beginGame = function() {
+				if($game.$renderer.ready && $game.$npc.ready && $game.$player.ready && $game.ready) {
+					$game.started = true;
+					$game.tick();
+				}
+				
+				else {
+					setTimeout(beginGame, 20);
+				}
+
+			};
+
+			beginGame();
+
+
+			
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
@@ -423,7 +459,7 @@ window.requestAnimFrame = (function(){
 			$game.$player.isMoving = false;
 			//now that the transition has ended, create a new grid
 			$game.createPathGrid(function() {
-				console.log("path found");
+				
 			});
 
 		},
@@ -554,23 +590,26 @@ window.requestAnimFrame = (function(){
 
 // renderer file
 (function() {
+
+	//TILESHEET iS 0, PlAYER IS 1, NPC is 2
 	//private render vars
-	var _tilesheet = null,
-	_playerTilesheet = null,
-	_npcTilesheet = null,
-	_tilesheetWidthPx= 640,
-	_tilesheetHeightPx= 3136,
-	_tilesheetWidth= _tilesheetWidthPx / $game.TILE_SIZE,
-	_tilesheetHeight= _tilesheetHeightPx / $game.TILE_SIZE,
-	_tilesheetCanvas= null,
-	_backgroundContext= null,
-	_foregroundContext= null,
-	_charactersContext= null,
-	_mouseContext = null,
-	_tilesheetContext= null;
+	var _tilesheets = [],
+		_allImages = [],
+		_tilesheetWidthPx= 640,
+		_tilesheetHeightPx= 3136,
+		_tilesheetWidth= _tilesheetWidthPx / $game.TILE_SIZE,
+		_tilesheetHeight= _tilesheetHeightPx / $game.TILE_SIZE,
+		_tilesheetCanvas= null,
+		_backgroundContext= null,
+		_foregroundContext= null,
+		_charactersContext= null,
+		_mouseContext = null,
+		_tilesheetContext= null;
 
 
 	$game.$renderer = {
+
+		ready: false,
 
 		init: function() {
 			_tilesheetCanvas = document.createElement('canvas');
@@ -579,67 +618,43 @@ window.requestAnimFrame = (function(){
 
 	        //initialize DB and let all players know there is a new active one
 			ss.rpc('player.init', function(response) {
-				console.log('rpc init: '+ response);
 			});
 
-			//load in tilesheets png
-			_tilesheet = new Image();
-			_tilesheet.src = 'img/game/tilesheet.png';
-
-			_playerTilesheet = new Image();
-			_playerTilesheet.src = 'img/game/player.png';
-
-			_npcTilesheet = new Image();
-			_npcTilesheet.src = 'img/game/mario.png';
-			
-			
 			//access the canvases for rendering
 			_backgroundContext = document.getElementById('background').getContext('2d');
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
-
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
-			//start doing stuff once the tilesheet png loads
-			_tilesheet.onload = function() {
-
-				//render out the whole tilesheet to the offscreen canvas
-				_tilesheetContext.drawImage(_tilesheet, 0, 0);
-
-				//get all the tiles for the current viewport (default to 0,0)
-				$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
-						
-						//new tile data stored in nextTiles by default
-						//since this is the initial load w/ no transition, 
-						//copy them over to currentTiles instead of transitioning
-						$game.copyTileArray(function() {
-
-							$game.createPathGrid(function() {
-
-							});
-
-							//first time loading game stuff,
-							//init the npc!
-							$game.$npc.init();
-							
-							$game.started = true;		
-							//to be deleted
-							//$game.$renderer.renderAll();
-
-						});
-				});
-			
-				$game.$player.init();
-			
-
-			};		
+			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/mario.png']
+			//loop through allimages, load in each one, when done,
+			//renderer is ready
+			$game.$renderer.loadImages(0);	
 		},
 
+		loadImages: function(num) {
+
+			//load the images recursively until done
+			_tilesheets[num] = new Image();
+			_tilesheets[num].src = _allImages[num];
+
+			_tilesheets[num].onload = function() {
+				var next = num += 1;
+				if(num === _allImages.length) { 
+					$game.$renderer.ready = true;
+					return;
+				}
+				else { 
+					$game.$renderer.loadImages(next);
+				}
+			};			
+		},
 		renderFrame: function() {
 			//only re-render all the tiles if the viewport is tranisitioning
 			if($game.firstLaunch) {
 				$game.firstLaunch = false;
 				$game.$renderer.renderAllTiles();
+				$game.$player.render();
 			}
 			else if($game.inTransit) {
 				//render tiles (bg,bg2, fg, and npcs)
@@ -656,7 +671,7 @@ window.requestAnimFrame = (function(){
 
 		renderTile: function(tileData) {
 			_backgroundContext.drawImage(
-			_tilesheet, 
+			_tilesheets[0], 
 			tileData.srcX * $game.TILE_SIZE,
 			tileData.srcY * $game.TILE_SIZE,
 			$game.TILE_SIZE,
@@ -685,7 +700,7 @@ window.requestAnimFrame = (function(){
 				);
 
 				_charactersContext.drawImage(
-					_playerTilesheet, 
+					_tilesheets[1], 
 					tileData.srcX,
 					tileData.srcY,
 					$game.TILE_SIZE*2,
@@ -747,7 +762,8 @@ window.requestAnimFrame = (function(){
 
 			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
-					
+					if(i==0 && j==0){ 
+					}
 					//tilemap reference to images starts at 1 instead of 0
 					var backIndex = $game.currentTiles[i][j].background - 1,
 						backIndex2 = $game.currentTiles[i][j].background2 - 1,
@@ -776,7 +792,6 @@ window.requestAnimFrame = (function(){
 						//get npc spritesheet data, pass it to tiledata, render
 						//$game.$renderer.renderTile(tileData);
 						$game.$npc.render($game.currentTiles[i][j]);
-						console.log("render me dammit");
 					}	
 
 					//foreground tiles 
@@ -792,19 +807,24 @@ window.requestAnimFrame = (function(){
 		},
 
 		renderNpc: function (npcData) {
-			_backgroundContext.drawImage(
-				_npcTilesheet, 
-				npcData.srcX * $game.TILE_SIZE,
-				npcData.srcY * $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				npcData.x * $game.TILE_SIZE,
-				npcData.y * $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-			);
+
+			$game.masterToLocal(npcData.x, npcData.y, function(loc) {			
+				var curX = loc.x * $game.TILE_SIZE;
+					curY = loc.y * $game.TILE_SIZE;
+			
+				_backgroundContext.drawImage(
+					_tilesheets[2], 
+					npcData.srcX * $game.TILE_SIZE,
+					npcData.srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2,
+					curX,
+					curY - $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2
+				);
 		
-				
+			});
 
 			//old method 
 
@@ -870,11 +890,13 @@ window.requestAnimFrame = (function(){
 	$game.$npc = {
 
 		//onScreenNpcs: [],
+		ready: false,
 
 		init: function() {
 			ss.rpc('npc.getNpcs', function(response) {
 				_allNpcs = response;
 				_loaded = true;
+				$game.$npc.ready = true;
 			});
 			// 		var x = response[0].id % $game.TOTAL_WIDTH,
 			// 			y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
@@ -978,7 +1000,6 @@ window.requestAnimFrame = (function(){
 		},
 
 		render: function(tile) {
-			
 			var data = {};
 			for(var z = 0; z < _allNpcs.length; z += 1) {
 				if(_allNpcs[z].id === tile.mapIndex) {
@@ -1009,6 +1030,8 @@ window.requestAnimFrame = (function(){
  		_prevOffY = 0,
  		_srcX = 80,
  		_srcY = 0,
+ 		_curFrame = 0,
+ 		_numFrames = 4,
  		_numSteps = 8,
  		_currentStepIncX = 0,
  		_currentStepIncY = 0,
@@ -1025,12 +1048,13 @@ window.requestAnimFrame = (function(){
 		currentStep: 0,
 		isMoving: false,
 		npcOnDeck: false,
+		ready: false,
 
 		//private methods
 
 		init: function() {
 			
-			$game.$player.render();
+			$game.$player.ready = true;
 		},
 
 		move: function () {
@@ -1104,7 +1128,14 @@ window.requestAnimFrame = (function(){
 				// _currentX = (_masterX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
 				// _currentY = (_masterY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
 
-				_srcX = (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
+				//try only changing the src (frame) every X frames
+				if(($game.$player.currentStep-1)%8 == 0) {
+					_curFrame += 1;
+					if(_curFrame >= _numFrames) {
+						_curFrame = 0;
+					}
+				}
+				_srcX = _curFrame * $game.TILE_SIZE*2,
 				_srcY =  _direction * $game.TILE_SIZE*2;
 
 				//$game.$renderer.renderPlayer(playerInfo);
@@ -1158,7 +1189,6 @@ window.requestAnimFrame = (function(){
 						_willTravel = true;
 						$game.calculateNext(x, y, function() {
 							//data is loaded!
-							console.log("next quadrant is loaded!");
 							// $game.$player.getPath();
 						});
 					}
@@ -1171,7 +1201,6 @@ window.requestAnimFrame = (function(){
 						end = $game.graph.nodes[y][x],
 						result = $game.$astar.search($game.graph.nodes, start, end);
 					ss.rpc('player.movePlayer', result);
-					console.log(result);
 				});
 			
 
