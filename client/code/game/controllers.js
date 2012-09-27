@@ -246,7 +246,7 @@ window.requestAnimFrame = (function(){
 			//renderer loads all the image files 
 			$game.$renderer.init();
 			//npc loads the npc data from DB
-			$game.$npc.init();
+				$game.$npc.init();
 			//player WILL load its previous data from DB
 			$game.$player.init();
 			ss.rpc('npc.init');
@@ -332,7 +332,7 @@ window.requestAnimFrame = (function(){
 
 				for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {		
 				
-					$game.isNoGo(x, y, function(val) {
+					$game.getTileState(x, y, function(val) {
 						//the pathfinding takes 1 means its clear 0 not
 						var tempNoGo;
 						if(val>0) {
@@ -353,11 +353,11 @@ window.requestAnimFrame = (function(){
 			callback();
 		},
 
-		isNoGo: function(x, y, callback) {
+		getTileState: function(x, y, callback) {
 			//var i = y*$game.viewportWidthInTiles + (x%$game.viewportWidthInTiles);
-			var noGoVal = $game.currentTiles[x][y].tileState;
+			var tileStateVal = $game.currentTiles[x][y].tileState;
 			// console.log(noGoVal + 'Get No Go Yo');
-			callback(noGoVal);
+			callback(tileStateVal);
 		},
 
 		isMapEdge: function(x, y, callback) {
@@ -710,50 +710,7 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE*2,
 					$game.TILE_SIZE*2
 				);
-			});
-		},
-	
-		renderAll: function() {
-			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
-				
-				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
-					
-					var backIndex = $game.currentTiles[i][j].background - 1,
-						backIndex2 = $game.currentTiles[i][j].background2 - 1,
-						foreIndex = $game.currentTiles[i][j].foreground - 1,
-						tileStateVal = $game.currentTiles[i][j].tileState;
-
-					//tilemap starts at 1 instead of 0
-					
-					//background tiles first
-					tileData = {
-						srcX: backIndex % _tilesheetWidth,
-						srcY: Math.floor(backIndex / _tilesheetWidth),
-						destX: i,
-						destY: j
-					};
-					
-					$game.$renderer.renderTile(tileData);
-					
-					//second layer background tiles (not all have something)
-					if( backIndex2 > -1) {
-						tileData.srcX = backIndex2 % _tilesheetWidth;
-						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
-						$game.$renderer.renderTile(tileData);
-					}
-
-					//foreground tiles 
-					if(foreIndex > -1) {
-						tileData.srcX = foreIndex % _tilesheetWidth;
-						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
-						$game.$renderer.renderTile(tileData);
-					}
-
-					if(tileStateVal === 2) {
-
-					}
-				}
-			}		
+			});	
 		},
 
 		renderAllTiles: function() {
@@ -788,7 +745,14 @@ window.requestAnimFrame = (function(){
 					}
 					
 					//npcs
-					if(tileStateVal === 2) {
+					// if(tileStateVal > -1) {
+					// 	//get npc spritesheet data, pass it to tiledata, render
+					// 	//$game.$renderer.renderTile(tileData);
+					// 	$game.$npc.render($game.currentTiles[i][j]);
+					// }	
+
+					if(tileStateVal >= 0) {
+						console.log(tileStateVal);
 						//get npc spritesheet data, pass it to tiledata, render
 						//$game.$renderer.renderTile(tileData);
 						$game.$npc.render($game.currentTiles[i][j]);
@@ -893,123 +857,31 @@ window.requestAnimFrame = (function(){
 		ready: false,
 
 		init: function() {
+			//load all the npc info from the DB store it in an array
+			//where the index is the id of the npc / mapIndex
 			ss.rpc('npc.getNpcs', function(response) {
-				_allNpcs = response;
+			
+				//iterate through repsonses, create a key 
+				//with the id and value is the object
+				for(var i = 0; i < response.length; i += 1) {
+					var stringId = String(response[i].id);
+					_allNpcs[stringId] = response[i];
+				}  
 				_loaded = true;
 				$game.$npc.ready = true;
 			});
-			// 		var x = response[0].id % $game.TOTAL_WIDTH,
-			// 			y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
-			// 		response[0].prevX = x,
-			// 		response[0].prevY = y,
-			// 		response[0].curX = x,
-			// 		response[0].curY = y;
-			// 		$game.$npc.onScreenNpcs.push(response[0]);
-			// 		_loaded = true;
-			// 	});
-			// }
-
-			//load all the npcs data and store it aqui
-
-			//old method
-
-			// //load the npcs that are on the current screen
-			// var idList = [];
-			// for(var x = 0; x < $game.currentTiles.length; x+=1) {
-			// 	for(var y = 0; y < $game.currentTiles[x].length; y+=1) {
-			// 		if($game.currentTiles[x][y].tileState === 2) {
-			// 			//add to list, the index, get it from db
-			// 			idList.push($game.currentTiles[x][y].mapIndex);
-			// 		}
-			// 	}	
-			// }
-
-			// //go through all the npcs who should be on the list
-			// //get their data, update their coords to local coords 
-			// //for prev and next movements 
-			// for(var i = 0; i<idList.length; i++) {
-			// 	ss.rpc('npc.getNpcById', idList[i], function(response) {
-			// 		var x = response[0].id % $game.TOTAL_WIDTH,
-			// 			y = Math.floor(response[0].id / $game.TOTAL_WIDTH);
-			// 		response[0].prevX = x,
-			// 		response[0].prevY = y,
-			// 		response[0].curX = x,
-			// 		response[0].curY = y;
-			// 		$game.$npc.onScreenNpcs.push(response[0]);
-			// 		_loaded = true;
-			// 	});
-			// }
-
-			
-
-			// var firstRender = function(){
-			// 		if(_loaded){
-			// 			$game.$npc.render();
-			// 		}	
-			// 		else{
-			// 			setTimeout(firstRender,16);
-			// 		}
-			// };
-			
-			// firstRender();
-
-		},
-
-		add: function(id) {
-			//add previous locations here for rendering
-		},
-
-		remove: function(id) {
-
-		},
-
-		slide: function() {
-			var stepX, stepY;
-			if($game.stepDirection==='left') {
-				stepX = 1;
-				stepY = 0;
-			}
-			else if($game.stepDirection==='right') {
-				stepX = -1;
-				stepY = 0;
-			}
-			else if($game.stepDirection==='up') {
-				stepX = 0;
-				stepY = 1;
-			}
-			else if($game.stepDirection==='down') {
-				stepX = 0;
-				stepY = -1;
-			}
-			for(var i = 0; i < $game.$npc.onScreenNpcs.length; i += 1) {
-				$game.$npc.onScreenNpcs[i].prevX = $game.$npc.onScreenNpcs[i].curX;
-				$game.$npc.onScreenNpcs[i].prevY = $game.$npc.onScreenNpcs[i].curY;
-				$game.$npc.onScreenNpcs[i].curX += stepX;
-				$game.$npc.onScreenNpcs[i].curY += stepY;
-
-				// var localIndex = $game.masterToLocal($game.$npc.onScreenNpcs[i].curY * $game.TOTAL_WIDTH + $game.$npc.onScreenNpcs[i].curX),
-				// locX = localIndex % $game.VIEWPORT_WIDTH,
-				// locY = Math.floor(localIndex / $game.VIEWPORT_WIDTH);
-				// if(locX < 0 || locY < 0 || locX >= $game.VIEWPORT_WIDTH || locY >= $game.VIEWPORT_HEIGHT) { 
-				// 	//$game.$npc.remove(i);
-				// }
-			}
-			//check if off screen using masterlocal
-
-			$game.$npc.render();
 		},
 
 		render: function(tile) {
+			//get npc data based on tileStateVal to string
 			var data = {};
-			for(var z = 0; z < _allNpcs.length; z += 1) {
-				if(_allNpcs[z].id === tile.mapIndex) {
-					data.srcX = _allNpcs[z].spriteMap[0].x * $game.TILE_SIZE,
-					data.srcY = _allNpcs[z].spriteMap[0].y * $game.TILE_SIZE,
-					data.x = tile.x,
-					data.y = tile.y;
-					$game.$renderer.renderNpc(data);
-				}
-			}
+				stringId = String(tile.tileState); 
+			console.log(stringId);
+			data.srcX = _allNpcs[stringId].spriteMap[0].x * $game.TILE_SIZE,
+			data.srcY = _allNpcs[stringId].spriteMap[0].y * $game.TILE_SIZE,
+			data.x = tile.x,
+			data.y = tile.y;
+			$game.$renderer.renderNpc(data);
 		}
  
 	}
@@ -1303,17 +1175,15 @@ $(function() {
 
 			if(clicked) {
 				//check if it is a nogo or npc
-				$game.isNoGo($game.$mouse.curX, $game.$mouse.curY, function(state) {
+				//if the tile BELOW the tile clicked is npc, 
+				//then user clicked the head, so act like npc
+				$game.getTileState($game.$mouse.curX, $game.$mouse.curY, function(state) {
 					//go
-					if(state === 0) {
+					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
 					}
-					//nogo
-					else if(state === 1 ) {
-
-					}
 					//npc
-					else {
+					else if(state >= 0 ) {
 						//move them to the spot to the 
 						//BOTTOM LEFT corner of the npc 
 						//(consistent so we leave that open in tilemap)
