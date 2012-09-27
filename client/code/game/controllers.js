@@ -238,7 +238,9 @@ window.requestAnimFrame = (function(){
 		TILE_SIZE: 32,
 		STEP_PIXELS: 4,
 
-		read: false,
+		ready: false,
+
+		onScreenNpcs: [],
 
 		init: function() {
 			
@@ -313,17 +315,17 @@ window.requestAnimFrame = (function(){
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					
 					$game.currentTiles[i][j] = $game.nextTiles[i][j];
-					
 				}
 			}
 			//reset array
 			$game.nextTiles.length = 0;
-
 			callback();
 		},
 
 		createPathGrid: function(callback) {
-	
+			
+			//wipe the on screen npc array
+			$game.onScreenNpcs.length = 0;
 			$game.gridTiles = new Array($game.VIEWPORT_HEIGHT);
 
 			for(var y = 0; y < $game.VIEWPORT_HEIGHT; y += 1) {
@@ -335,11 +337,34 @@ window.requestAnimFrame = (function(){
 					$game.getTileState(x, y, function(val) {
 						//the pathfinding takes 1 means its clear 0 not
 						var tempNoGo;
-						if(val>0) {
-							tempNoGo = 0;
-						}	
-						else {
+						if(val === -1) {
 							tempNoGo = 1;
+						}	
+						else if (val >= 0) {
+							tempNoGo = 0;
+							//since the restful state of the current bg 
+							//is settled, figure out if there is a npc on here
+							//this will let the renderer know if we need to animate
+							//any npcs (by index)
+							var stringId = String(val),
+								found = false;
+							
+							//see if that is in there already (because of the two tiles)
+						
+							for(var i = 0; i<$game.onScreenNpcs.length; i += 1) {
+								if($game.onScreenNpcs[i] === stringId) {
+									found = true;
+									continue;
+								}
+							}
+							if(!found) {
+								$game.onScreenNpcs.push(stringId);
+							} 
+							
+
+						}
+						else {
+							tempNoGo = 0;
 						}
 						$game.gridTiles[y][x] = tempNoGo;
 					});
@@ -354,9 +379,19 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTileState: function(x, y, callback) {
-			//var i = y*$game.viewportWidthInTiles + (x%$game.viewportWidthInTiles);
+			//must first do a check to see if the tile BOTTOM is the npc
+			//if so, then return npc val (THIS IS A HACK SORT OF)
+			
+			//only if it is not in the bottom row (obviously)
 			var tileStateVal = $game.currentTiles[x][y].tileState;
-			// console.log(noGoVal + 'Get No Go Yo');
+			
+			if( y < $game.VIEWPORT_HEIGHT-1) { 
+				var belowState = $game.currentTiles[x][y+1].tileState;
+
+				if(belowState >= 0 ) {
+					tileStateVal = belowState;
+				}
+			}
 			callback(tileStateVal);
 		},
 
@@ -441,14 +476,6 @@ window.requestAnimFrame = (function(){
 			if($game.stepNumber !== $game.numberOfSteps) {
 				$game.updateAndDraw();
 			}
-			// if($game.masterX!=$game.nextX){
-			// 	$game.masterX+=$game.stepX;
-			// 	$game._updateAndDraw();
-			// }
-			// else if($game.masterY!=$game.nextY){
-			// 	$game.masterY+=$game.stepY;
-			// 	$game._updateAndDraw();
-			// }
 			else {
 				$game.endTransition();
 			}
@@ -457,9 +484,10 @@ window.requestAnimFrame = (function(){
 		endTransition: function() {
 			$game.inTransit = false;
 			$game.$player.isMoving = false;
+			
 			//now that the transition has ended, create a new grid
 			$game.createPathGrid(function() {
-				
+				$game.stepDirection = false;
 			});
 
 		},
@@ -574,17 +602,6 @@ window.requestAnimFrame = (function(){
 // map file
 (function() {
 
-	// _renderAll = function() {
-
-	// };
-
-	// $game.$map = {
-
-	// 	init: function() {
-	// 		console.log($game.not);
-	// 	}
-
-	// };
 
 })();
 
@@ -604,8 +621,11 @@ window.requestAnimFrame = (function(){
 		_foregroundContext= null,
 		_charactersContext= null,
 		_mouseContext = null,
-		_tilesheetContext= null;
-
+		_tilesheetContext= null,
+		_prevMouseX = 0,
+		_prevMouseY = 0,
+		_hasNpc = false,
+		_wasNpc = false;
 
 	$game.$renderer = {
 
@@ -626,7 +646,9 @@ window.requestAnimFrame = (function(){
 			_charactersContext = document.getElementById('characters').getContext('2d');
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
-			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/mario.png']
+			//set stroke stuff for mouse 
+			
+			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/rick.png']
 			//loop through allimages, load in each one, when done,
 			//renderer is ready
 			$game.$renderer.loadImages(0);	
@@ -664,13 +686,32 @@ window.requestAnimFrame = (function(){
 				//render other players
 				//render colors
 			}
-			else if($game.$player.isMoving) {
-				$game.$player.render();
+			else { 
+				if($game.$player.isMoving) {
+					$game.$player.render();
+				}
+				if($game.onScreenNpcs.length > 0 ) {
+					$game.$npc.animateFrame();
+				}
 			}
+			
 		},
 
 		renderTile: function(tileData) {
 			_backgroundContext.drawImage(
+			_tilesheets[0], 
+			tileData.srcX * $game.TILE_SIZE,
+			tileData.srcY * $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE,
+			tileData.destX * $game.TILE_SIZE,
+			tileData.destY * $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE
+			);
+		},
+		renderForegroundTile: function(tileData) {
+			_foregroundContext.drawImage(
 			_tilesheets[0], 
 			tileData.srcX * $game.TILE_SIZE,
 			tileData.srcY * $game.TILE_SIZE,
@@ -717,6 +758,11 @@ window.requestAnimFrame = (function(){
 			//not worried about clearing previous because every 
 			//tile is being overwritten
 
+			//if the previous render cycle had an npc, then set was to true
+			_wasNpc = _hasNpc ? true : false;
+		
+			_hasNpc = false;
+
 			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					if(i==0 && j==0){ 
@@ -743,30 +789,69 @@ window.requestAnimFrame = (function(){
 						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
 						$game.$renderer.renderTile(tileData);
 					}
-					
-					//npcs
-					// if(tileStateVal > -1) {
-					// 	//get npc spritesheet data, pass it to tiledata, render
-					// 	//$game.$renderer.renderTile(tileData);
-					// 	$game.$npc.render($game.currentTiles[i][j]);
-					// }	
 
 					if(tileStateVal >= 0) {
-						console.log(tileStateVal);
 						//get npc spritesheet data, pass it to tiledata, render
 						//$game.$renderer.renderTile(tileData);
 						$game.$npc.render($game.currentTiles[i][j]);
+						_hasNpc = true;
 					}	
 
 					//foreground tiles 
 					if(foreIndex > -1) {
 						tileData.srcX = foreIndex % _tilesheetWidth;
 						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
-						$game.$renderer.renderTile(tileData);
+						//$game.$renderer.renderForegroundTile(tileData);
 					}
 
 						
 				}
+			}
+
+			//basically if theere was one on screen and now its gone
+			//do the clear fix solution to remove the edge
+			if(_wasNpc && !_hasNpc) {
+				$game.$renderer.clearEdgesFix();
+			}
+		},
+
+		//this is a fix because a npc only clears its previous when it draws
+		//a new one, therefore the edge is left hanging.
+		clearEdgesFix: function() {
+
+			if($game.stepDirection === 'left') {
+				//clear right edge
+				_charactersContext.clearRect(
+					$game.VIEWPORT_WIDTH * $game.TILE_SIZE - $game.TILE_SIZE,
+					0,
+					$game.TILE_SIZE,
+					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+				);
+					
+			}
+			else if($game.stepDirection === 'right') {
+				_charactersContext.clearRect(
+					0,
+					0,
+					$game.TILE_SIZE,
+					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+				);
+			}
+			else if($game.stepDirection === 'up') {
+				_charactersContext.clearRect(
+					0,
+					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE - $game.TILE_SIZE,
+					$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			else if($game.stepDirection === 'down') {
+				_charactersContext.clearRect(
+					0,
+					0,
+					$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
 			}
 		},
 
@@ -774,12 +859,40 @@ window.requestAnimFrame = (function(){
 
 			$game.masterToLocal(npcData.x, npcData.y, function(loc) {			
 				var curX = loc.x * $game.TILE_SIZE;
-					curY = loc.y * $game.TILE_SIZE;
-			
-				_backgroundContext.drawImage(
+					curY = loc.y * $game.TILE_SIZE,
+					clearX = 0,
+					clearY = 0;
+				//if intransit
+				if($game.inTransit) { 
+					if($game.stepDirection === 'left') {
+						clearX = -1;
+						clearY = 0;
+					}
+					else if($game.stepDirection === 'right') {
+						clearX = 1;
+						clearY = 0;
+					}
+					else if($game.stepDirection === 'up') {
+						clearX = 0;
+						clearY = -1;
+					}
+					else if($game.stepDirection === 'down') {
+						clearX = 0;
+						clearY = 1;
+					}
+				}
+
+				_charactersContext.clearRect(
+					curX + $game.TILE_SIZE * clearX,
+					curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2
+				);
+				//draw new frame of npc
+				_charactersContext.drawImage(
 					_tilesheets[2], 
-					npcData.srcX * $game.TILE_SIZE,
-					npcData.srcY * $game.TILE_SIZE,
+					npcData.srcX,
+					npcData.srcY,
 					$game.TILE_SIZE,
 					$game.TILE_SIZE*2,
 					curX,
@@ -787,57 +900,70 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
-		
 			});
-
-			//old method 
-
-			// //draw the top half of body on the foreground
-			// //bottom half on the background
-			// //var prevIndex = $game.masterToLocal(npc.prevY * $game.TOTAL_WIDTH + npc.prevX);
-			// //console.log(npc.prevX+" : "+npc.curX);
-			// var preIndex = npc.curY * $game.TOTAL_WIDTH + npc.curX;
-			// console.log("master index: "+preIndex);
-			// var i = $game.masterToLocal(preIndex);
-			// console.log("local index: "+i);
-			// //var pi = $game.masterToLocal(npc.prevY * $game.TOTAL_WIDTH + npc.prevX);
-			// var x = i % $game.VIEWPORT_WIDTH,
-			// 	y = Math.floor(i / $game.VIEWPORT_WIDTH),
-			// 	srcX = npc.spriteMap[0].x * $game.TILE_SIZE,
-			// 	srcY = npc.spriteMap[0].y * $game.TILE_SIZE,
-			// 	destX = x * $game.TILE_SIZE,
-			// 	destY = y * $game.TILE_SIZE;
-			// console.log("local coords: "+x+", "+y)
-			// _backgroundContext.drawImage(
-			// 	_npcTilesheet, 
-			// 	srcX,
-			// 	srcY,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	destX,
-			// 	destY-$game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE
-			// );
-			// _backgroundContext.drawImage(
-			// 	_npcTilesheet, 
-			// 	srcX,
-			// 	srcY+$game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	destX,
-			// 	destY,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE
-			// );
-
 		},
 
 		renderMouse: function(mouse) {
-			$('.cursor').css({
-				left: mouse.cX * 32,
-				top: mouse.cY * 32
+
+			var mX = mouse.cX * $game.TILE_SIZE,
+				mY = mouse.cY * $game.TILE_SIZE;
+
+			$game.getTileState(mouse.cX, mouse.cY, function(state) {
+				
+				//nogo
+				if(state === -2) { 
+					_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
+				}
+
+				//go
+				else if(state === -1) { 
+					_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
+				}
+				//npc
+				else {
+					_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
+				}
+				_backgroundContext.lineWidth   = 4;
+				
+				//clear previous mouse
+				_backgroundContext.clearRect (_prevMouseX * $game.TILE_SIZE, _prevMouseY * $game.TILE_SIZE, $game.TILE_SIZE, $game.TILE_SIZE);
+				
+				//redraw the background that it tarnished
+				var backIndex = $game.currentTiles[_prevMouseX][_prevMouseY].background - 1,
+					backIndex2 = $game.currentTiles[_prevMouseX][_prevMouseY].background2 - 1;
+
+					_backgroundContext.drawImage(
+						_tilesheets[0], 
+						backIndex % _tilesheetWidth * $game.TILE_SIZE,
+						Math.floor(backIndex / _tilesheetWidth) * $game.TILE_SIZE,
+						$game.TILE_SIZE,
+						$game.TILE_SIZE,
+						_prevMouseX * $game.TILE_SIZE,
+						_prevMouseY * $game.TILE_SIZE,
+						$game.TILE_SIZE,
+						$game.TILE_SIZE
+					);
+					_backgroundContext.drawImage(
+						_tilesheets[0], 
+						backIndex2 % _tilesheetWidth * $game.TILE_SIZE,
+						Math.floor(backIndex2 / _tilesheetWidth) * $game.TILE_SIZE,
+						$game.TILE_SIZE,
+						$game.TILE_SIZE,
+						_prevMouseX * $game.TILE_SIZE,
+						_prevMouseY * $game.TILE_SIZE,
+						$game.TILE_SIZE,
+						$game.TILE_SIZE
+					);
+	
+
+				//draw the new mouse
+
+
+				_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
+				_prevMouseX = mouse.cX;
+				_prevMouseY = mouse.cY;
 			});
+			
 		}
 
 	};
@@ -866,22 +992,49 @@ window.requestAnimFrame = (function(){
 				for(var i = 0; i < response.length; i += 1) {
 					var stringId = String(response[i].id);
 					_allNpcs[stringId] = response[i];
+					_allNpcs[stringId].counter = 0;
+					_allNpcs[stringId].currentFrame = 0;
 				}  
 				_loaded = true;
 				$game.$npc.ready = true;
 			});
 		},
 
+		animateFrame: function () {
+			for(var i = 0; i < $game.onScreenNpcs.length; i += 1) {
+				var curId = $game.onScreenNpcs[i];
+				_allNpcs[curId].counter += 1;
+				if(_allNpcs[curId].counter > 15) { 
+					_allNpcs[curId].counter = 0;
+				}
+
+				if(_allNpcs[curId].counter % 6 === 0) {
+					_allNpcs[curId].currentFrame += 1;
+					if(_allNpcs[curId].currentFrame === 4) {
+						_allNpcs[curId].currentFrame = 0;
+					}
+					var spot = _allNpcs[curId].currentFrame;
+					data = {};
+					data.srcX = _allNpcs[curId].spriteMap[spot].x,
+					data.srcY = _allNpcs[curId].spriteMap[spot].y,
+					data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
+					data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
+					$game.$renderer.renderNpc(data);
+				}
+				
+			}
+		},
+
 		render: function(tile) {
 			//get npc data based on tileStateVal to string
 			var data = {};
 				stringId = String(tile.tileState); 
-			console.log(stringId);
-			data.srcX = _allNpcs[stringId].spriteMap[0].x * $game.TILE_SIZE,
-			data.srcY = _allNpcs[stringId].spriteMap[0].y * $game.TILE_SIZE,
+			
+			data.srcX = _allNpcs[stringId].spriteMap[0].x,
+			data.srcY = _allNpcs[stringId].spriteMap[0].y,
 			data.x = tile.x,
 			data.y = tile.y;
-			$game.$renderer.renderNpc(data);
+			$game.$renderer.renderNpc(data,false);
 		}
  
 	}
@@ -1016,7 +1169,6 @@ window.requestAnimFrame = (function(){
 		},
 
 		endMove: function () {
-			//console.log("travel time");
 
 			if(_willTravel) {
 				var beginTravel = function(){
@@ -1189,7 +1341,7 @@ $(function() {
 						//(consistent so we leave that open in tilemap)
 						//also make sure it is not a transition tile
 						$game.$player.npcOnDeck = true;
-						$game.$player.beginMove($game.$mouse.curX-1,$game.$mouse.curY+2);
+						$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+2);
 					}
 				});
 			}		
@@ -1396,7 +1548,7 @@ $(document).ready(function() {
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
-				debug: true
+				debug: false
 			};
  			$game.$mouse.updateMouse(mInfo,true);
  		}

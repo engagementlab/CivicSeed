@@ -20,9 +20,19 @@ module.exports.global = [{
 	role: 'gardener',
 	id: '446',
 	spriteMap: [{
-		x: 0,
+		x: 16,
 		y: 0
-	}],
+	}, {
+		x: 80,
+		y: 0
+	}, {
+		x: 144,
+		y: 0
+	}, {
+		x: 208,
+		y: 0
+	}
+	],
 	attributes: {},
 	dialog: {
 		intro: ['I don\'t say much to start with, but I try.'],
