@@ -39,7 +39,10 @@
     "password-hash": ">= 1.2.1",
     "connect-flash": ">= 0.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
   "subdomain": "civicseed-testing",
   "scripts": {
     "start": "server.js"

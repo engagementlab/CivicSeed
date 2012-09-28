@@ -223,3 +223,5 @@ To deploy to NodeJitsu, from the root of the app just type:
     Answer: http://stackoverflow.com/questions/4488614/node-js-vs-java-for-comet-application
         http://stackoverflow.com/questions/4710420/scaling-node-js
         http://amix.dk/blog/post/19613
+        http://stackoverflow.com/questions/2387724/node-js-on-multi-core-machines/8685968#8685968
+        http://blog.nodejitsu.com/scaling-isomorphic-javascript-code

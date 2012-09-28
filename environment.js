@@ -1,123 +1,93 @@
-// /*
-//  * ENVIRONMENT/GLOBAL VARIABLES
-//  *
-//  * to run a specific environment, set the NODE_ENV variable on run:
-//  * also, to run a specific database, set the ALT_DB variable on run:
-//  * example: 'NODE_ENV=development ALT_DB=testing nodemon app.js'
-//  * production is default/fallback where nothing is set
-//  *
-//  */
+/*
+ * ENVIRONMENT/GLOBAL VARIABLES
+ *
+ * to run a specific environment, set the NODE_ENV variable on run:
+ * also, to run a specific database, set the ALT_DB variable on run:
+ * example: 'NODE_ENV=development ALT_DB=testing nodemon app.js'
+ * production is default/fallback where nothing is set
+ *
+ */
 
 // process.env.SUBDOMAIN = 'civicseed-testing';
 // process.env.NODE_ENV = 'production';
 
-// var fs = require('fs');
-// var parameters = require('./parameters.js');
+var parameters = require('./parameters.js');
 
-// // UNIQUE PARAMETERS PULLED FROM parameters.js FILE
-// var nodeEnv = process.env.NODE_ENV || parameters.NODE_ENV || 'development';
-// if(process.env.SUBDOMAIN && process.env.SUBDOMAIN === 'civicseed-testing') {
-// 	nodeEnv = 'testing';
-// }
-// var redisPass = process.env.REDIS_PASS || parameters.REDIS_PASS || '';
-// var mongoPass = process.env.MONGO_PASS || parameters.MONGO_PASS || '';
+// UNIQUE PARAMETERS PULLED FROM parameters.js FILE
+var nodeEnv = process.env.NODE_ENV || parameters.NODE_ENV || 'development';
+if(process.env.SUBDOMAIN && process.env.SUBDOMAIN === 'civicseed-testing') {
+	nodeEnv = 'testing'; // <-- er......
+}
+var redisPass = process.env.REDIS_PASS || parameters.REDIS_PASS || '';
+var mongoPass = process.env.MONGO_PASS || parameters.MONGO_PASS || '';
 
-// // console.log('   ************   '.yellow.inverse + nodeEnv + '   ************   '.yellow.inverse);
-// // console.log('   ************   '.yellow.inverse + process.env.SUBDOMAIN + '   ************   '.yellow.inverse);
+// console.log('   ************   '.yellow.inverse + nodeEnv + '   ************   '.yellow.inverse);
+// console.log('   ************   '.yellow.inverse + process.env.SUBDOMAIN + '   ************   '.yellow.inverse);
 
-// // REPEATED ENTRIES USED IN ALL ENVIRONMENTS
-// var map = {
-// 	mapTilesWidth: 142,
-// 	mapTilesHeight: 132,
-// };
+// REPEATED ENTRIES USED IN ALL ENVIRONMENTS
+var map = {
+	mapTilesWidth: 142,
+	mapTilesHeight: 132,
+};
 
-// // DEVELOPMENT ENVIRONMENT
-// var developmentEnvironment = {
-// 	app: {
-// 		name: 'Civic Seed',
-// 		nodeEnv: nodeEnv,
-// 		initialized: false,
-// 		siteUrl: process.env.SITE_URL || 'http://localhost:3000/',
-// 	},
-// 	redis: {
-// 		db: process.env.REDIS_DB || 'civic_dev_db',
-// 		pass: redisPass,
-// 		host: process.env.REDIS_HOST || 'localhost',
-// 		port: process.env.REDIS_PORT || 6379,
-// 	},
-// 	database: {
-// 		environment: process.env.ALT_ENV || nodeEnv,
-// 		URL: process.env.DATABASE_URL || 'mongodb://localhost/civic_dev_db',
-// 	},
-// 	map: map
-// };
-
-// // TESTING ENVIRONMENT
-// var testingEnvironment = {
-// 	app: {
-// 		name: 'Civic Seed Testing',
-// 		nodeEnv: nodeEnv,
-// 		initialized: false,
-// 		siteUrl: process.env.SITE_URL || 'http://civicseed-test.nodejitsu.com/',
-// 	},
-// 	redis: {
-// 		db: process.env.REDIS_DB || 'civicseedtesting',
-// 		pass: redisPass,
-// 		host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
-// 		port: process.env.REDIS_PORT || 9098,
-// 	},
-// 	// redis: {
-// 	// 	db: process.env.REDIS_DB || 'langbert',
-// 	// 	pass: redisPass,
-// 	// 	host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
-// 	// 	port: process.env.REDIS_PORT || 9174,
-// 	// },
-// 	database: {
-// 		environment: process.env.ALT_ENV || nodeEnv,
-// 		URL: process.env.DATABASE_URL || 'mongodb://root:' + mongoPass + '@ds033767.mongolab.com:33767/civicseeddev',
-// 	},
-// 	map: map
-// };
-
-// // PRODUCTION ENVIRONMENT
-// var productionEnvironment = {
-// 	// to come
-// };
-
-// // CHOOSING THE ENVIRONMENT
-// var chosenEnvironment;
-// if(nodeEnv === 'development') {
-// 	chosenEnvironment = developmentEnvironment;
-// } else if(nodeEnv === 'testing') {
-// 	chosenEnvironment = testingEnvironment;
-// } else {
-// 	chosenEnvironment = productionEnvironment;
-// }
-// module.exports = chosenEnvironment;
-
-
-
-
-// GOING FOR BROKE!!!
-module.exports = {
+// DEVELOPMENT ENVIRONMENT
+var developmentEnvironment = {
 	app: {
-		name: 'Civic Seed Testing',
-		nodeEnv: 'production',
-		initialized: false,
-		siteUrl: 'http://civicseed-test.nodejitsu.com/',
+		name: 'Civic Seed',
+		nodeEnv: nodeEnv,
+		siteUrl: process.env.SITE_URL || 'http://localhost:3000/',
 	},
 	redis: {
-		db: 'civicseed-testing',
-		pass: '93abeaf136a46c3c9eff2eae061e2cf0',
-		host: 'cowfish.redistogo.com',
-		port: 9098,
+		db: process.env.REDIS_DB || 'civic_dev_db',
+		pass: redisPass,
+		host: process.env.REDIS_HOST || 'localhost',
+		port: process.env.REDIS_PORT || 6379,
 	},
 	database: {
-		environment: 'production',
-		URL: 'mongodb://root:root@ds033767.mongolab.com:33767/civicseeddev',
+		environment: process.env.ALT_ENV || nodeEnv,
+		URL: process.env.DATABASE_URL || 'mongodb://localhost/civic_dev_db',
 	},
-	map: {
-		mapTilesWidth: 142,
-		mapTilesHeight: 132,
-	}
+	map: map
 };
+
+// TESTING ENVIRONMENT
+var testingEnvironment = {
+	app: {
+		name: 'Civic Seed Testing',
+		nodeEnv: nodeEnv,
+		siteUrl: process.env.SITE_URL || 'http://civicseed-test.nodejitsu.com/',
+	},
+	redis: {
+		db: process.env.REDIS_DB || 'civicseed-testing',
+		pass: redisPass,
+		host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
+		port: process.env.REDIS_PORT || 9098,
+	},
+	// redis: {
+	// 	db: process.env.REDIS_DB || 'langbert',
+	// 	pass: redisPass,
+	// 	host: process.env.REDIS_HOST || 'cowfish.redistogo.com',
+	// 	port: process.env.REDIS_PORT || 9174,
+	// },
+	database: {
+		environment: process.env.ALT_ENV || nodeEnv,
+		URL: process.env.DATABASE_URL || 'mongodb://root:' + mongoPass + '@ds033767.mongolab.com:33767/civicseeddev',
+	},
+	map: map
+};
+
+// PRODUCTION ENVIRONMENT
+var productionEnvironment = {
+	// to come
+};
+
+// CHOOSING THE ENVIRONMENT
+var chosenEnvironment;
+if(nodeEnv === 'development') {
+	chosenEnvironment = developmentEnvironment;
+} else if(nodeEnv === 'testing') {
+	chosenEnvironment = testingEnvironment;
+} else {
+	chosenEnvironment = productionEnvironment;
+}
+module.exports = chosenEnvironment;

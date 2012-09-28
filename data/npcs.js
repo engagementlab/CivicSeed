@@ -1,24 +1,7 @@
 module.exports.global = [{
-	id: '436',
-	spriteMap: [{
-		x: 8,
-		y: 2
-	}, {
-		x: 8,
-		y: 2
-	}],
-	name: 'Gnome',
-	role: 'gnome',
-	attributes: {},
-	dialog: {
-		intro: ['I\'m the Gnome.', 'I can help you out.', 'If you solve these riddles, you can become a master gardner.'],
-		random: ['I\'m sure you believe everything you\'re saying.', 'If you believed something different, you wouldn\'t be sitting where you\'re sitting.', 'Stability means we run it.']
-	}
-}, 
-{
-	name: 'Civic Gardener',
-	role: 'gardener',
 	id: '446',
+	name: 'Civic Gardener',
+	level: 1,
 	spriteMap: [{
 		x: 16,
 		y: 0
@@ -31,26 +14,23 @@ module.exports.global = [{
 	}, {
 		x: 208,
 		y: 0
-	}
-	],
-	attributes: {},
+	}],
 	dialog: {
-		intro: ['I don\'t say much to start with, but I try.'],
-		random: ['I see you\'re back already!', 'I\'m just practicing planting seeds. You should try it too.']
+		random: ['I don\'t say much to start with, but I try.', 'I see you\'re back already!', 'I\'m just practicing planting seeds. You should try it too.'],
+		question: ['What is red and grows in the ground?'],
+		answer: ['A raddish.']
 	}
-},
-{
-	name: 'Wizard',
-	role: 'wizard',
+}, {
 	id: '7283',
+	name: 'Wizard',
+	level: 2,
 	spriteMap: [{
 		x: 0,
 		y: 64
 	}],
-	attributes: {},
 	dialog: {
-		intro: ['What\'s up brah?'],
-		random: ['Bring me a shrubbery!', 'The answer is 42.']
+		random: ['What\'s up brah?', 'Bring me a shrubbery!'],
+		question: ['What is your favorite color?'],
+		answer: ['The answer is 42.']
 	}
-}
-];
+}];

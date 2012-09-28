@@ -96,18 +96,15 @@ var self = module.exports = {
 						mapY = Math.floor(i / mapTilesWidth);
 
 						//add the tile to the array
-						//tileState: -1 clear (go), -2 if something (nogo),
-						//index val if npc
-
-						//a go tile
+						//tileState: -1 if nothing (go!), -2 if something (nogo!), the index if it's an NPC
+						//checking values are arbitrary right now,
+						//based on the image used in tiled map editor
 						if(tileStateArray[i] === 0) {
 							tileStateVal = -1;
 						}
-						//4 is the number of the tilesheet index i used, this could change
 						else if(tileStateArray[i] === 4) {
 							tileStateVal = i;
 						}  
-						//nogo
 						else {
 							tileStateVal = -2;
 						}
@@ -136,13 +133,19 @@ var self = module.exports = {
 		app.get('/admin/startup/npcs', function(req, res) {
 			if(nodeEnv) {
 				var npcData = require(rootDir + '/data/npcs');
-				// var gnomeData = require(rootDir + '/data/gnome');
 				var npcModel = service.useModel('npc', 'preload').NpcModel;
-				// var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
+				var gnomeData = require(rootDir + '/data/gnome');
+				var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
+				// drop and save npcs
 				self.dropCollection('npcs', function() {
 					self.saveDocuments(npcModel, npcData.global, function() {
-						res.send('Gnome and NPCs loaded...');
+						// drop and save gnome(s)
+						self.dropCollection('gnomes', function() {
+							self.saveDocuments(gnomeModel, gnomeData.global, function() {
+								res.send('NPCs and Gnome loaded...');
+							});
+						});
 					});
 				});
 			} else {

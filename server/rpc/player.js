@@ -40,15 +40,15 @@ var self = module.exports = {
 			//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 			init: function() {
 
-				req.session.myTempVar = 1234;
-				var myTempVar = req.session.myTempVar;
-				console.log(' ************* ');
-				console.log(' ************* ');
-				console.log(' ************* ');
-				console.log(myTempVar);
-				console.log(' ************* ');
-				console.log(' ************* ');
-				console.log(' ************* ');
+				// req.session.myTempVar = 1234;
+				// var myTempVar = req.session.myTempVar;
+				// console.log(' ************* ');
+				// console.log(' ************* ');
+				// console.log(' ************* ');
+				// console.log(myTempVar);
+				// console.log(' ************* ');
+				// console.log(' ************* ');
+				// console.log(' ************* ');
 
 				// load models and database service only once
 				service = ss.service;
