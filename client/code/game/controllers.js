@@ -987,13 +987,13 @@ window.requestAnimFrame = (function(){
 
 	var _loaded = false,
 		_allNpcs = [],
-		_index = 0,
-		_isShowing = false;
+		_index = 0;
 
 	$game.$npc = {
 
 		ready: false,
 		hideTimer: null,
+		isShowing: false,
 
 		init: function() {
 			//load all the npc info from the DB store it in an array
@@ -1016,24 +1016,59 @@ window.requestAnimFrame = (function(){
 		show: function() {
 			//window overlay?
 			//check index below no exist
-			if(!_isShowing) {
+			if(!$game.$npc.isShowing) {
 				var stringId = String(_index),
-				ran = Math.floor(Math.random() * _allNpcs[stringId].dialog.random.length),
-				speak = _allNpcs[stringId].dialog.random[ran],
-				who = _allNpcs[stringId].name;
+					curNpc = _allNpcs[stringId];
+				
+				//if this is false, it means we clicked the npc square 
+				//that is the top one (which doesn't have a unique id in our list
+				//but rather corresponds to the one below it)
+				if(!curNpc) {
+					_index += $game.TOTAL_WIDTH;
+					stringId = String(_index);
+					console.log(stringId);
+					curNpc = _allNpcs[stringId];
+				}
+
+				//decide which content to show, 
+				//if it is on the level of the player, show that,
+				//otherwise, show random dialog
+				var who = _allNpcs[stringId].name;
+
+				if($game.$player.currentLevel === curNpc.level) {
+					
+					for(var q = 0; q < curNpc.dialog.question.length; q += 1) {
+						$(".resourceArea").append(curNpc.dialog.question[q]).slideDown(function() {
+							
+						});
+					}
+				}
+				else {
+					var ran = Math.floor(Math.random() * _allNpcs[stringId].dialog.random.length),
+					speak = _allNpcs[stringId].dialog.random[ran];
+					
+					$(".speechBubble").append("<p><span>"+who+": </span>"+speak+"</p>").slideDown(function() {
+						$game.$npc.hideTimer = setTimeout($game.$npc.hide,5000);
+					});
+				}
+				
 			
-				$(".speechBubble").append("<p>"+who+": "+speak+"</p>").slideDown(function() {
-					$game.$npc.hideTimer = setTimeout($game.$npc.hide,5000);
-				});
-				_isShowing = true;
+				
+				$game.$npc.isShowing = true;
 			}
 			
 		},
+
 		hide: function() {
 			clearTimeout($game.$npc.hideTimer);
 			$(".speechBubble").slideUp(function() {
-				_isShowing = false;
+				$game.$npc.isShowing = false;
 				$(".speechBubble p").remove();
+			});
+			$(".resourceArea").slideUp(function() {
+				$game.$npc.isShowing = false;
+				$(".resourceArea p").remove();
+				$(".resourceArea h2").remove();
 			});
 		},
 		setIndex: function(i) {
@@ -1114,6 +1149,7 @@ window.requestAnimFrame = (function(){
 		isMoving: false,
 		npcOnDeck: false,
 		ready: false,
+		currentLevel: 2,
 
 		//private methods
 
@@ -1372,9 +1408,7 @@ $(function() {
 			}
 
 			if(clicked) {
-				//set index val so reousrce can show right one
-				$game.$npc.setIndex($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex);
-				$game.$npc.hide();
+				
 				//check if it is a nogo or npc
 				//if the tile BELOW the tile clicked is npc, 
 				//then user clicked the head, so act like npc
@@ -1383,9 +1417,20 @@ $(function() {
 					//go
 					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
+						$game.$npc.hide();
 					}
+					
 					//npc
 					else if(state >= 0 ) {
+						//set index val so reousrce can show right one
+				
+						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
+
+						//if you click on a different square then the previously 
+						//selected npc, then hide the npc info if it is showing
+
+						$game.$npc.setIndex(newIndex);
+				
 						//move them to the spot to the 
 						//BOTTOM LEFT corner of the npc 
 						//(consistent so we leave that open in tilemap)

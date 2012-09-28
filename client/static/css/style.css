@@ -4911,14 +4911,19 @@ a.badge:hover {
   position: absolute;
   top: 15px;
   left: 15px;
-  width: 920px;
-  height: 440px;
-  background: rgba(30, 30, 30, 0.5);
+  width: 930px;
+  height: 450px;
+  background: rgba(30, 30, 30, 0.7);
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
   display: none;
-  overflow: scroll;
+}
+.resourceArea h2,
+.resourceArea p {
+  color: white;
+  text-shadow: 1px 1px 1px #222;
+  padding: 10px 10px 0px 15px;
 }
 .speechBubble {
   position: absolute;
@@ -4936,6 +4941,9 @@ a.badge:hover {
   color: white;
   padding: 10px;
   text-shadow: 1px 1px 1px #333;
+}
+.speechBubble p span {
+  color: #ccff33;
 }
 #background,
 #foreground,
