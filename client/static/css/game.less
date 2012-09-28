@@ -6,12 +6,47 @@
 	padding: 0;
 	border-radius: 5px;
 	border: 2px solid #222;
+	z-index:0;
 }
-#background,#foreground,#characters{
+.resourceArea{
+	position: absolute;
+	top:15px;
+	left:15px;
+	width: 920px;
+	height: 440px;
+	background: rgba(30,30,30,.5);
+	padding: 0;
+	border-radius: 5px;
+	z-index:9999;
+	display:none;
+	overflow:scroll;
+}
+.speechBubble{
+	position: absolute;
+	top:10px;
+	left:10px;
+	width: 940px;
+	height: 40px;
+	background: rgba(30,30,30,.5);
+	padding: 0;
+	border-radius: 5px;
+	z-index:9999;
+	display:none;
+}
+.speechBubble p {
+	color: white;
+	padding:10px;
+	text-shadow: 1px 1px 1px #333;
+}
+
+#background,#foreground,#characters,#npcs{
 	position: absolute;
 }
 #background{
 	z-index: 0;
+}
+#npcs{
+	z-index: 1;
 }
 #characters{
 	z-index: 2;
@@ -19,6 +54,7 @@
 #foreground{
 	z-index: 3;
 }
+
 #miniGrid{
 
 }

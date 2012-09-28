@@ -620,6 +620,7 @@ window.requestAnimFrame = (function(){
 		_backgroundContext= null,
 		_foregroundContext= null,
 		_charactersContext= null,
+		_npcsContext= null,
 		_mouseContext = null,
 		_tilesheetContext= null,
 		_prevMouseX = 0,
@@ -644,6 +645,7 @@ window.requestAnimFrame = (function(){
 			_backgroundContext = document.getElementById('background').getContext('2d');
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
+			_npcsContext = document.getElementById('npcs').getContext('2d');
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
 			//set stroke stuff for mouse 
@@ -687,12 +689,12 @@ window.requestAnimFrame = (function(){
 				//render colors
 			}
 			else { 
-				if($game.$player.isMoving) {
-					$game.$player.render();
-				}
 				if($game.onScreenNpcs.length > 0 ) {
 					$game.$npc.animateFrame();
 				}
+				if($game.$player.isMoving) {
+					$game.$player.render();
+				}				
 			}
 			
 		},
@@ -763,6 +765,15 @@ window.requestAnimFrame = (function(){
 		
 			_hasNpc = false;
 
+			//since we are sliding here (or first time), clear foreground context?
+			_foregroundContext.clearRect(
+				0,
+				0,
+				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+			);
+
+
 			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					if(i==0 && j==0){ 
@@ -801,7 +812,7 @@ window.requestAnimFrame = (function(){
 					if(foreIndex > -1) {
 						tileData.srcX = foreIndex % _tilesheetWidth;
 						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
-						//$game.$renderer.renderForegroundTile(tileData);
+						$game.$renderer.renderForegroundTile(tileData);
 					}
 
 						
@@ -821,7 +832,7 @@ window.requestAnimFrame = (function(){
 
 			if($game.stepDirection === 'left') {
 				//clear right edge
-				_charactersContext.clearRect(
+				_npcsContext.clearRect(
 					$game.VIEWPORT_WIDTH * $game.TILE_SIZE - $game.TILE_SIZE,
 					0,
 					$game.TILE_SIZE,
@@ -830,7 +841,7 @@ window.requestAnimFrame = (function(){
 					
 			}
 			else if($game.stepDirection === 'right') {
-				_charactersContext.clearRect(
+				_npcsContext.clearRect(
 					0,
 					0,
 					$game.TILE_SIZE,
@@ -838,7 +849,7 @@ window.requestAnimFrame = (function(){
 				);
 			}
 			else if($game.stepDirection === 'up') {
-				_charactersContext.clearRect(
+				_npcsContext.clearRect(
 					0,
 					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE - $game.TILE_SIZE,
 					$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
@@ -846,7 +857,7 @@ window.requestAnimFrame = (function(){
 				);
 			}
 			else if($game.stepDirection === 'down') {
-				_charactersContext.clearRect(
+				_npcsContext.clearRect(
 					0,
 					0,
 					$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
@@ -882,14 +893,14 @@ window.requestAnimFrame = (function(){
 					}
 				}
 
-				_charactersContext.clearRect(
+				_npcsContext.clearRect(
 					curX + $game.TILE_SIZE * clearX,
 					curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
 					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
 				//draw new frame of npc
-				_charactersContext.drawImage(
+				_npcsContext.drawImage(
 					_tilesheets[2], 
 					npcData.srcX,
 					npcData.srcY,
@@ -975,18 +986,19 @@ window.requestAnimFrame = (function(){
 (function() {
 
 	var _loaded = false,
-	_allNpcs = [];
+		_allNpcs = [],
+		_index = 0,
+		_isShowing = false;
 
 	$game.$npc = {
 
-		//onScreenNpcs: [],
 		ready: false,
+		hideTimer: null,
 
 		init: function() {
 			//load all the npc info from the DB store it in an array
 			//where the index is the id of the npc / mapIndex
 			ss.rpc('npc.getNpcs', function(response) {
-			
 				//iterate through repsonses, create a key 
 				//with the id and value is the object
 				for(var i = 0; i < response.length; i += 1) {
@@ -998,6 +1010,34 @@ window.requestAnimFrame = (function(){
 				_loaded = true;
 				$game.$npc.ready = true;
 			});
+		},
+
+		//returns local x,y grid data based on mouse location
+		show: function() {
+			//window overlay?
+			//check index below no exist
+			if(!_isShowing) {
+				var stringId = String(_index),
+				ran = Math.floor(Math.random() * _allNpcs[stringId].dialog.random.length),
+				speak = _allNpcs[stringId].dialog.random[ran],
+				who = _allNpcs[stringId].name;
+			
+				$(".speechBubble").append("<p>"+who+": "+speak+"</p>").slideDown(function() {
+					$game.$npc.hideTimer = setTimeout($game.$npc.hide,5000);
+				});
+				_isShowing = true;
+			}
+			
+		},
+		hide: function() {
+			clearTimeout($game.$npc.hideTimer);
+			$(".speechBubble").slideUp(function() {
+				_isShowing = false;
+				$(".speechBubble p").remove();
+			});
+		},
+		setIndex: function(i) {
+			_index = i;
 		},
 
 		animateFrame: function () {
@@ -1164,6 +1204,7 @@ window.requestAnimFrame = (function(){
 				_srcY =  _direction * $game.TILE_SIZE*2;
 
 				//$game.$renderer.renderPlayer(playerInfo);
+				//setTimeout($game.$player.move, 17);
 				requestAnimFrame($game.$player.move);
 			}
 		},
@@ -1186,7 +1227,9 @@ window.requestAnimFrame = (function(){
 			else {
 				if($game.$player.npcOnDeck) {
 					$game.$player.npcOnDeck = false;
-					alert('here is ya question mate');
+					
+
+					$game.$npc.show()
 					//trigger npc to popup info and stuff
 				}
 				$game.$player.isMoving = false;
@@ -1283,9 +1326,11 @@ $(function() {
 		curX: 0,
 		curY: 0,
 		changed: false,
+		index: 0,
 
 		//returns local x,y grid data based on mouse location
 		updateMouse: function(mouseInfo, clicked) {
+
 			var x = mouseInfo.x - mouseInfo.offX;
 			var y = mouseInfo.y - mouseInfo.offY;
 
@@ -1295,6 +1340,7 @@ $(function() {
 			$game.$mouse.curX = Math.floor(x/32);
 			$game.$mouse.curY = Math.floor(y/32);
 
+			
 			if(mouseInfo.debug){
 				console.log($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY]);
 			}
@@ -1326,9 +1372,13 @@ $(function() {
 			}
 
 			if(clicked) {
+				//set index val so reousrce can show right one
+				$game.$npc.setIndex($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex);
+				$game.$npc.hide();
 				//check if it is a nogo or npc
 				//if the tile BELOW the tile clicked is npc, 
 				//then user clicked the head, so act like npc
+				
 				$game.getTileState($game.$mouse.curX, $game.$mouse.curY, function(state) {
 					//go
 					if(state === -1) {

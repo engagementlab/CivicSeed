@@ -56,9 +56,15 @@
 	    <div class="gameboard">
 	    <!-- canvases for rendering game -->
 		    <canvas id="background" width="960px" height="480px"> </canvas>
+		    <canvas id="npcs" width="960px" height="480px" ></canvas>
 		    <canvas id="characters" width="960px" height="480px" ></canvas>
 		    <canvas id="foreground" width="960px" height="480px" ></canvas>
+		    <div class="resourceArea">
+			</div>
+			<div class="speechBubble">
+			</div>
 		</div>
+
 	    <!-- hud, ties angular with chat and player count -->
 		<div ng-controller="PlayerController">
 		 	<!-- HUD -->

@@ -4905,14 +4905,49 @@ a.badge:hover {
   padding: 0;
   border-radius: 5px;
   border: 2px solid #222;
+  z-index: 0;
+}
+.resourceArea {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 920px;
+  height: 440px;
+  background: rgba(30, 30, 30, 0.5);
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+  overflow: scroll;
+}
+.speechBubble {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 940px;
+  height: 40px;
+  background: rgba(30, 30, 30, 0.5);
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+}
+.speechBubble p {
+  color: white;
+  padding: 10px;
+  text-shadow: 1px 1px 1px #333;
 }
 #background,
 #foreground,
-#characters {
+#characters,
+#npcs {
   position: absolute;
 }
 #background {
   z-index: 0;
+}
+#npcs {
+  z-index: 1;
 }
 #characters {
   z-index: 2;
@@ -4922,15 +4957,6 @@ a.badge:hover {
 }
 .hud {
   margin-top: 20px;
-}
-.cursor {
-  width: 28px;
-  height: 28px;
-  border: 2px dashed white;
-  border-color: yellow;
-  position: absolute;
-  z-index: 1;
-  cursor: pointer;
 }
 .debug p {
   float: left;
