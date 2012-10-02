@@ -1020,19 +1020,7 @@ window.requestAnimFrame = (function(){
 			//bind all the buttons 
 			$(".resourceArea a i").bind("click", (function () {
 				$game.$npc.hideResource();
-			}));
-			$(".answerButton").bind("click", (function () {
-				$game.$npc.submitAnswer();
-			}));
-			$(".backButton").bind("click", (function () {
-				$game.$npc.previousSlide();
-			}));
-			$(".nextButton").bind("click", (function () {
-				console.log("budsada");
-				$game.$npc.nextSlide();
-			}));
-			$(".closeButton").bind("click", (function () {
-				$game.$npc.hideResource();
+				return false;
 			}));
 					
 		},
@@ -1083,6 +1071,7 @@ window.requestAnimFrame = (function(){
 			var speak = 'I have a resource about (pull from db), would you like to see it?',
 				buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
 
+			$('.speechBubble').css('height',55);
 			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+buttons+'</p>').slideDown(function() {
 				$(".speechBubble .btn-success").bind("click", (function () {
 					$game.$npc.showResource();
@@ -1118,31 +1107,51 @@ window.requestAnimFrame = (function(){
 		//bind functionality
 
 		//assume that the buttons were removed before 
-		
+			
+			
+
 		//if its been answered, we have a close button
 			if(_answered) {
 				$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button>');
 				$('.closeButton').text('Close');
+				$(".closeButton").bind("click", (function () {
+					$game.$npc.hideResource();
+				}));
 			}
 			else {
 				//if its the first page, we DEF. have a next and no back
 				if(_currentSlide === 0) {
 					$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button>');		
 					$('.nextButton').text('Next');
+					$(".nextButton").bind("click", (function () {
+						$game.$npc.nextSlide();
+					}));
 				}
 				
 				//if its not the first page or the last page, we have both
-				else if(_currentSlide > 0 && _currentSlide < _numSlides - 1) {
+				else if(_currentSlide > 0 && _currentSlide < _numSlides) {
 					$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button><button class="btn btn-inverse backButton">Back</button>');				
 					$('.nextButton').text('Next');
 					$('.backButton').text('Back');
+					$(".nextButton").bind("click", (function () {
+						$game.$npc.nextSlide();
+					}));
+					$(".backButton").bind("click", (function () {
+						$game.$npc.previousSlide();
+					}));
 				}
 
 				//if its the last page, we have an answer button and a back
-				else if(_currentSlide === _numSlides - 1) {
+				else if(_currentSlide === _numSlides) {
 					$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');				
 					$('.answerButton').text('Answer');
 					$('.backButton').text('Back');
+					$(".answerButton").bind("click", (function () {
+						$game.$npc.submitAnswer();
+					}));
+					$(".backButton").bind("click", (function () {
+						$game.$npc.previousSlide();
+					}));
 				}	
 			}
 		},
@@ -1152,10 +1161,10 @@ window.requestAnimFrame = (function(){
 			if(_answered) {
 				var speak = 'Well done!  Take this (thing from db) and solve that riddle!';
 				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>');
-
+				$('.resourceArea').append('<p><br><img src="http://www.fordesigner.com/imguploads/Image/cjbc/zcool/png20080525/1211728737.png"></p>');		
 			}
 			else {
-				if(_currentSlide === _numSlides - 1) {
+				if(_currentSlide === _numSlides) {
 					var finalQuestion = _curNpc.dialog.question[1],
 						inputBox = '<form><input></input></form>';	
 					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+finalQuestion+'</p>'+inputBox);
@@ -1178,7 +1187,8 @@ window.requestAnimFrame = (function(){
 		showChat: function() {		
 			var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
 			speak = _curNpc.dialog.random[ran];
-					
+			
+			$('.speechBubble').css('height',40);
 			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>').slideDown(function() {
 				$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
 			});
@@ -1214,6 +1224,7 @@ window.requestAnimFrame = (function(){
 		nextSlide: function() {
 			
 			_currentSlide += 1;
+
 			//wipe the resource area
 			$('.resourceArea').empty();
 
@@ -1231,13 +1242,8 @@ window.requestAnimFrame = (function(){
 		submitAnswer: function() {
 			//if the answer is true, give them something!
 			if(true) {
-				$('.resourceArea p').remove();
-				$('.resourceArea form').remove();
-				$('.resourceArea').append('<h2>Nice work!</h2><p>Take this thing from me.  Go forth and solve the riddle.<p>');
-				$('.nextButton').text('Close');
-				$('.nextButton').removeClass('btn-danger');
-				$('.nextButton').addClass('btn-primary');
-				_buttonState = 3;
+				_answered = true;
+				$game.$npc.nextSlide();
 			}
 			else {
 

@@ -4925,7 +4925,9 @@ a.badge:hover {
   text-shadow: 1px 1px 1px #222;
   padding: 10px 10px 0px 15px;
 }
-.nextButton {
+.nextButton,
+.answerButton,
+.closeButton {
   position: absolute;
   bottom: 20px;
   right: 20px;
