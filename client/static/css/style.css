@@ -4925,12 +4925,30 @@ a.badge:hover {
   text-shadow: 1px 1px 1px #222;
   padding: 10px 10px 0px 15px;
 }
+.nextButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+.backButton {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+.resourceArea a i {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.resourceArea form {
+  padding: 20px;
+}
 .speechBubble {
   position: absolute;
   top: 10px;
   left: 10px;
   width: 940px;
-  height: 40px;
+  height: 55px;
   background: rgba(30, 30, 30, 0.5);
   padding: 0;
   border-radius: 5px;
@@ -4942,8 +4960,11 @@ a.badge:hover {
   padding: 10px;
   text-shadow: 1px 1px 1px #333;
 }
-.speechBubble p span {
+.speakerName {
   color: #ccff33;
+}
+.speechBubble button {
+  margin: 0 10px;
 }
 #background,
 #foreground,

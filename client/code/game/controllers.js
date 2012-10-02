@@ -689,7 +689,7 @@ window.requestAnimFrame = (function(){
 				//render colors
 			}
 			else { 
-				if($game.onScreenNpcs.length > 0 ) {
+				if($game.onScreenNpcs.length > 0) {
 					$game.$npc.animateFrame();
 				}
 				if($game.$player.isMoving) {
@@ -988,12 +988,18 @@ window.requestAnimFrame = (function(){
 	var _loaded = false,
 		_allNpcs = [],
 		_index = 0;
+		_currentSlide = 0;
+		_numSlides = 0;
+		_curNpc = null;
+		_answered = false;
+		_who = null;
 
 	$game.$npc = {
 
 		ready: false,
 		hideTimer: null,
-		isShowing: false,
+		isResource: false,
+		isChat: false,
 
 		init: function() {
 			//load all the npc info from the DB store it in an array
@@ -1010,67 +1016,238 @@ window.requestAnimFrame = (function(){
 				_loaded = true;
 				$game.$npc.ready = true;
 			});
+
+			//bind all the buttons 
+			$(".resourceArea a i").bind("click", (function () {
+				$game.$npc.hideResource();
+			}));
+			$(".answerButton").bind("click", (function () {
+				$game.$npc.submitAnswer();
+			}));
+			$(".backButton").bind("click", (function () {
+				$game.$npc.previousSlide();
+			}));
+			$(".nextButton").bind("click", (function () {
+				console.log("budsada");
+				$game.$npc.nextSlide();
+			}));
+			$(".closeButton").bind("click", (function () {
+				$game.$npc.hideResource();
+			}));
+					
 		},
 
-		//returns local x,y grid data based on mouse location
 		show: function() {
-			//window overlay?
-			//check index below no exist
-			if(!$game.$npc.isShowing) {
-				var stringId = String(_index),
-					curNpc = _allNpcs[stringId];
+			if(!$game.$npc.isResource && !$game.$npc.isChat) {
+				var stringId = String(_index);
+
+				_curNpc = _allNpcs[stringId];
+
 				
 				//if this is false, it means we clicked the npc square 
 				//that is the top one (which doesn't have a unique id in our list
 				//but rather corresponds to the one below it)
-				if(!curNpc) {
+				if(!_curNpc) {
 					_index += $game.TOTAL_WIDTH;
 					stringId = String(_index);
 					console.log(stringId);
-					curNpc = _allNpcs[stringId];
+					_curNpc = _allNpcs[stringId];
 				}
 
-				//decide which content to show, 
-				//if it is on the level of the player, show that,
-				//otherwise, show random dialog
-				var who = _allNpcs[stringId].name;
+				_who = _allNpcs[stringId].name;
 
-				if($game.$player.currentLevel === curNpc.level) {
-					
-					for(var q = 0; q < curNpc.dialog.question.length; q += 1) {
-						$(".resourceArea").append(curNpc.dialog.question[q]).slideDown(function() {
-							
-						});
-					}
+				if($game.$player.currentLevel === _curNpc.level) {
+					$game.$npc.isResource = true;
+					$game.$npc.showPrompt();
 				}
 				else {
-					var ran = Math.floor(Math.random() * _allNpcs[stringId].dialog.random.length),
-					speak = _allNpcs[stringId].dialog.random[ran];
-					
-					$(".speechBubble").append("<p><span>"+who+": </span>"+speak+"</p>").slideDown(function() {
-						$game.$npc.hideTimer = setTimeout($game.$npc.hide,5000);
-					});
+					$game.$npc.isChat = true;
+					$game.$npc.showChat();
 				}
-				
-			
-				
-				$game.$npc.isShowing = true;
 			}
 			
 		},
+		//returns local x,y grid data based on mouse location
+		showPrompt: function() {
+			//window overlay?
+			//check index below no exist
 
-		hide: function() {
-			clearTimeout($game.$npc.hideTimer);
-			$(".speechBubble").slideUp(function() {
-				$game.$npc.isShowing = false;
-				$(".speechBubble p").remove();
+			//figure out which npc was clicked
+			//this was set on the click if an npc was clicked
+
+			_numSlides = _curNpc.dialog.content.length;
+			//reset the slide to 0 
+			_currentSlide = 0;
+
+			//the prompt looks like a chat, so show the damn chat son
+			var speak = 'I have a resource about (pull from db), would you like to see it?',
+				buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
+
+			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+buttons+'</p>').slideDown(function() {
+				$(".speechBubble .btn-success").bind("click", (function () {
+					$game.$npc.showResource();
+				}));
+				$(".speechBubble .btn-danger").bind("click", (function () {
+					$game.$npc.hideChat();
+				}));
 			});
-			$(".resourceArea").slideUp(function() {
-				$game.$npc.isShowing = false;
-				$(".resourceArea p").remove();
-				$(".resourceArea h2").remove();
+						
+		},
+
+		showResource: function() {
+			$('.speechBubble').slideUp(function() {
+				$('.speechBubble').empty();
+				$game.$npc.isChat = false;
+				$game.$npc.isResource = true;
+				$(".speechBubble .btn-success").unbind("click");
+				$(".speechBubble .btn-danger").unbind("click");
+
+				//ready to show the resource now 
+				var speak = _curNpc.dialog.question[0];
+				$('.resourceArea').empty();
+				$game.$npc.addContent();
+				$game.$npc.addButtons();
+				$('.resourceArea').slideDown();
 			});
 		},
+
+		addButtons: function() {
+		//determine which buttons to put on the resource area 
+		//based on page number, if its a form yet, etc.
+		//buttons: next, back, answer, close
+		//bind functionality
+
+		//assume that the buttons were removed before 
+		
+		//if its been answered, we have a close button
+			if(_answered) {
+				$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button>');
+				$('.closeButton').text('Close');
+			}
+			else {
+				//if its the first page, we DEF. have a next and no back
+				if(_currentSlide === 0) {
+					$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button>');		
+					$('.nextButton').text('Next');
+				}
+				
+				//if its not the first page or the last page, we have both
+				else if(_currentSlide > 0 && _currentSlide < _numSlides - 1) {
+					$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button><button class="btn btn-inverse backButton">Back</button>');				
+					$('.nextButton').text('Next');
+					$('.backButton').text('Back');
+				}
+
+				//if its the last page, we have an answer button and a back
+				else if(_currentSlide === _numSlides - 1) {
+					$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');				
+					$('.answerButton').text('Answer');
+					$('.backButton').text('Back');
+				}	
+			}
+		},
+
+		addContent: function() {
+			//add the answer form
+			if(_answered) {
+				var speak = 'Well done!  Take this (thing from db) and solve that riddle!';
+				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>');
+
+			}
+			else {
+				if(_currentSlide === _numSlides - 1) {
+					var finalQuestion = _curNpc.dialog.question[1],
+						inputBox = '<form><input></input></form>';	
+					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+finalQuestion+'</p>'+inputBox);
+				}
+				else if(_currentSlide === 0) {
+					var intro = _curNpc.dialog.question[0],
+						inputBox = '<form><input></input></form>';
+						content = _curNpc.dialog.content[0];
+					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+intro+'</p>'+content);
+				}
+				else if(_currentSlide > 0) {
+					var content = _curNpc.dialog.content[_currentSlide];
+					$('.resourceArea').append(content);
+				}		
+			}
+			
+
+		},
+
+		showChat: function() {		
+			var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
+			speak = _curNpc.dialog.random[ran];
+					
+			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>').slideDown(function() {
+				$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
+			});
+			
+		},
+
+		hideResource: function() {
+			$('.resourceArea').slideUp(function() {
+				$('.resourceArea p').remove();
+				$('.resourceArea h2').remove();
+				$game.$npc.isResource = false;
+			});		
+		},
+
+		hideChat: function() {
+			
+			clearTimeout($game.$npc.hideTimer);
+			$('.speechBubble').slideUp(function() {
+				$('.speechBubble').empty();
+				$game.$npc.isChat = false;
+				$game.$npc.isResource = false;
+				$(".speechBubble .btn-success").unbind("click");
+				$(".speechBubble .btn-danger").unbind("click");
+			});
+		},
+
+		//super ghetto hack to go back a page
+		previousSlide: function() {
+			_currentSlide -= 2;
+			$game.$npc.nextSlide();
+		},
+
+		nextSlide: function() {
+			
+			_currentSlide += 1;
+			//wipe the resource area
+			$('.resourceArea').empty();
+
+			$game.$npc.addContent();
+
+			$game.$npc.addButtons();
+
+			console.log(_currentSlide);
+			//add content (depending on what it is )
+			
+			
+			
+		},
+
+		submitAnswer: function() {
+			//if the answer is true, give them something!
+			if(true) {
+				$('.resourceArea p').remove();
+				$('.resourceArea form').remove();
+				$('.resourceArea').append('<h2>Nice work!</h2><p>Take this thing from me.  Go forth and solve the riddle.<p>');
+				$('.nextButton').text('Close');
+				$('.nextButton').removeClass('btn-danger');
+				$('.nextButton').addClass('btn-primary');
+				_buttonState = 3;
+			}
+			else {
+
+			}
+
+			//otherwise tell them they are wrong, stay on form page 
+
+
+		},
+
 		setIndex: function(i) {
 			_index = i;
 		},
@@ -1149,7 +1326,7 @@ window.requestAnimFrame = (function(){
 		isMoving: false,
 		npcOnDeck: false,
 		ready: false,
-		currentLevel: 2,
+		currentLevel: 1,
 
 		//private methods
 
@@ -1263,9 +1440,8 @@ window.requestAnimFrame = (function(){
 			else {
 				if($game.$player.npcOnDeck) {
 					$game.$player.npcOnDeck = false;
-					
 
-					$game.$npc.show()
+						$game.$npc.show();					
 					//trigger npc to popup info and stuff
 				}
 				$game.$player.isMoving = false;
@@ -1417,7 +1593,7 @@ $(function() {
 					//go
 					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
-						$game.$npc.hide();
+						$game.$npc.hideChat();
 					}
 					
 					//npc
@@ -1623,31 +1799,38 @@ $(document).ready(function() {
 		
 	//change cursor on mouse move
 	$('.gameboard').mousemove(function(m) {
-		var mInfo = {
-			x: m.pageX,
-			y: m.pageY,
-			offX: this.offsetLeft,
-			offY: this.offsetTop,
-			debug: false
-		};
-
-		$game.$mouse.updateMouse(mInfo, false); 
- 	});
-
- 	//figure out if we should transition (or do other stuff later)
- 	$('.gameboard').click(function(m) {
+		if( !$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
  	
- 		if( !$game.inTransit && !$game.$player.isMoving){
- 			var mInfo = {
+			var mInfo = {
 				x: m.pageX,
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
 				debug: false
 			};
- 			$game.$mouse.updateMouse(mInfo,true);
- 		}
+
+			$game.$mouse.updateMouse(mInfo, false); 
+		}
  	});
+
+ 	//figure out if we should transition (or do other stuff later)
+ 	$('.gameboard').click(function(m) {
+ 	
+ 		if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
+ 	
+ 				var mInfo = {
+					x: m.pageX,
+					y: m.pageY,
+					offX: this.offsetLeft,
+					offY: this.offsetTop,
+					debug: false
+				};
+	 			$game.$mouse.updateMouse(mInfo,true);
+
+	 	}
+ 		
+ 	});
+
 });
 
 
