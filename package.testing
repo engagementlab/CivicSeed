@@ -37,7 +37,8 @@
     "passport-local": ">= 0.1.6",
     "nodemailer": ">= 0.3.26",
     "password-hash": ">= 1.2.1",
-    "connect-flash": ">= 0.1.0"
+    "connect-flash": ">= 0.1.0",
+    "cloudfiles": ">= 0.3.4"
   },
   "devDependencies": {
     "mocha": "*",

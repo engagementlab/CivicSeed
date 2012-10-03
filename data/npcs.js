@@ -22,7 +22,7 @@ module.exports.global = [{
 	},
 	resource: {
 		type: 'article',
-		url: '/articles/446.html'
+		url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/446.html'
 	}
 }, {
 	id: '7283',
@@ -48,7 +48,7 @@ module.exports.global = [{
 	},
 	resource: {
 		type: 'article',
-		url: '/articles/7283.html'
+		url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
 	}
 }, {
 	id: '22',
