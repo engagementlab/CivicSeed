@@ -712,6 +712,15 @@ window.requestAnimFrame = (function(){
 			$game.TILE_SIZE
 			);
 		},
+		renderColor: function(tileData) {
+			_backgroundContext.fillStyle = tileData.color;
+			_backgroundContext.fillRect(
+				tileData.destX * $game.TILE_SIZE,
+				tileData.destY * $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE
+				);
+		},
 		renderForegroundTile: function(tileData) {
 			_foregroundContext.drawImage(
 			_tilesheets[0], 
@@ -782,7 +791,8 @@ window.requestAnimFrame = (function(){
 					var backIndex = $game.currentTiles[i][j].background - 1,
 						backIndex2 = $game.currentTiles[i][j].background2 - 1,
 						foreIndex = $game.currentTiles[i][j].foreground - 1,
-						tileStateVal = $game.currentTiles[i][j].tileState;
+						tileStateVal = $game.currentTiles[i][j].tileState,
+						colorVal = $game.currentTiles[i][j].color,
 
 					//background tiles first
 					tileData = {
@@ -813,6 +823,12 @@ window.requestAnimFrame = (function(){
 						tileData.srcX = foreIndex % _tilesheetWidth;
 						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
 						$game.$renderer.renderForegroundTile(tileData);
+					}
+
+					if(colorVal !== undefined) {
+						tileData.color = colorVal;
+						$game.$renderer.renderColor(tileData);
+						console.log("boooom");
 					}
 
 						
@@ -921,56 +937,70 @@ window.requestAnimFrame = (function(){
 
 			$game.getTileState(mouse.cX, mouse.cY, function(state) {
 				
-				//nogo
-				if(state === -2) { 
-					_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
-				}
-
-				//go
-				else if(state === -1) { 
-					_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
-				}
-				//npc
-				else {
-					_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
-				}
-				_backgroundContext.lineWidth   = 4;
-				
 				//clear previous mouse
 				_backgroundContext.clearRect (_prevMouseX * $game.TILE_SIZE, _prevMouseY * $game.TILE_SIZE, $game.TILE_SIZE, $game.TILE_SIZE);
 				
+				//evenetually modularize this shit son
 				//redraw the background that it tarnished
 				var backIndex = $game.currentTiles[_prevMouseX][_prevMouseY].background - 1,
 					backIndex2 = $game.currentTiles[_prevMouseX][_prevMouseY].background2 - 1;
 
-					_backgroundContext.drawImage(
-						_tilesheets[0], 
-						backIndex % _tilesheetWidth * $game.TILE_SIZE,
-						Math.floor(backIndex / _tilesheetWidth) * $game.TILE_SIZE,
-						$game.TILE_SIZE,
-						$game.TILE_SIZE,
-						_prevMouseX * $game.TILE_SIZE,
-						_prevMouseY * $game.TILE_SIZE,
-						$game.TILE_SIZE,
-						$game.TILE_SIZE
-					);
-					_backgroundContext.drawImage(
-						_tilesheets[0], 
-						backIndex2 % _tilesheetWidth * $game.TILE_SIZE,
-						Math.floor(backIndex2 / _tilesheetWidth) * $game.TILE_SIZE,
-						$game.TILE_SIZE,
-						$game.TILE_SIZE,
-						_prevMouseX * $game.TILE_SIZE,
-						_prevMouseY * $game.TILE_SIZE,
-						$game.TILE_SIZE,
-						$game.TILE_SIZE
-					);
+				var tileData = {
+					srcX: backIndex % _tilesheetWidth,
+					srcY: Math.floor(backIndex / _tilesheetWidth),
+					destX: _prevMouseX,
+					destY: _prevMouseY
+				};
+
+				$game.$renderer.renderTile(tileData);
+
+				tileData.srcX = backIndex2 % _tilesheetWidth;
+				tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
+				
+				$game.$renderer.renderTile(tileData);
+				
+				tileData.color = $game.currentTiles[_prevMouseX][_prevMouseY].color;
+				
+				if(tileData.color !== undefined) {
+					console.log(tileData.color);
+					$game.$renderer.renderColor(tileData);	
+				}
+				
 	
+				//do the players color if seed mode ya hurr?
+				if($game.$player.seedMode) {
+					_backgroundContext.strokeStyle = 'rgba(100,100,100,.4)';
+					_backgroundContext.fillStyle = 'rgba(250,0,250,.5)';
+					_backgroundContext.fillRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
+					_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
+
+				}
+				//regular exploring mode
+
+				else {
+					//nogo
+					if(state === -2) { 
+						_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
+					}
+
+					//go
+					else if(state === -1) { 
+						_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
+					}
+					//npc
+					else {
+						_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
+					}
+					_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
+				}
+				
+				_backgroundContext.lineWidth = 4;
+
+				
 
 				//draw the new mouse
+				
 
-
-				_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
 				_prevMouseX = mouse.cX;
 				_prevMouseY = mouse.cY;
 			});
@@ -1018,10 +1048,7 @@ window.requestAnimFrame = (function(){
 			});
 
 			//bind all the buttons 
-			$(".resourceArea a i").bind("click", (function () {
-				$game.$npc.hideResource();
-				return false;
-			}));
+			
 					
 		},
 
@@ -1157,6 +1184,13 @@ window.requestAnimFrame = (function(){
 		},
 
 		addContent: function() {
+
+			//add the close button
+			$('.resourceArea').append('<a href="#" style="font-size: 24px;"><i class="icon-remove-sign icon-large"></i></a>');
+			$(".resourceArea a i").bind("click", (function () {
+				$game.$npc.hideResource();
+				return false;
+			}));
 			//add the answer form
 			if(_answered) {
 				var speak = 'Well done!  Take this (thing from db) and solve that riddle!';
@@ -1333,6 +1367,8 @@ window.requestAnimFrame = (function(){
 		npcOnDeck: false,
 		ready: false,
 		currentLevel: 1,
+		seedMode: false,
+		myColor: 'rgba(255,0,255)',
 
 		//private methods
 
@@ -1429,7 +1465,10 @@ window.requestAnimFrame = (function(){
 		},
 
 		endMove: function () {
-
+			if($game.$player.seedMode) {
+				//plant some shit
+				$game.$player.dropSeed();
+			}
 			if(_willTravel) {
 				var beginTravel = function(){
 					if($game.dataLoaded){
@@ -1523,6 +1562,15 @@ window.requestAnimFrame = (function(){
 				prevY: _prevOffY
 			}
 			$game.$renderer.renderPlayer(playerInfo);
+		},
+
+		dropSeed: function() {
+			//add color to currentTiles
+			$game.masterToLocal(_masterX, _masterY, function(loc){
+				$game.currentTiles[loc.x][loc.y].color = $game.$player.myColor;
+				//redraw the background
+			});
+
 		}
 	};
 
@@ -1604,21 +1652,24 @@ $(function() {
 					
 					//npc
 					else if(state >= 0 ) {
-						//set index val so reousrce can show right one
-				
-						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
+						//only trave to a npc if we are not planting
+						if(!$game.$player.seedMode) {
+							//set index val so reousrce can show right one
+							var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
 
-						//if you click on a different square then the previously 
-						//selected npc, then hide the npc info if it is showing
+							//if you click on a different square then the previously 
+							//selected npc, then hide the npc info if it is showing
 
-						$game.$npc.setIndex(newIndex);
-				
-						//move them to the spot to the 
-						//BOTTOM LEFT corner of the npc 
-						//(consistent so we leave that open in tilemap)
-						//also make sure it is not a transition tile
-						$game.$player.npcOnDeck = true;
-						$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+2);
+							$game.$npc.setIndex(newIndex);
+					
+							//move them to the spot to the 
+							//BOTTOM LEFT corner of the npc 
+							//(consistent so we leave that open in tilemap)
+							//also make sure it is not a transition tile
+							$game.$player.npcOnDeck = true;
+							$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+						
+						}
 					}
 				});
 			}		
@@ -1802,7 +1853,10 @@ $(function() {
 
 
 $(document).ready(function() {
-		
+	
+	$('.seedButton').bind("click", (function () {
+		$game.$player.seedMode = $game.$player.seedMode ? false : true;
+	}));
 	//change cursor on mouse move
 	$('.gameboard').mousemove(function(m) {
 		if( !$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
@@ -1832,9 +1886,7 @@ $(document).ready(function() {
 					debug: false
 				};
 	 			$game.$mouse.updateMouse(mInfo,true);
-
 	 	}
- 		
  	});
 
 });

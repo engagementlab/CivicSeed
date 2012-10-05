@@ -4993,6 +4993,9 @@ a.badge:hover {
   float: left;
   margin-left: 20px;
 }
+.playerButtons {
+  cursor: pointer;
+}
 body {
   padding-top: 80px;
 }
