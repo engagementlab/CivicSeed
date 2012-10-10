@@ -1,5 +1,6 @@
-var fs = require('fs');
 var rootDir = process.cwd();
+var fs = require('fs');
+var dbActions = require(rootDir + '/modules/utils/databaseActions');
 var environment;
 var nodeEnv;
 var User;
@@ -57,8 +58,8 @@ var self = module.exports = {
 				var userData = require(rootDir + '/data/users');
 				var userModel = service.useModel('user', 'preload').UserModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
-				self.dropCollection('users', function() {
-					self.saveDocuments(userModel, userData.global, function() {
+				dbActions.dropCollection('users', function() {
+					dbActions.saveDocuments(userModel, userData.global, function() {
 						res.send('Users loaded...');
 					});
 				});
@@ -73,7 +74,7 @@ var self = module.exports = {
 				var tileData = require(rootDir + '/data/tiles');
 				var tileModel = service.useModel('tile', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
-				self.dropCollection('tiles', function() {
+				dbActions.dropCollection('tiles', function() {
 					var i,
 					tileObject = tileData.global,
 					backgroundArray = tileObject.backgroundArray,
@@ -88,7 +89,7 @@ var self = module.exports = {
 					tileStateVal,
 					tiles = [];
 
-					// self.saveDocuments(tileModel, tileData.global);
+					// dbActions.saveDocuments(tileModel, tileData.global);
 
 					// (re)constructing tile data based on data dump from third party tool
 					for(i = 0; i < numberOfTiles; i++) {
@@ -120,7 +121,7 @@ var self = module.exports = {
 						});
 
 					}
-					self.saveDocuments(tileModel, tiles, numberOfTiles, function() {
+					dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function() {
 						res.send(numberOfTiles + ' tiles loaded...');
 					});
 				});
@@ -138,11 +139,11 @@ var self = module.exports = {
 				var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 				// drop and save npcs
-				self.dropCollection('npcs', function() {
-					self.saveDocuments(npcModel, npcData.global, function() {
+				dbActions.dropCollection('npcs', function() {
+					dbActions.saveDocuments(npcModel, npcData.global, function() {
 						// drop and save gnome(s)
-						self.dropCollection('gnomes', function() {
-							self.saveDocuments(gnomeModel, gnomeData.global, function() {
+						dbActions.dropCollection('gnomes', function() {
+							dbActions.saveDocuments(gnomeModel, gnomeData.global, function() {
 								res.send('NPCs and Gnome loaded...');
 							});
 						});
@@ -219,57 +220,6 @@ var self = module.exports = {
 			// });
 		});
 
-	},
-
-	dropCollection: function(collection, callback) {
-		var dbCollections = self.service.db.collections;
-		dbCollections[collection].drop(function(err) {
-			if(err) {
-				console.error('  Could not drop database collection: %s  '.yellow.inverse, err);
-				// process.exit(1);
-				// throw err;
-			} else {
-				console.log('CS: '.blue + 'Database collection dropped: '.magenta + collection.yellow.underline);
-			}
-			callback();
-		});
-	},
-
-	saveDocuments: function(model, documents, count, callback) {
-		var collectionName = model.collection.collection.collectionName;
-		if(typeof count === 'function') {
-			callback = count;
-		}
-		model.create(documents, function(err) {
-			if(err) {
-				console.error('  Could not create documents: %s  '.yellow.inverse, err);
-				// process.exit(1);
-				// throw err;
-			} else {
-				// // do some finding and logging here to validate data was pushed???
-				// userModel.find(function (err, users) {
-				// 	// handleError('Could not find document: %s', err);
-				// 	// if(err) { return handleError(err); }
-					
-				// 	console.log(users);
-				// 	consoleOutput += users;
-
-				// 	// res.render('admin/startup.hbs', {
-				// 	// 	title: 'STARTUP',
-				// 	// 	consoleOutput: consoleOutput
-				// 	// });
-				// });
-
-				if(typeof count === 'number') {
-					console.log('CS: '.blue + String(count).magenta + ' ' + collectionName.yellow.underline + ' document(s) created and saved to database.'.magenta);
-				} else if(typeof count === 'undefined') {
-					console.log('CS: '.blue + collectionName.yellow.underline + ' document(s) created and saved to database.'.magenta);
-				}
-			}
-			if(typeof callback === 'function') {
-				callback();
-			}
-		});
 	}
 
 };
