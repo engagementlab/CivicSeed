@@ -1,0 +1,54 @@
+{{#extend "stylesheets"}}
+<link rel="stylesheet" href="/css/admin.css"/>
+{{/extend}}
+
+<!-- <form class="form-horizontal"></form> -->
+
+<div class="console">
+	<form class="form-horizontal">
+
+		<p>Create a new group of 30 invite codes:</p>
+
+		<div class="control-group">
+			<label class="control-label" for="sessionName">Session Name:</label>
+			<div class="controls">
+				<input id="sessionName" class="span4" type="text" placeholder="Give this session a name...">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="emailList">Email Addresses:</label>
+			<div class="controls">
+				<textarea id="emailList" rows="6" class="span4" placeholder="Enter a list of email addresses..."></textarea>
+			</div>
+		</div>
+		<div class="control-group">
+
+			<div class="controls">
+				<button id="inviteCodesBtn" class="btn btn-mini btn-info" type="button">Create and Send Invite Codes</button>
+			</div>
+		</div>
+
+		<p>Select an existing session to apply an action:</p>
+
+		<div class="control-group">
+			<label class="control-label" for="sessionSelect">Existing Session:</label>
+			<div class="controls">
+				<!-- <textarea id="emailList" rows="6" class="span4" placeholder="Enter a list of email addresses..."></textarea> -->
+				<select id="sessionSelect" class="span4">
+					{{#each invitees}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+				<button id="deleteCodesBtn" class="btn btn-mini btn-danger" type="button">Delete Session</button>
+				<button id="resendCodesBtn" class="btn btn-mini btn-info" type="button">Resend Invite Emails</button>
+			</div>
+		</div>
+
+		<pre id="inviteCodes" class="hidden"></pre>
+
+	</form>
+</div>
+
+{{#extend "scripts"}}
+<script src="/js/admin.js"></script>
+{{/extend}}
