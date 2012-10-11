@@ -1,29 +1,25 @@
-var mongoose = require('mongoose'),
+var config = require('./config'),
+mongoose = require('mongoose'),
 Schema = mongoose.Schema,
 ObjectId = Schema.ObjectId;
 
 var self = module.exports = {
 
-	environment: null,
-	nodeEnv: null,
 	db: null,
 	mongooseConnected: (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2),
 
-	init: function(environment, callback) {
+	init: function(callback) {
 		console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
-
-		self.environment = environment;
-		self.nodeEnv = environment.app.nodeEnv;
 		self.connectMongoose(callback);
 	},
 
 	connectMongoose: function(callback) {
 		// connect to database
 		if(!self.mongooseConnected) {
-			self.db = mongoose.createConnection(self.environment.database.URL);
+			self.db = mongoose.createConnection(config.get('mongoURL'));
 			self.db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 			self.db.once('open', function () {
-				console.log('CS:'.blue + ' Database: connection to '.green + self.environment.database.environment);
+				console.log('CS:'.blue + ' Database: connection to '.green + config.get('nodeEnv'));
 				if(typeof callback !== 'undefined') {
 					callback({ mongooseDb: self.db });
 				}

@@ -1,7 +1,7 @@
 var rootDir = process.cwd();
+var config = require(rootDir + '/config');
 var fs = require('fs');
 var dbActions = require(rootDir + '/modules/utils/databaseActions');
-var environment;
 var nodeEnv;
 var User;
 
@@ -24,8 +24,7 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		environment = service.environment;
-		nodeEnv = environment.app.nodeEnv;
+		nodeEnv = config.get('nodeEnv');
 		User = service.useModel('user').UserModel;
 
 		self.service = service;
@@ -72,8 +71,8 @@ var self = module.exports = {
 					foregroundArray = tileObject.foregroundArray,
 					tileStateArray = tileObject.tileStateArray,
 					numberOfTiles = backgroundArray.length,
-					mapTilesWidth = service.environment.map.mapTilesWidth,
-					mapTilesHeight = service.environment.map.mapTilesHeight,
+					mapTilesWidth = config.get('mapTilesWidth'),
+					mapTilesHeight = config.get('mapTilesHeight'),
 					mapX,
 					mapY,
 					tileStateVal,

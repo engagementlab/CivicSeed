@@ -1,5 +1,5 @@
 {
-  "name": "CivicSeed-testing",
+  "name": "CivicSeed-development",
   "authors": [
     "Robert Hall <@americanyak>",
     "Russell Goldenberg <@russellgoldenberg>",
@@ -38,13 +38,14 @@
     "nodemailer": ">= 0.3.26",
     "password-hash": ">= 1.2.1",
     "connect-flash": ">= 0.1.0",
-    "cloudfiles": ">= 0.3.4"
+    "cloudfiles": ">= 0.3.4",
+    "nconf": ">= 0.6.4"
   },
   "devDependencies": {
     "mocha": "*",
     "should": "*"
   },
-  "subdomain": "civicseed-testing",
+  "subdomain": "civicseed-development",
   "scripts": {
     "start": "server.js"
   }

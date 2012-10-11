@@ -2,9 +2,9 @@ var ss = require('socketstream'),
 express = require('express'),
 app = module.exports = express(),
 server,
-environment,
-service,
 config,
+service,
+configuration,
 control,
 passportConfig;
 
@@ -13,14 +13,14 @@ console.log(' < < < = = = = = = = = = = = =   Starting the Civic Seed Game Engin
 console.log(' < < < = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = > > > '.green);
 
 // Configuration and environmental files, etc.
-environment = require('./environment.js');
+config = require('./config.js');
 service = require('./service.js');
 
-// Setup database services, based on the environment
-service.init(environment, function(databases) {
+// Setup database services, based on the config
+service.init(function(databases) {
 
-	control = require('./controllers.js')(app, service, environment);
-	config = require('./configuration.js')(app, express, ss, environment, service, databases.mongooseDb);
+	control = require('./controllers.js')(app, service);
+	configuration = require('./configuration.js')(app, express, ss, service, databases.mongooseDb);
 	//passportConfig = require('./passportconfig.js')(app, service);
 
 	// Start web server

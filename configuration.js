@@ -1,4 +1,5 @@
-var passport = require('passport'),
+var config = require('./config'),
+passport = require('passport'),
 // consolidate = require('consolidate'),
 // hulk = require('hulk-hogan'),
 hbs = require('hbs'),
@@ -8,11 +9,14 @@ fs = require('fs');
 
 //configuration module 
 //All express and connect configuration must there
-module.exports = function(app, express, ss, env, service, mongooseDb) {
+module.exports = function(app, express, ss, service, mongooseDb) {
 
 	var hbsHelpers = service.useModule('middleware/hbs-helpers');
 
 	app.configure(function() {
+
+		var redisConfig;
+
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
 		// SOCKET STREAM
@@ -20,12 +24,17 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
 
-		// // use redis
-		// ss.session.store.use('redis', env.redis);
-		// ss.publish.transport.use('redis', env.redis);
-		// // var redis = require('redis');
-		// // // var quitter = redis.quit();
-		// // // var client = redis.createClient(env.redis);
+		// use redis
+		if(config.get('useRedis')) {
+			redisConfig = {
+				host: config.get('redisHost'),
+				port: config.get('redisPort'),
+				pass: config.get('redisPw'),
+				db: config.get('redisDb')
+			};
+			ss.session.store.use('redis', redisConfig);
+			ss.publish.transport.use('redis', redisConfig);
+		}
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', mongooseDb);
@@ -79,21 +88,21 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?
 		// ss.client.packAssets();
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
 	});
 
 	// testing config
 	// runner: 'NODE_ENV=testing nodemon app.js'
 	app.configure('testing', function() {
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
 	});
 
 	// staging config ???DO WE EVEN NEED A STAGING ENVIRONMENT???
 	// runner: 'NODE_ENV=staging node app.js'
 	app.configure('staging', function() {
 		ss.client.packAssets();
-		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
 	});
 
 	// live config
@@ -103,7 +112,7 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		// var oneYear = 31557600000;
 		// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 		// app.use(express.errorHandler()); 
-		console.log('CS: Config: Running in '.blue + env.app.nodeEnv + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
 	});
 
 

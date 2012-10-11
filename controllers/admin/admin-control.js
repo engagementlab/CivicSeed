@@ -1,4 +1,5 @@
-// var environment;
+// var rootDir = process.cwd();
+// var config = require(rootDir + '/config');
 // var nodeEnv;
 // var User;
 
@@ -8,8 +9,7 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		// environment = service.environment;
-		// nodeEnv = environment.app.nodeEnv;
+		// nodeEnv = config.get('nodeEnv');
 		// User = service.useModel('user').UserModel;
 		Invitee = service.useModel('user', 'preload').InviteeModel;
 
