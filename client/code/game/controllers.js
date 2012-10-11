@@ -574,6 +574,7 @@ window.requestAnimFrame = (function(){
 		masterToLocal: function(x, y, callback) {
 			//look through the currentTiles to find the same index and returns
 			//the local grid coords (because they shift)
+			var found = false;
 			for( var a = 0; a < $game.currentTiles.length; a += 1) {
 				for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
 					if(x === $game.currentTiles[a][b].x && y === $game.currentTiles[a][b].y) {
@@ -581,9 +582,13 @@ window.requestAnimFrame = (function(){
 							x: a,
 							y: b
 						};
+						found = true;
 						callback(local);
 					}
 				}	
+			}
+			if(!found) {
+				callback(false);
 			}
 		},				
 
@@ -698,8 +703,52 @@ window.requestAnimFrame = (function(){
 			}
 			
 		},
+		renderTile: function(i, j) {
+			//tilemap reference to images starts at 1 instead of 0
+			var backIndex = $game.currentTiles[i][j].background - 1,
+				backIndex2 = $game.currentTiles[i][j].background2 - 1,
+				foreIndex = $game.currentTiles[i][j].foreground - 1,
+				tileStateVal = $game.currentTiles[i][j].tileState,
+				colorVal = $game.currentTiles[i][j].color,
 
-		renderTile: function(tileData) {
+			//background tiles first
+			tileData = {
+				srcX: backIndex % _tilesheetWidth,
+				srcY: Math.floor(backIndex / _tilesheetWidth),
+				destX: i,
+				destY: j
+			};
+			
+			$game.$renderer.drawTile(tileData);
+			
+			//second layer background tiles (rocks, etc.)
+			if( backIndex2 > -1) {
+				tileData.srcX = backIndex2 % _tilesheetWidth;
+				tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
+				$game.$renderer.drawTile(tileData);
+			}
+
+			if(tileStateVal >= 0) {
+				//get npc spritesheet data, pass it to tiledata, render
+				//$game.$renderer.renderTile(tileData);
+				$game.$npc.render($game.currentTiles[i][j]);
+				_hasNpc = true;
+			}	
+
+			//foreground tiles 
+			if(foreIndex > -1) {
+				tileData.srcX = foreIndex % _tilesheetWidth;
+				tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
+				$game.$renderer.drawForegroundTile(tileData);
+			}
+
+			if(colorVal) {
+				tileData.color = colorVal;
+				$game.$renderer.drawColor(tileData);
+			}
+
+		},
+		drawTile: function(tileData) {
 			_backgroundContext.drawImage(
 			_tilesheets[0], 
 			tileData.srcX * $game.TILE_SIZE,
@@ -712,7 +761,7 @@ window.requestAnimFrame = (function(){
 			$game.TILE_SIZE
 			);
 		},
-		renderColor: function(tileData) {
+		drawColor: function(tileData) {
 			_backgroundContext.fillStyle = tileData.color;
 			_backgroundContext.fillRect(
 				tileData.destX * $game.TILE_SIZE,
@@ -721,7 +770,7 @@ window.requestAnimFrame = (function(){
 				$game.TILE_SIZE
 				);
 		},
-		renderForegroundTile: function(tileData) {
+		drawForegroundTile: function(tileData) {
 			_foregroundContext.drawImage(
 			_tilesheets[0], 
 			tileData.srcX * $game.TILE_SIZE,
@@ -787,51 +836,7 @@ window.requestAnimFrame = (function(){
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					if(i==0 && j==0){ 
 					}
-					//tilemap reference to images starts at 1 instead of 0
-					var backIndex = $game.currentTiles[i][j].background - 1,
-						backIndex2 = $game.currentTiles[i][j].background2 - 1,
-						foreIndex = $game.currentTiles[i][j].foreground - 1,
-						tileStateVal = $game.currentTiles[i][j].tileState,
-						colorVal = $game.currentTiles[i][j].color,
-
-					//background tiles first
-					tileData = {
-						srcX: backIndex % _tilesheetWidth,
-						srcY: Math.floor(backIndex / _tilesheetWidth),
-						destX: i,
-						destY: j
-					};
-					
-					$game.$renderer.renderTile(tileData);
-					
-					//second layer background tiles (rocks, etc.)
-					if( backIndex2 > -1) {
-						tileData.srcX = backIndex2 % _tilesheetWidth;
-						tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);						
-						$game.$renderer.renderTile(tileData);
-					}
-
-					if(tileStateVal >= 0) {
-						//get npc spritesheet data, pass it to tiledata, render
-						//$game.$renderer.renderTile(tileData);
-						$game.$npc.render($game.currentTiles[i][j]);
-						_hasNpc = true;
-					}	
-
-					//foreground tiles 
-					if(foreIndex > -1) {
-						tileData.srcX = foreIndex % _tilesheetWidth;
-						tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
-						$game.$renderer.renderForegroundTile(tileData);
-					}
-
-					if(colorVal !== undefined) {
-						tileData.color = colorVal;
-						$game.$renderer.renderColor(tileData);
-						console.log("boooom");
-					}
-
-						
+					$game.$renderer.renderTile(i,j);
 				}
 			}
 
@@ -940,31 +945,31 @@ window.requestAnimFrame = (function(){
 				//clear previous mouse
 				_backgroundContext.clearRect (_prevMouseX * $game.TILE_SIZE, _prevMouseY * $game.TILE_SIZE, $game.TILE_SIZE, $game.TILE_SIZE);
 				
-				//evenetually modularize this shit son
-				//redraw the background that it tarnished
-				var backIndex = $game.currentTiles[_prevMouseX][_prevMouseY].background - 1,
-					backIndex2 = $game.currentTiles[_prevMouseX][_prevMouseY].background2 - 1;
+				$game.$renderer.renderTile(_prevMouseX, _prevMouseY);
+				// //evenetually modularize this shit son
+				// //redraw the background that it tarnished
+				// var backIndex = $game.currentTiles[_prevMouseX][_prevMouseY].background - 1,
+				// 	backIndex2 = $game.currentTiles[_prevMouseX][_prevMouseY].background2 - 1;
 
-				var tileData = {
-					srcX: backIndex % _tilesheetWidth,
-					srcY: Math.floor(backIndex / _tilesheetWidth),
-					destX: _prevMouseX,
-					destY: _prevMouseY
-				};
+				// var tileData = {
+				// 	srcX: backIndex % _tilesheetWidth,
+				// 	srcY: Math.floor(backIndex / _tilesheetWidth),
+				// 	destX: _prevMouseX,
+				// 	destY: _prevMouseY
+				// };
 
-				$game.$renderer.renderTile(tileData);
+				// $game.$renderer.renderTile(tileData);
 
-				tileData.srcX = backIndex2 % _tilesheetWidth;
-				tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
+				// tileData.srcX = backIndex2 % _tilesheetWidth;
+				// tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
 				
-				$game.$renderer.renderTile(tileData);
+				// $game.$renderer.renderTile(tileData);
 				
-				tileData.color = $game.currentTiles[_prevMouseX][_prevMouseY].color;
+				// tileData.color = $game.currentTiles[_prevMouseX][_prevMouseY].color;
 				
-				if(tileData.color !== undefined) {
-					console.log(tileData.color);
-					$game.$renderer.renderColor(tileData);	
-				}
+				// if(tileData.color !== undefined) {
+				// 	$game.$renderer.renderColor(tileData);	
+				// }
 				
 	
 				//do the players color if seed mode ya hurr?
@@ -1565,11 +1570,64 @@ window.requestAnimFrame = (function(){
 		},
 
 		dropSeed: function() {
-			//add color to currentTiles
-			$game.masterToLocal(_masterX, _masterY, function(loc){
-				$game.currentTiles[loc.x][loc.y].color = $game.$player.myColor;
-				//redraw the background
-			});
+			//add color the surrounding tiles
+
+			var bombed = [];
+			//color algorithms for different levels:
+			if($game.$player.currentLevel === 0) {
+				 
+				var square = {
+					x: _masterX,
+					y: _masterY,
+					color: $game.$player.myColor
+				};
+
+				bombed.push(square);
+				ss.rpc('player.dropSeed', bombed);
+			}
+			else {
+
+				//do a check to see if someone already planted on that tile
+				if($game.currentTiles[_masterX][_masterY].colorOwner) {
+					alert('can\'t plant here.');
+				}
+				else{
+					//square
+					//start at top left corner
+					var origX = _masterX - 1;
+					var origY = _masterY - 1;
+					for(var a = 0; a<3; a++) {
+						for(var b = 0; b<3; b++) {
+							
+							var square = {
+								x: origX + a,
+								y: origY + b,
+								color: $game.$player.myColor
+							};
+							//only add it if it is on the map	
+							if(origX + a>-1 && origX + a<$game.TOTAL_WIDTH && origY + b>-1 && origY + b < $game.TOTAL_HEIGHT) {
+								//assign the middle one the owner
+								if( a === 1 && b === 1) {
+									//this will be put in the ACTUAL DB,
+									//instead of local
+									$game.currentTiles[_masterX][_masterY].colorOwner = true;
+									square.colorOwner = true;
+
+								}
+								bombed.push(square);	
+							}
+						}
+					}
+					ss.rpc('player.dropSeed', bombed);		
+				}
+			}
+			
+			
+
+			// $game.masterToLocal(_masterX, _masterY, function(loc){
+			// 	// $game.currentTiles[loc.x][loc.y].color = $game.$player.myColor;
+			// 	//redraw the background
+			// });
 
 		}
 	};
@@ -1838,7 +1896,16 @@ $(function() {
 
 })();
 
+
 (function() {
+	$game.$music = {
+
+	};
+
+})();
+//events recevied by RPC
+(function() {
+
 	ss.event.on('ss-playerMoved', function(moves){
   		//check if that quad is relevant to the current player
   		//this will also have the player info so as to id the appropriate one
@@ -1849,6 +1916,21 @@ $(function() {
   		$game.$player.move();
 
 	});
+	ss.event.on('ss-seedDropped', function(bombed){
+  		console.log(bombed);
+  		for(var b = 0; b < bombed.length; b += 1) {
+  			$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
+  				if(loc) {
+
+  					$game.currentTiles[loc.x][loc.y].color = $game.$player.myColor;
+  					//redraw whole tile, bg included
+  					$game.$renderer.renderTile(loc.x,loc.y);
+  					//$("#testAudio")[0].play();
+  				}
+  			});
+  		}
+	});
+
 })();
 
 

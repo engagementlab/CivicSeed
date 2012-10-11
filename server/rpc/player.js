@@ -117,7 +117,19 @@ var self = module.exports = {
 				// console.log(player);
 				ss.publish.all('ss-playerMoved', player);
 			},
-
+			dropSeed: function(bombed) {
+				// for(var p=0; p<players.length;p++){
+				// 	console.log(players[p].id);
+				// 		//ridic stupid way to check if it's the right one (id isn't working)
+				// 		if(players[p].r ==player.r && players[p].g ==player.g) {
+				// 			players[p].x = player.x;
+				// 			players[p].y = player.y;
+				// 			continue;
+				// 		}
+				// }
+				// console.log(player);
+				ss.publish.all('ss-seedDropped', bombed);
+			},
 		}
 	}
 }
