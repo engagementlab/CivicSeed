@@ -20,11 +20,6 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
 
-		// wrapper for ss-angular
-		// ss.responders.add(require('ss-angular'));
-		// client side angular templating
-		ss.client.templateEngine.use('angular');
-
 		// // use redis
 		// ss.session.store.use('redis', env.redis);
 		// ss.publish.transport.use('redis', env.redis);
@@ -44,7 +39,6 @@ module.exports = function(app, express, ss, env, service, mongooseDb) {
 			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.7.2.min.js',
-				'libs/angular-1.0.1.min.js',
 				'libs/bootstrap.min.js',
 				'game/entry.js',
 				'game/controllers.js',
