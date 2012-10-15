@@ -1,6 +1,5 @@
 (function($) {
 
-
 	var _init = function() {
 
 		_setupLoaders();
@@ -8,6 +7,7 @@
 
 	};
 
+	// loaders on startup page
 	var _setupLoaders = function() {
 		$('#dataLoaders').on('click', '.btn', function(event) {
 			var button = $(this),
@@ -23,42 +23,30 @@
 		});
 	};
 
+	// invite codes page
 	var _setupInviteCodes = function() {
 		$('#sessionSelect').on('change', function(event) {
-			var select = $(this);
-			var val = select.val();
+			// var select = $(this);
+			// var val = select.val();
 			$('#inviteCodesBtn').removeClass('btn-success');
-			if(val === 'new') {
-				$('#newSessionText').removeClass('hidden');
-				$('#alterSessionText').addClass('hidden');
-			} else {
-				$('#alterSessionText').removeClass('hidden');
-				$('#newSessionText').addClass('hidden');
-			}
 		});
 		$('#inviteCodesBtn').on('click', function(event) {
 			var button = $(this);
-			var val = $('#sessionSelect').val();
-			var sessionName;
-			var url;
+			var sessionName = document.getElementById('sessionName').value;
 			var date;
-			if(val === 'new') {
-				sessionName = document.getElementById('sessionName').value;
-				sessionName = sessionName.replace(/ /g, '.')
-				if(sessionName === '') {
-					date = new Date();
-					sessionName = 'session.' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-					sessionName += '.' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-				}
-				url = '/admin/action/create-invite-codes/' + sessionName;
-			} else {
-				url = '/admin/action/recreate-invite-codes/' + val;
+			sessionName = sessionName.replace(/ /g, '.');
+			if(sessionName === '') {
+				date = new Date();
+				sessionName = 'session.' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+				sessionName += '.' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 			}
-			// console.log(sessionName);
 			// button.removeClass('btn-success');
 			$.ajax({
-				url: url,
+				url: '/admin/action/create-invite-codes/' + sessionName,
 				success: function(data) {
+					var select = $('#sessionSelect');
+					select.append('<option value="' + sessionName + '">' + sessionName + '</option>');
+					select.val(sessionName);
 					$('#inviteCodes').text(data.join(',\n')).removeClass('hidden');
 					button.addClass('btn-success');
 				}
@@ -67,7 +55,5 @@
 	};
 
 	$(function() { _init(); })
-
-
 
 })(jQuery);

@@ -13,29 +13,6 @@
 		<button id="gnomeLoadBtn" class="btn" data-type="npcs">Preload Gnome &amp; NPCs</button>
 		<pre>{{consoleOutput}}</pre>
 	</div>
-
-	<div class="loader">
-		<label>
-			<span id="newSessionText">
-				Create a new group of 30 invite codes:
-				<input id="sessionName" type="text" placeholder="Give this session a name...">
-			</span>
-			<span id="alterSessionText" class="hidden">Recreate/alter this existing group of invite codes: </span>
-		</label>
-		<label>
-			Select a new or existing session to create:
-			<select id="sessionSelect">
-				<option value="new">New session/group</option>
-				{{#each invitees}}
-				<option value="{{this}}">Alter session/group {{this}}</option>
-				{{/each}}
-			</select>
-		</label>
-		<button id="inviteCodesBtn" class="btn">Create Invite Codes</button>
-		<pre id="inviteCodes" class="hidden"></pre>
-	</div>
-
-
 </div>
 
 {{#extend "scripts"}}

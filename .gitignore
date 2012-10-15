@@ -42,9 +42,6 @@ build/config/buildinfo.properties
 # hiding derby generated files
 public/gen
 
-# NOTE: DELIBERATELY IGNORING package.json FILE. SEE README FILE FOR FURTHER INFORMATION.
-package.json
-
 # IGNORING
 .monitor
 node_modules
@@ -63,3 +60,5 @@ password.js
 /parameters.js
 /notes.js
 /TODO.js
+/config.json
+/config-other.js

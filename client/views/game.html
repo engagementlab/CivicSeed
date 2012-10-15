@@ -73,41 +73,38 @@
 			</div>
 		</div>
 
-	    <!-- hud, ties angular with chat and player count -->
-		<div ng-controller="PlayerController">
-		 	<!-- HUD -->
-		    <div class="container hud">
-		        <div class="row">
-		        	<div style="font-size: 22px;">
-		        		<div class="span2 offset1 playerButtons">
-		            		<!-- <i class="icon-briefcase icon-large"></i> -->
-		            		<div class="seedButton">
-		            			<i class="icon-leaf icon-large"></i>
-		            		</div>
-		            		<!-- <i class="icon-trophy icon-large"></i> -->
+		<div class="container hud">
+			<div class="row">
+				<div style="font-size: 22px;">
+					<div class="span2 offset1 playerButtons">
+						<!-- <i class="icon-briefcase icon-large"></i> -->
+						<div class="seedButton">
+							<i class="icon-leaf icon-large"></i>
 						</div>
-		        		<div class="span3">	
-		        			<i class="icon-group icon-large"></i>
-		        			<span>{{numActivePlayers}} active players</span>
-		        		</div>
-		        		<div class="span5">
-		        			<form class="form-inline">
-									<input type="text" class="input-xlarge" placeholder="say something...">
-									<button type="submit" class="btn">Chat</button>
-							</form>
-		        		</div>
-		        		<div class="span1">
-		        			<i class="icon-question-sign icon-large"></i>
-		        		</div>    		
-		        	</div>
-			   	</div>
-		    </div>
+						<!-- <i class="icon-trophy icon-large"></i> -->
+					</div>
+					<div class="span3">	
+						<i class="icon-group icon-large"></i>
+						<span>{{numActivePlayers}} active players</span>
+					</div>
+					<div class="span5">
+						<form class="form-inline">
+							<input type="text" class="input-xlarge" placeholder="say something...">
+							<button type="submit" class="btn">Chat</button>
+						</form>
+					</div>
+					<div class="span1">
+						<i class="icon-question-sign icon-large"></i>
+					</div>    		
+				</div>
+			</div>
 		</div>
 		<audio id="testAudio">
 			<source src="/audio/tile.ogg" type="audio/ogg">
 			<source src="/audio/tile.mp3" type="audio/mp3">
   			Your browser does not support the <code>audio</code> element.
 		</audio>
+
 
 	</body>
 </html>

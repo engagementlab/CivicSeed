@@ -16,38 +16,9 @@
     [sudo] npm install -g nodemon
     npm install
 
-### New Files to Create
+### Environmental Configuration
 
-Create a package file from one of the following ```package.*``` (environment specific) files by copying the content into a new ```package.json``` file:
-
- 1. ```package.development```
- 2. ```package.testing```
- 3. ```package.production```
-
-Create a new file called ```parameters.js``` in your application root, and populate it with the following data:
-
-    // DEVELOPMENT
-    module.exports = {
-        NODE_ENV: 'testing',
-        REDIS_PASS: '',
-        MONGO_PASS: '',
-    };
-
-    // // TESTING
-    // module.exports = {
-    //  NODE_ENV: 'testing',
-    //  REDIS_PASS: 'xxx',
-    //  MONGO_PASS: 'yyy',
-    // };
-
-    // // PRODUCTION
-    // module.exports = {
-    //  NODE_ENV: 'production',
-    //  REDIS_PASS: 'xxx',
-    //  MONGO_PASS: 'yyy',
-    // };
-
-The idea here is that for sensitive or quickly changing data, we're not tracking it in git, but it's easy to flip between environments by commenting out the correct environment (and commenting the unneeded environments).
+...to come...[using nconf package JSON]...
 
 ### Startup
 

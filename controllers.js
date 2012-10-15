@@ -1,7 +1,7 @@
 var fs = require('fs'),
 hbs = require('hbs');
 
-module.exports = function(app, service, environment) {
+module.exports = function(app, service) {
 
 	var isJs = /\.js$/g,
 	hidden = /^\_/g,
