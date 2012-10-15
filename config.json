@@ -1,0 +1,13 @@
+  {
+       "name": "Civic Seed",
+       "nodeEnv": "development",
+       "siteUrl": "http://localhost:3000/",
+       "useRedis": true,
+       "redisHost": "localhost",
+       "redisPort": 6379,
+       "redisPw": "",
+       "redisDb": "civic_dev_db",
+       "mongoURL": "mongodb://localhost/civic_dev_db",
+       "mapTilesWidth": 142,
+       "mapTilesHeight": 132
+}

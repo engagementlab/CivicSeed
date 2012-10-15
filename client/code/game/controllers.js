@@ -607,6 +607,54 @@ window.requestAnimFrame = (function(){
 // map file
 (function() {
 
+	$game.$map = {
+
+		growingSeed: false,
+		seedsInProgress: [],
+
+		growSeeds: function() {
+
+
+		},
+
+		newBomb: function(bombed) {
+			for(var b = 0; b < bombed.length; b += 1) {
+  			$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
+  				if(loc) {
+					//if there IS a color
+  					if($game.currentTiles[loc.x][loc.y].color) {
+  						//if the tile is an owner, don't do shit
+						if(!$game.currentTiles[loc.x][loc.y].color.owner) {
+							//is color, no owner, add count (maybe modify color later)
+							//but only if it isn't over-colored
+
+							//if the new guy is now chief
+  							if(bombed[b].color.owner) {
+  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;	
+  							}
+  							if($game.currentTiles[loc.x][loc.y].color.count < 4 ) {
+  								$game.currentTiles[loc.x][loc.y].color.count += 1;
+  								//$game.currentTiles[loc.x][loc.y].color.h = ($game.currentTiles[loc.x][loc.y].color.h + bombed[b].color.h) * .5;
+  							}
+  						}
+  				
+  					}
+  					//add new color data to tile if nothing ther©767e
+  					else {
+  						bombed[b].color.count = 1;
+  						$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
+    				}
+  					
+  					//redraw whole tile, bg included
+  					$game.$renderer.renderTile(loc.x,loc.y);
+  					//$game.currenTiles[loc.x][loc.y].count += 1;
+  					//$("#testAudio")[0].play();
+  				}
+  					
+  			});
+  		}
+		}
+	}
 
 })();
 
@@ -699,6 +747,9 @@ window.requestAnimFrame = (function(){
 				}
 				if($game.$player.isMoving) {
 					$game.$player.render();
+				}
+				if($game.$map.growingSeed) {
+					$game.$map.growSeeds();	
 				}				
 			}
 			
@@ -2001,41 +2052,7 @@ $(function() {
 	//all this breakdown will be on the server side, not client side, 
 	//but we will pass the tiles info 
 	ss.event.on('ss-seedDropped', function(bombed){
-  		for(var b = 0; b < bombed.length; b += 1) {
-  			$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
-  				if(loc) {
-					//if there IS a color
-  					if($game.currentTiles[loc.x][loc.y].color) {
-  						//if the tile is an owner, don't do shit
-						if(!$game.currentTiles[loc.x][loc.y].color.owner) {
-							//is color, no owner, add count (maybe modify color later)
-							//but only if it isn't over-colored
-
-							//if the new guy is now chief
-  							if(bombed[b].color.owner) {
-  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;	
-  							}
-  							if($game.currentTiles[loc.x][loc.y].color.count < 4 ) {
-  								$game.currentTiles[loc.x][loc.y].color.count += 1;
-  								//$game.currentTiles[loc.x][loc.y].color.h = ($game.currentTiles[loc.x][loc.y].color.h + bombed[b].color.h) * .5;
-  							}
-  						}
-  				
-  					}
-  					//add new color data to tile if nothing ther©767e
-  					else {
-  						bombed[b].color.count = 1;
-  						$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
-    				}
-  					
-  					//redraw whole tile, bg included
-  					$game.$renderer.renderTile(loc.x,loc.y);
-  					//$game.currenTiles[loc.x][loc.y].count += 1;
-  					//$("#testAudio")[0].play();
-  				}
-  					
-  			});
-  		}
+		$game.$map.newBomb(bombed);
 	});
 
 })();
