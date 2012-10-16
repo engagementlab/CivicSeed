@@ -251,6 +251,8 @@ window.requestAnimFrame = (function(){
 				$game.$npc.init();
 			//player WILL load its previous data from DB
 			$game.$player.init();
+			$game.$map.init();
+			//$game.$audio.init();
 			ss.rpc('npc.init');
 
 			//games init must load the map info for current location
@@ -609,8 +611,13 @@ window.requestAnimFrame = (function(){
 
 	$game.$map = {
 
+		coloredTiles: [], //needs x, y, display
 		growingSeed: false,
 		seedsInProgress: [],
+
+		init: function() {
+			setInterval($game.$map.updateMiniMap, 5000);
+		},
 
 		growSeeds: function() {
 
@@ -618,41 +625,49 @@ window.requestAnimFrame = (function(){
 		},
 
 		newBomb: function(bombed) {
-			for(var b = 0; b < bombed.length; b += 1) {
-  			$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
-  				if(loc) {
-					//if there IS a color
-  					if($game.currentTiles[loc.x][loc.y].color) {
-  						//if the tile is an owner, don't do shit
-						if(!$game.currentTiles[loc.x][loc.y].color.owner) {
-							//is color, no owner, add count (maybe modify color later)
-							//but only if it isn't over-colored
 
-							//if the new guy is now chief
-  							if(bombed[b].color.owner) {
-  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;	
-  							}
-  							if($game.currentTiles[loc.x][loc.y].color.count < 4 ) {
-  								$game.currentTiles[loc.x][loc.y].color.count += 1;
-  								//$game.currentTiles[loc.x][loc.y].color.h = ($game.currentTiles[loc.x][loc.y].color.h + bombed[b].color.h) * .5;
-  							}
-  						}
-  				
-  					}
-  					//add new color data to tile if nothing ther©767e
-  					else {
-  						bombed[b].color.count = 1;
-  						$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
-    				}
-  					
-  					//redraw whole tile, bg included
-  					$game.$renderer.renderTile(loc.x,loc.y);
-  					//$game.currenTiles[loc.x][loc.y].count += 1;
-  					//$("#testAudio")[0].play();
-  				}
-  					
-  			});
-  		}
+			for(var b = 0; b < bombed.length; b += 1) {
+				//only add it to render list if it is on current screen
+				$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
+	  				if(loc) {
+						//if there IS a color
+	  					if($game.currentTiles[loc.x][loc.y].color) {
+	  						//if the tile is an owner, don't do shit
+							if(!$game.currentTiles[loc.x][loc.y].color.owner) {
+								//is color, no owner, add count (maybe modify color later)
+								//but only if it isn't over-colored
+
+								//if the new guy is now chief
+	  							if(bombed[b].color.owner) {
+	  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;	
+	  							}
+	  							if($game.currentTiles[loc.x][loc.y].color.count < 4 ) {
+	  								$game.currentTiles[loc.x][loc.y].color.count += 1;
+	  								//$game.currentTiles[loc.x][loc.y].color.h = ($game.currentTiles[loc.x][loc.y].color.h + bombed[b].color.h) * .5;
+	  							}
+	  						}
+	  				
+	  					}
+	  					//add new color data to tile if nothing ther©767e
+	  					else {
+	  						bombed[b].color.count = 1;
+	  						$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
+	    				}
+	  					
+	  					//redraw whole tile, bg included
+	  					$game.$renderer.renderTile(loc.x,loc.y);
+	  					//$game.currenTiles[loc.x][loc.y].count += 1;
+	  					$game.$audio.playSound(0);
+	  				}
+	  					
+	  			});
+			}
+		},
+
+		updateMiniMap: function() {
+			//show where the player is and the colored tiles 
+			//possibly all players too
+			$game.$renderer.renderMiniMap();
 		}
 	}
 
@@ -675,6 +690,7 @@ window.requestAnimFrame = (function(){
 		_charactersContext= null,
 		_npcsContext= null,
 		_mouseContext = null,
+		_minimapContext = null,
 		_tilesheetContext= null,
 		_prevMouseX = 0,
 		_prevMouseY = 0,
@@ -699,6 +715,8 @@ window.requestAnimFrame = (function(){
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
 			_npcsContext = document.getElementById('npcs').getContext('2d');
+			_minimapContext = document.getElementById('minimap').getContext('2d');
+
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
 			//set stroke stuff for mouse 
@@ -796,7 +814,7 @@ window.requestAnimFrame = (function(){
 
 			
 			//background tile 1
-			$game.$renderer.drawTile(tileData);
+			//$game.$renderer.drawTile(tileData);
 
 
 		
@@ -852,11 +870,11 @@ window.requestAnimFrame = (function(){
 			}
 			else {
 				//if not, display color based on number of times its been colored
-				alph = (tileData.colorInfo.color.count * .1) + .5;
+				alph = (tileData.colorInfo.color.count * .1) + .3;
 
 				//if it is just colored once, use original color
 				if(tileData.colorInfo.color.count === 1) {
-					alph = .7;
+					alph = .4;
 					hsla = 'hsla('+tileData.colorInfo.color.h+',90%,80%,'+alph+')';
 				}
 
@@ -1123,6 +1141,19 @@ window.requestAnimFrame = (function(){
 				_prevMouseY = mouse.cY;
 			});
 			
+		},
+
+		renderMiniMap: function() {
+			_minimapContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
+
+			//draw player
+			_minimapContext.fillStyle = 'rgb(255,0,0)';
+			_minimapContext.fillRect(
+				$game.$player._masterX,
+				$game.$player._masterY,
+				4,
+				4
+				);
 		}
 
 	};
@@ -1457,9 +1488,7 @@ window.requestAnimFrame = (function(){
 	//current values are there for the inbetween squares
 	//master is the most previously gridded position
 	
- 	var	_masterX = 10,
- 		_masterY = 10,
- 		_offX = 0,
+ 	var _offX = 0,
  		_offY = 0,
  		_prevOffX = 0,
  		_prevOffY = 0,
@@ -1478,6 +1507,8 @@ window.requestAnimFrame = (function(){
 	
 	$game.$player = {
 
+		_masterX: 10,
+ 		_masterY: 10,
 		seriesOfMoves: null,
 		currentMove: 0,
 		currentStep: 0,
@@ -1506,9 +1537,11 @@ window.requestAnimFrame = (function(){
 			//update the master location, and reset steps to go on to next move 
 			if($game.$player.currentStep >= _numSteps) {
 				$game.$player.currentStep = 0;
-				_masterX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
-				_masterY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+				$game.$player._masterX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
+				$game.$player._masterY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
 				$game.$player.currentMove += 1;
+				//render mini map every spot player moves
+				$game.$renderer.renderMiniMap();
 
 			}
 
@@ -1525,8 +1558,8 @@ window.requestAnimFrame = (function(){
 
 				//if it the first one, then figure out the direction to face
 				if($game.$player.currentStep === 1) {
-					_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _masterX;
-					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _masterY;
+					_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - $game.$player._masterX;
+					_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - $game.$player._masterY;
 					// _prevStepX = _currentX * $game.TILE_SIZE;
 					// _prevStepY = _currentY * $game.TILE_SIZE;
 					
@@ -1565,8 +1598,8 @@ window.requestAnimFrame = (function(){
 				// _prevStepX = _currentX;
 				// _prevStepY = _currentY;
 
-				// _currentX = (_masterX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
-				// _currentY = (_masterY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
+				// _currentX = ($game.$player._masterX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
+				// _currentY = ($game.$player._masterY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
 
 				//try only changing the src (frame) every X frames
 				if(($game.$player.currentStep-1)%8 == 0) {
@@ -1613,6 +1646,8 @@ window.requestAnimFrame = (function(){
 			//put the character back to normal position
 			_srcX = 80,
 			_srcY =  _direction * $game.TILE_SIZE*2;
+
+
 			
 		},
 
@@ -1636,7 +1671,7 @@ window.requestAnimFrame = (function(){
 				
 
 				//calc local for start point for pathfinding
-				$game.masterToLocal(_masterX, _masterY, function(loc) {
+				$game.masterToLocal($game.$player._masterX, $game.$player._masterY, function(loc) {
 					var start = $game.graph.nodes[loc.y][loc.x],
 						end = $game.graph.nodes[y][x],
 						result = $game.$astar.search($game.graph.nodes, start, end);
@@ -1670,8 +1705,8 @@ window.requestAnimFrame = (function(){
 			var playerInfo = {
 				srcX: _srcX,
 				srcY: _srcY,
-				x: _masterX,
-				y: _masterY,
+				x: $game.$player._masterX,
+				y: $game.$player._masterY,
 				offX: _offX,
 				offY: _offY,
 				prevX: _prevOffX,
@@ -1687,14 +1722,14 @@ window.requestAnimFrame = (function(){
 			//color algorithms for different levels:
 			if($game.$player.currentLevel === 0) {
 				var square = {
-					x: _masterX,
-					y: _masterY,
+					x: $game.$player._masterX,
+					y: $game.$player._masterY,
 					color: 
 					{
 						h: Math.floor(Math.random()),
 						s: $game.$player.saturation,
 						l: $game.$player.lightness,
-						a: .2,
+						a: .8,
 						owner: 'Russell'
 					}
 				};
@@ -1706,19 +1741,22 @@ window.requestAnimFrame = (function(){
 			//not the "intro level"
 			else {
 				//do a check to see if the tile is owned
-				if($game.currentTiles[_masterX][_masterY].color) {
-					if($game.currentTiles[_masterX][_masterY].color.owner) {
-						console.log('can\'t plant here.');
-					}
+				$game.masterToLocal($game.$player._masterX, $game.$player._masterY, function(loc) {
+					if($game.currentTiles[loc.x][loc.y].color) {
+						if($game.currentTiles[loc.x][loc.y].color.owner) {
+							console.log('can\'t plant here.');
+						}
 					//if it's colored and NOT owned
-					else {
-						$game.$player.addColor(true);
-					}	
-				}
-				//if it is not colored at all
-				else{
-					$game.$player.addColor(false);
-				}
+						else {
+							$game.$player.addColor(true);
+						}	
+					}
+					//if it is not colored at all
+					else{
+						$game.$player.addColor(false);
+					}
+				});
+				
 
 			}
 			
@@ -1728,8 +1766,8 @@ window.requestAnimFrame = (function(){
 			var bombed = [];
 			//square
 			//start at top left corner
-			var origX = _masterX - 1;
-			var origY = _masterY - 1;
+			var origX = $game.$player._masterX - 1;
+			var origY = $game.$player._masterY - 1;
 			var newHue = Math.floor(Math.random()*255);
 			for(var a = 0; a<3; a++) {
 				for(var b = 0; b<3; b++) {
@@ -1754,7 +1792,7 @@ window.requestAnimFrame = (function(){
 						if( a === 1 && b === 1) {
 							//this will be put in the ACTUAL DB,
 							//instead of local
-							square.color.a = .6;
+							square.color.a = 1;
 							square.color.owner = 'Russell'; 			
 						}
 						bombed.push(square);	
@@ -1866,6 +1904,57 @@ $(function() {
 			}		
 		}
 
+	};
+
+})();
+
+(function() {
+
+	_soundtrack = null;
+	_effect = null;
+
+	$game.$audio = {
+		
+		init: function() {
+			_soundtrack = document.createElement('audio'),
+    		_effect = document.createElement('audio'),
+            
+            _soundtrack.addEventListener('canplaythrough', function (e) {
+                this.removeEventListener('canplaythrough', arguments.callee, false);
+                console.log("soundtrack is ready to play.");
+                _soundtrack.play();
+                
+            },false);
+            _soundtrack.addEventListener('error', function (e) {
+               console.log("error sound");
+            }, false);
+            _effect.addEventListener('canplaythrough', function (e) {
+                this.removeEventListener('canplaythrough', arguments.callee, false);
+                console.log("effect is ready to play.");                
+            },false);
+            _effect.addEventListener('error', function (e) {
+               console.log("error effect");
+            }, false);
+        
+            _soundtrack.preload = "auto";
+            _soundtrack.autobuffer = true;
+            _soundtrack.loop = true;
+            _soundtrack.src = 'http://russellgoldenberg.com/civicseed_audio/temp.mp3';
+            _soundtrack.volume = .3;
+            _soundtrack.load();
+
+            _effect.preload = "auto";
+            _effect.autobuffer = true;
+            _effect.src = '/audio/tile.mp3';
+            _effect.volume = .7;
+            _effect.load();
+   
+		},
+
+		playSound: function(i) {
+
+			_effect.play();
+		}
 	};
 
 })();

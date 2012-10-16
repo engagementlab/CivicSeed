@@ -4971,7 +4971,8 @@ a.badge:hover {
 #background,
 #foreground,
 #characters,
-#npcs {
+#npcs,
+#minimap {
   position: absolute;
 }
 #background {
@@ -4985,6 +4986,11 @@ a.badge:hover {
 }
 #foreground {
   z-index: 3;
+}
+#minimap {
+  z-index: 4;
+  right: 0px;
+  background: rgba(20, 20, 20, 0.3);
 }
 .hud {
   margin-top: 20px;
