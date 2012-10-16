@@ -70,7 +70,7 @@
 .speechBubble button {
 	margin: 0 10px;
 }
-#background,#foreground,#characters,#npcs,#minimap{
+#background,#foreground,#characters,#npcs,#minimapPlayer, #minimapTile{
 	position: absolute;
 }
 #background{
@@ -86,10 +86,14 @@
 	z-index: 3;
 }
 
-#minimap{
+#minimapTile{
 	z-index: 4;
 	right:0px;
 	background: rgba(20,20,20,.3);
+}
+#minimapPlayer {
+	z-index: 5;
+	right:0px;
 }
 .hud{
 	margin-top: 20px;

@@ -657,7 +657,7 @@ window.requestAnimFrame = (function(){
 	  					//redraw whole tile, bg included
 	  					$game.$renderer.renderTile(loc.x,loc.y);
 	  					//$game.currenTiles[loc.x][loc.y].count += 1;
-	  					$game.$audio.playSound(0);
+	  					//$game.$audio.playSound(0);
 	  				}
 	  					
 	  			});
@@ -715,7 +715,7 @@ window.requestAnimFrame = (function(){
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
 			_npcsContext = document.getElementById('npcs').getContext('2d');
-			_minimapContext = document.getElementById('minimap').getContext('2d');
+			_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
@@ -1144,11 +1144,11 @@ window.requestAnimFrame = (function(){
 		},
 
 		renderMiniMap: function() {
-			_minimapContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
+			_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
 
 			//draw player
-			_minimapContext.fillStyle = 'rgb(255,0,0)';
-			_minimapContext.fillRect(
+			_minimapPlayerContext.fillStyle = 'rgb(255,0,0)';
+			_minimapPlayerContext.fillRect(
 				$game.$player._masterX,
 				$game.$player._masterY,
 				4,

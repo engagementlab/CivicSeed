@@ -4972,7 +4972,8 @@ a.badge:hover {
 #foreground,
 #characters,
 #npcs,
-#minimap {
+#minimapPlayer,
+#minimapTile {
   position: absolute;
 }
 #background {
@@ -4987,10 +4988,14 @@ a.badge:hover {
 #foreground {
   z-index: 3;
 }
-#minimap {
+#minimapTile {
   z-index: 4;
   right: 0px;
   background: rgba(20, 20, 20, 0.3);
+}
+#minimapPlayer {
+  z-index: 5;
+  right: 0px;
 }
 .hud {
   margin-top: 20px;
