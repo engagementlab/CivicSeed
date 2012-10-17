@@ -386,7 +386,6 @@ window.requestAnimFrame = (function(){
 			
 			//only if it is not in the bottom row (obviously)
 			var tileStateVal = $game.currentTiles[x][y].tileState;
-			console.log(tileStateVal);
 			if( y < $game.VIEWPORT_HEIGHT-1) { 
 				var belowState = $game.currentTiles[x][y+1].tileState;
 
@@ -394,7 +393,6 @@ window.requestAnimFrame = (function(){
 					tileStateVal = belowState;
 				}
 			}
-			console.log(tileStateVal);
 			callback(tileStateVal);
 		},
 
@@ -762,7 +760,7 @@ window.requestAnimFrame = (function(){
 			}
 			else { 
 				if($game.onScreenNpcs.length > 0) {
-					//$game.$npc.animateFrame();
+					$game.$npc.animateFrame();
 				}
 				if($game.$player.isMoving) {
 					$game.$player.render();
@@ -1117,14 +1115,12 @@ window.requestAnimFrame = (function(){
 
 				// else {
 					//nogo
-					console.log(state);
 					if(state === -2) { 
 						_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
 					}
 
 					//go
 					else if(state === -1) { 
-						console.log("shaboooom")
 						_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
 					}
 					//npc
@@ -1192,11 +1188,9 @@ window.requestAnimFrame = (function(){
 				//with the id and value is the object
 				for(var i = 0; i < response.length; i += 1) {
 					var stringId = String(response[i].id);
-					console.log("i: "+stringId);
 					_allNpcs[stringId] = response[i];
 					_allNpcs[stringId].counter = 0;
 					_allNpcs[stringId].currentFrame = 0;
-					console.log(response[i]);
 				}  
 				_loaded = true;
 				$game.$npc.ready = true;
@@ -1246,7 +1240,6 @@ window.requestAnimFrame = (function(){
 
 			
 			//this number should be dynamically generated based on html content
-			_numSlides = 2;
 			//reset the slide to 0 
 			_currentSlide = 0;
 
@@ -1267,6 +1260,15 @@ window.requestAnimFrame = (function(){
 		},
 
 		showResource: function() {
+
+			_numSlides = 2;
+
+			$('.resourceStage').empty();
+			$('.resourceStage').load(_curNpc.resource.url,function() {
+				_numSlides = $('.resourceStage .pages > .page').length;
+				console.log(_numSlides);
+			});
+			
 			$('.speechBubble').slideUp(function() {
 				$('.speechBubble').empty();
 				$game.$npc.isChat = false;
@@ -1281,6 +1283,7 @@ window.requestAnimFrame = (function(){
 				$game.$npc.addButtons();
 				$('.resourceArea').slideDown();
 			});
+			
 		},
 
 		addButtons: function() {
@@ -1342,6 +1345,7 @@ window.requestAnimFrame = (function(){
 		addContent: function() {
 
 			//add the close button
+			
 			$('.resourceArea').append('<a href="#" style="font-size: 24px;"><i class="icon-remove-sign icon-large"></i></a>');
 			$(".resourceArea a i").bind("click", (function () {
 				$game.$npc.hideResource();
@@ -1361,15 +1365,17 @@ window.requestAnimFrame = (function(){
 				}
 				else if(_currentSlide === 0) {
 					var intro = _curNpc.dialog.question[0],
-						inputBox = '<form><input></input></form>';
-						content = _curNpc.dialog.content[0];
+						inputBox = '<form><input></input></form>',
+						content = $('.resourceStage .pages .page').get(0);
+
 					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+intro+'</p>'+content);
 				}
 				else if(_currentSlide > 0) {
-					var content = _curNpc.dialog.content[_currentSlide];
+					var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
 					$('.resourceArea').append(content);
 				}		
 			}
+			
 			
 
 		},
@@ -2196,7 +2202,7 @@ $(document).ready(function() {
 					y: m.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: true
+					debug: false
 				};
 	 			$game.$mouse.updateMouse(mInfo,true);
 	 	}
