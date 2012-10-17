@@ -92,8 +92,9 @@ var self = module.exports = {
 						if(tileStateArray[i] === 0) {
 							tileStateVal = -1;
 						}
-						else if(tileStateArray[i] === 4) {
+						else if(tileStateArray[i] === 4716) {
 							tileStateVal = i;
+							console.log(i);
 						}  
 						else {
 							tileStateVal = -2;

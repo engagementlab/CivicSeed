@@ -14,7 +14,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			answer: [String]
 		},
 		resource: {
-			type: String,
+			kind: String,
 			url: String
 		}
 	});

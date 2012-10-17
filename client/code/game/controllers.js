@@ -386,7 +386,7 @@ window.requestAnimFrame = (function(){
 			
 			//only if it is not in the bottom row (obviously)
 			var tileStateVal = $game.currentTiles[x][y].tileState;
-			
+			console.log(tileStateVal);
 			if( y < $game.VIEWPORT_HEIGHT-1) { 
 				var belowState = $game.currentTiles[x][y+1].tileState;
 
@@ -394,6 +394,7 @@ window.requestAnimFrame = (function(){
 					tileStateVal = belowState;
 				}
 			}
+			console.log(tileStateVal);
 			callback(tileStateVal);
 		},
 
@@ -680,8 +681,8 @@ window.requestAnimFrame = (function(){
 	//private render vars
 	var _tilesheets = [],
 		_allImages = [],
-		_tilesheetWidthPx= 640,
-		_tilesheetHeightPx= 3136,
+		_tilesheetWidthPx= 2688,
+		_tilesheetHeightPx= 2688,
 		_tilesheetWidth= _tilesheetWidthPx / $game.TILE_SIZE,
 		_tilesheetHeight= _tilesheetHeightPx / $game.TILE_SIZE,
 		_tilesheetCanvas= null,
@@ -761,7 +762,7 @@ window.requestAnimFrame = (function(){
 			}
 			else { 
 				if($game.onScreenNpcs.length > 0) {
-					$game.$npc.animateFrame();
+					//$game.$npc.animateFrame();
 				}
 				if($game.$player.isMoving) {
 					$game.$player.render();
@@ -805,16 +806,16 @@ window.requestAnimFrame = (function(){
 				//this will be removed when we ACTUALLY 
 				//change the src of the owner tile in the DB
 				if(tileData.colorInfo.color.owner) {
-					tileData.srcX = 17;
-					tileData.srcY = 5;
-					$game.$renderer.drawTile(tileData);
+					//tileData.srcX = 17;
+					//tileData.srcY = 5;
+					//$game.$renderer.drawTile(tileData);
 				}
 			}
 
 
 			
 			//background tile 1
-			//$game.$renderer.drawTile(tileData);
+			$game.$renderer.drawTile(tileData);
 
 
 		
@@ -831,7 +832,7 @@ window.requestAnimFrame = (function(){
 			if(tileStateVal >= 0) {
 				//get npc spritesheet data, pass it to tiledata, render
 				//$game.$renderer.renderTile(tileData);
-				$game.$npc.render($game.currentTiles[i][j]);
+				//$game.$npc.render($game.currentTiles[i][j]);
 				_hasNpc = true;
 			}	
 
@@ -1071,6 +1072,7 @@ window.requestAnimFrame = (function(){
 			var mX = mouse.cX * $game.TILE_SIZE,
 				mY = mouse.cY * $game.TILE_SIZE;
 
+
 			$game.getTileState(mouse.cX, mouse.cY, function(state) {
 				
 				//clear previous mouse
@@ -1115,12 +1117,14 @@ window.requestAnimFrame = (function(){
 
 				// else {
 					//nogo
+					console.log(state);
 					if(state === -2) { 
 						_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
 					}
 
 					//go
 					else if(state === -1) { 
+						console.log("shaboooom")
 						_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
 					}
 					//npc
@@ -1188,9 +1192,11 @@ window.requestAnimFrame = (function(){
 				//with the id and value is the object
 				for(var i = 0; i < response.length; i += 1) {
 					var stringId = String(response[i].id);
+					console.log("i: "+stringId);
 					_allNpcs[stringId] = response[i];
 					_allNpcs[stringId].counter = 0;
 					_allNpcs[stringId].currentFrame = 0;
+					console.log(response[i]);
 				}  
 				_loaded = true;
 				$game.$npc.ready = true;
@@ -1204,9 +1210,8 @@ window.requestAnimFrame = (function(){
 		show: function() {
 			if(!$game.$npc.isResource && !$game.$npc.isChat) {
 				var stringId = String(_index);
-
+				console.log(stringId);
 				_curNpc = _allNpcs[stringId];
-
 				
 				//if this is false, it means we clicked the npc square 
 				//that is the top one (which doesn't have a unique id in our list
@@ -1239,7 +1244,9 @@ window.requestAnimFrame = (function(){
 			//figure out which npc was clicked
 			//this was set on the click if an npc was clicked
 
-			_numSlides = _curNpc.dialog.content.length;
+			
+			//this number should be dynamically generated based on html content
+			_numSlides = 2;
 			//reset the slide to 0 
 			_currentSlide = 0;
 
@@ -2189,7 +2196,7 @@ $(document).ready(function() {
 					y: m.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 	 			$game.$mouse.updateMouse(mInfo,true);
 	 	}

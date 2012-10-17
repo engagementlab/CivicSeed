@@ -1,6 +1,6 @@
 module.exports.global = [{
-	id: '446',
-	name: 'Rick Roll',
+	id: '584',
+	name: 'Ricky Bobby',
 	level: 1,
 	spriteMap: [{
 		x: 16,
@@ -21,7 +21,7 @@ module.exports.global = [{
 		answer: ['Tyrannosaurus Wrecks!']
 	},
 	resource: {
-		type: 'article',
+		kind: 'article',
 		// url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/446.html',
 		url: '/articles/446.html'
 	}
@@ -48,11 +48,11 @@ module.exports.global = [{
 		answer: ['The answer is 42.']
 	},
 	resource: {
-		type: 'article',
+		kind: 'article',
 		url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
 	}
 }, {
-	id: '22',
+	id: '20000',
 	name: 'Newbie',
 	level: 1,
 	spriteMap: [{
@@ -74,7 +74,7 @@ module.exports.global = [{
 		answer: ['Dats twoo.']
 	},
 	resource: {
-		type: 'video',
+		kind: 'video',
 		url: 'http://www.youtube.com/watch?v=P8a4iiOnzsc'
 	}
 }];
