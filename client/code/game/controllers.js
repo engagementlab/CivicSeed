@@ -830,7 +830,7 @@ window.requestAnimFrame = (function(){
 			if(tileStateVal >= 0) {
 				//get npc spritesheet data, pass it to tiledata, render
 				//$game.$renderer.renderTile(tileData);
-				//$game.$npc.render($game.currentTiles[i][j]);
+				$game.$npc.render($game.currentTiles[i][j]);
 				_hasNpc = true;
 			}	
 
@@ -953,6 +953,7 @@ window.requestAnimFrame = (function(){
 		
 			_hasNpc = false;
 
+			
 			//since we are sliding here (or first time), clear foreground context?
 			_foregroundContext.clearRect(
 				0,
@@ -980,8 +981,9 @@ window.requestAnimFrame = (function(){
 		//this is a fix because a npc only clears its previous when it draws
 		//a new one, therefore the edge is left hanging.
 		clearEdgesFix: function() {
-
+			
 			if($game.stepDirection === 'left') {
+
 				//clear right edge
 				_npcsContext.clearRect(
 					$game.VIEWPORT_WIDTH * $game.TILE_SIZE - $game.TILE_SIZE,
@@ -1366,7 +1368,7 @@ window.requestAnimFrame = (function(){
 				else if(_currentSlide === 0) {
 					var intro = _curNpc.dialog.question[0],
 						inputBox = '<form><input></input></form>',
-						content = $('.resourceStage .pages .page').get(0);
+						content = $('.resourceStage .pages .page').get(0).innerHTML;
 
 					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+intro+'</p>'+content);
 				}
@@ -2202,7 +2204,7 @@ $(document).ready(function() {
 					y: m.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 	 			$game.$mouse.updateMouse(mInfo,true);
 	 	}
