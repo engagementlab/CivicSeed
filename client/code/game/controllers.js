@@ -375,8 +375,8 @@ window.requestAnimFrame = (function(){
 			}
 
 			$game.graph = new Graph($game.gridTiles);
-			var st = $game.graph.toString();
-			console.log(st);
+			//var st = $game.graph.toString();
+			//console.log(st);
 			callback();
 		},
 
@@ -625,10 +625,14 @@ window.requestAnimFrame = (function(){
 
 		newBomb: function(bombed) {
 
+			//THIS WILL MOVE TO THE RPC on server, NOT local
+			//this will simply send out the coords of the tiles to redraw 
+
 			for(var b = 0; b < bombed.length; b += 1) {
 				//only add it to render list if it is on current screen
 				$game.masterToLocal(bombed[b].x, bombed[b].y, function(loc){
 	  				if(loc) {
+
 						//if there IS a color
 	  					if($game.currentTiles[loc.x][loc.y].color) {
 	  						//if the tile is an owner, don't do shit
@@ -638,24 +642,38 @@ window.requestAnimFrame = (function(){
 
 								//if the new guy is now chief
 	  							if(bombed[b].color.owner) {
-	  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;	
+	  								$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
+
 	  							}
-	  							if($game.currentTiles[loc.x][loc.y].color.count < 4 ) {
-	  								$game.currentTiles[loc.x][loc.y].color.count += 1;
-	  								//$game.currentTiles[loc.x][loc.y].color.h = ($game.currentTiles[loc.x][loc.y].color.h + bombed[b].color.h) * .5;
+	  							//reassign color based on previous alpha (increase)
+	  							else if($game.currentTiles[loc.x][loc.y].color.a < .8 ) {
+	  								$game.currentTiles[loc.x][loc.y].color.a += .15;
+	  								
+	  								if($game.currentTiles[loc.x][loc.y].color.a == .35) {
+	  									$game.currentTiles[loc.x][loc.y].color.h = 0;
+	  								}
+	  								else if($game.currentTiles[loc.x][loc.y].color.a == .5) {
+	  									$game.currentTiles[loc.x][loc.y].color.h = 50;
+	  								}
+	  								else if($game.currentTiles[loc.x][loc.y].color.a == .65) {
+	  									$game.currentTiles[loc.x][loc.y].color.h = 100;
+	  								}
+	  								else {
+	  									$game.currentTiles[loc.x][loc.y].color.h = 150;
+	  								}
 	  							}
 	  						}
 	  				
 	  					}
-	  					//add new color data to tile if nothing ther©767e
+	  					//add new color data to tile if nothing there
 	  					else {
-	  						bombed[b].color.count = 1;
 	  						$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
 	    				}
 	  					
 	  					//redraw whole tile, bg included
 	  					$game.$renderer.renderTile(loc.x,loc.y);
-	  					//$game.currenTiles[loc.x][loc.y].count += 1;
+	  					
+	  					//play sound clip
 	  					//$game.$audio.playSound(0);
 	  				}
 	  					
@@ -689,7 +707,8 @@ window.requestAnimFrame = (function(){
 		_charactersContext= null,
 		_npcsContext= null,
 		_mouseContext = null,
-		_minimapContext = null,
+		_minimapPlayerContext = null,
+		_minimapTileContext = null,
 		_tilesheetContext= null,
 		_prevMouseX = 0,
 		_prevMouseY = 0,
@@ -715,6 +734,7 @@ window.requestAnimFrame = (function(){
 			_charactersContext = document.getElementById('characters').getContext('2d');
 			_npcsContext = document.getElementById('npcs').getContext('2d');
 			_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
+			_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
 
 			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
@@ -797,13 +817,13 @@ window.requestAnimFrame = (function(){
 
 				//color tile first (move this above once it has transparency)
 			if(colorVal) {
-				tileData.colorInfo = { color: colorVal};
+				tileData.color = colorVal;
 				$game.$renderer.drawColor(tileData);
 				//if it is an owner tile, draw a flower!
 
 				//this will be removed when we ACTUALLY 
 				//change the src of the owner tile in the DB
-				if(tileData.colorInfo.color.owner) {
+				if(tileData.color.owner) {
 					//tileData.srcX = 17;
 					//tileData.srcY = 5;
 					//$game.$renderer.drawTile(tileData);
@@ -859,39 +879,7 @@ window.requestAnimFrame = (function(){
 		},
 		drawColor: function(tileData) {
 
-			
-			var alph,hsla;
-
-			//if the tile is the origin, then color it full color
-			if(tileData.colorInfo.color.owner) {
-				alph = tileData.colorInfo.color.a;
-				hsla = 'hsla('+tileData.colorInfo.color.h+','+tileData.colorInfo.color.s+','+tileData.colorInfo.color.l+','+alph+')';
-			}
-			else {
-				//if not, display color based on number of times its been colored
-				alph = (tileData.colorInfo.color.count * .1) + .3;
-
-				//if it is just colored once, use original color
-				if(tileData.colorInfo.color.count === 1) {
-					alph = .4;
-					hsla = 'hsla('+tileData.colorInfo.color.h+',90%,80%,'+alph+')';
-				}
-
-				//otherwise, it has been colored by multi people
-				else if(tileData.colorInfo.color.count === 2) {
-					hsla = 'hsla(70,90%,80%,'+alph+')';
-				}
-				else if(tileData.colorInfo.color.count === 3) {
-					hsla = 'hsla(140,90%,80%,'+alph+')';
-
-				}
-				else {
-					hsla = 'hsla(210,90%,80%,1)';
-
-				}
-
-			}
-
+			var hsla = 'hsla('+tileData.color.h+','+tileData.color.s +','+tileData.color.l +','+tileData.color.a + ')';
 			_backgroundContext.fillStyle = hsla;
 			_backgroundContext.fillRect(
 				tileData.destX * $game.TILE_SIZE,
@@ -1117,18 +1105,25 @@ window.requestAnimFrame = (function(){
 
 				// else {
 					//nogo
-					if(state === -2) { 
-						_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
-					}
 
-					//go
-					else if(state === -1) { 
-						_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
+					if($game.$player.seedMode) {
+						_backgroundContext.strokeStyle = 'rgba(255,255,0,.4)'; // red
 					}
-					//npc
 					else {
-						_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
+						if(state === -2) { 
+							_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
+						}
+
+						//go
+						else if(state === -1) { 
+							_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
+						}
+						//npc
+						else {
+							_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
+						}
 					}
+					
 					_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
 				//}
 				
@@ -1155,6 +1150,17 @@ window.requestAnimFrame = (function(){
 				$game.$player._masterY,
 				4,
 				4
+				);
+		},
+		renderMiniTile: function(sq) {
+			
+			var hsla = 'hsla('+sq.color.h+','+sq.color.s+','+sq.color.l+',1)';
+			_minimapTileContext.fillStyle = hsla;
+			_minimapTileContext.fillRect( 
+				sq.x,
+				sq.y,
+				1,
+				1
 				);
 		}
 
@@ -1268,7 +1274,6 @@ window.requestAnimFrame = (function(){
 			$('.resourceStage').empty();
 			$('.resourceStage').load(_curNpc.resource.url,function() {
 				_numSlides = $('.resourceStage .pages > .page').length;
-				console.log(_numSlides);
 			});
 			
 			$('.speechBubble').slideUp(function() {
@@ -1430,7 +1435,6 @@ window.requestAnimFrame = (function(){
 
 			$game.$npc.addButtons();
 
-			console.log(_currentSlide);
 			//add content (depending on what it is )
 			
 			
@@ -1690,7 +1694,13 @@ window.requestAnimFrame = (function(){
 					var start = $game.graph.nodes[loc.y][loc.x],
 						end = $game.graph.nodes[y][x],
 						result = $game.$astar.search($game.graph.nodes, start, end);
-					ss.rpc('player.movePlayer', result);
+						if(result.length > 0) {
+							ss.rpc('player.movePlayer', result);
+						}
+						else {
+
+						}
+					
 				});
 			
 
@@ -1730,8 +1740,25 @@ window.requestAnimFrame = (function(){
 			$game.$renderer.renderPlayer(playerInfo);
 		},
 
-		dropSeed: function() {
+		dropSeed: function(options) {
 			//add color the surrounding tiles
+			var oX, oY, mX, mY;
+
+
+			if(options.mouse) {
+				oX = options.x,
+				oY = options.y;
+				mX = $game.currentTiles[oX][oY].x;
+				mY = $game.currentTiles[oX][oY].y;
+			}
+			else {
+				$game.masterToLocal($game.$player._masterX, $game.$player._masterY,  function(loc) {
+					oX = loc.x;
+					oY = loc.y;
+				});
+				mX = $game.$player._masterX;
+				mY = $game.$player._masterY;
+			}
 
 			var bombed = [];
 			//color algorithms for different levels:
@@ -1756,33 +1783,31 @@ window.requestAnimFrame = (function(){
 			//not the "intro level"
 			else {
 				//do a check to see if the tile is owned
-				$game.masterToLocal($game.$player._masterX, $game.$player._masterY, function(loc) {
-					if($game.currentTiles[loc.x][loc.y].color) {
-						if($game.currentTiles[loc.x][loc.y].color.owner) {
-							console.log('can\'t plant here.');
-						}
-					//if it's colored and NOT owned
-						else {
-							$game.$player.addColor(true);
-						}	
-					}
-					//if it is not colored at all
-					else{
-						$game.$player.addColor(false);
-					}
-				});
 				
-
+				if($game.currentTiles[oX][oY].color) {
+					if($game.currentTiles[oX][oY].color.owner) {
+						console.log('can\'t plant here.');
+					}
+				//if it's colored and NOT owned
+					else {
+						$game.$player.addColor(true, mX,mY);
+					}	
+				}
+				//if it is not colored at all
+				else{
+					$game.$player.addColor(false, mX, mY);
+				}
+				
 			}
 			
 		},
 
-		addColor: function(isColored) {
+		addColor: function(isColored, x, y) {
 			var bombed = [];
 			//square
 			//start at top left corner
-			var origX = $game.$player._masterX - 1;
-			var origY = $game.$player._masterY - 1;
+			var origX = x - 1;
+			var origY = y - 1;
 			var newHue = Math.floor(Math.random()*255);
 			for(var a = 0; a<3; a++) {
 				for(var b = 0; b<3; b++) {
@@ -1812,6 +1837,8 @@ window.requestAnimFrame = (function(){
 						}
 						bombed.push(square);	
 					}
+
+					$game.$renderer.renderMiniTile(square);
 				}
 			}
 			ss.rpc('player.dropSeed', bombed);		
@@ -1886,36 +1913,46 @@ $(function() {
 				//check if it is a nogo or npc
 				//if the tile BELOW the tile clicked is npc, 
 				//then user clicked the head, so act like npc
-				
-				$game.getTileState($game.$mouse.curX, $game.$mouse.curY, function(state) {
-					//go
-					if(state === -1) {
-						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
-						$game.$npc.hideChat();
-					}
-					
-					//npc
-					else if(state >= 0 ) {
-						//only trave to a npc if we are not planting
-					
-						//set index val so reousrce can show right one
-						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
-
-						//if you click on a different square then the previously 
-						//selected npc, then hide the npc info if it is showing
-
-						$game.$npc.setIndex(newIndex);
-				
-						//move them to the spot to the 
-						//BOTTOM LEFT corner of the npc 
-						//(consistent so we leave that open in tilemap)
-						//also make sure it is not a transition tile
-						$game.$player.npcOnDeck = true;
-						$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+				if($game.$player.seedMode) {
+					var m = {
+							mouse: true,
+							x: $game.$mouse.curX,
+					 		y: $game.$mouse.curY
+					 		};
+					$game.$player.dropSeed(m);
+				}
+				else {
+					$game.getTileState($game.$mouse.curX, $game.$mouse.curY, function(state) {
+						//go
+						if(state === -1) {
+							$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
+							$game.$npc.hideChat();
+						}
 						
+						//npc
+						else if(state >= 0 ) {
+							//only trave to a npc if we are not planting
 						
-					}
-				});
+							//set index val so reousrce can show right one
+							var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
+
+							//if you click on a different square then the previously 
+							//selected npc, then hide the npc info if it is showing
+
+							$game.$npc.setIndex(newIndex);
+					
+							//move them to the spot to the 
+							//BOTTOM LEFT corner of the npc 
+							//(consistent so we leave that open in tilemap)
+							//also make sure it is not a transition tile
+							$game.$player.npcOnDeck = true;
+							$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+							
+							
+						}
+					});
+				}
+				
 			}		
 		}
 
@@ -2163,20 +2200,19 @@ $(function() {
 
 
 $(document).ready(function() {
-	
+
 	$('.seedButton').bind("click", (function () {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 		if(!$game.inTransit && !$game.$player.isMoving) {
-			$game.$player.dropSeed();
+			$game.$player.seedMode = !$game.$player.seedMode;
 		}
 		
 	}));
 	$(window).bind("keypress", (function (key) {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
-		if(!$game.inTransit && !$game.$player.isMoving && key.which === 115) {
-				$game.$player.dropSeed();
-		}
-		
+		if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
+				$game.$player.dropSeed({mouse:false});
+		}		
 	}));
 	//change cursor on mouse move
 	$('.gameboard').mousemove(function(m) {
@@ -2194,7 +2230,7 @@ $(document).ready(function() {
 		}
  	});
 
- 	//figure out if we should transition (or do other stuff later)
+ 	//figure out if we shoupdatuld transition (or do other stuff later)
  	$('.gameboard').click(function(m) {
  	
  		if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
@@ -2204,10 +2240,11 @@ $(document).ready(function() {
 					y: m.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: true
+					debug: false
 				};
 	 			$game.$mouse.updateMouse(mInfo,true);
 	 	}
  	});
+ 	
 
 });
