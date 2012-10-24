@@ -26,7 +26,7 @@ module.exports.global = [{
 		url: '/articles/446.html'
 	}
 }, {
-	id: '7283',
+	id: '4294',
 	name: 'Wizard',
 	level: 2,
 	spriteMap: [{

@@ -789,13 +789,12 @@ window.requestAnimFrame = (function(){
 					$game.$map.growSeeds();	
 				}				
 			}
-			
 		},
 		renderTile: function(i, j) {
 			//tilemap reference to images starts at 1 instead of 0
-			var backIndex = $game.currentTiles[i][j].background - 1,
-				backIndex2 = $game.currentTiles[i][j].background2 - 1,
-				foreIndex = $game.currentTiles[i][j].foreground - 1,
+			var backIndex = $game.currentTiles[i][j].background-1,
+				backIndex2 = $game.currentTiles[i][j].background2-1,
+				foreIndex = $game.currentTiles[i][j].foreground-1,
 				tileStateVal = $game.currentTiles[i][j].tileState,
 				colorVal = $game.currentTiles[i][j].color,
 
@@ -830,11 +829,10 @@ window.requestAnimFrame = (function(){
 				}
 			}
 
-
-			
 			//background tile 1
-			$game.$renderer.drawTile(tileData);
-
+			if(backIndex > -1) {
+				$game.$renderer.drawTile(tileData);
+			}
 
 		
 							
@@ -914,7 +912,7 @@ window.requestAnimFrame = (function(){
 				_charactersContext.clearRect(
 					prevX,
 					prevY - $game.TILE_SIZE,
-					$game.TILE_SIZE*2,
+					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
 
@@ -922,11 +920,11 @@ window.requestAnimFrame = (function(){
 					_tilesheets[1], 
 					tileData.srcX,
 					tileData.srcY,
-					$game.TILE_SIZE*2,
+					$game.TILE_SIZE,
 					$game.TILE_SIZE*2,
 					curX,
 					curY - $game.TILE_SIZE,
-					$game.TILE_SIZE*2,
+					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
 			});	
@@ -992,9 +990,9 @@ window.requestAnimFrame = (function(){
 			else if($game.stepDirection === 'up') {
 				_npcsContext.clearRect(
 					0,
-					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE - $game.TILE_SIZE,
+					$game.VIEWPORT_HEIGHT * $game.TILE_SIZE - $game.TILE_SIZE*2,
 					$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-					$game.TILE_SIZE
+					$game.TILE_SIZE * 2
 				);
 			}
 			else if($game.stepDirection === 'down') {
@@ -1059,7 +1057,6 @@ window.requestAnimFrame = (function(){
 
 			var mX = mouse.cX * $game.TILE_SIZE,
 				mY = mouse.cY * $game.TILE_SIZE;
-
 
 			$game.getTileState(mouse.cX, mouse.cY, function(state) {
 				
@@ -1212,7 +1209,6 @@ window.requestAnimFrame = (function(){
 		show: function() {
 			if(!$game.$npc.isResource && !$game.$npc.isChat) {
 				var stringId = String(_index);
-				console.log(stringId);
 				_curNpc = _allNpcs[stringId];
 				
 				//if this is false, it means we clicked the npc square 
@@ -1221,7 +1217,6 @@ window.requestAnimFrame = (function(){
 				if(!_curNpc) {
 					_index += $game.TOTAL_WIDTH;
 					stringId = String(_index);
-					console.log(stringId);
 					_curNpc = _allNpcs[stringId];
 				}
 
@@ -1494,7 +1489,7 @@ window.requestAnimFrame = (function(){
 			data.srcY = _allNpcs[stringId].spriteMap[0].y,
 			data.x = tile.x,
 			data.y = tile.y;
-			$game.$renderer.renderNpc(data,false);
+			$game.$renderer.renderNpc(data);
 		}
  
 	}
@@ -1511,7 +1506,7 @@ window.requestAnimFrame = (function(){
  		_offY = 0,
  		_prevOffX = 0,
  		_prevOffY = 0,
- 		_srcX = 80,
+ 		_srcX = 0,
  		_srcY = 0,
  		_curFrame = 0,
  		_numFrames = 4,
@@ -1592,16 +1587,16 @@ window.requestAnimFrame = (function(){
 					//since the character will be in different rows
 					//will be 0,1,2,3
 					if(_currentStepIncX === 1) {
-						_direction = 0;
+						_direction = 2;
 					}
 					else if(_currentStepIncX === -1) {
-						_direction = 0;
+						_direction = 1;
 					}
 					else if(_currentStepIncY === -1) {
 						_direction = 4;
 					}
 					else {
-						_direction = 7;
+						_direction = 3;
 					}
 				}
 
@@ -1627,7 +1622,7 @@ window.requestAnimFrame = (function(){
 						_curFrame = 0;
 					}
 				}
-				_srcX = _curFrame * $game.TILE_SIZE*2,
+				_srcX = _curFrame * $game.TILE_SIZE,
 				_srcY =  _direction * $game.TILE_SIZE*2;
 
 				//$game.$renderer.renderPlayer(playerInfo);
@@ -1637,6 +1632,17 @@ window.requestAnimFrame = (function(){
 		},
 
 		endMove: function () {
+			_offX = 0,
+			_offY = 0;
+
+			//put the character back to normal position
+			_srcX = 0,
+			_srcY =  0;
+
+			_prevOffX= 0;
+			_prevOffY= 0;
+
+			$game.$player.render();
 			if(_willTravel) {
 				var beginTravel = function(){
 					if($game.dataLoaded){
@@ -1659,15 +1665,8 @@ window.requestAnimFrame = (function(){
 				}
 				$game.$player.isMoving = false;
 			}
-			_offX = 0,
-			_offY = 0;
-
-			//put the character back to normal position
-			_srcX = 80,
-			_srcY =  _direction * $game.TILE_SIZE*2;
-
-
 			
+
 		},
 
 		
@@ -2225,7 +2224,6 @@ $(document).ready(function() {
 				offY: this.offsetTop,
 				debug: false
 			};
-
 			$game.$mouse.updateMouse(mInfo, false); 
 		}
  	});
