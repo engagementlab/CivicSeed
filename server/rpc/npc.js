@@ -1,21 +1,19 @@
-var service;
-var Users;
-var Npc;
-var db;
-
 var self = exports.actions = function(req, res, ss) {
+
+	// req.use('session');
+	// req.use('account.user.authenticated');
 
 	console.log('CS:'.blue + ' npc RPC request ---->'.magenta);
 	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 	// console.log(ss.db);
 
+	var service = ss.service;
+	var UserModel = service.useModel('user', 'ss').UserModel;
+	var NpcModel = service.useModel('npc', 'ss').NpcModel;
+	var GnomeModel = service.useModel('npc', 'ss').GnomeModel;
+
 	return {
 		init: function() {
-			service = ss.service;
-			User = service.useModel('user', 'ss').UserModel;
-			Npc = service.useModel('npc', 'ss').NpcModel;
-			Gnome = service.useModel('npc', 'ss').GnomeModel;
-
 			res(true); // successful
 		},
 		// This is a working example:
@@ -27,13 +25,21 @@ var self = exports.actions = function(req, res, ss) {
 		// });
 		
 		getNpcById: function(npcId) {
-			Npc.find({ id: npcId }, function (err, npc) {
-				res(npc);
+			NpcModel.find({ id: npcId }, function (err, npc) {
+				if(err) {
+					console.error('  Could not find NPC: %s  '.red.inverse, err);
+				} else {
+					res(npc);
+				}
 			});
 		},
 		getNpcs: function() {
-			Npc.find(function (err, npcs) {
-				res(npcs);
+			NpcModel.find(function (err, npcs) {
+				if(err) {
+					console.error('  Could not find NPCs: %s  '.red.inverse, err);
+				} else {
+					res(npcs);
+				}
 			});
 		},
 		movePlayer: function() {

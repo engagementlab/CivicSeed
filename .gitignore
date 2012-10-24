@@ -58,8 +58,9 @@ password.js
 /controllers/_temp/
 /controllers/game/_temp/
 /parameters.js
-/notes.js
-/TODO.js
 /config.json
 /config-other.js
 /client/static/audio/music/temp.mp3
+/_MEETUP.md
+/_TODO.md
+/_NOTES.md
