@@ -1,19 +1,18 @@
 {
-  "name": "CivicSeed-development",
+  "name": "CivicSeed-testing",
   "authors": [
     "Robert Hall <@americanyak>",
-    "Russell Goldenberg <@russellgoldenberg>",
-    "Jon Dutko <@jondutko>"
+    "Russell Goldenberg <@russellgoldenberg>"
   ],
   "description": "Social gaming for civic training",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "keywords": [
     "social",
     "civic",
     "training"
   ],
   "private": true,
-  "homepage": "http://yettocome.com",
+  "homepage": "http://engagementgamelab.org/2012/08/civic-seed/",
   "main": "./server.js",
   "repository": {
     "type": "git",
@@ -45,7 +44,7 @@
     "mocha": "*",
     "should": "*"
   },
-  "subdomain": "civicseed-development",
+  "subdomain": "civicseed-testing",
   "scripts": {
     "start": "server.js"
   }

@@ -1,47 +1,26 @@
-var intervalId = {};
-// var crypto = require('crypto');
+// Server-side Code
 
-var self = exports.actions = function(req, res, ss) {
+// Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
+exports.actions = function(req, res, ss) {
+
+	// Example of pre-loading sessions into req.session using internal middleware
+	req.use('session');
+	req.use('account.user.authenticated');
 
 	console.log('CS:'.blue + ' chat RPC request ---->'.magenta);
 	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 
 	return {
-		on: function() {
-			intervalId = setInterval(function() {
-					var message = 'Message from player';
-					ss.publish.all('ss-multi', message);
-			}, 3000);
-			setTimeout(function() {
-				res("Receiving SpaceMail"); 
-			}, 2000);
-		},
-		off: function(reason) {
-			console.log("Received reason: %s", reason);
-			clearInterval(intervalId);
-			setTimeout(function() {
-				ss.publish.all('ss-multi', reason);
-				res("Ignoring SpaceMail");
-			}, 2000);
-		},
-		// on: function() {
-		// 	intervalId = setInterval(function() {
-		// 		crypto.randomBytes(16, function(ex,buf) {
-		// 			var message = 'Message from space: ' + buf;
-		// 			ss.publish.all('ss-example', message);
-		// 		});
-		// 	}, 3000);
-		// 	setTimeout(function() {
-		// 		res("Receiving SpaceMail"); 
-		// 	}, 2000);
-		// },
-		// off: function(reason) {
-		// 	console.log("Received reason: %s", reason);
-		// 	clearInterval(intervalId);
-		// 	setTimeout(function() {
-		// 		ss.publish.all('ss-example', reason);
-		// 		res("Ignoring SpaceMail");
-		// 	}, 2000);
-		// }
+
+		sendMessage: function(message) {
+			if (message && message.length > 0) {         // Check for blank messages
+				ss.publish.all('newMessage', message);     // Broadcast the message to everyone
+				return res(true);                          // Confirm it was sent to the originating client
+			} else {
+				return res(false);
+			}
+		}
+
 	};
-}
+
+};

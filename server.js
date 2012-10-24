@@ -8,7 +8,8 @@ flash = require('connect-flash'),
 // fs = require('fs'),
 server,
 service,
-passportConfig;
+passportConfig,
+nodeEnv = app.get('env');
 
 console.log('\n\n < < < = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = > > > '.green);
 console.log(' < < < = = = = = = = = = = = =   Starting the Civic Seed Game Engine   = = = = = = = = = = = = > > > '.green.inverse);
@@ -18,7 +19,7 @@ console.log(' < < < = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 service = require('./service.js');
 
 // Setup database services, based on the config
-service.init(function(databases) {
+service.connectMongoose(app, function(databases) {
 
 	var control = require('./controllers.js')(app, service);
 	var hbsHelpers = service.useModule('middleware/hbs-helpers');
@@ -35,12 +36,12 @@ service.init(function(databases) {
 		ss.client.formatters.add(require('ss-stylus'));
 
 		// use redis
-		if(config.get('useRedis')) {
+		if(config.get('USE_REDIS')) {
 			redisConfig = {
-				host: config.get('redisHost'),
-				port: config.get('redisPort'),
-				pass: config.get('redisPw'),
-				db: config.get('redisDb')
+				host: config.get('REDIS_HOST'),
+				port: config.get('REDIS_PORT'),
+				pass: config.get('REDIS_PW'),
+				db: config.get('REDIS_DB')
 			};
 			ss.session.store.use('redis', redisConfig);
 			ss.publish.transport.use('redis', redisConfig);
@@ -89,6 +90,22 @@ service.init(function(databases) {
 		app.use(passport.initialize());
     	app.use(passport.session());
 
+// 		// ...LOAD MIDDLEWARE...
+// 		var rootDir = process.cwd();
+// 		var middleware = {
+// 			user: require(rootDir + '/server/middleware/account/user'),
+// 		};
+// 		// var temply1 = middleware.user.authenticated;
+// 		// var temply2 = middleware.user.authenticated();
+// 		// console.log(temply1, temply2);
+// 		app.use(middleware.user.authenticated('express'));
+
+// // app.use(function(req, res, next){
+// //   console.log('%s %s', req.method, req.url);
+// //   next();
+// // });
+
+
 		console.log('CS: Config: Default configurations set up.'.blue)
 	});
 
@@ -98,21 +115,21 @@ service.init(function(databases) {
 		// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?
 		// ss.client.packAssets();
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
 	});
 
 	// testing config
 	// runner: 'NODE_ENV=testing nodemon app.js'
 	app.configure('testing', function() {
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
 	});
 
 	// staging config ???DO WE EVEN NEED A STAGING ENVIRONMENT???
 	// runner: 'NODE_ENV=staging node app.js'
 	app.configure('staging', function() {
 		ss.client.packAssets();
-		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
 	});
 
 	// live config
@@ -122,7 +139,7 @@ service.init(function(databases) {
 		// var oneYear = 31557600000;
 		// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 		// app.use(express.errorHandler()); 
-		console.log('CS: Config: Running in '.blue + config.get('nodeEnv') + ' mode.'.blue);
+		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
 	});
 
 	//passportConfig = require('./passportconfig.js')(app, service);

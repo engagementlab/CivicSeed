@@ -9,7 +9,7 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		// nodeEnv = config.get('nodeEnv');
+		// nodeEnv = app.get('env');
 		// User = service.useModel('user').UserModel;
 		Invitee = service.useModel('user', 'preload').InviteeModel;
 
