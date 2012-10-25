@@ -322,6 +322,7 @@ window.requestAnimFrame = (function(){
 			//reset array
 			$game.nextTiles.length = 0;
 			callback();
+			
 		},
 
 		createPathGrid: function(callback) {
@@ -1904,7 +1905,7 @@ $(function() {
 					cX: $game.$mouse.curX,
 					cY: $game.$mouse.curY,
 				};
-				$game.$renderer.renderMouse(mouseStuff); 
+				//$game.$renderer.renderMouse(mouseStuff); 
 			}
 
 			if(clicked) {
