@@ -11,7 +11,8 @@ var self = module.exports = {
 
 	actions: function(req, res, ss) {
 
-		req.use('session');
+		// req.use('session');
+		// req.use('account.user.authenticated');
 
 		console.log('CS:'.blue + ' player RPC request ---->'.magenta);
 		console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
@@ -19,23 +20,6 @@ var self = module.exports = {
 		// Russ, it's all hooked up. Access the db via ss.db
 		//console.log(ss.db);
 		return {
-			// on: function() {
-			// 	intervalId = setInterval(function() {
-			// 			var message = 'Message from player';
-			// 			ss.publish.all('ss-multi', message);
-			// 	}, 3000);
-			// 	setTimeout(function() {
-			// 		res("Receiving SpaceMail"); 
-			// 	}, 2000);
-			// },
-			// off: function(reason) {
-			// 	console.log("Received reason: %s", reason);
-			// 	clearInterval(intervalId);
-			// 	setTimeout(function() {
-			// 		ss.publish.all('ss-multi', reason);
-			// 		res("Ignoring SpaceMail");
-			// 	}, 2000);
-			// },
 
 			//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 			init: function() {

@@ -8,18 +8,14 @@ var self = module.exports = {
 	db: null,
 	mongooseConnected: (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2),
 
-	init: function(callback) {
+	connectMongoose: function(app, callback) {
 		console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
-		self.connectMongoose(callback);
-	},
-
-	connectMongoose: function(callback) {
 		// connect to database
 		if(!self.mongooseConnected) {
-			self.db = mongoose.createConnection(config.get('mongoURL'));
+			self.db = mongoose.createConnection(config.get('MONGO_URL'));
 			self.db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 			self.db.once('open', function () {
-				console.log('CS:'.blue + ' Database: connection to '.green + config.get('nodeEnv'));
+				console.log('CS:'.blue + ' Database: connection to '.green + app.get('env'));
 				if(typeof callback !== 'undefined') {
 					callback({ mongooseDb: self.db });
 				}

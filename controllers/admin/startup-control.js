@@ -24,7 +24,7 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		nodeEnv = config.get('nodeEnv');
+		nodeEnv = app.get('env');
 		User = service.useModel('user').UserModel;
 
 		self.service = service;
@@ -71,8 +71,8 @@ var self = module.exports = {
 					foregroundArray = tileObject.foregroundArray,
 					tileStateArray = tileObject.tileStateArray,
 					numberOfTiles = backgroundArray.length,
-					mapTilesWidth = config.get('mapTilesWidth'),
-					mapTilesHeight = config.get('mapTilesHeight'),
+					mapTilesWidth = config.get('MAP_TILES_WIDTH'),
+					mapTilesHeight = config.get('MAP_TILES_HEIGHT'),
 					mapX,
 					mapY,
 					tileStateVal,
