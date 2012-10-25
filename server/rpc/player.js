@@ -11,7 +11,7 @@ var self = module.exports = {
 
 	actions: function(req, res, ss) {
 
-		req.use('session');
+		// req.use('session');
 		// req.use('account.user.authenticated');
 
 		console.log('CS:'.blue + ' player RPC request ---->'.magenta);

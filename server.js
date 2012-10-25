@@ -35,17 +35,17 @@ service.connectMongoose(app, function(databases) {
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
 
-		// use redis
-		if(config.get('USE_REDIS')) {
-			redisConfig = {
-				host: config.get('REDIS_HOST'),
-				port: config.get('REDIS_PORT'),
-				pass: config.get('REDIS_PW'),
-				db: config.get('REDIS_DB')
-			};
-			ss.session.store.use('redis', redisConfig);
-			ss.publish.transport.use('redis', redisConfig);
-		}
+		// // use redis
+		// if(config.get('USE_REDIS')) {
+		// 	redisConfig = {
+		// 		host: config.get('REDIS_HOST'),
+		// 		port: config.get('REDIS_PORT'),
+		// 		pass: config.get('REDIS_PW'),
+		// 		db: config.get('REDIS_DB')
+		// 	};
+		// 	ss.session.store.use('redis', redisConfig);
+		// 	ss.publish.transport.use('redis', redisConfig);
+		// }
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', databases.mongooseDb);

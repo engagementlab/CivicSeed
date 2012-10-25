@@ -3,9 +3,9 @@
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function(req, res, ss) {
 
-	// Example of pre-loading sessions into req.session using internal middleware
-	req.use('session');
-	req.use('account.user.authenticated');
+	// // Example of pre-loading sessions into req.session using internal middleware
+	// req.use('session');
+	// req.use('account.user.authenticated');
 
 	console.log('CS:'.blue + ' chat RPC request ---->'.magenta);
 	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
