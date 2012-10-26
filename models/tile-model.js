@@ -7,6 +7,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		isMapEdge: Boolean,
 		background: Number,
 		background2: Number,
+		background3: Number,
 		foreground: Number,
 		mapIndex: Number
 	});

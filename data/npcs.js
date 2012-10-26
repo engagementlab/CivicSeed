@@ -1,5 +1,5 @@
 module.exports.global = [{
-	id: '584',
+	id: '302',
 	name: 'Ricky Bobby',
 	level: 1,
 	spriteMap: [{

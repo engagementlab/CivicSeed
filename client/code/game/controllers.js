@@ -596,6 +596,7 @@ window.requestAnimFrame = (function(){
 
 		tick: function() {
             if($game.started) {
+            	$game.$player.update();
             	$game.$renderer.renderFrame();   
             }
 			requestAnimFrame($game.tick);
@@ -698,19 +699,24 @@ window.requestAnimFrame = (function(){
 	//private render vars
 	var _tilesheets = [],
 		_allImages = [],
-		_tilesheetWidthPx= 2688,
-		_tilesheetHeightPx= 2688,
-		_tilesheetWidth= _tilesheetWidthPx / $game.TILE_SIZE,
-		_tilesheetHeight= _tilesheetHeightPx / $game.TILE_SIZE,
+		_tilesheetWidth= 0,
+		_tilesheetHeight= 0,
+		
 		_tilesheetCanvas= null,
+		_tilesheetContext= null,
+
+		_offscreen_backgroundCanvas= null,
+		_offscreen_backgroundContext = null,
+
+		_offscreen_playerCanvas= null,
+		_offscreen_playerContext = null,
+
 		_backgroundContext= null,
 		_foregroundContext= null,
 		_charactersContext= null,
-		_npcsContext= null,
-		_mouseContext = null,
+
 		_minimapPlayerContext = null,
 		_minimapTileContext = null,
-		_tilesheetContext= null,
 		_prevMouseX = 0,
 		_prevMouseY = 0,
 		_hasNpc = false,
@@ -721,9 +727,20 @@ window.requestAnimFrame = (function(){
 		ready: false,
 
 		init: function() {
-			_tilesheetCanvas = document.createElement('canvas');
-        	_tilesheetCanvas.setAttribute('width', _tilesheetWidth * $game.TILE_SIZE);
-        	_tilesheetCanvas.setAttribute('height', _tilesheetHeight * $game.TILE_SIZE);
+			//render the tilesheet to a canvas to pull from their rather than image
+			
+        	//create offscreen canvases for optimized rendering
+        	_offscreen_backgroundCanvas = document.createElement('canvas');
+        	_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+        	_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+
+        	_offscreen_playerCanvas = document.createElement('canvas');
+        	_offscreen_playerCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+        	_offscreen_playerCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+	        
+        	//offscreen contexts
+	        _offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
+			_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
 
 	        //initialize DB and let all players know there is a new active one
 			ss.rpc('player.init', function(response) {
@@ -733,14 +750,18 @@ window.requestAnimFrame = (function(){
 			_backgroundContext = document.getElementById('background').getContext('2d');
 			_foregroundContext = document.getElementById('foreground').getContext('2d');
 			_charactersContext = document.getElementById('characters').getContext('2d');
-			_npcsContext = document.getElementById('npcs').getContext('2d');
+			
 			_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 			_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
 
-			_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
 			//set stroke stuff for mouse 
 			
+			_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Greeen default
+			_foregroundContext.lineWidth = 4;
+			_foregroundContext.save();
+
+
 			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/rick.png']
 			//loop through allimages, load in each one, when done,
 			//renderer is ready
@@ -754,6 +775,41 @@ window.requestAnimFrame = (function(){
 			_tilesheets[num].src = _allImages[num];
 
 			_tilesheets[num].onload = function() {
+				//if it is the map tile data, render to canvas
+				if(num === 0) {
+					var w = _tilesheets[num].width,
+						h = _tilesheets[num].height;
+
+					_tilesheetCanvas = document.createElement('canvas');
+        			_tilesheetCanvas.setAttribute('width', w);
+        			_tilesheetCanvas.setAttribute('height', h);
+        			_tilesheetContext = _tilesheetCanvas.getContext('2d');
+
+        			_tilesheetWidth= w / $game.TILE_SIZE,
+        			_tilesheetHeight= h / $game.TILE_SIZE,
+
+					_tilesheetContext.drawImage(
+						_tilesheets[num],
+						0,
+						0
+					);
+				}
+				//the player sheet
+				else if(num === 1) {
+					var w = _tilesheets[num].width,
+						h = _tilesheets[num].height;
+
+					_offscreen_playerCanvas = document.createElement('canvas');
+        			_offscreen_playerCanvas.setAttribute('width', w);
+        			_offscreen_playerCanvas.setAttribute('height', h);
+        			_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
+
+					_offscreen_playerContext.drawImage(
+						_tilesheets[num],
+						0,
+						0
+					);
+				}
 				var next = num += 1;
 				if(num === _allImages.length) { 
 					$game.$renderer.ready = true;
@@ -792,59 +848,36 @@ window.requestAnimFrame = (function(){
 			}
 		},
 		renderTile: function(i, j) {
+
+			//get the index (which refers to the location of the image)
 			//tilemap reference to images starts at 1 instead of 0
-			var backIndex = $game.currentTiles[i][j].background-1,
+			var backIndex1 = $game.currentTiles[i][j].background-1,
 				backIndex2 = $game.currentTiles[i][j].background2-1,
+				backIndex3 = $game.currentTiles[i][j].background3-1,
+				//will be backIndex3
 				foreIndex = $game.currentTiles[i][j].foreground-1,
 				tileStateVal = $game.currentTiles[i][j].tileState,
 				colorVal = $game.currentTiles[i][j].color,
 
-			
+				tileData = {
+					b1: backIndex1,
+					b2: backIndex2,
+					b3: backIndex3,
+					f: foreIndex,
+					destX: i,
+					destY: j
+				};
 
-			tileData = {
-				srcX: backIndex % _tilesheetWidth,
-				srcY: Math.floor(backIndex / _tilesheetWidth),
-				destX: i,
-				destY: j
-			};
-			//base tile data info
-			_backgroundContext.clearRect (
-				tileData.destX * $game.TILE_SIZE, 
-				tileData.destY * $game.TILE_SIZE, 
-				$game.TILE_SIZE, $game.TILE_SIZE,
-				$game.TILE_SIZE, $game.TILE_SIZE
-			);
 
-				//color tile first (move this above once it has transparency)
+			//color tile first if it needs to be done
 			if(colorVal) {
 				tileData.color = colorVal;
-				$game.$renderer.drawColor(tileData);
-				//if it is an owner tile, draw a flower!
-
-				//this will be removed when we ACTUALLY 
-				//change the src of the owner tile in the DB
-				if(tileData.color.owner) {
-					//tileData.srcX = 17;
-					//tileData.srcY = 5;
-					//$game.$renderer.drawTile(tileData);
-				}
 			}
 
-			//background tile 1
-			if(backIndex > -1) {
-				$game.$renderer.drawTile(tileData);
-			}
+			//send the tiledata to the artist aka mamagoo
+			$game.$renderer.drawMapTile(tileData);
 
-		
-							
 
-			//second layer background tiles (rocks, etc.)
-			if( backIndex2 > -1) {
-				tileData.srcX = backIndex2 % _tilesheetWidth;
-				tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
-
-				$game.$renderer.drawTile(tileData);
-			}
 
 			if(tileStateVal >= 0) {
 				//get npc spritesheet data, pass it to tiledata, render
@@ -853,53 +886,92 @@ window.requestAnimFrame = (function(){
 				_hasNpc = true;
 			}	
 
+
 			//foreground tiles 
+
 			if(foreIndex > -1) {
-				tileData.srcX = foreIndex % _tilesheetWidth;
-				tileData.srcY = Math.floor(foreIndex / _tilesheetWidth);
-				$game.$renderer.drawForegroundTile(tileData);
+
+				var foreData = {
+					srcX: foreIndex % _tilesheetWidth,
+					srcY: Math.floor(foreIndex / _tilesheetWidth),
+					destX: i,
+					destY: j
+				};
+				
+				$game.$renderer.drawForegroundTile(foreData);
 			}
 
+		},
+		drawMapTile: function(tileData) {
+
+			var srcX,srcY;
+
+			//draw color tile first 
+			if(tileData.color) {
+				var hsla = 'hsla('+tileData.color.h+','+tileData.color.s +','+tileData.color.l +','+tileData.color.a + ')';
+				_backgroundContext.fillStyle = hsla;
+				_backgroundContext.fillRect(
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+
+			//background1, the ground texture
+			if(tileData.b1 > -1) {
+				srcX =  tileData.b1 % _tilesheetWidth,
+				srcY =  Math.floor(tileData.b1 / _tilesheetWidth),
+
+
+				//draw it to offscreen
+				_backgroundContext.drawImage(
+					_tilesheetCanvas, 
+					srcX * $game.TILE_SIZE,
+					srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+
+			if(tileData.b2 > -1) {
+				srcX = tileData.b2 % _tilesheetWidth,
+				srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
+				//draw it to offscreen
+				_backgroundContext.drawImage(
+					_tilesheetCanvas,  
+					srcX * $game.TILE_SIZE,
+					srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+	
 			
-
 		},
-		drawTile: function(tileData) {
-			_backgroundContext.drawImage(
-			_tilesheets[0], 
-			tileData.srcX * $game.TILE_SIZE,
-			tileData.srcY * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE,
-			tileData.destX * $game.TILE_SIZE,
-			tileData.destY * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE
-			);
-		},
-		drawColor: function(tileData) {
 
-			var hsla = 'hsla('+tileData.color.h+','+tileData.color.s +','+tileData.color.l +','+tileData.color.a + ')';
-			_backgroundContext.fillStyle = hsla;
-			_backgroundContext.fillRect(
+		drawForegroundTile: function(tileData) {
+			_foregroundContext.drawImage(
+				_tilesheetCanvas, 
+				tileData.srcX * $game.TILE_SIZE,
+				tileData.srcY * $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE,
 				tileData.destX * $game.TILE_SIZE,
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
-		},
-		drawForegroundTile: function(tileData) {
-			_foregroundContext.drawImage(
-			_tilesheets[0], 
-			tileData.srcX * $game.TILE_SIZE,
-			tileData.srcY * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE,
-			tileData.destX * $game.TILE_SIZE,
-			tileData.destY * $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE
 			);
 		},
+		
 
 		renderPlayer: function(tileData) {
 			// console.log(tileData);
@@ -918,7 +990,7 @@ window.requestAnimFrame = (function(){
 				);
 
 				_charactersContext.drawImage(
-					_tilesheets[1], 
+					_offscreen_playerCanvas, 
 					tileData.srcX,
 					tileData.srcY,
 					$game.TILE_SIZE,
@@ -928,20 +1000,20 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
+
+
 			});	
 		},
 
 		renderAllTiles: function() {
-			//not worried about clearing previous because every 
-			//tile is being overwritten
+
 
 			//if the previous render cycle had an npc, then set was to true
-			_wasNpc = _hasNpc ? true : false;
+			//_wasNpc = _hasNpc ? true : false;
 		
-			_hasNpc = false;
+			//_hasNpc = false;
 
-			
-			//since we are sliding here (or first time), clear foreground context?
+
 			_foregroundContext.clearRect(
 				0,
 				0,
@@ -949,7 +1021,21 @@ window.requestAnimFrame = (function(){
 				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
 			);
 
+			//start fresh for the offscreen every time we change ALL tiles
+			_offscreen_backgroundContext.clearRect(
+				0,
+				0,
+				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+			);
+			_backgroundContext.clearRect(
+				0,
+				0,
+				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+			);
 
+			//go through and draw each tile to the appropriate canvas
 			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
 				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					if(i==0 && j==0){ 
@@ -958,11 +1044,15 @@ window.requestAnimFrame = (function(){
 				}
 			}
 
-			//basically if theere was one on screen and now its gone
-			//do the clear fix solution to remove the edge
-			if(_wasNpc && !_hasNpc) {
-				$game.$renderer.clearEdgesFix();
-			}
+			_charactersContext.clearRect(
+				0,
+				0,
+				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+				);
+
+
+
 		},
 
 		//this is a fix because a npc only clears its previous when it draws
@@ -1004,6 +1094,7 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE
 				);
 			}
+			
 		},
 
 		renderNpc: function (npcData) {
@@ -1033,14 +1124,15 @@ window.requestAnimFrame = (function(){
 					}
 				}
 
-				_npcsContext.clearRect(
+				//npcs should be drawn on the foreground
+				_foregroundContext.clearRect(
 					curX + $game.TILE_SIZE * clearX,
 					curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
 					$game.TILE_SIZE,
 					$game.TILE_SIZE*2
 				);
 				//draw new frame of npc
-				_npcsContext.drawImage(
+				_foregroundContext.drawImage(
 					_tilesheets[2], 
 					npcData.srcX,
 					npcData.srcY,
@@ -1061,76 +1153,58 @@ window.requestAnimFrame = (function(){
 
 			$game.getTileState(mouse.cX, mouse.cY, function(state) {
 				
-				//clear previous mouse
-				_backgroundContext.clearRect (_prevMouseX * $game.TILE_SIZE, _prevMouseY * $game.TILE_SIZE, $game.TILE_SIZE, $game.TILE_SIZE);
+				/*
+				//clear previous mouse area
+				_foregroundContext.clearRect(
+					_prevMouseX * $game.TILE_SIZE, 
+					_prevMouseY * $game.TILE_SIZE, 
+					$game.TILE_SIZE, 
+					$game.TILE_SIZE
+				);
 				
-				$game.$renderer.renderTile(_prevMouseX, _prevMouseY);
-				// //evenetually modularize this shit son
-				// //redraw the background that it tarnished
-				// var backIndex = $game.currentTiles[_prevMouseX][_prevMouseY].background - 1,
-				// 	backIndex2 = $game.currentTiles[_prevMouseX][_prevMouseY].background2 - 1;
+				//redraw that area 
+				var foreIndex = $game.currentTiles[mouse.cX][mouse.cY].foreground-1,
 
-				// var tileData = {
-				// 	srcX: backIndex % _tilesheetWidth,
-				// 	srcY: Math.floor(backIndex / _tilesheetWidth),
-				// 	destX: _prevMouseX,
-				// 	destY: _prevMouseY
-				// };
+				foreData = {
+					srcX: foreIndex % _tilesheetWidth,
+					srcY: Math.floor(foreIndex / _tilesheetWidth),
+					destX: mouse.cX,
+					destY: mouse.cY
+				};
+				$game.$renderer.drawForegroundTile(foreData);
 
-				// $game.$renderer.renderTile(tileData);
+				*/
+				var col;
 
-				// tileData.srcX = backIndex2 % _tilesheetWidth;
-				// tileData.srcY = Math.floor(backIndex2 / _tilesheetWidth);
-				
-				// $game.$renderer.renderTile(tileData);
-				
-				// tileData.color = $game.currentTiles[_prevMouseX][_prevMouseY].color;
-				
-				// if(tileData.color !== undefined) {
-				// 	$game.$renderer.renderColor(tileData);	
-				// }
-				
-	
-				//do the players color if seed mode ya hurr?
-				// if($game.$player.seedMode) {
-				// 	_backgroundContext.strokeStyle = 'rgba(100,100,100,.4)';
-				// 	_backgroundContext.fillStyle = 'rgba(250,0,250,.5)';
-				// 	_backgroundContext.fillRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
-				// 	_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
+				if($game.$player.seedMode) {
+					col = 'rgba(230,255,150,.4)';
+					//_foregroundContext.strokeStyle = 'rgba(150,255,150,.4)'; // seed color
+				}
+				//
+				else {
+					if(state == -1) {
+						col = 'rgba(100,240,200,.4)';
+						_foregroundContext.strokeStyle = 'rgba(100,240,200,.4)'; // red
 
-				// }
-				//regular exploring mode
-
-				// else {
+					}
 					//nogo
+					else if(state === -2) {
+						col = 'rgba(255,0,0,.4)'; 
+						_foregroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
 
-					if($game.$player.seedMode) {
-						_backgroundContext.strokeStyle = 'rgba(255,255,0,.4)'; // red
 					}
+					//npc
 					else {
-						if(state === -2) { 
-							_backgroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
-						}
-
-						//go
-						else if(state === -1) { 
-							_backgroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // greeb
-						}
-						//npc
-						else {
-							_backgroundContext.strokeStyle = 'rgba(0,0,255,.4)'; // blue	
-						}
+						col = 'rgba(0,150,235,.4)';
+						_foregroundContext.strokeStyle = 'rgba(0,150,235,.4)'; // blue	
 					}
-					
-					_backgroundContext.strokeRect(mX+2, mY+2, $game.TILE_SIZE-4, $game.TILE_SIZE-4);
-				//}
+				}
 				
-				_backgroundContext.lineWidth = 4;
-
-				
-
-				//draw the new mouse
-				
+				$('.cursorBox').css({
+					top: mY,
+					left: mX
+				});
+				//$('body').css('background',col);
 
 				_prevMouseX = mouse.cX;
 				_prevMouseY = mouse.cY;
@@ -1517,7 +1591,9 @@ window.requestAnimFrame = (function(){
  		_prevStepX = 0, //deprecated
  		_prevStepY = 0, //deprecated
  		_direction = 0,
- 		_willTravel = null;
+ 		_willTravel = null,
+ 		playerInfo = null;
+
 		
 	
 	$game.$player = {
@@ -1541,6 +1617,26 @@ window.requestAnimFrame = (function(){
 		init: function() {
 			
 			$game.$player.ready = true;
+			
+			playerInfo = {
+				srcX: _srcX,
+				srcY: _srcY,
+				x: $game.$player._masterX,
+				y: $game.$player._masterY,
+				offX: _offX,
+				offY: _offY,
+				prevX: _prevOffX,
+				prevY: _prevOffY
+			}
+
+		},
+
+		update: function(){
+
+			if($game.$player.isMoving) {
+				$game.$player.move();
+			}
+
 		},
 
 		move: function () {
@@ -1626,9 +1722,18 @@ window.requestAnimFrame = (function(){
 				_srcX = _curFrame * $game.TILE_SIZE,
 				_srcY =  _direction * $game.TILE_SIZE*2;
 
+				playerInfo.srcX = _srcX;
+				playerInfo.srcY = _srcY;
+				playerInfo.x = $game.$player._masterX;
+				playerInfo.y = $game.$player._masterY;
+				playerInfo.offX = _offX;
+				playerInfo.offY = _offY;
+				playerInfo.prevX = _prevOffX;
+				playerInfo.prevY = _prevOffY;
+			
 				//$game.$renderer.renderPlayer(playerInfo);
-				//setTimeout($game.$player.move, 17);
-				requestAnimFrame($game.$player.move);
+				//setTimeout($game.$player.move; 17);
+				//requestAnimFrame($game.$player;.move);
 			}
 		},
 
@@ -1643,6 +1748,16 @@ window.requestAnimFrame = (function(){
 			_prevOffX= 0;
 			_prevOffY= 0;
 
+			playerInfo.srcX = _srcX;
+			playerInfo.srcY = _srcY;
+			playerInfo.x = $game.$player._masterX;
+			playerInfo.y = $game.$player._masterY;
+			playerInfo.offX = _offX;
+			playerInfo.offY = _offY;
+			playerInfo.prevX = _prevOffX;
+			playerInfo.prevY = _prevOffY;
+
+			$game.$player.isMoving = false;
 			$game.$player.render();
 			if(_willTravel) {
 				var beginTravel = function(){
@@ -1664,7 +1779,6 @@ window.requestAnimFrame = (function(){
 						$game.$npc.show();					
 					//trigger npc to popup info and stuff
 				}
-				$game.$player.isMoving = false;
 			}
 			
 
@@ -1715,28 +1829,18 @@ window.requestAnimFrame = (function(){
 			_prevOffX = stepX * _numSteps;
 			_prevOffY = stepY * _numSteps;
 
+			playerInfo.srcX = _srcX;
+			playerInfo.srcY = _srcY;
+			playerInfo.x = $game.$player._masterX;
+			playerInfo.y = $game.$player._masterY;
+			playerInfo.offX = _offX;
+			playerInfo.offY = _offY;
+			playerInfo.prevX = _prevOffX;
+			playerInfo.prevY = _prevOffY;
+
 		},
 
 		render: function() {
-			// var playerInfo = {
-			// 	srcX: (($game.$player.currentStep-1)%4)*$game.TILE_SIZE*2,
-			// 	srcY: _direction * $game.TILE_SIZE*2,
-			// 	destX: _currentX,
-			// 	destY: _currentY,
-			// 	prevX: _prevStepX,
-			// 	prevY: _prevStepY
-			// }
-
-			var playerInfo = {
-				srcX: _srcX,
-				srcY: _srcY,
-				x: $game.$player._masterX,
-				y: $game.$player._masterY,
-				offX: _offX,
-				offY: _offY,
-				prevX: _prevOffX,
-				prevY: _prevOffY
-			}
 			$game.$renderer.renderPlayer(playerInfo);
 		},
 
@@ -1821,7 +1925,7 @@ window.requestAnimFrame = (function(){
 							h: newHue,
 							s: $game.$player.saturation,
 							l: $game.$player.lightness,
-							a: .2,
+							a: .5,
 							owner: false
 						}
 					};
@@ -1905,8 +2009,10 @@ $(function() {
 					cX: $game.$mouse.curX,
 					cY: $game.$mouse.curY,
 				};
-				//$game.$renderer.renderMouse(mouseStuff); 
+				$game.$renderer.renderMouse(mouseStuff); 
 			}
+
+			
 
 			if(clicked) {
 				
@@ -2187,7 +2293,7 @@ $(function() {
   		$game.$player.seriesOfMoves = moves;
   		$game.$player.currentMove = 1;
   		$game.$player.currentStep = 0;
-  		$game.$player.move();
+  		$game.$player.isMoving = true;
 
 	});
 	//all this breakdown will be on the server side, not client side, 
