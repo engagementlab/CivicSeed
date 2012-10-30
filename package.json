@@ -24,6 +24,7 @@
   "dependencies": {
     "socketstream": ">= 0.3.2",
     "ss-stylus": ">= 0.1.5",
+    "ss-hogan": ">= 0.1.3",
     "consolidate": ">= 0.3.0",
     "express": ">= 3.0.0rc4",
     "express-messages": ">= 0.0.2",

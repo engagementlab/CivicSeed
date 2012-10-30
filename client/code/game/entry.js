@@ -2,7 +2,6 @@
 
 // Make 'ss' available to all modules and the browser console
 window.ss = require('socketstream');
-require('/controllers');
 
 ss.server.on('disconnect', function(){
 	console.log('Connection down :-(');
@@ -15,8 +14,10 @@ ss.server.on('reconnect', function(){
 ss.server.on('ready', function(){
 
 	jQuery(function(){
-		
-		// require('/app');
+
+		require('/setup').init(function() {
+			require('/controllers');
+		});
 
 	});
 

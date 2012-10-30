@@ -35,6 +35,9 @@ service.connectMongoose(app, function(databases) {
 		// Code Formatters
 		ss.client.formatters.add(require('ss-stylus'));
 
+		// Server-side compiled templates for client
+		ss.client.templateEngine.use(require('ss-hogan'));
+
 		// // use redis
 		// if(config.get('USE_REDIS')) {
 		// 	redisConfig = {
@@ -60,11 +63,7 @@ service.connectMongoose(app, function(databases) {
 			code: [
 				'libs/jquery-1.7.2.min.js',
 				'libs/bootstrap.min.js',
-				'game/entry.js',
-				'game/controllers.js',
-				'game/map-control.js',
-				'game/npc-control.js',
-				'game/chat-control.js',
+				'game'
 			],
 			tmpl: '*'
 		});
