@@ -2383,7 +2383,7 @@ $(document).ready(function() {
 	}));
 	//change cursor on mouse move
 	$('.gameboard').mousemove(function(m) {
-		if( !$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
+		if( !$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource && $game.ready){
  	
 			var mInfo = {
 				x: m.pageX,
