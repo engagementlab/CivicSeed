@@ -4917,7 +4917,7 @@ a.badge:hover {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: rgba(30, 30, 30, 0.7);
+  background: rgba(30, 30, 30, 0.8);
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
@@ -4955,7 +4955,7 @@ a.badge:hover {
   left: 10px;
   width: 940px;
   height: 55px;
-  background: rgba(30, 30, 30, 0.5);
+  background: rgba(30, 30, 30, 0.7);
   padding: 0;
   border-radius: 5px;
   z-index: 9999;

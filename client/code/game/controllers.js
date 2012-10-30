@@ -762,7 +762,7 @@ window.requestAnimFrame = (function(){
 			_foregroundContext.save();
 
 
-			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/rick.png']
+			_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npc_0.png']
 			//loop through allimages, load in each one, when done,
 			//renderer is ready
 			$game.$renderer.loadImages(0);	
@@ -788,6 +788,7 @@ window.requestAnimFrame = (function(){
         			_tilesheetWidth= w / $game.TILE_SIZE,
         			_tilesheetHeight= h / $game.TILE_SIZE,
 
+    
 					_tilesheetContext.drawImage(
 						_tilesheets[num],
 						0,
@@ -839,9 +840,14 @@ window.requestAnimFrame = (function(){
 				if($game.onScreenNpcs.length > 0) {
 					$game.$npc.animateFrame();
 				}
+				
 				if($game.$player.isMoving) {
 					$game.$player.render();
 				}
+				else {
+					$game.$player.idle();
+				}
+
 				if($game.$map.growingSeed) {
 					$game.$map.growSeeds();	
 				}				
@@ -873,7 +879,6 @@ window.requestAnimFrame = (function(){
 			if(colorVal) {
 				tileData.color = colorVal;
 			}
-
 			//send the tiledata to the artist aka mamagoo
 			$game.$renderer.drawMapTile(tileData);
 
@@ -937,10 +942,26 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE
 				);
 			}
-
+			
 			if(tileData.b2 > -1) {
 				srcX = tileData.b2 % _tilesheetWidth,
 				srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
+				//draw it to offscreen
+				_backgroundContext.drawImage(
+					_tilesheetCanvas,  
+					srcX * $game.TILE_SIZE,
+					srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			if(tileData.b3 > -1) {
+				srcX = tileData.b3 % _tilesheetWidth,
+				srcY =  Math.floor(tileData.b3 / _tilesheetWidth),
 				//draw it to offscreen
 				_backgroundContext.drawImage(
 					_tilesheetCanvas,  
@@ -1098,7 +1119,6 @@ window.requestAnimFrame = (function(){
 		},
 
 		renderNpc: function (npcData) {
-
 			$game.masterToLocal(npcData.x, npcData.y, function(loc) {			
 				var curX = loc.x * $game.TILE_SIZE;
 					curY = loc.y * $game.TILE_SIZE,
@@ -1144,6 +1164,7 @@ window.requestAnimFrame = (function(){
 					$game.TILE_SIZE*2
 				);
 			});
+
 		},
 
 		renderMouse: function(mouse) {
@@ -1534,11 +1555,11 @@ window.requestAnimFrame = (function(){
 			for(var i = 0; i < $game.onScreenNpcs.length; i += 1) {
 				var curId = $game.onScreenNpcs[i];
 				_allNpcs[curId].counter += 1;
-				if(_allNpcs[curId].counter > 15) { 
+				if(_allNpcs[curId].counter > 16) { 
 					_allNpcs[curId].counter = 0;
 				}
 
-				if(_allNpcs[curId].counter % 6 === 0) {
+				if(_allNpcs[curId].counter % 8 === 0) {
 					_allNpcs[curId].currentFrame += 1;
 					if(_allNpcs[curId].currentFrame === 4) {
 						_allNpcs[curId].currentFrame = 0;
@@ -1549,6 +1570,7 @@ window.requestAnimFrame = (function(){
 					data.srcY = _allNpcs[curId].spriteMap[spot].y,
 					data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
 					data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
+
 					$game.$renderer.renderNpc(data);
 				}
 				
@@ -1592,7 +1614,9 @@ window.requestAnimFrame = (function(){
  		_prevStepY = 0, //deprecated
  		_direction = 0,
  		_willTravel = null,
+ 		_idleCounter = 0,
  		playerInfo = null;
+
 
 		
 	
@@ -1842,6 +1866,22 @@ window.requestAnimFrame = (function(){
 
 		render: function() {
 			$game.$renderer.renderPlayer(playerInfo);
+		},
+
+		idle: function () {
+			_idleCounter += 1;
+			if(_idleCounter > 64) { 
+				_idleCounter = 0;
+			}
+			if(_idleCounter > 48) {
+				playerInfo.srcX = 32;
+				playerInfo.srcY = 0;
+			}
+			else {
+				playerInfo.srcX = 0;
+				playerInfo.srcY = 0;
+			}
+			$game.$player.render();
 		},
 
 		dropSeed: function(options) {

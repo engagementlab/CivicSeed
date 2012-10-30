@@ -68,7 +68,7 @@ var self = module.exports = {
 					tileObject = tileData.global,
 					backgroundArray = tileObject.backgroundArray,
 					background2Array = tileObject.background2Array,
-					background3Array = tileObject.background2Array,
+					background3Array = tileObject.background3Array,
 					foregroundArray = tileObject.foregroundArray,
 					tileStateArray = tileObject.tileStateArray,
 					numberOfTiles = backgroundArray.length,
@@ -93,7 +93,7 @@ var self = module.exports = {
 						if(tileStateArray[i] === 0) {
 							tileStateVal = -1;
 						}
-						else if(tileStateArray[i] === 9	) {
+						else if(tileStateArray[i] === 2	) {
 							tileStateVal = i;
 						} 
 						else {
@@ -106,7 +106,7 @@ var self = module.exports = {
 							isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
 							background: backgroundArray[i],
 							background2: background2Array[i],
-							background3: background2Array[i],
+							background3: background3Array[i],
 							foreground: foregroundArray[i],
 							mapIndex: i
 						});

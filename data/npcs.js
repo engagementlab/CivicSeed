@@ -1,18 +1,18 @@
 module.exports.global = [{
-	id: '302',
+	id: '1150',
 	name: 'Ricky Bobby',
 	level: 1,
 	spriteMap: [{
-		x: 16,
+		x: 0,
 		y: 0
 	}, {
-		x: 80,
+		x: 32,
 		y: 0
 	}, {
-		x: 144,
+		x: 64,
 		y: 0
 	}, {
-		x: 208,
+		x: 96,
 		y: 0
 	}],
 	dialog: {
