@@ -9,6 +9,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		background2: Number,
 		background3: Number,
 		foreground: Number,
+		foreground2: Number,
 		mapIndex: Number
 	});
 

@@ -862,6 +862,7 @@ window.requestAnimFrame = (function(){
 				backIndex3 = $game.currentTiles[i][j].background3-1,
 				//will be backIndex3
 				foreIndex = $game.currentTiles[i][j].foreground-1,
+				foreIndex2 = $game.currentTiles[i][j].foreground2-1,
 				tileStateVal = $game.currentTiles[i][j].tileState,
 				colorVal = $game.currentTiles[i][j].color,
 
@@ -893,18 +894,17 @@ window.requestAnimFrame = (function(){
 
 
 			//foreground tiles 
-
-			if(foreIndex > -1) {
-
-				var foreData = {
-					srcX: foreIndex % _tilesheetWidth,
-					srcY: Math.floor(foreIndex / _tilesheetWidth),
+			var foreData = {
+					f1: foreIndex,
+					f2: foreIndex2,
 					destX: i,
 					destY: j
-				};
-				
+			};
+
+			if(foreIndex > -1 || foreIndex2 > -1) {
 				$game.$renderer.drawForegroundTile(foreData);
 			}
+
 
 		},
 		drawMapTile: function(tileData) {
@@ -980,17 +980,38 @@ window.requestAnimFrame = (function(){
 		},
 
 		drawForegroundTile: function(tileData) {
-			_foregroundContext.drawImage(
-				_tilesheetCanvas, 
-				tileData.srcX * $game.TILE_SIZE,
-				tileData.srcY * $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE,
-				tileData.destX * $game.TILE_SIZE,
-				tileData.destY * $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE
-			);
+			var srcX, srcY;
+			if(tileData.f1 > -1) {
+				srcX = tileData.f1 % _tilesheetWidth;
+				srcY = Math.floor(tileData.f1 / _tilesheetWidth);
+				_foregroundContext.drawImage(
+					_tilesheetCanvas, 
+					srcX * $game.TILE_SIZE,
+					srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			if(tileData.f2 > -1) {
+				srcX = tileData.f2 % _tilesheetWidth;
+				srcY = Math.floor(tileData.f2 / _tilesheetWidth);
+				_foregroundContext.drawImage(
+					_tilesheetCanvas, 
+					srcX * $game.TILE_SIZE,
+					srcY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
+					tileData.destX * $game.TILE_SIZE,
+					tileData.destY * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			
 		},
 		
 

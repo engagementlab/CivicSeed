@@ -70,6 +70,7 @@ var self = module.exports = {
 					background2Array = tileObject.background2Array,
 					background3Array = tileObject.background3Array,
 					foregroundArray = tileObject.foregroundArray,
+					foreground2Array = tileObject.foreground2Array,
 					tileStateArray = tileObject.tileStateArray,
 					numberOfTiles = backgroundArray.length,
 					mapTilesWidth = config.get('MAP_TILES_WIDTH'),
@@ -108,6 +109,7 @@ var self = module.exports = {
 							background2: background2Array[i],
 							background3: background3Array[i],
 							foreground: foregroundArray[i],
+							foreground2: foreground2Array[i],
 							mapIndex: i
 						});
 
