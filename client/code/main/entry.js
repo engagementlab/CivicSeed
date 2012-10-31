@@ -1,4 +1,5 @@
 window.ss = require('socketstream');
+var appInitialized = false;
 
 ss.server.on('disconnect', function(){
 	console.log('Lost connection to server...');
@@ -12,9 +13,12 @@ ss.server.on('ready', function(){
 
 	jQuery(function(){
 
-		require('/setup').init(function() {
-			require('/whatever-comes-next');
-		});
+		if(!appInitialized) {
+			require('/setup').init(function() {
+				appInitialized = true;
+				require('/whatever-comes-next');
+			});
+		}
 
 	});
 

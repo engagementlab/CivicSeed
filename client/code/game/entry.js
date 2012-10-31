@@ -1,23 +1,24 @@
-// This file automatically gets called first by SocketStream and must always exist
-
-// Make 'ss' available to all modules and the browser console
 window.ss = require('socketstream');
+var gameInitialized = false;
 
 ss.server.on('disconnect', function(){
-	console.log('Connection down :-(');
+	console.log('Lost connection to server...');
 });
 
 ss.server.on('reconnect', function(){
-	console.log('Connection back up :-)');
+	console.log('Connection to server...');
 });
 
 ss.server.on('ready', function(){
 
 	jQuery(function(){
 
-		require('/setup').init(function() {
-			require('/controllers');
-		});
+		if(!gameInitialized) {
+			require('/setup').init(function() {
+				gameInitialized = true;
+				require('/controllers');
+			});
+		}
 
 	});
 
