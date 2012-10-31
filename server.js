@@ -21,12 +21,11 @@ service = require('./service.js');
 // Setup database services, based on the config
 service.connectMongoose(app, function(databases) {
 
-	var control = require('./controllers.js')(app, service);
 	var hbsHelpers = service.useModule('middleware/hbs-helpers');
 
 	app.configure(function() {
 
-		var redisConfig;
+		var redisConfig, controllers;
 
 		console.log('\n\n   * * * * * * * * * * * *   Configuring Civic Seed   * * * * * * * * * * * *   \n\n'.yellow)
 
@@ -56,17 +55,8 @@ service.connectMongoose(app, function(databases) {
 		// make the models accessible to Socket Stream
 		ss.api.add('service', service);
 
-		// Define a single-page client
-		ss.client.define('main', {
-			view: 'game.html',
-			css: 'game.stylus',
-			code: [
-				'libs/jquery-1.7.2.min.js',
-				'libs/bootstrap.min.js',
-				'game'
-			],
-			tmpl: '*'
-		});
+		controllers = require('./controllers.js')(app, service);
+
 
 		// //Partials working?
 		// headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');

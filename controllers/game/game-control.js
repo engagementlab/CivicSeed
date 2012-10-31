@@ -1,13 +1,25 @@
+var ss = require('socketstream');
+
 var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		app.get('/game', function(req, res) {
-			res.serveClient('main');
+		ss.client.define('game', {
+			view: 'game.html',
+			css: 'game.stylus',
+			code: [
+				'libs/jquery-1.8.2.min.js',
+				'libs/bootstrap.min.js',
+				'game'
+			],
+			tmpl: [
+				'game',
+				'partials'
+			]
 		});
-		app.get('/gameMap',function(req,res){
-			console.log("auwoqehwq");
-			res.render('gameMap.hbs');
+
+		app.get('/game', function(req, res) {
+			res.serveClient('game');
 		});
 
 	}
