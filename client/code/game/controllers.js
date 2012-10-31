@@ -253,7 +253,7 @@ window.requestAnimFrame = (function(){
 			$game.$player.init();
 			$game.$map.init();
 			//$game.$audio.init();
-			ss.rpc('npc.init');
+			ss.rpc('game.npc.init');
 
 			//games init must load the map info for current location
 			//in future, surrounding as well
@@ -287,7 +287,7 @@ window.requestAnimFrame = (function(){
 		},
 
 		getTiles: function(x, y, x2, y2, callback) {
-			ss.rpc('player.getMapData', x, y, x + x2, y + y2, function(response) {
+			ss.rpc('game.player.getMapData', x, y, x + x2, y + y2, function(response) {
 				//breakdown single array into 2d array
 				
 				$game.nextTiles = new Array(x2);
@@ -743,7 +743,7 @@ window.requestAnimFrame = (function(){
 			_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
 
 	        //initialize DB and let all players know there is a new active one
-			ss.rpc('player.init', function(response) {
+			ss.rpc('game.player.init', function(response) {
 			});
 
 			//access the canvases for rendering
@@ -1305,7 +1305,7 @@ window.requestAnimFrame = (function(){
 		init: function() {
 			//load all the npc info from the DB store it in an array
 			//where the index is the id of the npc / mapIndex
-			ss.rpc('npc.getNpcs', function(response) {
+			ss.rpc('game.npc.getNpcs', function(response) {
 				//iterate through repsonses, create a key 
 				//with the id and value is the object
 				for(var i = 0; i < response.length; i += 1) {
@@ -1854,7 +1854,7 @@ window.requestAnimFrame = (function(){
 						end = $game.graph.nodes[y][x],
 						result = $game.$astar.search($game.graph.nodes, start, end);
 						if(result.length > 0) {
-							ss.rpc('player.movePlayer', result);
+							ss.rpc('game.player.movePlayer', result);
 						}
 						else {
 
@@ -1942,7 +1942,7 @@ window.requestAnimFrame = (function(){
 				};
 
 				bombed.push(square);
-				ss.rpc('player.dropSeed', bombed);
+				ss.rpc('game.player.dropSeed', bombed);
 			}
 
 			//not the "intro level"
@@ -2006,7 +2006,7 @@ window.requestAnimFrame = (function(){
 					$game.$renderer.renderMiniTile(square);
 				}
 			}
-			ss.rpc('player.dropSeed', bombed);		
+			ss.rpc('game.player.dropSeed', bombed);		
 		}
 	};
 
