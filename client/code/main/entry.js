@@ -16,7 +16,8 @@ ss.server.on('ready', function(){
 		if(!appInitialized) {
 			require('/setup').init(function() {
 				appInitialized = true;
-				require('/main');
+				// require('/main');
+				require('/actions');
 			});
 		}
 

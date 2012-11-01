@@ -16,6 +16,7 @@ ss.server.on('ready', function(){
 		if(!gameInitialized) {
 			require('/setup').init(function() {
 				gameInitialized = true;
+				require('/actions');
 				require('/controllers');
 			});
 		}

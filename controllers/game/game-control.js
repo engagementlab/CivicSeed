@@ -10,7 +10,8 @@ var self = module.exports = {
 			code: [
 				'libs/jquery-1.8.2.min.js',
 				'libs/bootstrap.min.js',
-				'game'
+				'game',
+				'account/actions.js'
 			],
 			tmpl: [
 				'game',

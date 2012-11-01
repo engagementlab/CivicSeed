@@ -7,17 +7,21 @@
 				<span class="icon-bar"></span>
 			</a>
 			<a class="brand" href="/">Civic Seed</a>
+
+			{{#user}}
 			<div class="btn-group pull-right">
 				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="icon-user"></i> Username
+					<i class="icon-user"></i> {{name}}
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
-					<li><a href="#">Profile</a></li>
+					<li><a href="">Profile</a></li>
 					<li class="divider"></li>
-					<li><a href="#">Sign Out</a></li>
+					<li class="signOut"><a href="/signout">Sign Out</a></li>
 				</ul>
 			</div>
+			{{/user}}
+
 			<div class="nav-collapse">
 				<ul class="nav">
 					<li class="active"><a href="#">Home</a></li>

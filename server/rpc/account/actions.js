@@ -19,6 +19,9 @@ exports.actions = function(req, res, ss) {
 					// }
 					if(user.password === password) {
 						req.session.setUserId(user.id);
+						req.session.name =  user.name;
+						req.session.email = user.email;
+						// console.log(req.session.name, req.session.email, req.session.userId, user.id);
 						res(true);
 					} else {
 						res(false);
@@ -31,10 +34,27 @@ exports.actions = function(req, res, ss) {
 
 		},
 
-		logout: function() {
-
+		deAuthenticate: function() {
+			// console.log(req.session.name, req.session.email, req.session.userId);
 			req.session.setUserId(null);
+			req.session.name
+			req.session.email = null;
+			// console.log(req.session.name, req.session.email, req.session.userId);
+			res(true);
+		},
 
+		getUserSession: function() {
+			if(req.session.userId) {
+				res({
+					user: {
+						id: req.session.userId,
+						name: req.session.name,
+						email: req.session.email
+					}
+				});
+			} else {
+				res(false);
+			}
 		}
 
 	};

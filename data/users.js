@@ -1,11 +1,11 @@
 module.exports.global = [{
 	name: 'Robert Hall',
-	password: 'password',
+	password: '',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
 	name: 'Russell Goldenberg',
-	password: 'password',
+	password: '',
 	email: 'russellgoldenberg@gmail.com',
 	role: 'superadmin'
 }, {

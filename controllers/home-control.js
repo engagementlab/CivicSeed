@@ -10,7 +10,8 @@ var self = module.exports = {
 			code: [
 				'libs/jquery-1.8.2.min.js',
 				'libs/bootstrap.min.js',
-				'main'
+				'main',
+				'account/actions.js'
 			],
 			tmpl: [
 				'main',
@@ -21,18 +22,6 @@ var self = module.exports = {
 		app.get('/', function(req, res) {
 			res.serveClient('main');
 		});
-
-		// app.get('/', function(req, res) {
-		// 	// if(req.user) {
-		// 	// 	res.redirect('/profile');
-		// 	// }
-		// 	res.render('home.hbs', {
-		// 		bodyClass: 'home'
-		// 	});
-		// });
-
-
-
 
 	}
 
