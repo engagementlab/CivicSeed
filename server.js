@@ -57,7 +57,6 @@ service.connectMongoose(app, function(databases) {
 
 		controllers = require('./controllers.js')(app, service);
 
-
 		// //Partials working?
 		// headerTemplate = fs.readFileSync(__dirname + '/client/views/header.hbs', 'utf8');
 		// hbs.registerPartial('headPartial', headerTemplate); 

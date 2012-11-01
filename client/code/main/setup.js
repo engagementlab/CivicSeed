@@ -7,4 +7,5 @@ exports.init = function(callback) {
 	$('.container').append(tmplEngine['main-home'].render());
 
 	callback();
+
 }

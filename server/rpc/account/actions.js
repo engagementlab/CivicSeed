@@ -1,28 +1,39 @@
+var rootDir = process.cwd();
+var service = require(rootDir + '/service');
+var UserModel = service.useModel('user').UserModel;
+
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
 
 	return {
 
-		authenticate: function(username, password) {
+		authenticate: function(email, password) {
 
-			console.log('authentication happening...'.blue.inverse);
+			UserModel.findOne({email: email} , function(err, user) {
 
-			// // lookup user in DB, LDAP, etc
+				if(user) {
+					// var hashedPassword = user.password;
+					// if(hash.verify(pass, hashedPassword)){
+					//     return callback(null,user);
+					// }
+					if(user.password === password) {
+						req.session.setUserId(user.id);
+						res(true);
+					} else {
+						res(false);
+					}
+				} else {
+					res(false);
+				}
 
-			// if (user) {
-			// 	req.session.setUserId(user.id);
-			// 	res(true);
-			// } else {
-			// 	res('Access denied!');
-			// }
+			});
 
 		},
 
 		logout: function() {
 
-
-			// req.session.setUserId(null);
+			req.session.setUserId(null);
 
 		}
 

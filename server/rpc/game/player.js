@@ -1,3 +1,8 @@
+// COMPARE ACCOUNT.ACTIONS JS FILE
+// var rootDir = process.cwd();
+// var service = require(rootDir + '/service');
+// var UserModel = service.useModel('user').UserModel;
+
 var intervalId = {};
 var numActivePlayers = 0;
 // var numPlayers = 0;
