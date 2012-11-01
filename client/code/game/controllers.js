@@ -242,6 +242,8 @@ window.requestAnimFrame = (function(){
 
 		onScreenNpcs: [],
 
+		numPlayers: 0,
+
 		init: function() {
 			
 			//init everything:
@@ -253,8 +255,7 @@ window.requestAnimFrame = (function(){
 			$game.$player.init();
 			$game.$map.init();
 			//$game.$audio.init();
-			ss.rpc('game.npc.init');
-
+			
 			//games init must load the map info for current location
 			//in future, surrounding as well
 			$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
@@ -744,6 +745,8 @@ window.requestAnimFrame = (function(){
 
 	        //initialize DB and let all players know there is a new active one
 			ss.rpc('game.player.init', function(response) {
+				$game.$player.id = response;
+				console.log("my session id: " + $game.$player.id);
 			});
 
 			//access the canvases for rendering
@@ -1656,6 +1659,8 @@ window.requestAnimFrame = (function(){
 		hue: 0,
 		saturation: '90%', 
 		lightness: '80%',  
+		id: null,
+
 
 		//private methods
 
@@ -1854,7 +1859,7 @@ window.requestAnimFrame = (function(){
 						end = $game.graph.nodes[y][x],
 						result = $game.$astar.search($game.graph.nodes, start, end);
 						if(result.length > 0) {
-							ss.rpc('game.player.movePlayer', result);
+							ss.rpc('game.player.movePlayer', result, $game.$player.id);
 						}
 						else {
 
@@ -2344,10 +2349,26 @@ $(function() {
 	};
 
 })();
+
+
+//detect when a client leaves and send something to server
+$(window).on('beforeunload', function() {
+    var x = leaveThisJoint();
+    return x;
+});
+function leaveThisJoint(){
+	ss.rpc('game.player.playerLeft', $game.$player.id);
+}
 //events recevied by RPC
 (function() {
 
-	ss.event.on('ss-playerMoved', function(moves){
+	//new player joining to keep track of
+	ss.event.on('ss-numActivePlayers', function(num) {
+		$game.numPlayers = num;
+		console.log("total active players: " + $game.numPlayers);
+	});
+
+	ss.event.on('ss-playerMoved', function(moves) {
   		//check if that quad is relevant to the current player
   		//this will also have the player info so as to id the appropriate one
   		$game.$player.seriesOfMoves = new Array(moves.length);
@@ -2359,9 +2380,10 @@ $(function() {
 	});
 	//all this breakdown will be on the server side, not client side, 
 	//but we will pass the tiles info 
-	ss.event.on('ss-seedDropped', function(bombed){
+	ss.event.on('ss-seedDropped', function(bombed) {
 		$game.$map.newBomb(bombed);
 	});
+
 
 })();
 

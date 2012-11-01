@@ -15,13 +15,11 @@ var self = module.exports = {
 	// userModel: null,
 
 	actions: function(req, res, ss) {
-
-		// req.use('session');
+		req.use('session');
 		// req.use('account.user.authenticated');
 
 		console.log('CS:'.blue + ' player RPC request ---->'.magenta);
 		console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
-
 		// Russ, it's all hooked up. Access the db via ss.db
 		//console.log(ss.db);
 		return {
@@ -44,10 +42,11 @@ var self = module.exports = {
 				userModel = service.useModel('user', 'ss');
 				tileModel = service.useModel('tile', 'ss');
 				numActivePlayers++;
-				console.log(req.session);
+				console.log("player "+req.session.id+" joined.");
 				//send the number of active players to angular
 				ss.publish.all('ss-numActivePlayers',numActivePlayers);
-				res(true);
+				console.log("active players" +numActivePlayers);
+				res(req.session.id);
 			},
 			// checkIn: function(player) {
 			// 	players.push(player);
@@ -93,7 +92,14 @@ var self = module.exports = {
 				// });
 				//return set of tiles based no bounds
 			},
-			movePlayer: function(player) {
+			playerLeft: function(id) {
+				numActivePlayers--;
+				ss.publish.all('ss-numActivePlayers', numActivePlayers);
+				console.log("player "+id+" left.");
+			},
+
+			movePlayer: function(player, id) {
+				console.log("move "+id);
 				// for(var p=0; p<players.length;p++){
 				// 	console.log(players[p].id);
 				// 		//ridic stupid way to check if it's the right one (id isn't working)
