@@ -1,5 +1,5 @@
 window.ss = require('socketstream');
-var gameInitialized = false;
+var appInitialized = false;
 
 ss.server.on('disconnect', function(){
 	console.log('Lost connection to server...');
@@ -13,11 +13,32 @@ ss.server.on('ready', function(){
 
 	jQuery(function(){
 
-		if(!gameInitialized) {
+		if(!appInitialized) {
 			require('/setup').init(function() {
-				gameInitialized = true;
-				require('/actions');
-				require('/controllers');
+
+				appInitialized = true;
+
+				var gameModule = require('/game');
+
+				gameModule.gameModuleReady(function() {
+
+					window.$game = gameModule.$game;
+
+					var $actions = require('/actions');
+
+					var $map = require('/map');
+					var $render = require('/render');
+					var $npc = require('/npc');
+					var $player = require('/player');
+					var $mouse = require('/mouse');
+					var $audio = require('/audio');
+					var $pathfinder = require('/pathfinder');
+					var $events = require('/events');
+
+					$game.init();
+
+				});
+
 			});
 		}
 
