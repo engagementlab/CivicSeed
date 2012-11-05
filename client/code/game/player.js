@@ -22,8 +22,8 @@ var _offX = 0,
 
 $game.$player = {
 
-	_masterX: 10,
-		_masterY: 10,
+	_masterX: 19,
+	_masterY: 10,
 	seriesOfMoves: null,
 	currentMove: 0,
 	currentStep: 0,
@@ -56,7 +56,6 @@ $game.$player = {
 		}
 
 	},
-
 	update: function(){
 
 		if($game.$player.isMoving) {
@@ -64,7 +63,6 @@ $game.$player = {
 		}
 
 	},
-
 	move: function () {
 		/** IMPORTANT note: x and y are really flipped!!! **/
 		//update the step
@@ -162,7 +160,6 @@ $game.$player = {
 			//requestAnimFrame($game.$player;.move);
 		}
 	},
-
 	endMove: function () {
 		_offX = 0,
 		_offY = 0;
@@ -201,16 +198,12 @@ $game.$player = {
 		else {
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
-
 					$game.$npc.show();					
 				//trigger npc to popup info and stuff
 			}
 		}
 		
-
 	},
-
-	
 	beginMove: function(x, y) {
 		_offX = 0,
 		_offY = 0;
@@ -246,10 +239,8 @@ $game.$player = {
 
 			
 		});
-		
-		
+			
 	},
-
 	slide: function(stepX, stepY) {
 
 		_prevOffX = stepX * _numSteps;
@@ -265,11 +256,11 @@ $game.$player = {
 		playerInfo.prevY = _prevOffY;
 
 	},
-
 	render: function() {
+		
 		$game.$renderer.renderPlayer(playerInfo);
+	
 	},
-
 	resetRenderValues: function() {
 		_prevOffX = 0,
 		_prevOffY = 0,
@@ -277,7 +268,6 @@ $game.$player = {
 		playerInfo.prevY = _prevOffY;
 
 	},
-
 	idle: function () {
 		_idleCounter += 1;
 		if(_idleCounter >= 64) { 
@@ -293,9 +283,7 @@ $game.$player = {
 			$game.$player.render();
 		}
 	
-		
 	},
-
 	dropSeed: function(options) {
 		//add color the surrounding tiles
 		var oX, oY, mX, mY;
@@ -357,7 +345,6 @@ $game.$player = {
 		}
 		
 	},
-
 	addColor: function(isColored, x, y) {
 		var bombed = [];
 		//square
@@ -398,6 +385,7 @@ $game.$player = {
 			}
 		}
 		ss.rpc('game.player.dropSeed', bombed);		
+	
 	}
 };
 

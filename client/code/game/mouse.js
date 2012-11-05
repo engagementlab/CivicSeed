@@ -84,7 +84,7 @@ $game.$mouse = {
 						//if you click on a different square then the previously 
 						//selected npc, then hide the npc info if it is showing
 
-						$game.$npc.setIndex(newIndex);
+						$game.$npc.selectNpc(newIndex);
 				
 						//move them to the spot to the 
 						//BOTTOM LEFT corner of the npc 

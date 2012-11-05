@@ -8,6 +8,8 @@ var _loaded = false,
 	__speak = null;
 	_answered = false;
 	_who = null;
+	_currentQuestion = 0;
+	_correctAnswer = false;
 
 $game.$npc = {
 
@@ -25,7 +27,7 @@ $game.$npc = {
 			for(var i = 0; i < response.length; i += 1) {
 				var stringId = String(response[i].id);
 				_allNpcs[stringId] = response[i];
-				_allNpcs[stringId].counter = 0;
+				_allNpcs[stringId].counter = Math.floor(Math.random()*55);
 				_allNpcs[stringId].currentFrame = 0;
 			}  
 			_loaded = true;
@@ -39,20 +41,10 @@ $game.$npc = {
 
 	show: function() {
 		if(!$game.$npc.isResource && !$game.$npc.isChat) {
-			var stringId = String(_index);
-			_curNpc = _allNpcs[stringId];
-			
 			//if this is false, it means we clicked the npc square 
 			//that is the top one (which doesn't have a unique id in our list
 			//but rather corresponds to the one below it)
-			if(!_curNpc) {
-				_index += $game.TOTAL_WIDTH;
-				stringId = String(_index);
-				_curNpc = _allNpcs[stringId];
-			}
-
-			_who = _allNpcs[stringId].name;
-
+			
 			if($game.$player.currentLevel === _curNpc.level) {
 				_currentSlide = 0;
 				$game.$npc.showPrompt(0);
@@ -104,11 +96,6 @@ $game.$npc = {
 
 	showResource: function() {
 
-		$('.resourceStage').empty();
-		$('.resourceStage').load(_curNpc.resource.url,function() {
-			_numSlides = $('.resourceStage .pages > .page').length;
-		});
-		
 		$('.speechBubble').slideUp(function() {
 			$('.speechBubble').empty();
 			$game.$npc.isChat = false;
@@ -117,7 +104,7 @@ $game.$npc = {
 			$(".speechBubble .btn-danger").unbind("click");
 
 			//ready to show the resource now 
-			_speak = _curNpc.dialog.questions[0];
+			//_speak = _curNpc.dialog.questions[0];
 			$('.resourceArea').empty();
 			$game.$npc.addContent();
 			$game.$npc.addButtons();
@@ -194,24 +181,23 @@ $game.$npc = {
 		}));
 		//add the answer form
 		if(_answered) {
-			_speak = 'Well done!  Take this (thing from db) and solve that riddle!';
+	
+			if(_correctAnswer) {
+				_speak = _curNpc.dialog.responses[0];
+			}
+			else {
+				_speak = _curNpc.dialog.responses[1];
+			}
 			$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>');
-			$('.resourceArea').append('<p><br><img src="http://www.fordesigner.com/imguploads/Image/cjbc/zcool/png20080525/1211728737.png"></p>');		
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				var finalQuestion = _curNpc.dialog.questions[1],
+				_speak = _curNpc.dialog.prompts[2];
+				var finalQuestion = _curNpc.dialog.questions[_currentQuestion],
 					inputBox = '<form><input></input></form>';	
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+finalQuestion+'</p>'+inputBox);
+				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+_speak+'</p><p>'+finalQuestion+'</p>'+inputBox);
 			}
-			else if(_currentSlide === 0) {
-				var intro = _curNpc.dialog.questions[0],
-					inputBox = '<form><input></input></form>',
-					content = $('.resourceStage .pages .page').get(0).innerHTML;
-
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+intro+'</p>'+content);
-			}
-			else if(_currentSlide > 0) {
+			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
 				$('.resourceArea').append(content);
 			}		
@@ -267,20 +253,40 @@ $game.$npc = {
 	submitAnswer: function() {
 		//if the answer is true, give them something!
 		if(true) {
-			_answered = true;
-			$game.$npc.nextSlide();
+			//do something in db and stuff 
+			_correctAnswer = true;
 		}
 		else {
-
+			_correctAnswer = false;
 		}
-
+		_answered = true;
+		$game.$npc.nextSlide();
 		//otherwise tell them they are wrong, stay on form page 
 
 
 	},
 
-	setIndex: function(i) {
+	selectNpc: function(i) {
 		_index = i;
+		var stringId = String(_index);
+		_curNpc = _allNpcs[stringId];
+
+		if(!_curNpc) {
+				_index += $game.TOTAL_WIDTH;
+				stringId = String(_index);
+				_curNpc = _allNpcs[stringId];
+			}
+
+		_who = _allNpcs[stringId].name;
+
+		if($game.$player.currentLevel === _curNpc.level) {
+			_currentQuestion =  Math.floor(Math.random() * _curNpc.dialog.questions.length),
+			$('.resourceStage').empty();
+			$('.resourceStage').load(_curNpc.resource.url,function() {
+				_numSlides = $('.resourceStage .pages > .page').length;
+			});
+		}
+		
 	},
 
 	animateFrame: function () {
