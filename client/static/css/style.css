@@ -5022,6 +5022,9 @@ a.badge:hover {
   height: 26px;
   z-index: 999;
 }
+.videoResource {
+  text-align: center;
+}
 body {
   padding-top: 80px;
 }

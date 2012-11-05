@@ -5,6 +5,7 @@ var _loaded = false,
 	_currentSlide = 0;
 	_numSlides = 0;
 	_curNpc = null;
+	__speak = null;
 	_answered = false;
 	_who = null;
 
@@ -53,48 +54,55 @@ $game.$npc = {
 			_who = _allNpcs[stringId].name;
 
 			if($game.$player.currentLevel === _curNpc.level) {
-				$game.$npc.isResource = true;
-				$game.$npc.showPrompt();
+				_currentSlide = 0;
+				$game.$npc.showPrompt(0);
 			}
 			else {
 				$game.$npc.isChat = true;
-				$game.$npc.showChat();
+				$game.$npc.showRandom();
 			}
 		}
 		
 	},
 	//returns local x,y grid data based on mouse location
-	showPrompt: function() {
-		//window overlay?
-		//check index below no exist
+	showPrompt: function(index) {
 
-		//figure out which npc was clicked
-		//this was set on the click if an npc was clicked
-
-		
-		//this number should be dynamically generated based on html content
-		//reset the slide to 0 
-		_currentSlide = 0;
-
-		//the prompt looks like a chat, so show the damn chat son
-		var speak = 'I have a resource about (pull from db), would you like to see it?',
-			buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
-
+		_speak = _curNpc.dialog.prompts[index];
 		$('.speechBubble').css('height',55);
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+buttons+'</p>').slideDown(function() {
-			$(".speechBubble .btn-success").bind("click", (function () {
-				$game.$npc.showResource();
-			}));
-			$(".speechBubble .btn-danger").bind("click", (function () {
-				$game.$npc.hideChat();
-			}));
-		});
+		if(index == 0) {
+			$game.$npc.isResource = true;
+			buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
+			_speak += buttons;
+			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
+				$(".speechBubble .btn-success").bind("click", (function () {
+					$game.$npc.showResource();
+				}));
+				$(".speechBubble .btn-danger").bind("click", (function () {
+					$game.$npc.hideChat();
+				}));
+			});
+		}
+		else {
+			$game.$npc.isChat = true;
+			$('.speechBubble').css('height',40);
+			$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
+				$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
+			});
+		}
 					
 	},
 
-	showResource: function() {
+	showRandom: function() {
+		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
+		_speak = _curNpc.dialog.random[ran];
+		
+		$('.speechBubble').css('height',40);
+		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
+			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
+		});
+	},
 
-		_numSlides = 2;
+	showResource: function() {
 
 		$('.resourceStage').empty();
 		$('.resourceStage').load(_curNpc.resource.url,function() {
@@ -109,7 +117,7 @@ $game.$npc = {
 			$(".speechBubble .btn-danger").unbind("click");
 
 			//ready to show the resource now 
-			var speak = _curNpc.dialog.question[0];
+			_speak = _curNpc.dialog.questions[0];
 			$('.resourceArea').empty();
 			$game.$npc.addContent();
 			$game.$npc.addButtons();
@@ -118,7 +126,6 @@ $game.$npc = {
 		
 	},
 
-	addButtons: function() {
 	//determine which buttons to put on the resource area 
 	//based on page number, if its a form yet, etc.
 	//buttons: next, back, answer, close
@@ -129,6 +136,8 @@ $game.$npc = {
 		
 
 	//if its been answered, we have a close button
+	addButtons: function() {
+
 		if(_answered) {
 			$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button>');
 			$('.closeButton').text('Close');
@@ -185,18 +194,18 @@ $game.$npc = {
 		}));
 		//add the answer form
 		if(_answered) {
-			var speak = 'Well done!  Take this (thing from db) and solve that riddle!';
-			$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>');
+			_speak = 'Well done!  Take this (thing from db) and solve that riddle!';
+			$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>');
 			$('.resourceArea').append('<p><br><img src="http://www.fordesigner.com/imguploads/Image/cjbc/zcool/png20080525/1211728737.png"></p>');		
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				var finalQuestion = _curNpc.dialog.question[1],
+				var finalQuestion = _curNpc.dialog.questions[1],
 					inputBox = '<form><input></input></form>';	
 				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+finalQuestion+'</p>'+inputBox);
 			}
 			else if(_currentSlide === 0) {
-				var intro = _curNpc.dialog.question[0],
+				var intro = _curNpc.dialog.questions[0],
 					inputBox = '<form><input></input></form>',
 					content = $('.resourceStage .pages .page').get(0).innerHTML;
 
@@ -210,17 +219,6 @@ $game.$npc = {
 		
 		
 
-	},
-
-	showChat: function() {		
-		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
-		speak = _curNpc.dialog.random[ran];
-		
-		$('.speechBubble').css('height',40);
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+speak+'</p>').slideDown(function() {
-			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
-		});
-		
 	},
 
 	hideResource: function() {
@@ -286,22 +284,60 @@ $game.$npc = {
 	},
 
 	animateFrame: function () {
+		data = {};
+
 		for(var i = 0; i < $game.onScreenNpcs.length; i += 1) {
 			var curId = $game.onScreenNpcs[i];
-			_allNpcs[curId].counter += 1;
-			if(_allNpcs[curId].counter > 16) { 
-				_allNpcs[curId].counter = 0;
+			
+			/*
+			_idleCounter += 1;
+			if(_idleCounter >= 64) { 
+				_idleCounter = 0;
+				playerInfo.srcX = 0;
+				playerInfo.srcY = 0;
+				$game.$player.render();
 			}
 
-			if(_allNpcs[curId].counter % 8 === 0) {
-				_allNpcs[curId].currentFrame += 1;
-				if(_allNpcs[curId].currentFrame === 4) {
-					_allNpcs[curId].currentFrame = 0;
-				}
-				var spot = _allNpcs[curId].currentFrame;
-				data = {};
-				data.srcX = _allNpcs[curId].spriteMap[spot].x,
-				data.srcY = _allNpcs[curId].spriteMap[spot].y,
+
+			if(_idleCounter == 48) {
+				playerInfo.srcX = 32;
+				playerInfo.srcY = 0;
+				$game.$player.render();
+			}*/
+
+
+			_allNpcs[curId].counter += 1;
+
+			if(_allNpcs[curId].counter >= 56) { 
+				_allNpcs[curId].counter = 0;
+				
+				data.srcX = _allNpcs[curId].spriteMap[0].x,
+				data.srcY = _allNpcs[curId].spriteMap[0].y,
+				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
+				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
+
+				$game.$renderer.renderNpc(data);
+			}
+
+			else if(_allNpcs[curId].counter === 24) {
+				data.srcX = _allNpcs[curId].spriteMap[1].x,
+				data.srcY = _allNpcs[curId].spriteMap[1].y,
+				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
+				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
+
+				$game.$renderer.renderNpc(data);
+			}
+			else if(_allNpcs[curId].counter === 28) {
+				data.srcX = _allNpcs[curId].spriteMap[2].x,
+				data.srcY = _allNpcs[curId].spriteMap[2].y,
+				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
+				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
+
+				$game.$renderer.renderNpc(data);
+			}
+			else if(_allNpcs[curId].counter === 32) {
+				data.srcX = _allNpcs[curId].spriteMap[3].x,
+				data.srcY = _allNpcs[curId].spriteMap[3].y,
 				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
 				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
 

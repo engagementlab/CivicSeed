@@ -10,8 +10,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		}],
 		dialog: {
 			random: [String],
-			question: [String],
-			answer: [String]
+			prompts: [String],
+			questions: [String],
+			answers: [String],
+			responses: [String]
 		},
 		resource: {
 			kind: String,

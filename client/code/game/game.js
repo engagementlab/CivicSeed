@@ -293,7 +293,7 @@ exports.$game = {
 	endTransition: function() {
 		$game.inTransit = false;
 		$game.$player.isMoving = false;
-		
+		$game.$player.resetRenderValues();
 		//now that the transition has ended, create a new grid
 		$game.createPathGrid(function() {
 			$game.stepDirection = false;

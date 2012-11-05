@@ -270,20 +270,30 @@ $game.$player = {
 		$game.$renderer.renderPlayer(playerInfo);
 	},
 
+	resetRenderValues: function() {
+		_prevOffX = 0,
+		_prevOffY = 0,
+		playerInfo.prevX = _prevOffX,
+		playerInfo.prevY = _prevOffY;
+
+	},
+
 	idle: function () {
 		_idleCounter += 1;
-		if(_idleCounter > 64) { 
+		if(_idleCounter >= 64) { 
 			_idleCounter = 0;
-		}
-		if(_idleCounter > 48) {
-			playerInfo.srcX = 32;
-			playerInfo.srcY = 0;
-		}
-		else {
 			playerInfo.srcX = 0;
 			playerInfo.srcY = 0;
+			$game.$player.render();
 		}
-		$game.$player.render();
+
+		if(_idleCounter == 48) {
+			playerInfo.srcX = 32;
+			playerInfo.srcY = 0;
+			$game.$player.render();
+		}
+	
+		
 	},
 
 	dropSeed: function(options) {

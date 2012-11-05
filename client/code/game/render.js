@@ -68,7 +68,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npc_0.png']
+		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png']
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);	
@@ -322,14 +322,13 @@ $game.$renderer = {
 	
 
 	renderPlayer: function(tileData) {
-		// console.log(tileData);
 		//convert x y to local 
 		$game.masterToLocal(tileData.x, tileData.y, function(loc) {			
 			var prevX = loc.x * $game.TILE_SIZE + tileData.prevX * $game.STEP_PIXELS;
 			prevY = loc.y * $game.TILE_SIZE + tileData.prevY * $game.STEP_PIXELS;
 			curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
 			curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
-
+			
 			_charactersContext.clearRect(
 				prevX,
 				prevY - $game.TILE_SIZE,
