@@ -358,42 +358,22 @@ $game.$renderer = {
 	renderOther: function(info) {
 		//convert x y to local 
 		$game.masterToLocal(info.x, info.y, function(loc) {			
-			// var prevX = loc.x * $game.TILE_SIZE + tileData.prevX * $game.STEP_PIXELS;
-			// prevY = loc.y * $game.TILE_SIZE + tileData.prevY * $game.STEP_PIXELS;
-			// curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
-			// curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
-			var curX = loc.x * $game.TILE_SIZE;
-				curY = loc.y * $game.TILE_SIZE;
+			var prevX = loc.x * $game.TILE_SIZE + info.prevX * $game.STEP_PIXELS;
+				prevY = loc.y * $game.TILE_SIZE + info.prevY * $game.STEP_PIXELS;
+				curX = loc.x * $game.TILE_SIZE + info.offX * $game.STEP_PIXELS;
+				curY = loc.y * $game.TILE_SIZE + info.offY * $game.STEP_PIXELS;
 			
-			// _charactersContext.clearRect(
-			// 	prevX,
-			// 	prevY - $game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE*2
-			// 	);
-
-			// _charactersContext.drawImage(
-			// 	_offscreen_playerCanvas, 
-			// 	tileData.srcX,
-			// 	tileData.srcY,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE*2,
-			// 	curX,
-			// 	curY - $game.TILE_SIZE,
-			// 	$game.TILE_SIZE,
-			// 	$game.TILE_SIZE*2
-			// 	);
 			_charactersContext.clearRect(
-				curX,
-				curY,
+				prevX,
+				prevY - $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2
 				);
 
 			_charactersContext.drawImage(
 				_offscreen_playerCanvas, 
-				0,
-				0,
+				info.srcX,
+				info.srcY,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2,
 				curX,
@@ -401,8 +381,6 @@ $game.$renderer = {
 				$game.TILE_SIZE,
 				$game.TILE_SIZE*2
 				);
-
-
 
 		});	
 	},

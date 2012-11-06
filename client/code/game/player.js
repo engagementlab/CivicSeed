@@ -85,6 +85,7 @@ $game.$player = {
 			$game.$player.currentStep = 0;
 			$game.$player._masterX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
 			$game.$player._masterY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
 			$game.$renderer.renderMiniMap();
@@ -106,6 +107,8 @@ $game.$player = {
 			if($game.$player.currentStep === 1) {
 				_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - $game.$player._masterX;
 				_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - $game.$player._masterY;
+				
+				console.log($game.$player.seriesOfMoves[$game.$player.currentMove].masterX +", "+ $game.$player._masterX);
 				// _prevStepX = _currentX * $game.TILE_SIZE;
 				// _prevStepY = _currentY * $game.TILE_SIZE;
 				
@@ -178,7 +181,7 @@ $game.$player = {
 		$game.$player.currentStep = 0;
 		$game.$player.isMoving = true;
 	},
-	
+
 	endMove: function () {
 		var posInfo = {
 			 id: $game.$player.id,

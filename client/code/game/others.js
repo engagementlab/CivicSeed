@@ -25,7 +25,10 @@ $game.$others = {
 	},
 
 	update: function() {
-
+		//if is moving, move
+		$.each(_onScreenPlayers, function(key, player) { 
+  			player.update(); 
+		});
 	},
 
 	remove: function(id) {
@@ -36,12 +39,21 @@ $game.$others = {
 	},
 
 	createOther: function(player) {
-		var newPlayer = {
+		var otherPlayer = {
 
 			name: player.name,
 			id: player.id,
-			x: player.x,
-			y: player.y,
+			isMoving: false,
+			currentStep: 0,
+			numSteps: 0,
+			currentMove: 0,
+			currentStepIncX: 0,
+			currentStepIncY: 0,
+			curFrame: 0,
+			numFrames: 4,
+			numSteps: 8,
+			direction: 0,
+
 			
 			renderInfo: {
 				x: player.x,
@@ -53,20 +65,114 @@ $game.$others = {
 				prevX: 0,
 				prevY: 0
 			},
+			update: function() {
+				
+				if(otherPlayer.isMoving) {
+					otherPlayer.move();
+				}
+			},
 
 			render: function() {
-				$game.$renderer.renderOther(newPlayer.renderInfo);
+				$game.$renderer.renderOther(otherPlayer.renderInfo);
 			},
 
 			beginMove: function(moves) {
+				otherPlayer.seriesOfMoves = new Array(moves.length);
+				otherPlayer.seriesOfMoves = moves;
+				otherPlayer.currentMove = 1;
+				otherPlayer.currentStep = 0;
+				otherPlayer.isMoving = true;
+				console.log(otherPlayer.seriesOfMoves);
+			},
 
-			}
+			endMove: function() {
+				otherPlayer.isMoving = false;
+
+				otherPlayer.renderInfo.srcX = 0;
+				otherPlayer.renderInfo.srcY = 0;
+				otherPlayer.renderInfo.offX = 0;
+				otherPlayer.renderInfo.offY = 0;
+				otherPlayer.renderInfo.prevX = 0;
+				otherPlayer.renderInfo.prevY = 0;
+			},
+
+			move: function() {
+				//if the steps between the tiles has finished,
+				//update the master location, and reset steps to go on to next move 
+				if(otherPlayer.currentStep >= otherPlayer.numSteps) {
+					otherPlayer.currentStep = 0;
+					otherPlayer.renderInfo.x = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX;
+					otherPlayer.renderInfo.y = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY;
+					otherPlayer.currentMove += 1;
+
+					//render mini map here *****
+
+				}
+
+				//check to see if done
+				if(otherPlayer.currentMove >= otherPlayer.seriesOfMoves.length) {
+					otherPlayer.endMove();
+				}
+
+				//if not, step through it
+				else {
+					
+					//increment the current step 
+					otherPlayer.currentStep += 1;
+
+					//if it the first one, then figure out the direction to face
+					if(otherPlayer.currentStep === 1) {
+						otherPlayer.currentStepIncX = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX - otherPlayer.renderInfo.x;
+						otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.renderInfo.y;
+						
+						console.log(otherPlayer.seriesOfMoves[otherPlayer.currentMove].x +", "+ otherPlayer.renderInfo.x);
+
+						//set the previous offsets to 0 because the last visit
+						//was the actual rounded master 
+						otherPlayer.renderInfo.prevX = 0;
+						otherPlayer.renderInfo.prevY = 0;
+
+						//set direction for sprite sheets
+						//direction refers to the y location on the sprite sheet
+						//since the character will be in different rows
+						//will be 0,1,2,3
+						if(otherPlayer.currentStepIncX === 1) {
+							otherPlayer.direction = 2;
+						}
+						else if(otherPlayer.currentStepIncX === -1) {
+							otherPlayer.direction = 1;
+						}
+						else if(otherPlayer.currentStepIncY === -1) {
+							otherPlayer.direction = 4;
+						}
+						else {
+							otherPlayer.direction = 3;
+						}
+					}
+
+					else {
+						otherPlayer.renderInfo.prevX = otherPlayer.renderInfo.offX;
+						otherPlayer.renderInfo.prevY = otherPlayer.renderInfo.offY;
+					}
+					
+					otherPlayer.renderInfo.offX = otherPlayer.currentStep * otherPlayer.currentStepIncX;
+					otherPlayer.renderInfo.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
+
+					//try only changing the src (frame) every X frames
+					if((otherPlayer.currentStep-1)%8 == 0) {
+						otherPlayer.curFrame += 1;
+						if(otherPlayer.curFrame >= otherPlayer.numFrames) {
+							otherPlayer.curFrame = 0;
+						}
+					}
+
+					otherPlayer.renderInfo.srcX = otherPlayer.curFrame * $game.TILE_SIZE,
+					otherPlayer.renderInfo.srcY =  otherPlayer.direction * $game.TILE_SIZE*2;
+				}
+			}	
 		};
-
-		return newPlayer;
+		return otherPlayer;
 	},
-
-
 
 	render: function() {
 		$.each(_onScreenPlayers, function(key, player) { 
@@ -84,130 +190,36 @@ $game.$others = {
 };
 
 	// resetRenderValues: function() {
-	// 	_prevOffX = 0,
-	// 	_prevOffY = 0,
-	// 	playerInfo.prevX = _prevOffX,
-	// 	playerInfo.prevY = _prevOffY;
+	// 	otherPlayer.prevX = 0,
+	// 	otherPlayer.prevY = 0,
+	// 	otherPlayer.renderInfo.prevX = otherPlayer.prevX,
+	// 	otherPlayer.renderInfo.prevY = otherPlayer.prevY;
 
 	// },
 	
 	
 			// move: function () {
-	// 	/** IMPORTANT note: x and y are really flipped!!! **/
-	// 	//update the step
-	// 	$game.$others.isMoving = true;
-
-	// 	//if the steps between the tiles has finished,
-	// 	//update the master location, and reset steps to go on to next move 
-	// 	if($game.$others.currentStep >= _numSteps) {
-	// 		$game.$others.currentStep = 0;
-	// 		$game.$others._masterX = $game.$others.seriesOfMoves[$game.$others.currentMove].masterX;
-	// 		$game.$others._masterY = $game.$others.seriesOfMoves[$game.$others.currentMove].masterY;
-	// 		$game.$others.currentMove += 1;
-	// 		//render mini map every spot player moves
-	// 		$game.$renderer.renderMiniMap();
-
-	// 	}
-
-	// 	//if we done, finish
-	// 	if($game.$others.currentMove >= $game.$others.seriesOfMoves.length) {
-	// 		$game.$others.endMove();
-	// 	}
-
-	// 	//if we no done, then step through it yo.
-	// 	else {
-			
-	// 		//increment the current step 
-	// 		$game.$others.currentStep += 1;
-
-	// 		//if it the first one, then figure out the direction to face
-	// 		if($game.$others.currentStep === 1) {
-	// 			_currentStepIncX = $game.$others.seriesOfMoves[$game.$others.currentMove].masterX - $game.$others._masterX;
-	// 			_currentStepIncY = $game.$others.seriesOfMoves[$game.$others.currentMove].masterY - $game.$others._masterY;
-	// 			// _prevStepX = _currentX * $game.TILE_SIZE;
-	// 			// _prevStepY = _currentY * $game.TILE_SIZE;
-				
-	// 			//set the previous offsets to 0 because the last visit
-	// 			//was the actual rounded master 
-	// 			_prevOffX = 0;
-	// 			_prevOffY = 0;
-
-	// 			//set direction for sprite sheets
-	// 			//direction refers to the y location on the sprite sheet
-	// 			//since the character will be in different rows
-	// 			//will be 0,1,2,3
-	// 			if(_currentStepIncX === 1) {
-	// 				_direction = 2;
-	// 			}
-	// 			else if(_currentStepIncX === -1) {
-	// 				_direction = 1;
-	// 			}
-	// 			else if(_currentStepIncY === -1) {
-	// 				_direction = 4;
-	// 			}
-	// 			else {
-	// 				_direction = 3;
-	// 			}
-	// 		}
-
-	// 		else {
-	// 			_prevOffX = _offX;
-	// 			_prevOffY = _offY;
-	// 		}
-			
-	// 		_offX = $game.$others.currentStep * _currentStepIncX;
-	// 		_offY = $game.$others.currentStep * _currentStepIncY;
-
-
-	// 		// _prevStepX = _currentX;
-	// 		// _prevStepY = _currentY;
-
-	// 		// _currentX = ($game.$others._masterX * $game.TILE_SIZE) + $game.$others.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
-	// 		// _currentY = ($game.$others._masterY * $game.TILE_SIZE) + $game.$others.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
-
-	// 		//try only changing the src (frame) every X frames
-	// 		if(($game.$others.currentStep-1)%8 == 0) {
-	// 			_curFrame += 1;
-	// 			if(_curFrame >= _numFrames) {
-	// 				_curFrame = 0;
-	// 			}
-	// 		}
-	// 		_srcX = _curFrame * $game.TILE_SIZE,
-	// 		_srcY =  _direction * $game.TILE_SIZE*2;
-
-	// 		playerInfo.srcX = _srcX;
-	// 		playerInfo.srcY = _srcY;
-	// 		playerInfo.x = $game.$others._masterX;
-	// 		playerInfo.y = $game.$others._masterY;
-	// 		playerInfo.offX = _offX;
-	// 		playerInfo.offY = _offY;
-	// 		playerInfo.prevX = _prevOffX;
-	// 		playerInfo.prevY = _prevOffY;
-		
-	// 		//$game.$renderer.renderPlayer(playerInfo);
-	// 		//setTimeout($game.$others.move; 17);
-	// 		//requestAnimFrame($game.$others;.move);
-	// 	}
+	
 	// },
 	// endMove: function () {
-	// 	_offX = 0,
-	// 	_offY = 0;
+	// 	otherPlayer.offX = 0,
+	// 	otherPlayer.offY = 0;
 
 	// 	//put the character back to normal position
-	// 	_srcX = 0,
-	// 	_srcY =  0;
+	// 	otherPlayer.srcX = 0,
+	// 	otherPlayer.srcY =  0;
 
-	// 	_prevOffX= 0;
-	// 	_prevOffY= 0;
+	// 	otherPlayer.prevX= 0;
+	// 	otherPlayer.prevY= 0;
 
-	// 	playerInfo.srcX = _srcX;
-	// 	playerInfo.srcY = _srcY;
-	// 	playerInfo.x = $game.$others._masterX;
-	// 	playerInfo.y = $game.$others._masterY;
-	// 	playerInfo.offX = _offX;
-	// 	playerInfo.offY = _offY;
-	// 	playerInfo.prevX = _prevOffX;
-	// 	playerInfo.prevY = _prevOffY;
+	// 	otherPlayer.renderInfo.srcX = otherPlayer.srcX;
+	// 	otherPlayer.renderInfo.srcY = otherPlayer.srcY;
+	// 	otherPlayer.renderInfo.x = $game.$others.x;
+	// 	otherPlayer.renderInfo.y = $game.$others.y;
+	// 	otherPlayer.renderInfo.offX = otherPlayer.offX;
+	// 	otherPlayer.renderInfo.offY = otherPlayer.offY;
+	// 	otherPlayer.renderInfo.prevX = otherPlayer.prevX;
+	// 	otherPlayer.renderInfo.prevY = otherPlayer.prevY;
 
 	// 	$game.$others.isMoving = false;
 	// 	$game.$others.render();

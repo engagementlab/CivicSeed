@@ -6,12 +6,12 @@ module.exports.global = [{
 }, {
 	name: 'Russell Goldenberg',
 	password: '',
-	email: 'russellgoldenberg@gmail.com',
+	email: 'r',
 	role: 'superadmin'
 }, {
 	name: 'Stephen Walter',
-	password: 'password',
-	email: 'swalter4669@gmail.com',
+	password: '',
+	email: 's',
 	role: 'admin'
 }, {
 	name: 'Eric Gordon',
