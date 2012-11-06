@@ -5,16 +5,16 @@ module.exports.global = [
 	level: 1,
 	spriteMap: [{
 		x: 0,
-		y: 0
+		y: 192
 	}, {
 		x: 32,
-		y: 0
+		y: 192
 	}, {
 		x: 64,
-		y: 0
+		y: 192
 	}, {
 		x: 96,
-		y: 0
+		y: 192
 	}],
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],

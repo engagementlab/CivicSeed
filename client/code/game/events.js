@@ -9,23 +9,33 @@ $(window).on('beforeunload', function() {
 	return x;
 });
 function leaveThisJoint(){
-	ss.rpc('game.player.playerLeft', $game.$player.id);
+	ss.rpc('game.player.removePlayer', $game.$player.id);
 }
 
 //new player joining to keep track of
-ss.event.on('ss-numActivePlayers', function(num) {
+ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
+	$game.$others.add(player);
+	console.log("total active players: " + $game.numPlayers);
+});
+ss.event.on('ss-removePlayer', function(num, playerId) {
+	$game.numPlayers = num;
+	$game.$others.remove(playerId);
 	console.log("total active players: " + $game.numPlayers);
 });
 
-ss.event.on('ss-playerMoved', function(moves) {
+ss.event.on('ss-playerMoved', function(moves, id) {
 		//check if that quad is relevant to the current player
 		//this will also have the player info so as to id the appropriate one
-		$game.$player.seriesOfMoves = new Array(moves.length);
-		$game.$player.seriesOfMoves = moves;
-		$game.$player.currentMove = 1;
-		$game.$player.currentStep = 0;
-		$game.$player.isMoving = true;
+		
+		if(id == $game.$player.id) {
+			$game.$player.sendMoveInfo(moves);
+		}
+		else {
+			$game.$others.sendMoveInfo(moves, id);
+
+		}
+		
 
 });
 //all this breakdown will be on the server side, not client side, 

@@ -6,7 +6,7 @@
 var intervalId = {};
 var numActivePlayers = 0;
 // var numPlayers = 0;
-var players = [];
+var players = {};
 
 var service, db, userModel,tileModel;
 
@@ -41,12 +41,37 @@ var self = module.exports = {
 				service = ss.service;
 				userModel = service.useModel('user', 'ss');
 				tileModel = service.useModel('tile', 'ss');
-				numActivePlayers++;
 				console.log("player "+req.session.id+" joined.");
-				//send the number of active players to angular
-				ss.publish.all('ss-numActivePlayers',numActivePlayers);
-				console.log("active players" +numActivePlayers);
-				res(req.session.id);
+				console.log(req.session);
+				//right now choose a random starting loc
+				var x = Math.ceil(Math.random() * 25),
+					y = Math.ceil(Math.random() * 12),
+					playerInfo = {
+						id: req.session.userId,
+						name: req.session.name,
+						x: x,
+						y: y
+					};
+
+				//send the number of active players and the new player info
+				res(playerInfo);
+			},
+
+			addPlayer: function(info) {
+				players[info.id] = info;
+				numActivePlayers += 1;
+				ss.publish.all('ss-addPlayer',numActivePlayers, info);
+				console.log(players);
+			},
+			removePlayer: function(id) {
+				numActivePlayers -= 1;
+				delete players[id];
+				console.log(players);
+				ss.publish.all('ss-removePlayer',numActivePlayers, id);
+			},
+
+			getOthers: function() {
+				res(players);
 			},
 			// checkIn: function(player) {
 			// 	players.push(player);
@@ -92,25 +117,22 @@ var self = module.exports = {
 				// });
 				//return set of tiles based no bounds
 			},
-			playerLeft: function(id) {
-				numActivePlayers--;
-				ss.publish.all('ss-numActivePlayers', numActivePlayers);
-				console.log("player "+id+" left.");
+			
+			movePlayer: function(moves, id) {
+				console.log("move "+id);
+
+				//send out the moves to everybody
+				ss.publish.all('ss-playerMoved', moves, id);
 			},
 
-			movePlayer: function(player, id) {
-				console.log("move "+id);
-				// for(var p=0; p<players.length;p++){
-				// 	console.log(players[p].id);
-				// 		//ridic stupid way to check if it's the right one (id isn't working)
-				// 		if(players[p].r ==player.r && players[p].g ==player.g) {
-				// 			players[p].x = player.x;
-				// 			players[p].y = player.y;
-				// 			continue;
-				// 		}
-				// }
-				// console.log(player);
-				ss.publish.all('ss-playerMoved', player);
+			sendPosition: function(info) {
+				for(var i = 0; i < players.length; i = i + 1) {
+					if(players[i].id === info.id) {
+						players[i].x = info.x;
+						players[i].y = info.y;
+						continue;
+					}
+				}
 			},
 			dropSeed: function(bombed) {
 				// for(var p=0; p<players.length;p++){

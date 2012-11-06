@@ -403,6 +403,7 @@ exports.$game = {
 
 	tick: function() {
 		if($game.started) {
+			$game.$others.update();
 			$game.$player.update();
 			$game.$renderer.renderFrame();   
 		}

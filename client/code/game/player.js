@@ -22,8 +22,10 @@ var _offX = 0,
 
 $game.$player = {
 
-	_masterX: 19,
-	_masterY: 10,
+	_masterX: null,
+	_masterY: null,
+	name: null,
+	id: null,
 	seriesOfMoves: null,
 	currentMove: 0,
 	currentStep: 0,
@@ -34,8 +36,8 @@ $game.$player = {
 	seedMode: false,
 	hue: 0,
 	saturation: '90%', 
-	lightness: '80%',  
-	id: null,
+	lightness: '80%',
+
 
 
 	//private methods
@@ -54,6 +56,15 @@ $game.$player = {
 			prevX: _prevOffX,
 			prevY: _prevOffY
 		}
+
+	},
+	setInfo: function(info) {
+			$game.$player.id = info.id;
+			$game.$player._masterX = info.x;
+			$game.$player._masterY = info.y;
+			$game.$player.name = info.name;
+			playerInfo.x = info.x;
+			playerInfo.y = info.y;
 
 	},
 	update: function(){
@@ -160,7 +171,21 @@ $game.$player = {
 			//requestAnimFrame($game.$player;.move);
 		}
 	},
+	sendMoveInfo: function(moves) {
+		$game.$player.seriesOfMoves = new Array(moves.length);
+		$game.$player.seriesOfMoves = moves;
+		$game.$player.currentMove = 1;
+		$game.$player.currentStep = 0;
+		$game.$player.isMoving = true;
+	},
+	
 	endMove: function () {
+		var posInfo = {
+			 id: $game.$player.id,
+			 x: $game.$player._masterX, 
+			 y: $game.$player._masterY
+		};
+		ss.rpc('game.player.sendPosition', posInfo);
 		_offX = 0,
 		_offY = 0;
 
@@ -257,7 +282,6 @@ $game.$player = {
 
 	},
 	render: function() {
-		
 		$game.$renderer.renderPlayer(playerInfo);
 	
 	},

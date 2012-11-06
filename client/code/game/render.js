@@ -48,8 +48,9 @@ $game.$renderer = {
 
 		//initialize DB and let all players know there is a new active one
 		ss.rpc('game.player.init', function(response) {
-			$game.$player.id = response;
-			console.log("my session id: " + $game.$player.id);
+			$game.$player.setInfo(response);
+			$game.$others.init();
+			ss.rpc('game.player.addPlayer',response);
 		});
 
 		//access the canvases for rendering
@@ -136,6 +137,7 @@ $game.$renderer = {
 		}
 		else if($game.inTransit) {
 			//render tiles (bg,bg2, fg, and npcs)
+			$game.$others.render();	
 			$game.$renderer.renderAllTiles();
 			$game.$player.render();
 			//render player (client)
@@ -143,6 +145,7 @@ $game.$renderer = {
 			//render colors
 		}
 		else { 
+			$game.$others.render();	
 			if($game.onScreenNpcs.length > 0) {
 				$game.$npc.animateFrame();
 			}
@@ -156,7 +159,7 @@ $game.$renderer = {
 
 			if($game.$map.growingSeed) {
 				$game.$map.growSeeds();	
-			}				
+			}
 		}
 	},
 	renderTile: function(i, j) {
@@ -352,6 +355,57 @@ $game.$renderer = {
 		});	
 	},
 
+	renderOther: function(info) {
+		//convert x y to local 
+		$game.masterToLocal(info.x, info.y, function(loc) {			
+			// var prevX = loc.x * $game.TILE_SIZE + tileData.prevX * $game.STEP_PIXELS;
+			// prevY = loc.y * $game.TILE_SIZE + tileData.prevY * $game.STEP_PIXELS;
+			// curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
+			// curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
+			var curX = loc.x * $game.TILE_SIZE;
+				curY = loc.y * $game.TILE_SIZE;
+			
+			// _charactersContext.clearRect(
+			// 	prevX,
+			// 	prevY - $game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE*2
+			// 	);
+
+			// _charactersContext.drawImage(
+			// 	_offscreen_playerCanvas, 
+			// 	tileData.srcX,
+			// 	tileData.srcY,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE*2,
+			// 	curX,
+			// 	curY - $game.TILE_SIZE,
+			// 	$game.TILE_SIZE,
+			// 	$game.TILE_SIZE*2
+			// 	);
+			_charactersContext.clearRect(
+				curX,
+				curY,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE*2
+				);
+
+			_charactersContext.drawImage(
+				_offscreen_playerCanvas, 
+				0,
+				0,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE*2,
+				curX,
+				curY - $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE*2
+				);
+
+
+
+		});	
+	},
 	renderAllTiles: function() {
 
 
