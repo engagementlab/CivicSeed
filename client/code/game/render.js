@@ -327,8 +327,8 @@ $game.$renderer = {
 	renderPlayer: function(tileData) {
 		//convert x y to local 
 		$game.masterToLocal(tileData.x, tileData.y, function(loc) {			
-			var prevX = loc.x * $game.TILE_SIZE + tileData.prevX * $game.STEP_PIXELS;
-			prevY = loc.y * $game.TILE_SIZE + tileData.prevY * $game.STEP_PIXELS;
+			var prevX = loc.x * $game.TILE_SIZE + tileData.prevOffX * $game.STEP_PIXELS;
+			prevY = loc.y * $game.TILE_SIZE + tileData.prevOffY * $game.STEP_PIXELS;
 			curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
 			curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
 			
@@ -592,16 +592,18 @@ renderMouse: function(mouse) {
 },
 
 renderMiniMap: function() {
+	/*
 	_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
 
 		//draw player
 		_minimapPlayerContext.fillStyle = 'rgb(255,0,0)';
 		_minimapPlayerContext.fillRect(
-			$game.$player._masterX,
-			$game.$player._masterY,
+			$game.$player.masterX,
+			$game.$player.masterY,
 			4,
 			4
 			);
+*/
 	},
 	renderMiniTile: function(sq) {
 		

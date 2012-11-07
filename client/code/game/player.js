@@ -1,29 +1,19 @@
 //current values are there for the inbetween squares
 //master is the most previously gridded position
 
-var _offX = 0,
-	_offY = 0,
-	_prevOffX = 0,
-	_prevOffY = 0,
-	_srcX = 0,
-	_srcY = 0,
-	_curFrame = 0,
+var _curFrame = 0,
 	_numFrames = 4,
 	_numSteps = 8,
 	_currentStepIncX = 0,
 	_currentStepIncY = 0,
-	_prevStepX = 0, //deprecated
-	_prevStepY = 0, //deprecated
 	_direction = 0,
 	_willTravel = null,
 	_idleCounter = 0,
-	playerInfo = null;
+	_info = {};
 
 
 $game.$player = {
 
-	_masterX: null,
-	_masterY: null,
 	name: null,
 	id: null,
 	seriesOfMoves: null,
@@ -46,46 +36,41 @@ $game.$player = {
 		
 		$game.$player.ready = true;
 		
-		playerInfo = {
-			srcX: _srcX,
-			srcY: _srcY,
-			x: $game.$player._masterX,
-			y: $game.$player._masterY,
-			offX: _offX,
-			offY: _offY,
-			prevX: _prevOffX,
-			prevY: _prevOffY
+		_info = {
+			srcX: 0,
+			srcY: 0,
+			x: 0,
+			y: 0,
+			offX: 0,
+			offY: 0,
+			prevOffX: 0,
+			prevOffY: 0
 		}
 
 	},
-	setInfo: function(info) {
-			$game.$player.id = info.id;
-			$game.$player._masterX = info.x;
-			$game.$player._masterY = info.y;
-			$game.$player.name = info.name;
-			playerInfo.x = info.x;
-			playerInfo.y = info.y;
-
+	setInfo: function(newInfo) {
+			$game.$player.id = newInfo.id;
+			_info.x = newInfo.x;
+			_info.y = newInfo.y;
+			$game.$player.name = newInfo.name;
 	},
+
 	update: function(){
 
 		if($game.$player.isMoving) {
 			$game.$player.move();
 		}
-
 	},
 	move: function () {
 		/** IMPORTANT note: x and y are really flipped!!! **/
 		//update the step
 		$game.$player.isMoving = true;
-
 		//if the steps between the tiles has finished,
 		//update the master location, and reset steps to go on to next move 
 		if($game.$player.currentStep >= _numSteps) {
 			$game.$player.currentStep = 0;
-			$game.$player._masterX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
-			$game.$player._masterY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
-
+			_info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
+			_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
 			$game.$renderer.renderMiniMap();
@@ -105,17 +90,12 @@ $game.$player = {
 
 			//if it the first one, then figure out the direction to face
 			if($game.$player.currentStep === 1) {
-				_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - $game.$player._masterX;
-				_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - $game.$player._masterY;
-				
-				console.log($game.$player.seriesOfMoves[$game.$player.currentMove].masterX +", "+ $game.$player._masterX);
-				// _prevStepX = _currentX * $game.TILE_SIZE;
-				// _prevStepY = _currentY * $game.TILE_SIZE;
-				
+				_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
+				_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
 				//set the previous offsets to 0 because the last visit
 				//was the actual rounded master 
-				_prevOffX = 0;
-				_prevOffY = 0;
+				_info.prevOffX = 0;
+				_info.prevOffY = 0;
 
 				//set direction for sprite sheets
 				//direction refers to the y location on the sprite sheet
@@ -136,42 +116,22 @@ $game.$player = {
 			}
 
 			else {
-				_prevOffX = _offX;
-				_prevOffY = _offY;
+				_info.prevOffX = _info.offX;
+				_info.prevOffY = _info.offY;
 			}
 			
-			_offX = $game.$player.currentStep * _currentStepIncX;
-			_offY = $game.$player.currentStep * _currentStepIncY;
-
-
-			// _prevStepX = _currentX;
-			// _prevStepY = _currentY;
-
-			// _currentX = ($game.$player._masterX * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncX * $game.STEP_PIXELS ),
-			// _currentY = ($game.$player._masterY * $game.TILE_SIZE) + $game.$player.currentStep * (_currentStepIncY * $game.STEP_PIXELS );
+			_info.offX = $game.$player.currentStep * _currentStepIncX;
+			_info.offY = $game.$player.currentStep * _currentStepIncY;
 
 			//try only changing the src (frame) every X frames
-			if(($game.$player.currentStep-1)%8 == 0) {
+			if(($game.$player.currentStep-1) % 8 == 0) {
 				_curFrame += 1;
 				if(_curFrame >= _numFrames) {
 					_curFrame = 0;
 				}
 			}
-			_srcX = _curFrame * $game.TILE_SIZE,
-			_srcY =  _direction * $game.TILE_SIZE*2;
-
-			playerInfo.srcX = _srcX;
-			playerInfo.srcY = _srcY;
-			playerInfo.x = $game.$player._masterX;
-			playerInfo.y = $game.$player._masterY;
-			playerInfo.offX = _offX;
-			playerInfo.offY = _offY;
-			playerInfo.prevX = _prevOffX;
-			playerInfo.prevY = _prevOffY;
-		
-			//$game.$renderer.renderPlayer(playerInfo);
-			//setTimeout($game.$player.move; 17);
-			//requestAnimFrame($game.$player;.move);
+			_info.srcX = _curFrame * $game.TILE_SIZE,
+			_info.srcY = _direction * $game.TILE_SIZE*2;
 		}
 	},
 	sendMoveInfo: function(moves) {
@@ -185,28 +145,19 @@ $game.$player = {
 	endMove: function () {
 		var posInfo = {
 			 id: $game.$player.id,
-			 x: $game.$player._masterX, 
-			 y: $game.$player._masterY
+			 x: _info.x, 
+			 y: _info.y
 		};
 		ss.rpc('game.player.sendPosition', posInfo);
-		_offX = 0,
-		_offY = 0;
+		_info.offX = 0,
+		_info.offY = 0;
 
 		//put the character back to normal position
-		_srcX = 0,
-		_srcY =  0;
+		_info.srcX = 0,
+		_info.srcY =  0;
 
-		_prevOffX= 0;
-		_prevOffY= 0;
-
-		playerInfo.srcX = _srcX;
-		playerInfo.srcY = _srcY;
-		playerInfo.x = $game.$player._masterX;
-		playerInfo.y = $game.$player._masterY;
-		playerInfo.offX = _offX;
-		playerInfo.offY = _offY;
-		playerInfo.prevX = _prevOffX;
-		playerInfo.prevY = _prevOffY;
+		_info.prevOffX= 0;
+		_info.prevOffY= 0;
 
 		$game.$player.isMoving = false;
 		$game.$player.render();
@@ -227,14 +178,14 @@ $game.$player = {
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
 					$game.$npc.show();					
-				//trigger npc to popup info and stuff
+				//trigger npc to popup _info and stuff
 			}
 		}
 		
 	},
 	beginMove: function(x, y) {
-		_offX = 0,
-		_offY = 0;
+		_info.offX = 0,
+		_info.offY = 0;
 		//check if it is an edge of the world
 		$game.isMapEdge(x, y, function(anEdge) {
 			_willTravel = false;
@@ -251,7 +202,7 @@ $game.$player = {
 			
 
 			//calc local for start point for pathfinding
-			$game.masterToLocal($game.$player._masterX, $game.$player._masterY, function(loc) {
+			$game.masterToLocal(_info.x, _info.y, function(loc) {
 				var start = $game.graph.nodes[loc.y][loc.x],
 					end = $game.graph.nodes[y][x],
 					result = $game.$astar.search($game.graph.nodes, start, end);
@@ -271,45 +222,31 @@ $game.$player = {
 	},
 	slide: function(stepX, stepY) {
 
-		_prevOffX = stepX * _numSteps;
-		_prevOffY = stepY * _numSteps;
-
-		playerInfo.srcX = _srcX;
-		playerInfo.srcY = _srcY;
-		playerInfo.x = $game.$player._masterX;
-		playerInfo.y = $game.$player._masterY;
-		playerInfo.offX = _offX;
-		playerInfo.offY = _offY;
-		playerInfo.prevX = _prevOffX;
-		playerInfo.prevY = _prevOffY;
-
+		_info.prevOffX = stepX * _numSteps;
+		_info.prevOffY = stepY * _numSteps;
 	},
 	render: function() {
-		$game.$renderer.renderPlayer(playerInfo);
-	
+		
+		$game.$renderer.renderPlayer(_info);
 	},
 	resetRenderValues: function() {
-		_prevOffX = 0,
-		_prevOffY = 0,
-		playerInfo.prevX = _prevOffX,
-		playerInfo.prevY = _prevOffY;
-
+		_info.prevOffX = 0,
+		_info.prevOffY = 0;
 	},
 	idle: function () {
 		_idleCounter += 1;
 		if(_idleCounter >= 64) { 
 			_idleCounter = 0;
-			playerInfo.srcX = 0;
-			playerInfo.srcY = 0;
+			_info.srcX = 0;
+			_info.srcY = 0;
 			$game.$player.render();
 		}
 
 		if(_idleCounter == 48) {
-			playerInfo.srcX = 32;
-			playerInfo.srcY = 0;
+			_info.srcX = 32;
+			_info.srcY = 0;
 			$game.$player.render();
 		}
-	
 	},
 	dropSeed: function(options) {
 		//add color the surrounding tiles
@@ -323,20 +260,20 @@ $game.$player = {
 			mY = $game.currentTiles[oX][oY].y;
 		}
 		else {
-			$game.masterToLocal($game.$player._masterX, $game.$player._masterY,  function(loc) {
+			$game.masterToLocal(_info.x, _info.y,  function(loc) {
 				oX = loc.x;
 				oY = loc.y;
 			});
-			mX = $game.$player._masterX;
-			mY = $game.$player._masterY;
+			mX = _info.x;
+			mY = _info.y;
 		}
 
 		var bombed = [];
 		//color algorithms for different levels:
 		if($game.$player.currentLevel === 0) {
 			var square = {
-				x: $game.$player._masterX,
-				y: $game.$player._masterY,
+				x: _info.x,
+				y: _info.y,
 				color: 
 				{
 					h: Math.floor(Math.random()),
@@ -370,7 +307,6 @@ $game.$player = {
 			}
 			
 		}
-		
 	},
 	addColor: function(isColored, x, y) {
 		var bombed = [];
@@ -412,7 +348,6 @@ $game.$player = {
 			}
 		}
 		ss.rpc('game.player.dropSeed', bombed);		
-	
 	}
 };
 
