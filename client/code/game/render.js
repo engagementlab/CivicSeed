@@ -137,8 +137,9 @@ $game.$renderer = {
 		}
 		else if($game.inTransit) {
 			//render tiles (bg,bg2, fg, and npcs)
-			$game.$others.render();	
+			
 			$game.$renderer.renderAllTiles();
+			$game.$others.render();	
 			$game.$player.render();
 			//render player (client)
 			//render other players
@@ -332,6 +333,8 @@ $game.$renderer = {
 			curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
 			curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
 			
+					console.log(loc.y);
+
 			_charactersContext.clearRect(
 				prevX,
 				prevY - $game.TILE_SIZE,
@@ -357,31 +360,33 @@ $game.$renderer = {
 
 	renderOther: function(info) {
 		//convert x y to local 
-		$game.masterToLocal(info.x, info.y, function(loc) {			
-			var prevX = loc.x * $game.TILE_SIZE + info.prevX * $game.STEP_PIXELS;
-				prevY = loc.y * $game.TILE_SIZE + info.prevY * $game.STEP_PIXELS;
+		$game.masterToLocal(info.x, info.y, function(loc) {
+
+			if(loc) {
+				var prevX = loc.x * $game.TILE_SIZE + info.prevOffX * $game.STEP_PIXELS;
+				prevY = loc.y * $game.TILE_SIZE + info.prevOffY * $game.STEP_PIXELS;
 				curX = loc.x * $game.TILE_SIZE + info.offX * $game.STEP_PIXELS;
 				curY = loc.y * $game.TILE_SIZE + info.offY * $game.STEP_PIXELS;
-			
-			_charactersContext.clearRect(
-				prevX,
-				prevY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
 
-			_charactersContext.drawImage(
-				_offscreen_playerCanvas, 
-				info.srcX,
-				info.srcY,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				curX,
-				curY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
+				_charactersContext.clearRect(
+					prevX,
+					prevY - $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2
+					);
 
+				_charactersContext.drawImage(
+					_offscreen_playerCanvas, 
+					info.srcX,
+					info.srcY,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2,
+					curX,
+					curY - $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE*2
+					);
+			}			
 		});	
 	},
 	renderAllTiles: function() {
@@ -606,7 +611,7 @@ renderMiniMap: function() {
 */
 	},
 	renderMiniTile: function(sq) {
-		
+		/*
 		var hsla = 'hsla('+sq.color.h+','+sq.color.s+','+sq.color.l+',1)';
 		_minimapTileContext.fillStyle = hsla;
 		_minimapTileContext.fillRect( 
@@ -615,7 +620,8 @@ renderMiniMap: function() {
 			1,
 			1
 			);
+		*/
 	}
-
+	
 };
 

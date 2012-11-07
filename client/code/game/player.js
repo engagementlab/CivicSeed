@@ -220,10 +220,9 @@ $game.$player = {
 		});
 			
 	},
-	slide: function(stepX, stepY) {
-
-		_info.prevOffX = stepX * _numSteps;
-		_info.prevOffY = stepY * _numSteps;
+	slide: function(slideX, slideY) {
+		_info.prevOffX = slideX * _numSteps;
+		_info.prevOffY = slideY * _numSteps;
 	},
 	render: function() {
 		

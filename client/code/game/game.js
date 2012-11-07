@@ -35,6 +35,11 @@ exports.$game = {
 	firstLaunch: true,
 	graph: null,
 	started: false,
+	leftEdge: 0,
+	rightEdge: 0,
+	topEdge: 0,
+	bottomEdge: 0,
+
 
 	//GLOBAL CONSTANTS
 	VIEWPORT_WIDTH: 30,
@@ -73,6 +78,13 @@ exports.$game = {
 					$game.ready = true;
 				});
 			});
+
+			$game.leftEdge = $game.masterX,
+			$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
+			$game.topEdge = $game.masterY,
+			$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
+
+
 		});
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
@@ -319,6 +331,7 @@ exports.$game = {
 			}
 			$game.masterX += 1;
 			$game.$player.slide(1,0);
+			$game.$others.slide(1,0);
 
 		}
 
@@ -337,6 +350,7 @@ exports.$game = {
 			}
 			$game.masterX -= 1;
 			$game.$player.slide(-1,0);
+			$game.$others.slide(-1,0);
 		}
 
 		//--------UP------------
@@ -354,6 +368,7 @@ exports.$game = {
 			}
 			$game.masterY -= 1;
 			$game.$player.slide(0,-1);
+			$game.$others.slide(0,-1);
 		}
 
 		//--------DOWN------------
@@ -371,7 +386,15 @@ exports.$game = {
 			}
 			$game.masterY += 1;
 			$game.$player.slide(0,1);
+			$game.$others.slide(0,1);
 		}
+
+		//update the edges since we shift em son
+
+		$game.leftEdge = $game.masterX,
+		$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
+		$game.topEdge = $game.masterY,
+		$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
 
 		//change the npc and players local positions 
 		//the tiles have been updated, now tell render to look over everything
@@ -381,8 +404,25 @@ exports.$game = {
 	},
 
 	masterToLocal: function(x, y, callback) {
+
+		//if this works I am a dolt for not doing it earlier
+		var local = {
+			x: x - $game.leftEdge,
+			y: y - $game.topEdge
+		}
+
+		if(local.y <= 16 && local.y >= 0 && local.x <= 30 && local.x >= 0) {
+			callback(local);
+
+		}
+		else {
+			callback(false);
+		}
+		
+		/*		
 		//look through the currentTiles to find the same index and returns
-		//the local grid coords (because they shift)
+		//the local grid coords (because they shift) NOT EFFICIENT
+
 		var found = false;
 		for( var a = 0; a < $game.currentTiles.length; a += 1) {
 			for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
@@ -399,6 +439,30 @@ exports.$game = {
 		if(!found) {
 			callback(false);
 		}
+		*/
+		/*
+		for( var a = 0; a < $game.currentTiles.length; a += 1) {
+			countX++;
+			if(x === $game.currentTiles[a][0].x) { 
+				for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
+					countY++;
+					if( y === $game.currentTiles[a][b].y) {
+						var local =  {
+							x: a,
+							y: b
+						};
+						found = true;
+						console.log("count: " + countX + countY);
+						callback(local);
+					}
+				}
+			}
+		}
+			
+		if(!found) {
+			console.log("ahh: "+countX + countY );
+			callback(false);
+		}*/
 	},				
 
 	tick: function() {
