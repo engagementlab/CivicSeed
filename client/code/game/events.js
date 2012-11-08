@@ -45,6 +45,17 @@ ss.event.on('ss-seedDropped', function(bombed) {
 });
 
 
+//new message from chat
+ss.event.on('ss-newMessage', function(message, id) {
+	if(id === $game.$player.id) {
+		$game.$player.message(message);
+	}
+	else {
+		$game.$others.message(message, id);
+	}
+});
+
+
 
 
 $('.seedButton').bind("click", (function () {
@@ -57,7 +68,7 @@ $('.seedButton').bind("click", (function () {
 $(window).bind("keypress", (function (key) {
 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 	if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
-			$game.$player.dropSeed({mouse:false});
+			//$game.$player.dropSeed({mouse:false});
 	}		
 }));
 //change cursor on mouse move
@@ -89,4 +100,13 @@ $('.gameboard').click(function(m) {
 		};
 			$game.$mouse.updateMouse(mInfo,true);
 	}
+});
+
+//send whatever is in the chat field
+$('#chatButton').click(function(e) {
+	var message = $('#chatText').val();
+	ss.rpc('game.chat.sendMessage', message, $game.$player.id);
+	$('#chatText').val('');
+	e.preventDefault();
+	return false;
 });

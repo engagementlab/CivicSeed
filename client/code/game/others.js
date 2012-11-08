@@ -15,12 +15,12 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
-		console.log(player.id);
+		//console.log(player.id);
 		if(player.id != $game.$player.id) {
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;
-			console.log("added: " + player.id);
+			//console.log("added: " + player.id);
 		}
 	},
 
@@ -50,11 +50,24 @@ $game.$others = {
   			player.resetRenderValues(); 
 		});
 	},
+	hideAllChats: function() {
+		$.each(_onScreenPlayers, function(key, player) { 
+  			player.hideChat(); 
+		});		
+	},
+
+	message: function(message, id) {
+		$.each(_onScreenPlayers, function(key, player) { 
+  			if(player.id === id) {
+  				player.message(message);
+  			}
+		});
+	},
 
 	remove: function(id) {
 		//clear from screen...
 		delete _onScreenPlayers[id];
-		console.log(_onScreenPlayers);
+		//console.log(_onScreenPlayers);
 	},
 
 	createOther: function(player) {
@@ -74,6 +87,10 @@ $game.$others = {
 			direction: 0,
 			idleCounter: 0,
 			getMaster: true,
+			chatId: 'player' + player.id,
+			chatIdSelector: '#player' + player.id,
+			hideTimer: null,
+			isChatting: false,
 
 			info: {
 				x: player.x,
@@ -123,6 +140,7 @@ $game.$others = {
 				}	
 
 			},
+			
 			idle: function() {
 
 				otherPlayer.idleCounter += 1;
@@ -143,6 +161,7 @@ $game.$others = {
 					otherPlayer.getMaster = false;
 				}
 			},
+			
 			clear: function() {
 
 				$game.$renderer.clearCharacter(otherPlayer.renderInfo);	
@@ -159,7 +178,7 @@ $game.$others = {
 			},
 
 			render: function() {			
-					$game.$renderer.renderPlayer(otherPlayer.renderInfo);
+					$game.$renderer.renderPlayer(otherPlayer.renderInfo, false);
 			},
 
 			beginMove: function(moves) {
@@ -168,6 +187,7 @@ $game.$others = {
 				otherPlayer.currentMove = 1;
 				otherPlayer.currentStep = 0;
 				otherPlayer.isMoving = true;
+				otherPlayer.hideChat();
 				//console.log(otherPlayer.seriesOfMoves);
 			},
 
@@ -253,6 +273,39 @@ $game.$others = {
 					otherPlayer.info.srcX = otherPlayer.curFrame * $game.TILE_SIZE,
 					otherPlayer.info.srcY =  otherPlayer.direction * $game.TILE_SIZE*2;
 				}
+			},
+
+			message: function(message) {
+			
+				var len = message.length + otherPlayer.name.length + 2;
+				var sz = Math.floor(len * 9.1);
+				if(otherPlayer.isChatting) {
+					clearTimeout(otherPlayer.hideTimer);
+					$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
+				}
+				else {
+					$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
+				}
+				
+				$(otherPlayer.chatIdSelector).css({
+					'top': otherPlayer.renderInfo.curY - 72,
+					'left': otherPlayer.renderInfo.curX - sz / 2,
+					'width': sz
+				});
+				
+				otherPlayer.isChatting = true;
+				//make it remove after 5 seconds...
+				otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,5000);
+			},
+
+			hideChat: function() {
+				//remove chat from screen	
+				clearTimeout(otherPlayer.hideTimer);
+				$(otherPlayer.chatIdSelector).fadeOut('fast',function() {
+					$(this).remove();
+					otherPlayer.isChatting = false;
+				});
+
 			}	
 		};
 		return otherPlayer;

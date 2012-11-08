@@ -69,7 +69,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png']
+		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png','img/game/otherPlayer.png']
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);	
@@ -130,8 +130,8 @@ $game.$renderer = {
 	},
 	renderFrame: function() {
 		//only re-render all the tiles if the viewport is tranisitioning
-		$game.$player.clear();
 		$game.$others.clear();
+		$game.$player.clear();
 		
 		if($game.firstLaunch) {
 			$game.firstLaunch = false;
@@ -148,9 +148,8 @@ $game.$renderer = {
 				$game.$map.growSeeds();	
 			}
 		}
-
-		$game.$player.render();
 		$game.$others.render();	
+		$game.$player.render();
 
 		
 
@@ -318,9 +317,10 @@ $game.$renderer = {
 	},
 	
 
-	renderPlayer: function(info) {
+	renderPlayer: function(info, main) {
 		//convert x y to local 
-		_charactersContext.drawImage(
+		if(main) {
+			_charactersContext.drawImage(
 			_offscreen_playerCanvas, 
 			info.srcX,
 			info.srcY,
@@ -330,7 +330,22 @@ $game.$renderer = {
 			info.curY - $game.TILE_SIZE,
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
-		);
+			);	
+		}
+		else {
+			_charactersContext.drawImage(
+			_tilesheets[3], 
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2,
+			info.curX,
+			info.curY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+			);
+		}
+		
 	},
 
 	clearCharacter: function(info) {

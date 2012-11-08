@@ -12,14 +12,14 @@ exports.actions = function(req, res, ss) {
 
 	return {
 
-		sendMessage: function(message) {
+		sendMessage: function(message, id) {
 			if (message && message.length > 0) {         // Check for blank messages
-				ss.publish.all('newMessage', message);     // Broadcast the message to everyone
+				ss.publish.all('ss-newMessage', message, id);     // Broadcast the message to everyone
 				return res(true);                          // Confirm it was sent to the originating client
 			} else {
 				return res(false);
 			}
-		}
+		},
 
 	};
 

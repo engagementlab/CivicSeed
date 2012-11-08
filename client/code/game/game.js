@@ -289,6 +289,8 @@ exports.$game = {
 	beginTransition: function() {
 		$game.inTransit = true;
 		$game.stepNumber = 0;
+		$game.$player.hideChat();
+		$game.$others.hideAllChats();
 		$game.stepTransition();
 
 	},

@@ -11,7 +11,11 @@ var _curFrame = 0,
 	_idleCounter = 0,
 	_getMaster = false;
 	_info = {},
-	_renderInfo = {};
+	_renderInfo = {},
+	_isChatting = false,
+	_hideTimer = null,
+	_chatId = null,
+	_chatIdSelector = null;
 
 
 $game.$player = {
@@ -49,11 +53,15 @@ $game.$player = {
 			prevOffY: 0
 		}
 	},
+
 	setInfo: function(newInfo) {
-			$game.$player.id = newInfo.id;
-			_info.x = newInfo.x;
-			_info.y = newInfo.y;
-			$game.$player.name = newInfo.name;
+
+		$game.$player.id = newInfo.id,
+		_info.x = newInfo.x,
+		_info.y = newInfo.y,
+		$game.$player.name = newInfo.name,
+		_chatId = 'player'+ newInfo.id,
+		_chatIdSelector = '#' + _chatId;
 	},
 
 	update: function(){
@@ -164,12 +172,14 @@ $game.$player = {
 			_info.srcY = _direction * $game.TILE_SIZE*2;
 		}
 	},
+
 	sendMoveInfo: function(moves) {
 		$game.$player.seriesOfMoves = new Array(moves.length);
 		$game.$player.seriesOfMoves = moves;
 		$game.$player.currentMove = 1;
 		$game.$player.currentStep = 0;
 		$game.$player.isMoving = true;
+		$game.$player.hideChat();
 	},
 
 	endMove: function () {
@@ -213,6 +223,7 @@ $game.$player = {
 		}
 		
 	},
+
 	beginMove: function(x, y) {
 		_info.offX = 0,
 		_info.offY = 0;
@@ -250,17 +261,22 @@ $game.$player = {
 		});
 			
 	},
+
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
 		_info.prevOffY = slideY * _numSteps;
 	},
+
 	render: function() {
-		$game.$renderer.renderPlayer(_renderInfo);
+		
+		$game.$renderer.renderPlayer(_renderInfo, true);
 	},
+
 	resetRenderValues: function() {
 		_info.prevOffX = 0,
 		_info.prevOffY = 0;
 	},
+
 	idle: function () {
 		_idleCounter += 1;
 		if(_idleCounter >= 64) {
@@ -280,6 +296,7 @@ $game.$player = {
 			_getMaster = false;
 		}
 	},
+
 	dropSeed: function(options) {
 		//add color the surrounding tiles
 		var oX, oY, mX, mY;
@@ -340,6 +357,7 @@ $game.$player = {
 			
 		}
 	},
+
 	addColor: function(isColored, x, y) {
 		var bombed = [];
 		//square
@@ -380,6 +398,49 @@ $game.$player = {
 			}
 		}
 		ss.rpc('game.player.dropSeed', bombed);		
+	},
+
+	message: function(message) {
+		//create element in dom to show message
+		//have it auto disspear after 5 seconds
+		//set player to showing message
+		//if they start moving or transiting then remove message?
+
+		var len = message.length + 4;
+		console.log(len);
+		var fadeTime = len * 150 + 1000;
+		if(fadeTime > 11500) {
+			fadeTime = 11500;
+		}
+		console.log(fadeTime);
+		var sz = Math.floor(len * 9.1);
+		if(_isChatting) {
+			clearTimeout(_hideTimer);
+			$(_chatIdSelector).text('me: '+message);
+		}
+		else {
+			$('.gameboard').append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
+		}
+		
+		$(_chatIdSelector).css({
+			'top': _renderInfo.curY - 72,
+			'left': _renderInfo.curX - sz / 2,
+			'width': sz
+		});
+		
+		_isChatting = true;
+		//make it remove after 5 seconds...
+		_hideTimer = setTimeout($game.$player.hideChat,fadeTime);
+	},
+
+	hideChat: function() {
+		//remove chat from screen	
+		clearTimeout(_hideTimer);
+		$(_chatIdSelector).fadeOut('fast',function() {
+			$(this).remove();
+			_isChatting = false;
+		});
+
 	}
 };
 

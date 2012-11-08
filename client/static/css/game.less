@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'InconsolataMedium';
+    src: url('Inconsolata-webfont.woff') format('woff'),
+         url('Inconsolata-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .gameboard{
 	position: relative;
 	margin: 0 auto;
@@ -123,5 +131,19 @@
 }
 .videoResource {
 	text-align: center;
+
+}
+.playerChat {
+	position: absolute;
+	font-family: 'InconsolataMedium', Sans-serif;
+	font-size: 16px;
+	width: 200px;
+	height: 20px;
+	background: rgba(30,30,30,.7);
+	border-radius: 5px;
+	padding:0 0 5px 10px;
+	z-index:9999;
+	color:white;
+	text-shadow: 1px 1px 1px #333;
 
 }
