@@ -401,10 +401,6 @@ $game.$player = {
 	},
 
 	message: function(message) {
-		//create element in dom to show message
-		//have it auto disspear after 5 seconds
-		//set player to showing message
-		//if they start moving or transiting then remove message?
 
 		var len = message.length + 4;
 		console.log(len);
@@ -413,7 +409,7 @@ $game.$player = {
 			fadeTime = 11500;
 		}
 		console.log(fadeTime);
-		var sz = Math.floor(len * 9.1);
+		var sz = Math.floor(len * 8) + 10;
 		if(_isChatting) {
 			clearTimeout(_hideTimer);
 			$(_chatIdSelector).text('me: '+message);
@@ -422,9 +418,32 @@ $game.$player = {
 			$('.gameboard').append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
 		}
 		
+		var half = sz / 2;
+		var placeX;
+		if(_renderInfo.curX > 480 ) {
+			var rem = 940 - _renderInfo.curX;
+			if(half > rem) {
+				placeX = _renderInfo.curX - half - (half - rem);
+			}
+			else {
+				placeX = _renderInfo.curX - half;
+			}
+		}
+		else {
+
+			if(half > _renderInfo.curX) {
+				placeX = _renderInfo.curX - half + (half - rem);
+			}
+			else {
+				placeX = _renderInfo.curX - half;
+			}
+		}
+		
+
+
 		$(_chatIdSelector).css({
 			'top': _renderInfo.curY - 72,
-			'left': _renderInfo.curX - sz / 2,
+			'left': placeX,
 			'width': sz
 		});
 		

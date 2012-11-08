@@ -278,6 +278,10 @@ $game.$others = {
 			message: function(message) {
 			
 				var len = message.length + otherPlayer.name.length + 2;
+				var fadeTime = len * 150 + 1000;
+				if(fadeTime > 11500) {
+					fadeTime = 11500;
+				}
 				var sz = Math.floor(len * 9.1);
 				if(otherPlayer.isChatting) {
 					clearTimeout(otherPlayer.hideTimer);
@@ -295,7 +299,7 @@ $game.$others = {
 				
 				otherPlayer.isChatting = true;
 				//make it remove after 5 seconds...
-				otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,5000);
+				otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,fadeTime);
 			},
 
 			hideChat: function() {
