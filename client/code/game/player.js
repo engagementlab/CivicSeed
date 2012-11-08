@@ -9,7 +9,9 @@ var _curFrame = 0,
 	_direction = 0,
 	_willTravel = null,
 	_idleCounter = 0,
-	_info = {};
+	_getMaster = false;
+	_info = {},
+	_renderInfo = {};
 
 
 $game.$player = {
@@ -46,7 +48,6 @@ $game.$player = {
 			prevOffX: 0,
 			prevOffY: 0
 		}
-
 	},
 	setInfo: function(newInfo) {
 			$game.$player.id = newInfo.id;
@@ -56,11 +57,40 @@ $game.$player = {
 	},
 
 	update: function(){
-
 		if($game.$player.isMoving) {
 			$game.$player.move();
+			_getMaster = true;
 		}
+		else if(!$game.inTransit) {
+			$game.$player.idle();
+		}
+		else if($game.inTransit) {
+			_getMaster = true;
+		}
+		//this keeps us from doing this query every frame
+		if(_getMaster) {
+			$game.masterToLocal(_info.x, _info.y, function(loc) {			
+				var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
+					prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
+					curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
+					curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
+				
+				_renderInfo.prevX = prevX,
+				_renderInfo.prevY = prevY,
+				_renderInfo.srcX = _info.srcX,
+				_renderInfo.srcY = _info.srcY,
+				_renderInfo.curX = curX,
+				_renderInfo.curY = curY;
+			});	
+		}
+		
 	},
+
+	clear: function() {
+
+		$game.$renderer.clearCharacter(_renderInfo);
+	},
+
 	move: function () {
 		/** IMPORTANT note: x and y are really flipped!!! **/
 		//update the step
@@ -225,8 +255,7 @@ $game.$player = {
 		_info.prevOffY = slideY * _numSteps;
 	},
 	render: function() {
-		
-		$game.$renderer.renderPlayer(_info);
+		$game.$renderer.renderPlayer(_renderInfo);
 	},
 	resetRenderValues: function() {
 		_info.prevOffX = 0,
@@ -234,17 +263,21 @@ $game.$player = {
 	},
 	idle: function () {
 		_idleCounter += 1;
-		if(_idleCounter >= 64) { 
+		if(_idleCounter >= 64) {
 			_idleCounter = 0;
 			_info.srcX = 0;
 			_info.srcY = 0;
-			$game.$player.render();
+			_getMaster = true;
 		}
 
-		if(_idleCounter == 48) {
+		else if(_idleCounter == 48) {
 			_info.srcX = 32;
 			_info.srcY = 0;
-			$game.$player.render();
+			_getMaster = true;
+		}
+
+		else {
+			_getMaster = false;
 		}
 	},
 	dropSeed: function(options) {

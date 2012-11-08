@@ -30,6 +30,12 @@ $game.$others = {
   			player.update(); 
 		});
 	},
+	clear: function() {
+		//if is moving, move
+		$.each(_onScreenPlayers, function(key, player) { 
+  			player.clear(); 
+		});
+	},
 
 	slide: function(slideX, slideY) {
 
@@ -37,6 +43,12 @@ $game.$others = {
   			player.slide(slideX, slideY); 
 		});
 
+	},
+
+	resetRenderValues: function () {
+		$.each(_onScreenPlayers, function(key, player) { 
+  			player.resetRenderValues(); 
+		});
 	},
 
 	remove: function(id) {
@@ -60,9 +72,10 @@ $game.$others = {
 			numFrames: 4,
 			numSteps: 8,
 			direction: 0,
+			idleCounter: 0,
+			getMaster: true,
 
-			
-			renderInfo: {
+			info: {
 				x: player.x,
 				y: player.y,
 				srcX: 0,
@@ -72,20 +85,81 @@ $game.$others = {
 				prevOffX: 0,
 				prevOffY: 0
 			},
+
+			renderInfo: {
+				srcX: 0,
+				srcY: 0,
+				x: 0,
+				y: 0
+			},
+
 			update: function() {
-				
 				if(otherPlayer.isMoving) {
 					otherPlayer.move();
+					otherPlayer.getMaster = true;
 				}
+				else if(!$game.inTransit) {
+					otherPlayer.idle();
+				}
+				else if($game.inTransit) {
+					otherPlayer.getMaster = true;
+				}
+
+				if(otherPlayer.getMaster) {
+					$game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y, function(loc) {			
+						var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
+							prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
+							curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
+							curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
+						
+						otherPlayer.renderInfo.prevX = prevX,
+						otherPlayer.renderInfo.prevY = prevY,
+						otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
+						otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
+						otherPlayer.renderInfo.curX = curX,
+						otherPlayer.renderInfo.curY = curY;
+					});		
+
+				}	
+
+			},
+			idle: function() {
+
+				otherPlayer.idleCounter += 1;
+				if(otherPlayer.idleCounter >= 64) {
+					otherPlayer.idleCounter = 0;
+					otherPlayer.info.srcX = 0;
+					otherPlayer.info.srcY = 0;
+					otherPlayer.getMaster = true;
+				}
+
+				else if(otherPlayer.idleCounter == 48) {
+					otherPlayer.info.srcX = 32;
+					otherPlayer.info.srcY = 0;
+					otherPlayer.getMaster = true;
+				}
+
+				else {
+					otherPlayer.getMaster = false;
+				}
+			},
+			clear: function() {
+
+				$game.$renderer.clearCharacter(otherPlayer.renderInfo);	
 			},
 
 			slide: function(sX, sY) {
-				otherPlayer.renderInfo.prevOffX = sX * otherPlayer.numSteps,
-				otherPlayer.renderInfo.prevOffY = sY * otherPlayer.numSteps;
+				otherPlayer.info.prevOffX = sX * otherPlayer.numSteps,
+				otherPlayer.info.prevOffY = sY * otherPlayer.numSteps;
+			},
+
+			resetRenderValues: function() {
+				otherPlayer.info.prevOffX = 0,
+				otherPlayer.info.prevOffY = 0;
 			},
 
 			render: function() {			
-					$game.$renderer.renderOther(otherPlayer.renderInfo);
+					$game.$renderer.renderPlayer(otherPlayer.renderInfo);
 			},
 
 			beginMove: function(moves) {
@@ -100,12 +174,12 @@ $game.$others = {
 			endMove: function() {
 				otherPlayer.isMoving = false;
 
-				otherPlayer.renderInfo.srcX = 0;
-				otherPlayer.renderInfo.srcY = 0;
-				otherPlayer.renderInfo.offX = 0;
-				otherPlayer.renderInfo.offY = 0;
-				otherPlayer.renderInfo.prevOffX = 0;
-				otherPlayer.renderInfo.prevOffY = 0;
+				otherPlayer.info.srcX = 0;
+				otherPlayer.info.srcY = 0;
+				otherPlayer.info.offX = 0;
+				otherPlayer.info.offY = 0;
+				otherPlayer.info.prevOffX = 0;
+				otherPlayer.info.prevOffY = 0;
 			},
 
 			move: function() {
@@ -113,8 +187,8 @@ $game.$others = {
 				//update the master location, and reset steps to go on to next move 
 				if(otherPlayer.currentStep >= otherPlayer.numSteps) {
 					otherPlayer.currentStep = 0;
-					otherPlayer.renderInfo.x = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX;
-					otherPlayer.renderInfo.y = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY;
+					otherPlayer.info.x = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX;
+					otherPlayer.info.y = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY;
 					otherPlayer.currentMove += 1;
 
 					//render mini map here *****
@@ -134,13 +208,13 @@ $game.$others = {
 
 					//if it the first one, then figure out the direction to face
 					if(otherPlayer.currentStep === 1) {
-						otherPlayer.currentStepIncX = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX - otherPlayer.renderInfo.x;
-						otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.renderInfo.y;
+						otherPlayer.currentStepIncX = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX - otherPlayer.info.x;
+						otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.info.y;
 						
 						//set the previous offsets to 0 because the last visit
 						//was the actual rounded master 
-						otherPlayer.renderInfo.prevOffX = 0;
-						otherPlayer.renderInfo.prevOffY = 0;
+						otherPlayer.info.prevOffX = 0;
+						otherPlayer.info.prevOffY = 0;
 
 						//set direction for sprite sheets
 						//direction refers to the y location on the sprite sheet
@@ -161,12 +235,12 @@ $game.$others = {
 					}
 
 					else {
-						otherPlayer.renderInfo.prevOffX = otherPlayer.renderInfo.offX;
-						otherPlayer.renderInfo.prevOffY = otherPlayer.renderInfo.offY;
+						otherPlayer.info.prevOffX = otherPlayer.info.offX;
+						otherPlayer.info.prevOffY = otherPlayer.info.offY;
 					}
 					
-					otherPlayer.renderInfo.offX = otherPlayer.currentStep * otherPlayer.currentStepIncX;
-					otherPlayer.renderInfo.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
+					otherPlayer.info.offX = otherPlayer.currentStep * otherPlayer.currentStepIncX;
+					otherPlayer.info.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
 
 					//try only changing the src (frame) every X frames
 					if((otherPlayer.currentStep-1)%8 == 0) {
@@ -176,8 +250,8 @@ $game.$others = {
 						}
 					}
 
-					otherPlayer.renderInfo.srcX = otherPlayer.curFrame * $game.TILE_SIZE,
-					otherPlayer.renderInfo.srcY =  otherPlayer.direction * $game.TILE_SIZE*2;
+					otherPlayer.info.srcX = otherPlayer.curFrame * $game.TILE_SIZE,
+					otherPlayer.info.srcY =  otherPlayer.direction * $game.TILE_SIZE*2;
 				}
 			}	
 		};
@@ -202,8 +276,8 @@ $game.$others = {
 	// resetRenderValues: function() {
 	// 	otherPlayer.prevOffX = 0,
 	// 	otherPlayer.prevOffY = 0,
-	// 	otherPlayer.renderInfo.prevOffX = otherPlayer.prevOffX,
-	// 	otherPlayer.renderInfo.prevOffY = otherPlayer.prevOffY;
+	// 	otherPlayer.info.prevOffX = otherPlayer.prevOffX,
+	// 	otherPlayer.info.prevOffY = otherPlayer.prevOffY;
 
 	// },
 	
@@ -222,14 +296,14 @@ $game.$others = {
 	// 	otherPlayer.prevOffX= 0;
 	// 	otherPlayer.prevOffY= 0;
 
-	// 	otherPlayer.renderInfo.srcX = otherPlayer.srcX;
-	// 	otherPlayer.renderInfo.srcY = otherPlayer.srcY;
-	// 	otherPlayer.renderInfo.x = $game.$others.x;
-	// 	otherPlayer.renderInfo.y = $game.$others.y;
-	// 	otherPlayer.renderInfo.offX = otherPlayer.offX;
-	// 	otherPlayer.renderInfo.offY = otherPlayer.offY;
-	// 	otherPlayer.renderInfo.prevOffX = otherPlayer.prevOffX;
-	// 	otherPlayer.renderInfo.prevOffY = otherPlayer.prevOffY;
+	// 	otherPlayer.info.srcX = otherPlayer.srcX;
+	// 	otherPlayer.info.srcY = otherPlayer.srcY;
+	// 	otherPlayer.info.x = $game.$others.x;
+	// 	otherPlayer.info.y = $game.$others.y;
+	// 	otherPlayer.info.offX = otherPlayer.offX;
+	// 	otherPlayer.info.offY = otherPlayer.offY;
+	// 	otherPlayer.info.prevOffX = otherPlayer.prevOffX;
+	// 	otherPlayer.info.prevOffY = otherPlayer.prevOffY;
 
 	// 	$game.$others.isMoving = false;
 	// 	$game.$others.render();

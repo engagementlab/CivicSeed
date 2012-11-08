@@ -130,38 +130,31 @@ $game.$renderer = {
 	},
 	renderFrame: function() {
 		//only re-render all the tiles if the viewport is tranisitioning
+		$game.$player.clear();
+		$game.$others.clear();
+		
 		if($game.firstLaunch) {
 			$game.firstLaunch = false;
 			$game.$renderer.renderAllTiles();
-			$game.$player.render();
 		}
 		else if($game.inTransit) {
-			//render tiles (bg,bg2, fg, and npcs)
-			
 			$game.$renderer.renderAllTiles();
-			$game.$others.render();	
-			$game.$player.render();
-			//render player (client)
-			//render other players
-			//render colors
 		}
-		else { 
-			$game.$others.render();	
+		else {
 			if($game.onScreenNpcs.length > 0) {
 				$game.$npc.animateFrame();
 			}
-			
-			if($game.$player.isMoving) {
-				$game.$player.render();
-			}
-			else {
-				$game.$player.idle();
-			}
-
 			if($game.$map.growingSeed) {
 				$game.$map.growSeeds();	
 			}
 		}
+
+		$game.$player.render();
+		$game.$others.render();	
+
+		
+
+		
 	},
 	renderTile: function(i, j) {
 
@@ -325,70 +318,30 @@ $game.$renderer = {
 	},
 	
 
-	renderPlayer: function(tileData) {
+	renderPlayer: function(info) {
 		//convert x y to local 
-		$game.masterToLocal(tileData.x, tileData.y, function(loc) {			
-			var prevX = loc.x * $game.TILE_SIZE + tileData.prevOffX * $game.STEP_PIXELS;
-			prevY = loc.y * $game.TILE_SIZE + tileData.prevOffY * $game.STEP_PIXELS;
-			curX = loc.x * $game.TILE_SIZE + tileData.offX * $game.STEP_PIXELS;
-			curY = loc.y * $game.TILE_SIZE + tileData.offY * $game.STEP_PIXELS;
-			
-					console.log(loc.y);
-
-			_charactersContext.clearRect(
-				prevX,
-				prevY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
-
-			_charactersContext.drawImage(
-				_offscreen_playerCanvas, 
-				tileData.srcX,
-				tileData.srcY,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				curX,
-				curY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
-
-
-		});	
+		_charactersContext.drawImage(
+			_offscreen_playerCanvas, 
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2,
+			info.curX,
+			info.curY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+		);
 	},
 
-	renderOther: function(info) {
-		//convert x y to local 
-		$game.masterToLocal(info.x, info.y, function(loc) {
-
-			if(loc) {
-				var prevX = loc.x * $game.TILE_SIZE + info.prevOffX * $game.STEP_PIXELS;
-				prevY = loc.y * $game.TILE_SIZE + info.prevOffY * $game.STEP_PIXELS;
-				curX = loc.x * $game.TILE_SIZE + info.offX * $game.STEP_PIXELS;
-				curY = loc.y * $game.TILE_SIZE + info.offY * $game.STEP_PIXELS;
-
-				_charactersContext.clearRect(
-					prevX,
-					prevY - $game.TILE_SIZE,
-					$game.TILE_SIZE,
-					$game.TILE_SIZE*2
-					);
-
-				_charactersContext.drawImage(
-					_offscreen_playerCanvas, 
-					info.srcX,
-					info.srcY,
-					$game.TILE_SIZE,
-					$game.TILE_SIZE*2,
-					curX,
-					curY - $game.TILE_SIZE,
-					$game.TILE_SIZE,
-					$game.TILE_SIZE*2
-					);
-			}			
-		});	
+	clearCharacter: function(info) {
+		_charactersContext.clearRect(
+			info.prevX,
+			info.prevY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+		);
 	},
+	
 	renderAllTiles: function() {
 
 
