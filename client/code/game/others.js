@@ -66,6 +66,8 @@ $game.$others = {
 
 	remove: function(id) {
 		//clear from screen...
+		//clear it off screen first, then delete!
+		_onScreenPlayers[id].clear();
 		delete _onScreenPlayers[id];
 		//console.log(_onScreenPlayers);
 	},
@@ -169,7 +171,6 @@ $game.$others = {
 			},
 			
 			clear: function() {
-
 				$game.$renderer.clearCharacter(otherPlayer.renderInfo);
 			},
 

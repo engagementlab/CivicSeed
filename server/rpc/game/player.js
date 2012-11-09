@@ -126,13 +126,8 @@ var self = module.exports = {
 			},
 
 			sendPosition: function(info) {
-				for(var i = 0; i < players.length; i = i + 1) {
-					if(players[i].id === info.id) {
-						players[i].x = info.x;
-						players[i].y = info.y;
-						continue;
-					}
-				}
+						players[info.id].x = info.x;
+						players[info.id].y = info.y;
 			},
 			dropSeed: function(bombed) {
 				// for(var p=0; p<players.length;p++){
