@@ -277,12 +277,13 @@ $game.$others = {
 
 			message: function(message) {
 			
-				var len = message.length + otherPlayer.name.length + 2;
-				var fadeTime = len * 150 + 1000;
-				if(fadeTime > 11500) {
-					fadeTime = 11500;
-				}
-				var sz = Math.floor(len * 9.1);
+				var len = message.length + otherPlayer.name.length + 2,
+					fadeTime = len * 150 + 1000,
+					sz = Math.floor(len * 8) + 10;
+				
+				fadeTime = (fadeTime > 11500) ? fadeTime : 11500;
+
+				
 				if(otherPlayer.isChatting) {
 					clearTimeout(otherPlayer.hideTimer);
 					$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
@@ -291,9 +292,31 @@ $game.$others = {
 					$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
 				}
 				
+				var half = sz / 2,
+					placeX;
+
+				if(otherPlayer.renderInfo.curX > 470 ) {
+					var rem = 940 - otherPlayer.renderInfo.curX;
+					if(half > rem) {
+						placeX = otherPlayer.renderInfo.curX - half - (half - rem);
+					}
+					else {
+						placeX = otherPlayer.renderInfo.curX - half + 16;
+					}
+				}
+				else {
+
+					if(half > otherPlayer.renderInfo.curX) {
+						placeX = otherPlayer.renderInfo.curX - half + (half - rem) + 10;
+					}
+					else {
+						placeX = otherPlayer.renderInfo.curX - half + 16;
+					}
+				}
+
 				$(otherPlayer.chatIdSelector).css({
 					'top': otherPlayer.renderInfo.curY - 72,
-					'left': otherPlayer.renderInfo.curX - sz / 2,
+					'left': placeX,
 					'width': sz
 				});
 				

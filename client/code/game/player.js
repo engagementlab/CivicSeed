@@ -402,45 +402,42 @@ $game.$player = {
 
 	message: function(message) {
 
-		var len = message.length + 4;
-		console.log(len);
-		var fadeTime = len * 150 + 1000;
-		if(fadeTime > 11500) {
-			fadeTime = 11500;
-		}
-		console.log(fadeTime);
-		var sz = Math.floor(len * 8) + 10;
+		var len = message.length + 4,
+			fadeTime = len * 150 + 1000,
+			sz = Math.floor(len * 8) + 10;
+				
+		fadeTime = (fadeTime > 11500) ? fadeTime : 11500;
+		
 		if(_isChatting) {
 			clearTimeout(_hideTimer);
-			$(_chatIdSelector).text('me: '+message);
+			$(_chatIdSelector).text('me: '+ message);
 		}
 		else {
 			$('.gameboard').append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
 		}
 		
-		var half = sz / 2;
-		var placeX;
-		if(_renderInfo.curX > 480 ) {
+		var half = sz / 2,
+			placeX;
+
+		if(_renderInfo.curX > 470 ) {
 			var rem = 940 - _renderInfo.curX;
 			if(half > rem) {
 				placeX = _renderInfo.curX - half - (half - rem);
 			}
 			else {
-				placeX = _renderInfo.curX - half;
+				placeX = _renderInfo.curX - half + 16;
 			}
 		}
 		else {
 
 			if(half > _renderInfo.curX) {
-				placeX = _renderInfo.curX - half + (half - rem);
+				placeX = _renderInfo.curX - half + (half - rem) + 10;
 			}
 			else {
-				placeX = _renderInfo.curX - half;
+				placeX = _renderInfo.curX - half + 16;
 			}
 		}
-		
-
-
+	
 		$(_chatIdSelector).css({
 			'top': _renderInfo.curY - 72,
 			'left': placeX,

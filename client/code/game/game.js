@@ -100,15 +100,13 @@ exports.$game = {
 		};
 
 		beginGame();
-
-
-		
 	},
 
 	getTiles: function(x, y, x2, y2, callback) {
 		ss.rpc('game.player.getMapData', x, y, x + x2, y + y2, function(response) {
 			//breakdown single array into 2d array
-			
+			var index;
+
 			$game.nextTiles = new Array(x2);
 			for(var i = 0; i < x2 ; i+=1) {
 				
@@ -116,7 +114,7 @@ exports.$game = {
 				
 				for(var j = 0; j < y2; j+=1) {
 
-					var index = j * x2 + (i % x2);
+					index = j * x2 + (i % x2);
 					$game.nextTiles[i][j] = response[index];
 					
 				}
@@ -158,7 +156,7 @@ exports.$game = {
 
 				$game.getTileState(x, y, function(val) {
 					//the pathfinding takes 1 means its clear 0 not
-					var tempNoGo;
+					var tempNoGo, stringId;
 					if(val === -1) {
 						tempNoGo = 1;
 					}	
@@ -168,7 +166,7 @@ exports.$game = {
 						//is settled, figure out if there is a npc on here
 						//this will let the renderer know if we need to animate
 						//any npcs (by index)
-						var stringId = String(val),
+						stringId = String(val),
 						found = false;
 						
 						//see if that is in there already (because of the two tiles)
@@ -421,51 +419,6 @@ exports.$game = {
 		else {
 			callback(false);
 		}
-		
-		/*		
-		//look through the currentTiles to find the same index and returns
-		//the local grid coords (because they shift) NOT EFFICIENT
-
-		var found = false;
-		for( var a = 0; a < $game.currentTiles.length; a += 1) {
-			for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
-				if(x === $game.currentTiles[a][b].x && y === $game.currentTiles[a][b].y) {
-					var local =  {
-						x: a,
-						y: b
-					};
-					found = true;
-					callback(local);
-				}
-			}	
-		}
-		if(!found) {
-			callback(false);
-		}
-		*/
-		/*
-		for( var a = 0; a < $game.currentTiles.length; a += 1) {
-			countX++;
-			if(x === $game.currentTiles[a][0].x) { 
-				for( var b = 0; b < $game.currentTiles[a].length; b += 1) {
-					countY++;
-					if( y === $game.currentTiles[a][b].y) {
-						var local =  {
-							x: a,
-							y: b
-						};
-						found = true;
-						console.log("count: " + countX + countY);
-						callback(local);
-					}
-				}
-			}
-		}
-			
-		if(!found) {
-			console.log("ahh: "+countX + countY );
-			callback(false);
-		}*/
 	},				
 
 	tick: function() {
