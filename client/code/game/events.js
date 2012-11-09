@@ -2,7 +2,7 @@
 
 //events recevied by RPC
 
-
+// SEE http://stackoverflow.com/questions/9626059/window-onbeforeunload-in-chrome-what-is-the-most-recent-fix
 //detect when a client leaves and send something to server
 $(window).on('beforeunload', function() {
 	var x = leaveThisJoint();
