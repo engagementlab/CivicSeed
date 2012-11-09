@@ -6,8 +6,8 @@ $game.$others = {
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
 			_onScreenPlayers = {};
-			$.each(response, function(key, player) { 
-  				$game.$others.add(player);
+			$.each(response, function(key, player) {
+				$game.$others.add(player);
 			});
 		});
 	},
@@ -26,41 +26,41 @@ $game.$others = {
 
 	update: function() {
 		//if is moving, move
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.update(); 
+		$.each(_onScreenPlayers, function(key, player) {
+			player.update();
 		});
 	},
 	clear: function() {
 		//if is moving, move
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.clear(); 
+		$.each(_onScreenPlayers, function(key, player) {
+			player.clear();
 		});
 	},
 
 	slide: function(slideX, slideY) {
 
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.slide(slideX, slideY); 
+		$.each(_onScreenPlayers, function(key, player) {
+			player.slide(slideX, slideY);
 		});
 
 	},
 
 	resetRenderValues: function () {
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.resetRenderValues(); 
+		$.each(_onScreenPlayers, function(key, player) {
+			player.resetRenderValues();
 		});
 	},
 	hideAllChats: function() {
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.hideChat(); 
-		});		
+		$.each(_onScreenPlayers, function(key, player) {
+			player.hideChat();
+		});
 	},
 
 	message: function(message, id) {
-		$.each(_onScreenPlayers, function(key, player) { 
-  			if(player.id === id) {
-  				player.message(message);
-  			}
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.id === id) {
+				player.message(message);
+			}
 		});
 	},
 
@@ -77,7 +77,6 @@ $game.$others = {
 			id: player.id,
 			isMoving: false,
 			currentStep: 0,
-			numSteps: 0,
 			currentMove: 0,
 			currentStepIncX: 0,
 			currentStepIncY: 0,
@@ -91,6 +90,7 @@ $game.$others = {
 			chatIdSelector: '#player' + player.id,
 			hideTimer: null,
 			isChatting: false,
+			offScreen: true,
 
 			info: {
 				x: player.x,
@@ -123,22 +123,28 @@ $game.$others = {
 				}
 
 				if(otherPlayer.getMaster) {
-					$game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y, function(loc) {			
-						var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
-							prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
-							curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
-							curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
-						
-						otherPlayer.renderInfo.prevX = prevX,
-						otherPlayer.renderInfo.prevY = prevY,
-						otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
-						otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
-						otherPlayer.renderInfo.curX = curX,
-						otherPlayer.renderInfo.curY = curY;
-					});		
+					$game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y, function(loc) {
 
-				}	
+						if(loc) {
+							var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
+								prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
+								curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
+								curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
+							
+							otherPlayer.renderInfo.prevX = prevX,
+							otherPlayer.renderInfo.prevY = prevY,
+							otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
+							otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
+							otherPlayer.renderInfo.curX = curX,
+							otherPlayer.renderInfo.curY = curY;
 
+							otherPlayer.offScreen = false;
+						}
+						else {
+							otherPlayer.offScreen = true;
+						}
+					});
+				}
 			},
 			
 			idle: function() {
@@ -164,7 +170,7 @@ $game.$others = {
 			
 			clear: function() {
 
-				$game.$renderer.clearCharacter(otherPlayer.renderInfo);	
+				$game.$renderer.clearCharacter(otherPlayer.renderInfo);
 			},
 
 			slide: function(sX, sY) {
@@ -177,8 +183,10 @@ $game.$others = {
 				otherPlayer.info.prevOffY = 0;
 			},
 
-			render: function() {			
+			render: function() {
+				if(otherPlayer.offScreen === false) {
 					$game.$renderer.renderPlayer(otherPlayer.renderInfo, false);
+				}
 			},
 
 			beginMove: function(moves) {
@@ -204,7 +212,7 @@ $game.$others = {
 
 			move: function() {
 				//if the steps between the tiles has finished,
-				//update the master location, and reset steps to go on to next move 
+				//update the master location, and reset steps to go on to next move
 				if(otherPlayer.currentStep >= otherPlayer.numSteps) {
 					otherPlayer.currentStep = 0;
 					otherPlayer.info.x = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX;
@@ -223,7 +231,7 @@ $game.$others = {
 				//if not, step through it
 				else {
 					
-					//increment the current step 
+					//increment the current step
 					otherPlayer.currentStep += 1;
 
 					//if it the first one, then figure out the direction to face
@@ -232,7 +240,7 @@ $game.$others = {
 						otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.info.y;
 						
 						//set the previous offsets to 0 because the last visit
-						//was the actual rounded master 
+						//was the actual rounded master
 						otherPlayer.info.prevOffX = 0;
 						otherPlayer.info.prevOffY = 0;
 
@@ -263,7 +271,7 @@ $game.$others = {
 					otherPlayer.info.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
 
 					//try only changing the src (frame) every X frames
-					if((otherPlayer.currentStep-1)%8 == 0) {
+					if((otherPlayer.currentStep-1)%8 === 0) {
 						otherPlayer.curFrame += 1;
 						if(otherPlayer.curFrame >= otherPlayer.numFrames) {
 							otherPlayer.curFrame = 0;
@@ -276,73 +284,75 @@ $game.$others = {
 			},
 
 			message: function(message) {
-			
-				var len = message.length + otherPlayer.name.length + 2,
-					fadeTime = len * 150 + 1000,
-					sz = Math.floor(len * 8) + 10;
 				
-				fadeTime = (fadeTime > 11500) ? fadeTime : 11500;
 
-				
-				if(otherPlayer.isChatting) {
-					clearTimeout(otherPlayer.hideTimer);
-					$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
-				}
-				else {
-					$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
-				}
-				
-				var half = sz / 2,
-					placeX;
+				if(otherPlayer.offScreen === false) {
+					var len = message.length + otherPlayer.name.length + 2,
+						fadeTime = len * 150 + 1000,
+						sz = Math.floor(len * 8) + 10;
+					
+					fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
 
-				if(otherPlayer.renderInfo.curX > 470 ) {
-					var rem = 940 - otherPlayer.renderInfo.curX;
-					if(half > rem) {
-						placeX = otherPlayer.renderInfo.curX - half - (half - rem);
+					
+					if(otherPlayer.isChatting) {
+						clearTimeout(otherPlayer.hideTimer);
+						$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
 					}
 					else {
-						placeX = otherPlayer.renderInfo.curX - half + 16;
+						$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
 					}
-				}
-				else {
+					
+					var half = sz / 2,
+						placeX;
 
-					if(half > otherPlayer.renderInfo.curX) {
-						placeX = otherPlayer.renderInfo.curX - half + (half - rem) + 10;
+					if(otherPlayer.renderInfo.curX > 470 ) {
+						var rem = 940 - otherPlayer.renderInfo.curX;
+						if(half > rem) {
+							placeX = otherPlayer.renderInfo.curX - half - (half - rem);
+						}
+						else {
+							placeX = otherPlayer.renderInfo.curX - half + 16;
+						}
 					}
 					else {
-						placeX = otherPlayer.renderInfo.curX - half + 16;
-					}
-				}
 
-				$(otherPlayer.chatIdSelector).css({
-					'top': otherPlayer.renderInfo.curY - 72,
-					'left': placeX,
-					'width': sz
-				});
+						if(half > otherPlayer.renderInfo.curX) {
+							placeX = otherPlayer.renderInfo.curX - half + (half - otherPlayer.renderInfo.curX) + 10;
+						}
+						else {
+							placeX = otherPlayer.renderInfo.curX - half + 16;
+						}
+					}
+
+					$(otherPlayer.chatIdSelector).css({
+						'top': otherPlayer.renderInfo.curY - 72,
+						'left': placeX,
+						'width': sz
+					});
+					
+					otherPlayer.isChatting = true;
+					//make it remove after 5 seconds...
+					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,fadeTime);
+				}
 				
-				otherPlayer.isChatting = true;
-				//make it remove after 5 seconds...
-				otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,fadeTime);
 			},
 
 			hideChat: function() {
-				//remove chat from screen	
+				//remove chat from screen
 				clearTimeout(otherPlayer.hideTimer);
 				$(otherPlayer.chatIdSelector).fadeOut('fast',function() {
 					$(this).remove();
 					otherPlayer.isChatting = false;
 				});
-
-			}	
+			}
 		};
 		return otherPlayer;
 	},
 
 	render: function() {
-		$.each(_onScreenPlayers, function(key, player) { 
-  			player.render(); 
+		$.each(_onScreenPlayers, function(key, player) {
+			player.render();
 		});
-
 	},
 	
 	sendMoveInfo: function(moves, id) {
@@ -352,60 +362,3 @@ $game.$others = {
 	}
 	
 };
-
-	// resetRenderValues: function() {
-	// 	otherPlayer.prevOffX = 0,
-	// 	otherPlayer.prevOffY = 0,
-	// 	otherPlayer.info.prevOffX = otherPlayer.prevOffX,
-	// 	otherPlayer.info.prevOffY = otherPlayer.prevOffY;
-
-	// },
-	
-	
-			// move: function () {
-	
-	// },
-	// endMove: function () {
-	// 	otherPlayer.offX = 0,
-	// 	otherPlayer.offY = 0;
-
-	// 	//put the character back to normal position
-	// 	otherPlayer.srcX = 0,
-	// 	otherPlayer.srcY =  0;
-
-	// 	otherPlayer.prevOffX= 0;
-	// 	otherPlayer.prevOffY= 0;
-
-	// 	otherPlayer.info.srcX = otherPlayer.srcX;
-	// 	otherPlayer.info.srcY = otherPlayer.srcY;
-	// 	otherPlayer.info.x = $game.$others.x;
-	// 	otherPlayer.info.y = $game.$others.y;
-	// 	otherPlayer.info.offX = otherPlayer.offX;
-	// 	otherPlayer.info.offY = otherPlayer.offY;
-	// 	otherPlayer.info.prevOffX = otherPlayer.prevOffX;
-	// 	otherPlayer.info.prevOffY = otherPlayer.prevOffY;
-
-	// 	$game.$others.isMoving = false;
-	// 	$game.$others.render();
-	// 	if(_willTravel) {
-	// 		var beginTravel = function(){
-	// 			if($game.dataLoaded){
-	// 				$game.dataLoaded = false;
-	// 				$game.beginTransition();
-	// 			}	
-	// 			else{
-	// 				//keep tryin!
-	// 				setTimeout(beginTravel,50);
-	// 			}
-	// 		};
-	// 		beginTravel();
-	// 	}
-	// 	else {
-	// 		if($game.$others.npcOnDeck) {
-	// 			$game.$others.npcOnDeck = false;
-	// 				$game.$npc.show();					
-	// 			//trigger npc to popup info and stuff
-	// 		}
-	// 	}
-		
-	// };

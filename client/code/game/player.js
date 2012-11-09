@@ -31,7 +31,7 @@ $game.$player = {
 	currentLevel: 1,
 	seedMode: false,
 	hue: 0,
-	saturation: '90%', 
+	saturation: '90%',
 	lightness: '80%',
 
 
@@ -51,7 +51,7 @@ $game.$player = {
 			offY: 0,
 			prevOffX: 0,
 			prevOffY: 0
-		}
+		};
 	},
 
 	setInfo: function(newInfo) {
@@ -77,11 +77,11 @@ $game.$player = {
 		}
 		//this keeps us from doing this query every frame
 		if(_getMaster) {
-			$game.masterToLocal(_info.x, _info.y, function(loc) {			
+			$game.masterToLocal(_info.x, _info.y, function(loc) {
 				var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
-					prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
-					curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
-					curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
+				prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
+				curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
+				curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
 				
 				_renderInfo.prevX = prevX,
 				_renderInfo.prevY = prevY,
@@ -89,9 +89,8 @@ $game.$player = {
 				_renderInfo.srcY = _info.srcY,
 				_renderInfo.curX = curX,
 				_renderInfo.curY = curY;
-			});	
+			});
 		}
-		
 	},
 
 	clear: function() {
@@ -104,7 +103,7 @@ $game.$player = {
 		//update the step
 		$game.$player.isMoving = true;
 		//if the steps between the tiles has finished,
-		//update the master location, and reset steps to go on to next move 
+		//update the master location, and reset steps to go on to next move
 		if($game.$player.currentStep >= _numSteps) {
 			$game.$player.currentStep = 0;
 			_info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
@@ -123,7 +122,7 @@ $game.$player = {
 		//if we no done, then step through it yo.
 		else {
 			
-			//increment the current step 
+			//increment the current step
 			$game.$player.currentStep += 1;
 
 			//if it the first one, then figure out the direction to face
@@ -131,7 +130,7 @@ $game.$player = {
 				_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
 				_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
 				//set the previous offsets to 0 because the last visit
-				//was the actual rounded master 
+				//was the actual rounded master
 				_info.prevOffX = 0;
 				_info.prevOffY = 0;
 
@@ -162,7 +161,7 @@ $game.$player = {
 			_info.offY = $game.$player.currentStep * _currentStepIncY;
 
 			//try only changing the src (frame) every X frames
-			if(($game.$player.currentStep-1) % 8 == 0) {
+			if(($game.$player.currentStep-1) % 8 === 0) {
 				_curFrame += 1;
 				if(_curFrame >= _numFrames) {
 					_curFrame = 0;
@@ -184,9 +183,9 @@ $game.$player = {
 
 	endMove: function () {
 		var posInfo = {
-			 id: $game.$player.id,
-			 x: _info.x, 
-			 y: _info.y
+			id: $game.$player.id,
+			x: _info.x,
+			y: _info.y
 		};
 		ss.rpc('game.player.sendPosition', posInfo);
 		_info.offX = 0,
@@ -206,7 +205,7 @@ $game.$player = {
 				if($game.dataLoaded){
 					$game.dataLoaded = false;
 					$game.beginTransition();
-				}	
+				}
 				else{
 					//keep tryin!
 					setTimeout(beginTravel,50);
@@ -217,8 +216,8 @@ $game.$player = {
 		else {
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
-					$game.$npc.show();					
-				//trigger npc to popup _info and stuff
+					$game.$npc.show();
+					//trigger npc to popup _info and stuff
 			}
 		}
 		
@@ -323,12 +322,12 @@ $game.$player = {
 			var square = {
 				x: _info.x,
 				y: _info.y,
-				color: 
+				color:
 				{
 					h: Math.floor(Math.random()),
 					s: $game.$player.saturation,
 					l: $game.$player.lightness,
-					a: .8,
+					a: 0.8,
 					owner: 'Russell'
 				}
 			};
@@ -348,7 +347,7 @@ $game.$player = {
 			//if it's colored and NOT owned
 				else {
 					$game.$player.addColor(true, mX,mY);
-				}	
+				}
 			}
 			//if it is not colored at all
 			else{
@@ -372,32 +371,32 @@ $game.$player = {
 					x: origX + a,
 					y: origY + b,
 					
-					color: 
+					color:
 					{
 						h: newHue,
 						s: $game.$player.saturation,
 						l: $game.$player.lightness,
-						a: .5,
+						a: 0.5,
 						owner: false
 					}
 				};
 
-				//only add it if it is on the map	
+				//only add it if it is on the map
 				if(origX + a>-1 && origX + a<$game.TOTAL_WIDTH && origY + b>-1 && origY + b < $game.TOTAL_HEIGHT) {
 					//assign the middle one the owner
 					if( a === 1 && b === 1) {
 						//this will be put in the ACTUAL DB,
 						//instead of local
-						square.color.a = 1;
-						square.color.owner = 'Russell'; 			
+						square.color.a = 1,
+						square.color.owner = 'Russell';
 					}
-					bombed.push(square);	
+					bombed.push(square);
 				}
 
 				$game.$renderer.renderMiniTile(square);
 			}
 		}
-		ss.rpc('game.player.dropSeed', bombed);		
+		ss.rpc('game.player.dropSeed', bombed);
 	},
 
 	message: function(message) {
@@ -406,7 +405,7 @@ $game.$player = {
 			fadeTime = len * 150 + 1000,
 			sz = Math.floor(len * 8) + 10;
 				
-		fadeTime = (fadeTime > 11500) ? fadeTime : 11500;
+		fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
 		
 		if(_isChatting) {
 			clearTimeout(_hideTimer);
@@ -431,7 +430,7 @@ $game.$player = {
 		else {
 
 			if(half > _renderInfo.curX) {
-				placeX = _renderInfo.curX - half + (half - rem) + 10;
+				placeX = _renderInfo.curX - half + (half - _renderInfo.curX) + 10;
 			}
 			else {
 				placeX = _renderInfo.curX - half + 16;
@@ -450,7 +449,7 @@ $game.$player = {
 	},
 
 	hideChat: function() {
-		//remove chat from screen	
+		//remove chat from screen
 		clearTimeout(_hideTimer);
 		$(_chatIdSelector).fadeOut('fast',function() {
 			$(this).remove();

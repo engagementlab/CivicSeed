@@ -22,26 +22,22 @@ $game.$npc = {
 		//load all the npc info from the DB store it in an array
 		//where the index is the id of the npc / mapIndex
 		ss.rpc('game.npc.getNpcs', function(response) {
-			//iterate through repsonses, create a key 
+			//iterate through repsonses, create a key
 			//with the id and value is the object
 			for(var i = 0; i < response.length; i += 1) {
 				var stringId = String(response[i].id);
 				_allNpcs[stringId] = response[i];
 				_allNpcs[stringId].counter = Math.floor(Math.random()*55);
 				_allNpcs[stringId].currentFrame = 0;
-			}  
+			}
 			_loaded = true;
 			$game.$npc.ready = true;
 		});
-
-		//bind all the buttons 
-		
-				
 	},
 
 	show: function() {
 		if(!$game.$npc.isResource && !$game.$npc.isChat) {
-			//if this is false, it means we clicked the npc square 
+			//if this is false, it means we clicked the npc square
 			//that is the top one (which doesn't have a unique id in our list
 			//but rather corresponds to the one below it)
 			
@@ -61,7 +57,7 @@ $game.$npc = {
 
 		_speak = _curNpc.dialog.prompts[index];
 		$('.speechBubble').css('height',55);
-		if(index == 0) {
+		if(index === 0) {
 			$game.$npc.isResource = true;
 			buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
 			_speak += buttons;
@@ -103,7 +99,7 @@ $game.$npc = {
 			$(".speechBubble .btn-success").unbind("click");
 			$(".speechBubble .btn-danger").unbind("click");
 
-			//ready to show the resource now 
+			//ready to show the resource now
 			//_speak = _curNpc.dialog.questions[0];
 			$('.resourceArea').empty();
 			$game.$npc.addContent();
@@ -113,12 +109,12 @@ $game.$npc = {
 		
 	},
 
-	//determine which buttons to put on the resource area 
+	//determine which buttons to put on the resource area
 	//based on page number, if its a form yet, etc.
 	//buttons: next, back, answer, close
 	//bind functionality
 
-	//assume that the buttons were removed before 
+	//assume that the buttons were removed before
 		
 		
 
@@ -135,7 +131,7 @@ $game.$npc = {
 		else {
 			//if its the first page, we DEF. have a next and no back
 			if(_currentSlide === 0) {
-				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button>');		
+				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button>');
 				$('.nextButton').text('Next');
 				$(".nextButton").bind("click", (function () {
 					$game.$npc.nextSlide();
@@ -144,7 +140,7 @@ $game.$npc = {
 			
 			//if its not the first page or the last page, we have both
 			else if(_currentSlide > 0 && _currentSlide < _numSlides) {
-				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button><button class="btn btn-inverse backButton">Back</button>');				
+				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button><button class="btn btn-inverse backButton">Back</button>');
 				$('.nextButton').text('Next');
 				$('.backButton').text('Back');
 				$(".nextButton").bind("click", (function () {
@@ -157,7 +153,7 @@ $game.$npc = {
 
 			//if its the last page, we have an answer button and a back
 			else if(_currentSlide === _numSlides) {
-				$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');				
+				$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');
 				$('.answerButton').text('Answer');
 				$('.backButton').text('Back');
 				$(".answerButton").bind("click", (function () {
@@ -166,7 +162,7 @@ $game.$npc = {
 				$(".backButton").bind("click", (function () {
 					$game.$npc.previousSlide();
 				}));
-			}	
+			}
 		}
 	},
 
@@ -194,17 +190,14 @@ $game.$npc = {
 			if(_currentSlide === _numSlides) {
 				_speak = _curNpc.dialog.prompts[2];
 				var finalQuestion = _curNpc.dialog.questions[_currentQuestion],
-					inputBox = '<form><input></input></form>';	
+					inputBox = '<form><input></input></form>';
 				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+_speak+'</p><p>'+finalQuestion+'</p>'+inputBox);
 			}
 			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
 				$('.resourceArea').append(content);
-			}		
+			}
 		}
-		
-		
-
 	},
 
 	hideResource: function() {
@@ -212,7 +205,7 @@ $game.$npc = {
 			$('.resourceArea p').remove();
 			$('.resourceArea h2').remove();
 			$game.$npc.isResource = false;
-		});		
+		});
 	},
 
 	hideChat: function() {
@@ -253,7 +246,7 @@ $game.$npc = {
 	submitAnswer: function() {
 		//if the answer is true, give them something!
 		if(true) {
-			//do something in db and stuff 
+			//do something in db and stuff
 			_correctAnswer = true;
 		}
 		else {
@@ -261,7 +254,7 @@ $game.$npc = {
 		}
 		_answered = true;
 		$game.$npc.nextSlide();
-		//otherwise tell them they are wrong, stay on form page 
+		//otherwise tell them they are wrong, stay on form page
 
 
 	},
@@ -294,27 +287,9 @@ $game.$npc = {
 
 		for(var i = 0; i < $game.onScreenNpcs.length; i += 1) {
 			var curId = $game.onScreenNpcs[i];
-			
-			/*
-			_idleCounter += 1;
-			if(_idleCounter >= 64) { 
-				_idleCounter = 0;
-				playerInfo.srcX = 0;
-				playerInfo.srcY = 0;
-				$game.$player.render();
-			}
-
-
-			if(_idleCounter == 48) {
-				playerInfo.srcX = 32;
-				playerInfo.srcY = 0;
-				$game.$player.render();
-			}*/
-
-
 			_allNpcs[curId].counter += 1;
 
-			if(_allNpcs[curId].counter >= 56) { 
+			if(_allNpcs[curId].counter >= 56) {
 				_allNpcs[curId].counter = 0;
 				
 				data.srcX = _allNpcs[curId].spriteMap[0].x,
@@ -356,7 +331,7 @@ $game.$npc = {
 	render: function(tile) {
 		//get npc data based on tileStateVal to string
 		var data = {};
-			stringId = String(tile.tileState); 
+			stringId = String(tile.tileState);
 		
 		data.srcX = _allNpcs[stringId].spriteMap[0].x,
 		data.srcY = _allNpcs[stringId].spriteMap[0].y,
@@ -365,4 +340,4 @@ $game.$npc = {
 		$game.$renderer.renderNpc(data);
 	}
 
-}
+};

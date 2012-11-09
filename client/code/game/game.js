@@ -58,7 +58,7 @@ exports.$game = {
 	init: function() {
 		
 		//init everything:
-		//renderer loads all the image files 
+		//renderer loads all the image files
 		$game.$renderer.init();
 		//npc loads the npc data from DB
 		$game.$npc.init();
@@ -71,7 +71,7 @@ exports.$game = {
 		//in future, surrounding as well
 		$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
 			//new tile data stored in nextTiles by default
-			//since this is the initial load w/ no transition, 
+			//since this is the initial load w/ no transition,
 			//copy them over to currentTiles instead of transitioning
 			$game.copyTileArray(function() {
 				$game.createPathGrid(function() {
@@ -127,7 +127,7 @@ exports.$game = {
 
 		$game.currentTiles = new Array($game.VIEWPORT_WIDTH);
 		
-		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
+		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 			$game.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT);
 			
 
@@ -152,17 +152,17 @@ exports.$game = {
 
 			$game.gridTiles[y] = new Array($game.VIEWPORT_WIDTH);
 
-			for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {		
+			for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {
 
-				$game.getTileState(x, y, function(val) {
+				val = $game.getTileState(x, y);
 					//the pathfinding takes 1 means its clear 0 not
 					var tempNoGo, stringId;
 					if(val === -1) {
 						tempNoGo = 1;
-					}	
+					}
 					else if (val >= 0) {
 						tempNoGo = 0;
-						//since the restful state of the current bg 
+						//since the restful state of the current bg
 						//is settled, figure out if there is a npc on here
 						//this will let the renderer know if we need to animate
 						//any npcs (by index)
@@ -179,7 +179,7 @@ exports.$game = {
 						}
 						if(!found) {
 							$game.onScreenNpcs.push(stringId);
-						} 
+						}
 						
 
 					}
@@ -187,9 +187,7 @@ exports.$game = {
 						tempNoGo = 0;
 					}
 					$game.gridTiles[y][x] = tempNoGo;
-				});
-
-			}	
+			}
 		}
 
 		$game.graph = new Graph($game.gridTiles);
@@ -198,20 +196,21 @@ exports.$game = {
 		callback();
 	},
 
-	getTileState: function(x, y, callback) {
+	getTileState: function(x, y) {
 		//must first do a check to see if the tile BOTTOM is the npc
 		//if so, then return npc val (THIS IS A HACK SORT OF)
 		
 		//only if it is not in the bottom row (obviously)
 		var tileStateVal = $game.currentTiles[x][y].tileState;
-		if( y < $game.VIEWPORT_HEIGHT-1) { 
+		if( y < $game.VIEWPORT_HEIGHT-1 ) {
 			var belowState = $game.currentTiles[x][y+1].tileState;
 
 			if(belowState >= 0 ) {
 				tileStateVal = belowState;
 			}
 		}
-		callback(tileStateVal);
+		return tileStateVal;
+		
 	},
 
 	isMapEdge: function(x, y, callback) {
@@ -318,16 +317,17 @@ exports.$game = {
 		$game.stepNumber += 1;
 		//--------RIGHT------------
 		//go thru current array and shift everthing
+		var i, j;
 		if($game.stepDirection === 'right') {
 			//shift all except last column
-			for(var i = 0; i < $game.VIEWPORT_WIDTH - 1; i+=1) {
-				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			for(i = 0; i < $game.VIEWPORT_WIDTH - 1; i+=1) {
+				for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					$game.currentTiles[i][j] = $game.currentTiles[ i + 1 ][j];
 				}
 			}
 			
 			//shift a new column from the next array to the last spot
-			for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 				$game.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = $game.nextTiles[$game.stepNumber - 1][j];
 			}
 			$game.masterX += 1;
@@ -340,13 +340,13 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection === 'left') {
 			//shift all except last column
-			for(var i = $game.VIEWPORT_WIDTH - 1; i > 0; i-=1) {
-				for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			for(i = $game.VIEWPORT_WIDTH - 1; i > 0; i-=1) {
+				for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 					$game.currentTiles[i][j] = $game.currentTiles[ i - 1 ][j];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
 				$game.currentTiles[0][j] = $game.nextTiles[$game.nextTiles.length - $game.stepNumber ][j];
 			}
 			$game.masterX -= 1;
@@ -358,13 +358,13 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection==='up') {
 			//shift all except last column
-			for(var j = $game.VIEWPORT_HEIGHT - 1; j > 0; j-=1) {
-				for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			for(j = $game.VIEWPORT_HEIGHT - 1; j > 0; j-=1) {
+				for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 					$game.currentTiles[i][j] = $game.currentTiles[i][j - 1];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 				$game.currentTiles[i][0] = $game.nextTiles[i][$game.nextTiles[0].length - $game.stepNumber];
 			}
 			$game.masterY -= 1;
@@ -376,13 +376,13 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection === 'down') {
 			//shift all except last column
-			for(var j = 0; j < $game.VIEWPORT_HEIGHT - 1; j+=1) {
-				for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			for(j = 0; j < $game.VIEWPORT_HEIGHT - 1; j+=1) {
+				for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 					$game.currentTiles[i][j] = $game.currentTiles[i][j + 1];
 				}
 			}
 			//shift a new column from the next array to the last spot
-			for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 				$game.currentTiles[i][$game.VIEWPORT_HEIGHT - 1] = $game.nextTiles[i][$game.stepNumber - 1];
 			}
 			$game.masterY += 1;
@@ -397,11 +397,11 @@ exports.$game = {
 		$game.topEdge = $game.masterY,
 		$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
 
-		//change the npc and players local positions 
+		//change the npc and players local positions
 		//the tiles have been updated, now tell render to look over everything
 		//and re-render EVERYTHING
 		//$game.$renderer.renderAll();
-		requestAnimFrame($game.stepTransition); 
+		requestAnimFrame($game.stepTransition);
 	},
 
 	masterToLocal: function(x, y, callback) {
@@ -410,22 +410,22 @@ exports.$game = {
 		var local = {
 			x: x - $game.leftEdge,
 			y: y - $game.topEdge
-		}
+		};
 
-		if(local.y <= 16 && local.y >= 0 && local.x <= 30 && local.x >= 0) {
+		if(local.y <= 15 && local.y >= 0 && local.x <= 29 && local.x >= 0) {
 			callback(local);
 
 		}
 		else {
 			callback(false);
 		}
-	},				
+	},
 
 	tick: function() {
 		if($game.started) {
 			$game.$others.update();
 			$game.$player.update();
-			$game.$renderer.renderFrame();   
+			$game.$renderer.renderFrame();
 		}
 		requestAnimFrame($game.tick);
 	}

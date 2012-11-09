@@ -62,17 +62,17 @@ $game.$renderer = {
 		_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
 
 
-		//set stroke stuff for mouse 
+		//set stroke stuff for mouse
 		
 		_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Greeen default
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png','img/game/otherPlayer.png']
+		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png','img/game/otherPlayer.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
-		$game.$renderer.loadImages(0);	
+		$game.$renderer.loadImages(0);
 	},
 
 	loadImages: function(num) {
@@ -84,12 +84,10 @@ $game.$renderer = {
 		_tilesheets[num].onload = function() {
 			//if it is the map tile data, render to canvas
 			if(num === 0) {
-				var w = _tilesheets[num].width,
-				h = _tilesheets[num].height;
 
 				_tilesheetCanvas = document.createElement('canvas');
-				_tilesheetCanvas.setAttribute('width', w);
-				_tilesheetCanvas.setAttribute('height', h);
+				_tilesheetCanvas.setAttribute('width', _tilesheets[num].width);
+				_tilesheetCanvas.setAttribute('height', _tilesheets[num].height);
 				_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
 				_tilesheetWidth= w / $game.TILE_SIZE,
@@ -104,12 +102,10 @@ $game.$renderer = {
 			}
 			//the player sheet
 			else if(num === 1) {
-				var w = _tilesheets[num].width,
-				h = _tilesheets[num].height;
 
 				_offscreen_playerCanvas = document.createElement('canvas');
-				_offscreen_playerCanvas.setAttribute('width', w);
-				_offscreen_playerCanvas.setAttribute('height', h);
+				_offscreen_playerCanvas.setAttribute('width', _tilesheets[num].width);
+				_offscreen_playerCanvas.setAttribute('height', _tilesheets[num].height);
 				_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
 
 				_offscreen_playerContext.drawImage(
@@ -119,14 +115,14 @@ $game.$renderer = {
 					);
 			}
 			var next = num += 1;
-			if(num === _allImages.length) { 
+			if(num === _allImages.length) {
 				$game.$renderer.ready = true;
 				return;
 			}
-			else { 
+			else {
 				$game.$renderer.loadImages(next);
 			}
-		};			
+		};
 	},
 	renderFrame: function() {
 		//only re-render all the tiles if the viewport is tranisitioning
@@ -145,10 +141,10 @@ $game.$renderer = {
 				$game.$npc.animateFrame();
 			}
 			if($game.$map.growingSeed) {
-				$game.$map.growSeeds();	
+				$game.$map.growSeeds();
 			}
 		}
-		$game.$others.render();	
+		$game.$others.render();
 		$game.$player.render();
 
 		
@@ -192,10 +188,10 @@ $game.$renderer = {
 			//$game.$renderer.renderTile(tileData);
 			$game.$npc.render($game.currentTiles[i][j]);
 			_hasNpc = true;
-		}	
+		}
 
 
-		//foreground tiles 
+		//foreground tiles
 		var foreData = {
 			f1: foreIndex,
 			f2: foreIndex2,
@@ -213,7 +209,7 @@ $game.$renderer = {
 
 		var srcX,srcY;
 
-		//draw color tile first 
+		//draw color tile first
 		if(tileData.color) {
 			var hsla = 'hsla('+tileData.color.h+','+tileData.color.s +','+tileData.color.l +','+tileData.color.a + ')';
 			_backgroundContext.fillStyle = hsla;
@@ -233,7 +229,7 @@ $game.$renderer = {
 
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas, 
+				_tilesheetCanvas,
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -250,7 +246,7 @@ $game.$renderer = {
 			srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,  
+				_tilesheetCanvas,
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -266,7 +262,7 @@ $game.$renderer = {
 			srcY =  Math.floor(tileData.b3 / _tilesheetWidth),
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,  
+				_tilesheetCanvas,
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -287,7 +283,7 @@ $game.$renderer = {
 			srcX = tileData.f1 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f1 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas, 
+				_tilesheetCanvas,
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -302,7 +298,7 @@ $game.$renderer = {
 			srcX = tileData.f2 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f2 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas, 
+				_tilesheetCanvas,
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -318,10 +314,10 @@ $game.$renderer = {
 	
 
 	renderPlayer: function(info, main) {
-		//convert x y to local 
+		//convert x y to local
 		if(main) {
 			_charactersContext.drawImage(
-			_offscreen_playerCanvas, 
+			_offscreen_playerCanvas,
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -330,11 +326,11 @@ $game.$renderer = {
 			info.curY - $game.TILE_SIZE,
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
-			);	
+			);
 		}
 		else {
 			_charactersContext.drawImage(
-			_tilesheets[3], 
+			_tilesheets[3],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -388,10 +384,8 @@ $game.$renderer = {
 			);
 
 		//go through and draw each tile to the appropriate canvas
-		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {	
+		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
 			for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
-				if(i==0 && j==0){ 
-				}
 				$game.$renderer.renderTile(i,j);
 			}
 		}
@@ -450,13 +444,13 @@ $game.$renderer = {
 	},
 
 	renderNpc: function (npcData) {
-		$game.masterToLocal(npcData.x, npcData.y, function(loc) {			
+		$game.masterToLocal(npcData.x, npcData.y, function(loc) {
 			var curX = loc.x * $game.TILE_SIZE;
 			curY = loc.y * $game.TILE_SIZE,
 			clearX = 0,
 			clearY = 0;
 			//if intransit
-			if($game.inTransit) { 
+			if($game.inTransit) {
 				if($game.stepDirection === 'left') {
 					clearX = -1;
 					clearY = 0;
@@ -484,7 +478,7 @@ $game.$renderer = {
 				);
 			//draw new frame of npc
 			_foregroundContext.drawImage(
-				_tilesheets[2], 
+				_tilesheets[2],
 				npcData.srcX,
 				npcData.srcY,
 				$game.TILE_SIZE,
@@ -503,18 +497,18 @@ renderMouse: function(mouse) {
 	var mX = mouse.cX * $game.TILE_SIZE,
 	mY = mouse.cY * $game.TILE_SIZE;
 
-	$game.getTileState(mouse.cX, mouse.cY, function(state) {
+	var state = $game.getTileState(mouse.cX, mouse.cY);
 		
 			/*
 			//clear previous mouse area
 			_foregroundContext.clearRect(
-				_prevMouseX * $game.TILE_SIZE, 
-				_prevMouseY * $game.TILE_SIZE, 
-				$game.TILE_SIZE, 
+				_prevMouseX * $game.TILE_SIZE,
+				_prevMouseY * $game.TILE_SIZE,
+				$game.TILE_SIZE,
 				$game.TILE_SIZE
 			);
 			
-			//redraw that area 
+			//redraw that area
 			var foreIndex = $game.currentTiles[mouse.cX][mouse.cY].foreground-1,
 
 			foreData = {
@@ -541,14 +535,14 @@ renderMouse: function(mouse) {
 				}
 				//nogo
 				else if(state === -2) {
-					col = 'rgba(255,0,0,.4)'; 
+					col = 'rgba(255,0,0,.4)';
 					_foregroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
 
 				}
 				//npc
 				else {
 					col = 'rgba(0,150,235,.4)';
-					_foregroundContext.strokeStyle = 'rgba(0,150,235,.4)'; // blue	
+					_foregroundContext.strokeStyle = 'rgba(0,150,235,.4)'; // blue
 				}
 			}
 			
@@ -560,7 +554,7 @@ renderMouse: function(mouse) {
 
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
-		});
+	
 
 },
 
@@ -582,7 +576,7 @@ renderMiniMap: function() {
 		/*
 		var hsla = 'hsla('+sq.color.h+','+sq.color.s+','+sq.color.l+',1)';
 		_minimapTileContext.fillStyle = hsla;
-		_minimapTileContext.fillRect( 
+		_minimapTileContext.fillRect(
 			sq.x,
 			sq.y,
 			1,

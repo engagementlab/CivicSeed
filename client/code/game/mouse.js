@@ -46,9 +46,9 @@ $game.$mouse = {
 				pX: $game.$mouse.prevX,
 				pY: $game.$mouse.prevY,
 				cX: $game.$mouse.curX,
-				cY: $game.$mouse.curY,
+				cY: $game.$mouse.curY
 			};
-			$game.$renderer.renderMouse(mouseStuff); 
+			$game.$renderer.renderMouse(mouseStuff);
 		}
 
 		
@@ -56,18 +56,18 @@ $game.$mouse = {
 		if(clicked) {
 			
 			//check if it is a nogo or npc
-			//if the tile BELOW the tile clicked is npc, 
+			//if the tile BELOW the tile clicked is npc,
 			//then user clicked the head, so act like npc
 			if($game.$player.seedMode) {
 				var m = {
-						mouse: true,
-						x: $game.$mouse.curX,
-				 		y: $game.$mouse.curY
-				 		};
+							mouse: true,
+							x: $game.$mouse.curX,
+							y: $game.$mouse.curY
+						};
 				$game.$player.dropSeed(m);
 			}
 			else {
-				$game.getTileState($game.$mouse.curX, $game.$mouse.curY, function(state) {
+				var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
 					//go
 					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
@@ -81,13 +81,13 @@ $game.$mouse = {
 						//set index val so reousrce can show right one
 						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
 
-						//if you click on a different square then the previously 
+						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
 
 						$game.$npc.selectNpc(newIndex);
 				
-						//move them to the spot to the 
-						//BOTTOM LEFT corner of the npc 
+						//move them to the spot to the
+						//BOTTOM LEFT corner of the npc
 						//(consistent so we leave that open in tilemap)
 						//also make sure it is not a transition tile
 						$game.$player.npcOnDeck = true;
@@ -95,7 +95,7 @@ $game.$mouse = {
 						
 						
 					}
-				});
+
 			}
 			
 		}

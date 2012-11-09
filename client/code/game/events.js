@@ -38,8 +38,8 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 		
 
 });
-//all this breakdown will be on the server side, not client side, 
-//but we will pass the tiles info 
+//all this breakdown will be on the server side, not client side,
+//but we will pass the tiles info
 ss.event.on('ss-seedDropped', function(bombed) {
 	$game.$map.newBomb(bombed);
 });
@@ -47,12 +47,14 @@ ss.event.on('ss-seedDropped', function(bombed) {
 
 //new message from chat
 ss.event.on('ss-newMessage', function(message, id) {
+	
 	if(id === $game.$player.id) {
 		$game.$player.message(message);
 	}
 	else {
 		$game.$others.message(message, id);
 	}
+
 });
 
 
@@ -69,7 +71,7 @@ $(window).bind("keypress", (function (key) {
 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 	if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
 			//$game.$player.dropSeed({mouse:false});
-	}		
+	}
 }));
 //change cursor on mouse move
 $('.gameboard').mousemove(function(m) {
@@ -82,7 +84,7 @@ $('.gameboard').mousemove(function(m) {
 			offY: this.offsetTop,
 			debug: false
 		};
-		$game.$mouse.updateMouse(mInfo, false); 
+		$game.$mouse.updateMouse(mInfo, false);
 	}
 });
 
@@ -104,9 +106,12 @@ $('.gameboard').click(function(m) {
 
 //send whatever is in the chat field
 $('#chatButton').click(function(e) {
-	var message = $('#chatText').val();
-	ss.rpc('game.chat.sendMessage', message, $game.$player.id);
-	$('#chatText').val('');
 	e.preventDefault();
+	if($game.$npc.isResource === false && $game.inTransit === false && $game.$player.isMoving === false) {
+		var message = $('#chatText').val();
+		ss.rpc('game.chat.sendMessage', message, $game.$player.id);
+		$('#chatText').val('');
+	}
 	return false;
+
 });
