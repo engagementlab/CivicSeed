@@ -108,15 +108,16 @@ exports.$game = {
 			var index;
 
 			$game.nextTiles = new Array(x2);
-			for(var i = 0; i < x2 ; i+=1) {
-				
-				$game.nextTiles[i] = new Array(y2);
-				
-				for(var j = 0; j < y2; j+=1) {
+			
+			var i = x2;
 
+			while(--i >= 0) {
+				$game.nextTiles[i] = new Array(y2);
+				var j = y2;
+
+				while(--j >= 0) {
 					index = j * x2 + (i % x2);
 					$game.nextTiles[i][j] = response[index];
-					
 				}
 			}
 			callback();
@@ -127,12 +128,12 @@ exports.$game = {
 
 		$game.currentTiles = new Array($game.VIEWPORT_WIDTH);
 		
-		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
-			$game.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT);
-			
+		var i = $game.VIEWPORT_WIDTH;
 
-			for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
-				
+		while(--i >= 0) {
+			$game.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT);
+			var j = $game.VIEWPORT_HEIGHT;
+			while(--j >= 0) {
 				$game.currentTiles[i][j] = $game.nextTiles[i][j];
 			}
 		}
@@ -148,45 +149,45 @@ exports.$game = {
 		$game.onScreenNpcs.length = 0;
 		$game.gridTiles = new Array($game.VIEWPORT_HEIGHT);
 
-		for(var y = 0; y < $game.VIEWPORT_HEIGHT; y += 1) {
+		var y = $game.VIEWPORT_HEIGHT;
 
+		while(--y >= 0) {
 			$game.gridTiles[y] = new Array($game.VIEWPORT_WIDTH);
 
-			for(var  x = 0; x < $game.VIEWPORT_WIDTH; x += 1) {
-
+			var x = $game.VIEWPORT_WIDTH;
+			while(--x >= 0) {
 				val = $game.getTileState(x, y);
 					//the pathfinding takes 1 means its clear 0 not
-					var tempNoGo, stringId;
-					if(val === -1) {
-						tempNoGo = 1;
-					}
-					else if (val >= 0) {
-						tempNoGo = 0;
-						//since the restful state of the current bg
-						//is settled, figure out if there is a npc on here
-						//this will let the renderer know if we need to animate
-						//any npcs (by index)
-						stringId = String(val),
-						found = false;
-						
-						//see if that is in there already (because of the two tiles)
+				var tempNoGo, stringId;
+				if(val === -1) {
+					tempNoGo = 1;
+				}
+				else if (val >= 0) {
+					tempNoGo = 0;
+					//since the restful state of the current bg
+					//is settled, figure out if there is a npc on here
+					//this will let the renderer know if we need to animate
+					//any npcs (by index)
+					stringId = String(val),
+					found = false;
+					
+					//see if that is in there already (because of the two tiles)
 
-						for(var i = 0; i<$game.onScreenNpcs.length; i += 1) {
-							if($game.onScreenNpcs[i] === stringId) {
-								found = true;
-								continue;
-							}
+					var i = $game.onScreenNpcs.length;
+					while(--i >= 0) {
+						if($game.onScreenNpcs[i] === stringId) {
+							found = true;
+							break;
 						}
-						if(!found) {
-							$game.onScreenNpcs.push(stringId);
-						}
-						
-
 					}
-					else {
-						tempNoGo = 0;
+					if(!found) {
+						$game.onScreenNpcs.push(stringId);
 					}
-					$game.gridTiles[y][x] = tempNoGo;
+				}
+				else {
+					tempNoGo = 0;
+				}
+				$game.gridTiles[y][x] = tempNoGo;
 			}
 		}
 
@@ -320,14 +321,21 @@ exports.$game = {
 		var i, j;
 		if($game.stepDirection === 'right') {
 			//shift all except last column
-			for(i = 0; i < $game.VIEWPORT_WIDTH - 1; i+=1) {
-				for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+
+			i = 0;
+
+			while(i < $game.VIEWPORT_WIDTH - 1) {
+				j = 0;
+				while(j < $game.VIEWPORT_HEIGHT) {
 					$game.currentTiles[i][j] = $game.currentTiles[ i + 1 ][j];
+					j += 1;
 				}
+				i += 1;
 			}
 			
 			//shift a new column from the next array to the last spot
-			for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			j = $game.VIEWPORT_HEIGHT;
+			while(--j >= 0) {
 				$game.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = $game.nextTiles[$game.stepNumber - 1][j];
 			}
 			$game.masterX += 1;
@@ -340,15 +348,24 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection === 'left') {
 			//shift all except last column
-			for(i = $game.VIEWPORT_WIDTH - 1; i > 0; i-=1) {
-				for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			i = $game.VIEWPORT_WIDTH - 1;
+
+			while(i > 0) {
+				j = 0;
+				while(j < $game.VIEWPORT_HEIGHT) {
 					$game.currentTiles[i][j] = $game.currentTiles[ i - 1 ][j];
+					j += 1;
+
 				}
+				i -= 1;
 			}
+			
 			//shift a new column from the next array to the last spot
-			for(j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+			j = $game.VIEWPORT_HEIGHT;
+			while(--j >= 0) {
 				$game.currentTiles[0][j] = $game.nextTiles[$game.nextTiles.length - $game.stepNumber ][j];
 			}
+
 			$game.masterX -= 1;
 			$game.$player.slide(-1,0);
 			$game.$others.slide(-1,0);
@@ -358,15 +375,23 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection==='up') {
 			//shift all except last column
-			for(j = $game.VIEWPORT_HEIGHT - 1; j > 0; j-=1) {
-				for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			j = $game.VIEWPORT_HEIGHT - 1;
+			while(j > 0) {
+				
+				i = 0;
+				while(i < $game.VIEWPORT_WIDTH) {
 					$game.currentTiles[i][j] = $game.currentTiles[i][j - 1];
+					i += 1;
 				}
+				j -= 1;
 			}
+				
 			//shift a new column from the next array to the last spot
-			for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			i = $game.VIEWPORT_WIDTH;
+			while(--i >= 0) {
 				$game.currentTiles[i][0] = $game.nextTiles[i][$game.nextTiles[0].length - $game.stepNumber];
 			}
+
 			$game.masterY -= 1;
 			$game.$player.slide(0,-1);
 			$game.$others.slide(0,-1);
@@ -376,15 +401,23 @@ exports.$game = {
 		//go thru current array and shift everthing
 		if($game.stepDirection === 'down') {
 			//shift all except last column
-			for(j = 0; j < $game.VIEWPORT_HEIGHT - 1; j+=1) {
-				for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			j = 0;
+			while(j < $game.VIEWPORT_HEIGHT-1) {
+				
+				i = 0;
+				while(i < $game.VIEWPORT_WIDTH) {
 					$game.currentTiles[i][j] = $game.currentTiles[i][j + 1];
+					i += 1;
 				}
+				j += 1;
 			}
+				
 			//shift a new column from the next array to the last spot
-			for(i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
+			i = $game.VIEWPORT_WIDTH;
+			while(--i >= 0) {
 				$game.currentTiles[i][$game.VIEWPORT_HEIGHT - 1] = $game.nextTiles[i][$game.stepNumber - 1];
 			}
+
 			$game.masterY += 1;
 			$game.$player.slide(0,1);
 			$game.$others.slide(0,1);

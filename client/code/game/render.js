@@ -90,8 +90,8 @@ $game.$renderer = {
 				_tilesheetCanvas.setAttribute('height', _tilesheets[num].height);
 				_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
-				_tilesheetWidth= w / $game.TILE_SIZE,
-				_tilesheetHeight= h / $game.TILE_SIZE,
+				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE,
+				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE,
 
 
 				_tilesheetContext.drawImage(
@@ -384,8 +384,10 @@ $game.$renderer = {
 			);
 
 		//go through and draw each tile to the appropriate canvas
-		for(var i = 0; i < $game.VIEWPORT_WIDTH; i+=1) {
-			for(var j = 0; j < $game.VIEWPORT_HEIGHT; j+=1) {
+		var i = $game.VIEWPORT_WIDTH;
+		while(--i >= 0) {
+			var j = $game.VIEWPORT_HEIGHT;
+			while(--j >= 0) {
 				$game.$renderer.renderTile(i,j);
 			}
 		}

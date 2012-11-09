@@ -364,9 +364,12 @@ $game.$player = {
 		var origX = x - 1;
 		var origY = y - 1;
 		var newHue = Math.floor(Math.random()*255);
-		for(var a = 0; a<3; a++) {
-			for(var b = 0; b<3; b++) {
-				
+
+		var a = 3;
+		while(--a >= 0) {
+			var b = 3;
+			while(--b >= 0) {
+
 				var square = {
 					x: origX + a,
 					y: origY + b,
