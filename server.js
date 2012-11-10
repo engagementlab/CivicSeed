@@ -37,17 +37,17 @@ service.connectMongoose(app, function(databases) {
 		// Server-side compiled templates for client
 		ss.client.templateEngine.use(require('ss-hogan'));
 
-		// // use redis
-		// if(config.get('USE_REDIS')) {
-		// 	redisConfig = {
-		// 		host: config.get('REDIS_HOST'),
-		// 		port: config.get('REDIS_PORT'),
-		// 		pass: config.get('REDIS_PW'),
-		// 		db: config.get('REDIS_DB')
-		// 	};
-		// 	ss.session.store.use('redis', redisConfig);
-		// 	ss.publish.transport.use('redis', redisConfig);
-		// }
+		// use redis
+		if(config.get('USE_REDIS')) {
+			redisConfig = {
+				host: config.get('REDIS_HOST'),
+				port: config.get('REDIS_PORT'),
+				pass: config.get('REDIS_PW'),
+				db: config.get('REDIS_DB')
+			};
+			ss.session.store.use('redis', redisConfig);
+			ss.publish.transport.use('redis', redisConfig);
+		}
 
 		// connect mongoose to ss internal API
 		ss.api.add('db', databases.mongooseDb);
@@ -97,45 +97,27 @@ service.connectMongoose(app, function(databases) {
 		console.log('CS: Config: Default configurations set up.'.blue)
 	});
 
-	// development config
-	// runner: 'NODE_ENV=development nodemon app.js' or just 'nodemon app.js'
-	app.configure('development', function() {
+	if(nodeEnv === 'development') {
 		// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?
 		// ss.client.packAssets();
 		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
-	});
+	}
 
-	// testing config
-	// runner: 'NODE_ENV=testing nodemon app.js'
-	app.configure('testing', function() {
-		app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
-	});
-
-	// staging config ???DO WE EVEN NEED A STAGING ENVIRONMENT???
-	// runner: 'NODE_ENV=staging node app.js'
-	app.configure('staging', function() {
-		ss.client.packAssets();
-		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
-	});
-
-	// live config
-	// runner: 'NODE_ENV=production node app.js'
-	app.configure('production', function() {
+	if(nodeEnv === 'testing' || nodeEnv === 'production') {
 		ss.client.packAssets();
 		// var oneYear = 31557600000;
 		// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
 		// app.use(express.errorHandler()); 
 		console.log('CS: Config: Running in '.blue + nodeEnv + ' mode.'.blue);
-	});
+	}
 
 	//passportConfig = require('./passportconfig.js')(app, service);
 
 	// Start web server
 	server = app.listen(process.env['app_port'] || 3000, function() {
 		var local = server.address();
-		console.log("Express server listening @ http://%s:%d/ in %s mode", local.address, local.port, app.settings.env);
+		console.log('Express server listening @ http://%s:%d/ in %s mode', local.address, local.port, app.settings.env);
 	});
 
 	// Start SocketStream
