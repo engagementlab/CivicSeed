@@ -13,7 +13,7 @@
   ],
   "private": true,
   "homepage": "http://engagementgamelab.org/2012/08/civic-seed/",
-  "main": "./server.js",
+  "main": "./bin/server",
   "repository": {
     "type": "git",
     "url": "git://github.com/americanyak/CivicSeed.git"
@@ -47,6 +47,6 @@
   },
   "subdomain": "civicseed-testing",
   "scripts": {
-    "start": "server.js"
+    "start": "node ./bin/server"
   }
 }
