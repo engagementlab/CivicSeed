@@ -66,3 +66,5 @@ password.js
 /_NOTES.md
 /_DEMO/
 tasks.TODO
+/config_testing.json
+/config_backup.json
