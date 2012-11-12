@@ -1,20 +1,14 @@
-# OS or Editor folders
+.monitor
 .DS_Store
 Thumbs.db
-
-# IGNORING
-.monitor
-.nodemonignore
 node_modules
-package.development
-package.testing
-package.production
-CivicSeed.sublime-project
-CivicSeed.sublime-workspace
-info.txt
+*.sublime-*
 /client/static/assets/
 /data/map/expanded/
 /models/_temp/
 /controllers/_temp/
 /controllers/game/_temp/
-README.md
+/client/static/audio/music/temp.mp3
+/config*.json
+/_HIDDEN/
+/modules/utils/password.js
