@@ -20,7 +20,6 @@ ss.server.on('ready', function(){
 
 				var $account = require('/account');
 				$account.accountHandlers();
-				$account.getUserSession();
 
 			});
 		}

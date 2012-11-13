@@ -1,5 +1,3 @@
-
-
 //events recevied by RPC
 
 // SEE http://stackoverflow.com/questions/9626059/window-onbeforeunload-in-chrome-what-is-the-most-recent-fix
@@ -8,7 +6,7 @@ $(window).on('beforeunload', function() {
 	var x = leaveThisJoint();
 	return x;
 });
-function leaveThisJoint(){
+function leaveThisJoint() {
 	ss.rpc('game.player.removePlayer', $game.$player.id);
 }
 

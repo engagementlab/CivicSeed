@@ -25,7 +25,7 @@ ss.server.on('ready', function(){
 					window.$game = gameModule.$game;
 
 					var $account = require('/account');
-					// $account.accountHandlers();
+					$account.accountHandlers();
 
 					var $map = require('/map');
 					var $render = require('/render');

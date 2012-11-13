@@ -5,6 +5,8 @@ var UserModel = service.useModel('user').UserModel;
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
+	// req.use('debug');
+	// req.use('account.authenticated');
 
 	return {
 
@@ -47,7 +49,6 @@ exports.actions = function(req, res, ss) {
 
 		getUserSession: function() {
 			if(req.session.userId) {
-				console.log(req.session);
 				res({
 					user: {
 						id: req.session.userId,
@@ -56,7 +57,8 @@ exports.actions = function(req, res, ss) {
 					}
 				});
 			} else {
-				res(false);
+				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
+				res('NOT_AUTHENTICATED');
 			}
 		}
 
