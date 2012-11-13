@@ -1,0 +1,13 @@
+{
+	"NAME": "Civic Seed",
+	"DOMAIN": "localhost",
+	"PORT": 3000,
+	"USE_REDIS": true,
+	"REDIS_HOST": "localhost",
+	"REDIS_PORT": 6379,
+	"REDIS_PW": "",
+	"REDIS_DB": "[redis_db]",
+	"MONGO_URL": "mongodb://localhost/[mongo_db]",
+	"MAP_TILES_WIDTH": 142,
+	"MAP_TILES_HEIGHT": 132
+}

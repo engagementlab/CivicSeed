@@ -15,9 +15,13 @@ ss.server.on('ready', function(){
 
 		if(!appInitialized) {
 			require('/setup').init(function() {
+
 				appInitialized = true;
-				// require('/main');
-				require('/actions');
+
+				var $account = require('/account');
+				$account.accountHandlers();
+				$account.getUserSession();
+
 			});
 		}
 

@@ -2,7 +2,7 @@ var ss = require('socketstream');
 
 var self = module.exports = {
 
-	init: function (app, service, hbs) {
+	init: function (app) {
 
 		ss.client.define('game', {
 			view: 'game.html',
@@ -11,7 +11,7 @@ var self = module.exports = {
 				'libs/jquery-1.8.2.min.js',
 				'libs/bootstrap.min.js',
 				'game',
-				'account/actions.js'
+				'shared'
 			],
 			tmpl: [
 				'game',

@@ -1,4 +1,4 @@
-// COMPARE ACCOUNT.ACTIONS JS FILE
+// COMPARE SHARED.ACCOUNT JS FILE
 // var rootDir = process.cwd();
 // var service = require(rootDir + '/service');
 // var UserModel = service.useModel('user').UserModel;
@@ -18,8 +18,8 @@ var self = module.exports = {
 		req.use('session');
 		// req.use('account.user.authenticated');
 
-		console.log('CS:'.blue + ' player RPC request ---->'.magenta);
-		console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
+		// console.log('CS:'.blue + ' player RPC request ---->'.magenta);
+		// console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 		// Russ, it's all hooked up. Access the db via ss.db
 		//console.log(ss.db);
 		return {

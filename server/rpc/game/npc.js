@@ -3,8 +3,8 @@ var self = exports.actions = function(req, res, ss) {
 	// req.use('session');
 	// req.use('account.user.authenticated');
 
-	console.log('CS:'.blue + ' npc RPC request ---->'.magenta);
-	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
+	// console.log('CS:'.blue + ' npc RPC request ---->'.magenta);
+	// console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 	// console.log(ss.db);
 
 	var service = ss.service;

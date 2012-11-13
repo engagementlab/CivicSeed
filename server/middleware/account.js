@@ -2,6 +2,8 @@
 exports.authenticated = function(framework) {
 	return function(req, res, next) {
 		if(req.session && (req.session.userId != null)) {
+			console.log(req.session);
+			console.log(req.session.userId);
 			console.log('GREEN LIGHT'.green.inverse);
 			return next();
 		} else {
@@ -25,3 +27,4 @@ exports.authenticated = function(framework) {
 // 		next();
 // 	};
 // };
+

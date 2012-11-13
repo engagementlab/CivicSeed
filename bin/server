@@ -128,6 +128,6 @@ service.connectMongoose(app, function(databases) {
 	ss.start(server);
 
 	// Append SocketStream middleware to the stack
-	app.stack = app.stack.concat(ss.http.middleware.stack);
+	app.stack = ss.http.middleware.stack.concat(app.stack);
 
 });

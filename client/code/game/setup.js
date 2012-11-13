@@ -3,7 +3,7 @@ exports.init = function(callback) {
 	var $body = $(document.body);
 	var tmplEngine = ss.tmpl;
 
-	ss.rpc('account.actions.getUserSession', function(userSessionObject) {
+	ss.rpc('shared.account.getUserSession', function(userSessionObject) {
 		$body.append(tmplEngine['partials-navigation'].render(userSessionObject));
 	});
 

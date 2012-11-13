@@ -21,6 +21,7 @@ exports.actions = function(req, res, ss) {
 						req.session.setUserId(user.id);
 						req.session.name =  user.name;
 						req.session.email = user.email;
+						req.session.save();
 						// console.log(req.session.name, req.session.email, req.session.userId, user.id);
 						res(true);
 					} else {
@@ -37,14 +38,16 @@ exports.actions = function(req, res, ss) {
 		deAuthenticate: function() {
 			// console.log(req.session.name, req.session.email, req.session.userId);
 			req.session.setUserId(null);
-			req.session.name
+			req.session.name = null;
 			req.session.email = null;
+			req.session.save();
 			// console.log(req.session.name, req.session.email, req.session.userId);
 			res(true);
 		},
 
 		getUserSession: function() {
 			if(req.session.userId) {
+				console.log(req.session);
 				res({
 					user: {
 						id: req.session.userId,

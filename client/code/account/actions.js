@@ -22,7 +22,7 @@
 		},
 
 		authenticate: function(email, password) {
-			ss.rpc('account.actions.authenticate', email, password, function(authenticated) {
+			ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
 				if(authenticated) {
 					location.href = '/game';
 				} else {
@@ -33,7 +33,7 @@
 		},
 
 		deAuthenticate: function() {
-			ss.rpc('account.actions.deAuthenticate', function(deAuthenticate) {
+			ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 				if(deAuthenticate) {
 					location.href = '/';
 					// console.log('Logging out...');

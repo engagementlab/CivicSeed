@@ -9,6 +9,7 @@ node_modules
 /controllers/_temp/
 /controllers/game/_temp/
 /client/static/audio/music/temp.mp3
-/config*.json
+/config.json
+/config_*.json
 /_HIDDEN/
 /modules/utils/password.js
