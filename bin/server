@@ -39,7 +39,7 @@ service.connectMongoose(app, function(databases) {
 	// hbs.registerPartial('headPartial', headerTemplate); 
 
 
-	app.set('views', __dirname + '/client/views');
+	app.set('views', rootDir + '/client/views');
 	app.set('view engine', 'hbs');
 	hbsHelpers.init();
 	// app.set('view engine', 'html');
@@ -47,6 +47,7 @@ service.connectMongoose(app, function(databases) {
 	app.use(express.logger(':method :url :status'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
+	app.use(app.router);
 	// app.use(express.cookieParser());
 	// app.use(express.session({secret: 'secret'}));
 	// app.use(express.compiler({src: __dirname + '/wwwroot', enable: ['stylus']}));

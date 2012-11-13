@@ -1,4 +1,5 @@
-var config = require('./config'),
+var rootDir = process.cwd(),
+config = require(rootDir + '/config'),
 mongoose = require('mongoose'),
 Schema = mongoose.Schema,
 ObjectId = Schema.ObjectId;
@@ -39,11 +40,11 @@ var self = module.exports = {
 		} else {
 			console.log('CS: '.blue + 'Import model '.blue + modelName.yellow.underline + ' into following controller: '.blue);
 		}
-		return require("./models/" + modelName + '-model')(mongoose, self.db, Schema, ObjectId);
+		return require(rootDir + '/models/' + modelName + '-model')(mongoose, self.db, Schema, ObjectId);
 	},
 
 	useModule: function (moduleName, state) {
-		return require("./modules/" + moduleName);
+		return require(rootDir + '/modules/' + moduleName);
 	}
 
 };
@@ -69,7 +70,7 @@ var self = module.exports = {
 // exports.login = function(name, pass, callback) {
 // 	UserModel.findOne({email:name},function(err,user){
 // 		if(!user){
-// 			return callback("you don't belong here.",null);
+// 			return callback('you don't belong here.',null);
 // 		}
 // 		else {
 // 			var hashedPassword = user.password;
@@ -77,7 +78,7 @@ var self = module.exports = {
 // 				return callback(null,user);
 // 			}
 // 			else {
-// 				return  callback("wrong! try again.",null);
+// 				return callback('wrong! try again.',null);
 // 			}
 // 		}
 // 	});
