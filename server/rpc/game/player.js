@@ -41,6 +41,17 @@ exports.actions = function(req, res, ss) {
 					y: y
 				};
 
+			/* TRY the tilemodel query first, it should print fine in the console
+			then try the usermodel.  throws an error (for me)
+			*/
+			tileModel.findOne(function(err,r1) {
+				console.log(r1);
+			});
+
+			// userModel.findOne(function(err,r2) {
+			// 	console.log(r2);
+			// });
+
 			//send the number of active players and the new player info
 			res(playerInfo);
 		},
