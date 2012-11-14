@@ -2,13 +2,6 @@ var hash = require('password-hash');
 
 module.exports = function(mongoose, db, Schema, ObjectId) {
 
-	var InviteeSchema = new Schema({
-		sessionName: String,
-		email: String,
-		accepted: Boolean,
-		code: String
-	});
-
 	var UserSchema = new Schema({
 		gameChannel: String, // not sure what type this should be...
 		name: String,
@@ -18,7 +11,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	});
 
 	//the third param specifies an exact collection to look for in the DB
-	var InviteeModel = db.model('Invitee', InviteeSchema, 'invitees');
 	var UserModel = db.model('User', UserSchema, 'users');
 
 	// // var crypto = require('crypto');
@@ -47,10 +39,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 //var ph = require('./lib/password-hash');
 
-	return {
-		InviteeModel: InviteeModel,
-		UserModel: UserModel,
-	};
+	return UserModel;
 
 	// user.schema.pre('save', function (next) {
 	// 	if (!validatePresenceOf(this.password)) {

@@ -1,6 +1,6 @@
 var rootDir = process.cwd();
 var service = require(rootDir + '/service');
-var UserModel = service.useModel('user').UserModel;
+var UserModel = service.useModel('user');
 
 exports.actions = function(req, res, ss) {
 

@@ -10,8 +10,8 @@ var self = module.exports = {
 	init: function (app, service, hbs) {
 
 		// nodeEnv = app.get('env');
-		// User = service.useModel('user').UserModel;
-		Invitee = service.useModel('user', 'preload').InviteeModel;
+		// User = service.useModel('user');
+		Invitee = service.useModel('user', 'preload');
 
 		app.get('/admin', function(req, res) {
 			res.render('admin/admin.hbs', {

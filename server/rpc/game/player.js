@@ -1,14 +1,14 @@
 // COMPARE SHARED.ACCOUNT JS FILE
 // var rootDir = process.cwd();
 // var service = require(rootDir + '/service');
-// var UserModel = service.useModel('user').UserModel;
+// var UserModel = service.useModel('user');
 
 var intervalId = {};
 var numActivePlayers = 0;
 // var numPlayers = 0;
 var players = {};
 
-var service, db, userModel,tileModel;
+var service, db, userModel, tileModel;
 
 exports.actions = function(req, res, ss) {
 
@@ -44,13 +44,13 @@ exports.actions = function(req, res, ss) {
 			/* TRY the tilemodel query first, it should print fine in the console
 			then try the usermodel.  throws an error (for me)
 			*/
-			tileModel.findOne(function(err,r1) {
-				console.log(r1);
+			tileModel.findOne(function(err, tile) {
+				console.log(tile);
 			});
 
-			// userModel.findOne(function(err,r2) {
-			// 	console.log(r2);
-			// });
+			userModel.findOne(function(err, user) {
+				console.log(user);
+			});
 
 			//send the number of active players and the new player info
 			res(playerInfo);

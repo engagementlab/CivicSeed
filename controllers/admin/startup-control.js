@@ -25,7 +25,7 @@ var self = module.exports = {
 	init: function (app, service, hbs) {
 
 		nodeEnv = app.get('env');
-		User = service.useModel('user').UserModel;
+		User = service.useModel('user');
 
 		self.service = service;
 
@@ -45,7 +45,7 @@ var self = module.exports = {
 		app.get('/admin/startup/users', function(req, res) {
 			if(nodeEnv) {
 				var userData = require(rootDir + '/data/users');
-				var userModel = service.useModel('user', 'preload').UserModel;
+				var userModel = service.useModel('user', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
 				dbActions.dropCollection('users', function() {
 					dbActions.saveDocuments(userModel, userData.global, function() {
@@ -127,9 +127,9 @@ var self = module.exports = {
 		app.get('/admin/startup/npcs', function(req, res) {
 			if(nodeEnv) {
 				var npcData = require(rootDir + '/data/npcs');
-				var npcModel = service.useModel('npc', 'preload').NpcModel;
+				var npcModel = service.useModel('npc', 'preload');
 				var gnomeData = require(rootDir + '/data/gnome');
-				var gnomeModel = service.useModel('npc', 'preload').GnomeModel;
+				var gnomeModel = service.useModel('npc', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 				// drop and save npcs
 				dbActions.dropCollection('npcs', function() {

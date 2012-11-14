@@ -8,9 +8,9 @@ var self = exports.actions = function(req, res, ss) {
 	// console.log(ss.db);
 
 	var service = ss.service;
-	var UserModel = service.useModel('user', 'ss').UserModel;
-	var NpcModel = service.useModel('npc', 'ss').NpcModel;
-	var GnomeModel = service.useModel('npc', 'ss').GnomeModel;
+	var UserModel = service.useModel('user', 'ss');
+	var NpcModel = service.useModel('npc', 'ss');
+	var GnomeModel = service.useModel('npc', 'ss');
 
 	return {
 		init: function() {

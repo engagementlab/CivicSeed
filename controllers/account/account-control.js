@@ -2,8 +2,8 @@ var self = module.exports = {
 
 	init: function (app, service, hbs) {
 
-		// var Account = service.useModel('user').model;
-		var User = service.useModel('user').model;
+		// var Account = service.useModel('user');
+		var User = service.useModel('user');
 
 
 

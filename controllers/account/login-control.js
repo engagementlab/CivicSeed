@@ -7,7 +7,7 @@ var self = module.exports = {
     init: function (app, service, hbs) {
 
         //  var accountMiddleware = service.useModule('middleware/account');
-        var users = service.useModel('user').UserModel;
+        var users = service.useModel('user');
 
 		// see home-control for app.get('/' ...
 		app.post('/',
