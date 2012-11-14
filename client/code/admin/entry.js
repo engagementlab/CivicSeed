@@ -13,16 +13,18 @@ ss.server.on('ready', function() {
 
 	jQuery(function() {
 
-		if(!appInitialized) {
-			require('/main-setup').init(function() {
+		console.log('hittheeerr');
 
-				appInitialized = true;
+		// if(!appInitialized) {
+		// 	require('/admin-setup').init(function() {
 
-				var $account = require('/account');
-				$account.accountHandlers();
+		// 		appInitialized = true;
 
-			});
-		}
+		// 		// var $account = require('/account');
+		// 		// $account.accountHandlers();
+
+		// 	});
+		// }
 
 	});
 

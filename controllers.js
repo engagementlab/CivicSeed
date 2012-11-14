@@ -1,45 +1,35 @@
 var fs = require('fs'),
-hbs = require('hbs');
+	walk = require('walk'),
+	hbs = require('hbs'),
+	walker;
 
-module.exports = function(app, service) {
+var self = module.exports = {
 
-	var isJs = /\.js$/g,
-	hidden = /^\_/g,
-	loadDirectory = function(rootDir, path) {
+	loadAll: function(app, service, callback) {
 
-		fs.readdir(rootDir, function(err, files) {
-			if(err) {
-				throw err;
-			}
-			files.forEach(function(file) {
-				var newRootDir = rootDir + '/' + file,
-				newPath = path + '/' + file,
-				stats;
+		var isJs = /\.js$/g,
+			hidden = /^\_/g;
 
-				try {
-					stats = fs.lstatSync(newRootDir);
-					if(stats.isDirectory()) {
-						loadDirectory(newRootDir, newPath);
-					}
-				}
-				catch (e) {
-					console.log(' *** ERROR CHECKING FOR CONTROLLERS DIRECTORY *** '.red.inverse)
-				}
-				if(file.match(isJs)) {
-					if(!file.match(hidden)) {
-						require(newPath).init(app, service, hbs);
-						console.log('CS: '.blue + 'Initialize controller file: '.blue + file.yellow.underline);
-					}
-				}
-			});
+		console.log('\n\n   * * * * * * * * * * * *   Loading Controllers   * * * * * * * * * * * *   \n\n'.yellow);
+
+		walker = walk.walk(__dirname + '/controllers', {
+			followLinks: false
 		});
 
-	};
+		walker.on('file', function(root, fileStats, next) {
+			var file = fileStats.name;
+			if (file.match(isJs) && !file.match(hidden)) {
+				require(root + '/' + file).init(app, service, hbs);
+				console.log('CS: '.blue + 'Initialize controller file: '.blue + file.yellow.underline);
+			}
+			next();
+		});
 
-	// load all controller files in all folders, recursively
-	loadDirectory(__dirname + '/controllers', './controllers');
-
-	// if we want to explicitly require controllers, do it here:
-	// require('./...controller-file.js...')(app, service);
+		walker.on('end', function() {
+			// // when it's all said and done, return control to the server
+			console.log('callback'.yellow.inverse);
+			callback();
+		});
+	}
 
 };

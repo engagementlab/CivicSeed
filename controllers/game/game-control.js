@@ -2,7 +2,7 @@ var ss = require('socketstream');
 
 var self = module.exports = {
 
-	init: function (app) {
+	init: function(app) {
 
 		ss.client.define('game', {
 			view: 'game.html',
