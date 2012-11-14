@@ -7,35 +7,119 @@ module.exports.global = [{
 	name: 'Robert',
 	password: '',
 	email: 'b',
-	role: 'superadmin'
+	role: 'superadmin',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }, {
 	name: 'Russell',
 	password: '',
 	email: 'r',
-	role: 'superadmin'
+	role: 'superadmin',
+	game: {
+			position: {
+				x: 2,
+				y: 5,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 0
+			},
+			resources: []
+		}
 }, {
 	name: 'Stephen',
 	password: '',
 	email: 's',
-	role: 'admin'
+	role: 'admin',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }, {
 	name: 'Eric',
 	password: '',
 	email: 'e',
-	role: 'admin'
+	role: 'admin',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }, {
 	name: 'Sam',
 	password: '',
 	email: 'a',
-	role: 'admin'
+	role: 'admin',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }, {
 	name: 'Joe',
 	password: '',
 	email: 'j',
-	role: 'actor'
+	role: 'actor',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }, {
 	name: 'Frank',
 	password: '',
 	email: 'f',
-	role: 'actor'
+	role: 'actor',
+	game: {
+			position: {
+				x: 20,
+				y: 10,
+				inTransit: false
+			},
+			colorInfo: {
+				rgb: null,
+				tilesheet: 1
+			},
+			resources: []
+		}
 }];

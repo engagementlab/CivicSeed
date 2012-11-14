@@ -34,7 +34,7 @@ exports.$game = {
 	inTransit: false,
 	firstLaunch: true,
 	graph: null,
-	started: false,
+	running: false,
 	leftEdge: 0,
 	rightEdge: 0,
 	topEdge: 0,
@@ -89,7 +89,7 @@ exports.$game = {
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
 			if($game.$renderer.ready && $game.$npc.ready && $game.$player.ready && $game.ready) {
-				$game.started = true;
+				$game.running = true;
 				$game.tick();
 			}
 			
@@ -100,6 +100,17 @@ exports.$game = {
 		};
 
 		beginGame();
+	},
+
+	pause: function() {
+		$('.pauseMenu').slideDown();
+		$game.running = false;
+	},
+
+	resume: function() {
+		$('.pauseMenu').slideUp();
+		$game.running = true;
+		$game.tick();
 	},
 
 	getTiles: function(x, y, x2, y2, callback) {
@@ -455,12 +466,12 @@ exports.$game = {
 	},
 
 	tick: function() {
-		if($game.started) {
+		if($game.running) {
 			$game.$others.update();
 			$game.$player.update();
 			$game.$renderer.renderFrame();
+			requestAnimFrame($game.tick);
 		}
-		requestAnimFrame($game.tick);
 	}
 };
 

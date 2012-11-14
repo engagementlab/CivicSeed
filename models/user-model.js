@@ -7,7 +7,24 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		name: String,
 		password: String,
 		email: String,
-		role: String
+		role: String,
+		game: {
+			position: {
+				x: Number,
+				y: Number,
+				inTransit: Boolean
+			},
+			colorInfo: {
+				rgb: String,
+				tilesheet: Number
+			},
+			resources: [{
+				npc: Number,
+				question: Number,
+				answer: String,
+				result: Boolean
+			}]
+		}
 	});
 
 	//the third param specifies an exact collection to look for in the DB

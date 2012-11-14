@@ -113,3 +113,10 @@ $('#chatButton').click(function(e) {
 	return false;
 
 });
+
+$(window).blur(function(e) {
+	$game.pause();
+});
+$(window).focus(function(e) {
+	$game.resume();
+});

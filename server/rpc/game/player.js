@@ -29,6 +29,8 @@ exports.actions = function(req, res, ss) {
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
+
+			console.log(req.session.game);
 			// console.log('player ' + req.session.id + ' joined.');
 			// console.log(req.session);
 			//right now choose a random starting loc
@@ -37,20 +39,9 @@ exports.actions = function(req, res, ss) {
 				playerInfo = {
 					id: req.session.userId,
 					name: req.session.name,
-					x: x,
-					y: y
+					x: req.session.game.position.x,
+					y: req.session.game.position.y
 				};
-
-			/* TRY the tilemodel query first, it should print fine in the console
-			then try the usermodel.  throws an error (for me)
-			*/
-			tileModel.findOne(function(err, tile) {
-				console.log(tile);
-			});
-
-			userModel.findOne(function(err, user) {
-				console.log(user);
-			});
 
 			//send the number of active players and the new player info
 			res(playerInfo);

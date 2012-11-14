@@ -24,6 +24,7 @@ exports.actions = function(req, res, ss) {
 						req.session.name =  user.name;
 						req.session.email = user.email;
 						req.session.role = user.role;
+						req.session.game = user.game;
 						// req.session.gameChannel = channel....
 						req.session.save();
 						// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
