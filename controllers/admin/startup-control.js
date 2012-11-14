@@ -129,7 +129,7 @@ var self = module.exports = {
 				var npcData = require(rootDir + '/data/npcs');
 				var npcModel = service.useModel('npc', 'preload');
 				var gnomeData = require(rootDir + '/data/gnome');
-				var gnomeModel = service.useModel('npc', 'preload');
+				var gnomeModel = service.useModel('gnome', 'preload');
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 				// drop and save npcs
 				dbActions.dropCollection('npcs', function() {
