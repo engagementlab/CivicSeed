@@ -10,11 +10,11 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	});
 
 	var UserSchema = new Schema({
-		sessionName: String, // not sure what type this should be...
+		gameChannel: String, // not sure what type this should be...
 		name: String,
 		password: String,
 		email: String,
-		type: String
+		role: String
 	});
 
 	//the third param specifies an exact collection to look for in the DB

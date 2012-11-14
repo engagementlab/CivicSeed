@@ -25,10 +25,13 @@ service.connectMongoose(app, function(databases) {
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>> CONTROLLERS AND MIDDLEWARE
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 
+	var server;
 	var redisConfig;
 	var controllers = require(rootDir + '/controllers')(app, service);
 	var hbsHelpers = service.useModule('middleware/hbs-helpers');
-	var server;
+	// var expressMiddleware = {
+	// 	account: require(rootDir + '/server/middleware/account'),
+	// };
 
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>> EXPRESS
@@ -47,7 +50,7 @@ service.connectMongoose(app, function(databases) {
 	app.use(express.logger(':method :url :status'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(app.router);
+	// app.use(app.router); 
 	// app.use(express.cookieParser());
 	// app.use(express.session({secret: 'secret'}));
 	// app.use(express.compiler({src: __dirname + '/wwwroot', enable: ['stylus']}));
@@ -55,20 +58,15 @@ service.connectMongoose(app, function(databases) {
 	app.use(passport.initialize());
 	app.use(passport.session());
 
-// 		// ...LOAD MIDDLEWARE...
-// 		var rootDir = process.cwd();
-// 		var middleware = {
-// 			user: require(rootDir + '/server/middleware/account/user'),
-// 		};
-// 		// var temply1 = middleware.user.authenticated;
-// 		// var temply2 = middleware.user.authenticated();
-// 		// console.log(temply1, temply2);
-// 		app.use(middleware.user.authenticated('express'));
+	// // var temply1 = expressMiddleware.account.authenticated;
+	// // var temply2 = expressMiddleware.account.authenticated();
+	// // console.log(temply1, temply2);
+	// app.use(expressMiddleware.account.authenticated('express'));
 
-// // app.use(function(req, res, next){
-// //   console.log('%s %s', req.method, req.url);
-// //   next();
-// // });
+	// app.use(function(req, res, next){
+	//   console.log('%s %s', req.method, req.url);
+	//   next();
+	// });
 
 	if(nodeEnv === 'development') {
 		// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?

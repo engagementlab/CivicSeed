@@ -5,7 +5,6 @@ exports.authenticated = function(framework) {
 			// console.log('Authenticated...'.green.inverse);
 			return next();
 		} else {
-			console.log('RED LIGHT'.red.inverse);
 			if(framework === 'express') {
 				if(req.url.match(/^\/admin/g)) {
 					// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
@@ -13,7 +12,7 @@ exports.authenticated = function(framework) {
 				}
 				return next();
 			} else {
-				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
+				// console.log('Not authenticated . . . sending ss response . . . '.yellow.inverse);
 				return res('NOT_AUTHENTICATED');
 			}
 		}

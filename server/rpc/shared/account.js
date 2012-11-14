@@ -23,8 +23,10 @@ exports.actions = function(req, res, ss) {
 						req.session.setUserId(user.id);
 						req.session.name =  user.name;
 						req.session.email = user.email;
+						req.session.role = user.role;
+						// req.session.gameChannel = channel....
 						req.session.save();
-						// console.log(req.session.name, req.session.email, req.session.userId, user.id);
+						// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
 						res(true);
 					} else {
 						res(false);
@@ -38,12 +40,13 @@ exports.actions = function(req, res, ss) {
 		},
 
 		deAuthenticate: function() {
-			// console.log(req.session.name, req.session.email, req.session.userId);
+			// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			req.session.setUserId(null);
 			req.session.name = null;
 			req.session.email = null;
+			req.session.role = null;
 			req.session.save();
-			// console.log(req.session.name, req.session.email, req.session.userId);
+			// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			res(true);
 		},
 

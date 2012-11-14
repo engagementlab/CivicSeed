@@ -29,8 +29,8 @@ exports.actions = function(req, res, ss) {
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
-			console.log("player "+req.session.id+" joined.");
-			console.log(req.session);
+			// console.log('player ' + req.session.id + ' joined.');
+			// console.log(req.session);
 			//right now choose a random starting loc
 			var x = Math.ceil(Math.random() * 25),
 				y = Math.ceil(Math.random() * 12),

@@ -28,4 +28,14 @@ module.exports.global = [{
 	password: '',
 	email: 'a',
 	role: 'admin'
+}, {
+	name: 'Joe',
+	password: '',
+	email: 'j',
+	role: 'actor'
+}, {
+	name: 'Frank',
+	password: '',
+	email: 'f',
+	role: 'actor'
 }];
