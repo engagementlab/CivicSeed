@@ -132,12 +132,8 @@ $game.$renderer = {
 		//only re-render all the tiles if the viewport is tranisitioning
 		$game.$others.clear();
 		$game.$player.clear();
-		
-		if($game.firstLaunch) {
-			$game.firstLaunch = false;
-			$game.$renderer.renderAllTiles();
-		}
-		else if($game.inTransit) {
+
+		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
 		}
 		else {
@@ -148,13 +144,27 @@ $game.$renderer = {
 				$game.$map.growSeeds();
 			}
 		}
-		$game.$others.render();
-		$game.$player.render();
 
-		
+		$game.$renderer.makeQueue(function(all) {
+			var a = all.length;
+			while(--a > -1) {
+				$game.$renderer.renderPlayer(all[a]);
+			}
+		});
 
-		
 	},
+
+	makeQueue: function(callback) {
+		var order = $game.$others.getRenderInfo(),
+			playerInfo = $game.$player.getRenderInfo();
+
+		order.push(playerInfo);
+		order.sort(function(a, b){
+ 			return b.curY-a.curY
+		});
+		callback(order);
+	},
+
 	renderTile: function(i, j) {
 
 		//get the index (which refers to the location of the image)
@@ -317,7 +327,21 @@ $game.$renderer = {
 	},
 	
 
-	renderPlayer: function(info, main) {
+	renderPlayer: function(info) {
+		_charactersContext.drawImage(
+		_offscreen_playerCanvas[info.colorNum],
+		info.srcX,
+		info.srcY,
+		$game.TILE_SIZE,
+		$game.TILE_SIZE*2,
+		info.curX,
+		info.curY - $game.TILE_SIZE,
+		$game.TILE_SIZE,
+		$game.TILE_SIZE*2
+		);
+	},
+
+	renderCharacter: function(info) {
 
 		_charactersContext.drawImage(
 		_offscreen_playerCanvas[info.colorNum],

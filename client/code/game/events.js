@@ -90,7 +90,6 @@ $('.gameboard').mousemove(function(m) {
 $('.gameboard').click(function(m) {
 
 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource && $game.running){
-			console.log($game.running);
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,

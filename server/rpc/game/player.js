@@ -34,9 +34,7 @@ exports.actions = function(req, res, ss) {
 			// console.log('player ' + req.session.id + ' joined.');
 			// console.log(req.session);
 			//right now choose a random starting loc
-			var x = Math.ceil(Math.random() * 25),
-				y = Math.ceil(Math.random() * 12),
-				playerInfo = {
+			var playerInfo = {
 					id: req.session.userId,
 					name: req.session.name,
 					game: req.session.game
@@ -50,19 +48,17 @@ exports.actions = function(req, res, ss) {
 			players[info.id] = info;
 			numActivePlayers += 1;
 			ss.publish.all('ss-addPlayer',numActivePlayers, info);
-			console.log(players);
 		},
 		removePlayer: function(id) {
 		
 			userModel.findById(id, function (err, user) {
-				user.game.position.x = players[id].x,
-				user.game.position.y = players[id].y;
+				user.game.position.x = players[id].game.position.x,
+				user.game.position.y = players[id].game.position.y;
 
 				user.save(function (y) {
 					ss.publish.all('ss-removePlayer', numActivePlayers, id);
 					numActivePlayers -= 1;
 					delete players[id];
-					console.log(players);
 				});
 			});
 		},
@@ -70,26 +66,6 @@ exports.actions = function(req, res, ss) {
 		getOthers: function() {
 			res(players);
 		},
-		// checkIn: function(player) {
-		// 	players.push(player);
-		// 	ss.publish.all('ss-numPlayers', numActivePlayers);
-		// 	// it's working now!
-		// 	userModel.find({ name: 'admin' }, function(err,result) {
-		// 		console.log(result);
-		// 	});
-		// 	userModel.find({ name: 'Robert Hall' }, function(err,result) {
-		// 		console.log(result);
-		// 	});
-		// },
-
-		// checkIn: function(){
-		// 	numPlayers++;
-		// 	ss.publish.all('ss-count',numPlayers);
-		// },
-		// addMe: function(player){
-		// 	players.push(player);
-		// 	ss.publish.all('ss-allPlayers',players);
-		// },
 
 		// ------> this should be moved into our map rpc handler???
 		getMapData: function(x1,y1,x2,y2) {
@@ -123,8 +99,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		sendPosition: function(info) {
-					players[info.id].x = info.x;
-					players[info.id].y = info.y;
+					players[info.id].game.position.x = info.x;
+					players[info.id].game.position.y = info.y;
 		},
 		dropSeed: function(bombed) {
 			// for(var p=0; p<players.length;p++){

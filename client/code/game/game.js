@@ -104,6 +104,7 @@ exports.$game = {
 		var beginGame = function() {
 			if($game.$renderer.ready && $game.$npc.ready && $game.$player.ready && $game.ready) {
 				$game.running = true;
+				$game.$renderer.renderAllTiles();
 				$game.tick();
 			}
 			

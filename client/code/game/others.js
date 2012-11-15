@@ -95,8 +95,8 @@ $game.$others = {
 			offScreen: true,
 
 			info: {
-				x: player.x,
-				y: player.y,
+				x: player.game.position.x,
+				y: player.game.position.y,
 				srcX: 0,
 				srcY: 0,
 				offX: 0,
@@ -106,10 +106,13 @@ $game.$others = {
 			},
 
 			renderInfo: {
+				colorNum: player.game.colorInfo.tilesheet,
 				srcX: 0,
 				srcY: 0,
-				x: 0,
-				y: 0
+				curX: player.x,
+				curY: player.y,
+				prevX: player.x,
+				prevY: player.y
 			},
 
 			update: function() {
@@ -126,7 +129,6 @@ $game.$others = {
 
 				if(otherPlayer.getMaster) {
 					$game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y, function(loc) {
-
 						if(loc) {
 							var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
 								prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
@@ -134,7 +136,8 @@ $game.$others = {
 								curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
 							
 							otherPlayer.renderInfo.prevX = prevX,
-							otherPlayer.renderInfo.prevY = prevY,
+							otherPlayer.renderInfo.prevY = prevY;
+
 							otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
 							otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
 							otherPlayer.renderInfo.curX = curX,
@@ -181,12 +184,15 @@ $game.$others = {
 
 			resetRenderValues: function() {
 				otherPlayer.info.prevOffX = 0,
-				otherPlayer.info.prevOffY = 0;
+				otherPlayer.info.prevOffcY = 0;
 			},
 
-			render: function() {
-				if(otherPlayer.offScreen === false) {
-					$game.$renderer.renderPlayer(otherPlayer.renderInfo, false);
+			getRenderInfo: function() {
+				if(!otherPlayer.offScreen) {
+					return otherPlayer.renderInfo;
+				}
+				else {
+					return false;
 				}
 			},
 
@@ -287,7 +293,7 @@ $game.$others = {
 			message: function(message) {
 				
 
-				if(otherPlayer.offScreen === false) {
+				if(!otherPlayer.offScreen) {
 					var len = message.length + otherPlayer.name.length + 2,
 						fadeTime = len * 150 + 1000,
 						sz = Math.floor(len * 8) + 10;
@@ -350,10 +356,15 @@ $game.$others = {
 		return otherPlayer;
 	},
 
-	render: function() {
+	getRenderInfo: function() {
+		var all = [];
 		$.each(_onScreenPlayers, function(key, player) {
-			player.render();
+			var temp = player.getRenderInfo();
+			if(temp) {
+				all.push(temp);
+			}
 		});
+		return all;
 	},
 	
 	sendMoveInfo: function(moves, id) {

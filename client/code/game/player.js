@@ -42,10 +42,8 @@ $game.$player = {
 		//initialize DB and let all players know there is a new active one
 		ss.rpc('game.player.init', function(newInfo) {
 			
-			console.log(newInfo);
 			$game.$others.init();
 			ss.rpc('game.player.addPlayer',newInfo);
-			$game.$player.ready = true;
 			_info = {
 				srcX: 0,
 				srcY: 0,
@@ -57,8 +55,15 @@ $game.$player = {
 				prevOffY: 0
 			};
 
-			_renderInfo.colorNum = newInfo.game.colorInfo.tilesheet;
-			
+			_renderInfo.colorNum = newInfo.game.colorInfo.tilesheet,
+			_renderInfo.srcX = 0,
+			_renderInfo.srcY = 0,
+			_renderInfo.curX = _info.x * $game.TILE_SIZE,
+			_renderInfo.curY = _info.y * $game.TILE_SIZE,
+			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
+			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
+			$game.$player.ready = true;
+
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
 			_chatId = 'player'+ newInfo.id,
@@ -90,7 +95,8 @@ $game.$player = {
 				
 				_renderInfo.prevX = prevX,
 				_renderInfo.prevY = prevY,
-				_renderInfo.srcX = _info.srcX,
+
+				_renderInfo.srcX = _info.srcX,$
 				_renderInfo.srcY = _info.srcY,
 				_renderInfo.curX = curX,
 				_renderInfo.curY = curY;
@@ -99,7 +105,6 @@ $game.$player = {
 	},
 
 	clear: function() {
-
 		$game.$renderer.clearCharacter(_renderInfo);
 	},
 
@@ -204,7 +209,6 @@ $game.$player = {
 		_info.prevOffY= 0;
 
 		$game.$player.isMoving = false;
-		$game.$player.render();
 		if(_willTravel) {
 			var beginTravel = function(){
 				if($game.dataLoaded){
@@ -271,9 +275,8 @@ $game.$player = {
 		_info.prevOffY = slideY * _numSteps;
 	},
 
-	render: function() {
-		
-		$game.$renderer.renderPlayer(_renderInfo, true);
+	getRenderInfo: function() {
+		return _renderInfo;	
 	},
 
 	resetRenderValues: function() {
