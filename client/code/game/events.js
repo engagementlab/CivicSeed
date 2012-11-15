@@ -1,4 +1,4 @@
-//events recevied by RPC
+	//events recevied by RPC
 
 // SEE http://stackoverflow.com/questions/9626059/window-onbeforeunload-in-chrome-what-is-the-most-recent-fix
 //detect when a client leaves and send something to server
@@ -7,7 +7,7 @@ $(window).on('beforeunload', function() {
 	return x;
 });
 function leaveThisJoint() {
-	ss.rpc('game.player.removePlayer', $game.$player.id);
+	$game.$player.remove();
 }
 
 //new player joining to keep track of
@@ -89,8 +89,8 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource){
-
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource && $game.running){
+			console.log($game.running);
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
@@ -105,7 +105,7 @@ $('.gameboard').click(function(m) {
 //send whatever is in the chat field
 $('#chatButton').click(function(e) {
 	e.preventDefault();
-	if($game.$npc.isResource === false && $game.inTransit === false && $game.$player.isMoving === false) {
+	if(!$game.$npc.isResource && !$game.inTransit && !$game.$player.isMoving) {
 		var message = $('#chatText').val();
 		ss.rpc('game.chat.sendMessage', message, $game.$player.id);
 		$('#chatText').val('');
@@ -115,8 +115,13 @@ $('#chatButton').click(function(e) {
 });
 
 $(window).blur(function(e) {
-	$game.pause();
+	if(!$game.$npc.isResource) {
+		//$game.pause();
+	}
+	
 });
-$(window).focus(function(e) {
+
+$(".unPause").click(function () {
 	$game.resume();
 });
+

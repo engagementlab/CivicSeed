@@ -39,8 +39,7 @@ exports.actions = function(req, res, ss) {
 				playerInfo = {
 					id: req.session.userId,
 					name: req.session.name,
-					x: req.session.game.position.x,
-					y: req.session.game.position.y
+					game: req.session.game
 				};
 
 			//send the number of active players and the new player info
@@ -54,10 +53,18 @@ exports.actions = function(req, res, ss) {
 			console.log(players);
 		},
 		removePlayer: function(id) {
-			numActivePlayers -= 1;
-			delete players[id];
-			console.log(players);
-			ss.publish.all('ss-removePlayer',numActivePlayers, id);
+		
+			userModel.findById(id, function (err, user) {
+				user.game.position.x = players[id].x,
+				user.game.position.y = players[id].y;
+
+				user.save(function (y) {
+					ss.publish.all('ss-removePlayer', numActivePlayers, id);
+					numActivePlayers -= 1;
+					delete players[id];
+					console.log(players);
+				});
+			});
 		},
 
 		getOthers: function() {

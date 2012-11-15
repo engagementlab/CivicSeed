@@ -39,29 +39,34 @@ $game.$player = {
 	//private methods
 
 	init: function() {
-		
-		$game.$player.ready = true;
-		
-		_info = {
-			srcX: 0,
-			srcY: 0,
-			x: 0,
-			y: 0,
-			offX: 0,
-			offY: 0,
-			prevOffX: 0,
-			prevOffY: 0
-		};
-	},
+		//initialize DB and let all players know there is a new active one
+		ss.rpc('game.player.init', function(newInfo) {
+			
+			console.log(newInfo);
+			$game.$others.init();
+			ss.rpc('game.player.addPlayer',newInfo);
+			$game.$player.ready = true;
+			_info = {
+				srcX: 0,
+				srcY: 0,
+				x: newInfo.game.position.x,
+				y: newInfo.game.position.y,
+				offX: 0,
+				offY: 0,
+				prevOffX: 0,
+				prevOffY: 0
+			};
 
-	setInfo: function(newInfo) {
+			_renderInfo.colorNum = newInfo.game.colorInfo.tilesheet;
+			
+			$game.$player.id = newInfo.id,
+			$game.$player.name = newInfo.name,
+			_chatId = 'player'+ newInfo.id,
+			_chatIdSelector = '#' + _chatId;
 
-		$game.$player.id = newInfo.id,
-		_info.x = newInfo.x,
-		_info.y = newInfo.y,
-		$game.$player.name = newInfo.name,
-		_chatId = 'player'+ newInfo.id,
-		_chatIdSelector = '#' + _chatId;
+			$game.firstLoad(_info.x, _info.y);
+		});
+
 	},
 
 	update: function(){
@@ -459,6 +464,10 @@ $game.$player = {
 			_isChatting = false;
 		});
 
-	}
+	},
+
+	remove: function() {
+		ss.rpc('game.player.removePlayer', $game.$player.id);
+	},
 };
 

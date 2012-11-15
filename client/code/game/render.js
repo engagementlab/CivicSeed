@@ -3,6 +3,7 @@
 //private render vars
 var _tilesheets = [],
 _allImages = [],
+_playerImages = [],
 _tilesheetWidth= 0,
 _tilesheetHeight= 0,
 
@@ -12,8 +13,8 @@ _tilesheetContext= null,
 _offscreen_backgroundCanvas= null,
 _offscreen_backgroundContext = null,
 
-_offscreen_playerCanvas= null,
-_offscreen_playerContext = null,
+_offscreen_playerCanvas = [],
+_offscreen_playerContext = [],
 
 _backgroundContext= null,
 _foregroundContext= null,
@@ -37,21 +38,9 @@ $game.$renderer = {
 		_offscreen_backgroundCanvas = document.createElement('canvas');
 		_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-
-		_offscreen_playerCanvas = document.createElement('canvas');
-		_offscreen_playerCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-		_offscreen_playerCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		
 		//offscreen contexts
 		_offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
-		_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
-
-		//initialize DB and let all players know there is a new active one
-		ss.rpc('game.player.init', function(response) {
-			$game.$player.setInfo(response);
-			$game.$others.init();
-			ss.rpc('game.player.addPlayer',response);
-		});
 
 		//access the canvases for rendering
 		_backgroundContext = document.getElementById('background').getContext('2d');
@@ -63,13 +52,12 @@ $game.$renderer = {
 
 
 		//set stroke stuff for mouse
-		
 		_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Greeen default
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/player.png','img/game/npcs.png','img/game/otherPlayer.png'];
+		_allImages = ['img/game/tilesheet.png','img/game/npcs.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -83,6 +71,8 @@ $game.$renderer = {
 
 		_tilesheets[num].onload = function() {
 			//if it is the map tile data, render to canvas
+			var next = num + 1;
+
 			if(num === 0) {
 
 				_tilesheetCanvas = document.createElement('canvas');
@@ -100,27 +90,41 @@ $game.$renderer = {
 					0
 					);
 			}
-			//the player sheet
-			else if(num === 1) {
-
-				_offscreen_playerCanvas = document.createElement('canvas');
-				_offscreen_playerCanvas.setAttribute('width', _tilesheets[num].width);
-				_offscreen_playerCanvas.setAttribute('height', _tilesheets[num].height);
-				_offscreen_playerContext = _offscreen_playerCanvas.getContext('2d');
-
-				_offscreen_playerContext.drawImage(
-					_tilesheets[num],
-					0,
-					0
-					);
+			if(num === _allImages.length - 1) {
+				$game.$renderer.loadPlayerImages(0);
 			}
-			var next = num += 1;
-			if(num === _allImages.length) {
+			else {
+				$game.$renderer.loadImages(next);
+			}
+		};
+	},
+	loadPlayerImages: function(num) {
+		var next = num + 1,
+			playerFile = "img/game/player" + num + ".png";
+		_playerImages[num] = new Image();
+		_playerImages[num].src = playerFile;
+
+		_playerImages[num].onload = function() {
+
+
+			_offscreen_playerCanvas[num] = document.createElement('canvas');
+			_offscreen_playerCanvas[num].setAttribute('width', _playerImages[num].width);
+			_offscreen_playerCanvas[num].setAttribute('height', _playerImages[num].height);
+			_offscreen_playerContext[num] = _offscreen_playerCanvas[num].getContext('2d');
+			_offscreen_playerContext[num] = _offscreen_playerCanvas[num].getContext('2d');
+
+			_offscreen_playerContext[num].drawImage(
+				_playerImages[num],
+				0,
+				0
+			);
+
+			if(next === 6) {
 				$game.$renderer.ready = true;
 				return;
 			}
 			else {
-				$game.$renderer.loadImages(next);
+				$game.$renderer.loadPlayerImages(next);
 			}
 		};
 	},
@@ -314,34 +318,18 @@ $game.$renderer = {
 	
 
 	renderPlayer: function(info, main) {
-		//convert x y to local
-		if(main) {
-			_charactersContext.drawImage(
-			_offscreen_playerCanvas,
-			info.srcX,
-			info.srcY,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2,
-			info.curX,
-			info.curY - $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2
-			);
-		}
-		else {
-			_charactersContext.drawImage(
-			_tilesheets[3],
-			info.srcX,
-			info.srcY,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2,
-			info.curX,
-			info.curY - $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2
-			);
-		}
-		
+
+		_charactersContext.drawImage(
+		_offscreen_playerCanvas[info.colorNum],
+		info.srcX,
+		info.srcY,
+		$game.TILE_SIZE,
+		$game.TILE_SIZE*2,
+		info.curX,
+		info.curY - $game.TILE_SIZE,
+		$game.TILE_SIZE,
+		$game.TILE_SIZE*2
+		);
 	},
 
 	clearCharacter: function(info) {
@@ -480,7 +468,7 @@ $game.$renderer = {
 				);
 			//draw new frame of npc
 			_foregroundContext.drawImage(
-				_tilesheets[2],
+				_tilesheets[1],
 				npcData.srcX,
 				npcData.srcY,
 				$game.TILE_SIZE,

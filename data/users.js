@@ -16,7 +16,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 1
+				tilesheet: 0
 			},
 			resources: []
 		}
@@ -33,7 +33,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 0
+				tilesheet: 1
 			},
 			resources: []
 		}
@@ -50,7 +50,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 1
+				tilesheet: 2
 			},
 			resources: []
 		}
@@ -67,7 +67,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 1
+				tilesheet: 3
 			},
 			resources: []
 		}
@@ -84,7 +84,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 1
+				tilesheet: 4
 			},
 			resources: []
 		}
@@ -101,7 +101,7 @@ module.exports.global = [{
 			},
 			colorInfo: {
 				rgb: null,
-				tilesheet: 1
+				tilesheet: 5
 			},
 			resources: []
 		}

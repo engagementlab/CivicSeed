@@ -59,16 +59,32 @@ exports.$game = {
 		
 		//init everything:
 		//renderer loads all the image files
+		$game.$player.init();
+
 		$game.$renderer.init();
 		//npc loads the npc data from DB
 		$game.$npc.init();
 		//player WILL load its previous data from DB
-		$game.$player.init();
+		
 		$game.$map.init();
 		//$game.$audio.init();
+	},
+
+	firstLoad: function (x, y) {
 		
-		//games init must load the map info for current location
-		//in future, surrounding as well
+		//calculate the top left corner of the viewport based on where the player is 
+		
+		var tx = (x === 0) ? 0 : x - 1,
+			ty = (y === 0) ? 0 : y - 1;
+			
+			divX = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2 )),
+			divY = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2 )),
+			startX  = divX * ($game.VIEWPORT_WIDTH - 2),
+			startY = divY * ($game.VIEWPORT_HEIGHT - 2);
+
+		$game.masterX = startX,
+		$game.masterY = startY;
+
 		$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
 			//new tile data stored in nextTiles by default
 			//since this is the initial load w/ no transition,
@@ -83,8 +99,6 @@ exports.$game = {
 			$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
 			$game.topEdge = $game.masterY,
 			$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
-
-
 		});
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
@@ -108,9 +122,11 @@ exports.$game = {
 	},
 
 	resume: function() {
-		$('.pauseMenu').slideUp();
-		$game.running = true;
-		$game.tick();
+		$('.pauseMenu').slideUp(function() {
+			$game.running = true;
+			$game.tick();
+		});
+		
 	},
 
 	getTiles: function(x, y, x2, y2, callback) {
