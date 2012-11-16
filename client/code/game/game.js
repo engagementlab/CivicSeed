@@ -113,7 +113,7 @@ exports.$game = {
 			}
 
 		};
-
+		$game.$renderer.renderMiniPlayers(x, y);
 		beginGame();
 	},
 
@@ -465,7 +465,7 @@ exports.$game = {
 		requestAnimFrame($game.stepTransition);
 	},
 
-	masterToLocal: function(x, y, callback) {
+	masterToLocal: function(x, y) {
 
 		//if this works I am a dolt for not doing it earlier
 		var local = {
@@ -474,11 +474,11 @@ exports.$game = {
 		};
 
 		if(local.y <= 15 && local.y >= 0 && local.x <= 29 && local.x >= 0) {
-			callback(local);
+			return local;
 
 		}
 		else {
-			callback(false);
+			return false;
 		}
 	},
 

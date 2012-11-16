@@ -188,10 +188,13 @@ $game.$renderer = {
 			};
 
 
+
 		//color tile first if it needs to be done
 		if(colorVal) {
 			tileData.color = colorVal;
+			
 		}
+
 		//send the tiledata to the artist aka mamagoo
 		$game.$renderer.drawMapTile(tileData);
 
@@ -219,14 +222,26 @@ $game.$renderer = {
 
 
 	},
+
+	clearMapTile: function(x, y) {
+		_backgroundContext.clearRect(
+			x,
+			y,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE
+			);
+
+	},
+
 	drawMapTile: function(tileData) {
 
 		var srcX,srcY;
 
 		//draw color tile first
 		if(tileData.color) {
-			var hsla = 'hsla('+tileData.color.h+','+tileData.color.s +','+tileData.color.l +','+tileData.color.a + ')';
-			_backgroundContext.fillStyle = hsla;
+
+			var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
+			_backgroundContext.fillStyle = rgba;
 			_backgroundContext.fillRect(
 				tileData.destX * $game.TILE_SIZE,
 				tileData.destY * $game.TILE_SIZE,
@@ -458,60 +473,59 @@ $game.$renderer = {
 	},
 
 	renderNpc: function (npcData) {
-		$game.masterToLocal(npcData.x, npcData.y, function(loc) {
-			var curX = loc.x * $game.TILE_SIZE;
-			curY = loc.y * $game.TILE_SIZE,
-			clearX = 0,
-			clearY = 0;
-			//if intransit
-			if($game.inTransit) {
-				if($game.stepDirection === 'left') {
-					clearX = -1;
-					clearY = 0;
-				}
-				else if($game.stepDirection === 'right') {
-					clearX = 1;
-					clearY = 0;
-				}
-				else if($game.stepDirection === 'up') {
-					clearX = 0;
-					clearY = -1;
-				}
-				else if($game.stepDirection === 'down') {
-					clearX = 0;
-					clearY = 1;
-				}
+		var loc = $game.masterToLocal(npcData.x, npcData.y);
+
+		var curX = loc.x * $game.TILE_SIZE;
+		curY = loc.y * $game.TILE_SIZE,
+		clearX = 0,
+		clearY = 0;
+		//if intransit
+		if($game.inTransit) {
+			if($game.stepDirection === 'left') {
+				clearX = -1;
+				clearY = 0;
 			}
+			else if($game.stepDirection === 'right') {
+				clearX = 1;
+				clearY = 0;
+			}
+			else if($game.stepDirection === 'up') {
+				clearX = 0;
+				clearY = -1;
+			}
+			else if($game.stepDirection === 'down') {
+				clearX = 0;
+				clearY = 1;
+			}
+		}
 
-			//npcs should be drawn on the foreground
-			_foregroundContext.clearRect(
-				curX + $game.TILE_SIZE * clearX,
-				curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
-			//draw new frame of npc
-			_foregroundContext.drawImage(
-				_tilesheets[1],
-				npcData.srcX,
-				npcData.srcY,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				curX,
-				curY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-				);
-		});
+		//npcs should be drawn on the foreground
+		_foregroundContext.clearRect(
+			curX + $game.TILE_SIZE * clearX,
+			curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+			);
+		//draw new frame of npc
+		_foregroundContext.drawImage(
+			_tilesheets[1],
+			npcData.srcX,
+			npcData.srcY,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2,
+			curX,
+			curY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+		);
+	},
 
-},
+	renderMouse: function(mouse) {
 
-renderMouse: function(mouse) {
+		var mX = mouse.cX * $game.TILE_SIZE,
+		mY = mouse.cY * $game.TILE_SIZE;
 
-	var mX = mouse.cX * $game.TILE_SIZE,
-	mY = mouse.cY * $game.TILE_SIZE;
-
-	var state = $game.getTileState(mouse.cX, mouse.cY);
+		var state = $game.getTileState(mouse.cX, mouse.cY);
 		
 			/*
 			//clear previous mouse area
@@ -568,35 +582,33 @@ renderMouse: function(mouse) {
 
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
-	
-
 },
 
-renderMiniMap: function() {
-	/*
-	_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
+	renderMiniPlayers: function(x, y) {
+		_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
 
 		//draw player
+		console.log($game.$player.masterX);
 		_minimapPlayerContext.fillStyle = 'rgb(255,0,0)';
 		_minimapPlayerContext.fillRect(
-			$game.$player.masterX,
-			$game.$player.masterY,
+			x,
+			y,
 			4,
 			4
-			);
-*/
+		);
 	},
-	renderMiniTile: function(sq) {
-		/*
-		var hsla = 'hsla('+sq.color.h+','+sq.color.s+','+sq.color.l+',1)';
-		_minimapTileContext.fillStyle = hsla;
+
+	renderMiniTile: function(x, y) {
+		var col = $game.currentTiles[x][y].color,
+			rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
+		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
-			sq.x,
-			sq.y,
+			x,
+			y,
 			1,
 			1
-			);
-		*/
+		);
+		
 	}
 	
 };

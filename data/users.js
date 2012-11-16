@@ -15,7 +15,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 222,
+					g: 129,
+					b: 82
+				},
 				tilesheet: 0
 			},
 			resources: []
@@ -32,7 +36,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 140,
+					g: 225,
+					b: 161
+				},
 				tilesheet: 1
 			},
 			resources: []
@@ -49,7 +57,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 222,
+					g: 116,
+					b: 147
+				},
 				tilesheet: 2
 			},
 			resources: []
@@ -66,7 +78,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 144,
+					g: 234,
+					b: 229
+				},
 				tilesheet: 3
 			},
 			resources: []
@@ -83,7 +99,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 157,
+					g: 45,
+					b: 243
+				},
 				tilesheet: 4
 			},
 			resources: []
@@ -100,7 +120,11 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
+				rgb: {
+					r: 139,
+					g: 203,
+					b: 236
+				},
 				tilesheet: 5
 			},
 			resources: []
@@ -117,8 +141,12 @@ module.exports.global = [{
 				inTransit: false
 			},
 			colorInfo: {
-				rgb: null,
-				tilesheet: 1
+				rgb: {
+					r: 139,
+					g: 203,
+					b: 236
+				},
+				tilesheet: 5
 			},
 			resources: []
 		}

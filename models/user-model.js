@@ -15,7 +15,11 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				inTransit: Boolean
 			},
 			colorInfo: {
-				rgb: String,
+				rgb: {
+					r: Number,
+					g: Number, 
+					b: Number
+				},
 				tilesheet: Number
 			},
 			resources: [{

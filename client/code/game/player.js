@@ -30,9 +30,7 @@ $game.$player = {
 	ready: false,
 	currentLevel: 1,
 	seedMode: false,
-	hue: 0,
-	saturation: '90%',
-	lightness: '80%',
+	color: {},
 
 
 
@@ -66,10 +64,13 @@ $game.$player = {
 
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
+			$game.$player.color = newInfo.game.colorInfo.rgb;
+
 			_chatId = 'player'+ newInfo.id,
 			_chatIdSelector = '#' + _chatId;
 
 			$game.firstLoad(_info.x, _info.y);
+			
 		});
 
 	},
@@ -87,7 +88,8 @@ $game.$player = {
 		}
 		//this keeps us from doing this query every frame
 		if(_getMaster) {
-			$game.masterToLocal(_info.x, _info.y, function(loc) {
+			var loc = $game.masterToLocal(_info.x, _info.y);
+			if(loc) {
 				var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
 				prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
 				curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
@@ -96,11 +98,11 @@ $game.$player = {
 				_renderInfo.prevX = prevX,
 				_renderInfo.prevY = prevY,
 
-				_renderInfo.srcX = _info.srcX,$
+				_renderInfo.srcX = _info.srcX,
 				_renderInfo.srcY = _info.srcY,
 				_renderInfo.curX = curX,
 				_renderInfo.curY = curY;
-			});
+			}
 		}
 	},
 
@@ -120,7 +122,7 @@ $game.$player = {
 			_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
-			$game.$renderer.renderMiniMap();
+			$game.$renderer.renderMiniPlayers(_info.x, _info.y);
 
 		}
 
@@ -251,21 +253,17 @@ $game.$player = {
 			
 
 			//calc local for start point for pathfinding
-			$game.masterToLocal(_info.x, _info.y, function(loc) {
-				var start = $game.graph.nodes[loc.y][loc.x],
-					end = $game.graph.nodes[y][x],
-					result = $game.$astar.search($game.graph.nodes, start, end);
-					if(result.length > 0) {
-						ss.rpc('game.player.movePlayer', result, $game.$player.id);
-					}
-					else {
-
-					}
-				
-			});
-		
-
+			var loc = $game.masterToLocal(_info.x, _info.y);
 			
+			var start = $game.graph.nodes[loc.y][loc.x],
+				end = $game.graph.nodes[y][x],
+				result = $game.$astar.search($game.graph.nodes, start, end);
+			if(result.length > 0) {
+				ss.rpc('game.player.movePlayer', result, $game.$player.id);
+			}
+			else {
+
+			}
 		});
 			
 	},
@@ -305,109 +303,65 @@ $game.$player = {
 	},
 
 	dropSeed: function(options) {
-		//add color the surrounding tiles
-		var oX, oY, mX, mY;
 
+		var oX = options.x,
+			oY = options.y,
+			mX = $game.currentTiles[oX][oY].x,
+			mY = $game.currentTiles[oX][oY].y,
+			bombed = [];
+		
+		//start at the top left corner and loop through (vertical first)
+		var origX = mX - 1,
+			origY = mY - 1,
+			sX = oX - 1,
+			sY = oY - 1;
 
-		if(options.mouse) {
-			oX = options.x,
-			oY = options.y;
-			mX = $game.currentTiles[oX][oY].x;
-			mY = $game.currentTiles[oX][oY].y;
-		}
-		else {
-			$game.masterToLocal(_info.x, _info.y,  function(loc) {
-				oX = loc.x;
-				oY = loc.y;
-			});
-			mX = _info.x;
-			mY = _info.y;
-		}
-
-		var bombed = [];
-		//color algorithms for different levels:
-		if($game.$player.currentLevel === 0) {
-			var square = {
-				x: _info.x,
-				y: _info.y,
-				color:
-				{
-					h: Math.floor(Math.random()),
-					s: $game.$player.saturation,
-					l: $game.$player.lightness,
-					a: 0.8,
-					owner: 'Russell'
-				}
-			};
-
-			bombed.push(square);
-			ss.rpc('game.player.dropSeed', bombed);
-		}
-
-		//not the "intro level"
-		else {
-			//do a check to see if the tile is owned
-			
-			if($game.currentTiles[oX][oY].color) {
-				if($game.currentTiles[oX][oY].color.owner) {
-					console.log('can\'t plant here.');
-				}
-			//if it's colored and NOT owned
-				else {
-					$game.$player.addColor(true, mX,mY);
-				}
+		if($game.currentTiles[oX][oY].color) {
+			if($game.currentTiles[oX][oY].color.owner) {
+				//do something else beside a console log here <--------------
+				return false;
 			}
-			//if it is not colored at all
-			else{
-				$game.$player.addColor(false, mX, mY);
-			}
-			
 		}
-	},
-
-	addColor: function(isColored, x, y) {
-		var bombed = [];
-		//square
-		//start at top left corner
-		var origX = x - 1;
-		var origY = y - 1;
-		var newHue = Math.floor(Math.random()*255);
-
-		var a = 3;
-		while(--a >= 0) {
-			var b = 3;
-			while(--b >= 0) {
-
-				var square = {
-					x: origX + a,
-					y: origY + b,
+		var a = 0;
+		while(a < 3) {
+			var b = 0;
+			while(b < 3) {
+				//only add it if it is on screen <------------------------- change later to in game
+				if(sX + a > -1 && sX + a < $game.VIEWPORT_WIDTH && sY + b > -1 && sY + b < $game.VIEWPORT_HEIGHT) {
+					//set x,y and color info for each square
+					var square = {
+						x: origX + a,
+						y: origY + b,
+						color:
+						{
+							r: $game.$player.color.r,
+							g: $game.$player.color.g,
+							b: $game.$player.color.b,
+							a: 0.3,
+							owner: false
+						}
+					};
+					//right now, do a check to see if the current square is on screen <--------- change to any tile down raod
+					if(square.x >-1 && origX + a<$game.TOTAL_WIDTH && origY + b>-1 && origY + b < $game.TOTAL_HEIGHT) {
+						//assign the middle one the owner
+						if( a === 1 && b === 1) {
+							//this will be put in the ACTUAL DB,
+							//instead of local
+							square.color.a = 1.0,
+							square.color.owner = $game.$player.name;
+						}
+						bombed.push(square);
+					}
 					
-					color:
-					{
-						h: newHue,
-						s: $game.$player.saturation,
-						l: $game.$player.lightness,
-						a: 0.5,
-						owner: false
-					}
-				};
-
-				//only add it if it is on the map
-				if(origX + a>-1 && origX + a<$game.TOTAL_WIDTH && origY + b>-1 && origY + b < $game.TOTAL_HEIGHT) {
-					//assign the middle one the owner
-					if( a === 1 && b === 1) {
-						//this will be put in the ACTUAL DB,
-						//instead of local
-						square.color.a = 1,
-						square.color.owner = 'Russell';
-					}
-					bombed.push(square);
 				}
-
-				$game.$renderer.renderMiniTile(square);
+				b += 1;
 			}
+			a += 1;
 		}
+				
 		ss.rpc('game.player.dropSeed', bombed);
+		//check if they clicked on an owned tile
+				
 	},
 
 	message: function(message) {

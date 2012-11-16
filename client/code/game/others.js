@@ -128,27 +128,26 @@ $game.$others = {
 				}
 
 				if(otherPlayer.getMaster) {
-					$game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y, function(loc) {
-						if(loc) {
-							var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
-								prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
-								curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
-								curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
-							
-							otherPlayer.renderInfo.prevX = prevX,
-							otherPlayer.renderInfo.prevY = prevY;
+					var loc = $game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
+					if(loc) {
+						var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
+							prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
+							curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
+							curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
+						
+						otherPlayer.renderInfo.prevX = prevX,
+						otherPlayer.renderInfo.prevY = prevY;
 
-							otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
-							otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
-							otherPlayer.renderInfo.curX = curX,
-							otherPlayer.renderInfo.curY = curY;
+						otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
+						otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
+						otherPlayer.renderInfo.curX = curX,
+						otherPlayer.renderInfo.curY = curY;
 
-							otherPlayer.offScreen = false;
-						}
-						else {
-							otherPlayer.offScreen = true;
-						}
-					});
+						otherPlayer.offScreen = false;
+					}
+					else {
+						otherPlayer.offScreen = true;
+					}
 				}
 			},
 			
