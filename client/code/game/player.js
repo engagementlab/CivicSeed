@@ -70,6 +70,7 @@ $game.$player = {
 			_chatIdSelector = '#' + _chatId;
 
 			$game.firstLoad(_info.x, _info.y);
+			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, 'rgb(255,0,0)');
 			
 		});
 
@@ -122,8 +123,6 @@ $game.$player = {
 			_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
-			$game.$renderer.renderMiniPlayers(_info.x, _info.y);
-
 		}
 
 		//if we done, finish
@@ -200,6 +199,9 @@ $game.$player = {
 			y: _info.y
 		};
 		ss.rpc('game.player.sendPosition', posInfo);
+
+		$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+
 		_info.offX = 0,
 		_info.offY = 0;
 

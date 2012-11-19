@@ -21,6 +21,7 @@ $game.$others = {
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;
 			//console.log("added: " + player.id);
+			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(255,255,255)');  
 		}
 	},
 
@@ -214,6 +215,8 @@ $game.$others = {
 				otherPlayer.info.offY = 0;
 				otherPlayer.info.prevOffX = 0;
 				otherPlayer.info.prevOffY = 0;
+
+				$game.$map.updatePlayer(otherPlayer.id, otherPlayer.info.x, otherPlayer.info.y);
 			},
 
 			move: function() {

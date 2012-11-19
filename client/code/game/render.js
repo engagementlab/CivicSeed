@@ -606,16 +606,18 @@ $game.$renderer = {
 			
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
-},
+	},
 
-	renderMiniPlayers: function(x, y) {
+	clearMiniMap: function() {
 		_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
+	},
 
+	renderMiniPlayer: function(player) {
 		//draw player
-		_minimapPlayerContext.fillStyle = 'rgb(255,0,0)';
+		_minimapPlayerContext.fillStyle = player.col;
 		_minimapPlayerContext.fillRect(
-			x,
-			y,
+			player.x,
+			player.y,
 			4,
 			4
 		);

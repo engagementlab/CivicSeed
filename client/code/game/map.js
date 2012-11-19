@@ -8,13 +8,41 @@ $game.$map = {
 	growingSeed: false,
 	seedsInProgress: [],
 
-	init: function() {
-		setInterval($game.$map.updateMiniMap, 5000);
-	},
+	miniMap: {},
 
+	init: function() {
+		$game.$map.paintMini();
+	},
+	paintMini: function() {
+
+	},
 	growSeeds: function() {
 
+	},
 
+	addPlayer: function(id, x, y, col) {
+		$game.$map.miniMap[id] = {};
+		$game.$map.miniMap[id].x = x,
+		$game.$map.miniMap[id].y = y;
+		$game.$map.miniMap[id].col = col;
+		$game.$map.render();
+	},
+
+	updatePlayer: function(id, x, y) {
+		$game.$renderer.clearMiniMap();
+		$game.$map.miniMap[id].x = x;
+		$game.$map.miniMap[id].y = y;
+		$game.$map.render();
+	},
+
+	removePlayer: function(id) {
+		delete miniMap[id];
+	},
+
+	render: function() {
+		$.each($game.$map.miniMap, function(key, player) {
+			$game.$renderer.renderMiniPlayer(player);
+		});
 	},
 
 	newBomb: function(bombed) {
@@ -83,12 +111,6 @@ $game.$map = {
 				//$game.$audio.playSound(0);
 			}
 		}
-	},
-
-	updateMiniMap: function() {
-		//show where the player is and the colored tiles 
-		//possibly all players too
-		//$game.$renderer.renderMiniPlayers();
 	}
 }
 

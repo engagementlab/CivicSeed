@@ -59,6 +59,8 @@ exports.$game = {
 		
 		//init everything:
 		//renderer loads all the image files
+		$game.$map.init();
+
 		$game.$player.init();
 
 		$game.$renderer.init();
@@ -66,7 +68,7 @@ exports.$game = {
 		$game.$npc.init();
 		//player WILL load its previous data from DB
 		
-		$game.$map.init();
+		
 		//$game.$audio.init();
 	},
 
@@ -113,7 +115,6 @@ exports.$game = {
 			}
 
 		};
-		$game.$renderer.renderMiniPlayers(x, y);
 		beginGame();
 	},
 
