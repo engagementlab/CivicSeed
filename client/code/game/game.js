@@ -486,6 +486,7 @@ exports.$game = {
 		if($game.running) {
 			$game.$others.update();
 			$game.$player.update();
+			$game.$npc.update();
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}

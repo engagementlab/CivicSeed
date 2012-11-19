@@ -5017,17 +5017,6 @@ a.badge:hover {
 .playerButtons {
   cursor: pointer;
 }
-.cursorBox {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  border-width: 3px;
-  border-color: orange;
-  border-style: dashed;
-  width: 26px;
-  height: 26px;
-  z-index: 999;
-}
 .videoResource {
   text-align: center;
 }

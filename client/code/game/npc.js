@@ -1,14 +1,13 @@
 
 var _loaded = false,
-	_allNpcs = [],
-	_index = 0;
-	_currentSlide = 0;
-	_numSlides = 0;
-	_curNpc = null;
-	__speak = null;
-	_answered = false;
-	_who = null;
-	_currentQuestion = 0;
+	_allNpcs = {},
+	_currentSlide = 0.
+	_numSlides = 0,
+	_curNpc = null,
+	_speak = null,
+	_answered = false,
+	_who = null,
+	_currentQuestion = 0,
 	_correctAnswer = false;
 
 $game.$npc = {
@@ -24,14 +23,165 @@ $game.$npc = {
 		ss.rpc('game.npc.getNpcs', function(response) {
 			//iterate through repsonses, create a key
 			//with the id and value is the object
-			for(var i = 0; i < response.length; i += 1) {
-				var stringId = String(response[i].id);
-				_allNpcs[stringId] = response[i];
-				_allNpcs[stringId].counter = Math.floor(Math.random()*55);
-				_allNpcs[stringId].currentFrame = 0;
-			}
+			_allNpcs = {};
+			$.each(response, function(key, npc) {
+				$game.$npc.addNpc(npc);
+			});
 			_loaded = true;
 			$game.$npc.ready = true;
+		});
+	},
+
+	addNpc: function(npc) {
+		var newbie = $game.$npc.createNpc(npc);
+		newbie.getMaster();
+		_allNpcs[npc.id] = newbie;
+
+	},
+
+	update: function() {
+		//if is moving, move
+		$.each(_allNpcs, function(key, npc) {
+			npc.update();
+		});
+	},
+
+	clear: function() {
+		//if is moving, move
+		$.each(_allNpcs, function(key, npc) {
+			npc.clear();
+		});
+	},
+
+	getRenderInfo: function() {
+		var all = [];
+		$.each(_allNpcs, function(key, npc) {
+			var temp = npc.getRenderInfo();
+			if(temp) {
+				all.push(temp);
+			}
+		});
+		return all;
+	},
+
+	createNpc: function(npc) {
+
+		var npcObject = {
+
+			name: npc.name,
+			id: npc.id,
+			dialog: npc.dialog,
+			level: npc.level,
+			resource: npc.resource,
+			onScreen: null,
+			numSteps: 64,
+			counter: Math.floor(Math.random() * 64),
+			curFrame: 0,
+			numFrames: 4,
+
+
+			info: {
+				x: npc.id % $game.TOTAL_WIDTH,
+				y: Math.floor(npc.id / $game.TOTAL_WIDTH),
+				spriteMap: npc.spriteMap
+			},
+
+			renderInfo: {
+				prevX: (npc.id % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+				prevY: (Math.floor(npc.id / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+				curX: (npc.id % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+				curY: (Math.floor(npc.id / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+				srcX: 0,
+				srcY: 0,
+				isNpc: true
+			},
+
+
+			update: function() {
+
+				if(!$game.inTransit) {
+					npcObject.idle();
+				}
+				else if($game.inTransit) {
+					npcObject.getMaster();
+				}
+
+			},
+
+			getMaster: function() {
+				var loc = $game.masterToLocal(npcObject.info.x, npcObject.info.y);
+				if(loc) {
+					var prevX = loc.x * $game.TILE_SIZE,
+						prevY = loc.y * $game.TILE_SIZE,
+						curX = loc.x * $game.TILE_SIZE,
+						curY = loc.y * $game.TILE_SIZE;
+					
+					npcObject.renderInfo.prevX = prevX,
+					npcObject.renderInfo.prevY = prevY;
+
+					npcObject.renderInfo.curX = curX,
+					npcObject.renderInfo.curY = curY;
+					npcObject.onScreen = true;
+				}
+				else {
+					npcObject.onScreen = false;
+				}
+			},
+
+			idle: function() {
+				npcObject.counter += 1;
+				
+				if(npcObject.counter >= 56) {
+					npcObject.counter = 0,
+					npcObject.renderInfo.srcX = 0,
+					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+				}
+
+				else if(npcObject.counter == 24) {
+					npcObject.renderInfo.srcX = 32;
+					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+				}
+
+				else if(npcObject.counter == 28) {
+					npcObject.renderInfo.srcX = 64;
+					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+				}
+
+				else if(npcObject.counter == 32) {
+					npcObject.renderInfo.srcX = 96;
+					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+				}
+
+			},
+
+
+			clear: function() {
+				$game.$renderer.clearCharacter(npcObject.renderInfo);
+			},
+
+			getRenderInfo: function() {
+				if(npcObject.onScreen) {
+					return npcObject.renderInfo;
+				}
+				else {
+					return false;
+				}
+			}
+
+		};
+
+		return npcObject;		
+	},
+
+	hideChat: function() {
+		
+		clearTimeout($game.$npc.hideTimer);
+		$('.speechBubble').slideUp(function() {
+			$('.speechBubble').empty();
+			$game.$npc.isChat = false;
+			$game.$npc.isResource = false;
+			$(".speechBubble .btn-success").unbind("click");
+			$(".speechBubble .btn-danger").unbind("click");
 		});
 	},
 
@@ -236,11 +386,7 @@ $game.$npc = {
 		$game.$npc.addContent();
 
 		$game.$npc.addButtons();
-
-		//add content (depending on what it is )
-		
-		
-		
+	
 	},
 
 	submitAnswer: function() {
@@ -281,63 +427,5 @@ $game.$npc = {
 		}
 		
 	},
-
-	animateFrame: function () {
-		data = {};
-
-		for(var i = 0; i < $game.onScreenNpcs.length; i += 1) {
-			var curId = $game.onScreenNpcs[i];
-			_allNpcs[curId].counter += 1;
-
-			if(_allNpcs[curId].counter >= 56) {
-				_allNpcs[curId].counter = 0;
-				
-				data.srcX = _allNpcs[curId].spriteMap[0].x,
-				data.srcY = _allNpcs[curId].spriteMap[0].y,
-				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
-				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
-
-				$game.$renderer.renderNpc(data);
-			}
-
-			else if(_allNpcs[curId].counter === 24) {
-				data.srcX = _allNpcs[curId].spriteMap[1].x,
-				data.srcY = _allNpcs[curId].spriteMap[1].y,
-				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
-				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
-
-				$game.$renderer.renderNpc(data);
-			}
-			else if(_allNpcs[curId].counter === 28) {
-				data.srcX = _allNpcs[curId].spriteMap[2].x,
-				data.srcY = _allNpcs[curId].spriteMap[2].y,
-				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
-				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
-
-				$game.$renderer.renderNpc(data);
-			}
-			else if(_allNpcs[curId].counter === 32) {
-				data.srcX = _allNpcs[curId].spriteMap[3].x,
-				data.srcY = _allNpcs[curId].spriteMap[3].y,
-				data.x = _allNpcs[curId].id % $game.TOTAL_WIDTH,
-				data.y = Math.floor(_allNpcs[curId].id / $game.TOTAL_WIDTH);
-
-				$game.$renderer.renderNpc(data);
-			}
-			
-		}
-	},
-
-	render: function(tile) {
-		//get npc data based on tileStateVal to string
-		var data = {};
-			stringId = String(tile.tileState);
-		
-		data.srcX = _allNpcs[stringId].spriteMap[0].x,
-		data.srcY = _allNpcs[stringId].spriteMap[0].y,
-		data.x = tile.x,
-		data.y = tile.y;
-		$game.$renderer.renderNpc(data);
-	}
-
+	
 };

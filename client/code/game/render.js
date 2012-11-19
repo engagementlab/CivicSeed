@@ -132,10 +132,12 @@ $game.$renderer = {
 		//only re-render all the tiles if the viewport is tranisitioning
 		$game.$others.clear();
 		$game.$player.clear();
+		$game.$npc.clear();
 
 		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
 		}
+		/*
 		else {
 			if($game.onScreenNpcs.length > 0) {
 				$game.$npc.animateFrame();
@@ -143,12 +145,18 @@ $game.$renderer = {
 			if($game.$map.growingSeed) {
 				$game.$map.growSeeds();
 			}
-		}
+		}*/
 
 		$game.$renderer.makeQueue(function(all) {
 			var a = all.length;
 			while(--a > -1) {
-				$game.$renderer.renderPlayer(all[a]);
+				if(all[a].isNpc) {
+					$game.$renderer.renderNpc(all[a]);
+				}
+				else {
+					$game.$renderer.renderPlayer(all[a]);	
+				}
+				
 			}
 		});
 
@@ -156,7 +164,13 @@ $game.$renderer = {
 
 	makeQueue: function(callback) {
 		var order = $game.$others.getRenderInfo(),
+			order2 = $game.$npc.getRenderInfo(),
 			playerInfo = $game.$player.getRenderInfo();
+
+		var l = order2.length;
+		while(--l > -1) {
+			order.push(order2[l]);
+		}
 
 		order.push(playerInfo);
 		order.sort(function(a, b){
@@ -199,14 +213,14 @@ $game.$renderer = {
 		$game.$renderer.drawMapTile(tileData);
 
 
-
+		/*
 		if(tileStateVal >= 0) {
 			//get npc spritesheet data, pass it to tiledata, render
 			//$game.$renderer.renderTile(tileData);
 			$game.$npc.render($game.currentTiles[i][j]);
 			_hasNpc = true;
 		}
-
+		*/
 
 		//foreground tiles
 		var foreData = {
@@ -473,48 +487,48 @@ $game.$renderer = {
 	},
 
 	renderNpc: function (npcData) {
-		var loc = $game.masterToLocal(npcData.x, npcData.y);
+		// var loc = $game.masterToLocal(npcData.x, npcData.y);
 
-		var curX = loc.x * $game.TILE_SIZE;
-		curY = loc.y * $game.TILE_SIZE,
-		clearX = 0,
-		clearY = 0;
-		//if intransit
-		if($game.inTransit) {
-			if($game.stepDirection === 'left') {
-				clearX = -1;
-				clearY = 0;
-			}
-			else if($game.stepDirection === 'right') {
-				clearX = 1;
-				clearY = 0;
-			}
-			else if($game.stepDirection === 'up') {
-				clearX = 0;
-				clearY = -1;
-			}
-			else if($game.stepDirection === 'down') {
-				clearX = 0;
-				clearY = 1;
-			}
-		}
+		// var curX = loc.x * $game.TILE_SIZE;
+		// curY = loc.y * $game.TILE_SIZE,
+		// clearX = 0,
+		// clearY = 0;
+		// //if intransit
+		// if($game.inTransit) {
+		// 	if($game.stepDirection === 'left') {
+		// 		clearX = -1;
+		// 		clearY = 0;
+		// 	}
+		// 	else if($game.stepDirection === 'right') {
+		// 		clearX = 1;
+		// 		clearY = 0;
+		// 	}
+		// 	else if($game.stepDirection === 'up') {
+		// 		clearX = 0;
+		// 		clearY = -1;
+		// 	}
+		// 	else if($game.stepDirection === 'down') {
+		// 		clearX = 0;
+		// 		clearY = 1;
+		// 	}
+		// }
 
-		//npcs should be drawn on the foreground
-		_foregroundContext.clearRect(
-			curX + $game.TILE_SIZE * clearX,
-			curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2
-			);
+		// //npcs should be drawn on the foreground
+		// _charactersContext.clearRect(
+		// 	curX + $game.TILE_SIZE * clearX,
+		// 	curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
+		// 	$game.TILE_SIZE,
+		// 	$game.TILE_SIZE*2
+		// 	);
 		//draw new frame of npc
-		_foregroundContext.drawImage(
+		_charactersContext.drawImage(
 			_tilesheets[1],
 			npcData.srcX,
 			npcData.srcY,
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2,
-			curX,
-			curY - $game.TILE_SIZE,
+			npcData.curX,
+			npcData.curY - $game.TILE_SIZE,
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
 		);
@@ -523,11 +537,10 @@ $game.$renderer = {
 	renderMouse: function(mouse) {
 
 		var mX = mouse.cX * $game.TILE_SIZE,
-		mY = mouse.cY * $game.TILE_SIZE;
-
-		var state = $game.getTileState(mouse.cX, mouse.cY);
+			mY = mouse.cY * $game.TILE_SIZE,
+			state = $game.getTileState(mouse.cX, mouse.cY);
 		
-			/*
+			
 			//clear previous mouse area
 			_foregroundContext.clearRect(
 				_prevMouseX * $game.TILE_SIZE,
@@ -538,21 +551,30 @@ $game.$renderer = {
 			
 			//redraw that area
 			var foreIndex = $game.currentTiles[mouse.cX][mouse.cY].foreground-1,
+				foreIndex2 =  $game.currentTiles[mouse.cX][mouse.cY].foreground2-1,
 
-			foreData = {
-				srcX: foreIndex % _tilesheetWidth,
-				srcY: Math.floor(foreIndex / _tilesheetWidth),
-				destX: mouse.cX,
-				destY: mouse.cY
+				foreData = {
+					f1: foreIndex,
+					f2: foreIndex2,
+					destX: mouse.cX,
+					destY: mouse.cY
 			};
+
 			$game.$renderer.drawForegroundTile(foreData);
 
-			*/
+			
 			var col;
 
 			if($game.$player.seedMode) {
-				col = 'rgba(230,255,150,.4)';
-				//_foregroundContext.strokeStyle = 'rgba(150,255,150,.4)'; // seed color
+				col = 'rgba('+$game.$player.color.r+','+$game.$player.color.g+','+$game.$player.color.b+','+ 0.5 + ')';
+
+				_foregroundContext.fillStyle = col; // seed color
+				_foregroundContext.fillRect(
+					mX + 2,
+					mY + 2,
+					$game.TILE_SIZE - 4,
+					$game.TILE_SIZE - 4
+				);
 			}
 			//
 			else {
@@ -572,14 +594,16 @@ $game.$renderer = {
 					col = 'rgba(0,150,235,.4)';
 					_foregroundContext.strokeStyle = 'rgba(0,150,235,.4)'; // blue
 				}
+				_foregroundContext.strokeRect(
+					mX + 2,
+					mY + 2,
+					$game.TILE_SIZE - 4,
+					$game.TILE_SIZE - 4
+				);
 			}
-			
-			$('.cursorBox').css({
-				top: mY,
-				left: mX
-			});
-			//$('body').css('background',col);
 
+			
+			
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
 },
@@ -588,7 +612,6 @@ $game.$renderer = {
 		_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
 
 		//draw player
-		console.log($game.$player.masterX);
 		_minimapPlayerContext.fillStyle = 'rgb(255,0,0)';
 		_minimapPlayerContext.fillRect(
 			x,

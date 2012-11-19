@@ -1,5 +1,5 @@
 
-	_onScreenPlayers = {};
+_onScreenPlayers = {};
 
 $game.$others = {
 
@@ -130,9 +130,9 @@ $game.$others = {
 				if(otherPlayer.getMaster) {
 					var loc = $game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
 					if(loc) {
-						var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS;
-							prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS;
-							curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS;
+						var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS,
+							prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS,
+							curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS,
 							curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
 						
 						otherPlayer.renderInfo.prevX = prevX,
@@ -226,6 +226,7 @@ $game.$others = {
 					otherPlayer.currentMove += 1;
 
 					//render mini map here *****
+					//$game.$renderer.renderMiniPlayers(_info.x, _info.y);
 
 				}
 

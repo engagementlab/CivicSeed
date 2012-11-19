@@ -32,6 +32,7 @@ $game.$mouse = {
 		else if($game.$mouse.curX < 0) {
 			$game.$mouse.curX = 0;
 		}
+		
 		if($game.$mouse.curY > 14) {
 			$game.$mouse.curY = 14;
 		}
