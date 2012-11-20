@@ -22,7 +22,13 @@ module.exports.global = [{
 				},
 				tilesheet: 0
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Russell',
@@ -43,7 +49,13 @@ module.exports.global = [{
 				},
 				tilesheet: 1
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Stephen',
@@ -64,7 +76,13 @@ module.exports.global = [{
 				},
 				tilesheet: 2
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Eric',
@@ -85,7 +103,13 @@ module.exports.global = [{
 				},
 				tilesheet: 3
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Sam',
@@ -106,7 +130,13 @@ module.exports.global = [{
 				},
 				tilesheet: 4
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Joe',
@@ -127,7 +157,13 @@ module.exports.global = [{
 				},
 				tilesheet: 5
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }, {
 	name: 'Frank',
@@ -148,6 +184,12 @@ module.exports.global = [{
 				},
 				tilesheet: 5
 			},
-			resources: []
+			resources: [],
+			inventory: [],
+			seeds: {
+				normal: 1,
+				riddle: 0,
+				special: 0
+			}
 		}
 }];

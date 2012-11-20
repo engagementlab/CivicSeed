@@ -11,13 +11,15 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		dialog: {
 			random: [String],
 			prompts: [String],
-			questions: [String],
-			answers: [String],
+			question: String,
+			answer: String,
 			responses: [String]
 		},
 		resource: {
 			kind: String,
-			url: String
+			url: String,
+			tagline: String,
+			tangram: Number
 		}
 	});
 

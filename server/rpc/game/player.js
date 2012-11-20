@@ -31,9 +31,8 @@ exports.actions = function(req, res, ss) {
 			tileModel = service.useModel('tile', 'ss');
 
 			console.log(req.session.game);
-			// console.log('player ' + req.session.id + ' joined.');
-			// console.log(req.session);
-			//right now choose a random starting loc
+			
+			//should we pull the game info from the db instead of it being passed in a session?
 			var playerInfo = {
 					id: req.session.userId,
 					name: req.session.name,

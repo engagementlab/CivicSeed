@@ -31,6 +31,9 @@ $game.$player = {
 	currentLevel: 1,
 	seedMode: false,
 	color: {},
+	resource: {},
+	inventory: {},
+	seeds: {}
 
 
 
@@ -65,6 +68,9 @@ $game.$player = {
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
 			$game.$player.color = newInfo.game.colorInfo.rgb;
+			$game.$player.inventory = newInfo.game.inventory;
+			$game.$player.resources = newInfo.game.resources;
+			$game.$player.seeds = newInfo.game.seeds;
 
 			_chatId = 'player'+ newInfo.id,
 			_chatIdSelector = '#' + _chatId;

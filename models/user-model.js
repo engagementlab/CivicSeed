@@ -17,17 +17,23 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			colorInfo: {
 				rgb: {
 					r: Number,
-					g: Number, 
+					g: Number,
 					b: Number
 				},
 				tilesheet: Number
 			},
 			resources: [{
 				npc: Number,
-				question: Number,
 				answer: String,
+				attempts: Number,
 				result: Boolean
-			}]
+			}],
+			inventory: [Number],
+			seeds: {
+				normal: Number,
+				riddle: Number,
+				special: Number
+			}
 		}
 	});
 
