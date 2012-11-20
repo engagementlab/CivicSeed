@@ -52,29 +52,31 @@ $game.$map = {
 
 		for(var b = 0; b < bombed.length; b += 1) {
 			//only add it to render list if it is on current screen
-			var loc = $game.masterToLocal(bombed[b].x, bombed[b].y);
+			var loc = $game.masterToLocal(bombed[b].x, bombed[b].y),
+				curTile = null;
 			if(loc) {
 				
 				//if there IS a color
-				if($game.currentTiles[loc.x][loc.y].color) {
+				curTile = $game.currentTiles[loc.x][loc.y];
+				if(curTile.color) {
 					//if the tile is an owner, don't do shit
-					if(!$game.currentTiles[loc.x][loc.y].color.owner) {
+					if(!curTile.color.owner) {
 						//is color, no owner, add count (maybe modify color later)
 						//but only if it isn't over-colored
 
 						//if the new guy is now chief
 						if(bombed[b].color.owner) {
-							$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
+							curTile.color = bombed[b].color;
 						}
 						
 						//no owner and new one will not be owner but is colored:
 						//increase alpha (until at .8)
-						else if($game.currentTiles[loc.x][loc.y].color.a < 0.7 ) {
+						else if(curTile.color.a < 0.7 ) {
 							
-							var prevR = $game.currentTiles[loc.x][loc.y].color.r,
-								prevG = $game.currentTiles[loc.x][loc.y].color.g,
-								prevB = $game.currentTiles[loc.x][loc.y].color.b,
-								prevA = $game.currentTiles[loc.x][loc.y].color.a;
+							var prevR = curTile.color.r,
+								prevG = curTile.color.g,
+								prevB = curTile.color.b,
+								prevA = curTile.color.a;
 
 							var weightA = prevA / 0.1,
 								weightB = 1;
@@ -84,22 +86,16 @@ $game.$map = {
 								newG = Math.floor((weightA * prevG + weightB * bombed[b].color.g) / (weightA + weightB)),
 								newB = Math.floor((weightA * prevB + weightB * bombed[b].color.b) / (weightA + weightB));
 
-							$game.currentTiles[loc.x][loc.y].color.a = Math.round(($game.currentTiles[loc.x][loc.y].color.a + 0.1) * 10) / 10,
-							$game.currentTiles[loc.x][loc.y].color.r = newR,
-							$game.currentTiles[loc.x][loc.y].color.g = newG,
-							$game.currentTiles[loc.x][loc.y].color.b = newB;
-
-
+							curTile.color.a = Math.round((curTile.color.a + 0.1) * 10) / 10,
+							curTile.color.r = newR,
+							curTile.color.g = newG,
+							curTile.color.b = newB;
 						}
-						else {
-						}
-					}
-					else{
 					}
 				}
 				//add new color data to tile if nothing there
 				else {
-					$game.currentTiles[loc.x][loc.y].color = bombed[b].color;
+					curTile.color = bombed[b].color;
 				}
 				//redraw whole tile, bg included
 				

@@ -183,14 +183,16 @@ $game.$renderer = {
 
 		//get the index (which refers to the location of the image)
 		//tilemap reference to images starts at 1 instead of 0
-		var backIndex1 = $game.currentTiles[i][j].background-1,
-		backIndex2 = $game.currentTiles[i][j].background2-1,
-		backIndex3 = $game.currentTiles[i][j].background3-1,
-			//will be backIndex3
-			foreIndex = $game.currentTiles[i][j].foreground-1,
-			foreIndex2 = $game.currentTiles[i][j].foreground2-1,
-			tileStateVal = $game.currentTiles[i][j].tileState,
-			colorVal = $game.currentTiles[i][j].color,
+		var curTile = $game.currentTiles[i][j],
+
+			backIndex1 = curTile.background-1,
+			backIndex2 = curTile.background2-1,
+			backIndex3 = curTile.background3-1,
+				//will be backIndex3
+			foreIndex = curTile.foreground-1,
+			foreIndex2 = curTile.foreground2-1,
+			tileStateVal = curTile.tileState,
+			colorVal = curTile.color,
 
 			tileData = {
 				b1: backIndex1,
@@ -206,21 +208,10 @@ $game.$renderer = {
 		//color tile first if it needs to be done
 		if(colorVal) {
 			tileData.color = colorVal;
-			
 		}
 
 		//send the tiledata to the artist aka mamagoo
 		$game.$renderer.drawMapTile(tileData);
-
-
-		/*
-		if(tileStateVal >= 0) {
-			//get npc spritesheet data, pass it to tiledata, render
-			//$game.$renderer.renderTile(tileData);
-			$game.$npc.render($game.currentTiles[i][j]);
-			_hasNpc = true;
-		}
-		*/
 
 		//foreground tiles
 		var foreData = {
@@ -396,13 +387,6 @@ $game.$renderer = {
 	
 	renderAllTiles: function() {
 
-
-		//if the previous render cycle had an npc, then set was to true
-		//_wasNpc = _hasNpc ? true : false;
-		
-		//_hasNpc = false;
-
-
 		_foregroundContext.clearRect(
 			0,
 			0,
@@ -444,83 +428,8 @@ $game.$renderer = {
 
 	},
 
-	//this is a fix because a npc only clears its previous when it draws
-	//a new one, therefore the edge is left hanging.
-	clearEdgesFix: function() {
-		
-		if($game.stepDirection === 'left') {
-
-			//clear right edge
-			_npcsContext.clearRect(
-				$game.VIEWPORT_WIDTH * $game.TILE_SIZE - $game.TILE_SIZE,
-				0,
-				$game.TILE_SIZE,
-				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-				);
-			
-		}
-		else if($game.stepDirection === 'right') {
-			_npcsContext.clearRect(
-				0,
-				0,
-				$game.TILE_SIZE,
-				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-				);
-		}
-		else if($game.stepDirection === 'up') {
-			_npcsContext.clearRect(
-				0,
-				$game.VIEWPORT_HEIGHT * $game.TILE_SIZE - $game.TILE_SIZE*2,
-				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-				$game.TILE_SIZE * 2
-				);
-		}
-		else if($game.stepDirection === 'down') {
-			_npcsContext.clearRect(
-				0,
-				0,
-				$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-				$game.TILE_SIZE
-				);
-		}
-		
-	},
-
 	renderNpc: function (npcData) {
-		// var loc = $game.masterToLocal(npcData.x, npcData.y);
 
-		// var curX = loc.x * $game.TILE_SIZE;
-		// curY = loc.y * $game.TILE_SIZE,
-		// clearX = 0,
-		// clearY = 0;
-		// //if intransit
-		// if($game.inTransit) {
-		// 	if($game.stepDirection === 'left') {
-		// 		clearX = -1;
-		// 		clearY = 0;
-		// 	}
-		// 	else if($game.stepDirection === 'right') {
-		// 		clearX = 1;
-		// 		clearY = 0;
-		// 	}
-		// 	else if($game.stepDirection === 'up') {
-		// 		clearX = 0;
-		// 		clearY = -1;
-		// 	}
-		// 	else if($game.stepDirection === 'down') {
-		// 		clearX = 0;
-		// 		clearY = 1;
-		// 	}
-		// }
-
-		// //npcs should be drawn on the foreground
-		// _charactersContext.clearRect(
-		// 	curX + $game.TILE_SIZE * clearX,
-		// 	curY + $game.TILE_SIZE * clearY - $game.TILE_SIZE,
-		// 	$game.TILE_SIZE,
-		// 	$game.TILE_SIZE*2
-		// 	);
-		//draw new frame of npc
 		_charactersContext.drawImage(
 			_tilesheets[1],
 			npcData.srcX,
@@ -570,10 +479,10 @@ $game.$renderer = {
 
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
-					mX + 2,
-					mY + 2,
-					$game.TILE_SIZE - 4,
-					$game.TILE_SIZE - 4
+					mX,
+					mY,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
 				);
 			}
 			//

@@ -340,7 +340,8 @@ $game.$player = {
 							g: $game.$player.color.g,
 							b: $game.$player.color.b,
 							a: 0.3,
-							owner: false
+							owner: false,
+							index: ((origY + b) * $game.TOTAL_WIDTH) + (origX + a)
 						}
 					};
 					//right now, do a check to see if the current square is on screen <--------- change to any tile down raod

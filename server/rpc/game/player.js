@@ -103,17 +103,31 @@ exports.actions = function(req, res, ss) {
 					players[info.id].game.position.y = info.y;
 		},
 		dropSeed: function(bombed) {
-			// for(var p=0; p<players.length;p++){
-			// 	console.log(players[p].id);
-			// 		//ridic stupid way to check if it's the right one (id isn't working)
-			// 		if(players[p].r ==player.r && players[p].g ==player.g) {
-			// 			players[p].x = player.x;
-			// 			players[p].y = player.y;
-			// 			continue;
-			// 		}
-			// }
-			// console.log(player);
+			
+			//send out the color information to each client to render
 			ss.publish.all('ss-seedDropped', bombed);
+			console.log(bombed);
+			var num = bombed.length,
+				cur = 0;
+			//add the color to the database for official business
+			var saveColors = function(i) {
+				console.log(bombed[cur].color.index);
+				tileModel.findOne({ 'mapIndex': bombed[cur].color.index }, function (err, tile) {
+					console.log(err, tile);
+					
+					tile.set('color', bombed[cur].color);
+					tile.save(function(y) {
+						cur += 1;
+						if(cur < num) {
+							saveColors(cur);
+						}
+					});
+					
+				});
+			};
+
+			saveColors(cur);
+			
 		},
 	}
 }
