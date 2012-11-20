@@ -33,7 +33,7 @@ $game.$player = {
 	color: {},
 	resource: {},
 	inventory: {},
-	seeds: {}
+	seeds: {},
 
 
 
