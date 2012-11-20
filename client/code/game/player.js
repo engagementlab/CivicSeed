@@ -306,6 +306,7 @@ $game.$player = {
 
 	dropSeed: function(options) {
 
+		console.log('dropSeed called');
 		var oX = options.x,
 			oY = options.y,
 			mX = $game.currentTiles[oX][oY].x,
@@ -319,11 +320,12 @@ $game.$player = {
 			sY = oY - 1;
 
 		if($game.currentTiles[oX][oY].color) {
-			if($game.currentTiles[oX][oY].color.owner) {
-				//do something else beside a console log here <--------------
+			if($game.currentTiles[oX][oY].color.owner !== 'nobody') {
+				console.log('owned');
 				return false;
 			}
 		}
+
 		var a = 0;
 		while(a < 3) {
 			var b = 0;
@@ -340,31 +342,72 @@ $game.$player = {
 							g: $game.$player.color.g,
 							b: $game.$player.color.b,
 							a: 0.3,
-							owner: false,
-							index: ((origY + b) * $game.TOTAL_WIDTH) + (origX + a)
+							owner: 'nobody'
 						}
 					};
-					//right now, do a check to see if the current square is on screen <--------- change to any tile down raod
-					if(square.x >-1 && origX + a<$game.TOTAL_WIDTH && origY + b>-1 && origY + b < $game.TOTAL_HEIGHT) {
-						//assign the middle one the owner
-						if( a === 1 && b === 1) {
-							//this will be put in the ACTUAL DB,
-							//instead of local
-							square.color.a = 1.0,
-							square.color.owner = $game.$player.name;
+
+					//assign the middle one the owner
+					if( a === 1 && b === 1) {
+						//this will be put in the ACTUAL DB,
+						//instead of local
+						square.color.a = 0.85,
+						square.color.owner = $game.$player.name;
+					}
+
+					//now that we created the new color, figure out the new tile info
+					//then push to array which is sent to db
+
+					var curTile = $game.currentTiles[sX + a][sY + b];
+
+					//if there is a pre-existing color:
+					if(curTile.color) {
+
+						//only update if the tile is NOT and owner
+						if(curTile.color.owner === 'nobody') {
+
+							//if the new guy is now to be the chief, overwrite all color data
+							if(square.color.owner !== 'nobody') {
+								bombed.push(square);
+							}
+						
+							//already colored, not owned, not maxed out:
+							else if(curTile.color.a < 0.7 ) {
+
+								var prevR = curTile.color.r,
+									prevG = curTile.color.g,
+									prevB = curTile.color.b,
+									prevA = curTile.color.a;
+
+								var weightA = prevA / 0.1,
+									weightB = 1;
+
+
+								var newR = Math.floor((weightA * prevR + weightB * square.color.r) / (weightA + weightB)),
+									newG = Math.floor((weightA * prevG + weightB * square.color.g) / (weightA + weightB)),
+									newB = Math.floor((weightA * prevB + weightB * square.color.b) / (weightA + weightB));
+
+								square.color.a = Math.round((curTile.color.a + 0.1) * 10) / 10,
+								square.color.r = newR,
+								square.color.g = newG,
+								square.color.b = newB;
+								bombed.push(square);
+							}
 						}
+					}
+					//if there is no color, just add it!
+					else {
 						bombed.push(square);
 					}
-					
 				}
 				b += 1;
 			}
 			a += 1;
 		}
-				
-		ss.rpc('game.player.dropSeed', bombed);
-		//check if they clicked on an owned tile
-				
+		if(bombed.length > 0) {
+			console.log(bombed);
+			ss.rpc('game.player.dropSeed', bombed);
+		}
+		
 	},
 
 	message: function(message) {

@@ -103,26 +103,29 @@ exports.actions = function(req, res, ss) {
 					players[info.id].game.position.y = info.y;
 		},
 		dropSeed: function(bombed) {
-			
+
+			console.log(bombed);
 			//send out the color information to each client to render
 			ss.publish.all('ss-seedDropped', bombed);
-			console.log(bombed);
+			
+			
 			var num = bombed.length,
-				cur = 0;
+				cur = 0,
+				index = 0;
 			//add the color to the database for official business
 			var saveColors = function(i) {
-				console.log(bombed[cur].color.index);
-				tileModel.findOne({ 'mapIndex': bombed[cur].color.index }, function (err, tile) {
+				index = bombed[i].y * 142 + bombed[i].x;
+
+				tileModel.findOne({ 'mapIndex': index }, function (err, tile) {
 					console.log(err, tile);
 					
-					tile.set('color', bombed[cur].color);
+					tile.set('color', bombed[i].color);
 					tile.save(function(y) {
 						cur += 1;
 						if(cur < num) {
 							saveColors(cur);
 						}
 					});
-					
 				});
 			};
 

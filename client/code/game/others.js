@@ -184,7 +184,7 @@ $game.$others = {
 
 			resetRenderValues: function() {
 				otherPlayer.info.prevOffX = 0,
-				otherPlayer.info.prevOffcY = 0;
+				otherPlayer.info.prevOffY = 0;
 			},
 
 			getRenderInfo: function() {
