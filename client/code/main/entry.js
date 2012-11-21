@@ -14,14 +14,34 @@ ss.server.on('ready', function() {
 	jQuery(function() {
 
 		if(!appInitialized) {
-			require('/main-setup').init(function() {
 
-				appInitialized = true;
+			Davis(function() {
 
-				var $account = require('/account');
-				$account.accountHandlers();
+				var $app = this;
+
+				require('/routes-middleware.js').loadMiddleware(ss, $app);
+				require('/main-routes').loadRoutes(ss, $app);
+				require('/admin-routes').loadRoutes(ss, $app);
+				require('/startup-routes').loadRoutes(ss, $app);
+				// require('/game-routes').loadRoutes(ss, $app);
+
+				$app.configure(function(config) {
+					// config.linkSelector = 'a.davis';
+					// config.formSelector = 'form.davis';
+					// config.throwErrors = true;
+					// config.handleRouteNotFound = false;
+					config.generateRequestOnPageLoad = true;
+				});
+
+				$app.start();
 
 			});
+
+			var $account = require('/account');
+			$account.accountHandlers();
+
+			appInitialized = true;
+
 		}
 
 	});

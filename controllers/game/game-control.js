@@ -9,6 +9,7 @@ var self = module.exports = {
 			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.8.2.min.js',
+				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
 				'game',
 				'shared'
@@ -19,7 +20,7 @@ var self = module.exports = {
 			]
 		});
 
-		app.get('/game', function(req, res) {
+		ss.http.route('/game', function(req, res) {
 			res.serveClient('game');
 		});
 

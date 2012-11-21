@@ -1,11 +1,7 @@
-{{#extend "stylesheets"}}
-<link rel="stylesheet" href="/css/admin.css"/>
-{{/extend}}
-
 <div class="console">
 	<h1>Startup</h1>
 	<h2>Database Initialization</h2>
-	{{#if nodeEnv}}<h4>{{nodeEnv}} Environment</h4>{{/if}}
+	<h4>{{nodeEnv}} Environment</h4>
 
 	<div id="dataLoaders" class="loader">
 		<button id="userLoadBtn" class="btn" data-type="users">Preload Users</button>
@@ -14,7 +10,3 @@
 		<pre>{{consoleOutput}}</pre>
 	</div>
 </div>
-
-{{#extend "scripts"}}
-<script src="/js/admin.js"></script>
-{{/extend}}

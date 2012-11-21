@@ -17,19 +17,11 @@ var self = module.exports = {
 			self.db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 			self.db.once('open', function () {
 				console.log('CS:'.blue + ' Database: connection to '.green + app.get('env'));
-				if(typeof callback !== 'undefined') {
+				if(typeof callback === 'function') {
 					callback({ mongooseDb: self.db });
 				}
 			});
 		}
-	},
-
-	connectRedis: function(callback) {
-		// var client = redis.createClient(9098, 'cowfish.redistogo.com');
-		// client.auth('[...pw...]', function (err) {
-		// 	if (err) { throw err; }
-		// 	// You are now connected to your redis.
-		// });
 	},
 
 	useModel: function(modelName, state) {

@@ -1,68 +1,39 @@
 var rootDir = process.cwd();
 var config = require(rootDir + '/config');
+var service = require(rootDir + '/service');
 var fs = require('fs');
 var dbActions = require(rootDir + '/modules/utils/databaseActions');
-var nodeEnv;
-var User;
 
-var handleError = function(message, err) {
-	if(err) {
-		if(message.length < 1) {
-			message = 'Error: %s'
-		}
-		console.error(message, err);
-		// process.exit(1);
-		throw err;
-	}
-};
+var userModel = service.useModel('user', 'preload');
+var tileModel = service.useModel('tile', 'preload');
+var npcModel = service.useModel('npc', 'preload');
+var gnomeModel = service.useModel('gnome', 'preload');
 
-var self = module.exports = {
+// var nodeEnv;
 
-	service: null,
-	// users: null,
-	// emailUtil: null,
+exports.actions = function(req, res, ss) {
 
-	init: function (app, service, hbs) {
+	req.use('session');
+	// req.use('debug');
+	req.use('account.authenticated');
 
-		nodeEnv = app.get('env');
-		User = service.useModel('user');
+	return {
 
-		self.service = service;
+		loadData: function(dataType) {
 
-		app.get('/admin/startup', function(req, res) {
+			var userData, tileData, npcData, gnomeData;
 
-			res.render('admin/startup.hbs', {
-				title: 'Startup',
-				bodyClass: 'admin startup',
-				nodeEnv: nodeEnv,
-				// consoleOutput: consoleOutput,
-				message: 'Startup admin panel.'
-			});
-
-		});
-
-		// adding users to database
-		app.get('/admin/startup/users', function(req, res) {
-			if(nodeEnv) {
-				var userData = require(rootDir + '/data/users');
-				var userModel = service.useModel('user', 'preload');
+			if(dataType === 'users') {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
+				userData = require(rootDir + '/data/users');
 				dbActions.dropCollection('users', function() {
 					dbActions.saveDocuments(userModel, userData.global, function() {
-						res.send('Users loaded...');
+						res('Data loaded: ' + dataType);
 					});
 				});
-			} else {
-				res.send('There was an error retrieiving any data...');
-			}
-		});
-
-		// adding tiles to database
-		app.get('/admin/startup/tiles', function(req, res) {
-			if(nodeEnv) {
-				var tileData = require(rootDir + '/data/tiles');
-				var tileModel = service.useModel('tile', 'preload');
+			} else if(dataType === 'tiles') {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
+				tileData = require(rootDir + '/data/tiles');
 				dbActions.dropCollection('tiles', function() {
 					var i,
 					tileObject = tileData.global,
@@ -115,45 +86,26 @@ var self = module.exports = {
 
 					}
 					dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function() {
-						res.send(numberOfTiles + ' tiles loaded...');
+						res('Data loaded: ' + numberOfTiles + ' ' + dataType);
 					});
 				});
-			} else {
-				res.send('There was an error retrieiving any data...');
-			}
-		});
-
-		// adding gnome and npcs to database
-		app.get('/admin/startup/npcs', function(req, res) {
-			if(nodeEnv) {
-				var npcData = require(rootDir + '/data/npcs');
-				var npcModel = service.useModel('npc', 'preload');
-				var gnomeData = require(rootDir + '/data/gnome');
-				var gnomeModel = service.useModel('gnome', 'preload');
+			} else if(dataType === 'npcs') {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
-				// drop and save npcs
+				npcData = require(rootDir + '/data/npcs');
+				gnomeData = require(rootDir + '/data/gnome');
 				dbActions.dropCollection('npcs', function() {
 					dbActions.saveDocuments(npcModel, npcData.global, function() {
-						// drop and save gnome(s)
 						dbActions.dropCollection('gnomes', function() {
 							dbActions.saveDocuments(gnomeModel, gnomeData.global, function() {
-								res.send('NPCs and Gnome loaded...');
+								res('Data loaded: ' + dataType);
 							});
 						});
 					});
 				});
-			} else {
-				res.send('There was an error retrieiving any data...');
+
 			}
-		});
+		}
 
-		// app.get('/sessions/destroy', function(req, res) {
-		// 	if(req.session) {
-		// 		req.session.destroy(function() {});
-		// 	}
-		// 	res.redirect('/login');
-		// });
+	};
 
-	}
-
-};
+}

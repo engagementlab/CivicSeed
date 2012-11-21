@@ -12,4 +12,5 @@ node_modules
 /config.json
 /config_*.json
 /_HIDDEN/
+/resources/
 /modules/utils/password.js

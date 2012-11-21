@@ -31,7 +31,6 @@
     "hbs": ">= 1.0.5",
     "mongoose": ">= 3.1.1",
     "redis": ">= 0.8.1",
-    "underscore": ">= 1.3.3",
     "colors": ">= 0.6.0",
     "passport": ">= 0.1.12",
     "passport-local": ">= 0.1.6",

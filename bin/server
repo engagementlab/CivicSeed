@@ -71,8 +71,6 @@ service.connectMongoose(app, function(databases) {
 		// });
 
 		if(nodeEnv === 'development') {
-			// FOR SOME REASON, PACKING ASSETS BREAKS...NEED TO FIGURE THIS OUT...or...just use resource loading tools?
-			// ss.client.packAssets();
 			app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 		}
 
