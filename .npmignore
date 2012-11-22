@@ -11,6 +11,5 @@ node_modules
 /client/static/audio/music/temp.mp3
 /config.json
 /config_*.json
-/_HIDDEN/
-/resources/
 /modules/utils/password.js
+_*
