@@ -24,7 +24,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			},
 			resources: [{
 				npc: Number,
-				answer: String,
+				answers: [String],
 				attempts: Number,
 				result: Boolean
 			}],

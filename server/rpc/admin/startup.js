@@ -7,6 +7,7 @@ var dbActions = require(rootDir + '/modules/utils/databaseActions');
 var userModel = service.useModel('user', 'preload');
 var tileModel = service.useModel('tile', 'preload');
 var npcModel = service.useModel('npc', 'preload');
+var resourceModel = service.useModel('resource','preload');
 var gnomeModel = service.useModel('gnome', 'preload');
 
 // var nodeEnv;
@@ -21,7 +22,7 @@ exports.actions = function(req, res, ss) {
 
 		loadData: function(dataType) {
 
-			var userData, tileData, npcData, gnomeData;
+			var userData, tileData, npcData, gnomeData, resourceData;
 
 			if(dataType === 'users') {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
@@ -93,11 +94,16 @@ exports.actions = function(req, res, ss) {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 				npcData = require(rootDir + '/data/npcs');
 				gnomeData = require(rootDir + '/data/gnome');
+				resourceData = require(rootDir + '/data/resources');
 				dbActions.dropCollection('npcs', function() {
 					dbActions.saveDocuments(npcModel, npcData.global, function() {
 						dbActions.dropCollection('gnomes', function() {
 							dbActions.saveDocuments(gnomeModel, gnomeData.global, function() {
-								res('Data loaded: ' + dataType);
+								dbActions.dropCollection('resources', function() {
+									dbActions.saveDocuments(resourceModel, resourceData.global, function() {
+										res('Data loaded: ' + dataType);
+									});
+								});
 							});
 						});
 					});

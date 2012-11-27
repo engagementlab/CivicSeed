@@ -236,6 +236,7 @@ $game.$player = {
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
 					$game.$npc.show();
+
 					//trigger npc to popup _info and stuff
 			}
 		}
@@ -478,5 +479,36 @@ $game.$player = {
 	remove: function() {
 		ss.rpc('game.player.removePlayer', $game.$player.id);
 	},
+
+	getPrompt: function(i) {
+		var num = 0;
+		//check to see if the player has that resource or not 
+		//if($game.$player.resources[])
+		return num;
+	},
+
+	answerResource: function(correct, id, answer) {
+		
+		var r = {
+			npc: id,
+			answers: [answer],
+			attempts: 1,
+			result: correct
+		};
+
+		var stringId = String(id);
+		var rs = $game.$player.resources[stringId];
+		
+		if(!rs) {
+			$game.$player.resources[stringId] = r;
+		}
+		else {
+			console.log(rs, 'dupe');
+			rs.answers.push(r.answers[0]);
+			rs.attempts += 1;
+			rs.result = r.result;
+		}
+		console.log($game.$player.resources[stringId]);
+	}
 };
 

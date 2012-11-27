@@ -30,9 +30,10 @@ ss.server.on('ready', function() {
 					var $map = require('/map');
 					var $render = require('/render');
 					var $npc = require('/npc');
+					var $resources = require('/resources');
 					var $player = require('/player');
 					var $others = require('/others');
-					var $thing = require('/thing')
+					var $thing = require('/thing');
 					var $mouse = require('/mouse');
 					var $audio = require('/audio');
 					var $pathfinder = require('/pathfinder');

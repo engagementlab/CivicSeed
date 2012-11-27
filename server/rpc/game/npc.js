@@ -11,6 +11,7 @@ var self = exports.actions = function(req, res, ss) {
 	var UserModel = service.useModel('user', 'ss');
 	var NpcModel = service.useModel('npc', 'ss');
 	var GnomeModel = service.useModel('npc', 'ss');
+	var ResourceModel = service.useModel('resource', 'ss');
 
 	return {
 		init: function() {
@@ -39,6 +40,16 @@ var self = exports.actions = function(req, res, ss) {
 					console.error('  Could not find NPCs: %s  '.red.inverse, err);
 				} else {
 					res(npcs);
+				}
+			});
+		},
+		getResources: function() {
+			ResourceModel.find(function (err, resources) {
+				if(err) {
+					console.error('  Could not find NPCs: %s  '.red.inverse, err);
+				}
+				else {
+					res(resources);
 				}
 			});
 		},

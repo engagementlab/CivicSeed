@@ -73,7 +73,7 @@ $(window).bind("keypress", (function (key) {
 }));
 //change cursor on mouse move
 $('.gameboard').mousemove(function(m) {
-	if( !$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource && $game.ready){
+	if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.ready){
 	
 		var mInfo = {
 			x: m.pageX,
@@ -89,7 +89,7 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$npc.isResource && $game.running){
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
