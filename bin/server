@@ -94,6 +94,14 @@ service.connectMongoose(app, function(databases) {
 		// Server-side compiled templates for client
 		ss.client.templateEngine.use(require('ss-hogan'));
 
+		// using engine.io for web sockets transport
+		ss.ws.transport.use(require('ss-engine.io'), {
+			client: {
+				host: 'localhost',
+				port: port
+			}
+		});
+
 		// use redis
 		if(config.get('USE_REDIS')) {
 			redisConfig = {
@@ -104,6 +112,7 @@ service.connectMongoose(app, function(databases) {
 			};
 			ss.session.store.use('redis', redisConfig);
 			ss.publish.transport.use('redis', redisConfig);
+			ss.session.options.maxAge = 1261440000000; // forty years
 		}
 
 		// connect mongoose to ss internal API
