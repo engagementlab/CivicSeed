@@ -4929,6 +4929,18 @@ a.badge:hover {
   z-index: 9999;
   display: none;
 }
+.inventory {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  width: 930px;
+  height: 60px;
+  background: rgba(30, 30, 30, 0.8);
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+}
 .resourceArea h2,
 .resourceArea p {
   color: white;
@@ -5017,6 +5029,10 @@ a.badge:hover {
 .playerButtons {
   cursor: pointer;
 }
+.playerButtons div {
+  width: 64px;
+  float: left;
+}
 .videoResource {
   text-align: center;
 }
@@ -5051,6 +5067,19 @@ a.badge:hover {
   color: white;
   font-size: 2em;
   margin-top: 100px;
+}
+.inventory button {
+  bottom: 15px;
+  right: 10px;
+}
+.inventoryItem {
+  float: left;
+  padding: 15px;
+}
+.inventoryItem img {
+  padding: 0;
+  margin: 0;
+  width: 32px;
 }
 body {
   padding-top: 80px;

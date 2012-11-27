@@ -8,7 +8,8 @@ var _loaded = false,
 	_who = null,
 	_correctAnswer = false,
 	_curResource = null,
-	_revisiting = false;
+	_revisiting = false,
+	_inventory = false;
 
 $game.$resources = {
 
@@ -28,7 +29,13 @@ $game.$resources = {
 		});
 	},
 
-	loadResource: function(who, index) {
+	beginResource: function(e) {
+		$game.$resources.loadResource(false, e.data.npc, true);
+		_inventory = true;
+		$game.$resources.isShowing = true;
+	},
+
+	loadResource: function(who, index, now) {
 		_who = who,
 		_answered = false,
 		_currentSlide = 0;
@@ -39,7 +46,12 @@ $game.$resources = {
 		var url = _curResource.url;
 		$('.resourceStage').load(url,function() {
 			_numSlides = $('.resourceStage .pages > .page').length;
+			if(now) {
+				$game.$resources.showResource(2);
+			}
 		});
+
+
 	},
 
 	showResource: function(num) {
@@ -58,7 +70,12 @@ $game.$resources = {
 			$('.resourceArea').empty();
 			$game.$resources.addContent();
 			$game.$resources.addButtons();
-			$('.resourceArea').slideDown();
+			console.log($game.$player.inventoryShowing);
+			$('.inventory').slideUp(function() {
+				$game.$player.inventoryShowing = false;
+				$('.resourceArea').slideDown();
+			});
+			
 		});
 		
 	},
@@ -176,6 +193,12 @@ $game.$resources = {
 			$('.resourceArea h2').remove();
 			$game.$resources.isShowing = false;
 		});
+		if(_inventory) {
+			$('.inventory').slideDown(function() {
+				_inventory = false;
+				$game.$player.inventoryShowing = true;
+			});
+		}
 	},
 
 	//super ghetto hack to go back a page

@@ -176,7 +176,7 @@ $game.$npc = {
 		$('.speechBubble').slideUp(function() {
 			$('.speechBubble').empty();
 			$game.$npc.isChat = false;
-			$game.$npc.isResource = false;
+			$game.$resources.isShowing = false;
 			$(".speechBubble .btn-success").unbind("click");
 			$(".speechBubble .btn-danger").unbind("click");
 		});
@@ -242,7 +242,7 @@ $game.$npc = {
 
 			//here we will tell the resoure object to clear old stuff,
 			//and tell it what to load (and who it corresponds to)
-			$game.$resources.loadResource(_who, _curNpc.id);
+			$game.$resources.loadResource(_who, _curNpc.id, false);
 			_resourceOnDeck = true;
 		}
 		else {

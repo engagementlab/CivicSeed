@@ -68,8 +68,9 @@ exports.$game = {
 		$game.$npc.init();
 		//player WILL load its previous data from DB
 		
+		$game.$resources.init();
 		
-		//$game.$audio.init();
+		$game.$audio.init();
 	},
 
 	firstLoad: function (x, y) {
@@ -121,11 +122,13 @@ exports.$game = {
 	pause: function() {
 		$('.pauseMenu').slideDown();
 		$game.running = false;
+		$game.$audio.playTheme();
 	},
 
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
+			$game.$audio.pauseTheme();
 			$game.tick();
 		});
 		

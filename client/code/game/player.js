@@ -26,6 +26,7 @@ $game.$player = {
 	currentMove: 0,
 	currentStep: 0,
 	isMoving: false,
+	inventoryShowing: false,
 	npcOnDeck: false,
 	ready: false,
 	currentLevel: 1,
@@ -72,7 +73,7 @@ $game.$player = {
 			$game.$player.resources = newInfo.game.resources;
 			$game.$player.seeds = newInfo.game.seeds;
 
-			console.log($game.$player.resources, typeof $game.$player.resources);
+			$game.$player.fillInventory();
 
 			_chatId = 'player'+ newInfo.id,
 			_chatIdSelector = '#' + _chatId;
@@ -538,6 +539,7 @@ $game.$player = {
 			rs.result = r.result;
 			$game.$player.seeds.normal += 1;
 			$game.$player.inventory.push(id);
+			$game.$player.addToInventory(id);
 		}
 	},
 
@@ -549,6 +551,30 @@ $game.$player = {
 				return $game.$player.resources[l].answers[rightOne];
 			}
 		}
+	},
+
+	clearInventory: function() {
+		$('.inventoryItem').rempve();
+	},
+
+	fillInventory: function() {
+		var l = $game.$player.resources.length;
+		while(--l > -1) {
+			if($game.$player.resources[l].result) {
+				
+				var file = 'r' + $game.$player.resources[l].npc;
+
+				$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
+				$('.'+ file).bind('click',{npc: $game.$player.resources[l].npc}, $game.$resources.beginResource);
+			}
+		}
+	},
+
+	addToInventory: function(id) {
+		var file = 'r' + id;
+		$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
+		$('.'+ file).bind('click',{npc: id}, $game.$resources.beginResource);
 	}
+
 };
 

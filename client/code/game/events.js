@@ -15,6 +15,7 @@ ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
 	console.log("total active players: " + $game.numPlayers);
+	$('.activePlayers').text(num + ' active players!');
 });
 ss.event.on('ss-removePlayer', function(num, playerId) {
 	$game.numPlayers = num;
@@ -89,7 +90,7 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running){
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
@@ -130,4 +131,24 @@ $('.resourceArea').keypress(function(event){
         return false;
     }
 });
+
+$('.inventoryButton').click(function () {
+	if(!$game.$resources.isShowing) {
+		if($game.$player.inventoryShowing) {
+			$('.inventory').slideUp(function() {
+				$game.$player.inventoryShowing = false;
+			});	
+		}
+		else {
+			$('.inventory').slideDown(function() {
+				$game.$player.inventoryShowing = true;
+			});	
+		}	
+	}
+	
+	return false;
+});
+
+
+
 
