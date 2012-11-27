@@ -7,7 +7,7 @@ $(window).on('beforeunload', function() {
 	return x;
 });
 function leaveThisJoint() {
-	$game.$player.remove();
+	$game.$player.exitAndSave();
 }
 
 //new player joining to keep track of
@@ -110,7 +110,6 @@ $('#chatButton').click(function(e) {
 		$('#chatText').val('');
 	}
 	return false;
-
 });
 
 $(window).blur(function(e) {
@@ -122,5 +121,13 @@ $(window).blur(function(e) {
 
 $(".unPause").click(function () {
 	$game.resume();
+});
+
+$('.resourceArea').keypress(function(event){
+    
+    if (event.keyCode == 10 || event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+    }
 });
 

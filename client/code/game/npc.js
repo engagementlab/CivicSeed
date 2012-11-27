@@ -33,6 +33,7 @@ $game.$npc = {
 		newbie.getMaster();
 		_allNpcs[npc.id] = newbie;
 
+
 	},
 
 	update: function() {
@@ -206,7 +207,7 @@ $game.$npc = {
 		_speak += buttons;
 		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
 			$(".speechBubble .btn-success").bind("click", (function () {
-				$game.$resources.showResource();
+				$game.$resources.showResource(promptNum);
 			}));
 			$(".speechBubble .btn-danger").bind("click", (function () {
 				$game.$npc.hideChat();

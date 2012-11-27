@@ -29,8 +29,6 @@ exports.actions = function(req, res, ss) {
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
-
-			console.log(req.session.game);
 			
 			//should we pull the game info from the db instead of it being passed in a session?
 			var playerInfo = {
@@ -40,6 +38,7 @@ exports.actions = function(req, res, ss) {
 				};
 
 			//send the number of active players and the new player info
+			console.log(playerInfo.game);
 			res(playerInfo);
 		},
 
@@ -48,16 +47,23 @@ exports.actions = function(req, res, ss) {
 			numActivePlayers += 1;
 			ss.publish.all('ss-addPlayer',numActivePlayers, info);
 		},
-		removePlayer: function(id) {
+		exitPlayer: function(player) {
 		
-			userModel.findById(id, function (err, user) {
-				user.game.position.x = players[id].game.position.x,
-				user.game.position.y = players[id].game.position.y;
+			console.log("exit: ",player);
+
+			userModel.findById(player.id, function (err, user) {
+				user.game.position.x = players[player.id].game.position.x,
+				user.game.position.y = players[player.id].game.position.y;
+				user.game.resources = player.resources;
+				user.game.inventory = player.inventory;
+				user.game.seeds = player.seeds;
+
+				
 
 				user.save(function (y) {
-					ss.publish.all('ss-removePlayer', numActivePlayers, id);
+					ss.publish.all('ss-removePlayer', numActivePlayers, player.id);
 					numActivePlayers -= 1;
-					delete players[id];
+					delete players[player.id];
 				});
 			});
 		},

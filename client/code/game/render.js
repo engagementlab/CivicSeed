@@ -459,14 +459,14 @@ $game.$renderer = {
 			);
 			
 			//redraw that area
-			var foreIndex = $game.currentTiles[mouse.cX][mouse.cY].foreground-1,
-				foreIndex2 =  $game.currentTiles[mouse.cX][mouse.cY].foreground2-1,
+			var foreIndex = $game.currentTiles[_prevMouseX][_prevMouseY].foreground-1,
+				foreIndex2 =  $game.currentTiles[_prevMouseX][_prevMouseY].foreground2-1,
 
 				foreData = {
 					f1: foreIndex,
 					f2: foreIndex2,
-					destX: mouse.cX,
-					destY: mouse.cY
+					destX: _prevMouseX,
+					destY: _prevMouseY
 			};
 
 			$game.$renderer.drawForegroundTile(foreData);

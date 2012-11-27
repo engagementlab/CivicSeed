@@ -7,7 +7,8 @@ var _loaded = false,
 	_answered = false,
 	_who = null,
 	_correctAnswer = false,
-	_curResource = null;
+	_curResource = null,
+	_revisiting = false;
 
 $game.$resources = {
 
@@ -41,7 +42,12 @@ $game.$resources = {
 		});
 	},
 
-	showResource: function() {
+	showResource: function(num) {
+		//if they already got it right, then don't have answer form, but show answer
+		if(num === 2) {
+			_revisiting = true;
+		}
+
 		$('.speechBubble').slideUp(function() {
 			$('.speechBubble').empty();
 			$(".speechBubble .btn-success").unbind("click");
@@ -57,16 +63,6 @@ $game.$resources = {
 		
 	},
 
-	//determine which buttons to put on the resource area
-	//based on page number, if its a form yet, etc.
-	//buttons: next, back, answer, close
-	//bind functionality
-
-	//assume that the buttons were removed before
-		
-		
-
-	//if its been answered, we have a close button
 	addButtons: function() {
 
 		if(_answered) {
@@ -101,12 +97,25 @@ $game.$resources = {
 
 			//if its the last page, we have an answer button and a back
 			else if(_currentSlide === _numSlides) {
-				$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');
-				$('.answerButton').text('Answer');
+				if(_revisiting) {
+					$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button><button class="btn btn-inverse backButton">Back</button>');
+					$('.closeButton').text('Close');
+					$(".closeButton").bind("click", (function () {
+						$game.$resources.hideResource();
+					}));
+				}
+				else {
+					$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');
+					$('.answerButton').text('Answer');
+					$(".answerButton").bind("click", (function (e) {
+						e.preventDefault();
+						$game.$resources.submitAnswer();
+						return false;
+					}));
+				}
+				
 				$('.backButton').text('Back');
-				$(".answerButton").bind("click", (function () {
-					$game.$resources.submitAnswer();
-				}));
+				
 				$(".backButton").bind("click", (function () {
 					$game.$resources.previousSlide();
 				}));
@@ -128,7 +137,7 @@ $game.$resources = {
 	
 			if(_correctAnswer) {
 				_speak = _curResource.responses[0];
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p><p><img src="img/resource'+_curResource.resource.tangram+'.png"></p>');
+				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p><p><img src="img/game/resources/r'+_curResource.id+'.png"></p>');
 			}
 			else {
 				_speak = _curResource.responses[1];
@@ -138,10 +147,21 @@ $game.$resources = {
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				_speak = _curResource.prompt;
-				var finalQuestion = _curResource.question,
-					inputBox = '<form><input></input></form>';
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+_speak+'</p><p>'+finalQuestion+'</p>'+inputBox);
+				
+				var finalQuestion = _curResource.question;
+				//show their answer and the question, not the form
+				if(_revisiting) {
+					playerAnswer = $game.$player.getAnswer(_curResource.id);
+					$('.resourceArea').append('<p>'+finalQuestion+'</p><p><span class="speakerName"> You said: </span>'+playerAnswer+'</p>');
+				}
+				else {
+					_speak = _curResource.prompt;
+					var inputBox = '<form><input></input></form>';
+					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+_speak+'</p><p>'+finalQuestion+'</p>'+inputBox);
+				}
+				
+					
+				
 			}
 			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;

@@ -31,7 +31,7 @@ $game.$player = {
 	currentLevel: 1,
 	seedMode: false,
 	color: {},
-	resource: {},
+	resources: [],
 	inventory: {},
 	seeds: {},
 
@@ -71,6 +71,8 @@ $game.$player = {
 			$game.$player.inventory = newInfo.game.inventory;
 			$game.$player.resources = newInfo.game.resources;
 			$game.$player.seeds = newInfo.game.seeds;
+
+			console.log($game.$player.resources, typeof $game.$player.resources);
 
 			_chatId = 'player'+ newInfo.id,
 			_chatIdSelector = '#' + _chatId;
@@ -476,15 +478,35 @@ $game.$player = {
 
 	},
 
-	remove: function() {
-		ss.rpc('game.player.removePlayer', $game.$player.id);
+	exitAndSave: function() {
+		
+		var info = {
+		id: $game.$player.id,
+		resources: $game.$player.resources,
+		inventory: $game.$player.inventory,
+		seeds: $game.$player.seeds
+		};
+		ss.rpc('game.player.exitPlayer', info);
+		
 	},
 
-	getPrompt: function(i) {
-		var num = 0;
-		//check to see if the player has that resource or not 
-		//if($game.$player.resources[])
-		return num;
+	getPrompt: function(id) {
+		
+		var	l = $game.$player.resources.length;
+
+		while(--l > -1) {
+			if(id === $game.$player.resources[l].npc) {
+				//if the player already got it right, it should be prompt 2
+				if($game.$player.resources[l].result) {
+					return 2;
+				}
+				else {
+					return 1;
+				}
+				continue;
+			}
+		}
+		return 0;
 	},
 
 	answerResource: function(correct, id, answer) {
@@ -495,20 +517,38 @@ $game.$player = {
 			attempts: 1,
 			result: correct
 		};
-
-		var stringId = String(id);
-		var rs = $game.$player.resources[stringId];
 		
+		var rs = null,
+			l = $game.$player.resources.length;
+
+		while(--l > -1) {
+			if(id === $game.$player.resources[l].npc) {
+				rs = $game.$player.resources[l];
+				continue;
+			}
+		}
+
 		if(!rs) {
-			$game.$player.resources[stringId] = r;
+			$game.$player.resources.push(r);
 		}
 		else {
 			console.log(rs, 'dupe');
 			rs.answers.push(r.answers[0]);
 			rs.attempts += 1;
 			rs.result = r.result;
+			$game.$player.seeds.normal += 1;
+			$game.$player.inventory.push(id);
 		}
-		console.log($game.$player.resources[stringId]);
+	},
+
+	getAnswer: function(id) {
+		var l = $game.$player.resources.length;
+		while(--l > -1) {
+			if(id === $game.$player.resources[l].npc) {
+				var rightOne = $game.$player.resources[l].answers.length - 1;
+				return $game.$player.resources[l].answers[rightOne];
+			}
+		}
 	}
 };
 
