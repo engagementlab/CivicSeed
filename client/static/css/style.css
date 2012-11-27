@@ -5030,7 +5030,6 @@ a.badge:hover {
   cursor: pointer;
 }
 .playerButtons div {
-  width: 64px;
   float: left;
 }
 .videoResource {
@@ -5067,6 +5066,10 @@ a.badge:hover {
   color: white;
   font-size: 2em;
   margin-top: 100px;
+}
+.inventoryButton {
+  width: 32px;
+  margin-right: 20px;
 }
 .inventory button {
   bottom: 15px;
