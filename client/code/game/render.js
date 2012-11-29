@@ -133,6 +133,7 @@ $game.$renderer = {
 		$game.$others.clear();
 		$game.$player.clear();
 		$game.$npc.clear();
+		$game.$gnome.clear();
 
 		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
@@ -150,11 +151,14 @@ $game.$renderer = {
 		$game.$renderer.makeQueue(function(all) {
 			var a = all.length;
 			while(--a > -1) {
-				if(all[a].isNpc) {
+				if(all[a].kind === 'npc') {
 					$game.$renderer.renderNpc(all[a]);
 				}
+				else if(all[a].kind === 'gnome') {
+					$game.$renderer.renderGnome(all[a]);
+				}
 				else {
-					$game.$renderer.renderPlayer(all[a]);	
+					$game.$renderer.renderPlayer(all[a]);
 				}
 				
 			}
@@ -165,6 +169,7 @@ $game.$renderer = {
 	makeQueue: function(callback) {
 		var order = $game.$others.getRenderInfo(),
 			order2 = $game.$npc.getRenderInfo(),
+			gnomeInfo = $game.$gnome.getRenderInfo();
 			playerInfo = $game.$player.getRenderInfo();
 
 		var l = order2.length;
@@ -172,9 +177,14 @@ $game.$renderer = {
 			order.push(order2[l]);
 		}
 
+		if(gnomeInfo) {
+			order.push(gnomeInfo);
+		}
+
 		order.push(playerInfo);
+
 		order.sort(function(a, b){
- 			return b.curY-a.curY
+			return b.curY-a.curY;
 		});
 		callback(order);
 	},
@@ -475,8 +485,7 @@ $game.$renderer = {
 			var col;
 
 			if($game.$player.seedMode) {
-				col = 'rgba('+$game.$player.color.r+','+$game.$player.color.g+','+$game.$player.color.b+','+ 0.5 + ')';
-
+				col = 'rgba('+$game.$player.game.colorInfo.rgb.r+','+$game.$player.game.colorInfo.rgb.g+','+$game.$player.game.colorInfo.rgb.b+','+ 0.5 + ')';
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
 					mX,
@@ -543,6 +552,29 @@ $game.$renderer = {
 			1
 		);
 		
+	},
+
+	clearGnome: function(info) {
+		_charactersContext.clearRect(
+			info.prevX,
+			info.prevY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+		);
+	},
+
+	renderGnome: function(info) {
+		_charactersContext.drawImage(
+			_tilesheets[1],
+			0,
+			128,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2,
+			info.curX,
+			info.curY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
+		);
 	}
 	
 };

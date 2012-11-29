@@ -70,6 +70,8 @@ exports.$game = {
 		
 		$game.$resources.init();
 		
+		$game.$gnome.init();
+		
 		$game.$audio.init();
 	},
 
@@ -88,6 +90,11 @@ exports.$game = {
 		$game.masterX = startX,
 		$game.masterY = startY;
 
+		$game.leftEdge = $game.masterX,
+		$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
+		$game.topEdge = $game.masterY,
+		$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
+
 		$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
 			//new tile data stored in nextTiles by default
 			//since this is the initial load w/ no transition,
@@ -98,10 +105,7 @@ exports.$game = {
 				});
 			});
 
-			$game.leftEdge = $game.masterX,
-			$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
-			$game.topEdge = $game.masterY,
-			$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
+			
 		});
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
@@ -471,7 +475,7 @@ exports.$game = {
 
 	masterToLocal: function(x, y) {
 
-		//if this works I am a dolt for not doing it earlier
+		//if this works I am a dolt for not doing it earlier (I am a dolt)
 		var local = {
 			x: x - $game.leftEdge,
 			y: y - $game.topEdge
@@ -491,6 +495,7 @@ exports.$game = {
 			$game.$others.update();
 			$game.$player.update();
 			$game.$npc.update();
+			$game.$gnome.update();
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}

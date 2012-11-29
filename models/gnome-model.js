@@ -3,16 +3,23 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	var gnomeSchema = new Schema({
 		id: Number,
 		name: String,
-		level: Number,
 		spriteMap: [{
 			x: Number,
 			y: Number
 		}],
 		dialog: {
-			intro: [String],
-			random: [String],
-			question: [String],
-			answer: [String]
+			level: [{
+				instruction: [String],
+				riddle: {
+					sonnet: String,
+					prompt: [String],
+					responses: [String]
+				}
+			}],
+			finale: {
+				videos: [String],
+				explanations: [String]
+			}
 		}
 	});
 

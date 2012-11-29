@@ -9,7 +9,7 @@ var _curFrame = 0,
 	_direction = 0,
 	_willTravel = null,
 	_idleCounter = 0,
-	_getMaster = false;
+	_getMaster = true;
 	_info = {},
 	_renderInfo = {},
 	_isChatting = false,
@@ -22,6 +22,7 @@ $game.$player = {
 
 	name: null,
 	id: null,
+	game: null,
 	seriesOfMoves: null,
 	currentMove: 0,
 	currentStep: 0,
@@ -64,14 +65,12 @@ $game.$player = {
 			_renderInfo.curY = _info.y * $game.TILE_SIZE,
 			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
 			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
+			_renderInfo.kind = 'player',
 			$game.$player.ready = true;
 
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
-			$game.$player.color = newInfo.game.colorInfo.rgb;
-			$game.$player.inventory = newInfo.game.inventory;
-			$game.$player.resources = newInfo.game.resources;
-			$game.$player.seeds = newInfo.game.seeds;
+			$game.$player.game = newInfo.game;
 
 			$game.$player.fillInventory();
 
@@ -79,6 +78,7 @@ $game.$player = {
 			_chatIdSelector = '#' + _chatId;
 
 			$game.firstLoad(_info.x, _info.y);
+			$game.$player.updateRenderInfo();
 			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, 'rgb(255,0,0)');
 			
 		});
@@ -98,24 +98,29 @@ $game.$player = {
 		}
 		//this keeps us from doing this query every frame
 		if(_getMaster) {
-			var loc = $game.masterToLocal(_info.x, _info.y);
-			if(loc) {
-				var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
-				prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
-				curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
-				curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
-				
-				_renderInfo.prevX = prevX,
-				_renderInfo.prevY = prevY,
-
-				_renderInfo.srcX = _info.srcX,
-				_renderInfo.srcY = _info.srcY,
-				_renderInfo.curX = curX,
-				_renderInfo.curY = curY;
-			}
+			$game.$player.updateRenderInfo();
 		}
 	},
 
+	updateRenderInfo: function() {
+		var loc = $game.masterToLocal(_info.x, _info.y);
+		if(loc) {
+			var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
+			prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
+			curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
+			curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
+			
+			_renderInfo.prevX = prevX,
+			_renderInfo.prevY = prevY,
+
+			_renderInfo.srcX = _info.srcX,
+			_renderInfo.srcY = _info.srcY,
+			_renderInfo.curX = curX,
+			_renderInfo.curY = curY;
+		}
+	},
+
+	
 	clear: function() {
 		$game.$renderer.clearCharacter(_renderInfo);
 	},
@@ -207,7 +212,7 @@ $game.$player = {
 			x: _info.x,
 			y: _info.y
 		};
-		ss.rpc('game.player.sendPosition', posInfo);
+		ss.rpc('game.player.savePosition', posInfo);
 
 		$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
 
@@ -257,8 +262,8 @@ $game.$player = {
 				if(x === 0 || x === 29 || y === 0 || y === 14) {
 					_willTravel = true;
 					$game.calculateNext(x, y, function() {
-						//data is loaded!
-						// $game.$player.getPath();
+					// 	//data is loaded!
+					// 	// $game.$player.getPath();
 					});
 				}
 			}
@@ -267,14 +272,23 @@ $game.$player = {
 			//calc local for start point for pathfinding
 			var loc = $game.masterToLocal(_info.x, _info.y);
 			
+			var masterEndX = $game.currentTiles[x][y].x,
+				masterEndY = $game.currentTiles[x][y].y;
+
+			// var points = {
+			// 	sX: _info.x,
+			// 	sY: _info.y,
+			// 	eX: masterEndX,
+			// 	eY: masterEndY
+			// };
+
 			var start = $game.graph.nodes[loc.y][loc.x],
 				end = $game.graph.nodes[y][x],
 				result = $game.$astar.search($game.graph.nodes, start, end);
 			if(result.length > 0) {
-				ss.rpc('game.player.movePlayer', result, $game.$player.id);
-			}
-			else {
-
+				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
+					$game.$player.sendMoveInfo(result);
+				});
 			}
 		});
 			
@@ -348,9 +362,9 @@ $game.$player = {
 						y: origY + b,
 						color:
 						{
-							r: $game.$player.color.r,
-							g: $game.$player.color.g,
-							b: $game.$player.color.b,
+							r: $game.$player.game.colorInfo.rgb.r,
+							g: $game.$player.game.colorInfo.rgb.g,
+							b: $game.$player.game.colorInfo.rgb.b,
 							a: 0.3,
 							owner: 'nobody'
 						}
@@ -480,25 +494,20 @@ $game.$player = {
 	},
 
 	exitAndSave: function() {
-		
-		var info = {
-		id: $game.$player.id,
-		resources: $game.$player.resources,
-		inventory: $game.$player.inventory,
-		seeds: $game.$player.seeds
-		};
-		ss.rpc('game.player.exitPlayer', info);
+		$game.$player.game.position.x = _info.x,
+		$game.$player.game.position.y = _info.y;
+		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
 		
 	},
 
 	getPrompt: function(id) {
 		
-		var	l = $game.$player.resources.length;
+		var	l = $game.$player.game.resources.length;
 
 		while(--l > -1) {
-			if(id === $game.$player.resources[l].npc) {
+			if(id === $game.$player.game.resources[l].npc) {
 				//if the player already got it right, it should be prompt 2
-				if($game.$player.resources[l].result) {
+				if($game.$player.game.resources[l].result) {
 					return 2;
 				}
 				else {
@@ -520,35 +529,35 @@ $game.$player = {
 		};
 		
 		var rs = null,
-			l = $game.$player.resources.length;
+			l = $game.$player.game.resources.length;
 
 		while(--l > -1) {
-			if(id === $game.$player.resources[l].npc) {
-				rs = $game.$player.resources[l];
+			if(id === $game.$player.game.resources[l].npc) {
+				rs = $game.$player.game.resources[l];
 				continue;
 			}
 		}
 
 		if(!rs) {
-			$game.$player.resources.push(r);
+			$game.$player.game.resources.push(r);
 		}
 		else {
 			console.log(rs, 'dupe');
 			rs.answers.push(r.answers[0]);
 			rs.attempts += 1;
 			rs.result = r.result;
-			$game.$player.seeds.normal += 1;
-			$game.$player.inventory.push(id);
+			$game.$player.game.seeds.normal += 1;
+			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
 		}
 	},
 
 	getAnswer: function(id) {
-		var l = $game.$player.resources.length;
+		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
-			if(id === $game.$player.resources[l].npc) {
-				var rightOne = $game.$player.resources[l].answers.length - 1;
-				return $game.$player.resources[l].answers[rightOne];
+			if(id === $game.$player.game.resources[l].npc) {
+				var rightOne = $game.$player.game.resources[l].answers.length - 1;
+				return $game.$player.game.resources[l].answers[rightOne];
 			}
 		}
 	},
@@ -558,14 +567,14 @@ $game.$player = {
 	},
 
 	fillInventory: function() {
-		var l = $game.$player.resources.length;
+		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
-			if($game.$player.resources[l].result) {
+			if($game.$player.game.resources[l].result) {
 				
-				var file = 'r' + $game.$player.resources[l].npc;
+				var file = 'r' + $game.$player.game.resources[l].npc;
 
 				$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
-				$('.'+ file).bind('click',{npc: $game.$player.resources[l].npc}, $game.$resources.beginResource);
+				$('.'+ file).bind('click',{npc: $game.$player.game.resources[l].npc}, $game.$resources.beginResource);
 			}
 		}
 	},

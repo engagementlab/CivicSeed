@@ -38,8 +38,8 @@ exports.actions = function(req, res, ss) {
 				};
 
 			//send the number of active players and the new player info
-			console.log(playerInfo.game);
 			res(playerInfo);
+
 		},
 
 		addPlayer: function(info) {
@@ -47,23 +47,20 @@ exports.actions = function(req, res, ss) {
 			numActivePlayers += 1;
 			ss.publish.all('ss-addPlayer',numActivePlayers, info);
 		},
-		exitPlayer: function(player) {
-		
-			console.log("exit: ",player);
-
-			userModel.findById(player.id, function (err, user) {
-				user.game.position.x = players[player.id].game.position.x,
-				user.game.position.y = players[player.id].game.position.y;
-				user.game.resources = player.resources;
-				user.game.inventory = player.inventory;
-				user.game.seeds = player.seeds;
-
-				
+		exitPlayer: function(info, id) {
+			
+			//update redis
+			req.session.game = info;
+			req.session.save();
+			
+			//update mongo
+			userModel.findById(id, function (err, user) {
+				user.game = info;
 
 				user.save(function (y) {
-					ss.publish.all('ss-removePlayer', numActivePlayers, player.id);
+					ss.publish.all('ss-removePlayer', numActivePlayers, id);
 					numActivePlayers -= 1;
-					delete players[player.id];
+					delete players[id];
 				});
 			});
 		},
@@ -96,20 +93,21 @@ exports.actions = function(req, res, ss) {
 			//return set of tiles based no bounds
 		},
 		
-		movePlayer: function(moves, id) {
-			console.log("move "+id);
+		movePlayer: function(pos, id) {
 
 			//send out the moves to everybody
-			ss.publish.all('ss-playerMoved', moves, id);
+			ss.publish.all('ss-playerMoved', pos, id);
+			res(true);
 		},
 
-		sendPosition: function(info) {
-					players[info.id].game.position.x = info.x;
-					players[info.id].game.position.y = info.y;
+		savePosition: function(info) {
+			// players[info.id].game.position.x = info.x;
+			// players[info.id].game.position.y = info.y;
+			console.log(info);
+			req.session.game = info;
 		},
 		dropSeed: function(bombed) {
 
-			console.log(bombed);
 			//send out the color information to each client to render
 			ss.publish.all('ss-seedDropped', bombed);
 			
@@ -122,7 +120,6 @@ exports.actions = function(req, res, ss) {
 				index = bombed[i].y * 142 + bombed[i].x;
 
 				tileModel.findOne({ 'mapIndex': index }, function (err, tile) {
-					console.log(err, tile);
 					
 					tile.set('color', bombed[i].color);
 					tile.save(function(y) {

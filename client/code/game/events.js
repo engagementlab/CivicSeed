@@ -27,12 +27,8 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 		//check if that quad is relevant to the current player
 		//this will also have the player info so as to id the appropriate one
 		
-		if(id == $game.$player.id) {
-			$game.$player.sendMoveInfo(moves);
-		}
-		else {
+		if(id != $game.$player.id) {
 			$game.$others.sendMoveInfo(moves, id);
-
 		}
 		
 
@@ -132,7 +128,7 @@ $('.resourceArea').keypress(function(event){
     }
 });
 
-$('.inventoryButton').click(function () {
+$('.inventoryButton, .inventory button').click(function () {
 	if(!$game.$resources.isShowing) {
 		if($game.$player.inventoryShowing) {
 			$('.inventory').slideUp(function() {
@@ -145,10 +141,5 @@ $('.inventoryButton').click(function () {
 			});	
 		}	
 	}
-	
 	return false;
 });
-
-
-
-

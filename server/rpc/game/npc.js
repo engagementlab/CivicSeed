@@ -10,7 +10,7 @@ var self = exports.actions = function(req, res, ss) {
 	var service = ss.service;
 	var UserModel = service.useModel('user', 'ss');
 	var NpcModel = service.useModel('npc', 'ss');
-	var GnomeModel = service.useModel('npc', 'ss');
+	var GnomeModel = service.useModel('gnome', 'ss');
 	var ResourceModel = service.useModel('resource', 'ss');
 
 	return {
@@ -59,6 +59,11 @@ var self = exports.actions = function(req, res, ss) {
 		getDialog: function() {
 			res(['I\'m saying one thing', 'Here\'s another thing I say.', 'Boy, I\'m just full of things to say!']);
 		},
+		loadGnome: function() {
+			GnomeModel.find(function(err, response) {
+				res(response);
+			});
+		}
 
 		// exampleResponse: function() {
 		// 	ss.publish.all('systemAlert', 'The server is about to be shut down');

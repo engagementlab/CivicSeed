@@ -34,6 +34,7 @@ ss.server.on('ready', function() {
 					var $player = require('/player');
 					var $others = require('/others');
 					var $thing = require('/thing');
+					var $gnome = require('/gnome');
 					var $mouse = require('/mouse');
 					var $audio = require('/audio');
 					var $pathfinder = require('/pathfinder');

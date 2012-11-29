@@ -1,26 +1,22 @@
 module.exports.global = {
-	id: '436',
+	id: 0,
+	name: 'Gnome Gnome',
 	spriteMap: [{
-		x: 8,
-		y: 2
-	}, {
-		x: 8,
-		y: 2
+		x: 0,
+		y: 0
 	}],
-	name: 'Gnome',
-	level: 0,
 	dialog: {
-		intro: [
-			'I\'m the Gnome.',
-			'I can help you out.',
-			'If you solve these riddles, you can become a master gardner.'
-		],
-		random: [
-			'I\'m sure you believe everything you\'re saying.',
-			'If you believed something different, you wouldn\'t be sitting where you\'re sitting.',
-			'Stability means we run it.'
-		],
-		question: [''],
-		answer: ['']
+		level: [{
+			instruction: ['Go northeast'],
+			riddle: {
+				sonnet: 'Who is the man?',
+				prompt: ['What?'],
+				responses: ['Correct']
+			}
+		}],
+		finale: {
+			videos: ['video to come'],
+			explanations: ['explanation to come']
+		}
 	}
 };

@@ -90,7 +90,7 @@ $game.$npc = {
 				curY: (Math.floor(npc.id / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
 				srcX: 0,
 				srcY: 0,
-				isNpc: true
+				kind: 'npc'
 			},
 
 

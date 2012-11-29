@@ -82,15 +82,21 @@ $game.$mouse = {
 
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
-
-						$game.$npc.selectNpc(newIndex);
+						if(newIndex !== $game.$gnome.index) {
+							$game.$npc.selectNpc(newIndex);
 				
-						//move them to the spot to the
-						//BOTTOM LEFT corner of the npc
-						//(consistent so we leave that open in tilemap)
-						//also make sure it is not a transition tile
-						$game.$player.npcOnDeck = true;
-						$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+							//move them to the spot to the
+							//BOTTOM LEFT corner of the npc
+							//(consistent so we leave that open in tilemap)
+							//also make sure it is not a transition tile
+							$game.$player.npcOnDeck = true;
+							$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+						}
+
+						else {
+							$game.$gnome.show();
+						}
+						
 						
 						
 					}

@@ -7,8 +7,8 @@ exports.actions = function(req, res, ss) {
 	// req.use('session');
 	// req.use('account.user.authenticated');
 
-	console.log('CS:'.blue + ' chat RPC request ---->'.magenta);
-	console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
+	//console.log('CS:'.blue + ' chat RPC request ---->'.magenta);
+	//console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
 
 	return {
 
