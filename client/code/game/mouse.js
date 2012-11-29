@@ -78,7 +78,7 @@ $game.$mouse = {
 					//npc
 					else if(state >= 0 ) {
 						//set index val so reousrce can show right one
-						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].mapIndex;
+						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].tileState;
 
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing

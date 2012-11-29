@@ -5,6 +5,7 @@ $game.$others = {
 
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
+			console.log(response);
 			_onScreenPlayers = {};
 			$.each(response, function(key, player) {
 				$game.$others.add(player);
@@ -15,12 +16,11 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
-		//console.log(player.id);
 		if(player.id != $game.$player.id) {
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;
-			newbie.getRenderInfo();
+			newbie.updateRenderInfo();
 			//console.log("added: " + player.id);
 			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(255,255,255)');  
 		}
@@ -114,7 +114,8 @@ $game.$others = {
 				curX: player.x,
 				curY: player.y,
 				prevX: player.x,
-				prevY: player.y
+				prevY: player.y,
+				kind: 'player'
 			},
 
 			update: function() {
@@ -130,11 +131,11 @@ $game.$others = {
 				}
 
 				if(otherPlayer.getMaster) {
-					otherPlayer.getRenderInfo();
+					otherPlayer.updateRenderInfo();
 				}
 			},
 
-			getRenderInfo: function() {
+			updateRenderInfo: function() {
 				var loc = $game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
 				if(loc) {
 					var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS,

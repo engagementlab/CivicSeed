@@ -12,19 +12,19 @@ $game.$gnome = {
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
-			console.log(response);
-			
+			$game.$gnome.index = response.id;
+
 			_info = {
-				x: 18,
-				y: 10
+				x: response.x,
+				y: response.y
 			};
 
 			_renderInfo = {
 				kind: 'gnome',
-				curX: 18,
-				curY: 10,
-				prevX: 18,
-				prevY: 10
+				curX: response.x,
+				curY: response.y,
+				prevX: response.x,
+				prevY: response.y
 			};
 
 			$game.$gnome.getMaster();
@@ -109,24 +109,43 @@ $game.$gnome = {
 
 	show: function() {
 		
-		//decide what to show based on the player's current status
-		//if they are on level 0- show instructions
+		
 
-		//if they are in a level 1-4
-			//and haven't seen riddle show riddle
+		//decide what to show based on the player's current status
+				
+		//if they are in a level 0-4
+		if($game.$player.currentLevel < 5) {
+
+			//show instructions first
+			if($game.$player.game.gnomeState === 0) {
+				alert('follow me!');
+			}
+			
+
+			//then show riddle
 
 			//if they have resources but not the right ones provide hint
 
 			//if they have the right ones prompt to answer
-
-		//if they have beat level 4
+		
+		}
+		//they have beaten the INDIVIDUAL part of the game
+		else {
+			//if they have beat level 4
 			//but comm. meter is <
 
 			//and comm. meter is >
 
 			//and final task is solved
+		}
+
 		
 	},
+
+	showTangram: function() {
+		var file = '/img/game/tangrams/puzzle' + $game.$player.currentLevel + '.png';
+		
+	}
 /*
 	hideChat: function() {
 		

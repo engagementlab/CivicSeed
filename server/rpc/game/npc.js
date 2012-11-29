@@ -60,7 +60,7 @@ var self = exports.actions = function(req, res, ss) {
 			res(['I\'m saying one thing', 'Here\'s another thing I say.', 'Boy, I\'m just full of things to say!']);
 		},
 		loadGnome: function() {
-			GnomeModel.find(function(err, response) {
+			GnomeModel.findOne(function(err, response) {
 				res(response);
 			});
 		}

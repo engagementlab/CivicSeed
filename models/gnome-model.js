@@ -2,6 +2,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var gnomeSchema = new Schema({
 		id: Number,
+		x: Number,
+		y: Number,
 		name: String,
 		spriteMap: [{
 			x: Number,

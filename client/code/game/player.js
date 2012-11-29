@@ -32,11 +32,6 @@ $game.$player = {
 	ready: false,
 	currentLevel: 1,
 	seedMode: false,
-	color: {},
-	resources: [],
-	inventory: {},
-	seeds: {},
-
 
 
 	//private methods
@@ -100,6 +95,15 @@ $game.$player = {
 		if(_getMaster) {
 			$game.$player.updateRenderInfo();
 		}
+	},
+
+	updateGnomeState: function() {
+		// //update gnome state when: 
+		// 	-resource added to inventory 
+		// 	-riddle solved (level change)
+		// 	-instructions viewed
+
+		
 	},
 
 	updateRenderInfo: function() {

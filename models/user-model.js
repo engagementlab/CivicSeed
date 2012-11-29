@@ -33,7 +33,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				normal: Number,
 				riddle: Number,
 				special: Number
-			}
+			},
+			gnomeState: Number
 		}
 	});
 

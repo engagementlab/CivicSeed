@@ -28,7 +28,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Russell',
@@ -55,7 +56,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Stephen',
@@ -82,7 +84,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Eric',
@@ -109,7 +112,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Sam',
@@ -136,7 +140,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Joe',
@@ -163,7 +168,8 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }, {
 	name: 'Frank',
@@ -190,6 +196,7 @@ module.exports.global = [{
 				normal: 1,
 				riddle: 0,
 				special: 0
-			}
+			},
+			gnomeState: 0
 		}
 }];

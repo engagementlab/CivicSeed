@@ -45,6 +45,7 @@ exports.actions = function(req, res, ss) {
 		addPlayer: function(info) {
 			players[info.id] = info;
 			numActivePlayers += 1;
+			console.log(players);
 			ss.publish.all('ss-addPlayer',numActivePlayers, info);
 		},
 		exitPlayer: function(info, id) {
@@ -103,7 +104,7 @@ exports.actions = function(req, res, ss) {
 		savePosition: function(info) {
 			// players[info.id].game.position.x = info.x;
 			// players[info.id].game.position.y = info.y;
-			console.log(info);
+			//console.log(info);
 			req.session.game = info;
 		},
 		dropSeed: function(bombed) {

@@ -63,12 +63,21 @@ exports.actions = function(req, res, ss) {
 						//tileState: -1 if nothing (go!), -2 if something (nogo!), the index if it's an NPC
 						//checking values are arbitrary right now,
 						//based on the image used in tiled map editor
+
+						// 0: this means there was nothing place in tilestate layer, aka GO
 						if(tileStateArray[i] === 0) {
 							tileStateVal = -1;
 						}
+
+						//2: this refers to the BLUE tile, means there is an NPC
 						else if(tileStateArray[i] === 2	) {
 							tileStateVal = i;
-						} 
+						}
+						//3: this is the pink? tile, it is the gnome
+						else if(tileStateArray[i] === 3) {
+							tileStateVal = 99999;
+						}
+						//3: this means there was something OTHER than the blue tile place, NOGO
 						else {
 							tileStateVal = -2;
 						}
