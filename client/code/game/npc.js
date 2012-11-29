@@ -202,10 +202,9 @@ $game.$npc = {
 	showPrompt: function() {
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
-		$('.speechBubble').css('height',55);
 		buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
 		_speak += buttons;
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
+		$('.speechBubble').append('<span class="speakerName">'+_who+': </span>'+ _speak).slideDown(function() {
 			$(".speechBubble .btn-success").bind("click", (function () {
 				$game.$resources.showResource(promptNum);
 			}));
@@ -219,8 +218,7 @@ $game.$npc = {
 		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
 		_speak = _curNpc.dialog.random[ran];
 		
-		$('.speechBubble').css('height',40);
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
+		$('.speechBubble').append('<span class="speakerName">'+_who+': </span>'+ _speak).slideDown(function() {
 			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
 		});
 	},

@@ -4971,15 +4971,12 @@ a.badge:hover {
   position: absolute;
   top: 10px;
   left: 10px;
-  width: 940px;
-  height: 55px;
+  width: 920px;
+  max-height: 55px;
   background: rgba(30, 30, 30, 0.7);
-  padding: 0;
   border-radius: 5px;
   z-index: 9999;
   display: none;
-}
-.speechBubble p {
   color: white;
   padding: 10px;
   text-shadow: 1px 1px 1px #333;

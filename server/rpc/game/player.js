@@ -45,7 +45,6 @@ exports.actions = function(req, res, ss) {
 		addPlayer: function(info) {
 			players[info.id] = info;
 			numActivePlayers += 1;
-			console.log(players);
 			ss.publish.all('ss-addPlayer',numActivePlayers, info);
 		},
 		exitPlayer: function(info, id) {

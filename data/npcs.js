@@ -24,7 +24,7 @@ module.exports.global = [
 {
 	id: '872',
 	name: 'Wizard',
-	level: 1,
+	level: 2,
 	spriteMap: [{
 		x: 0,
 		y: 0

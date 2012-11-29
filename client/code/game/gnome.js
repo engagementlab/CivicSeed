@@ -1,6 +1,7 @@
 var _info = null,
 	_renderInfo = null,
-	_onScreen = false;
+	_onScreen = false,
+	_messages = null;
 
 $game.$gnome = {
 
@@ -9,10 +10,12 @@ $game.$gnome = {
 	counter: Math.floor(Math.random() * 64),
 	curFrame: 0,
 	numFrames: 4,
+	dialog: null,
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
 			$game.$gnome.index = response.id;
+			$game.$gnome.dialog = response.dialog;
 
 			_info = {
 				x: response.x,
@@ -118,7 +121,8 @@ $game.$gnome = {
 
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
-				alert('follow me!');
+				_messages = $game.$gnome.dialog.level[$game.$player.currentLevel].instructions;
+				showChat();
 			}
 			
 
@@ -145,7 +149,16 @@ $game.$gnome = {
 	showTangram: function() {
 		var file = '/img/game/tangrams/puzzle' + $game.$player.currentLevel + '.png';
 		
-	}
+	},
+
+	showChat: function(messages) {
+
+		
+	},
+
+	addChatContent: function() {
+
+	},
 /*
 	hideChat: function() {
 		

@@ -5,7 +5,6 @@ $game.$others = {
 
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
-			console.log(response);
 			_onScreenPlayers = {};
 			$.each(response, function(key, player) {
 				$game.$others.add(player);
