@@ -5082,6 +5082,9 @@ a.badge:hover {
   width: 32px;
   cursor: pointer;
 }
+.hideButton {
+  display: none;
+}
 body {
   padding-top: 80px;
 }

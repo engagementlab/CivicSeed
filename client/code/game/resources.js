@@ -61,7 +61,7 @@ $game.$resources = {
 		}
 
 		$('.speechBubble').slideUp(function() {
-			$('.speechBubble').empty();
+			$('.speechBubble button').addClass('hideButton');
 			$(".speechBubble .btn-success").unbind("click");
 			$(".speechBubble .btn-danger").unbind("click");
 

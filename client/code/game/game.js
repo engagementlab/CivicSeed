@@ -499,6 +499,10 @@ exports.$game = {
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}
+	},
+
+	clearSpeechBubble: function() {
+		$('.speechBubble span').empty();
 	}
 };
 

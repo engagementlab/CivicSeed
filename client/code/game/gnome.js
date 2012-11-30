@@ -1,7 +1,8 @@
 var _info = null,
 	_renderInfo = null,
 	_onScreen = false,
-	_messages = null;
+	_messages = null,
+	_currentMessage = 0;
 
 $game.$gnome = {
 
@@ -11,11 +12,14 @@ $game.$gnome = {
 	curFrame: 0,
 	numFrames: 4,
 	dialog: null,
+	name: null,
+	isChat: false,
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
-			$game.$gnome.index = response.id;
-			$game.$gnome.dialog = response.dialog;
+			$game.$gnome.index = response.id,
+			$game.$gnome.dialog = response.dialog,
+			$game.$gnome.name = response.name;
 
 			_info = {
 				x: response.x,
@@ -117,12 +121,16 @@ $game.$gnome = {
 		//decide what to show based on the player's current status
 				
 		//if they are in a level 0-4
+
+		
 		if($game.$player.currentLevel < 5) {
 
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog.level[$game.$player.currentLevel].instructions;
-				showChat();
+				_currentMessage = 0;
+				$game.$gnome.showChat();
+
 			}
 			
 
@@ -151,13 +159,48 @@ $game.$gnome = {
 		
 	},
 
-	showChat: function(messages) {
-
+	showChat: function() {
+		$game.$gnome.isChat = true;
+		$game.$gnome.nextChatContent();
+	},
+	hideChat: function() {
+		$('.speechBubble').slideUp(function() {
+			$('.speechBubble button').addClass('hideButton');
+			$('.speechBubble .closeChatButton').unbind('click');
+			$game.$gnome.isChat = false;
+		});
 		
 	},
-
 	addChatContent: function() {
+		$game.clearSpeechBubble();
+		$('.speechBubble .nextChatButton').removeClass('hideButton');
+		$('.speechBubble .speakerName').text($game.$gnome.name);
+		$('.speechBubble .message').text(_messages[_currentMessage]);
+		if(_currentMessage === 0) {
+			$('.speechBubble').slideDown(function() {
+				$(".speechBubble .nextChatButton").bind('click', (function () {
+					$game.$gnome.nextChatContent();
+				}));
+			});
+		}
+		else if(_currentMessage === _messages.length - 1) {
+			console.log('lol');
+			$(".speechBubble .nextChatButton").unbind('click').addClass('hideButton');
 
+			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
+				$game.$gnome.hideChat();
+			}));
+			
+		}
+	},
+
+	nextChatContent: function() {
+
+		//show the next message if there are more in the bag
+		if(_currentMessage < _messages.length) {
+			$game.$gnome.addChatContent();
+			_currentMessage += 1;
+		}
 	},
 /*
 	hideChat: function() {

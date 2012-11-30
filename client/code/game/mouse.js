@@ -72,7 +72,14 @@ $game.$mouse = {
 					//go
 					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
-						$game.$npc.hideChat();
+						if($game.$npc.isChat) {
+							console.log('ah');
+							$game.$npc.hideChat();
+						}
+						else if($game.$gnome.isChat) {
+							$game.$gnome.hideChat();	
+						}
+						
 					}
 					
 					//npc

@@ -173,12 +173,12 @@ $game.$npc = {
 	hideChat: function() {
 		
 		clearTimeout($game.$npc.hideTimer);
+		$('.speechBubble button').addClass('hideButton');
 		$('.speechBubble').slideUp(function() {
-			$('.speechBubble').empty();
 			$game.$npc.isChat = false;
 			$game.$resources.isShowing = false;
-			$(".speechBubble .btn-success").unbind("click");
-			$(".speechBubble .btn-danger").unbind("click");
+			$(".speechBubble .yesButton").unbind("click");
+			$(".speechBubble .noButton").unbind("click");
 		});
 	},
 
@@ -202,23 +202,31 @@ $game.$npc = {
 	showPrompt: function() {
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
-		buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
-		_speak += buttons;
-		$('.speechBubble').append('<span class="speakerName">'+_who+': </span>'+ _speak).slideDown(function() {
-			$(".speechBubble .btn-success").bind("click", (function () {
+		$game.clearSpeechBubble();
+		$('.speechBubble .speakerName').text(_who);
+		$('.speechBubble .message').text(_speak);
+		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
+		$('.speechBubble').slideDown(function() {
+			$(".speechBubble .yesButton").bind("click", (function () {
 				$game.$resources.showResource(promptNum);
 			}));
-			$(".speechBubble .btn-danger").bind("click", (function () {
+			$(".speechBubble .noButton").bind("click", (function () {
 				$game.$npc.hideChat();
 			}));
 		});
 	},
 
 	showRandom: function() {
-		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length),
+		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length);
+		
 		_speak = _curNpc.dialog.random[ran];
 		
-		$('.speechBubble').append('<span class="speakerName">'+_who+': </span>'+ _speak).slideDown(function() {
+		$game.clearSpeechBubble();
+
+		$('.speechBubble .speakerName').text(_who);
+		$('.speechBubble .message').text(_speak);
+
+		$('.speechBubble').slideDown(function() {
 			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
 		});
 	},
