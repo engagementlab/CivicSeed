@@ -14,13 +14,14 @@ function leaveThisJoint() {
 ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
-	console.log("total active players: " + $game.numPlayers);
 	$('.activePlayers').text(num + ' active players!');
 });
+
+
 ss.event.on('ss-removePlayer', function(num, playerId) {
 	$game.numPlayers = num;
 	$game.$others.remove(playerId);
-	console.log("total active players: " + $game.numPlayers);
+	$('.activePlayers').text(num + ' active players!');
 });
 
 ss.event.on('ss-playerMoved', function(moves, id) {
@@ -86,7 +87,7 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running){
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
