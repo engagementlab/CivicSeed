@@ -4929,6 +4929,18 @@ a.badge:hover {
   z-index: 9999;
   display: none;
 }
+.gnomeArea {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 930px;
+  height: 390px;
+  background: rgba(30, 30, 30, 0.8);
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+}
 .inventory {
   position: absolute;
   bottom: 15px;
@@ -4942,7 +4954,9 @@ a.badge:hover {
   display: none;
 }
 .resourceArea h2,
-.resourceArea p {
+.resourceArea p,
+.gnomeArea h2,
+.gnomeArea p {
   color: white;
   text-shadow: 1px 1px 1px #222;
   padding: 10px 10px 0px 15px;
@@ -4959,7 +4973,8 @@ a.badge:hover {
   bottom: 20px;
   left: 20px;
 }
-.resourceArea a i {
+.resourceArea a i,
+.gnomeArea a i {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -4985,6 +5000,7 @@ a.badge:hover {
   color: #ccff33;
 }
 .speechBubble button {
+  float: right;
   margin: 0 10px;
 }
 #background,

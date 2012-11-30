@@ -144,3 +144,37 @@ $('.inventoryButton, .inventory button').click(function () {
 	}
 	return false;
 });
+
+$(".resourceArea a i, .resourceArea .closeButton").bind("click", (function (e) {
+	e.preventDefault();
+	$game.$resources.hideResource();
+	return false;
+}));
+$(".resourceArea .nextButton").bind("click", (function () {
+	$game.$resources.nextSlide();
+}));
+$(".resourceArea .backButton").bind("click", (function () {
+	$game.$resources.previousSlide();
+}));								
+$(".resourceArea .answerButton").bind("click", (function (e) {
+	e.preventDefault();
+	$game.$resources.submitAnswer();
+	return false;
+}));
+
+$(".gnomeArea a i, .gnomeArea .closeButton").bind("click", (function (e) {
+	e.preventDefault();
+	$game.$gnome.hideResource();
+	return false;
+}));
+$(".gnomeArea .nextButton").bind("click", (function () {
+	$game.$gnome.nextSlide();
+}));
+$(".gnomeArea .backButton").bind("click", (function () {
+	$game.$gnome.previousSlide();
+}));								
+$(".gnomeArea .answerButton").bind("click", (function (e) {
+	e.preventDefault();
+	$game.$gnome.submitAnswer();
+	return false;
+}));

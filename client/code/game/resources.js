@@ -50,8 +50,6 @@ $game.$resources = {
 				$game.$resources.showResource(2);
 			}
 		});
-
-
 	},
 
 	showResource: function(num) {
@@ -62,15 +60,14 @@ $game.$resources = {
 
 		$('.speechBubble').slideUp(function() {
 			$('.speechBubble button').addClass('hideButton');
-			$(".speechBubble .btn-success").unbind("click");
-			$(".speechBubble .btn-danger").unbind("click");
+			$(".speechBubble .yesButton").unbind("click");
+			$(".speechBubble .noButton").unbind("click");
 
 			//ready to show the resource now
 			//_speak = _curResource.dialog.questions[0];
-			$('.resourceArea').empty();
+			$('.resourceArea .dialog > span, .resourceArea .resourceContent').empty();
 			$game.$resources.addContent();
 			$game.$resources.addButtons();
-			console.log($game.$player.inventoryShowing);
 			$('.inventory').slideUp(function() {
 				$game.$player.inventoryShowing = false;
 				$('.resourceArea').slideDown();
@@ -81,117 +78,83 @@ $game.$resources = {
 	},
 
 	addButtons: function() {
-
+		$('.resourceArea button').addClass('hideButton');
+		
 		if(_answered) {
-			$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button>');
-			$('.closeButton').text('Close');
-			$(".closeButton").bind("click", (function () {
-				$game.$resources.hideResource();
-			}));
+			$('.resourceArea .closeButton').removeClass('hideButton');
 		}
 		else {
 			//if its the first page, we DEF. have a next and no back
 			if(_currentSlide === 0) {
-				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button>');
-				$('.nextButton').text('Next');
-				$(".nextButton").bind("click", (function () {
-					$game.$resources.nextSlide();
-				}));
+				$('.resourceArea .nextButton').removeClass('hideButton');
 			}
 			
 			//if its not the first page or the last page, we have both
 			else if(_currentSlide > 0 && _currentSlide < _numSlides) {
-				$('.resourceArea').append('<button class="btn btn-primary nextButton">Next</button><button class="btn btn-inverse backButton">Back</button>');
-				$('.nextButton').text('Next');
-				$('.backButton').text('Back');
-				$(".nextButton").bind("click", (function () {
-					$game.$resources.nextSlide();
-				}));
-				$(".backButton").bind("click", (function () {
-					$game.$resources.previousSlide();
-				}));
+				$('.resourceArea .nextButton,.resourceArea  .backButton').removeClass('hideButton');
 			}
 
 			//if its the last page, we have an answer button and a back
 			else if(_currentSlide === _numSlides) {
 				if(_revisiting) {
-					$('.resourceArea').append('<button class="btn btn-primary closeButton">Close</button><button class="btn btn-inverse backButton">Back</button>');
-					$('.closeButton').text('Close');
-					$(".closeButton").bind("click", (function () {
-						$game.$resources.hideResource();
-					}));
+					$('.resourceArea .closeButton').removeClass('hideButton');
 				}
 				else {
-					$('.resourceArea').append('<button class="btn btn-success answerButton">Answer</button><button class="btn btn-inverse backButton">Back</button>');
-					$('.answerButton').text('Answer');
-					$(".answerButton").bind("click", (function (e) {
-						e.preventDefault();
-						$game.$resources.submitAnswer();
-						return false;
-					}));
+					$('.resourceArea .answerButton').removeClass('hideButton');
 				}
-				
-				$('.backButton').text('Back');
-				
-				$(".backButton").bind("click", (function () {
-					$game.$resources.previousSlide();
-				}));
+				$('.resourceArea .backButton').removeClass('hideButton');
 			}
 		}
 	},
 
 	addContent: function() {
 
-		//add the close button
-		
-		$('.resourceArea').append('<a href="#" style="font-size: 24px;"><i class="icon-remove-sign icon-large"></i></a>');
-		$(".resourceArea a i").bind("click", (function () {
-			$game.$resources.hideResource();
-			return false;
-		}));
 		//add the answer form
 		if(_answered) {
 	
 			if(_correctAnswer) {
 				_speak = _curResource.responses[0];
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p><p><img src="img/game/resources/r'+_curResource.id+'.png"></p>');
+				$('.resourceArea .speakerName').text(_who);
+				$('.resourceArea .message').text(_speak);
+				$('.resourceContent').html('</p><p><img src="img/game/resources/r'+_curResource.id+'.png"></p>');
 			}
 			else {
 				_speak = _curResource.responses[1];
-				$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>');
+				$('.resourceArea .speakerName').text(_who);
+				$('.resourceArea .message').text(_speak);
+				$('.resourceContent').empty();
 			}
 			
 		}
 		else {
 			if(_currentSlide === _numSlides) {
 				
-				var finalQuestion = _curResource.question;
+				var finalQuestion = '<p>' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
-					playerAnswer = $game.$player.getAnswer(_curResource.id);
-					$('.resourceArea').append('<p>'+finalQuestion+'</p><p><span class="speakerName"> You said: </span>'+playerAnswer+'</p>');
+					playerAnswer = '<p><span class=\'speakerName\'>Your Answer: </span>'+$game.$player.getAnswer(_curResource.id) + '</p>';
+					$('.resourceContent').html(finalQuestion + playerAnswer);
 				}
 				else {
 					_speak = _curResource.prompt;
+					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .message').text(_speak);
 					var inputBox = '<form><input></input></form>';
-					$('.resourceArea').append('<p><span class="speakerName">'+_who+': </span>'+_speak+'</p><p>'+finalQuestion+'</p>'+inputBox);
+					$('.resourceContent').html(finalQuestion + inputBox);
 				}
-				
 					
-				
 			}
 			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
-				$('.resourceArea').append(content);
+				$('.resourceContent').html(content);
 			}
 		}
 	},
 
 	hideResource: function() {
 		$('.resourceArea').slideUp(function() {
-			$('.resourceArea p').remove();
-			$('.resourceArea h2').remove();
 			$game.$resources.isShowing = false;
+			$('.resourceArea button').addClass('hideButton');
 		});
 		if(_inventory) {
 			$('.inventory').slideDown(function() {
@@ -212,7 +175,6 @@ $game.$resources = {
 		_currentSlide += 1;
 
 		//wipe the resource area
-		$('.resourceArea').empty();
 
 		$game.$resources.addContent();
 

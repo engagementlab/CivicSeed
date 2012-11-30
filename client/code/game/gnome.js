@@ -2,7 +2,9 @@ var _info = null,
 	_renderInfo = null,
 	_onScreen = false,
 	_messages = null,
-	_currentMessage = 0;
+	_currentMessage = 0,
+	_currentSlide = 0,
+	_promptNum = 0;
 
 $game.$gnome = {
 
@@ -14,6 +16,7 @@ $game.$gnome = {
 	dialog: null,
 	name: null,
 	isChat: false,
+	isShowing: false,
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
@@ -132,13 +135,20 @@ $game.$gnome = {
 				$game.$gnome.showChat();
 
 			}
-			
 
-			//then show riddle
+			//if they have gotten the instructions / intro dialog, show them the riddle
+			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
+			else if($game.$player.game.gnomeState === 1) {
+				$game.$gnome.showPrompt(0);
+			}
+			//if they have the riddle, then provide a random hint, refer them to inventory is one
+			else if($game.$player.game.gnomeState === 2) {
 
-			//if they have resources but not the right ones provide hint
-
-			//if they have the right ones prompt to answer
+			}
+			//if they have gathered the right resources, prompt to answer riddle
+			else if($game.$player.gnome.gnomeState === 3) {
+				$game.$gnome.showPrompt(1);
+			}
 		
 		}
 		//they have beaten the INDIVIDUAL part of the game
@@ -168,14 +178,21 @@ $game.$gnome = {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .closeChatButton').unbind('click');
 			$game.$gnome.isChat = false;
+
+			//save that the player has looked at the instructions
+			if($game.$player.game.gnomeState === 0) {
+				$game.$player.game.gnomeState = 1;
+			}
 		});
 		
 	},
 	addChatContent: function() {
-		$game.clearSpeechBubble();
+		
 		$('.speechBubble .nextChatButton').removeClass('hideButton');
-		$('.speechBubble .speakerName').text($game.$gnome.name);
+		$('.speechBubble .speakerName').text($game.$gnome.name+": ");
 		$('.speechBubble .message').text(_messages[_currentMessage]);
+
+		//first item, then drop
 		if(_currentMessage === 0) {
 			$('.speechBubble').slideDown(function() {
 				$(".speechBubble .nextChatButton").bind('click', (function () {
@@ -184,7 +201,6 @@ $game.$gnome = {
 			});
 		}
 		else if(_currentMessage === _messages.length - 1) {
-			console.log('lol');
 			$(".speechBubble .nextChatButton").unbind('click').addClass('hideButton');
 
 			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
@@ -195,13 +211,119 @@ $game.$gnome = {
 	},
 
 	nextChatContent: function() {
-
 		//show the next message if there are more in the bag
 		if(_currentMessage < _messages.length) {
 			$game.$gnome.addChatContent();
 			_currentMessage += 1;
 		}
 	},
+
+	showPrompt: function(p) {
+		$game.$gnome.isChat = true;
+		_speak =  $game.$gnome.dialog.level[$game.$player.currentLevel].riddle.prompts[p];
+
+		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
+		$('.speechBubble .message').text(_speak);
+		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
+		$('.speechBubble').slideDown(function() {
+			$(".speechBubble .yesButton").bind("click", (function () {
+				$game.$gnome.showRiddle(p);
+			}));
+			$(".speechBubble .noButton").bind("click", (function () {
+				$game.$gnome.hideChat();
+			}));
+		});
+	},
+
+	showRiddle: function(num) {
+		_promptNum = num;
+		$game.$gnome.addContent();
+		$game.$gnome.addButtons();
+		_currentSlide = 0;
+		
+		$('.speechBubble').slideUp(function() {
+			$('.speechBubble button').addClass('hideButton');
+			$('.speechBubble .yesButton').unbind('click');
+			$('.speechBubble .noButton').unbind('click');
+			$('.gnomeArea').slideDown(function() {
+				$game.$gnome.isShowing = true;
+			});
+		});
+		
+	},
+
+	addButtons: function() {
+		$('.gnomeArea button').addClass('hideButton');
+
+		if(_promptNum === 0) {
+			if(_currentSlide === 0) {
+				$('.gnomeArea .nextButton').removeClass('hideButton');
+			}
+			else if(_currentSlide === 1) {
+				console.log('a');
+				$('.gnomeArea .closeButton').removeClass('hideButton');
+				$('.gnomeArea .backButton').removeClass('hideButton');
+			}
+		}
+		else {
+			if(_currentSlide === 0) {
+
+			}
+			else if(_currentSlide === 1) {
+
+			}
+			else {
+
+			}
+		}
+	},
+
+	nextSlide: function() {
+		_currentSlide += 1;
+		$game.$gnome.addContent();
+		$game.$gnome.addButtons();
+	},
+
+	previousSlide: function() {
+		_currentSlide -= 1;
+		$game.$gnome.addContent();
+		$game.$gnome.addButtons();
+	},
+
+	addContent: function() {
+
+		
+		$('.gnomeArea .speakerName').text($game.$gnome.name+': ');
+		
+		//if _promptNum is 0, then it is the just showing the riddle and tangram
+		if(_promptNum === 0) {
+			if(_currentSlide === 0) {
+				$('.gnomeArea .message').text('here is your next riddle whale thing.');
+				$('.gnomeContent').html('<p>'+$game.$gnome.dialog.level[$game.$player.currentLevel].riddle.sonnet+'</p>');
+			}
+			else {
+				$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
+				$('.gnomeContent').html('<p><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+			}
+		}
+		//they are solving it, so riddle interface and stuff
+		else {
+			$('.inventory').slideDown(function() {
+				$game.$player.inventoryShowing = true;
+			});
+		}
+	},
+
+	hideResource: function() {
+		$('.gnomeArea').slideUp(function() {
+			$game.$gnome.isShowing = false;
+			$('.gnome button').addClass('hideButton');
+			$game.$gnome.isChat = false;
+		});
+		$('.inventory').slideUp(function() {
+			$game.$player.inventoryShowing = false;
+		});	
+	}
 /*
 	hideChat: function() {
 		

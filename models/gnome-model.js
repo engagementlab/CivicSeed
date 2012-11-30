@@ -14,7 +14,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				instructions: [String],
 				riddle: {
 					sonnet: String,
-					prompt: [String],
+					prompts: [String],
 					responses: [String]
 				},
 				hint: [String]

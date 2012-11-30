@@ -73,7 +73,6 @@ $game.$mouse = {
 					if(state === -1) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
 						if($game.$npc.isChat) {
-							console.log('ah');
 							$game.$npc.hideChat();
 						}
 						else if($game.$gnome.isChat) {
@@ -85,12 +84,13 @@ $game.$mouse = {
 					//npc
 					else if(state >= 0 ) {
 						//set index val so reousrce can show right one
-						var newIndex = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].tileState;
+						
+						
 
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
-						if(newIndex !== $game.$gnome.index) {
-							$game.$npc.selectNpc(newIndex);
+						if(state !== $game.$gnome.index) {
+							$game.$npc.selectNpc(state);
 				
 							//move them to the spot to the
 							//BOTTOM LEFT corner of the npc

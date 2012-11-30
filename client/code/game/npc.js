@@ -173,10 +173,10 @@ $game.$npc = {
 	hideChat: function() {
 		
 		clearTimeout($game.$npc.hideTimer);
-		$('.speechBubble button').addClass('hideButton');
 		$('.speechBubble').slideUp(function() {
 			$game.$npc.isChat = false;
 			$game.$resources.isShowing = false;
+			$('.speechBubble button').addClass('hideButton');
 			$(".speechBubble .yesButton").unbind("click");
 			$(".speechBubble .noButton").unbind("click");
 		});
@@ -202,8 +202,7 @@ $game.$npc = {
 	showPrompt: function() {
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
-		$game.clearSpeechBubble();
-		$('.speechBubble .speakerName').text(_who);
+		$('.speechBubble .speakerName').text(_who+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
 		$('.speechBubble').slideDown(function() {
@@ -221,7 +220,6 @@ $game.$npc = {
 		
 		_speak = _curNpc.dialog.random[ran];
 		
-		$game.clearSpeechBubble();
 
 		$('.speechBubble .speakerName').text(_who);
 		$('.speechBubble .message').text(_speak);
@@ -235,7 +233,6 @@ $game.$npc = {
 		_index = i;
 		var stringId = String(_index);
 		_curNpc = _allNpcs[stringId];
-
 		if(!_curNpc) {
 			_index += $game.TOTAL_WIDTH;
 			stringId = String(_index);

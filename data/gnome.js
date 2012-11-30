@@ -13,7 +13,7 @@ module.exports.global = {
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
 				sonnet: 'If you like Pina Coladas and getting caught in the rain \nIf you\'re not into yoga, if you have half a brain \nIf you like making love at midnight in the dunes on the cape \nThen I\'m the love that you\'ve looked for write to me and escape',
-				prompt: ['What?'],
+				prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 				responses: ['Correct','Wrong','Close']
 			},
 			hint: ['get more things', 'try harder']
@@ -22,7 +22,7 @@ module.exports.global = {
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
 				sonnet: 'If you like Pina Coladas and getting caught in the rain \nIf you\'re not into yoga, if you have half a brain \nIf you like making love at midnight in the dunes on the cape \nThen I\'m the love that you\'ve looked for write to me and escape',
-				prompt: ['What?'],
+				prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 				responses: ['Correct','Wrong','Close']
 			},
 			hint: ['get more things', 'try harder']
@@ -31,7 +31,7 @@ module.exports.global = {
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
 				sonnet: 'If you like Pina Coladas and getting caught in the rain \nIf you\'re not into yoga, if you have half a brain \nIf you like making love at midnight in the dunes on the cape \nThen I\'m the love that you\'ve looked for write to me and escape',
-				prompt: ['What?'],
+				prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 				responses: ['Correct','Wrong','Close']
 			},
 			hint: ['get more things', 'try harder']
@@ -40,7 +40,7 @@ module.exports.global = {
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
 				sonnet: 'If you like Pina Coladas and getting caught in the rain \nIf you\'re not into yoga, if you have half a brain \nIf you like making love at midnight in the dunes on the cape \nThen I\'m the love that you\'ve looked for write to me and escape',
-				prompt: ['What?'],
+				prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 				responses: ['Correct','Wrong','Close']
 			},
 			hint: ['get more things', 'try harder']
@@ -49,7 +49,7 @@ module.exports.global = {
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
 				sonnet: 'If you like Pina Coladas and getting caught in the rain \nIf you\'re not into yoga, if you have half a brain \nIf you like making love at midnight in the dunes on the cape \nThen I\'m the love that you\'ve looked for write to me and escape',
-				prompt: ['What?'],
+				prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 				responses: ['Correct','Wrong','Close']
 			},
 			hint: ['get more things', 'try harder']
