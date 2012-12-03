@@ -71,7 +71,7 @@ $(window).bind("keypress", (function (key) {
 }));
 //change cursor on mouse move
 $('.gameboard').mousemove(function(m) {
-	if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.ready){
+	if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
 	
 		var mInfo = {
 			x: m.pageX,
