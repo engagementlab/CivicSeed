@@ -69,6 +69,7 @@ $game.$others = {
 		//clear from screen...
 		//clear it off screen first, then delete!
 		_onScreenPlayers[id].clear();
+		$game.$map.removePlayer(id);
 		delete _onScreenPlayers[id];
 		//console.log(_onScreenPlayers);
 	},

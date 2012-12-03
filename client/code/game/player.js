@@ -587,7 +587,10 @@ $game.$player = {
 		var file = 'r' + id;
 		$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
 		$('.'+ file).bind('click',{npc: id}, $game.$resources.beginResource);
-	}
+	},
 
+	getPosition: function() {
+		return _info;
+	}
 };
 

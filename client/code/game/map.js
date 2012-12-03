@@ -36,7 +36,9 @@ $game.$map = {
 	},
 
 	removePlayer: function(id) {
-		delete miniMap[id];
+		$game.$renderer.clearMiniMap();
+		delete $game.$map.miniMap[id];
+		$game.$map.render();
 	},
 
 	render: function() {

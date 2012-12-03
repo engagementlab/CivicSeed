@@ -1,43 +1,159 @@
 module.exports.global = [
 {
-	id: '1150',
+	id: '4876',
 	name: 'Ricky Bobby',
 	level: 1,
-	spriteMap: [{
-		x: 0,
-		y: 64
-	}, {
-		x: 32,
-		y: 64
-	}, {
-		x: 64,
-		y: 64
-	}, {
-		x: 96,
-		y: 64
-	}],
+	spriteY: 0,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
 		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
-	id: '872',
+	id: '4992',
 	name: 'Wizard',
-	level: 2,
-	spriteMap: [{
-		x: 0,
-		y: 0
-	}, {
-		x: 32,
-		y: 0
-	}, {
-		x: 64,
-		y: 0
-	}, {
-		x: 96,
-		y: 0
-	}],
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '5694',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 128,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '352',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 192,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '3761',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 256,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '6176',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 320,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '8003',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '8844',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 0,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '9554',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '6707',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 0,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '8831',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '2285',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 0,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '1891',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '481',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 0,
+	dialog: {
+		random: ['I say stuff not if I am not in your current level.'],
+		prompts: ['Check out this resource.', 'Try again.','You already did this one.']
+	}
+},
+{
+	id: '9240',
+	name: 'Ricky Bobby',
+	level: 1,
+	spriteY: 64,
+	dialog: {
+		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
+		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+	}
+},
+{
+	id: '3858',
+	name: 'Wizard',
+	level: 1,
+	spriteY: 0,
 	dialog: {
 		random: ['I say stuff not if I am not in your current level.'],
 		prompts: ['Check out this resource.', 'Try again.','You already did this one.']

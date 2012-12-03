@@ -80,7 +80,7 @@ $game.$npc = {
 			info: {
 				x: npc.id % $game.TOTAL_WIDTH,
 				y: Math.floor(npc.id / $game.TOTAL_WIDTH),
-				spriteMap: npc.spriteMap
+				spriteY: npc.spriteY
 			},
 
 			renderInfo: {
@@ -131,22 +131,22 @@ $game.$npc = {
 				if(npcObject.counter >= 56) {
 					npcObject.counter = 0,
 					npcObject.renderInfo.srcX = 0,
-					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+					npcObject.renderInfo.srcY = npcObject.info.spriteY;
 				}
 
 				else if(npcObject.counter == 24) {
 					npcObject.renderInfo.srcX = 32;
-					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+					npcObject.renderInfo.srcY = npcObject.info.spriteY;
 				}
 
 				else if(npcObject.counter == 28) {
 					npcObject.renderInfo.srcX = 64;
-					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+					npcObject.renderInfo.srcY = npcObject.info.spriteY;
 				}
 
 				else if(npcObject.counter == 32) {
 					npcObject.renderInfo.srcX = 96;
-					npcObject.renderInfo.srcY = npcObject.info.spriteMap[0].y;
+					npcObject.renderInfo.srcY = npcObject.info.spriteY;
 				}
 
 			},

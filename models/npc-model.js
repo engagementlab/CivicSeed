@@ -4,10 +4,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		id: Number,
 		name: String,
 		level: Number,
-		spriteMap: [{
-			x: Number,
-			y: Number
-		}],
+		spriteY: Number,
 		dialog: {
 			random: [String],
 			prompts: [String]
