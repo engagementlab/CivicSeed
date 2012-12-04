@@ -119,13 +119,9 @@ $game.$gnome = {
 
 	show: function() {
 		
-		
-
 		//decide what to show based on the player's current status
 				
 		//if they are in a level 0-4
-
-		
 		if($game.$player.currentLevel < 5) {
 
 			//show instructions first
@@ -135,7 +131,6 @@ $game.$gnome = {
 				$game.$gnome.showChat();
 
 			}
-
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
 			else if($game.$player.game.gnomeState === 1) {
@@ -143,7 +138,16 @@ $game.$gnome = {
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
 			else if($game.$player.game.gnomeState === 2) {
-
+				var curHint = 0;
+				console.log($game.$player.game.inventory);
+				if($game.$player.game.inventory.length > 0) {
+					curHint = 1;
+				}
+				//else hint 1
+				_messages = [];
+				_messages.push($game.$gnome.dialog.level[$game.$player.currentLevel].hint[curHint]);
+				_currentMessage = 0;
+				$game.$gnome.showChat();
 			}
 			//if they have gathered the right resources, prompt to answer riddle
 			else if($game.$player.gnome.gnomeState === 3) {
@@ -183,6 +187,7 @@ $game.$gnome = {
 			if($game.$player.game.gnomeState === 0) {
 				$game.$player.game.gnomeState = 1;
 			}
+
 		});
 		
 	},
@@ -200,13 +205,12 @@ $game.$gnome = {
 				}));
 			});
 		}
-		else if(_currentMessage === _messages.length - 1) {
+		if(_currentMessage === _messages.length - 1) {
 			$(".speechBubble .nextChatButton").unbind('click').addClass('hideButton');
 
 			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
 				$game.$gnome.hideChat();
 			}));
-			
 		}
 	},
 
@@ -235,6 +239,15 @@ $game.$gnome = {
 		});
 	},
 
+	inventoryShowRiddle: function() {
+		//hide the inventory
+		$('.inventory').slideUp(function() {
+			$game.$player.inventoryShowing = false;
+			$game.$gnome.isChat = true;
+			$game.$gnome.showRiddle(0);
+		});
+	},
+
 	showRiddle: function(num) {
 		_promptNum = num;
 		$game.$gnome.addContent();
@@ -260,7 +273,6 @@ $game.$gnome = {
 				$('.gnomeArea .nextButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-				console.log('a');
 				$('.gnomeArea .closeButton').removeClass('hideButton');
 				$('.gnomeArea .backButton').removeClass('hideButton');
 			}
@@ -302,8 +314,23 @@ $game.$gnome = {
 				$('.gnomeContent').html('<p>'+$game.$gnome.dialog.level[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {
-				$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
+				//show them a different version if they already posses it
+				
+				if($game.$player.game.gnomeState > 1) {
+					$('.gnomeArea .message').text('Here is the outline to view again.');
+				}
+				else {
+					$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
+					//add this tangram outline to the inventory
+					var file = 'puzzle' + $game.$player.currentLevel;
+					$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/tangram\/'+file+'small.png"></div>');
+					$('.'+ file).bind('click', $game.$gnome.inventoryShowRiddle);
+					//update gnomeState
+					$game.$player.game.gnomeState = 2;
+				}
+				
 				$('.gnomeContent').html('<p><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				
 			}
 		}
 		//they are solving it, so riddle interface and stuff

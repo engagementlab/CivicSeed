@@ -567,19 +567,20 @@ $game.$player = {
 	},
 
 	clearInventory: function() {
-		$('.inventoryItem').rempve();
+		$('.inventoryItem').remove();
 	},
 
 	fillInventory: function() {
-		var l = $game.$player.game.resources.length;
+		var l = $game.$player.game.inventory.length;
 		while(--l > -1) {
-			if($game.$player.game.resources[l].result) {
-				
-				var file = 'r' + $game.$player.game.resources[l].npc;
-
+				var file = 'r' + $game.$player.game.inventory[l];
 				$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
 				$('.'+ file).bind('click',{npc: $game.$player.game.resources[l].npc}, $game.$resources.beginResource);
-			}
+		}
+		if($game.$player.game.gnomeState > 1) {
+			var gFile = 'puzzle' + $game.$player.currentLevel;
+			$('.inventory').prepend('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png"></div>');
+			$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 		}
 	},
 

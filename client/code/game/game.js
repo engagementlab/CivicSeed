@@ -110,6 +110,9 @@ exports.$game = {
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
 			if($game.$renderer.ready && $game.$npc.ready && $game.$player.ready && $game.ready && $game.$audio.ready) {
+				$('.loading').fadeOut(function() {
+					$(this).remove();
+				});
 				$game.running = true;
 				$game.$renderer.renderAllTiles();
 				$game.$audio.playTheme();
