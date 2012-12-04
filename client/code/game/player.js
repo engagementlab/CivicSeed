@@ -53,7 +53,7 @@ $game.$player = {
 				prevOffX: 0,
 				prevOffY: 0
 			};
-
+			
 			_renderInfo.colorNum = newInfo.game.colorInfo.tilesheet,
 			_renderInfo.srcX = 0,
 			_renderInfo.srcY = 0,
@@ -280,19 +280,13 @@ $game.$player = {
 			var masterEndX = $game.currentTiles[x][y].x,
 				masterEndY = $game.currentTiles[x][y].y;
 
-			// var points = {
-			// 	sX: _info.x,
-			// 	sY: _info.y,
-			// 	eX: masterEndX,
-			// 	eY: masterEndY
-			// };
-
 			var start = $game.graph.nodes[loc.y][loc.x],
 				end = $game.graph.nodes[y][x],
 				result = $game.$astar.search($game.graph.nodes, start, end);
 			if(result.length > 0) {
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
 					$game.$player.sendMoveInfo(result);
+					$game.$audio.update(masterEndX, masterEndY);
 				});
 			}
 		});
