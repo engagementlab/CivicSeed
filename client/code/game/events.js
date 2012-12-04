@@ -130,7 +130,7 @@ $('.resourceArea').keypress(function(event){
 });
 
 $('.inventoryButton, .inventory button').click(function () {
-	if(!$game.$resources.isShowing) {
+	if(!$game.$resources.isShowing && !$game.$gnome.isShowing) {
 		if($game.$player.inventoryShowing) {
 			$('.inventory').slideUp(function() {
 				$game.$player.inventoryShowing = false;

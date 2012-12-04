@@ -15,7 +15,8 @@ var _curFrame = 0,
 	_isChatting = false,
 	_hideTimer = null,
 	_chatId = null,
-	_chatIdSelector = null;
+	_chatIdSelector = null,
+	_numRequired = [2,1,1,1];
 
 
 $game.$player = {
@@ -535,6 +536,8 @@ $game.$player = {
 		var rs = null,
 			l = $game.$player.game.resources.length;
 
+		
+		//see if the resource is already in the list
 		while(--l > -1) {
 			if(id === $game.$player.game.resources[l].npc) {
 				rs = $game.$player.game.resources[l];
@@ -542,17 +545,24 @@ $game.$player = {
 			}
 		}
 
+		//if not, then add it to the list
 		if(!rs) {
 			$game.$player.game.resources.push(r);
 		}
 		else {
-			console.log(rs, 'dupe');
 			rs.answers.push(r.answers[0]);
 			rs.attempts += 1;
 			rs.result = r.result;
+		}
+
+		//the answer was correct, add item to inventory
+		if(correct) {
 			$game.$player.game.seeds.normal += 1;
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
+			if($game.$player.game.inventory.length >= _numRequired[$game.$player.currentLevel] - 1 && $game.$player.game.gnomeState > 1) {
+				$game.$player.game.gnomeState = 3;
+			}
 		}
 	},
 
@@ -579,7 +589,7 @@ $game.$player = {
 		}
 		if($game.$player.game.gnomeState > 1) {
 			var gFile = 'puzzle' + $game.$player.currentLevel;
-			$('.inventory').prepend('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png"></div>');
+			$('.inventory').append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png"></div>');
 			$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 		}
 	},

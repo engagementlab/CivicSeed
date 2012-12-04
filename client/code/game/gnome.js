@@ -150,7 +150,7 @@ $game.$gnome = {
 				$game.$gnome.showChat();
 			}
 			//if they have gathered the right resources, prompt to answer riddle
-			else if($game.$player.gnome.gnomeState === 3) {
+			else if($game.$player.game.gnomeState === 3) {
 				$game.$gnome.showPrompt(1);
 			}
 		
@@ -241,18 +241,20 @@ $game.$gnome = {
 
 	inventoryShowRiddle: function() {
 		//hide the inventory
-		$('.inventory').slideUp(function() {
-			$game.$player.inventoryShowing = false;
+		if(!$game.$gnome.isShowing) {
+			$('.inventory').slideUp();
 			$game.$gnome.isChat = true;
 			$game.$gnome.showRiddle(0);
-		});
+		}
 	},
 
 	showRiddle: function(num) {
+		//if they are solving, change functionality of inventory
 		_promptNum = num;
+		_currentSlide = 0;
 		$game.$gnome.addContent();
 		$game.$gnome.addButtons();
-		_currentSlide = 0;
+		
 		
 		$('.speechBubble').slideUp(function() {
 			$('.speechBubble button').addClass('hideButton');
@@ -279,10 +281,11 @@ $game.$gnome = {
 		}
 		else {
 			if(_currentSlide === 0) {
-
+				$('.gnomeArea .nextButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-
+				$('.gnomeArea .answerButton').removeClass('hideButton');
+				$('.gnomeArea .backButton').removeClass('hideButton');
 			}
 			else {
 
@@ -323,21 +326,40 @@ $game.$gnome = {
 					$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
 					//add this tangram outline to the inventory
 					var file = 'puzzle' + $game.$player.currentLevel;
-					$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/tangram\/'+file+'small.png"></div>');
+					$('.inventory').append('<div class="inventoryItem '+file+'"><img src="img\/game\/tangram\/'+file+'small.png"></div>');
 					$('.'+ file).bind('click', $game.$gnome.inventoryShowRiddle);
 					//update gnomeState
 					$game.$player.game.gnomeState = 2;
 				}
 				
-				$('.gnomeContent').html('<p><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
 				
 			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
+			$('.inventory button').addClass('hideButton');
 			$('.inventory').slideDown(function() {
-				$game.$player.inventoryShowing = true;
+				$game.$player.inventoryShowing = false;
 			});
+
+			//show the riddle again
+			if(_currentSlide === 0) {
+				$('.gnomeArea .message').text('here is the riddle again. look it over before you solve the puzzle.');
+				$('.gnomeContent').html('<p>'+$game.$gnome.dialog.level[$game.$player.currentLevel].riddle.sonnet+'</p>');
+			}
+			//puzzle interface
+			else if(_currentSlide === 1){
+				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
+				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+			}
+			//right wrong screen
+			else {
+
+			}
+			
+			
+			
 		}
 	},
 
@@ -347,9 +369,17 @@ $game.$gnome = {
 			$('.gnome button').addClass('hideButton');
 			$game.$gnome.isChat = false;
 		});
-		$('.inventory').slideUp(function() {
-			$game.$player.inventoryShowing = false;
-		});	
+		if($game.$player.inventoryShowing) {
+			$('.inventory').slideDown(function() {
+				$game.$player.inventoryShowing = true;
+			});
+		}
+		else {
+			$('.inventory').slideUp(function() {
+				$game.$player.inventoryShowing = false;
+				$('.inventory button').removeClass('hideButton');
+			});
+		}
 	}
 /*
 	hideChat: function() {

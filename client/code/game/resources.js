@@ -30,9 +30,11 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
-		$game.$resources.loadResource(false, e.data.npc, true);
-		_inventory = true;
-		$game.$resources.isShowing = true;
+		if(!$game.$gnome.isShowing) { 
+			$game.$resources.loadResource(false, e.data.npc, true);
+			_inventory = true;
+			$game.$resources.isShowing = true;
+		}
 	},
 
 	loadResource: function(who, index, now) {
