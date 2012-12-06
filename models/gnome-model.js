@@ -9,8 +9,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			x: Number,
 			y: Number
 		}],
-		dialog: {
-			level: [{
+		dialog: [
+			{
 				instructions: [String],
 				riddle: {
 					sonnet: String,
@@ -18,12 +18,26 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 					responses: [String]
 				},
 				hint: [String]
-			}],
-			finale: {
-				videos: [String],
-				explanations: [String]
 			}
-		}
+		],
+		finale: {
+			videos: [String],
+			explanations: [String]
+		},
+		tangram: [
+			{
+				answer: [
+					{
+						id: Number,
+						x: Number,
+						y: Number
+					}
+				]
+			}
+
+		]
+
+
 	});
 
 	var GnomeModel = db.model('gnome', gnomeSchema, 'gnomes');

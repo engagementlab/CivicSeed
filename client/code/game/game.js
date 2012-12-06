@@ -57,16 +57,13 @@ exports.$game = {
 
 	init: function() {
 		
-		//init everything:
-		//renderer loads all the image files
 		$game.$map.init();
 
 		$game.$player.init();
 
 		$game.$renderer.init();
-		//npc loads the npc data from DB
+		
 		$game.$npc.init();
-		//player WILL load its previous data from DB
 		
 		$game.$resources.init();
 		

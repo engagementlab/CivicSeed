@@ -30,11 +30,10 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
-		if(!$game.$gnome.isShowing) { 
-			$game.$resources.loadResource(false, e.data.npc, true);
-			_inventory = true;
-			$game.$resources.isShowing = true;
-		}
+		$game.$resources.loadResource(false, e.data.npc, true);
+		_inventory = true;
+		$game.$resources.isShowing = true;
+		
 	},
 
 	loadResource: function(who, index, now) {
@@ -158,10 +157,18 @@ $game.$resources = {
 			$game.$resources.isShowing = false;
 			$('.resourceArea button').addClass('hideButton');
 		});
+
+		//if the resource was being displayed from the inventory, keep it up.
 		if(_inventory) {
 			$('.inventory').slideDown(function() {
 				_inventory = false;
-				$game.$player.inventoryShowing = true;
+				if($game.$gnome.isSolving) {
+					$game.$player.inventoryShowing = false;
+				}
+				else {
+					$game.$player.inventoryShowing = true;
+				}
+				
 			});
 		}
 	},

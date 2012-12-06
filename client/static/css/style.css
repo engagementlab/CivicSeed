@@ -4931,7 +4931,7 @@ a.badge:hover {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: rgba(30, 30, 30, 0.8);
+  background: #333;
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
@@ -4942,11 +4942,11 @@ a.badge:hover {
   top: 15px;
   left: 15px;
   width: 930px;
-  height: 380px;
-  background: rgba(30, 30, 30, 0.8);
+  height: 450px;
+  background: #333;
   padding: 0;
   border-radius: 5px;
-  z-index: 9999;
+  z-index: 9998;
   display: none;
 }
 .centerText {
@@ -5102,11 +5102,9 @@ a.badge:hover {
 .inventoryItem {
   float: left;
   padding: 15px;
-}
-.inventoryItem img {
-  padding: 0;
   margin: 0;
   width: 32px;
+  height: 32px;
   cursor: pointer;
 }
 .hideButton {

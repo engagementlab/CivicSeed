@@ -1,4 +1,4 @@
-var _info = null,
+	var _info = null,
 	_renderInfo = null,
 	_onScreen = false,
 	_messages = null,
@@ -17,6 +17,7 @@ $game.$gnome = {
 	name: null,
 	isChat: false,
 	isShowing: false,
+	isSolving: false,
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
@@ -126,7 +127,7 @@ $game.$gnome = {
 
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
-				_messages = $game.$gnome.dialog.level[$game.$player.currentLevel].instructions;
+				_messages = $game.$gnome.dialog[$game.$player.currentLevel].instructions;
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -139,13 +140,12 @@ $game.$gnome = {
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
 			else if($game.$player.game.gnomeState === 2) {
 				var curHint = 0;
-				console.log($game.$player.game.inventory);
 				if($game.$player.game.inventory.length > 0) {
 					curHint = 1;
 				}
 				//else hint 1
 				_messages = [];
-				_messages.push($game.$gnome.dialog.level[$game.$player.currentLevel].hint[curHint]);
+				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 			}
@@ -189,7 +189,6 @@ $game.$gnome = {
 			}
 
 		});
-		
 	},
 	addChatContent: function() {
 		
@@ -224,14 +223,20 @@ $game.$gnome = {
 
 	showPrompt: function(p) {
 		$game.$gnome.isChat = true;
-		_speak =  $game.$gnome.dialog.level[$game.$player.currentLevel].riddle.prompts[p];
+		_speak =  $game.$gnome.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
 		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
 		$('.speechBubble').slideDown(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
+				if(p === 1) {
+					$game.$gnome.isSolving = true;
+					$('.gnomeArea').css('height','380px');
+				}
+
 				$game.$gnome.showRiddle(p);
+				
 			}));
 			$(".speechBubble .noButton").bind("click", (function () {
 				$game.$gnome.hideChat();
@@ -240,7 +245,9 @@ $game.$gnome = {
 	},
 
 	inventoryShowRiddle: function() {
-		//hide the inventory
+		
+		//hide the inventory if the resource is not already visible
+		//when clicked on from inventory (this means it isn't in puzzle mode)
 		if(!$game.$gnome.isShowing) {
 			$('.inventory').slideUp();
 			$game.$gnome.isChat = true;
@@ -281,11 +288,7 @@ $game.$gnome = {
 		}
 		else {
 			if(_currentSlide === 0) {
-				$('.gnomeArea .nextButton').removeClass('hideButton');
-			}
-			else if(_currentSlide === 1) {
 				$('.gnomeArea .answerButton').removeClass('hideButton');
-				$('.gnomeArea .backButton').removeClass('hideButton');
 			}
 			else {
 
@@ -314,7 +317,7 @@ $game.$gnome = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .message').text('here is your next riddle whale thing.');
-				$('.gnomeContent').html('<p>'+$game.$gnome.dialog.level[$game.$player.currentLevel].riddle.sonnet+'</p>');
+				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {
 				//show them a different version if they already posses it
@@ -324,10 +327,10 @@ $game.$gnome = {
 				}
 				else {
 					$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
+					
 					//add this tangram outline to the inventory
-					var file = 'puzzle' + $game.$player.currentLevel;
-					$('.inventory').append('<div class="inventoryItem '+file+'"><img src="img\/game\/tangram\/'+file+'small.png"></div>');
-					$('.'+ file).bind('click', $game.$gnome.inventoryShowRiddle);
+					$game.$player.tangramToInventory();
+					
 					//update gnomeState
 					$game.$player.game.gnomeState = 2;
 				}
@@ -343,111 +346,93 @@ $game.$gnome = {
 				$game.$player.inventoryShowing = false;
 			});
 
-			//show the riddle again
+			//combo riddle and puzzle interface
 			if(_currentSlide === 0) {
-				$('.gnomeArea .message').text('here is the riddle again. look it over before you solve the puzzle.');
-				$('.gnomeContent').html('<p>'+$game.$gnome.dialog.level[$game.$player.currentLevel].riddle.sonnet+'</p>');
-			}
-			//puzzle interface
-			else if(_currentSlide === 1){
+				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
 				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
 			}
-			//right wrong screen
+			//right/wrong screen
 			else {
 
 			}
-			
-			
 			
 		}
 	},
 
 	hideResource: function() {
+		//slide up the gnome area that contains big content
+		//re-enable clicking by setting bools to false
 		$('.gnomeArea').slideUp(function() {
 			$game.$gnome.isShowing = false;
 			$('.gnome button').addClass('hideButton');
+			$('.gnomeArea').css('height','450px');
 			$game.$gnome.isChat = false;
+			$game.$gnome.isSolving = false;
 		});
+
+		//if we left inventory on, that means we want to show it again
 		if($game.$player.inventoryShowing) {
 			$('.inventory').slideDown(function() {
 				$game.$player.inventoryShowing = true;
 			});
 		}
+		//otherwise, make sure it is hidden
 		else {
 			$('.inventory').slideUp(function() {
 				$game.$player.inventoryShowing = false;
 				$('.inventory button').removeClass('hideButton');
 			});
 		}
+	},
+
+	submitAnswer: function() {
+		//go through and check each piece on 'the board' and see it exists within the right answer 
+		//array and check the location. give feedback/next screen based on results
+	},
+
+	dragStart: function(e) {
+		if($game.$gnome.isSolving) {
+			var select = 'r' + e.data.npc,
+				dt = e.originalEvent.dataTransfer;
+			
+			dt.setData('text/plain', select);
+			//set drag over shit
+			$('.gnomeArea')
+				.bind('dragover',$game.$gnome.dragOver)
+				.bind('drop', $game.$gnome.drop);
+		}
+	},
+	dragEnd: function(e) {
+		e.preventDefault();
+	},
+	dragOver: function(e) {
+		e.preventDefault();
+	},
+	drop: function(e) {
+		e.preventDefault();
+		
+		var selector = e.originalEvent.dataTransfer.getData('text/plain'),
+			newImg = '<img class="b'+ selector + '"src="img\/game\/resources\/'+ selector +'.png">';
+		$('.gnomeArea').append(newImg);
+		$('.b' + selector)
+			.css({
+				position: 'absolute',
+				top: e.originalEvent.offsetY,
+				left: e.originalEvent.offsetX
+			})
+			.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+			
+
+	},
+	dragBigStart: function(e) {
+		e.originalEvent.dataTransfer.setData('text/plain', e.data.npc);
+		$('.gnomeArea')
+			.bind('drop', $game.$gnome.dropBig);
+	},
+	dropBig: function(e) {
+		console.log('in ya face');
 	}
-/*
-	hideChat: function() {
-		
-		clearTimeout($game.$gnome.hideTimer);
-		$('.speechBubble').slideUp(function() {
-			$('.speechBubble').empty();
-			$game.$gnome.isChat = false;
-			$game.$resources.isShowing = false;
-			$(".speechBubble .btn-success").unbind("click");
-			$(".speechBubble .btn-danger").unbind("click");
-		});
-	},
 
-	
 
-	//choose prompt based on PLAYERs memory of interaction
-	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
-	showPrompt: function() {
-		var promptNum = $game.$player.getPrompt(_curgnome.id);
-		_speak = _curgnome.dialog.prompts[promptNum];
-		$('.speechBubble').css('height',55);
-		buttons = '<button class="btn btn-success">Yes</button><button class="btn btn-danger">No</button>';
-		_speak += buttons;
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
-			$(".speechBubble .btn-success").bind("click", (function () {
-				$game.$resources.showResource(promptNum);
-			}));
-			$(".speechBubble .btn-danger").bind("click", (function () {
-				$game.$gnome.hideChat();
-			}));
-		});
-	},
-
-	showRandom: function() {
-		var ran = Math.floor(Math.random() * _curgnome.dialog.random.length),
-		_speak = _curgnome.dialog.random[ran];
-		
-		$('.speechBubble').css('height',40);
-		$('.speechBubble').append('<p><span class="speakerName">'+_who+': </span>'+ _speak +'</p>').slideDown(function() {
-			$game.$gnome.hideTimer = setTimeout($game.$gnome.hideChat,5000);
-		});
-	},
-
-	selectgnome: function(i) {
-		_index = i;
-		var stringId = String(_index);
-		_curgnome = _allgnomes[stringId];
-
-		if(!_curgnome) {
-			_index += $game.TOTAL_WIDTH;
-			stringId = String(_index);
-			_curgnome = _allgnomes[stringId];
-		}
-
-		_who = _allgnomes[stringId].name;
-
-		if($game.$player.currentLevel === _curgnome.level) {
-
-			//here we will tell the resoure object to clear old stuff,
-			//and tell it what to load (and who it corresponds to)
-			$game.$resources.loadResource(_who, _curgnome.id, false);
-			_resourceOnDeck = true;
-		}
-		else {
-			_resourceOnDeck = false;
-		}
-		
-	}
-	*/
 };

@@ -7,8 +7,7 @@ module.exports.global = {
 		x: 0,
 		y: 0
 	}],
-	dialog: {
-		level: [
+	dialog: [
 		{
 			instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.','However, we have a constant problem where our world becomes colorless. We love color....','Solve my riddles and I will give you seeds to plant color.','LEAVE ME ALONE, ROARRRRRRR!!!!'],
 			riddle: {
@@ -54,10 +53,49 @@ module.exports.global = {
 			},
 			hint: ['get more things', 'try harder']
 		}
-		],
-		finale: {
-			videos: ['video to come'],
-			explanations: ['explanation to come']
+	],
+	finale: {
+		videos: ['video to come'],
+		explanations: ['explanation to come']
+	},
+	tangram: [
+		{
+			answer: [
+				{
+					id: 0,
+					x: 150,
+					y: 200
+				},
+				{
+					id: 344,
+					x: 333,
+					y: 31
+				},
+				{
+					id: 4343,
+					x: 33,
+					y: 2040
+				}
+			]
+		},
+		{
+			answer: [
+				{
+					id: 0,
+					x: 150,
+					y: 200
+				},
+				{
+					id: 344,
+					x: 333,
+					y: 31
+				},
+				{
+					id: 4343,
+					x: 33,
+					y: 2040
+				}
+			]
 		}
-	}
+	]
 };

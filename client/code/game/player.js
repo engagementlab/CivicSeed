@@ -16,7 +16,7 @@ var _curFrame = 0,
 	_hideTimer = null,
 	_chatId = null,
 	_chatIdSelector = null,
-	_numRequired = [2,1,1,1];
+	_numRequired = [1,1,1,1];
 
 
 $game.$player = {
@@ -31,7 +31,7 @@ $game.$player = {
 	inventoryShowing: false,
 	npcOnDeck: false,
 	ready: false,
-	currentLevel: 1,
+	currentLevel: 0,
 	seedMode: false,
 
 
@@ -575,23 +575,34 @@ $game.$player = {
 	},
 
 	fillInventory: function() {
+		//on first load, fill inventory from DB
 		var l = $game.$player.game.inventory.length;
 		while(--l > -1) {
-				var file = 'r' + $game.$player.game.inventory[l];
-				$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
-				$('.'+ file).bind('click',{npc: $game.$player.game.resources[l].npc}, $game.$resources.beginResource);
+			$game.$player.addToInventory($game.$player.game.inventory[l]);
 		}
+
+		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
 		if($game.$player.game.gnomeState > 1) {
-			var gFile = 'puzzle' + $game.$player.currentLevel;
-			$('.inventory').append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png"></div>');
-			$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
+			$game.$player.tangramToInventory();
 		}
 	},
 
 	addToInventory: function(id) {
+		//create the class / ref to the image
 		var file = 'r' + id;
-		$('.inventory').prepend('<div class="inventoryItem '+file+'"><img src="img\/game\/resources\/small\/'+file+'.png"></div>');
-		$('.'+ file).bind('click',{npc: id}, $game.$resources.beginResource);
+		//put image on page
+		$('.inventory').prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
+		
+		//bind click and drag functions, pass npc #
+		$('img.inventoryItem.'+ file)
+			.bind('click',{npc: id}, $game.$resources.beginResource)
+			.bind('dragstart',{npc: id}, $game.$gnome.dragStart);
+	},
+
+	tangramToInventory: function() {
+		var gFile = 'puzzle' + $game.$player.currentLevel;
+		$('.inventory').append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png" draggable = "false"></div>');
+		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
 
 	getPosition: function() {
