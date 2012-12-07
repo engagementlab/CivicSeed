@@ -434,10 +434,13 @@ $game.$gnome = {
 				position: 'absolute',
 				top: e.originalEvent.offsetY,
 				left: e.originalEvent.offsetX
-			})
+			});
 			//bind some drag functionality to it
 			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
-			var selectBig = document.getElementsByClassName(selector)[0];
+
+			var selectBig = document.getElementsByClassName('b' + npc)[0];
+			_transferData.id = npc;
+
 			selectBig.addEventListener('dragstart',$game.$gnome.dragBigStart,false);
 		//unbind gnome area to not expect drop
 		$('.tangramArea')
@@ -455,10 +458,9 @@ $game.$gnome = {
 
 		console.log(e);
 
-		_transferData.x = offX,
-		_transferData.y = offY,
-		_transferData.id = e.data.npc;
 		console.log(_transferData);
+		_transferData.x = offX,
+		_transferData.y = offY;
 		//e.originalEvent.dataTransfer.setData('text/plain', e.data.npc +"," + offX +","+offY);
 		
 		// $('.tangramArea')
@@ -472,7 +474,7 @@ $game.$gnome = {
 	},
 	dropBig: function(e) {
 		
-		
+		console.log(e);
 		// var data = e.originalEvent.dataTransfer.getData('text/plain');
 		// var splitData = data.split(','),
 		// 	selector = '.b' + splitData[0],
@@ -480,11 +482,15 @@ $game.$gnome = {
 		// 	offY = parseInt(splitData[2],10);
 
 		// console.log(offX,offY);
-		var selector = '.b' + _transferData.id;
+		var selector = '.b' + _transferData.id,
+			x = e.offsetX - _transferData.x,
+			y = e.offsetY - _transferData.y;
+
+		console.log(x, y);
 		$(selector)
 			.css({
-				top: e.offsetY + _transferData.y,
-				left: e.offsetX + _transferData.x
+				top: y,
+				left: x
 			});
 			//bind some drag functionality to it
 			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
@@ -497,8 +503,8 @@ $game.$gnome = {
 		//clear data from drag bind
 		//e.originalEvent.dataTransfer.clearData();
 		
-		event.preventDefault();
-		return false;
+		//event.preventDefault();
+		//return false;
 	}
 
 
