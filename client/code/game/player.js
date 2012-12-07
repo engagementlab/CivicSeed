@@ -554,12 +554,17 @@ $game.$player = {
 			$game.$player.game.seeds.normal += 1;
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
-			if($game.$player.game.inventory.length >= _numRequired[$game.$player.currentLevel] - 1 && $game.$player.game.gnomeState > 1) {
-				$game.$player.game.gnomeState = 3;
-			}
+			$game.$player.checkGnomeState();
 		}
 	},
 
+	checkGnomeState: function() {
+		//put player to state 3 (solving) if they have enough resources
+		//AND they have already seen the first 2 staes
+		if($game.$player.game.inventory.length >= _numRequired[$game.$player.currentLevel] && $game.$player.game.gnomeState > 1) {
+				$game.$player.game.gnomeState = 3;
+			}
+	},
 	getAnswer: function(id) {
 		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
@@ -584,7 +589,7 @@ $game.$player = {
 		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
 		if($game.$player.game.gnomeState > 1) {
 			$game.$player.tangramToInventory();
-		}
+		}	
 	},
 
 	addToInventory: function(id) {

@@ -4,7 +4,8 @@
 	_messages = null,
 	_currentMessage = 0,
 	_currentSlide = 0,
-	_promptNum = 0;
+	_promptNum = 0,
+	_transferData = {};
 
 $game.$gnome = {
 
@@ -148,8 +149,9 @@ $game.$gnome = {
 				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
+
 			}
-			//if they have gathered the right resources, prompt to answer riddle
+			//if they have gathered the right resources, prompt to answer 
 			else if($game.$player.game.gnomeState === 3) {
 				$game.$gnome.showPrompt(1);
 			}
@@ -187,7 +189,6 @@ $game.$gnome = {
 			if($game.$player.game.gnomeState === 0) {
 				$game.$player.game.gnomeState = 1;
 			}
-
 		});
 	},
 	addChatContent: function() {
@@ -267,8 +268,10 @@ $game.$gnome = {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
+
 			$('.gnomeArea').slideDown(function() {
 				$game.$gnome.isShowing = true;
+				$('.tangramArea').show();
 			});
 		});
 		
@@ -333,6 +336,7 @@ $game.$gnome = {
 					
 					//update gnomeState
 					$game.$player.game.gnomeState = 2;
+					$game.$player.checkGnomeState();
 				}
 				
 				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
@@ -363,6 +367,7 @@ $game.$gnome = {
 	hideResource: function() {
 		//slide up the gnome area that contains big content
 		//re-enable clicking by setting bools to false
+		$('.tangramArea').hide();
 		$('.gnomeArea').slideUp(function() {
 			$game.$gnome.isShowing = false;
 			$('.gnome button').addClass('hideButton');
@@ -398,40 +403,108 @@ $game.$gnome = {
 			
 			dt.setData('text/plain', select);
 			//set drag over shit
-			$('.gnomeArea')
+			$('.tangramArea')
 				.bind('dragover',$game.$gnome.dragOver)
 				.bind('drop', $game.$gnome.drop);
+
+			$('.' + select).css('opacity','.4');
 		}
 	},
 	dragEnd: function(e) {
 		e.preventDefault();
 	},
 	dragOver: function(e) {
-		e.preventDefault();
+		if (e.preventDefault) {
+			e.preventDefault();
+		}
+		return false;
 	},
 	drop: function(e) {
 		e.preventDefault();
-		
-		var selector = e.originalEvent.dataTransfer.getData('text/plain'),
-			newImg = '<img class="b'+ selector + '"src="img\/game\/resources\/'+ selector +'.png">';
-		$('.gnomeArea').append(newImg);
-		$('.b' + selector)
+		if (e.stopPropagation) {
+			e.stopPropagation();
+		}
+		//create a new image and put it on the gnome area
+		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
+			selector = '.b' + npc;
+			newImg = '<img class="b'+ npc + '"src="img\/game\/resources\/'+ npc +'.png">';
+		$('.tangramArea').append(newImg);
+		$(selector)
 			.css({
 				position: 'absolute',
 				top: e.originalEvent.offsetY,
 				left: e.originalEvent.offsetX
-			})
-			.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
-			
+			});
+			//bind some drag functionality to it
+			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+
+			var selectBig = document.getElementsByClassName('b' + npc)[0];
+			_transferData.id = npc;
+
+			selectBig.addEventListener('dragstart',$game.$gnome.dragBigStart,false);
+		//unbind gnome area to not expect drop
+		$('.tangramArea')
+			.unbind('dragover')
+			.unbind('drop');
+	
+		//clear data from drag bind
+		e.originalEvent.dataTransfer.clearData();
+		return false;
 
 	},
 	dragBigStart: function(e) {
-		e.originalEvent.dataTransfer.setData('text/plain', e.data.npc);
-		$('.gnomeArea')
-			.bind('drop', $game.$gnome.dropBig);
+		var offX = e.offsetX,
+			offY = e.offsetY;
+
+		console.log(e);
+
+		console.log(_transferData);
+		_transferData.x = offX,
+		_transferData.y = offY;
+		//e.originalEvent.dataTransfer.setData('text/plain', e.data.npc +"," + offX +","+offY);
+		
+		// $('.tangramArea')
+		// 	.bind('drop', $game.$gnome.dropBig, false)
+		// 	.bind('dragover', $game.$gnome.dragOver, false);
+		var t = document.getElementsByClassName('tangramArea')[0];
+	
+		t.addEventListener('drop',$game.$gnome.dropBig,false);
+		t.addEventListener('dragover',$game.$gnome.dragOver,false); 
+
 	},
 	dropBig: function(e) {
-		console.log('in ya face');
+		
+		console.log(e);
+		// var data = e.originalEvent.dataTransfer.getData('text/plain');
+		// var splitData = data.split(','),
+		// 	selector = '.b' + splitData[0],
+		// 	offX = parseInt(splitData[1],10),
+		// 	offY = parseInt(splitData[2],10);
+
+		// console.log(offX,offY);
+		var selector = '.b' + _transferData.id,
+			x = e.offsetX - _transferData.x,
+			y = e.offsetY - _transferData.y;
+
+		console.log(x, y);
+		$(selector)
+			.css({
+				top: y,
+				left: x
+			});
+			//bind some drag functionality to it
+			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+		
+		//unbind gnome area to not expect drop
+		// $('.tangramArea')
+		// 	.unbind('dragover')
+		// 	.unbind('drop');
+	
+		//clear data from drag bind
+		//e.originalEvent.dataTransfer.clearData();
+		
+		//event.preventDefault();
+		//return false;
 	}
 
 

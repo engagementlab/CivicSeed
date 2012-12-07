@@ -121,7 +121,6 @@ $game.$audio = {
 			absY = Math.abs(diffY);
 
 		var closest, targetV;
-		console.log(posX, posY);
 		//check for gnome/s place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 4;
@@ -164,11 +163,11 @@ $game.$audio = {
 		}
 
 		if(trackRegion === _currentTrack) {
-			$game.$audio.slideVolume(targetV, false, -1);
+			//$game.$audio.slideVolume(targetV, false, -1);
 		}
 		else {
 			//swap track on fade end
-			$game.$audio.slideVolume(0, targetV, trackRegion);
+			//$game.$audio.slideVolume(0, targetV, trackRegion);
 		}
 		//if they will be getting close to the center, fade
 

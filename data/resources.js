@@ -14,7 +14,7 @@ module.exports.global = [
 	id: '4992',
 	kind: 'article',
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
-	url: '/articles/7283.html',
+	url: '/articles/446.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
@@ -25,7 +25,7 @@ module.exports.global = [
 	id: '5694',
 	kind: 'article',
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
-	url: '/articles/7283.html',
+	url: '/articles/446.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
@@ -36,7 +36,7 @@ module.exports.global = [
 	id: '352',
 	kind: 'article',
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
-	url: '/articles/7283.html',
+	url: '/articles/446.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
@@ -47,7 +47,7 @@ module.exports.global = [
 	id: '3761',
 	kind: 'article',
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
-	url: '/articles/7283.html',
+	url: '/articles/446.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',

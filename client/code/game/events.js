@@ -25,13 +25,12 @@ ss.event.on('ss-removePlayer', function(num, playerId) {
 });
 
 ss.event.on('ss-playerMoved', function(moves, id) {
-		//check if that quad is relevant to the current player
-		//this will also have the player info so as to id the appropriate one
+	//check if that quad is relevant to the current player
+	//this will also have the player info so as to id the appropriate one
 		
-		if(id != $game.$player.id) {
-			$game.$others.sendMoveInfo(moves, id);
-		}
-		
+	if(id != $game.$player.id) {
+		$game.$others.sendMoveInfo(moves, id);
+	}
 
 });
 //all this breakdown will be on the server side, not client side,
