@@ -24,7 +24,11 @@ $game.$audio = {
 			_soundtracks[num].preload = "auto";
 			_soundtracks[num].autobuffer = true;
 			_soundtracks[num].loop = true;
-			_soundtracks[num].src = '/audio/music/' + num + '.wav';
+			if(CivicSeed.ENVIRONMENT === 'development') {
+				_soundtracks[num].src = '/audio/music/' + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000);
+			} else {
+				_soundtracks[num].src = '/audio/music/' + num + '.wav?VERSION=' + CivicSeed.VERSION;
+			}
 			_soundtracks[num].volume = 0.0;
 			_soundtracks[num].load();
 
@@ -163,11 +167,11 @@ $game.$audio = {
 		}
 
 		if(trackRegion === _currentTrack) {
-			//$game.$audio.slideVolume(targetV, false, -1);
+			$game.$audio.slideVolume(targetV, false, -1);
 		}
 		else {
 			//swap track on fade end
-			//$game.$audio.slideVolume(0, targetV, trackRegion);
+			$game.$audio.slideVolume(0, targetV, trackRegion);
 		}
 		//if they will be getting close to the center, fade
 

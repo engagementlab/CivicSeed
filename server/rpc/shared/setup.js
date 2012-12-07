@@ -1,19 +1,23 @@
-// exports.actions = function(req, res, ss) {
+var rootDir = process.cwd(),
+	config = require(rootDir + '/config');
 
-// 	req.use('session');
-// 	// req.use('account.authenticated');
+var self = exports.actions = function(req, res, ss) {
 
-// 	return {
+	// req.use('session');
+	// req.use('debug');
+	// req.use('account.authenticated');
 
-// 		init: function() {
+	return {
 
-// 			res({
-// 				object: 'ified',
-// 				blessesConsulate: 'singify'
-// 			});
+		init: function() {
 
-// 		}
+			res({
+				VERSION: config.get('VERSION'),
+				ENVIRONMENT: require(rootDir + '/bin/server').get('env')
+			});
 
-// 	};
+		}
 
-// }
+	};
+
+};

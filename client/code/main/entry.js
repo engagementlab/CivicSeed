@@ -1,19 +1,17 @@
 window.ss = require('socketstream');
 var appInitialized = false;
 
-ss.server.on('disconnect', function() {
-	console.log('Lost connection to server...');
-});
-
-ss.server.on('reconnect', function() {
-	console.log('Connection to server...');
-});
+// TODO: only do this in dev mode
+ss.server.on('disconnect', function() { console.log('Lost connection to server...'); });
+ss.server.on('reconnect', function() { console.log('Connection to server...'); });
 
 ss.server.on('ready', function() {
 
 	jQuery(function() {
 
 		if(!appInitialized) {
+
+			ss.rpc('shared.setup.init', function(response) { window.CivicSeed = response; });
 
 			Davis(function() {
 
