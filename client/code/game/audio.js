@@ -80,37 +80,64 @@ $game.$audio = {
 		_effects[i].play();
 	},
 
-	slideVolume: function(val, nextVal, swap) {
-		var diff = val - _soundtracks[_currentTrack].volume;
-		
-		if(diff >= 0) {
-			dir = 0.001;
+	slideVolume: function(val, swap) {
+		//that means we aren't changing tracks, so just transition volume
+		if(swap < 0) {
+			console.log('same');
+
+			$(_soundtracks[_currentTrack]).stop(true,true).animate({
+				volume: val
+			}, 2000, function() {
+				console.log(_soundtracks[_currentTrack].volume);
+			});
 		}
+		//slide current track to 0, then use val to transition new track
 		else {
-			dir = -0.001;
-		}
-		if(Math.abs(diff) > 0.01) {
-				_soundtracks[_currentTrack].volume += dir;
-				tweenTimeout = setTimeout(function() {
-				$game.$audio.slideVolume(val, nextVal, swap);
-			}, 5);
-		}
-		else{
-			console.log('end:',swap);
-			if(swap > - 1) {
-				_soundtracks[_currentTrack].pause();
+			console.log(_soundtracks[_currentTrack]);
+			$(_soundtracks[_currentTrack]).stop(true,true).animate({
+				volume: 0
+			}, 1000, function() {
+				$game.$audio.pauseTheme();
+				console.log(_soundtracks[_currentTrack].volume);
 				_currentTrack = swap;
-				console.log('current', _currentTrack);
-				_soundtracks[_currentTrack].volume = 0;
-				_soundtracks[_currentTrack].play();
-				$game.$audio.slideVolume(nextVal, false, -1);
-			}
+				$game.$audio.playTheme();
+				$(_soundtracks[_currentTrack]).stop(true,true).animate({
+					volume: val
+				}, 2000, function() {
+					console.log(_soundtracks[_currentTrack].volume);
+				});
+			});
 		}
+		
+		// var diff = val - _soundtracks[_currentTrack].volume;
+		
+		// if(diff >= 0) {
+		// 	dir = 0.001;
+		// }
+		// else {
+		// 	dir = -0.001;
+		// }
+		// if(Math.abs(diff) > 0.01) {
+		// 		_soundtracks[_currentTrack].volume += dir;
+		// 		tweenTimeout = setTimeout(function() {
+		// 		$game.$audio.slideVolume(val, nextVal, swap);
+		// 	}, 5);
+		// }
+		// else{
+		// 	console.log('end:',swap);
+		// 	if(swap > - 1) {
+		// 		_soundtracks[_currentTrack].pause();
+		// 		_currentTrack = swap;
+		// 		console.log('current', _currentTrack);
+		// 		_soundtracks[_currentTrack].volume = 0;
+		// 		_soundtracks[_currentTrack].play();
+		// 		$game.$audio.slideVolume(nextVal, false, -1);
+		// 	}
+		// }
 		
 	},
 
 	update: function(posX, posY) {
-		clearTimeout(_tweenTimeout);
 	
 		//compare player position to centers of the world 
 		//var pos = $game.$player.getPosition();
@@ -162,17 +189,10 @@ $game.$audio = {
 			}
 		}
 
-		if(trackRegion === _currentTrack) {
-			//$game.$audio.slideVolume(targetV, false, -1);
-		}
-		else {
-			//swap track on fade end
-			//$game.$audio.slideVolume(0, targetV, trackRegion);
-		}
-		//if they will be getting close to the center, fade
+		trackRegion = trackRegion === _currentTrack ? -1 : trackRegion;
+		
+		//$game.$audio.slideVolume(targetV, trackRegion);
 
-		
-		
 	}
 
 };
