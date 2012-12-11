@@ -8,7 +8,12 @@ module.exports.global = [
 	prompt: 'Answer this right and I will give you a piece',
 	question: 'What did the student say was his motivation for joining Jumpstart?',
 	answer: 'something',
-	responses: ['you are so smaht','ouch, laters.']
+	responses: ['you are so smaht','ouch, laters.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '4992',
@@ -19,7 +24,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '5694',
@@ -30,7 +40,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '352',
@@ -41,7 +56,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '3761',
@@ -52,7 +72,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '6176',
@@ -63,7 +88,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '872',
@@ -74,7 +104,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '8003',
@@ -85,7 +120,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '8844',
@@ -96,7 +136,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '9554',
@@ -107,7 +152,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '6707',
@@ -118,7 +168,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '8831',
@@ -129,7 +184,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '2285',
@@ -140,7 +200,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '1891',
@@ -151,7 +216,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '481',
@@ -162,7 +232,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '9240',
@@ -173,7 +248,12 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 },
 {
 	id: '3858',
@@ -184,6 +264,11 @@ module.exports.global = [
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.']
+	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	shape: {
+		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
+		fill: 'rgb(250,0,0)',
+		stroke: 'rgb(200,0,0)'
+	}
 }
 ];

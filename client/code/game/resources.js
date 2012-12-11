@@ -117,7 +117,10 @@ $game.$resources = {
 				_speak = _curResource.responses[0];
 				$('.resourceArea .speakerName').text(_who);
 				$('.resourceArea .message').text(_speak);
-				$('.resourceContent').html('</p><p><img src="img/game/resources/r'+_curResource.id+'.png"></p>');
+				//show image on screen
+				//get path from db, make svg with that
+				var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,200)"</path></svg>';
+				$('.resourceContent').html(newSvg);
 			}
 			else {
 				_speak = _curResource.responses[1];
@@ -208,8 +211,11 @@ $game.$resources = {
 		_answered = true;
 		$game.$resources.nextSlide();
 		//otherwise tell them they are wrong, stay on form page
+	},
 
-
+	getShape: function(id) {
+		var stringId = String(id);
+		return _resources[stringId].shape;
 	}
 
 

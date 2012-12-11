@@ -5,7 +5,12 @@
 	_currentMessage = 0,
 	_currentSlide = 0,
 	_promptNum = 0,
-	_transferData = {};
+	_transferData = {},
+	_svg = null,
+	_drag = null,
+	_new = null,
+	_dragOffX = 0,
+	_dragOffY = 0;
 
 $game.$gnome = {
 
@@ -15,6 +20,7 @@ $game.$gnome = {
 	curFrame: 0,
 	numFrames: 4,
 	dialog: null,
+	tangram: null,
 	name: null,
 	isChat: false,
 	isShowing: false,
@@ -24,7 +30,8 @@ $game.$gnome = {
 		ss.rpc('game.npc.loadGnome', function(response) {
 			$game.$gnome.index = response.id,
 			$game.$gnome.dialog = response.dialog,
-			$game.$gnome.name = response.name;
+			$game.$gnome.name = response.name,
+			$game.$gnome.tangram = response.tangram;
 
 			_info = {
 				x: response.x,
@@ -40,6 +47,8 @@ $game.$gnome = {
 			};
 
 			$game.$gnome.getMaster();
+
+			$game.$gnome.setupTangram();
 
 		});
 	},
@@ -374,6 +383,8 @@ $game.$gnome = {
 			$('.gnomeArea').css('height','450px');
 			$game.$gnome.isChat = false;
 			$game.$gnome.isSolving = false;
+			$('.puzzleSvg').empty();
+			$('.inventoryItem').css('opacity',1);
 		});
 
 		//if we left inventory on, that means we want to show it again
@@ -392,22 +403,70 @@ $game.$gnome = {
 	},
 
 	submitAnswer: function() {
-		//go through and check each piece on 'the board' and see it exists within the right answer 
+		//go through and check each piece on 'the board' and see it exists within the right answer
 		//array and check the location. give feedback/next screen based on results
+		var allTangrams = $('.puzzleSvg > path'),
+			correct = true,
+			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length;
+
+		allTangrams.each(function(i, d) {
+			
+			var tanIdD = $(this).attr('class'),
+				tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
+				trans = $(this).attr('transform'),
+				transD = trans.substring(10,trans.length-1),
+				transD2 = transD.split(','),
+				transX = parseInt(transD2[0],10),
+				transY = parseInt(transD2[1],10);
+
+				//check these three values against the ones in the answers sheet
+				var t = aLength - 1;
+				while(--t > -1) {
+					var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
+					if(answer.id === tanId) {
+						var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+						console.log(dist);
+						if(dist < 10) {
+							console.log('winna');
+						}
+						else {
+							console.log('close');
+						}
+					}
+					else {
+						console.log('wrong piece');
+					}
+
+				}
+		});	
+	},
+
+	setupTangram: function() {
+		_svg = d3.select('.tangramArea').append('svg')
+			.attr('class','puzzleSvg')
+			.attr('width','900px')
+			.attr('height','380px');
+
+		_drag = d3.behavior.drag()
+    		.origin(Object)
+    		.on('drag', $game.$gnome.dragMove)
+    		.on('dragstart', $game.$gnome.dragMoveStart)
+    		.on('dragend', $game.$gnome.dropMove);
 	},
 
 	dragStart: function(e) {
 		if($game.$gnome.isSolving) {
-			var select = 'r' + e.data.npc,
-				dt = e.originalEvent.dataTransfer;
+			var id = e.data.npc,
+				dt = e.originalEvent.dataTransfer,
+				select = '.r' + id;
 			
-			dt.setData('text/plain', select);
+			dt.setData('text/plain', id);
 			//set drag over shit
 			$('.tangramArea')
 				.bind('dragover',$game.$gnome.dragOver)
 				.bind('drop', $game.$gnome.drop);
 
-			$('.' + select).css('opacity','.4');
+			
 		}
 	},
 	dragEnd: function(e) {
@@ -424,25 +483,25 @@ $game.$gnome = {
 		if (e.stopPropagation) {
 			e.stopPropagation();
 		}
-		//create a new image and put it on the gnome area
+		//set class name for new shape and fetch shape data
 		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
-			selector = '.b' + npc;
-			newImg = '<img class="b'+ npc + '"src="img\/game\/resources\/'+ npc +'.png">';
-		$('.tangramArea').append(newImg);
-		$(selector)
-			.css({
-				position: 'absolute',
-				top: e.originalEvent.offsetY,
-				left: e.originalEvent.offsetX
-			});
-			//bind some drag functionality to it
-			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+			selector = 'br' + npc,
+			x = e.originalEvent.offsetX,
+			y =  e.originalEvent.offsetY,
+			shape = $game.$resources.getShape(npc);
 
-			var selectBig = document.getElementsByClassName('b' + npc)[0];
-			_transferData.id = npc;
+			//access with shape.path
 
-			selectBig.addEventListener('dragstart',$game.$gnome.dragBigStart,false);
-		//unbind gnome area to not expect drop
+		$('.r' + npc).css('opacity','.4');
+		
+		_new = _svg.append('path')
+			.attr('class',selector)
+			.data([{x:x , y: y, id: npc}])
+			.attr('d', shape.path)
+			.attr('fill', 'rgb(180,200,230)')
+			.attr('transform', 'translate('+x+','+y+')')
+			.call(_drag);
+
 		$('.tangramArea')
 			.unbind('dragover')
 			.unbind('drop');
@@ -452,60 +511,26 @@ $game.$gnome = {
 		return false;
 
 	},
-	dragBigStart: function(e) {
-		var offX = e.offsetX,
-			offY = e.offsetY;
 
-		console.log(e);
-
-		console.log(_transferData);
-		_transferData.x = offX,
-		_transferData.y = offY;
-		//e.originalEvent.dataTransfer.setData('text/plain', e.data.npc +"," + offX +","+offY);
-		
-		// $('.tangramArea')
-		// 	.bind('drop', $game.$gnome.dropBig, false)
-		// 	.bind('dragover', $game.$gnome.dragOver, false);
-		var t = document.getElementsByClassName('tangramArea')[0];
+	dragMoveStart: function(d) {
+		_dragOffX = d3.mouse(this)[0],
+		_dragOffY = d3.mouse(this)[1],
 	
-		t.addEventListener('drop',$game.$gnome.dropBig,false);
-		t.addEventListener('dragover',$game.$gnome.dragOver,false); 
+		d3.select('.br' + d.id)
+			.attr('fill','#fff');
+	},
+
+	dragMove: function(d) {
+		var mX = d3.event.sourceEvent.offsetX - _dragOffX,
+			mY = d3.event.sourceEvent.offsetY - _dragOffY,
+			trans = 'translate(' + mX  + ', ' + mY + ')';
+
+		d3.select('.br' + d.id)
+			.attr('transform',trans);
 
 	},
-	dropBig: function(e) {
-		
-		console.log(e);
-		// var data = e.originalEvent.dataTransfer.getData('text/plain');
-		// var splitData = data.split(','),
-		// 	selector = '.b' + splitData[0],
-		// 	offX = parseInt(splitData[1],10),
-		// 	offY = parseInt(splitData[2],10);
-
-		// console.log(offX,offY);
-		var selector = '.b' + _transferData.id,
-			x = e.offsetX - _transferData.x,
-			y = e.offsetY - _transferData.y;
-
-		console.log(x, y);
-		$(selector)
-			.css({
-				top: y,
-				left: x
-			});
-			//bind some drag functionality to it
-			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
-		
-		//unbind gnome area to not expect drop
-		// $('.tangramArea')
-		// 	.unbind('dragover')
-		// 	.unbind('drop');
-	
-		//clear data from drag bind
-		//e.originalEvent.dataTransfer.clearData();
-		
-		//event.preventDefault();
-		//return false;
+	dropMove: function(d) {
+		d3.select('.br' + d.id)
+			.attr('fill','#99aadd');
 	}
-
-
 };

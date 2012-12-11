@@ -11,6 +11,7 @@ var self = module.exports = {
 				'libs/jquery-1.8.2.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
+				'libs/d3.v2.min.js',
 				'game',
 				'shared'
 			],

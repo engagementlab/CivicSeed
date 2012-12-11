@@ -34,9 +34,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 					}
 				]
 			}
-
 		]
-
 
 	});
 
