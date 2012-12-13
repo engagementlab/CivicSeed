@@ -363,7 +363,8 @@ $game.$gnome = {
 			if(_currentSlide === 0) {
 				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
-				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
+				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
 			else {
@@ -407,7 +408,8 @@ $game.$gnome = {
 		//array and check the location. give feedback/next screen based on results
 		var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
-			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length;
+			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length,
+			message = '';
 
 		allTangrams.each(function(i, d) {
 			
@@ -417,10 +419,11 @@ $game.$gnome = {
 				transD = trans.substring(10,trans.length-1),
 				transD2 = transD.split(','),
 				transX = parseInt(transD2[0],10),
-				transY = parseInt(transD2[1],10);
-
+				transY = parseInt(transD2[1],10),
+				
 				//check these three values against the ones in the answers sheet
-				var t = aLength - 1;
+				t = aLength - 1;
+
 				while(--t > -1) {
 					var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
 					if(answer.id === tanId) {
@@ -436,15 +439,27 @@ $game.$gnome = {
 					else {
 						console.log('wrong piece');
 					}
-
 				}
-		});	
+		});
+
+		if(allTangrams.length === 0) {
+			correct = false;
+			message = 'at least TRY to solve it...geesh';
+		}
+
+		if(correct) {
+			console.log('ya buddy');
+		}
+		else {
+			console.log('NEIN');
+			message = ''
+		}
 	},
 
 	setupTangram: function() {
 		_svg = d3.select('.tangramArea').append('svg')
 			.attr('class','puzzleSvg')
-			.attr('width','900px')
+			.attr('width','930px')
 			.attr('height','380px');
 
 		_drag = d3.behavior.drag()
@@ -521,16 +536,56 @@ $game.$gnome = {
 	},
 
 	dragMove: function(d) {
-		var mX = d3.event.sourceEvent.offsetX - _dragOffX,
-			mY = d3.event.sourceEvent.offsetY - _dragOffY,
-			trans = 'translate(' + mX  + ', ' + mY + ')';
+		var x = d3.event.sourceEvent.offsetX,
+			y = d3.event.sourceEvent.offsetY,
+			mX = $game.$gnome.snapTo(x - _dragOffX),
+			mY = $game.$gnome.snapTo(y - _dragOffY);
 
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			col = '#f00';
+			$('.trash').css('opacity',1);
+		}
+		else {
+			col = '#fff';
+			$('.trash').css('opacity',.5);
+		}
+
+		var trans = 'translate(' + mX  + ', ' + mY + ')',
+			col = '#eee';
+		
 		d3.select('.br' + d.id)
+			.attr('fill', col)
 			.attr('transform',trans);
 
 	},
 	dropMove: function(d) {
-		d3.select('.br' + d.id)
+		var x = d3.event.sourceEvent.offsetX,
+			y = d3.event.sourceEvent.offsetY;
+
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.br' + d.id).remove();
+			$('.r' + d.id).css('opacity', 1);
+			$('.trash').css('opacity',.5);
+		}
+		else {
+			d3.select('.br' + d.id)
 			.attr('fill','#99aadd');
+		}
+		
+	},
+
+	snapTo: function(num) {
+
+		var result = num,
+			round = (num % 10 - 5);
+
+		if(round > -1) {
+			result += 5 - round;
+		}
+		else {
+			result += -5 - round;
+		} 
+
+		return result;			
 	}
 };
