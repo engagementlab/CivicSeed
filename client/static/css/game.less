@@ -57,9 +57,9 @@
 
 .tangramArea {
 	position: absolute;
-	top:15px;
-	left:15px;
-	width:830px;
+	top:0px;
+	left:0px;
+	width:930px;
 	height:380px;
 	padding: 0;
 	z-index: 9998;
@@ -162,10 +162,10 @@
 	float:left;
 	margin-left:20px;
 }
-.playerButtons {
+.playerHud {
 	cursor: pointer;
 }
-.playerButtons div {
+.playerHud div {
 	float: left;
 }
 
@@ -227,4 +227,20 @@
 }
 .nextChatButton {
 
+}
+.riddleText {
+	position: absolute;
+	top: 50px;
+	left: 20px;
+	width:200px;
+	color: #999;
+}
+.gnomeArea .answerButton, .gnomeArea i {
+	z-index:9999;
+}
+.gnomeArea .trash {
+	opacity: .5;
+	position: absolute;
+	top:150px;
+	right:10px;
 }

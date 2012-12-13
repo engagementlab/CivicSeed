@@ -328,13 +328,17 @@ $game.$player = {
 	},
 
 	dropSeed: function(options) {
-
-		console.log('dropSeed called');
+		//if there are no seeds, send message can't plant
+		if($game.$player.game.seeds.normal < 1) {
+			
+			return false;
+		}
 		var oX = options.x,
 			oY = options.y,
 			mX = $game.currentTiles[oX][oY].x,
 			mY = $game.currentTiles[oX][oY].y,
 			bombed = [];
+		
 		
 		//start at the top left corner and loop through (vertical first)
 		var origX = mX - 1,
@@ -354,7 +358,11 @@ $game.$player = {
 			var b = 0;
 			while(b < 3) {
 				//only add it if it is on screen <------------------------- change later to in game
-				if(sX + a > -1 && sX + a < $game.VIEWPORT_WIDTH && sY + b > -1 && sY + b < $game.VIEWPORT_HEIGHT) {
+				//if(sX + a > -1 && sX + a < $game.VIEWPORT_WIDTH && sY + b > -1 && sY + b < $game.VIEWPORT_HEIGHT) {
+				
+
+				//only add if it is in the map!
+				if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
 					//set x,y and color info for each square
 					var square = {
 						x: origX + a,
@@ -377,58 +385,17 @@ $game.$player = {
 						square.color.owner = $game.$player.name;
 					}
 
-					//now that we created the new color, figure out the new tile info
-					//then push to array which is sent to db
+					bombed.push(square);
 
-					var curTile = $game.currentTiles[sX + a][sY + b];
-
-					//if there is a pre-existing color:
-					if(curTile.color) {
-
-						//only update if the tile is NOT and owner
-						if(curTile.color.owner === 'nobody') {
-
-							//if the new guy is now to be the chief, overwrite all color data
-							if(square.color.owner !== 'nobody') {
-								bombed.push(square);
-							}
-						
-							//already colored, not owned, not maxed out:
-							else if(curTile.color.a < 0.7 ) {
-
-								var prevR = curTile.color.r,
-									prevG = curTile.color.g,
-									prevB = curTile.color.b,
-									prevA = curTile.color.a;
-
-								var weightA = prevA / 0.1,
-									weightB = 1;
-
-
-								var newR = Math.floor((weightA * prevR + weightB * square.color.r) / (weightA + weightB)),
-									newG = Math.floor((weightA * prevG + weightB * square.color.g) / (weightA + weightB)),
-									newB = Math.floor((weightA * prevB + weightB * square.color.b) / (weightA + weightB));
-
-								square.color.a = Math.round((curTile.color.a + 0.1) * 10) / 10,
-								square.color.r = newR,
-								square.color.g = newG,
-								square.color.b = newB;
-								bombed.push(square);
-							}
-						}
-					}
-					//if there is no color, just add it!
-					else {
-						bombed.push(square);
-					}
 				}
 				b += 1;
 			}
 			a += 1;
 		}
+		
 		if(bombed.length > 0) {
-			console.log(bombed);
 			ss.rpc('game.player.dropSeed', bombed);
+			$game.$player.game.seeds.normal -= 1;
 		}
 		
 	},
@@ -542,6 +509,7 @@ $game.$player = {
 		//if not, then add it to the list
 		if(!rs) {
 			$game.$player.game.resources.push(r);
+			rs = $game.$player.game.resources[$game.$player.game.resources.length - 1];
 		}
 		else {
 			rs.answers.push(r.answers[0]);
@@ -551,7 +519,7 @@ $game.$player = {
 
 		//the answer was correct, add item to inventory
 		if(correct) {
-			$game.$player.game.seeds.normal += 1;
+			$game.$player.game.seeds.normal += (6 - rs.attempts);
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
 			$game.$player.checkGnomeState();
@@ -595,7 +563,7 @@ $game.$player = {
 	addToInventory: function(id) {
 		//create the class / ref to the image
 		var file = 'r' + id;
-		//put image on page
+		//put image on page in inventory
 		$('.inventory').prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
 		
 		//bind click and drag functions, pass npc #
