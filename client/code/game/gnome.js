@@ -302,8 +302,13 @@ $game.$gnome = {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .answerButton').removeClass('hideButton');
 			}
+			else if(_currentSlide === 1) {
+				$('.gnomeArea .answerButton').addClass('hideButton');
+				$('.gnomeArea .nextButton').removeClass('hideButton');
+			}
 			else {
-
+				$('.gnomeArea .nextButton').addClass('hideButton');
+				$('.gnomeArea .answerButton').removeClass('hideButton');
 			}
 		}
 	},
@@ -354,21 +359,34 @@ $game.$gnome = {
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
-			$('.inventory button').addClass('hideButton');
-			$('.inventory').slideDown(function() {
-				$game.$player.inventoryShowing = false;
-			});
+			
 
 			//combo riddle and puzzle interface
 			if(_currentSlide === 0) {
+				$('.inventory button').addClass('hideButton');
+				$('.inventory').slideDown(function() {
+					$game.$player.inventoryShowing = false;
+				});
 				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
 				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
 				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
+			else if(_currentSlide === 1) {
+				$('.inventory').slideUp(function() {
+					$game.$player.inventoryShowing = false;
+					$('.inventory button').removeClass('hideButton');
+					$('.inventoryItem').remove();
+				});
+				$('.gnomeArea .message').text('Well done fella!  Here is a mega seed.');
+				var newHTML2 = '<p class="riddleText">Mega seed:</p><p class="centerText"><img class="trash" src="/img/game/trash.png"></p>';
+				$('.gnomeContent').html(newHTML2);
+			}
 			else {
-
+				$('.gnomeArea .message').text('Now please tell me something about yourself for the profile.');
+				var inputBox = '<form><input></input></form>';
+				$('.gnomeContent').html(inputBox);
 			}
 			
 		}
@@ -406,54 +424,91 @@ $game.$gnome = {
 	submitAnswer: function() {
 		//go through and check each piece on 'the board' and see it exists within the right answer
 		//array and check the location. give feedback/next screen based on results
-		var allTangrams = $('.puzzleSvg > path'),
+		if(_currentSlide === 0) {
+			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
 			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length,
 			message = '';
 
-		allTangrams.each(function(i, d) {
-			
-			var tanIdD = $(this).attr('class'),
-				tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
-				trans = $(this).attr('transform'),
-				transD = trans.substring(10,trans.length-1),
-				transD2 = transD.split(','),
-				transX = parseInt(transD2[0],10),
-				transY = parseInt(transD2[1],10),
-				
-				//check these three values against the ones in the answers sheet
-				t = aLength - 1;
+			allTangrams.each(function(i, d) {
+				//pull the coordinates for each tangram
+				var tanIdD = $(this).attr('class'),
+					tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
+					trans = $(this).attr('transform'),
+					transD = trans.substring(10,trans.length-1),
+					transD2 = transD.split(','),
+					transX = parseInt(transD2[0],10),
+					transY = parseInt(transD2[1],10),
+					
+					t = aLength - 1;
 
-				while(--t > -1) {
-					var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
-					if(answer.id === tanId) {
-						var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
-						console.log(dist);
-						if(dist < 10) {
-							console.log('winna');
+					//go through the answer sheet to see if the current tangram is there &&
+					//in the right place
+
+					while(--t > -1) {
+						var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
+						if(answer.id === tanId) {
+							//this is a distance check if we don't do snapping
+							var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+							console.log(dist);
+							if(dist < 10) {
+								console.log('winna');
+							}
+							else {
+								console.log('close');
+							}
+
+							// //this is a hard check for snapping
+							// if(transX === answer.x && transY === answer.y) {
+							//console.log('winna');
+							// }
+							// else {
+							//console.log('losa');
+							// }
 						}
 						else {
-							console.log('close');
+							console.log('wrong piece');
 						}
 					}
-					else {
-						console.log('wrong piece');
+					correct = true;
+					if(correct) {
+						_currentSlide = 1;
+						$game.$gnome.addContent();
+						$game.$gnome.addButtons();
+						//display item and congrats.
+						//-> next slide is the prompt to answer question
+
+						//remove all items from inventory on slide up
+						//remove them from puzzle surface
+						$('.puzzleSvg').empty();
+						$('.tangramArea').hide();
+						//remove them from player's inventory
+						$game.$player.emptyInventory();
 					}
-				}
-		});
+					else {
+						//display modal on current screen with feedback
+					}
+			});
 
-		if(allTangrams.length === 0) {
-			correct = false;
-			message = 'at least TRY to solve it...geesh';
-		}
+			if(allTangrams.length === 0) {
+				correct = false;
+				message = 'at least TRY to solve it...geesh';
+			}
 
-		if(correct) {
-			console.log('ya buddy');
+			if(correct) {
+				console.log('ya buddy');
+			}
+			else {
+				console.log('NEIN');
+				message = '';
+			}
 		}
 		else {
-			console.log('NEIN');
-			message = ''
+			$game.$player.nextLevel();
+			$game.$gnome.hideResource();
+			//upload the user's answer to the DB
 		}
+		
 	},
 
 	setupTangram: function() {
@@ -542,7 +597,7 @@ $game.$gnome = {
 			mY = $game.$gnome.snapTo(y - _dragOffY);
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
-			col = '#f00';
+			col = 'rgba(255,0,0,.3)';
 			$('.trash').css('opacity',1);
 		}
 		else {
@@ -550,8 +605,7 @@ $game.$gnome = {
 			$('.trash').css('opacity',.5);
 		}
 
-		var trans = 'translate(' + mX  + ', ' + mY + ')',
-			col = '#eee';
+		var trans = 'translate(' + mX  + ', ' + mY + ')';
 		
 		d3.select('.br' + d.id)
 			.attr('fill', col)

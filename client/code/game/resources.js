@@ -54,6 +54,7 @@ $game.$resources = {
 	},
 
 	showResource: function(num) {
+		_revisiting = false;
 		//if they already got it right, then don't have answer form, but show answer
 		if(num === 2) {
 			_revisiting = true;
