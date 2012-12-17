@@ -68,6 +68,7 @@ $game.$player = {
 			$game.$player.name = newInfo.name,
 			$game.$player.game = newInfo.game;
 
+			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
 			$game.$player.fillInventory();
 
 			_chatId = 'player'+ newInfo.id,
@@ -396,6 +397,7 @@ $game.$player = {
 		if(bombed.length > 0) {
 			ss.rpc('game.player.dropSeed', bombed);
 			$game.$player.game.seeds.normal -= 1;
+			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
 		}
 		
 	},
@@ -520,6 +522,7 @@ $game.$player = {
 		//the answer was correct, add item to inventory
 		if(correct) {
 			$game.$player.game.seeds.normal += (6 - rs.attempts);
+			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
 			$game.$player.checkGnomeState();
@@ -550,6 +553,7 @@ $game.$player = {
 	fillInventory: function() {
 		//on first load, fill inventory from DB
 		var l = $game.$player.game.inventory.length;
+		$('.inventoryButton .hudCount').text(l);
 		while(--l > -1) {
 			$game.$player.addToInventory($game.$player.game.inventory[l]);
 		}
@@ -566,6 +570,8 @@ $game.$player = {
 		//put image on page in inventory
 		$('.inventory').prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
 		
+		$('.inventoryButton .hudCount').text($game.$player.game.inventory.length);
+
 		//bind click and drag functions, pass npc #
 		$('img.inventoryItem.'+ file)
 			.bind('click',{npc: id}, $game.$resources.beginResource)
@@ -580,6 +586,18 @@ $game.$player = {
 
 	getPosition: function() {
 		return _info;
+	},
+
+	emptyInventory: function() {
+		$game.$player.game.inventory = [];
+		$('.hudCount').text('0');
+	},
+
+	nextLevel: function() {
+		$game.$player.currentLevel += 1;
+		$game.$player.game.gnomeState = 0;
+
+		//load in other tree file
 	}
 };
 

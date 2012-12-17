@@ -1,25 +1,43 @@
-<div class="container hud">
-	<div class="row">
-		<div style="font-size: 22px;">
-			<div class="span8 playerHud">
-				<div class="inventoryButton">
-					<i class="icon-briefcase icon-large"></i>
-				</div>
-				<div class="seedButton">
-					<i class="icon-leaf icon-large"></i>
-				</div>
-				<i class="icon-group icon-large"></i>
-				<span class="activePlayers"></span>
+<div class = 'container hud'>
+	<div class = 'row'>
+		<div class = 'span4 playerHud'>
+			<div class = 'inventoryButton'>
+				<i class = 'icon-briefcase icon-large'></i>
+				<p class = 'hudCount' >0</p>
 			</div>
-			<div class="span4 globalHud">
-				<div class="chatBox">
-					<form class="form-inline">
-						<input type="text" class="input-xlarge" maxlength="90" placeholder="say something..." id="chatText">
-						<button type="submit" class="btn" id="chatButton">Chat</button>
-					</form>
-				</div>
-				<i class="icon-question-sign icon-large"></i>
+			<div class = 'seedButton'>
+				<i class = 'icon-leaf icon-large'></i>
+				<p class = 'hudCount' >0</p>
+			</div>
+			<div class = 'seed2Button'>
+				<i class = 'icon-tint icon-large'></i>
+				<p class = 'hudCount' >0</p>
+			</div>
+			<div class = 'chatButton'>
+				<i class = 'icon-comment icon-large'></i>
+			</div>
+		</div>
+		<div class = 'span4 displayHud'>
+			<form class = 'form-inline chatBox hide'>
+				<input type = 'text' class = 'input-xlarge' maxlength = '90' placeholder = 'say something...' id = 'chatText'>
+				<button type = 'submit' class = 'btn' id = 'chatButton'> Chat </button>
+			</form>
+			<p class = 'displayBox'>
+				<span class='displayBoxText'>you are in the forest</span>
+			</p>
+		</div>
+		<div class = 'span4 globalHud'>
+			<div class = 'activePlayers'>
+				<i class='icon-group icon-large'></i>
+				<p class = 'hudCount' >0</p>
+			</div>
+			<div class='progress progress-info progress-striped' style='width: 60%'>
+  				<div class='bar' style='width: 25%'></div>
+			</div>
+			<div class = 'helpButton'>
+				<i class='icon-question-sign icon-large'></i>
 			</div>
 		</div>
 	</div>
 </div>
+

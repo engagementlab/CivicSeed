@@ -4913,6 +4913,12 @@ a.badge:hover {
   border: 2px solid #222;
   z-index: 0;
   background: #eee;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .loading {
   position: absolute;
@@ -4957,6 +4963,18 @@ a.badge:hover {
   height: 380px;
   padding: 0;
   z-index: 9998;
+  display: none;
+}
+.gnomeArea {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 930px;
+  height: 450px;
+  background: #141414;
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9994;
   display: none;
 }
 .centerText {
@@ -5050,11 +5068,19 @@ a.badge:hover {
   background: rgba(20, 20, 20, 0.3);
 }
 #minimapPlayer {
+  background: rgba(20, 20, 20, 0.3);
   z-index: 5;
   right: 0px;
+  border-radius: 3px;
 }
 .hud {
   margin-top: 20px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .debug p {
   float: left;
@@ -5063,7 +5089,8 @@ a.badge:hover {
 .playerHud {
   cursor: pointer;
 }
-.playerHud div {
+.hud div {
+  font-size: 22px;
   float: left;
 }
 .videoResource {
@@ -5101,9 +5128,10 @@ a.badge:hover {
   font-size: 2em;
   margin-top: 100px;
 }
-.inventoryButton {
-  width: 32px;
-  margin-right: 20px;
+.playerHud div {
+  width: 48px;
+  margin-right: 10px;
+  position: relative;
 }
 .inventory button {
   bottom: 15px;
@@ -5136,6 +5164,49 @@ a.badge:hover {
   position: absolute;
   top: 150px;
   right: 10px;
+}
+.chatBox input {
+  width: 75%;
+  font-size: 16px;
+  font-family: 'InconsolataMedium', monospace;
+}
+.globalHud div {
+  width: 48px;
+  margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.globalHud .helpButton {
+  margin-right: 0px;
+  float: right;
+}
+.hide {
+  display: none;
+}
+.displayBox {
+  width: 90%;
+  height: 24px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 4px;
+  text-align: center;
+  overflow: hidden;
+  font-family: 'InconsolataMedium', monospace;
+  position: relative;
+}
+.hudCount {
+  font-family: 'InconsolataMedium', monospace;
+  position: absolute;
+  font-size: 14px;
+  height: 16px;
+  margin: 0;
+  padding: 0px 5px 5px 5px;
+  top: -12px;
+  right: 5px;
+  color: #333;
+  background: rgba(0, 238, 255, 0.5);
+  border-radius: 10px;
 }
 body {
   padding-top: 80px;
