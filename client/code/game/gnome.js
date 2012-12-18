@@ -133,11 +133,11 @@ $game.$gnome = {
 		//decide what to show based on the player's current status
 				
 		//if they are in a level 0-4
-		if($game.$player.currentLevel < 5) {
+		if($game.$player.game.currentLevel < 5) {
 
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
-				_messages = $game.$gnome.dialog[$game.$player.currentLevel].instructions;
+				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -155,7 +155,7 @@ $game.$gnome = {
 				}
 				//else hint 1
 				_messages = [];
-				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
+				_messages.push($game.$gnome.dialog[$game.$player.game.currentLevel].hint[curHint]);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -180,7 +180,7 @@ $game.$gnome = {
 	},
 
 	showTangram: function() {
-		var file = '/img/game/tangrams/puzzle' + $game.$player.currentLevel + '.png';
+		var file = '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';
 		
 	},
 
@@ -233,7 +233,7 @@ $game.$gnome = {
 
 	showPrompt: function(p) {
 		$game.$gnome.isChat = true;
-		_speak =  $game.$gnome.dialog[$game.$player.currentLevel].riddle.prompts[p];
+		_speak =  $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.prompts[p];
 
 		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 		$('.speechBubble .message').text(_speak);
@@ -334,7 +334,7 @@ $game.$gnome = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .message').text('here is your next riddle whale thing.');
-				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {
 				//show them a different version if they already posses it
@@ -353,7 +353,7 @@ $game.$gnome = {
 					$game.$player.checkGnomeState();
 				}
 				
-				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p>');
 				
 			}
 		}
@@ -367,9 +367,9 @@ $game.$gnome = {
 				$('.inventory').slideDown(function() {
 					$game.$player.inventoryShowing = false;
 				});
-				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
+				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
 				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
@@ -404,6 +404,11 @@ $game.$gnome = {
 			$game.$gnome.isSolving = false;
 			$('.puzzleSvg').empty();
 			$('.inventoryItem').css('opacity',1);
+
+			//if they just beat a level, then show progreess
+			if($game.$player.game.gnomeState === 0) {
+				$('.progressArea').slideToggle();
+			}
 		});
 
 		//if we left inventory on, that means we want to show it again
@@ -427,7 +432,7 @@ $game.$gnome = {
 		if(_currentSlide === 0) {
 			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
-			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length,
+			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
 			message = '';
 
 			allTangrams.each(function(i, d) {
@@ -446,7 +451,7 @@ $game.$gnome = {
 					//in the right place
 
 					while(--t > -1) {
-						var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
+						var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
 						if(answer.id === tanId) {
 							//this is a distance check if we don't do snapping
 							var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
@@ -456,6 +461,9 @@ $game.$gnome = {
 							}
 							else {
 								console.log('close');
+								correct = false;
+								message = 'right piece, wrong place.';
+								continue;
 							}
 
 							// //this is a hard check for snapping
@@ -467,10 +475,13 @@ $game.$gnome = {
 							// }
 						}
 						else {
-							console.log('wrong piece');
+							console.log('wrong pieces bruh.');
+							message = 'wrong pieces bruh.';
+							correct = false;
+							continue;
 						}
 					}
-					correct = true;
+					//correct = true;
 					if(correct) {
 						_currentSlide = 1;
 						$game.$gnome.addContent();
@@ -484,8 +495,10 @@ $game.$gnome = {
 						$('.tangramArea').hide();
 						//remove them from player's inventory
 						$game.$player.emptyInventory();
+						$game.$player.nextLevel();
 					}
 					else {
+						$game.$gnome.feedback(message);
 						//display modal on current screen with feedback
 					}
 			});
@@ -493,15 +506,7 @@ $game.$gnome = {
 			if(allTangrams.length === 0) {
 				correct = false;
 				message = 'at least TRY to solve it...geesh';
-			}
-
-			if(correct) {
-				console.log('ya buddy');
-			}
-			else {
-				console.log('NEIN');
-				message = '';
-			}
+			}			
 		}
 		else {
 			$game.$player.nextLevel();
@@ -619,7 +624,7 @@ $game.$gnome = {
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
 			$('.r' + d.id).css('opacity', 1);
-			$('.trash').css('opacity',.5);
+			$('.trash').css('opacity',0.5);
 		}
 		else {
 			d3.select('.br' + d.id)
@@ -638,8 +643,18 @@ $game.$gnome = {
 		}
 		else {
 			result += -5 - round;
-		} 
+		}
+		return result;
+	},
 
-		return result;			
+	feedback: function(message) {
+		
+		$('.feedback')
+			.text(message)
+			.fadeIn();
+
+		setTimeout(function() {
+			$('.feedback').fadeOut();
+		},3500);
 	}
 };

@@ -31,7 +31,6 @@ $game.$player = {
 	inventoryShowing: false,
 	npcOnDeck: false,
 	ready: false,
-	currentLevel: 0,
 	seedMode: false,
 
 
@@ -77,7 +76,11 @@ $game.$player = {
 			$game.firstLoad(_info.x, _info.y);
 			$game.$player.updateRenderInfo();
 			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, 'rgb(255,0,0)');
-			
+
+			var src = $game.$player.game.colorMap;
+			if(src !== undefined) {
+				$game.$renderer.imageToCanvas(src);
+			}
 		});
 
 	},
@@ -464,6 +467,7 @@ $game.$player = {
 	exitAndSave: function() {
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
+		$game.$player.game.colorMap = $game.$map.saveImage();
 		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
 		
 	},
@@ -532,7 +536,7 @@ $game.$player = {
 	checkGnomeState: function() {
 		//put player to state 3 (solving) if they have enough resources
 		//AND they have already seen the first 2 staes
-		if($game.$player.game.inventory.length >= _numRequired[$game.$player.currentLevel] && $game.$player.game.gnomeState > 1) {
+		if($game.$player.game.inventory.length >= _numRequired[$game.$player.game.currentLevel] && $game.$player.game.gnomeState > 1) {
 				$game.$player.game.gnomeState = 3;
 			}
 	},
@@ -579,7 +583,7 @@ $game.$player = {
 	},
 
 	tangramToInventory: function() {
-		var gFile = 'puzzle' + $game.$player.currentLevel;
+		var gFile = 'puzzle' + $game.$player.game.currentLevel;
 		$('.inventory').append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png" draggable = "false"></div>');
 		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
@@ -594,7 +598,7 @@ $game.$player = {
 	},
 
 	nextLevel: function() {
-		$game.$player.currentLevel += 1;
+		$game.$player.game.currentLevel += 1;
 		$game.$player.game.gnomeState = 0;
 
 		//load in other tree file

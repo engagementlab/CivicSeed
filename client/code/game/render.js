@@ -575,6 +575,15 @@ $game.$renderer = {
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
 		);
+	},
+
+	imageToCanvas: function(map) {
+		var newImg = new Image();
+		
+		newImg.onload = function() {
+			_minimapTileContext.drawImage(newImg,0,0);
+		};
+		newImg.src = map;
 	}
 	
 };

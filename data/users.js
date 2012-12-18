@@ -9,6 +9,7 @@ module.exports.global = [{
 	email: 'b',
 	role: 'superadmin',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,
@@ -37,6 +38,7 @@ module.exports.global = [{
 	email: 'r',
 	role: 'superadmin',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 2,
 				y: 5,
@@ -65,6 +67,7 @@ module.exports.global = [{
 	email: 's',
 	role: 'admin',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,
@@ -93,6 +96,7 @@ module.exports.global = [{
 	email: 'e',
 	role: 'admin',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,
@@ -121,6 +125,7 @@ module.exports.global = [{
 	email: 'a',
 	role: 'admin',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,
@@ -149,6 +154,7 @@ module.exports.global = [{
 	email: 'j',
 	role: 'actor',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,
@@ -177,6 +183,7 @@ module.exports.global = [{
 	email: 'f',
 	role: 'actor',
 	game: {
+			currentLevel: 0,
 			position: {
 				x: 20,
 				y: 10,

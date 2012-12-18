@@ -209,7 +209,9 @@ var statusUpdate = function(m) {
 				}, 3000);
 			});
 	});
-		
-		
-	
 };
+
+$('.progress').bind('click', function() {
+
+	$('.progressArea').slideToggle();
+});

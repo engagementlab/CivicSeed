@@ -72,16 +72,16 @@ user-select: none;
 	display:none;
 }
 
-.gnomeArea{
+.progressArea{
 	position: absolute;
 	top:15px;
 	left:15px;
 	width: 930px;
 	height: 450px;
-	background: rgb(20,20,20,.8);
+	background: rgba(20,20,20,0.8);
 	padding: 0;
 	border-radius: 5px;
-	z-index:9994;
+	z-index:9990;
 	display:none;
 }
 
@@ -304,6 +304,7 @@ user-select: none;
 	overflow: hidden;
 	font-family: 'InconsolataMedium', monospace;
 	position:relative;
+	cursor: default;
 }
 
 .hudCount {
@@ -318,4 +319,33 @@ user-select: none;
 	color: #333;
 	background: rgba(0, 238, 255,.5);
 	border-radius:10px;
+}
+.progressArea h2 {
+	padding:10px;
+	margin-left:20px;
+	color: #ccff00;
+}
+.seedersHeader {
+	color: #999;
+}
+.topSeeders {
+	padding:10px;
+	margin-left:20px;
+	color: #ccc;
+}
+.feedback {
+	width: 320px;
+	height: 36px;
+	position: absolute;
+	text-align: center;
+	font-size:20px;
+	top: 150px;
+	left: 310px;
+	color: #eee;
+	border-radius: 5px;
+	border: 2px solid white;
+	background: #f00;
+	display: none;
+	padding-bottom: 20px;
+	z-index: 9999;
 }
