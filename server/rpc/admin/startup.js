@@ -9,6 +9,7 @@ var tileModel = service.useModel('tile', 'preload');
 var npcModel = service.useModel('npc', 'preload');
 var resourceModel = service.useModel('resource','preload');
 var gnomeModel = service.useModel('gnome', 'preload');
+var gameModel = service.useModel('game', 'preload');
 
 // var nodeEnv;
 
@@ -22,7 +23,7 @@ exports.actions = function(req, res, ss) {
 
 		loadData: function(dataType) {
 
-			var userData, tileData, npcData, gnomeData, resourceData;
+			var userData, tileData, npcData, gnomeData, resourceData, gameData;
 
 			if(dataType === 'users') {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
@@ -118,6 +119,14 @@ exports.actions = function(req, res, ss) {
 					});
 				});
 
+			}  else if(dataType === 'game') {
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
+					gameData = require(rootDir + '/data/game');
+					dbActions.dropCollection('game', function() {
+						dbActions.saveDocuments(gameModel, gameData.global, function() {
+							res('Data loaded: ' + dataType);
+						});
+					});
 			}
 		}
 
