@@ -374,13 +374,18 @@ $game.$gnome = {
 			}
 			//right/wrong screen
 			else if(_currentSlide === 1) {
+				$('.gnomeArea').animate({
+						'height':'450px'
+				});
 				$('.inventory').slideUp(function() {
 					$game.$player.inventoryShowing = false;
 					$('.inventory button').removeClass('hideButton');
 					$('.inventoryItem').remove();
+					
 				});
+
 				$('.gnomeArea .message').text('Well done fella!  Here is a mega seed.');
-				var newHTML2 = '<p class="riddleText">Mega seed:</p><p class="centerText"><img class="trash" src="/img/game/trash.png"></p>';
+				var newHTML2 = '<p class="riddleText">Mega seed:</p>';
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {
@@ -481,38 +486,43 @@ $game.$gnome = {
 							continue;
 						}
 					}
-					//correct = true;
-					if(correct) {
-						_currentSlide = 1;
-						$game.$gnome.addContent();
-						$game.$gnome.addButtons();
-						//display item and congrats.
-						//-> next slide is the prompt to answer question
-
-						//remove all items from inventory on slide up
-						//remove them from puzzle surface
-						$('.puzzleSvg').empty();
-						$('.tangramArea').hide();
-						//remove them from player's inventory
-						$game.$player.emptyInventory();
-						$game.$player.nextLevel();
-						$game.$player.game.seeds.riddle += 3;
-					}
-					else {
-						$game.$gnome.feedback(message);
-						//display modal on current screen with feedback
-					}
+					//correct = true
 			});
+
 
 			if(allTangrams.length === 0) {
 				correct = false;
 				message = 'at least TRY to solve it...geesh';
-			}			
+			}
+
+			correct = true;
+			if(correct) {
+				_currentSlide = 1;
+				$game.$gnome.addContent();
+				$game.$gnome.addButtons();
+				//display item and congrats.
+				//-> next slide is the prompt to answer question
+
+				//remove all items from inventory on slide up
+				//remove them from puzzle surface
+				$('.puzzleSvg').empty();
+				$('.tangramArea').hide();
+				//remove them from player's inventory
+				$game.$player.emptyInventory();
+				$game.$player.game.seeds.riddle += 3;
+			}
+			else {
+				$game.$gnome.feedback(message);
+				//display modal on current screen with feedback
+			}
+
 		}
 		else {
 			$game.$player.nextLevel();
 			$game.$gnome.hideResource();
 			//upload the user's answer to the DB
+			var portAnswer = $('.gnomeContent input').val();
+			$game.$player.game.resume.push(portAnswer);
 		}
 		
 	},
@@ -627,7 +637,6 @@ $game.$gnome = {
 			mY = $game.$gnome.snapTo(y - _dragOffY),
 			trans = 'translate(' + mX  + ', ' + mY + ')';
 
-		console.log(x, y, x - _dragOffX, y - _dragOffY, mX, mY, d3.event.sourceEvent);
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
 			$('.r' + d.id).css('opacity', 1);

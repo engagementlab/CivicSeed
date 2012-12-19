@@ -37,7 +37,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				dropped: Number
 			},
 			gnomeState: Number,
-			colorMap: String
+			colorMap: String,
+			resume: [String]
 		}
 	});
 
