@@ -9,6 +9,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		email: String,
 		role: String,
 		game: {
+			currentLevel: Number,
 			position: {
 				x: Number,
 				y: Number,
@@ -34,7 +35,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				riddle: Number,
 				special: Number
 			},
-			gnomeState: Number
+			gnomeState: Number,
+			colorMap: String
 		}
 	});
 

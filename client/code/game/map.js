@@ -11,10 +11,9 @@ $game.$map = {
 	miniMap: {},
 
 	init: function() {
-		$game.$map.paintMini();
 	},
 	paintMini: function() {
-
+		
 	},
 	growSeeds: function() {
 
@@ -68,6 +67,12 @@ $game.$map = {
 				//$game.$audio.playSound(0);
 			}
 		}
+	},
+
+	saveImage: function() {
+		var myDrawing = document.getElementById('minimapTile');
+		var drawingURL = myDrawing.toDataURL('img/png');
+		return drawingURL;
 	}
 };
 

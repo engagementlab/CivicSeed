@@ -5,7 +5,12 @@
 	_currentMessage = 0,
 	_currentSlide = 0,
 	_promptNum = 0,
-	_transferData = {};
+	_transferData = {},
+	_svg = null,
+	_drag = null,
+	_new = null,
+	_dragOffX = 0,
+	_dragOffY = 0;
 
 $game.$gnome = {
 
@@ -15,6 +20,7 @@ $game.$gnome = {
 	curFrame: 0,
 	numFrames: 4,
 	dialog: null,
+	tangram: null,
 	name: null,
 	isChat: false,
 	isShowing: false,
@@ -24,7 +30,8 @@ $game.$gnome = {
 		ss.rpc('game.npc.loadGnome', function(response) {
 			$game.$gnome.index = response.id,
 			$game.$gnome.dialog = response.dialog,
-			$game.$gnome.name = response.name;
+			$game.$gnome.name = response.name,
+			$game.$gnome.tangram = response.tangram;
 
 			_info = {
 				x: response.x,
@@ -40,6 +47,8 @@ $game.$gnome = {
 			};
 
 			$game.$gnome.getMaster();
+
+			$game.$gnome.setupTangram();
 
 		});
 	},
@@ -124,11 +133,11 @@ $game.$gnome = {
 		//decide what to show based on the player's current status
 				
 		//if they are in a level 0-4
-		if($game.$player.currentLevel < 5) {
+		if($game.$player.game.currentLevel < 5) {
 
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
-				_messages = $game.$gnome.dialog[$game.$player.currentLevel].instructions;
+				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -146,7 +155,7 @@ $game.$gnome = {
 				}
 				//else hint 1
 				_messages = [];
-				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
+				_messages.push($game.$gnome.dialog[$game.$player.game.currentLevel].hint[curHint]);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -171,7 +180,7 @@ $game.$gnome = {
 	},
 
 	showTangram: function() {
-		var file = '/img/game/tangrams/puzzle' + $game.$player.currentLevel + '.png';
+		var file = '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';
 		
 	},
 
@@ -224,7 +233,7 @@ $game.$gnome = {
 
 	showPrompt: function(p) {
 		$game.$gnome.isChat = true;
-		_speak =  $game.$gnome.dialog[$game.$player.currentLevel].riddle.prompts[p];
+		_speak =  $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.prompts[p];
 
 		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 		$('.speechBubble .message').text(_speak);
@@ -293,8 +302,13 @@ $game.$gnome = {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .answerButton').removeClass('hideButton');
 			}
+			else if(_currentSlide === 1) {
+				$('.gnomeArea .answerButton').addClass('hideButton');
+				$('.gnomeArea .nextButton').removeClass('hideButton');
+			}
 			else {
-
+				$('.gnomeArea .nextButton').addClass('hideButton');
+				$('.gnomeArea .answerButton').removeClass('hideButton');
 			}
 		}
 	},
@@ -320,7 +334,7 @@ $game.$gnome = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .message').text('here is your next riddle whale thing.');
-				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {
 				//show them a different version if they already posses it
@@ -339,26 +353,40 @@ $game.$gnome = {
 					$game.$player.checkGnomeState();
 				}
 				
-				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p>');
 				
 			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
-			$('.inventory button').addClass('hideButton');
-			$('.inventory').slideDown(function() {
-				$game.$player.inventoryShowing = false;
-			});
+			
 
 			//combo riddle and puzzle interface
 			if(_currentSlide === 0) {
-				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
+				$('.inventory button').addClass('hideButton');
+				$('.inventory').slideDown(function() {
+					$game.$player.inventoryShowing = false;
+				});
+				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
-				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.currentLevel+'.png"></p>');
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
+				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
+			else if(_currentSlide === 1) {
+				$('.inventory').slideUp(function() {
+					$game.$player.inventoryShowing = false;
+					$('.inventory button').removeClass('hideButton');
+					$('.inventoryItem').remove();
+				});
+				$('.gnomeArea .message').text('Well done fella!  Here is a mega seed.');
+				var newHTML2 = '<p class="riddleText">Mega seed:</p><p class="centerText"><img class="trash" src="/img/game/trash.png"></p>';
+				$('.gnomeContent').html(newHTML2);
+			}
 			else {
-
+				$('.gnomeArea .message').text('Now please tell me something about yourself for the profile.');
+				var inputBox = '<form><input></input></form>';
+				$('.gnomeContent').html(inputBox);
 			}
 			
 		}
@@ -374,6 +402,13 @@ $game.$gnome = {
 			$('.gnomeArea').css('height','450px');
 			$game.$gnome.isChat = false;
 			$game.$gnome.isSolving = false;
+			$('.puzzleSvg').empty();
+			$('.inventoryItem').css('opacity',1);
+
+			//if they just beat a level, then show progreess
+			if($game.$player.game.gnomeState === 0) {
+				$('.progressArea').slideToggle();
+			}
 		});
 
 		//if we left inventory on, that means we want to show it again
@@ -392,22 +427,121 @@ $game.$gnome = {
 	},
 
 	submitAnswer: function() {
-		//go through and check each piece on 'the board' and see it exists within the right answer 
+		//go through and check each piece on 'the board' and see it exists within the right answer
 		//array and check the location. give feedback/next screen based on results
+		if(_currentSlide === 0) {
+			var allTangrams = $('.puzzleSvg > path'),
+			correct = true,
+			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
+			message = '';
+
+			allTangrams.each(function(i, d) {
+				//pull the coordinates for each tangram
+				var tanIdD = $(this).attr('class'),
+					tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
+					trans = $(this).attr('transform'),
+					transD = trans.substring(10,trans.length-1),
+					transD2 = transD.split(','),
+					transX = parseInt(transD2[0],10),
+					transY = parseInt(transD2[1],10),
+					
+					t = aLength - 1;
+
+					//go through the answer sheet to see if the current tangram is there &&
+					//in the right place
+
+					while(--t > -1) {
+						var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+						if(answer.id === tanId) {
+							//this is a distance check if we don't do snapping
+							var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+							console.log(dist);
+							if(dist < 10) {
+								console.log('winna');
+							}
+							else {
+								console.log('close');
+								correct = false;
+								message = 'right piece, wrong place.';
+								continue;
+							}
+
+							// //this is a hard check for snapping
+							// if(transX === answer.x && transY === answer.y) {
+							//console.log('winna');
+							// }
+							// else {
+							//console.log('losa');
+							// }
+						}
+						else {
+							console.log('wrong pieces bruh.');
+							message = 'wrong pieces bruh.';
+							correct = false;
+							continue;
+						}
+					}
+					//correct = true;
+					if(correct) {
+						_currentSlide = 1;
+						$game.$gnome.addContent();
+						$game.$gnome.addButtons();
+						//display item and congrats.
+						//-> next slide is the prompt to answer question
+
+						//remove all items from inventory on slide up
+						//remove them from puzzle surface
+						$('.puzzleSvg').empty();
+						$('.tangramArea').hide();
+						//remove them from player's inventory
+						$game.$player.emptyInventory();
+						$game.$player.nextLevel();
+					}
+					else {
+						$game.$gnome.feedback(message);
+						//display modal on current screen with feedback
+					}
+			});
+
+			if(allTangrams.length === 0) {
+				correct = false;
+				message = 'at least TRY to solve it...geesh';
+			}			
+		}
+		else {
+			$game.$player.nextLevel();
+			$game.$gnome.hideResource();
+			//upload the user's answer to the DB
+		}
+		
+	},
+
+	setupTangram: function() {
+		_svg = d3.select('.tangramArea').append('svg')
+			.attr('class','puzzleSvg')
+			.attr('width','930px')
+			.attr('height','380px');
+
+		_drag = d3.behavior.drag()
+    		.origin(Object)
+    		.on('drag', $game.$gnome.dragMove)
+    		.on('dragstart', $game.$gnome.dragMoveStart)
+    		.on('dragend', $game.$gnome.dropMove);
 	},
 
 	dragStart: function(e) {
 		if($game.$gnome.isSolving) {
-			var select = 'r' + e.data.npc,
-				dt = e.originalEvent.dataTransfer;
+			var id = e.data.npc,
+				dt = e.originalEvent.dataTransfer,
+				select = '.r' + id;
 			
-			dt.setData('text/plain', select);
+			dt.setData('text/plain', id);
 			//set drag over shit
 			$('.tangramArea')
 				.bind('dragover',$game.$gnome.dragOver)
 				.bind('drop', $game.$gnome.drop);
 
-			$('.' + select).css('opacity','.4');
+			
 		}
 	},
 	dragEnd: function(e) {
@@ -424,25 +558,25 @@ $game.$gnome = {
 		if (e.stopPropagation) {
 			e.stopPropagation();
 		}
-		//create a new image and put it on the gnome area
+		//set class name for new shape and fetch shape data
 		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
-			selector = '.b' + npc;
-			newImg = '<img class="b'+ npc + '"src="img\/game\/resources\/'+ npc +'.png">';
-		$('.tangramArea').append(newImg);
-		$(selector)
-			.css({
-				position: 'absolute',
-				top: e.originalEvent.offsetY,
-				left: e.originalEvent.offsetX
-			});
-			//bind some drag functionality to it
-			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+			selector = 'br' + npc,
+			x = e.originalEvent.offsetX,
+			y =  e.originalEvent.offsetY,
+			shape = $game.$resources.getShape(npc);
 
-			var selectBig = document.getElementsByClassName('b' + npc)[0];
-			_transferData.id = npc;
+			//access with shape.path
 
-			selectBig.addEventListener('dragstart',$game.$gnome.dragBigStart,false);
-		//unbind gnome area to not expect drop
+		$('.r' + npc).css('opacity','.4');
+		
+		_new = _svg.append('path')
+			.attr('class',selector)
+			.data([{x:x , y: y, id: npc}])
+			.attr('d', shape.path)
+			.attr('fill', 'rgb(180,200,230)')
+			.attr('transform', 'translate('+x+','+y+')')
+			.call(_drag);
+
 		$('.tangramArea')
 			.unbind('dragover')
 			.unbind('drop');
@@ -452,60 +586,75 @@ $game.$gnome = {
 		return false;
 
 	},
-	dragBigStart: function(e) {
-		var offX = e.offsetX,
-			offY = e.offsetY;
 
-		console.log(e);
-
-		console.log(_transferData);
-		_transferData.x = offX,
-		_transferData.y = offY;
-		//e.originalEvent.dataTransfer.setData('text/plain', e.data.npc +"," + offX +","+offY);
-		
-		// $('.tangramArea')
-		// 	.bind('drop', $game.$gnome.dropBig, false)
-		// 	.bind('dragover', $game.$gnome.dragOver, false);
-		var t = document.getElementsByClassName('tangramArea')[0];
+	dragMoveStart: function(d) {
+		_dragOffX = d3.mouse(this)[0],
+		_dragOffY = d3.mouse(this)[1],
 	
-		t.addEventListener('drop',$game.$gnome.dropBig,false);
-		t.addEventListener('dragover',$game.$gnome.dragOver,false); 
+		d3.select('.br' + d.id)
+			.attr('fill','#fff');
+	},
+
+	dragMove: function(d) {
+		var x = d3.event.sourceEvent.offsetX,
+			y = d3.event.sourceEvent.offsetY,
+			mX = $game.$gnome.snapTo(x - _dragOffX),
+			mY = $game.$gnome.snapTo(y - _dragOffY);
+
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			col = 'rgba(255,0,0,.3)';
+			$('.trash').css('opacity',1);
+		}
+		else {
+			col = '#fff';
+			$('.trash').css('opacity',.5);
+		}
+
+		var trans = 'translate(' + mX  + ', ' + mY + ')';
+		
+		d3.select('.br' + d.id)
+			.attr('fill', col)
+			.attr('transform',trans);
 
 	},
-	dropBig: function(e) {
-		
-		console.log(e);
-		// var data = e.originalEvent.dataTransfer.getData('text/plain');
-		// var splitData = data.split(','),
-		// 	selector = '.b' + splitData[0],
-		// 	offX = parseInt(splitData[1],10),
-		// 	offY = parseInt(splitData[2],10);
+	dropMove: function(d) {
+		var x = d3.event.sourceEvent.offsetX,
+			y = d3.event.sourceEvent.offsetY;
 
-		// console.log(offX,offY);
-		var selector = '.b' + _transferData.id,
-			x = e.offsetX - _transferData.x,
-			y = e.offsetY - _transferData.y;
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.br' + d.id).remove();
+			$('.r' + d.id).css('opacity', 1);
+			$('.trash').css('opacity',0.5);
+		}
+		else {
+			d3.select('.br' + d.id)
+			.attr('fill','#99aadd');
+		}
+		
+	},
 
-		console.log(x, y);
-		$(selector)
-			.css({
-				top: y,
-				left: x
-			});
-			//bind some drag functionality to it
-			//.bind('dragstart',{npc: selector}, $game.$gnome.dragBigStart);
+	snapTo: function(num) {
+
+		var result = num,
+			round = (num % 10 - 5);
+
+		if(round > -1) {
+			result += 5 - round;
+		}
+		else {
+			result += -5 - round;
+		}
+		return result;
+	},
+
+	feedback: function(message) {
 		
-		//unbind gnome area to not expect drop
-		// $('.tangramArea')
-		// 	.unbind('dragover')
-		// 	.unbind('drop');
-	
-		//clear data from drag bind
-		//e.originalEvent.dataTransfer.clearData();
-		
-		//event.preventDefault();
-		//return false;
+		$('.feedback')
+			.text(message)
+			.fadeIn();
+
+		setTimeout(function() {
+			$('.feedback').fadeOut();
+		},3500);
 	}
-
-
 };

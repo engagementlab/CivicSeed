@@ -1,52 +1,73 @@
-<div class="gameboard">
-	<canvas id="background" width="960px" height="480px"> </canvas>
-	<canvas id="npcs" width="960px" height="480px" ></canvas>
-	<canvas id="characters" width="960px" height="480px" ></canvas>
-	<canvas id="foreground" width="960px" height="480px" ></canvas>
-	<canvas id="minimapTile" width="142px" height="132px" ></canvas>
-	<canvas id="minimapPlayer" width="142px" height="132px" ></canvas>
-	<p class="loading">Loading...</p>
-	<div class="resourceArea">
-		<a href="#" style="font-size: 24px;"><i class="icon-remove-sign icon-large"></i></a>
-		<p class="dialog">
-			<span class="speakerName"></span>
-			<span class="message"></span>
+<div class='gameboard'>
+	<canvas id='background' width='960px' height='480px'> </canvas>
+	<canvas id='npcs' width='960px' height='480px' ></canvas>
+	<canvas id='characters' width='960px' height='480px' ></canvas>
+	<canvas id='foreground' width='960px' height='480px' ></canvas>
+	<canvas id='minimapTile' width='142px' height='132px' ></canvas>
+	<canvas id='minimapPlayer' width='142px' height='132px' ></canvas>
+	<p class='loading'>Loading...</p>
+	<div class='resourceArea'>
+		<a href='#' style='font-size: 24px;'><i class='icon-remove-sign icon-large'></i></a>
+		<p class='dialog'>
+			<span class='speakerName'></span>
+			<span class='message'></span>
 		</p>
-		<div class="resourceContent">
+		<div class='resourceContent'>
 		</div>
-		<button class="nextButton btn btn-info" type="button">Next</button>
-		<button class="backButton btn btn-inverse" type="button">Back</button>
-		<button class="answerButton btn btn-success" type="button">Answer</button>
-		<button class="closeButton btn btn-primary" type="button">Close</button>
+		<button class='nextButton btn btn-info' type='button'>Next</button>
+		<button class='backButton btn btn-inverse' type='button'>Back</button>
+		<button class='answerButton btn btn-success' type='button'>Answer</button>
+		<button class='closeButton btn btn-primary' type='button'>Close</button>
 	</div>
-	<div class="gnomeArea">
-		<a href="#" style="font-size: 24px;"><i class="icon-remove-sign icon-large"></i></a>
-		<p class="dialog">
-			<span class="speakerName"></span>
-			<span class="message"></span>
+	<div class='gnomeArea'>
+		<p class='dialog'>
+			<span class='speakerName'></span>
+			<span class='message'></span>
 		</p>
-		<div class="gnomeContent">
+		<div class='gnomeContent'>
 		</div>
-		<button class="nextButton btn btn-info" type="button">Next</button>
-		<button class="backButton btn btn-inverse" type="button">Back</button>
-		<button class="answerButton btn btn-success" type="button">Answer</button>
-		<button class="closeButton btn btn-primary" type="button">Close</button>
+		<div class='tangramArea'>
+			<p class = 'feedback'>
+			</p>
+		</div>
+		<button class='nextButton btn btn-info' type='button'>Next</button>
+		<button class='backButton btn btn-inverse' type='button'>Back</button>
+		<button class='answerButton btn btn-success' type='button'>Answer</button>
+		<button class='closeButton btn btn-primary' type='button'>Close</button>
+		<a href='#' style='font-size: 24px;'><i class='icon-remove-sign icon-large'></i></a>
 	</div>
-	<div class="tangramArea">
+	<div class='progressArea'>
+		<h2>Game Progress</h2>
+		<div class='topSeeders'>
+			<h3 class='seedersHeader'>Top Seeders: </h3>
+			<div class='megaBar'>
+			
+			</div>
+			<ol>
+				<li>Russell: <span>230 tiles</span></li>
+				<li>Robert: <span>206 tiles</span></li>
+				<li>Steve: <span>135 tiles</span></li>
+				<li>Herbie: <span>44 tiles</span></li> 
+			</ol>
+		</div>
+		
+		<div class='colorMap'>
+		</div>
 	</div>
-	<div class="inventory">
-		<button class="closeButton btn btn-primary" type="button">Close</button>
+	
+	<div class='inventory'>
+		<button class='closeButton btn btn-primary' type='button'>Close</button>
 	</div>
-	<p class="speechBubble">
-		<span class="speakerName"></span>
-		<span class="message"></span>
-		<button class="nextChatButton btn btn-success hideButton" type="button">Next</button>
-		<button class="closeChatButton btn btn-primary hideButton" type="button">Close</button>
-		<button class="noButton btn btn-danger hideButton" type="button">No</button>
-		<button class="yesButton btn btn-success hideButton" type="button">Yes</button>
+	<p class='speechBubble'>
+		<span class='speakerName'></span>
+		<span class='message'></span>
+		<button class='nextChatButton btn btn-success hideButton' type='button'>Next</button>
+		<button class='closeChatButton btn btn-primary hideButton' type='button'>Close</button>
+		<button class='noButton btn btn-danger hideButton' type='button'>No</button>
+		<button class='yesButton btn btn-success hideButton' type='button'>Yes</button>
 	</p>
-	<div class="pauseMenu">
+	<div class='pauseMenu'>
 		<p>please re-focus your mind, body, and the window...</p>
-		<p><button class="unPause btn btn-success" type="button">Resume Game</button></p>
+		<p><button class='unPause btn btn-success' type='button'>Resume Game</button></p>
 	</div>
 </div>

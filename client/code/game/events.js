@@ -14,14 +14,14 @@ function leaveThisJoint() {
 ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
-	$('.activePlayers').text(num + ' active players!');
+	$('.activePlayers p').text(num);
 });
 
 
 ss.event.on('ss-removePlayer', function(num, playerId) {
 	$game.numPlayers = num;
 	$game.$others.remove(playerId);
-	$('.activePlayers').text(num + ' active players!');
+	$('.activePlayers p').text(num);
 });
 
 ss.event.on('ss-playerMoved', function(moves, id) {
@@ -37,6 +37,7 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 //but we will pass the tiles info
 ss.event.on('ss-seedDropped', function(bombed) {
 	$game.$map.newBomb(bombed);
+	statusUpdate('someone dropped one');
 });
 
 
@@ -59,6 +60,12 @@ $('.seedButton').bind("click", (function () {
 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 	if(!$game.inTransit && !$game.$player.isMoving) {
 		$game.$player.seedMode = !$game.$player.seedMode;
+		if($game.$player.seedMode) {
+			$('.displayBoxText').text('in seed mode');
+		}
+		else {
+			$('.displayBoxText').text('you are in the forest');
+		}
 	}
 	
 }));
@@ -109,6 +116,13 @@ $('#chatButton').click(function(e) {
 	return false;
 });
 
+$('.chatButton').click(function(e) {
+	
+	$('.chatBox').toggleClass('hide');
+	$('.displayBox').toggleClass('hide');
+	//return false;
+});
+
 $(window).blur(function(e) {
 	if(!$game.$npc.isResource) {
 		//$game.pause();
@@ -133,11 +147,13 @@ $('.inventoryButton, .inventory button').click(function () {
 		if($game.$player.inventoryShowing) {
 			$('.inventory').slideUp(function() {
 				$game.$player.inventoryShowing = false;
+				$('.displayBoxText').text('you are in the forest');
 			});	
 		}
 		else {
 			$('.inventory').slideDown(function() {
 				$game.$player.inventoryShowing = true;
+				$('.displayBoxText').text('click items to view again');
 			});	
 		}	
 	}
@@ -177,3 +193,25 @@ $(".gnomeArea .answerButton").bind("click", (function (e) {
 	$game.$gnome.submitAnswer();
 	return false;
 }));
+
+$('.activePlayers').click(function() {
+	$('#minimapPlayer').toggleClass('hide');
+});
+
+var statusUpdate = function(m) {
+	var prevM = $('.displayBoxText').text();
+	$('.displayBoxText').fadeOut(200,function() {
+		$(this)
+			.text(m)
+			.fadeIn(600,function() {
+				setTimeout(function() {
+					$('.displayBoxText').text(prevM);
+				}, 3000);
+			});
+	});
+};
+
+$('.progress').bind('click', function() {
+
+	$('.progressArea').slideToggle();
+});

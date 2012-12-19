@@ -16,6 +16,12 @@
 	border: 2px solid #222;
 	z-index:0;
 	background:#eee;
+	-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
 .loading {
 	position:absolute;
@@ -57,12 +63,25 @@
 
 .tangramArea {
 	position: absolute;
-	top:15px;
-	left:15px;
-	width:830px;
+	top:0px;
+	left:0px;
+	width:930px;
 	height:380px;
 	padding: 0;
 	z-index: 9998;
+	display:none;
+}
+
+.progressArea{
+	position: absolute;
+	top:15px;
+	left:15px;
+	width: 930px;
+	height: 450px;
+	background: rgba(20,20,20,0.8);
+	padding: 0;
+	border-radius: 5px;
+	z-index:9990;
 	display:none;
 }
 
@@ -150,22 +169,32 @@
 	z-index: 4;
 	right:0px;
 	background: rgba(20,20,20,.3);
+
 }
 #minimapPlayer {
+	background: rgba(20,20,20,.3);
 	z-index: 5;
 	right:0px;
+	border-radius:3px;
 }
 .hud{
 	margin-top: 20px;
+	-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
 .debug p{
 	float:left;
 	margin-left:20px;
 }
-.playerButtons {
+.playerHud {
 	cursor: pointer;
 }
-.playerButtons div {
+.hud div {
+	font-size: 22px;
 	float: left;
 }
 
@@ -206,9 +235,10 @@
 	margin-top: 100px;
 
 }
-.inventoryButton {
-	width:32px;
-	margin-right:20px;
+.playerHud div {
+	width:48px;
+	margin-right:10px;
+	position:relative;
 }
 .inventory button {
 	bottom: 15px;
@@ -227,4 +257,95 @@
 }
 .nextChatButton {
 
+}
+.riddleText {
+	position: absolute;
+	top: 50px;
+	left: 20px;
+	width:200px;
+	color: #999;
+}
+.gnomeArea .answerButton, .gnomeArea i {
+	z-index:9999;
+}
+.gnomeArea .trash {
+	opacity: .5;
+	position: absolute;
+	top:150px;
+	right:10px;
+}
+
+.chatBox input{
+	width: 75%;
+	font-size: 16px;
+	font-family: 'InconsolataMedium', monospace;
+}
+.globalHud div {
+	width:48px;
+	margin-right: 10px;
+	cursor: pointer;
+	position:relative;
+}
+.globalHud .helpButton {
+	margin-right: 0px;
+	float:right;
+}
+.hide {
+	display:none;
+}
+.displayBox {
+	width:90%;
+	height: 24px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 16px;
+	padding: 4px;
+	text-align:center;
+	overflow: hidden;
+	font-family: 'InconsolataMedium', monospace;
+	position:relative;
+	cursor: default;
+}
+
+.hudCount {
+	font-family: 'InconsolataMedium', monospace;
+	position:absolute;
+	font-size:14px;
+	height:16px;
+	margin:0;
+	padding: 0px 5px 5px 5px;
+	top:-12px;
+	right:5px;
+	color: #eee;
+	background: rgba(0, 120, 130,.8);
+	border-radius:10px;
+}
+.progressArea h2 {
+	padding:10px;
+	margin-left:20px;
+	color: #ccff00;
+}
+.seedersHeader {
+	color: #999;
+}
+.topSeeders {
+	padding:10px;
+	margin-left:20px;
+	color: #ccc;
+}
+.feedback {
+	width: 320px;
+	height: 36px;
+	position: absolute;
+	text-align: center;
+	font-size:20px;
+	top: 150px;
+	left: 310px;
+	color: #eee;
+	border-radius: 5px;
+	border: 2px solid white;
+	background: #f00;
+	display: none;
+	padding-bottom: 20px;
+	z-index: 9999;
 }

@@ -8,7 +8,12 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		prompt: String,
 		question: String,
 		answer: String,
-		responses: [String]
+		responses: [String],
+		shape: {
+			path: String,
+			fill: String,
+			stroke: String
+		}
 	});
 
 	var ResourceModel = db.model('resource', resourceSchema, 'resources');

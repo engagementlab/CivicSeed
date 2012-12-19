@@ -58,8 +58,8 @@ exports.actions = function(req, res, ss) {
 				user.game = info;
 
 				user.save(function (y) {
-					ss.publish.all('ss-removePlayer', numActivePlayers, id);
 					numActivePlayers -= 1;
+					ss.publish.all('ss-removePlayer', numActivePlayers, id);
 					delete players[id];
 				});
 			});
@@ -108,10 +108,10 @@ exports.actions = function(req, res, ss) {
 		},
 		dropSeed: function(bombed) {
 
-			//send out the color information to each client to render
-			ss.publish.all('ss-seedDropped', bombed);
-			
-			
+			//welcome to the color server
+			//here, we will run through the array of tiles passed to us, call them from the db,
+			//and update them if necessary (better way? is to do this on client, but client needs
+			//to have the other viewports loaded as well)
 			var num = bombed.length,
 				cur = 0,
 				index = 0;
@@ -119,20 +119,68 @@ exports.actions = function(req, res, ss) {
 			var saveColors = function(i) {
 				index = bombed[i].y * 142 + bombed[i].x;
 
-				tileModel.findOne({ 'mapIndex': index }, function (err, tile) {
+				tileModel.findOne({ 'mapIndex': index }, function (err, oldTile) {
 					
-					tile.set('color', bombed[i].color);
-					tile.save(function(y) {
+					//do the magic here of blending
+					//if there is a color, then we will need to modify it
+					if(oldTile.color.owner !== undefined) {
+
+						//if the old one is a nobody -
+						if(oldTile.color.owner === 'nobody') {
+							
+							//if the NEW one should be owner
+							if(bombed[i].color.owner !== 'nobody') {
+								oldTile.set('color', bombed[i].color);
+							}
+
+							//new one should be modified
+							else {
+								//if there is still room
+								if(oldTile.color.a < 0.7 ) {
+
+									var prevR = oldTile.color.r,
+										prevG = oldTile.color.g,
+										prevB = oldTile.color.b,
+										prevA = oldTile.color.a;
+
+									var weightA = prevA / 0.1,
+										weightB = 1;
+
+									var newR = Math.floor((weightA * prevR + weightB * bombed[i].color.r) / (weightA + weightB)),
+										newG = Math.floor((weightA * prevG + weightB * bombed[i].color.g) / (weightA + weightB)),
+										newB = Math.floor((weightA * prevB + weightB * bombed[i].color.b) / (weightA + weightB));
+
+									bombed[i].color.a = Math.round((oldTile.color.a + 0.1) * 10) / 10,
+									bombed[i].color.r = newR,
+									bombed[i].color.g = newG,
+									bombed[i].color.b = newB;
+									
+									oldTile.set('color', bombed[i].color);
+								}
+							}
+						}
+						else {
+							bombed[i].color = oldTile.color;
+						}
+					}
+					//if there is no color, then full on use the new values
+					else {
+						oldTile.set('color', bombed[i].color);
+					}
+
+					oldTile.save(function(y) {
 						cur += 1;
 						if(cur < num) {
 							saveColors(cur);
 						}
+						else {
+							//we are done,send out the color information to each client to render
+							ss.publish.all('ss-seedDropped', bombed);
+						}
 					});
 				});
 			};
-
-			saveColors(cur);
-			
-		},
-	}
+			saveColors(0);
+		}
+	};
 }

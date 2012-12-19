@@ -241,7 +241,7 @@ $game.$npc = {
 
 		_who = _allNpcs[stringId].name;
 
-		if($game.$player.currentLevel === _curNpc.level) {
+		if($game.$player.game.currentLevel === _curNpc.level) {
 
 			//here we will tell the resoure object to clear old stuff,
 			//and tell it what to load (and who it corresponds to)

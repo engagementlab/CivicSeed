@@ -1,6 +1,6 @@
 module.exports.global = [
 {
-	id: '4876',
+	id: '6176',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 0,
@@ -10,7 +10,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '4992',
+	id: '8427',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 64,
@@ -20,7 +20,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '5694',
+	id: '8276',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 128,
@@ -30,7 +30,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '352',
+	id: '8986',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 192,
@@ -40,7 +40,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '3761',
+	id: '6707',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 256,
@@ -50,7 +50,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '6176',
+	id: '8542',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 320,
@@ -60,7 +60,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '8003',
+	id: '2569',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 64,
@@ -70,7 +70,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '8844',
+	id: '1608',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 0,
@@ -80,7 +80,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '9554',
+	id: '479',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 64,
@@ -90,7 +90,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '6707',
+	id: '8956',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 0,
@@ -100,7 +100,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '8831',
+	id: '4284',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 64,
@@ -110,7 +110,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '2285',
+	id: '4876',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 0,
@@ -120,7 +120,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '1891',
+	id: '4992',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 64,
@@ -130,7 +130,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '481',
+	id: '6265',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 0,
@@ -140,7 +140,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '9240',
+	id: '352',
 	name: 'Ricky Bobby',
 	level: 0,
 	spriteY: 64,
@@ -150,7 +150,7 @@ module.exports.global = [
 	}
 },
 {
-	id: '3858',
+	id: '3335',
 	name: 'Wizard',
 	level: 0,
 	spriteY: 0,
