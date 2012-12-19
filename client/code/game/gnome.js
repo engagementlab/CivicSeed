@@ -496,6 +496,7 @@ $game.$gnome = {
 						//remove them from player's inventory
 						$game.$player.emptyInventory();
 						$game.$player.nextLevel();
+						$game.$player.game.seeds.riddle += 3;
 					}
 					else {
 						$game.$gnome.feedback(message);

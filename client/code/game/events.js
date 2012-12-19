@@ -35,9 +35,12 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 });
 //all this breakdown will be on the server side, not client side,
 //but we will pass the tiles info
-ss.event.on('ss-seedDropped', function(bombed) {
-	$game.$map.newBomb(bombed);
-	statusUpdate('someone dropped one');
+ss.event.on('ss-seedDropped', function(bombed, id, name) {
+	$game.$map.newBomb(bombed, id, name);
+	if(id === $game.$player.id) {
+		$game.$player.awaitingBomb = false;
+	}
+	statusUpdate(name + ' dropped one');
 });
 
 
@@ -56,20 +59,37 @@ ss.event.on('ss-newMessage', function(message, id) {
 
 
 
-$('.seedButton').bind("click", (function () {
+$('.seedButton').bind('click', (function () {
 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 	if(!$game.inTransit && !$game.$player.isMoving) {
-		$game.$player.seedMode = !$game.$player.seedMode;
-		if($game.$player.seedMode) {
-			$('.displayBoxText').text('in seed mode');
-		}
-		else {
+		
+		//turn it off if on
+		if($game.$player.seedMode > 0) {
+			$game.$player.seedMode = 0;
 			$('.displayBoxText').text('you are in the forest');
 		}
+		else {
+			$game.$player.seedMode = 1;
+			$('.displayBoxText').text('seed mode');
+		}
 	}
-	
 }));
-$(window).bind("keypress", (function (key) {
+$('.seedButton2').bind('click', (function () {
+	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
+	if(!$game.inTransit && !$game.$player.isMoving) {
+		
+		//turn it off if on
+		if($game.$player.seedMode > 0) {
+			$game.$player.seedMode = 0;
+			$('.displayBoxText').text('you are in the forest');
+		}
+		else {
+			$game.$player.seedMode = 2;
+			$('.displayBoxText').text('mega seed mode son');
+		}
+	}
+}));
+$(window).bind('keypress', (function (key) {
 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 	if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
 			//$game.$player.dropSeed({mouse:false});
@@ -130,7 +150,7 @@ $(window).blur(function(e) {
 	
 });
 
-$(".unPause").click(function () {
+$('.unPause').click(function () {
 	$game.resume();
 });
 
@@ -160,35 +180,35 @@ $('.inventoryButton, .inventory button').click(function () {
 	return false;
 });
 
-$(".resourceArea a i, .resourceArea .closeButton").bind("click", (function (e) {
+$('.resourceArea a i, .resourceArea .closeButton').bind('click', (function (e) {
 	e.preventDefault();
 	$game.$resources.hideResource();
 	return false;
 }));
-$(".resourceArea .nextButton").bind("click", (function () {
+$('.resourceArea .nextButton').bind('click', (function () {
 	$game.$resources.nextSlide();
 }));
-$(".resourceArea .backButton").bind("click", (function () {
+$('.resourceArea .backButton').bind('click', (function () {
 	$game.$resources.previousSlide();
 }));								
-$(".resourceArea .answerButton").bind("click", (function (e) {
+$('.resourceArea .answerButton').bind('click', (function (e) {
 	e.preventDefault();
 	$game.$resources.submitAnswer();
 	return false;
 }));
 
-$(".gnomeArea a i, .gnomeArea .closeButton").bind("click", (function (e) {
+$('.gnomeArea a i, .gnomeArea .closeButton').bind('click', (function (e) {
 	e.preventDefault();
 	$game.$gnome.hideResource();
 	return false;
 }));
-$(".gnomeArea .nextButton").bind("click", (function () {
+$('.gnomeArea .nextButton').bind('click', (function () {
 	$game.$gnome.nextSlide();
 }));
-$(".gnomeArea .backButton").bind("click", (function () {
+$('.gnomeArea .backButton').bind('click', (function () {
 	$game.$gnome.previousSlide();
 }));								
-$(".gnomeArea .answerButton").bind("click", (function (e) {
+$('.gnomeArea .answerButton').bind('click', (function (e) {
 	e.preventDefault();
 	$game.$gnome.submitAnswer();
 	return false;

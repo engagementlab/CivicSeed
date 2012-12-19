@@ -31,7 +31,8 @@ $game.$player = {
 	inventoryShowing: false,
 	npcOnDeck: false,
 	ready: false,
-	seedMode: false,
+	seedMode: 0,
+	awaitingBomb: false,
 
 
 	//private methods
@@ -68,6 +69,7 @@ $game.$player = {
 			$game.$player.game = newInfo.game;
 
 			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+			$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
 			$game.$player.fillInventory();
 
 			_chatId = 'player'+ newInfo.id,
@@ -333,74 +335,125 @@ $game.$player = {
 
 	dropSeed: function(options) {
 		//if there are no seeds, send message can't plant
-		if($game.$player.game.seeds.normal < 1) {
-			
-			return false;
-		}
-		var oX = options.x,
-			oY = options.y,
-			mX = $game.currentTiles[oX][oY].x,
-			mY = $game.currentTiles[oX][oY].y,
-			bombed = [];
-		
-		
-		//start at the top left corner and loop through (vertical first)
-		var origX = mX - 1,
-			origY = mY - 1,
-			sX = oX - 1,
-			sY = oY - 1;
+	
+		options.mX = $game.currentTiles[options.x][options.y].x,
+		options.mY = $game.currentTiles[options.x][options.y].y;
 
-		if($game.currentTiles[oX][oY].color) {
-			if($game.currentTiles[oX][oY].color.owner !== 'nobody') {
+		var mode = options.mode;
+
+		//regular seed mode
+		if(mode === 1) {
+
+			if($game.$player.game.seeds.normal < 1) {
+				return false;
+			}
+			else {
+				options.sz = 3;
+				$game.$player.calculateSeeds(options);
+			}
+		}
+		//riddle seed mode
+		else if(mode === 2 ){
+			if($game.$player.game.seeds.riddle < 1) {
+				return false;
+			}
+			else {
+				options.sz = ($game.$player.game.currentLevel * 2) + 5;
+				$game.$player.calculateSeeds(options);
+			}
+		}
+		
+	},
+
+	calculateSeeds: function(options) {
+		//start at the top left corner and loop through (vertical first)
+		var mid = Math.floor(options.sz / 2),
+			origX = options.mX - mid,
+			origY = options.mY - mid,
+			sX = options.x - mid,
+			sY = options.y - mid,
+			bombed = [],
+			mode = options.mode;
+		
+		if($game.currentTiles[options.x][options.y].color) {
+			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
 				console.log('owned');
 				return false;
 			}
 		}
 
-		var a = 0;
-		while(a < 3) {
-			var b = 0;
-			while(b < 3) {
-				//only add it if it is on screen <------------------------- change later to in game
-				//if(sX + a > -1 && sX + a < $game.VIEWPORT_WIDTH && sY + b > -1 && sY + b < $game.VIEWPORT_HEIGHT) {
-				
 
+		var b = 0;
+		while(b < options.sz) {
+			var a = 0;
+			while(a < options.sz) {
 				//only add if it is in the map!
 				if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-					//set x,y and color info for each square
-					var square = {
-						x: origX + a,
-						y: origY + b,
-						color:
-						{
-							r: $game.$player.game.colorInfo.rgb.r,
-							g: $game.$player.game.colorInfo.rgb.g,
-							b: $game.$player.game.colorInfo.rgb.b,
-							a: 0.3,
-							owner: 'nobody'
+					
+					//only make circles if not mode 1 (basic)
+					
+					//this says: if you are part of the circle radius
+					//if you are basic, then do it regardless
+					if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
+
+						var tempA = Math.round((0.7 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.5) * 100) / 100;
+						
+						//set x,y and color info for each square
+						var square = {
+							x: origX + a,
+							y: origY + b,
+							color:
+							{
+								r: $game.$player.game.colorInfo.rgb.r,
+								g: $game.$player.game.colorInfo.rgb.g,
+								b: $game.$player.game.colorInfo.rgb.b,
+								a: tempA,
+								owner: 'nobody'
+							}
+						};
+
+						//assign the middle one the owner
+						if( a === mid && b === mid) {
+							square.color.a = 0.8;
+							square.color.owner = $game.$player.name;
 						}
-					};
-
-					//assign the middle one the owner
-					if( a === 1 && b === 1) {
-						//this will be put in the ACTUAL DB,
-						//instead of local
-						square.color.a = 0.85,
-						square.color.owner = $game.$player.name;
+						bombed.push(square);
 					}
-
-					bombed.push(square);
-
 				}
-				b += 1;
+				a += 1;
 			}
-			a += 1;
+			b += 1;
 		}
-		
+
 		if(bombed.length > 0) {
-			ss.rpc('game.player.dropSeed', bombed);
-			$game.$player.game.seeds.normal -= 1;
-			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+			
+			//change background to a flower for epicenter like a loading bar
+			$game.currentTiles[sX + mid][sY + mid].background = 2;
+
+			$game.$renderer.renderTile(sX + mid, sY + mid);
+
+			//set a waiting boolean so we don't plant more until receive data back from rpc
+			$game.$player.awaitingBomb = true;
+
+			//send the data to the rpc
+			var info = {
+				id: $game.$player.id,
+				name: $game.$player.name,
+				sz: options.sz,
+				x: origX,
+				y: origY
+			}
+			ss.rpc('game.player.dropSeed', bombed, info);
+			
+			//update seed count in HUD
+			if(mode === 1) {
+				$game.$player.game.seeds.normal -= 1;
+				$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+			}
+			else if(mode === 2) {
+				$game.$player.game.seeds.riddle -= 1;
+				$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+			}
 		}
 		
 	},

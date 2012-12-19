@@ -106,81 +106,101 @@ exports.actions = function(req, res, ss) {
 			//console.log(info);
 			req.session.game = info;
 		},
-		dropSeed: function(bombed) {
+		dropSeed: function(bombed, info) {
 
 			//welcome to the color server
 			//here, we will run through the array of tiles passed to us, call them from the db,
 			//and update them if necessary (better way? is to do this on client, but client needs
 			//to have the other viewports loaded as well)
 			var num = bombed.length,
-				cur = 0,
-				index = 0;
-			//add the color to the database for official business
-			var saveColors = function(i) {
-				index = bombed[i].y * 142 + bombed[i].x;
+				curOld = 0,
+				index = 0,
+				minX = info.x,
+				maxX = info.x + info.sz,
+				minY = info.y,
+				maxY = info.y + info.sz;
 
-				tileModel.findOne({ 'mapIndex': index }, function (err, oldTile) {
-					
-					//do the magic here of blending
-					//if there is a color, then we will need to modify it
-					if(oldTile.color.owner !== undefined) {
+			tileModel
+			.where('x').gte(minX).lt(maxX)
+			.where('y').gte(minY).lt(maxY)
+			.sort('mapIndex')
+			.find(function (err, oldTiles) {
+				if (err){
+					res(false);
+				}
+				if (oldTiles) {
+					var saveColors = function(i) {
+						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
+							//color stuff here:
+							if(oldTiles[i].color.owner !== undefined) {
 
-						//if the old one is a nobody -
-						if(oldTile.color.owner === 'nobody') {
-							
-							//if the NEW one should be owner
-							if(bombed[i].color.owner !== 'nobody') {
-								oldTile.set('color', bombed[i].color);
-							}
-
-							//new one should be modified
-							else {
-								//if there is still room
-								if(oldTile.color.a < 0.7 ) {
-
-									var prevR = oldTile.color.r,
-										prevG = oldTile.color.g,
-										prevB = oldTile.color.b,
-										prevA = oldTile.color.a;
-
-									var weightA = prevA / 0.1,
-										weightB = 1;
-
-									var newR = Math.floor((weightA * prevR + weightB * bombed[i].color.r) / (weightA + weightB)),
-										newG = Math.floor((weightA * prevG + weightB * bombed[i].color.g) / (weightA + weightB)),
-										newB = Math.floor((weightA * prevB + weightB * bombed[i].color.b) / (weightA + weightB));
-
-									bombed[i].color.a = Math.round((oldTile.color.a + 0.1) * 10) / 10,
-									bombed[i].color.r = newR,
-									bombed[i].color.g = newG,
-									bombed[i].color.b = newB;
+								//if the old one is a nobody -
+								if(oldTiles[i].color.owner === 'nobody') {
 									
-									oldTile.set('color', bombed[i].color);
+									//if the NEW one should be owner
+									if(bombed[index].color.owner !== 'nobody') {
+										oldTiles[i].set('color', bombed[index].color);
+									}
+
+									//new one should be modified
+									else {
+										//if there is still room
+										if(oldTiles[i].color.a < 0.7 ) {
+
+											var prevR = oldTiles[i].color.r,
+												prevG = oldTiles[i].color.g,
+												prevB = oldTiles[i].color.b,
+												prevA = oldTiles[i].color.a;
+
+											var weightA = prevA / 0.1,
+												weightB = 1;
+
+											var newR = Math.floor((weightA * prevR + weightB * bombed[index].color.r) / (weightA + weightB)),
+												newG = Math.floor((weightA * prevG + weightB * bombed[index].color.g) / (weightA + weightB)),
+												newB = Math.floor((weightA * prevB + weightB * bombed[index].color.b) / (weightA + weightB));
+
+											bombed[index].color.a = Math.round((oldTiles[i].color.a + 0.1) * 100) / 100,
+											bombed[index].color.r = newR,
+											bombed[index].color.g = newG,
+											bombed[index].color.b = newB;
+											
+											oldTiles[i].set('color', bombed[index].color);
+										}
+										//don't incorp. new for sending out, use old one since at max
+										else {
+											bombed[index].color = oldTiles[i].color;
+										}
+									}
+								}
+								else {
+									bombed[index].color = oldTiles[i].color;
 								}
 							}
+							//if there is no color, then full on use the new values
+							else {
+								oldTiles[i].set('color', bombed[index].color);
+							}
+						
+							oldTiles[i].save(function(y) {
+								index += 1;
+								curOld += 1;
+								if(index < num) {
+									saveColors(curOld);
+								}
+								else {
+									//we are done,send out the color information to each client to render
+									ss.publish.all('ss-seedDropped', bombed, info.id, info.name);
+								}
+							});
 						}
 						else {
-							bombed[i].color = oldTile.color;
+							curOld += 1;
+							saveColors(curOld);
 						}
-					}
-					//if there is no color, then full on use the new values
-					else {
-						oldTile.set('color', bombed[i].color);
-					}
-
-					oldTile.save(function(y) {
-						cur += 1;
-						if(cur < num) {
-							saveColors(cur);
-						}
-						else {
-							//we are done,send out the color information to each client to render
-							ss.publish.all('ss-seedDropped', bombed);
-						}
-					});
-				});
-			};
-			saveColors(0);
+					};
+					saveColors(curOld);
+				}
+			});
 		}
 	};
 }

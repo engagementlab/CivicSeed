@@ -484,7 +484,7 @@ $game.$renderer = {
 			
 			var col;
 
-			if($game.$player.seedMode) {
+			if($game.$player.seedMode > 0) {
 				col = 'rgba('+$game.$player.game.colorInfo.rgb.r+','+$game.$player.game.colorInfo.rgb.g+','+$game.$player.game.colorInfo.rgb.b+','+ 0.5 + ')';
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
@@ -541,9 +541,9 @@ $game.$renderer = {
 		);
 	},
 
-	renderMiniTile: function(x, y) {
-		var col = $game.currentTiles[x][y].color,
-			rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
+	renderMiniTile: function(x, y, col) {
+	
+		var	rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
 		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
 			x,

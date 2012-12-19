@@ -59,13 +59,16 @@ $game.$mouse = {
 			//check if it is a nogo or npc
 			//if the tile BELOW the tile clicked is npc,
 			//then user clicked the head, so act like npc
-			if($game.$player.seedMode) {
-				var m = {
+			if($game.$player.seedMode > 0) {
+				if(!$game.$player.awaitingBomb) {
+					var m = {
 							mouse: true,
 							x: $game.$mouse.curX,
-							y: $game.$mouse.curY
+							y: $game.$mouse.curY,
+							mode: $game.$player.seedMode
 						};
-				$game.$player.dropSeed(m);
+					$game.$player.dropSeed(m);
+				}
 			}
 			else {
 				var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
@@ -76,7 +79,7 @@ $game.$mouse = {
 							$game.$npc.hideChat();
 						}
 						else if($game.$gnome.isChat) {
-							$game.$gnome.hideChat();	
+							$game.$gnome.hideChat();
 						}
 						
 					}
