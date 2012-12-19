@@ -74,7 +74,7 @@ service.connectMongoose(app, function(databases) {
 	// using engine.io for web sockets transport
 	ss.ws.transport.use(require('ss-engine.io'), {
 		client: {
-			host: 'localhost',
+			host: domain,
 			port: port
 		}
 	});
