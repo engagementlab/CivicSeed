@@ -233,7 +233,5 @@ var statusUpdate = function(m) {
 
 $('.progress').bind('click', function() {
 
-	$game.$map.showColorMap();
-	$('.progressArea').slideToggle();
-
+	$game.showProgress();
 });

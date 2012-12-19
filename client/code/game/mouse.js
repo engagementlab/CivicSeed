@@ -71,48 +71,60 @@ $game.$mouse = {
 				}
 			}
 			else {
-				var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
-					//go
-					if(state === -1) {
-						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
-						if($game.$npc.isChat) {
-							$game.$npc.hideChat();
-						}
-						else if($game.$gnome.isChat) {
-							$game.$gnome.hideChat();
+
+				//if clicking on a player, show their info
+				var mX = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].x,
+					mY = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].y;
+
+				$game.$others.playerCard(mX, mY, function(ret) {
+					//if we clicked a player, show their info
+
+					if(ret) {
+						ss.rpc('game.player.getInfo', ret, function(user) {
+							var msg = user.dropped + ' tiles colored || level ' + user.level;
+							$game.$others.message(msg, ret);
+						});
+					}
+					else {
+						var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
+						//go
+						if(state === -1) {
+							$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
+							if($game.$npc.isChat) {
+								$game.$npc.hideChat();
+							}
+							else if($game.$gnome.isChat) {
+								$game.$gnome.hideChat();
+							}
+							
 						}
 						
-					}
+						//npc
+						else if(state >= 0 ) {
+							//set index val so reousrce can show right one
+							
+							
+
+							//if you click on a different square then the previously
+							//selected npc, then hide the npc info if it is showing
+							if(state !== $game.$gnome.index) {
+								$game.$npc.selectNpc(state);
 					
-					//npc
-					else if(state >= 0 ) {
-						//set index val so reousrce can show right one
-						
-						
+								//move them to the spot to the
+								//BOTTOM LEFT corner of the npc
+								//(consistent so we leave that open in tilemap)
+								//also make sure it is not a transition tile
+								$game.$player.npcOnDeck = true;
+								$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+							}
 
-						//if you click on a different square then the previously
-						//selected npc, then hide the npc info if it is showing
-						if(state !== $game.$gnome.index) {
-							$game.$npc.selectNpc(state);
-				
-							//move them to the spot to the
-							//BOTTOM LEFT corner of the npc
-							//(consistent so we leave that open in tilemap)
-							//also make sure it is not a transition tile
-							$game.$player.npcOnDeck = true;
-							$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
+							else {
+								$game.$gnome.show();
+							}
 						}
-
-						else {
-							$game.$gnome.show();
-						}
-						
-						
-						
 					}
-
+				});
 			}
-			
 		}
 	}
 

@@ -206,6 +206,24 @@ exports.actions = function(req, res, ss) {
 					saveColors(curOld);
 				}
 			});
+		},
+
+		getInfo: function(id) {
+			userModel.findById(id, function (err, user) {
+				if(err) {
+					res('user not found');
+				}
+				else {
+					var data = {
+						dropped: user.game.seeds.dropped,
+						level: user.game.currentLevel,
+						name: user.name,
+						color: user.game.color
+					};
+					res(data);
+				}
+			});
+			
 		}
 	};
 }

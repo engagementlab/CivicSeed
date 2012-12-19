@@ -353,7 +353,7 @@ $game.$gnome = {
 					$game.$player.checkGnomeState();
 				}
 				
-				$('.gnomeContent').html('<p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p>');
+				$('.gnomeContent').html('<img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png" class="tangramOutline">');
 				
 			}
 		}
@@ -369,7 +369,7 @@ $game.$gnome = {
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><p class="centerText"><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png"></p><img class="trash" src="/img/game/trash.png">';
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png" class="tangramOutline"><img class="trash" src="/img/game/trash.png">';
 				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
@@ -599,8 +599,10 @@ $game.$gnome = {
 	dragMove: function(d) {
 		var x = d3.event.sourceEvent.offsetX,
 			y = d3.event.sourceEvent.offsetY,
-			mX = $game.$gnome.snapTo(x - _dragOffX),
-			mY = $game.$gnome.snapTo(y - _dragOffY);
+			// mX = $game.$gnome.snapTo(x - _dragOffX),
+			// mY = $game.$gnome.snapTo(y - _dragOffY);
+			mX = x - _dragOffX,
+			mY = y - _dragOffY;
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			col = 'rgba(255,0,0,.3)';
@@ -620,8 +622,12 @@ $game.$gnome = {
 	},
 	dropMove: function(d) {
 		var x = d3.event.sourceEvent.offsetX,
-			y = d3.event.sourceEvent.offsetY;
+			y = d3.event.sourceEvent.offsetY,
+			mX = $game.$gnome.snapTo(x - _dragOffX),
+			mY = $game.$gnome.snapTo(y - _dragOffY),
+			trans = 'translate(' + mX  + ', ' + mY + ')';
 
+		console.log(x, y, x - _dragOffX, y - _dragOffY, mX, mY, d3.event.sourceEvent);
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
 			$('.r' + d.id).css('opacity', 1);
@@ -629,7 +635,8 @@ $game.$gnome = {
 		}
 		else {
 			d3.select('.br' + d.id)
-			.attr('fill','#99aadd');
+			.attr('fill','#99aadd')
+			.attr('transform',trans);
 		}
 		
 	},
@@ -637,13 +644,15 @@ $game.$gnome = {
 	snapTo: function(num) {
 
 		var result = num,
-			round = (num % 10 - 5);
+			thresh = 10,
+			half = thresh / 2
+			round = (num % thresh - half);
 
 		if(round > -1) {
-			result += 5 - round;
+			result += half - round;
 		}
 		else {
-			result += -5 - round;
+			result += -half - round;
 		}
 		return result;
 	},

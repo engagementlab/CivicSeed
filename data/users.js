@@ -28,7 +28,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -57,7 +58,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -86,7 +88,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -115,7 +118,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -144,7 +148,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -173,7 +178,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}
@@ -202,7 +208,8 @@ module.exports.global = [{
 			seeds: {
 				normal: 1,
 				riddle: 0,
-				special: 0
+				special: 0,
+				dropped: 0
 			},
 			gnomeState: 0
 		}

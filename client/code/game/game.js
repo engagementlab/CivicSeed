@@ -131,13 +131,13 @@ exports.$game = {
 	pause: function() {
 		$('.pauseMenu').slideDown();
 		$game.running = false;
-		$game.$audio.playTheme();
+		$game.$audio.pauseTheme();
 	},
 
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
-			$game.$audio.pauseTheme();
+			$game.$audio.playTheme();
 			$game.tick();
 		});
 		
@@ -486,7 +486,7 @@ exports.$game = {
 			y: y - $game.topEdge
 		};
 
-		if(local.y <= 15 && local.y >= 0 && local.x <= 29 && local.x >= 0) {
+		if(local.y <= 14 && local.y >= 0 && local.x <= 29 && local.x >= 0) {
 			return local;
 
 		}
@@ -504,6 +504,18 @@ exports.$game = {
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}
+	},
+
+	showProgress: function() {
+		//save and show player's colors 
+		var srcString = $game.$map.saveImage();
+		$('.colorMap img')
+			.attr('src', srcString)
+			.attr('width', '426px');
+		
+		//show player's seed droppings
+		console.log($game.$player.game.seeds.dropped);
+		$('.progressArea').slideToggle();
 	}
 };
 

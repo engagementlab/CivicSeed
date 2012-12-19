@@ -74,6 +74,23 @@ $game.$others = {
 		//console.log(_onScreenPlayers);
 	},
 
+	playerCard: function(x, y, callback) {
+		var found = false;
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.info.x === x && player.info.y === y) {
+					callback(player.id);
+					found = true;
+			}
+		});
+
+		if(!found) {
+			callback(false);	
+		}
+		
+
+	},
+
+
 	createOther: function(player) {
 		var otherPlayer = {
 

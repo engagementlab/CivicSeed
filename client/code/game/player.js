@@ -441,8 +441,13 @@ $game.$player = {
 				name: $game.$player.name,
 				sz: options.sz,
 				x: origX,
-				y: origY
+				y: origY,
+				dropped: $game.$player.game.seeds.dropped
 			}
+
+			//increase the drop count for the player
+			$game.$player.game.seeds.dropped += bombed.length;
+
 			ss.rpc('game.player.dropSeed', bombed, info);
 			
 			//update seed count in HUD

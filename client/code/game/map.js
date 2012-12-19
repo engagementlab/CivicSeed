@@ -78,13 +78,6 @@ $game.$map = {
 		var myDrawing = document.getElementById('minimapTile');
 		var drawingURL = myDrawing.toDataURL('img/png');
 		return drawingURL;
-	},
-
-	showColorMap: function() {
-		var srcString = $game.$map.saveImage();
-		$('.colorMap img')
-			.attr('src', srcString)
-			.attr('width', '426px');
 	}
 };
 

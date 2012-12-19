@@ -33,7 +33,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			seeds: {
 				normal: Number,
 				riddle: Number,
-				special: Number
+				special: Number,
+				dropped: Number
 			},
 			gnomeState: Number,
 			colorMap: String
