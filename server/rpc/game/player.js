@@ -130,7 +130,12 @@ exports.actions = function(req, res, ss) {
 				}
 				if (oldTiles) {
 					var saveColors = function(i) {
+						//change epicenter background 
+						if(index === Math.floor(num / 2)) {
+							oldTiles[i].background = 735;
+						}
 						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
+
 							//color stuff here:
 							if(oldTiles[i].color.owner !== undefined) {
 

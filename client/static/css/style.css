@@ -5238,6 +5238,19 @@ a.badge:hover {
   padding-bottom: 20px;
   z-index: 9999;
 }
+.colorMap {
+  background: rgba(0, 0, 0, 0.8);
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  border-radius: 5px;
+}
+.colorMap img {
+  margin: 0;
+  padding: 0;
+}
 body {
   padding-top: 80px;
 }

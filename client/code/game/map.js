@@ -46,7 +46,7 @@ $game.$map = {
 		});
 	},
 
-	newBomb: function(bombed) {
+	newBomb: function(bombed, id) {
 
 		//THIS WILL MOVE TO THE RPC on server, NOT local
 		//this will simply send out the coords of the tiles to redraw
@@ -61,7 +61,12 @@ $game.$map = {
 				
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
-				$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
+				
+				if(id === $game.$player.id) {
+					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);	
+				}
+
+				
 				
 				//play sound clip
 				//$game.$audio.playSound(0);
@@ -73,6 +78,13 @@ $game.$map = {
 		var myDrawing = document.getElementById('minimapTile');
 		var drawingURL = myDrawing.toDataURL('img/png');
 		return drawingURL;
+	},
+
+	showColorMap: function() {
+		var srcString = $game.$map.saveImage();
+		$('.colorMap img')
+			.attr('src', srcString)
+			.attr('width', '426px');
 	}
 };
 

@@ -36,7 +36,7 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 //all this breakdown will be on the server side, not client side,
 //but we will pass the tiles info
 ss.event.on('ss-seedDropped', function(bombed, id, name) {
-	$game.$map.newBomb(bombed, id, name);
+	$game.$map.newBomb(bombed, id);
 	if(id === $game.$player.id) {
 		$game.$player.awaitingBomb = false;
 	}
@@ -233,5 +233,7 @@ var statusUpdate = function(m) {
 
 $('.progress').bind('click', function() {
 
+	$game.$map.showColorMap();
 	$('.progressArea').slideToggle();
+
 });
