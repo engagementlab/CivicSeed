@@ -28,7 +28,7 @@ var self = module.exports = {
 		walker.on('end', function() {
 			// when it's all said and done, return control to the server
 			console.log('All controllers loaded...'.yellow);
-			callback();
+			if(typeof callback === 'function') { callback(); }
 		});
 	}
 

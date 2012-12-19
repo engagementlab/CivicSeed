@@ -10,13 +10,13 @@ var self = module.exports = {
 	mongooseConnected: (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2),
 
 	connectMongoose: function(app, callback) {
-		console.log('\n\n   * * * * * * * * * * * *   Starting Database Services and Loading Predefined Data   * * * * * * * * * * * *   \n\n'.yellow);
+		console.log('\n\n   * * * * * * * * * * * *   Starting Database Services   * * * * * * * * * * * *   '.yellow);
 		// connect to database
 		if(!self.mongooseConnected) {
 			self.db = mongoose.createConnection(config.get('MONGO_URL'));
 			self.db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 			self.db.once('open', function () {
-				console.log('CS:'.blue + ' Database: connection to '.green + app.get('env'));
+				console.log('   * * * * * * * * * * * *   MongoDB: connection to '.green + app.get('env').yellow.inverse);
 				if(typeof callback === 'function') {
 					callback({ mongooseDb: self.db });
 				}
@@ -26,7 +26,7 @@ var self = module.exports = {
 
 	useModel: function(modelName, state) {
 		if(state === 'preload') {
-			console.log('CS: '.blue + 'Initializing database by using model '.green + modelName.yellow.underline);
+			console.log('CS: '.blue + 'Preloading model for SS RPC: '.green + modelName.yellow.underline);
 		} else if(state === 'ss') {
 			console.log('CS: '.blue + 'Importing model '.magenta + modelName.yellow.underline + ' into socket stream RPC.'.magenta);
 		} else {

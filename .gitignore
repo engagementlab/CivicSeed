@@ -3,7 +3,7 @@
 Thumbs.db
 node_modules
 *.sublime-*
-/client/static/assets/
+#/client/static/assets/
 /data/map/expanded/
 /models/_temp/
 /controllers/_temp/
