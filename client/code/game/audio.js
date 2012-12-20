@@ -10,7 +10,8 @@ $game.$audio = {
 	ready: false,
 
 	init: function() {
-		$game.$audio.loadTrack(0);
+		$game.$audio.ready = true;
+		//$game.$audio.loadTrack(0);
 	},
 
 	loadTrack: function(num) {
@@ -61,7 +62,7 @@ $game.$audio = {
 
 			_effects[num].addEventListener('canplaythrough', function (e) {
 				this.removeEventListener('canplaythrough', arguments.callee, false);
-				console.log(num, 'ready to play.');
+				//console.log(num, 'ready to play.');
 				num += 1;
 				$game.$audio.loadeEffect(num);
 			},false);
@@ -87,28 +88,28 @@ $game.$audio = {
 	slideVolume: function(val, swap) {
 		//that means we aren't changing tracks, so just transition volume
 		if(swap < 0) {
-			console.log('same');
+			
 
 			$(_soundtracks[_currentTrack]).stop(true,true).animate({
 				volume: val
 			}, 2000, function() {
-				console.log(_soundtracks[_currentTrack].volume);
+				
 			});
 		}
 		//slide current track to 0, then use val to transition new track
 		else {
-			console.log(_soundtracks[_currentTrack]);
+			
 			$(_soundtracks[_currentTrack]).stop(true,true).animate({
 				volume: 0
 			}, 1000, function() {
 				$game.$audio.pauseTheme();
-				console.log(_soundtracks[_currentTrack].volume);
+				
 				_currentTrack = swap;
 				$game.$audio.playTheme();
 				$(_soundtracks[_currentTrack]).stop(true,true).animate({
 					volume: val
 				}, 2000, function() {
-					console.log(_soundtracks[_currentTrack].volume);
+					
 				});
 			});
 		}
@@ -195,7 +196,7 @@ $game.$audio = {
 
 		trackRegion = trackRegion === _currentTrack ? -1 : trackRegion;
 		
-		//$game.$audio.slideVolume(targetV, trackRegion);
+		$game.$audio.slideVolume(targetV, trackRegion);
 
 	}
 

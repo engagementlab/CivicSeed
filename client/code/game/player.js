@@ -292,7 +292,7 @@ $game.$player = {
 			if(result.length > 0) {
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
 					$game.$player.sendMoveInfo(result);
-					$game.$audio.update(masterEndX, masterEndY);
+					//$game.$audio.update(masterEndX, masterEndY);
 				});
 			}
 		});
