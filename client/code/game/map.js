@@ -7,10 +7,14 @@ $game.$map = {
 	coloredTiles: [], //needs x, y, display
 	growingSeed: false,
 	seedsInProgress: [],
+	collectiveImage: null,
 
 	miniMap: {},
 
 	init: function() {
+		ss.rpc('game.map.init', function(bigMap) {
+			$game.$map.collectiveImage = bigMap;
+		});
 	},
 	paintMini: function() {
 		
@@ -63,7 +67,11 @@ $game.$map = {
 				$game.$renderer.renderTile(loc.x,loc.y);
 				
 				if(id === $game.$player.id) {
+					console.log('mine');
 					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);	
+				}
+				else{
+					console.log('other');
 				}
 
 				

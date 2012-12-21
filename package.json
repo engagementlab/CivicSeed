@@ -40,7 +40,8 @@
     "connect-flash": ">= 0.1.0",
     "cloudfiles": ">= 0.3.4",
     "nconf": ">= 0.6.4",
-    "walk": ">= 2.2.1"
+    "walk": ">= 2.2.1",
+    "canvas": ">= 0.13.1"
   },
   "devDependencies": {
     "mocha": "*",

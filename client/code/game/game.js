@@ -507,14 +507,13 @@ exports.$game = {
 	},
 
 	showProgress: function() {
-		//save and show player's colors 
-		var srcString = $game.$map.saveImage();
+		//save and show player's colors
+		var myImageSrc = $game.$map.saveImage();
 		$('.colorMap img')
-			.attr('src', srcString)
+			.attr('src', $game.$map.collectiveImage)
 			.attr('width', '426px');
 		
 		//show player's seed droppings
-		console.log($game.$player.game.seeds.dropped);
 		$('.progressArea').slideToggle();
 	}
 };
