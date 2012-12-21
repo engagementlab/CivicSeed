@@ -290,8 +290,8 @@ $game.$player = {
 				end = $game.graph.nodes[y][x],
 				result = $game.$astar.search($game.graph.nodes, start, end);
 			if(result.length > 0) {
+				$game.$player.sendMoveInfo(result);
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-					$game.$player.sendMoveInfo(result);
 					//$game.$audio.update(masterEndX, masterEndY);
 				});
 			}
