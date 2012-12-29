@@ -13,6 +13,7 @@ function leaveThisJoint() {
 //new player joining to keep track of
 ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
+	console.log('adding player', player);
 	$game.$others.add(player);
 	$('.activePlayers p').text(num);
 });

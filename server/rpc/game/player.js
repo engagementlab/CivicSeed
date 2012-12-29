@@ -37,15 +37,11 @@ exports.actions = function(req, res, ss) {
 					game: req.session.game
 				};
 
+			players[playerInfo.id] = playerInfo;
+			numActivePlayers += 1;
+			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
-
-		},
-
-		addPlayer: function(info) {
-			players[info.id] = info;
-			numActivePlayers += 1;
-			ss.publish.all('ss-addPlayer',numActivePlayers, info);
 		},
 		exitPlayer: function(info, id) {
 			
@@ -101,8 +97,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			// players[info.id].game.position.x = info.x;
-			// players[info.id].game.position.y = info.y;
+			players[info.id].game.position.x = info.x;
+			players[info.id].game.position.y = info.y;
 			//console.log(info);
 			req.session.game = info;
 		},

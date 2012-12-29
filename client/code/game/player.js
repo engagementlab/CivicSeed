@@ -42,7 +42,6 @@ $game.$player = {
 		ss.rpc('game.player.init', function(newInfo) {
 			
 			$game.$others.init();
-			ss.rpc('game.player.addPlayer',newInfo);
 			_info = {
 				srcX: 0,
 				srcY: 0,
@@ -146,9 +145,11 @@ $game.$player = {
 			$game.$player.currentStep = 0;
 			_info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
 			_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
-		}
+			$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+		}	
 
 		//if we done, finish
 		if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {

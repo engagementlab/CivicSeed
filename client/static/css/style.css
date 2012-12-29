@@ -5066,6 +5066,7 @@ a.badge:hover {
   z-index: 4;
   right: 0px;
   background: rgba(20, 20, 20, 0.3);
+  display: none;
 }
 #minimapPlayer {
   background: rgba(20, 20, 20, 0.3);

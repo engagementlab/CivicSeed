@@ -6,8 +6,11 @@ $game.$others = {
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
 			_onScreenPlayers = {};
+
 			$.each(response, function(key, player) {
+				console.log('from get others: ', player);
 				$game.$others.add(player);
+
 			});
 		});
 	},
@@ -15,6 +18,7 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
+		
 		if(player.id != $game.$player.id) {
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
@@ -252,7 +256,8 @@ $game.$others = {
 					otherPlayer.currentMove += 1;
 
 					//render mini map here *****
-					//$game.$renderer.renderMiniPlayers(_info.x, _info.y);
+					//THIS CAN BE REMOVED IF WE DON"T WANT IT TOO OFTEN
+					$game.$map.updatePlayer(otherPlayer.id, otherPlayer.info.x, otherPlayer.info.y);
 
 				}
 
