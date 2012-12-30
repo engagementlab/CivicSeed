@@ -510,7 +510,7 @@ exports.$game = {
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
 		$('.colorMap img')
-			.attr('src', $game.$map.collectiveImage)
+			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		
 		//show player's seed droppings
