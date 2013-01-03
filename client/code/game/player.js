@@ -444,7 +444,7 @@ $game.$player = {
 				x: origX,
 				y: origY,
 				dropped: $game.$player.game.seeds.dropped
-			}
+			};
 
 			//increase the drop count for the player
 			$game.$player.game.seeds.dropped += bombed.length;

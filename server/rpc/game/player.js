@@ -8,7 +8,7 @@ var numActivePlayers = 0;
 // var numPlayers = 0;
 var players = {};
 
-var service, db, userModel, tileModel;
+var service, db, userModel, tileModel, gameModel;
 
 exports.actions = function(req, res, ss) {
 
@@ -29,16 +29,18 @@ exports.actions = function(req, res, ss) {
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
+			gameModel = service.useModel('game', 'ss');
 			
 			//should we pull the game info from the db instead of it being passed in a session?
 			var playerInfo = {
-					id: req.session.userId,
-					name: req.session.name,
-					game: req.session.game
-				};
+				id: req.session.userId,
+				name: req.session.name,
+				game: req.session.game
+			};
 
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
+
 			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
@@ -126,7 +128,7 @@ exports.actions = function(req, res, ss) {
 				}
 				if (oldTiles) {
 					var saveColors = function(i) {
-						//change epicenter background 
+						//change epicenter background
 						if(index === Math.floor(num / 2)) {
 							oldTiles[i].background = 735;
 						}
@@ -189,6 +191,8 @@ exports.actions = function(req, res, ss) {
 									saveColors(curOld);
 								}
 								else {
+									//add tile count to our progress
+									
 									//we are done,send out the color information to each client to render
 									ss.publish.all('ss-seedDropped', bombed, info.id, info.name);
 								}

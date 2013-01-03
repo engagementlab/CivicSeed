@@ -121,6 +121,7 @@ $game.$renderer = {
 
 			if(next === 6) {
 				$game.$renderer.ready = true;
+				$game.$player.init();
 				return;
 			}
 			else {

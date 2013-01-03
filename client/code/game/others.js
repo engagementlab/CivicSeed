@@ -2,16 +2,17 @@
 _onScreenPlayers = {};
 
 $game.$others = {
+	ready: false,
 
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
 			_onScreenPlayers = {};
 
 			$.each(response, function(key, player) {
-				console.log('from get others: ', player);
 				$game.$others.add(player);
 
 			});
+			$game.$others.ready = true;
 		});
 	},
 

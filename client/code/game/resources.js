@@ -1,6 +1,5 @@
 
-var _loaded = false,	
-	_resources = [],
+var _resources = [],
 	_currentSlide = 0,
 	_numSlides = 0,
 	_speak = null,
@@ -14,6 +13,7 @@ var _loaded = false,
 $game.$resources = {
 
 	isShowing: false,
+	ready: false,
 	
 
 	init: function() {
@@ -25,7 +25,7 @@ $game.$resources = {
 				var stringId = String(resource.id);
 				_resources[stringId] = resource;
 			});
-			_loaded = true;
+			$game.$resources.ready = true;
 		});
 	},
 

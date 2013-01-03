@@ -3,5 +3,7 @@ module.exports.global = {
 	tilesColored: 0,
 	state: 0,
 	messages: [],
-	chatLog: []
+	chatLog: [],
+	levelQuestion: ['What is your background?', 'Where do you like to work?','What time is it?','When are you done?'],
+	leaderboard: []
 };

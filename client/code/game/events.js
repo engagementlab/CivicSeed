@@ -13,7 +13,6 @@ function leaveThisJoint() {
 //new player joining to keep track of
 ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
-	console.log('adding player', player);
 	$game.$others.add(player);
 	$('.activePlayers p').text(num);
 });
@@ -233,6 +232,13 @@ var statusUpdate = function(m) {
 };
 
 $('.progress').bind('click', function() {
-
-	$game.showProgress();
+	if($game.showingProgress) {
+		$('.progressArea').slideUp(function() {
+			$game.showingProgress = false;
+		});
+	}
+	else {
+		$game.showProgress();	
+	}
+	
 });

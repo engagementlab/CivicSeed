@@ -8,6 +8,7 @@ $game.$map = {
 	growingSeed: false,
 	seedsInProgress: [],
 	collectiveImage: null,
+	ready: false,
 
 	miniMap: {},
 
@@ -15,6 +16,7 @@ $game.$map = {
 		// ss.rpc('game.map.init', function(bigMap) {
 		// 	$game.$map.collectiveImage = bigMap;
 		// });
+		$game.$map.ready = true;
 	},
 	paintMini: function() {
 		

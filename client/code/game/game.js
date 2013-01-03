@@ -54,14 +54,15 @@ exports.$game = {
 	onScreenNpcs: [],
 
 	numPlayers: 0,
+	showingProgress : false,
 
 	init: function() {
 		
 		$game.$map.init();
 
-		$game.$player.init();
-
 		$game.$renderer.init();
+		//then starts player init when done
+		//which in turn starts others init
 		
 		$game.$npc.init();
 		
@@ -74,7 +75,7 @@ exports.$game = {
 
 	firstLoad: function (x, y) {
 		
-		//calculate the top left corner of the viewport based on where the player is 
+		//calculate the top left corner of the viewport based on where the player is
 		
 		var tx = (x === 0) ? 0 : x - 1,
 			ty = (y === 0) ? 0 : y - 1;
@@ -106,7 +107,7 @@ exports.$game = {
 		});
 		//trigger the game to start, only when everything is loaded
 		var beginGame = function() {
-			if($game.$renderer.ready && $game.$npc.ready && $game.$player.ready && $game.ready && $game.$audio.ready) {
+			if($game.ready && $game.$map.ready && $game.$renderer.ready && $game.$player.ready && $game.$others.ready && $game.$npc.ready && $game.$resources.ready && $game.$gnome.ready && $game.$audio.ready) {
 				$('.loading').fadeOut(function() {
 					$(this).remove();
 				});
@@ -507,14 +508,20 @@ exports.$game = {
 	},
 
 	showProgress: function() {
+
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
 		$('.colorMap img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		
+		var seedCount = '<p class="highlight">' + $game.$player.name + ': ' + $game.$player.game.seeds.dropped + ' tiles colored</p>';
 		//show player's seed droppings
-		$('.progressArea').slideToggle();
+		$('.topSeeders').empty();
+		$('.topSeeders').append(seedCount);
+		$('.progressArea').slideDown(function() {
+			$game.showingProgress = true;
+		});
 	}
 };
 

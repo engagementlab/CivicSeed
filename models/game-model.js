@@ -12,7 +12,9 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			who: String,
 			what: String,
 			when: Date
-		}]
+		}],
+		levelQuestion: [String],
+		leaderboard: [String]
 	});
 
 	var GameModel = db.model('Game', gameSchema, 'game');

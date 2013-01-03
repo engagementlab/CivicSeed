@@ -25,6 +25,7 @@ $game.$gnome = {
 	isChat: false,
 	isShowing: false,
 	isSolving: false,
+	ready: false,
 	
 	init: function() {
 		ss.rpc('game.npc.loadGnome', function(response) {
@@ -49,6 +50,8 @@ $game.$gnome = {
 			$game.$gnome.getMaster();
 
 			$game.$gnome.setupTangram();
+
+			$game.$gnome.ready = true;
 
 		});
 	},
