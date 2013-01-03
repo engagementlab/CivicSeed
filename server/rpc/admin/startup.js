@@ -104,29 +104,34 @@ exports.actions = function(req, res, ss) {
 				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 				npcData = require(rootDir + '/data/npcs');
 				gnomeData = require(rootDir + '/data/gnome');
-				resourceData = require(rootDir + '/data/resources');
+				
 				dbActions.dropCollection('npcs', function() {
 					dbActions.saveDocuments(npcModel, npcData.global, function() {
 						dbActions.dropCollection('gnomes', function() {
 							dbActions.saveDocuments(gnomeModel, gnomeData.global, function() {
-								dbActions.dropCollection('resources', function() {
-									dbActions.saveDocuments(resourceModel, resourceData.global, function() {
-										res('Data loaded: ' + dataType);
-									});
-								});
+								res('Data loaded: ' + dataType);
 							});
 						});
 					});
 				});
 
 			}  else if(dataType === 'game') {
-					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
-					gameData = require(rootDir + '/data/game');
-					dbActions.dropCollection('game', function() {
-						dbActions.saveDocuments(gameModel, gameData.global, function() {
-							res('Data loaded: ' + dataType);
-						});
+				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
+				gameData = require(rootDir + '/data/game');
+				dbActions.dropCollection('game', function() {
+					dbActions.saveDocuments(gameModel, gameData.global, function() {
+						res('Data loaded: ' + dataType);
 					});
+				});
+			}
+			else if(dataType === 'resources') {
+				console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Resources   * * * * * * * * * * * *   \n\n'.yellow);
+				resourceData = require(rootDir + '/data/resources');
+				dbActions.dropCollection('resources', function() {
+					dbActions.saveDocuments(resourceModel, resourceData.global, function() {
+						res('Data loaded: ' + dataType);
+					});
+				});
 			}
 		}
 

@@ -129,8 +129,12 @@ $('.gameboard').click(function(m) {
 $('#chatButton').click(function(e) {
 	e.preventDefault();
 	if(!$game.$npc.isResource && !$game.inTransit && !$game.$player.isMoving) {
-		var message = $('#chatText').val();
-		ss.rpc('game.chat.sendMessage', message, $game.$player.id);
+		var data = {
+			msg: $('#chatText').val(),
+			who: $game.$player.name,
+			id: $game.$player.id
+		};
+		ss.rpc('game.chat.sendMessage', data);
 		$('#chatText').val('');
 	}
 	return false;
