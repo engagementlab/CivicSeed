@@ -63,6 +63,17 @@ var self = exports.actions = function(req, res, ss) {
 			GnomeModel.findOne(function(err, response) {
 				res(response);
 			});
+		},
+		answerToResource: function(data, id) {
+			ResourceModel.findOne({id: id}, function (err, resource) {
+				if(err) {
+					console.error('  Could not find resource', err);
+				}
+				else {
+					resource.playerAnswers.push(data);
+					resource.save();
+				}
+			});
 		}
 
 		// exampleResponse: function() {

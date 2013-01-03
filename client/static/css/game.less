@@ -6,6 +6,8 @@
     font-style: normal;
 }
 
+@mono: 'InconsolataMedium';
+
 .gameboard{
 	position: relative;
 	margin: 0 auto;
@@ -29,7 +31,7 @@ user-select: none;
 	left: 480px;
 	text-align: center;
 	color: #222;
-	font-family: 'InconsolataMedium', sans-serif;
+	font-family: @mono, sans-serif;
 }
 .resourceStage {
 	display:none;	
@@ -205,7 +207,7 @@ user-select: none;
 }
 .playerChat {
 	position: absolute;
-	font-family: 'InconsolataMedium', Sans-serif;
+	font-family: @mono, Sans-serif;
 	font-size: 16px;
 	width: 200px;
 	height: 20px;
@@ -230,7 +232,7 @@ user-select: none;
 }
 .pauseMenu p{
 	text-align: center;
-	font-family: 'InconsolataMedium', Sans-serif;
+	font-family: @mono, Sans-serif;
 	color: white;
 	font-size: 2em;
 	margin-top: 100px;
@@ -279,7 +281,7 @@ user-select: none;
 .chatBox input{
 	width: 75%;
 	font-size: 16px;
-	font-family: 'InconsolataMedium', monospace;
+	font-family: @mono, monospace;
 }
 .globalHud div {
 	width:48px;
@@ -303,13 +305,13 @@ user-select: none;
 	padding: 4px;
 	text-align:center;
 	overflow: hidden;
-	font-family: 'InconsolataMedium', monospace;
+	font-family: @mono, monospace;
 	position:relative;
 	cursor: default;
 }
 
 .hudCount {
-	font-family: 'InconsolataMedium', monospace;
+	font-family: @mono, monospace;
 	position:absolute;
 	font-size:14px;
 	height:16px;
@@ -371,4 +373,8 @@ user-select: none;
 }
 .gnomeContent form {
 	padding:20px;
+}
+.playerAnswers {
+	color: #ccc;
+	list-style: none;
 }

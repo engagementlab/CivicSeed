@@ -74,7 +74,6 @@ $game.$resources = {
 				$game.$player.inventoryShowing = false;
 				$('.resourceArea').slideDown();
 			});
-			
 		});
 		
 	},
@@ -83,7 +82,13 @@ $game.$resources = {
 		$('.resourceArea button').addClass('hideButton');
 		
 		if(_answered) {
-			$('.resourceArea .closeButton').removeClass('hideButton');
+			if(_currentSlide === _numSlides + 1) {
+				$('.resourceArea .nextButton').removeClass('hideButton');
+			}
+			else {
+				$('.resourceArea .closeButton').removeClass('hideButton');	
+			}
+			
 		}
 		else {
 			//if its the first page, we DEF. have a next and no back
@@ -111,17 +116,27 @@ $game.$resources = {
 
 	addContent: function() {
 
-		//add the answer form
+		//if they answered the question...
 		if(_answered) {
-	
+		
+			//if they got it right, give them a tangram
 			if(_correctAnswer) {
-				_speak = _curResource.responses[0];
-				$('.resourceArea .speakerName').text(_who);
-				$('.resourceArea .message').text(_speak);
-				//show image on screen
-				//get path from db, make svg with that
-				var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,200)"</path></svg>';
-				$('.resourceContent').html(newSvg);
+
+				//first, congrats and show them the tangram piece
+				if(_currentSlide === _numSlides + 1) {
+					_speak = _curResource.responses[0];
+					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .message').text(_speak);
+					//show image on screen
+					//get path from db, make svg with that
+					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,200)"</path></svg>';
+					$('.resourceContent').html(newSvg);
+				}
+				//the next slide will show them recent answers
+				else {
+					$game.$resources.showRecentAnswers();
+				}
+			
 			}
 			else {
 				_speak = _curResource.responses[1];
@@ -137,8 +152,7 @@ $game.$resources = {
 				var finalQuestion = '<p>' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
-					playerAnswer = '<p><span class=\'speakerName\'>Your Answer: </span>'+$game.$player.getAnswer(_curResource.id) + '</p>';
-					$('.resourceContent').html(finalQuestion + playerAnswer);
+					$game.$resources.showRecentAnswers();
 				}
 				else {
 					_speak = _curResource.prompt;
@@ -154,6 +168,32 @@ $game.$resources = {
 				$('.resourceContent').html(content);
 			}
 		}
+	},
+
+	showRecentAnswers: function() {
+		var recentAnswers = _curResource.playerAnswers,
+			numAnswers = recentAnswers.length,
+			displayAnswers;
+		if(numAnswers === 0) {
+			_speak = 'Congrats! You were the first to answer.';
+		}
+		else {
+			_speak = 'Here are some recent answers by your peers: ';
+			displayAnswers = '<ul>';
+			var numToShow = numAnswers < 3 ? numAnswers: 3,
+				counter = 0,
+				spot = numAnswers - 1;
+			
+			while(counter < numToShow) {
+				displayAnswers += '<li class="playerAnswers">' + recentAnswers[spot-counter].name + ': ' + recentAnswers[spot-counter].answer + '</li>';
+				counter += 1;
+			}
+
+			displayAnswers += '</ul>';
+		}
+		$('.resourceArea .speakerName').text(_who);
+		$('.resourceArea .message').text(_speak);
+		$('.resourceContent').html(displayAnswers);
 	},
 
 	hideResource: function() {
@@ -201,8 +241,15 @@ $game.$resources = {
 		var response = $('.resourceArea input').val();
 		
 		if(response === _curResource.answer) {
-			//do something in db and stuff
+			//update player stuff 
 			$game.$player.answerResource(true,_curResource.id, response);
+			
+			//add this to the DB of resources for all player answers
+			var newAnswer = {
+				name: $game.$player.name,
+				answer: response
+			};
+			ss.rpc('game.npc.answerToResource', newAnswer, _curResource.id);
 			_correctAnswer = true;
 		}
 		else {

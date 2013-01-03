@@ -13,7 +13,11 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			path: String,
 			fill: String,
 			stroke: String
-		}
+		},
+		playerAnswers: [{
+			name: String,
+			answer: String
+		}]
 	});
 
 	var ResourceModel = db.model('resource', resourceSchema, 'resources');

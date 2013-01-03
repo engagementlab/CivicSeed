@@ -5261,6 +5261,10 @@ a.badge:hover {
 .gnomeContent form {
   padding: 20px;
 }
+.playerAnswers {
+  color: #ccc;
+  list-style: none;
+}
 body {
   padding-top: 80px;
 }

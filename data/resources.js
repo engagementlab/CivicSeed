@@ -13,7 +13,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '8427',
@@ -29,7 +30,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '8276',
@@ -45,7 +47,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '8986',
@@ -61,7 +64,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '6707',
@@ -77,7 +81,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '8542',
@@ -93,7 +98,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '2569',
@@ -109,7 +115,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '1608',
@@ -125,7 +132,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '479',
@@ -141,7 +149,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '8956',
@@ -157,7 +166,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '4284',
@@ -173,7 +183,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '4876',
@@ -189,7 +200,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '4992',
@@ -205,7 +217,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '6265',
@@ -221,7 +234,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '352',
@@ -237,7 +251,8 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 },
 {
 	id: '3335',
@@ -253,6 +268,7 @@ module.exports.global = [
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
-	}
+	},
+	playerAnswers: []
 }
 ];
