@@ -12,9 +12,9 @@ $game.$map = {
 	miniMap: {},
 
 	init: function() {
-		ss.rpc('game.map.init', function(bigMap) {
-			$game.$map.collectiveImage = bigMap;
-		});
+		// ss.rpc('game.map.init', function(bigMap) {
+		// 	$game.$map.collectiveImage = bigMap;
+		// });
 	},
 	paintMini: function() {
 		
