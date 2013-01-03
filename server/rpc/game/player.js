@@ -45,6 +45,7 @@ exports.actions = function(req, res, ss) {
 			//send the number of active players and the new player info
 			res(playerInfo);
 		},
+
 		exitPlayer: function(info, id) {
 			
 			//update redis
@@ -224,6 +225,16 @@ exports.actions = function(req, res, ss) {
 				}
 			});
 			
+		},
+		getGameInfo: function() {
+			gameModel.find({}, function (err, result) {
+				if(err) {
+					console.log('game cannot start');
+				}
+				else{
+					res(result);
+				}
+			});
 		}
 	};
 }

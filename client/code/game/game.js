@@ -53,8 +53,12 @@ exports.$game = {
 
 	onScreenNpcs: [],
 
-	numPlayers: 0,
 	showingProgress : false,
+
+	levelQuestion: null,
+	tilesColored: 0,
+	leaderboard: null,
+	numPlayers: 0,
 
 	init: function() {
 		
@@ -64,13 +68,12 @@ exports.$game = {
 		//then starts player init when done
 		//which in turn starts others init
 		
-		$game.$npc.init();
-		
 		$game.$resources.init();
 		
 		$game.$gnome.init();
 		
 		$game.$audio.init();
+
 	},
 
 	firstLoad: function (x, y) {
@@ -92,6 +95,20 @@ exports.$game = {
 		$game.rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
 		$game.topEdge = $game.masterY,
 		$game.bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
+
+		//load up npcs
+		$game.$npc.init();
+
+		//get gnomes local coords to place him
+		$game.$gnome.getMaster();
+
+		ss.rpc('game.player.getGameInfo', function(response) {
+			$game.levelQuestion = response[0].levelQuestion;
+			$game.tilesColored = response[0].tilesColored;
+			$game.leaderboard = response[0].leaderboard;
+			
+		});
+		ss.rpc('game.chat.init');
 
 		$game.getTiles($game.masterX, $game.masterY, $game.VIEWPORT_WIDTH, $game.VIEWPORT_HEIGHT, function() {
 			//new tile data stored in nextTiles by default

@@ -45,9 +45,7 @@ $game.$gnome = {
 				curY: response.y,
 				prevX: response.x,
 				prevY: response.y
-			};
-
-			$game.$gnome.getMaster();
+			};	
 
 			$game.$gnome.setupTangram();
 
@@ -392,7 +390,8 @@ $game.$gnome = {
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {
-				$('.gnomeArea .message').text('Now please tell me something about yourself for the profile.');
+				var endQuestion = $game.levelQuestion[$game.$player.game.currentLevel];
+				$('.gnomeArea .message').text(endQuestion);
 				var inputBox = '<form><input></input></form>';
 				$('.gnomeContent').html(inputBox);
 			}
@@ -623,7 +622,7 @@ $game.$gnome = {
 		}
 		else {
 			col = '#fff';
-			$('.trash').css('opacity',.5);
+			$('.trash').css('opacity',0.5);
 		}
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';

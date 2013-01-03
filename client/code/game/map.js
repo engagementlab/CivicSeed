@@ -69,15 +69,8 @@ $game.$map = {
 				$game.$renderer.renderTile(loc.x,loc.y);
 				
 				if(id === $game.$player.id) {
-					console.log('mine');
-					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);	
+					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
 				}
-				else{
-					console.log('other');
-				}
-
-				
-				
 				//play sound clip
 				//$game.$audio.playSound(0);
 			}
