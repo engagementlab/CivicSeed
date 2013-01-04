@@ -242,7 +242,16 @@ $('.progress').bind('click', function() {
 		});
 	}
 	else {
-		$game.showProgress();	
+		$game.showProgress();
 	}
-	
+});
+$(window).bind('keydown',function(e) {
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+		$game.$mouse.updateKey(e.which);
+	}
+});
+$(window).bind('keyup',function(e) {
+	if($game.$player.keyWalking) {
+		$game.$player.keyWalking = false;
+	}
 });

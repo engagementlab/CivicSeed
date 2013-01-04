@@ -9,6 +9,7 @@
 	_svg = null,
 	_drag = null,
 	_new = null,
+	_counter = 0,
 	_dragOffX = 0,
 	_dragOffY = 0;
 
@@ -41,6 +42,8 @@ $game.$gnome = {
 
 			_renderInfo = {
 				kind: 'gnome',
+				srcX: 0,
+				srcY: 0,
 				curX: response.x,
 				curY: response.y,
 				prevX: response.x,
@@ -103,30 +106,30 @@ $game.$gnome = {
 	},
 
 	idle: function() {
-		/*
+		
 		_counter += 1;
 		
-		if(_counter >= 56) {
+		if(_counter >= 40) {
 			_counter = 0,
 			_renderInfo.srcX = 0,
-			_renderInfo.srcY = _info.spriteMap[0].y;
+			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 24) {
-			_renderInfo.srcX = 32;
-			_renderInfo.srcY = _info.spriteMap[0].y;
+		else if(_counter == 30) {
+			_renderInfo.srcX = 32 * 6;
+			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 28) {
-			_renderInfo.srcX = 64;
-			_renderInfo.srcY = _info.spriteMap[0].y;
+		else if(_counter == 20) {
+			_renderInfo.srcX = 32 * 12;
+			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 32) {
-			_renderInfo.srcX = 96;
-			_renderInfo.srcY = _info.spriteMap[0].y;
+		else if(_counter == 10) {
+			_renderInfo.srcX = 32 * 18;
+			_renderInfo.srcY = 0;
 		}
-	*/
+	
 	},
 
 	show: function() {

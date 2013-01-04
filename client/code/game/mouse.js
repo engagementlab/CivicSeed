@@ -102,9 +102,7 @@ $game.$mouse = {
 						//npc
 						else if(state >= 0 ) {
 							//set index val so reousrce can show right one
-							
-							
-
+			
 							//if you click on a different square then the previously
 							//selected npc, then hide the npc info if it is showing
 							if(state !== $game.$gnome.index) {
@@ -125,6 +123,45 @@ $game.$mouse = {
 					}
 				});
 			}
+		}
+	},
+
+	updateKey: function(keyInfo) {
+		//w 119
+		//a 97
+		//s 115
+		//d 100
+		var currentSpot = $game.$player.getPosition(),
+			local = $game.masterToLocal(currentSpot.x,currentSpot.y),
+			targetX = 0,
+			targetY = 0;
+
+		//up
+		if(keyInfo === 87) {
+			targetY = -1;
+		}
+		//down
+		else if(keyInfo === 83) {
+			targetY = 1;
+		}
+		//left
+		else if(keyInfo === 65) {
+			targetX = -1;
+		}
+		//right
+		else if(keyInfo === 68) {
+			targetX = 1;
+		}
+
+
+		//go
+		
+		$game.$player.beginKeyWalk(targetX,targetY);
+		if($game.$npc.isChat) {
+			$game.$npc.hideChat();
+		}
+		else if($game.$gnome.isChat) {
+			$game.$gnome.hideChat();
 		}
 	}
 

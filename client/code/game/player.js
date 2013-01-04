@@ -33,6 +33,10 @@ $game.$player = {
 	ready: false,
 	seedMode: 0,
 	awaitingBomb: false,
+	keyWalking: false,
+	keyX: 0,
+	keyY: 0,
+	keyMoving: false,
 
 
 	//private methods
@@ -139,6 +143,7 @@ $game.$player = {
 		/** IMPORTANT note: x and y are really flipped!!! **/
 		//update the step
 		$game.$player.isMoving = true;
+
 		//if the steps between the tiles has finished,
 		//update the master location, and reset steps to go on to next move
 		if($game.$player.currentStep >= _numSteps) {
@@ -153,9 +158,13 @@ $game.$player = {
 
 		//if we done, finish
 		if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
-			$game.$player.endMove();
+			if($game.$player.keyMoving) {
+				$game.$player.endKeyMove();
+			}	
+			else {
+				$game.$player.endMove();
+			}
 		}
-
 		//if we no done, then step through it yo.
 		else {
 			
@@ -218,6 +227,47 @@ $game.$player = {
 		$game.$player.hideChat();
 	},
 
+	endKeyMove: function() {
+
+		_info.offX = 0,
+		_info.offY = 0;
+		_info.prevOffX= 0;
+		_info.prevOffY= 0;
+
+		//if traveling, falsify everthing, start the travel
+		if(_willTravel) {
+			_info.srcY = 0,
+			_info.srcX = 0;
+			$game.$player.keyWalking = false;
+			$game.$player.isMoving = false;
+			$game.$player.keyMoving = false;
+			var beginTravel = function(){
+				if($game.dataLoaded){
+					$game.dataLoaded = false;
+					$game.beginTransition();
+				}
+				else{
+					//keep tryin!
+					setTimeout(beginTravel,50);
+				}
+			};
+			beginTravel();
+		}
+		// no travel,
+		else {
+			//if still holding, keep movin shorty
+			if($game.$player.keyWalking) {
+				$game.$player.getKeyMove();
+			}
+			else {
+				_info.srcY = 0,
+				_info.srcX = 0;
+				$game.$player.keyMoving = false;
+				$game.$player.isMoving = false;
+			}
+		}
+	},
+
 	endMove: function () {
 		var posInfo = {
 			id: $game.$player.id,
@@ -232,6 +282,7 @@ $game.$player = {
 		_info.offY = 0;
 
 		//put the character back to normal position
+
 		_info.srcX = 0,
 		_info.srcY =  0;
 
@@ -292,6 +343,7 @@ $game.$player = {
 				result = $game.$astar.search($game.graph.nodes, start, end);
 			if(result.length > 0) {
 				$game.$player.sendMoveInfo(result);
+				
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
 					//$game.$audio.update(masterEndX, masterEndY);
 				});
@@ -300,6 +352,41 @@ $game.$player = {
 			
 	},
 
+	beginKeyWalk: function(dirX, dirY) {
+		$game.$player.keyWalking = true;
+		$game.$player.keyX = dirX;
+		$game.$player.keyY = dirY;
+		$game.$player.getKeyMove();
+		$game.$player.isMoving = true;
+
+	},
+	getKeyMove: function() {
+		
+		var locStart = $game.masterToLocal(_info.x, _info.y),
+			newX = $game.$player.keyX + _info.x,
+			newY = $game.$player.keyY + _info.y,
+			locEnd = $game.masterToLocal(newX, newY),
+			start = $game.graph.nodes[locStart.y][locStart.x],
+			end = $game.graph.nodes[locEnd.y][locEnd.x],
+			result = $game.$astar.search($game.graph.nodes, start, end);
+
+		$game.$player.keyMoving = true;
+		
+		$game.isMapEdge(locEnd.x, locEnd.y, function(anEdge) {
+			
+			_willTravel = false;
+			//if a transition is necessary, load new data
+			if(!anEdge) {
+				if(locEnd.x === 0 || locEnd.x === 29 || locEnd.y === 0 || locEnd.y === 14) {
+					_willTravel = true;
+					$game.calculateNext(locEnd.x, locEnd.y, function() {
+						
+					});
+				}
+			}
+			$game.$player.sendMoveInfo(result);
+		});
+	},
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
 		_info.prevOffY = slideY * _numSteps;

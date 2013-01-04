@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/npcs.png'];
+		_allImages = ['img/game/tilesheet.png','img/game/npcs.png', 'img/game/botanist.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -558,23 +558,23 @@ $game.$renderer = {
 	clearGnome: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
-			info.prevY - $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2
+			info.prevY - $game.TILE_SIZE * 4,
+			$game.TILE_SIZE * 6,
+			$game.TILE_SIZE * 5
 		);
 	},
 
 	renderGnome: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[1],
-			0,
-			128,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2,
+			_tilesheets[2],
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE * 6,
+			$game.TILE_SIZE * 5,
 			info.curX,
-			info.curY - $game.TILE_SIZE,
-			$game.TILE_SIZE,
-			$game.TILE_SIZE*2
+			info.curY - $game.TILE_SIZE * 4,
+			$game.TILE_SIZE * 6,
+			$game.TILE_SIZE * 5
 		);
 	},
 
