@@ -9,7 +9,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			what: String
 		}],
 		levelQuestion: [String],
-		leaderboard: [String]
+		leaderboard: [{
+			name: String,
+			count: Number
+		}]
 	});
 
 	var GameModel = db.model('Game', gameSchema, 'game');

@@ -5216,11 +5216,12 @@ a.badge:hover {
   color: #ccff00;
 }
 .seedersHeader {
+  margin-left: 40px;
   color: #999;
 }
 .topSeeders {
   padding: 10px;
-  margin-left: 20px;
+  margin-left: 30px;
   color: #ccc;
 }
 .feedback {

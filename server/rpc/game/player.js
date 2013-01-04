@@ -129,10 +129,6 @@ exports.actions = function(req, res, ss) {
 				}
 				if (oldTiles) {
 					var saveColors = function(i) {
-						//change epicenter background
-						if(index === Math.floor(num / 2)) {
-							oldTiles[i].background = 735;
-						}
 						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
 
 							//color stuff here:
@@ -192,10 +188,66 @@ exports.actions = function(req, res, ss) {
 									saveColors(curOld);
 								}
 								else {
-									//add tile count to our progress
-									
 									//we are done,send out the color information to each client to render
 									ss.publish.all('ss-seedDropped', bombed, info.id, info.name);
+									
+									//access our global game model for status updates
+									gameModel.findOne({}, function (err, result) {
+										if(err) {
+									
+										}
+										else{
+											//add tile count to our progress
+											var oldCount = result.tilesColored,
+												newCount = oldCount + bombed.length;
+												oldPercent = Math.floor((oldCount / 18744) * 100),
+												newPercent = Math.floor((newCount / 18744) * 100);
+
+											//update leadeboard
+											var oldBoard = result.leaderboard,
+												i = oldBoard.length,
+												found = false,
+												newGuy = {
+													name: info.name,
+													count: info.dropped
+												};
+
+											//if new guy exists, update him
+											while(--i > -1) {
+												if(oldBoard[i].name === newGuy.name) {
+													oldBoard[i].count = newGuy.count;
+													found = true;
+													continue;
+												}
+											}
+											//add new guy
+											if(!found) {
+												oldBoard.push(newGuy);
+											}
+
+											//sort them
+											oldBoard.sort(function(a, b){
+												return b.count-a.count;
+											});
+											
+											//get rid of the last one if too many
+											if(oldBoard.length > 5) {
+												oldBoard.pop();
+											}
+
+											//save all changes
+											result.set('tilesColored', newCount);
+											result.set('leaderboard', oldBoard);
+											result.save();
+											
+											//send out new percent if it has changed
+											if(oldPercent !== newPercent) {
+												ss.publish.all('ss-progressChange', newCount, oldBoard);
+											}
+										}
+									});
+
+
 								}
 							});
 						}
@@ -227,7 +279,7 @@ exports.actions = function(req, res, ss) {
 			
 		},
 		getGameInfo: function() {
-			gameModel.find({}, function (err, result) {
+			gameModel.findOne({}, function (err, result) {
 				if(err) {
 					console.log('game cannot start');
 				}

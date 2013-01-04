@@ -516,10 +516,7 @@ $game.$player = {
 		if(bombed.length > 0) {
 			
 			//change background to a flower for epicenter like a loading bar
-			$game.currentTiles[sX + mid][sY + mid].background = 735;
-
-			$game.$renderer.renderTile(sX + mid, sY + mid);
-
+		
 			//set a waiting boolean so we don't plant more until receive data back from rpc
 			$game.$player.awaitingBomb = true;
 

@@ -10,13 +10,17 @@ function leaveThisJoint() {
 	$game.$player.exitAndSave();
 }
 
+
+
+/******* RPC EVENTS *********/
+
+
 //new player joining to keep track of
 ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
 	$('.activePlayers p').text(num);
 });
-
 
 ss.event.on('ss-removePlayer', function(num, playerId) {
 	$game.numPlayers = num;
@@ -56,7 +60,14 @@ ss.event.on('ss-newMessage', function(message, id) {
 
 });
 
+ss.event.on('ss-progressChange', function(num, board) {
+	$game.tilesColored = num;
+	$game.leaderboard = board;
+});
 
+
+
+/********** BUTTON / MOUSE EVENTS **********/
 
 
 $('.seedButton').bind('click', (function () {
@@ -251,7 +262,5 @@ $(window).bind('keydown',function(e) {
 	}
 });
 $(window).bind('keyup',function(e) {
-	if($game.$player.keyWalking) {
-		$game.$player.keyWalking = false;
-	}
+	$game.$player.keyWalking = false;
 });

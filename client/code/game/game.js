@@ -103,10 +103,10 @@ exports.$game = {
 		$game.$gnome.getMaster();
 
 		ss.rpc('game.player.getGameInfo', function(response) {
-			$game.levelQuestion = response[0].levelQuestion;
-			$game.tilesColored = response[0].tilesColored;
-			$game.leaderboard = response[0].leaderboard;
-			
+			console.log(response);
+			$game.levelQuestion = response.levelQuestion;
+			$game.tilesColored = response.tilesColored;
+			$game.leaderboard = response.leaderboard;
 		});
 		ss.rpc('game.chat.init');
 
@@ -532,10 +532,17 @@ exports.$game = {
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		
-		var seedCount = '<p class="highlight">' + $game.$player.name + ': ' + $game.$player.game.seeds.dropped + ' tiles colored</p>';
+		var seedCount = '<p class="highlight">You: ' + $game.$player.game.seeds.dropped + ' tiles colored</p>',
+			topPlayers = '<ol>';
+		
+		for(var i = 0; i < $game.leaderboard.length; i++) {
+			topPlayers += '<li>' + $game.leaderboard[i].name + ': ' + $game.leaderboard[i].count + ' tiles colored</li>';
+		}
+		topPlayers += '</ol>';
 		//show player's seed droppings
+
 		$('.topSeeders').empty();
-		$('.topSeeders').append(seedCount);
+		$('.topSeeders').append(topPlayers + seedCount);
 		$('.progressArea').slideDown(function() {
 			$game.showingProgress = true;
 		});
