@@ -11,7 +11,7 @@ $game.$audio = {
 
 	init: function() {
 		$game.$audio.ready = true;
-		//$game.$audio.loadTrack(0);
+		$game.$audio.loadTrack(0);
 	},
 
 	loadTrack: function(num) {
@@ -88,10 +88,9 @@ $game.$audio = {
 	slideVolume: function(val, swap) {
 		//that means we aren't changing tracks, so just transition volume
 		if(swap < 0) {
-			
-
 			$(_soundtracks[_currentTrack]).stop(true,true).animate({
-				volume: val
+				//volume: val
+				volume: 0
 			}, 2000, function() {
 				
 			});
@@ -107,39 +106,13 @@ $game.$audio = {
 				_currentTrack = swap;
 				$game.$audio.playTheme();
 				$(_soundtracks[_currentTrack]).stop(true,true).animate({
-					volume: val
+					//volume: val
+					volume: 0
 				}, 2000, function() {
 					
 				});
 			});
 		}
-		
-		// var diff = val - _soundtracks[_currentTrack].volume;
-		
-		// if(diff >= 0) {
-		// 	dir = 0.001;
-		// }
-		// else {
-		// 	dir = -0.001;
-		// }
-		// if(Math.abs(diff) > 0.01) {
-		// 		_soundtracks[_currentTrack].volume += dir;
-		// 		tweenTimeout = setTimeout(function() {
-		// 		$game.$audio.slideVolume(val, nextVal, swap);
-		// 	}, 5);
-		// }
-		// else{
-		// 	console.log('end:',swap);
-		// 	if(swap > - 1) {
-		// 		_soundtracks[_currentTrack].pause();
-		// 		_currentTrack = swap;
-		// 		console.log('current', _currentTrack);
-		// 		_soundtracks[_currentTrack].volume = 0;
-		// 		_soundtracks[_currentTrack].play();
-		// 		$game.$audio.slideVolume(nextVal, false, -1);
-		// 	}
-		// }
-		
 	},
 
 	update: function(posX, posY) {
@@ -156,28 +129,34 @@ $game.$audio = {
 		//check for gnome/s place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 4;
-			targetV = .4;
+			targetV = 0.4;
+			$game.currentArea = 'botanist\'s garden';
 		}
 		else {
 			//3 bottom right
 			if(diffX > 0 && diffY > 0) {
 				trackRegion = 2;
+				$game.currentArea = 'ranch';
 			}
 			//2 top right
 			else if(diffX > 0 && diffY < 0) {
 				trackRegion = 1;
+				$game.currentArea = 'towm';
 			}
 			//1 top left
 			else if(diffX < 0 && diffY < 0) {
 				trackRegion = 0;
+				$game.currentArea = 'forest';
 			}
 			//4 bottom left
 			else if(diffX < 0 && diffY > 0) {
 				trackRegion = 3;
+				$game.currentArea = 'port';
 			}
 			//no man/s land
 			else {
 				trackRegion = 4;
+				$game.currentArea = 'land of nothingness';
 			}
 			if (absX < absY) {
 				closest = absX;
@@ -196,6 +175,7 @@ $game.$audio = {
 
 		trackRegion = trackRegion === _currentTrack ? -1 : trackRegion;
 		
+		$game.changeStatus();
 		$game.$audio.slideVolume(targetV, trackRegion);
 
 	}

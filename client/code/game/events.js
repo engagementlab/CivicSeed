@@ -44,7 +44,6 @@ ss.event.on('ss-seedDropped', function(bombed, id, name) {
 	if(id === $game.$player.id) {
 		$game.$player.awaitingBomb = false;
 	}
-	statusUpdate(name + ' dropped one');
 });
 
 
@@ -82,11 +81,11 @@ $('.seedButton').bind('click', (function () {
 		//turn it off if on
 		if($game.$player.seedMode > 0) {
 			$game.$player.seedMode = 0;
-			$('.displayBoxText').text('you are in the forest');
+			$game.changeStatus();
 		}
 		else {
 			$game.$player.seedMode = 1;
-			$('.displayBoxText').text('seed mode');
+			$game.changeStatus();
 		}
 	}
 }));
@@ -97,11 +96,11 @@ $('.seedButton2').bind('click', (function () {
 		//turn it off if on
 		if($game.$player.seedMode > 0) {
 			$game.$player.seedMode = 0;
-			$('.displayBoxText').text('you are in the forest');
+			$game.changeStatus();
 		}
 		else {
 			$game.$player.seedMode = 2;
-			$('.displayBoxText').text('mega seed mode son');
+			$game.changeStatus();
 		}
 	}
 }));
@@ -114,7 +113,6 @@ $(window).bind('keypress', (function (key) {
 //change cursor on mouse move
 $('.gameboard').mousemove(function(m) {
 	if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
-	
 		var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
@@ -237,19 +235,6 @@ $('.gnomeArea .answerButton').bind('click', (function (e) {
 $('.activePlayers').click(function() {
 	$('#minimapPlayer').toggleClass('hide');
 });
-
-var statusUpdate = function(m) {
-	var prevM = $('.displayBoxText').text();
-	$('.displayBoxText').fadeOut(200,function() {
-		$(this)
-			.text(m)
-			.fadeIn(600,function() {
-				setTimeout(function() {
-					$('.displayBoxText').text(prevM);
-				}, 3000);
-			});
-	});
-};
 
 $('.progress').bind('click', function() {
 	if($game.showingProgress) {

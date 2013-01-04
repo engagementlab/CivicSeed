@@ -345,7 +345,7 @@ $game.$player = {
 				$game.$player.sendMoveInfo(result);
 				
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-					//$game.$audio.update(masterEndX, masterEndY);
+					$game.$audio.update(masterEndX, masterEndY);
 				});
 			}
 		});
@@ -744,6 +744,9 @@ $game.$player = {
 		$game.$player.game.currentLevel += 1;
 		$game.$player.game.gnomeState = 0;
 
+		//send status to message board
+		var stat = $game.$player.name + 'is on level' + $game.$player.game.currentLevel + '!';
+		//ss.rpc('game.player.status', stat);
 		//load in other tree file
 	}
 };

@@ -61,6 +61,7 @@ exports.$game = {
 	percent: 0,
 	percentString: null,
 	numPlayers: 0,
+	currentArea: 'botanist\'s garden',
 
 	init: function() {
 		
@@ -135,10 +136,10 @@ exports.$game = {
 				});
 				$game.running = true;
 				$game.$renderer.renderAllTiles();
-				//$game.$audio.playTheme();
+				$game.$audio.playTheme();
 				
 				var playerPos = $game.$player.getPosition();
-				//$game.$audio.update(playerPos.x, playerPos.y);
+				$game.$audio.update(playerPos.x, playerPos.y);
 
 				$game.tick();
 			}
@@ -154,13 +155,13 @@ exports.$game = {
 	pause: function() {
 		$('.pauseMenu').slideDown();
 		$game.running = false;
-		//$game.$audio.pauseTheme();
+		$game.$audio.pauseTheme();
 	},
 
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
-			//$game.$audio.playTheme();
+			$game.$audio.playTheme();
 			$game.tick();
 		});
 		
@@ -558,6 +559,26 @@ exports.$game = {
 		$('.progressArea').slideDown(function() {
 			$game.showingProgress = true;
 		});
+	},
+	statusUpdate: function(msg) {
+		var prevM = $('.displayBoxText').text();
+		$('.displayBoxText').fadeOut(200,function() {
+			$(this)
+				.text(msg)
+				.fadeIn(600,function() {
+					setTimeout(function() {
+						$('.displayBoxText').text(prevM);
+					}, 3000);
+				});
+		});
+	},
+	changeStatus: function() {
+		if($game.$player.seedMode > 0) {
+			$('.displayBoxText').text('click a tile to drop a seed');
+		}
+		else {
+			$('.displayBoxText').text('the ' + $game.currentArea);
+		}
 	}
 };
 

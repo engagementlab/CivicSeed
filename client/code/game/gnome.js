@@ -246,6 +246,7 @@ $game.$gnome = {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				if(p === 1) {
 					$game.$gnome.isSolving = true;
+					$('.displayBoxText').text('drag a piece to the board to use it');
 					$('.gnomeArea').css('height','380px');
 				}
 
@@ -412,6 +413,7 @@ $game.$gnome = {
 			$('.gnomeArea').css('height','450px');
 			$game.$gnome.isChat = false;
 			$game.$gnome.isSolving = false;
+			$game.changeStatus();
 			$('.puzzleSvg').empty();
 			$('.inventoryItem').css('opacity',1);
 
