@@ -58,6 +58,8 @@ exports.$game = {
 	levelQuestion: null,
 	tilesColored: 0,
 	leaderboard: null,
+	percent: 0,
+	percentString: null,
 	numPlayers: 0,
 
 	init: function() {
@@ -107,6 +109,9 @@ exports.$game = {
 			$game.levelQuestion = response.levelQuestion;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
+			$game.percent = Math.floor(($game.tilesColored / 18744) * 100);
+			$game.percentString = $game.percent + '%';
+			$('.hudBar').css('width', $game.percentString);
 		});
 		ss.rpc('game.chat.init');
 
@@ -532,7 +537,12 @@ exports.$game = {
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		
-		var seedCount = '<p class="highlight">You: ' + $game.$player.game.seeds.dropped + ' tiles colored</p>',
+		$game.percentString = $game.percent + '%';
+		
+		var percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
+			percentShow = '<p>Collective: ' + $game.percentString + ' complete...</p>';
+			
+		var	seedCount = '<p class="highlight">You: ' + $game.$player.game.seeds.dropped + ' tiles colored</p>',
 			topPlayers = '<ol>';
 		
 		for(var i = 0; i < $game.leaderboard.length; i++) {
@@ -541,6 +551,8 @@ exports.$game = {
 		topPlayers += '</ol>';
 		//show player's seed droppings
 
+		$('.megaBar').empty();
+		$('.megaBar').append(percentShow + percentBar);
 		$('.topSeeders').empty();
 		$('.topSeeders').append(topPlayers + seedCount);
 		$('.progressArea').slideDown(function() {

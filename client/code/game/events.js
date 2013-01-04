@@ -60,11 +60,16 @@ ss.event.on('ss-newMessage', function(message, id) {
 
 });
 
-ss.event.on('ss-progressChange', function(num, board) {
+ss.event.on('ss-progressChange', function(num) {
 	$game.tilesColored = num;
-	$game.leaderboard = board;
+	$game.percent = Math.floor(($game.tilesColored / 18744) * 100);
+	$game.percentString = $game.percent + '%';
+	$('.hudBar').css('width', $game.percentString);
 });
 
+ss.event.on('ss-leaderChange', function(board) {
+	$game.leaderboard = board;
+});
 
 
 /********** BUTTON / MOUSE EVENTS **********/

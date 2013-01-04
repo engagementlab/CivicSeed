@@ -209,7 +209,7 @@ exports.actions = function(req, res, ss) {
 												found = false,
 												newGuy = {
 													name: info.name,
-													count: info.dropped
+													count: info.dropped + bombed.length
 												};
 
 											//if new guy exists, update him
@@ -240,11 +240,13 @@ exports.actions = function(req, res, ss) {
 											result.set('leaderboard', oldBoard);
 											result.save();
 											
+											ss.publish.all('ss-leaderChange', oldBoard);
 											//send out new percent if it has changed
 											if(oldPercent !== newPercent) {
-												ss.publish.all('ss-progressChange', newCount, oldBoard);
+												ss.publish.all('ss-progressChange', newCount);
 											}
 										}
+										res(bombed.length);
 									});
 
 
