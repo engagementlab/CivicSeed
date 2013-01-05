@@ -23,9 +23,9 @@
   },
   "dependencies": {
     "socketstream": ">= 0.3.2",
-    "ss-stylus": ">= 0.1.5",
+    "ss-stylus": "https://github.com/americanyak/ss-stylus/tarball/master",
     "ss-hogan": ">= 0.1.3",
-    "ss-engine.io": ">= 0.0.9",
+    "ss-engine.io": ">= 0.1.0",
     "consolidate": ">= 0.3.0",
     "express": ">= 3.0.0rc4",
     "express-messages": ">= 0.0.2",
