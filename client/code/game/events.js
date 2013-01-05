@@ -133,7 +133,7 @@ $('.gameboard').click(function(m) {
 			y: m.pageY,
 			offX: this.offsetLeft,
 			offY: this.offsetTop,
-			debug: false
+			debug: true
 		};
 			$game.$mouse.updateMouse(mInfo,true);
 	}
@@ -246,11 +246,12 @@ $('.progress').bind('click', function() {
 		$game.showProgress();
 	}
 });
-$(window).bind('keydown',function(e) {
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
-		$game.$mouse.updateKey(e.which);
-	}
-});
-$(window).bind('keyup',function(e) {
-	$game.$player.keyWalking = false;
-});
+
+// $(window).bind('keydown',function(e) {
+// 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+// 		$game.$mouse.updateKey(e.which);
+// 	}
+// });
+// $(window).bind('keyup',function(e) {
+// 	$game.$player.keyWalking = false;
+// });
