@@ -371,6 +371,8 @@ $game.$gnome = {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
 					$game.$player.inventoryShowing = false;
+					//set the inventory items to draggable in case they were off
+					$('.inventoryItem').attr('draggable','true');
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
@@ -444,6 +446,7 @@ $game.$gnome = {
 		if(_currentSlide === 0) {
 			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
+			numRight = 0,
 			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
 			message = '';
 
@@ -457,38 +460,42 @@ $game.$gnome = {
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
 					
-					t = aLength - 1;
+					t = aLength;
 
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
-
+					
 					while(--t > -1) {
 						var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+						
 						if(answer.id === tanId) {
 							//this is a distance check if we don't do snapping
-							var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
-							console.log(dist);
-							if(dist < 10) {
-								console.log('winna');
-							}
-							else {
-								console.log('close');
-								correct = false;
-								message = 'right piece, wrong place.';
-								continue;
-							}
-
-							// //this is a hard check for snapping
-							// if(transX === answer.x && transY === answer.y) {
-							//console.log('winna');
+							
+							// var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+							// console.log('dist: ' + dist);
+							// if(dist < 10) {
+							// 	//console.log('winna');
 							// }
 							// else {
-							//console.log('losa');
+							// 	//console.log('close');
+							// 	correct = false;
+							// 	message = 'at least one piece is misplaced';
+							// 	continue;
 							// }
+
+							//this is a hard check for snapping
+							if(transX === answer.x && transY === answer.y) {
+								numRight += 1;
+							}
+							else {
+								correct = false;
+								message = 'at least one piece is misplaced';
+								continue;
+							}
 						}
 						else {
-							console.log('wrong pieces bruh.');
-							message = 'wrong pieces bruh.';
+							//console.log('wrong pieces bruh.');
+							message = 'at least one piece should not be here';
 							correct = false;
 							continue;
 						}
@@ -502,25 +509,28 @@ $game.$gnome = {
 				message = 'at least TRY to solve it...geesh';
 			}
 
-			correct = true;
 			if(correct) {
-				_currentSlide = 1;
-				$game.$gnome.addContent();
-				$game.$gnome.addButtons();
-				//display item and congrats.
-				//-> next slide is the prompt to answer question
+				//it is correct if none were WRONG
+				//make sure ALL were on the board
+				if(numRight === aLength) {
+					_currentSlide = 1;
+					$game.$gnome.addContent();
+					$game.$gnome.addButtons();
+					//display item and congrats.
+					//-> next slide is the prompt to answer question
 
-				//remove all items from inventory on slide up
-				//remove them from puzzle surface
-				$('.puzzleSvg').empty();
-				$('.tangramArea').hide();
-				//remove them from player's inventory
-				$game.$player.emptyInventory();
-				$game.$player.game.seeds.riddle += 3;
+					//remove all items from inventory on slide up
+					//remove them from puzzle surface
+					$('.puzzleSvg').empty();
+					$('.tangramArea').hide();
+					//remove them from player's inventory
+					$game.$player.emptyInventory();
+					$game.$player.game.seeds.riddle += 3;
+				}
 			}
 			else {
-				$game.$gnome.feedback(message);
 				//display modal on current screen with feedback
+				$game.$gnome.feedback(message);
 			}
 
 		}
@@ -585,7 +595,9 @@ $game.$gnome = {
 
 			//access with shape.path
 
-		$('.r' + npc).css('opacity','.4');
+		$('.r' + npc)
+			.css('opacity','.4')
+			.attr('draggable', 'false');
 		
 		_new = _svg.append('path')
 			.attr('class',selector)
@@ -646,7 +658,9 @@ $game.$gnome = {
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
-			$('.r' + d.id).css('opacity', 1);
+			$('.r' + d.id)
+				.css('opacity', 1)
+				.attr('draggable', 'true');
 			$('.trash').css('opacity',0.5);
 		}
 		else {

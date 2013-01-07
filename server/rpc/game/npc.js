@@ -71,7 +71,10 @@ var self = exports.actions = function(req, res, ss) {
 				}
 				else {
 					resource.playerAnswers.push(data);
-					resource.save();
+					resource.save(function() {
+						//blast players with new player answers
+						ss.publish.all('ss-addPlayerAnswer', data, id);
+					});
 				}
 			});
 		}

@@ -58,6 +58,7 @@ $game.$resources = {
 		//if they already got it right, then don't have answer form, but show answer
 		if(num === 2) {
 			_revisiting = true;
+			_correctAnswer = false;
 		}
 
 		$('.speechBubble').slideUp(function() {
@@ -83,12 +84,16 @@ $game.$resources = {
 		
 		if(_answered) {
 			if(_currentSlide === _numSlides + 1) {
-				$('.resourceArea .nextButton').removeClass('hideButton');
+				if(_correctAnswer) {
+					$('.resourceArea .nextButton').removeClass('hideButton');
+				}
+				else {
+					$('.resourceArea .closeButton').removeClass('hideButton');
+				}
 			}
 			else {
-				$('.resourceArea .closeButton').removeClass('hideButton');	
+				$('.resourceArea .closeButton').removeClass('hideButton');
 			}
-			
 		}
 		else {
 			//if its the first page, we DEF. have a next and no back
@@ -115,7 +120,6 @@ $game.$resources = {
 	},
 
 	addContent: function() {
-
 		//if they answered the question...
 		if(_answered) {
 		
@@ -129,11 +133,12 @@ $game.$resources = {
 					$('.resourceArea .message').text(_speak);
 					//show image on screen
 					//get path from db, make svg with that
-					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,200)"</path></svg>';
+					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,100)"</path></svg>';
 					$('.resourceContent').html(newSvg);
 				}
 				//the next slide will show them recent answers
 				else {
+					$('.resourceContent').empty();
 					$game.$resources.showRecentAnswers();
 				}
 			
@@ -148,7 +153,6 @@ $game.$resources = {
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				
 				var finalQuestion = '<p>' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
@@ -173,9 +177,15 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		var recentAnswers = _curResource.playerAnswers,
 			numAnswers = recentAnswers.length,
-			displayAnswers;
+			displayAnswers,
+			finalQuestion = '<p>' + _curResource.question + '</p>';
 		if(numAnswers === 0) {
 			_speak = 'Congrats! You were the first to answer.';
+			finalQuestion = '';
+		}
+		else if(numAnswers === 1 && recentAnswers[0].name === $game.$player.name) {
+			_speak = 'Congrats! You were the first to answer.';
+			finalQuestion = '';
 		}
 		else {
 			_speak = 'Here are some recent answers by your peers: ';
@@ -193,7 +203,7 @@ $game.$resources = {
 		}
 		$('.resourceArea .speakerName').text(_who);
 		$('.resourceArea .message').text(_speak);
-		$('.resourceContent').html(displayAnswers);
+		$('.resourceContent').html(finalQuestion + displayAnswers);
 	},
 
 	hideResource: function() {
@@ -264,6 +274,12 @@ $game.$resources = {
 	getShape: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].shape;
+	},
+
+	addAnswer: function(data, id) {
+		var stringId = String(id);
+		_curResource = _resources[stringId];
+		_curResource.playerAnswers.push(data);
 	}
 
 

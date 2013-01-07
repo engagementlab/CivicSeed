@@ -70,6 +70,10 @@ ss.event.on('ss-leaderChange', function(board) {
 	$game.leaderboard = board;
 });
 
+ss.event.on('ss-addPlayerAnswer', function(data, id) {
+	$game.$resources.addAnswer(data,id);
+});
+
 
 /********** BUTTON / MOUSE EVENTS **********/
 
