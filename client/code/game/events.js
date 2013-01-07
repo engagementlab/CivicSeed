@@ -131,7 +131,7 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat && !$game.showingProgress){
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
@@ -233,6 +233,14 @@ $('.gnomeArea .backButton').bind('click', (function () {
 $('.gnomeArea .answerButton').bind('click', (function (e) {
 	e.preventDefault();
 	$game.$gnome.submitAnswer();
+	return false;
+}));
+
+$('.progressArea a i').bind('click', (function (e) {
+	e.preventDefault();
+	$('.progressArea').slideUp(function() {
+		$game.showingProgress = false;
+	});
 	return false;
 }));
 

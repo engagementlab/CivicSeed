@@ -11,7 +11,8 @@
 	_new = null,
 	_counter = 0,
 	_dragOffX = 0,
-	_dragOffY = 0;
+	_dragOffY = 0,
+	_feedbackTimeout = null;
 
 $game.$gnome = {
 
@@ -142,6 +143,7 @@ $game.$gnome = {
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
+				console.log(_messages);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -167,6 +169,10 @@ $game.$gnome = {
 			//if they have gathered the right resources, prompt to answer 
 			else if($game.$player.game.gnomeState === 3) {
 				$game.$gnome.showPrompt(1);
+			}
+			//they have solved the tangram but not answered the portfolio question
+			else if($game.$player.game.gnomeState === 4) {
+				$game.$gnome.showRiddle(2);
 			}
 		
 		}
@@ -272,8 +278,15 @@ $game.$gnome = {
 
 	showRiddle: function(num) {
 		//if they are solving, change functionality of inventory
-		_promptNum = num;
-		_currentSlide = 0;
+		if(num === 2) {
+			_promptNum = 1;
+			_currentSlide = 2;
+			$game.$gnome.isChat = true;
+		}
+		else {
+			_promptNum = num;
+			_currentSlide = 0;	
+		}
 		$game.$gnome.addContent();
 		$game.$gnome.addButtons();
 		
@@ -285,7 +298,9 @@ $game.$gnome = {
 
 			$('.gnomeArea').slideDown(function() {
 				$game.$gnome.isShowing = true;
-				$('.tangramArea').show();
+				if(_currentSlide !== 2) {
+					$('.tangramArea').show();	
+				}
 			});
 		});
 		
@@ -421,7 +436,7 @@ $game.$gnome = {
 
 			//if they just beat a level, then show progreess
 			if($game.$player.game.gnomeState === 0) {
-				$('.progressArea').slideToggle();
+				$game.showProgress();
 			}
 		});
 
@@ -448,7 +463,9 @@ $game.$gnome = {
 			correct = true,
 			numRight = 0,
 			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
-			message = '';
+			message = '',
+			wrongOne = false,
+			nudge = false;
 
 			allTangrams.each(function(i, d) {
 				//pull the coordinates for each tangram
@@ -460,53 +477,63 @@ $game.$gnome = {
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
 					
-					t = aLength;
+					t = aLength,
+					found = false;
 
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
 					
-					while(--t > -1) {
-						var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+				while(--t > -1) {
+					var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+					if(answer.id === tanId) {
+						found = true;
+						//this is a distance check if we don't do snapping
 						
-						if(answer.id === tanId) {
-							//this is a distance check if we don't do snapping
-							
-							// var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
-							// console.log('dist: ' + dist);
-							// if(dist < 10) {
-							// 	//console.log('winna');
-							// }
-							// else {
-							// 	//console.log('close');
-							// 	correct = false;
-							// 	message = 'at least one piece is misplaced';
-							// 	continue;
-							// }
+						// var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+						// console.log('dist: ' + dist);
+						// if(dist < 10) {
+						// 	//console.log('winna');
+						// }
+						// else {
+						// 	//console.log('close');
+						// 	correct = false;
+						// 	message = 'at least one piece is misplaced';
+						// 	continue;
+						// }
 
-							//this is a hard check for snapping
-							if(transX === answer.x && transY === answer.y) {
-								numRight += 1;
-							}
-							else {
-								correct = false;
-								message = 'at least one piece is misplaced';
-								continue;
-							}
+						//this is a hard check for snapping
+						if(transX === answer.x && transY === answer.y) {
+							numRight += 1;
 						}
 						else {
-							//console.log('wrong pieces bruh.');
-							message = 'at least one piece should not be here';
 							correct = false;
-							continue;
 						}
 					}
-					//correct = true
-			});
+				}
 
+				if(!found) {
+					wrongOne = true;
+					correct = false;
+				}
+				else if(found && !correct) {
+					nudge = true;
+					correct = false;
+				}
+			});
 
 			if(allTangrams.length === 0) {
 				correct = false;
-				message = 'at least TRY to solve it...geesh';
+				message = 'at least TRY to solve it...';
+			}
+			else if(allTangrams.length < aLength) {
+				correct= false;
+				message = 'you are missing some';
+			}
+			else if(wrongOne) {
+				message = 'at least one is incorrect';
+			}
+			else if(nudge) {
+				message = 'try giving them a nudge';
 			}
 
 			if(correct) {
@@ -526,6 +553,9 @@ $game.$gnome = {
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
 					$game.$player.game.seeds.riddle += 3;
+					//update HUD 
+					$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+					$game.$player.game.gnomeState = 4;
 				}
 			}
 			else {
@@ -540,6 +570,7 @@ $game.$gnome = {
 			//upload the user's answer to the DB
 			var portAnswer = $('.gnomeContent input').val();
 			$game.$player.game.resume.push(portAnswer);
+			$game.changeStatus('talk to the gnome');
 		}
 		
 	},
@@ -618,6 +649,9 @@ $game.$gnome = {
 	},
 
 	dragMoveStart: function(d) {
+		clearTimeout(_feedbackTimeout);
+		$('.feedback').fadeOut('fast');
+
 		_dragOffX = d3.mouse(this)[0],
 		_dragOffY = d3.mouse(this)[1],
 	
@@ -693,7 +727,7 @@ $game.$gnome = {
 			.text(message)
 			.fadeIn();
 
-		setTimeout(function() {
+		_feedbackTimeout = setTimeout(function() {
 			$('.feedback').fadeOut();
 		},3500);
 	}

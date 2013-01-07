@@ -572,12 +572,17 @@ exports.$game = {
 				});
 		});
 	},
-	changeStatus: function() {
-		if($game.$player.seedMode > 0) {
-			$('.displayBoxText').text('click a tile to drop a seed');
+	changeStatus: function(custom) {
+		if(custom) {
+			$('.displayBoxText').text(custom);
 		}
 		else {
-			$('.displayBoxText').text('the ' + $game.currentArea);
+			if($game.$player.seedMode > 0) {
+				$('.displayBoxText').text('click a tile to drop a seed');
+			}
+			else {
+				$('.displayBoxText').text('the ' + $game.currentArea);
+			}	
 		}
 	}
 };
