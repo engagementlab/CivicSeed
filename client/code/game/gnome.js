@@ -632,9 +632,11 @@ $game.$gnome = {
 		
 		_new = _svg.append('path')
 			.attr('class',selector)
-			.data([{x:x , y: y, id: npc}])
+			.data([{x:x , y: y, id: npc, color: shape.fill}])
 			.attr('d', shape.path)
-			.attr('fill', 'rgb(180,200,230)')
+			.attr('fill', shape.fill)
+			.attr('stroke', 'rgb(255,255,255)')
+			.attr('stroke-width', 0)
 			.attr('transform', 'translate('+x+','+y+')')
 			.call(_drag);
 
@@ -656,7 +658,7 @@ $game.$gnome = {
 		_dragOffY = d3.mouse(this)[1],
 	
 		d3.select('.br' + d.id)
-			.attr('fill','#fff');
+			.attr('stroke-width', 3);
 	},
 
 	dragMove: function(d) {
@@ -668,18 +670,15 @@ $game.$gnome = {
 			mY = y - _dragOffY;
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
-			col = 'rgba(255,0,0,.3)';
 			$('.trash').css('opacity',1);
 		}
 		else {
-			col = '#fff';
 			$('.trash').css('opacity',0.5);
 		}
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 		
 		d3.select('.br' + d.id)
-			.attr('fill', col)
 			.attr('transform',trans);
 
 	},
@@ -689,6 +688,7 @@ $game.$gnome = {
 			mX = $game.$gnome.snapTo(x - _dragOffX),
 			mY = $game.$gnome.snapTo(y - _dragOffY),
 			trans = 'translate(' + mX  + ', ' + mY + ')';
+			//shape = $game.$resources.getShape(npc);
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
@@ -699,7 +699,7 @@ $game.$gnome = {
 		}
 		else {
 			d3.select('.br' + d.id)
-			.attr('fill','#99aadd')
+			.attr('stroke-width',0)
 			.attr('transform',trans);
 		}
 		

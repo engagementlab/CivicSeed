@@ -530,9 +530,12 @@ $game.$player = {
 				dropped: $game.$player.game.seeds.dropped
 			};
 
-			ss.rpc('game.player.dropSeed', bombed, info, function(num) {
+
+			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
 				//increase the drop count for the player
-			$game.$player.game.seeds.dropped += num;
+				if(result > 0) {
+					$game.$player.game.seeds.dropped += 1;
+				}
 			});
 			
 			//update seed count in HUD

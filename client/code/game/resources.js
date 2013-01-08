@@ -30,7 +30,8 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
-		$game.$resources.loadResource(false, e.data.npc, true);
+		var nombre = $game.$npc.getName(e.data.npc);
+		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
 		$game.$resources.isShowing = true;
 		
@@ -120,6 +121,8 @@ $game.$resources = {
 	},
 
 	addContent: function() {
+		$('.resourceArea .speakerName').empty();
+		$('.resourceArea .message').empty();
 		//if they answered the question...
 		if(_answered) {
 		
@@ -129,11 +132,11 @@ $game.$resources = {
 				//first, congrats and show them the tangram piece
 				if(_currentSlide === _numSlides + 1) {
 					_speak = _curResource.responses[0];
-					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .speakerName').text(_who + ': ');
 					$('.resourceArea .message').text(_speak);
 					//show image on screen
 					//get path from db, make svg with that
-					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,100)"</path></svg>';
+					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
 					$('.resourceContent').html(newSvg);
 				}
 				//the next slide will show them recent answers
@@ -145,7 +148,7 @@ $game.$resources = {
 			}
 			else {
 				_speak = _curResource.responses[1];
-				$('.resourceArea .speakerName').text(_who);
+				$('.resourceArea .speakerName').text(_who + ': ');
 				$('.resourceArea .message').text(_speak);
 				$('.resourceContent').empty();
 			}
@@ -160,7 +163,7 @@ $game.$resources = {
 				}
 				else {
 					_speak = _curResource.prompt;
-					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .speakerName').text(_who + ': ');
 					$('.resourceArea .message').text(_speak);
 					var inputBox = '<form><input></input></form>';
 					$('.resourceContent').html(finalQuestion + inputBox);
@@ -201,7 +204,7 @@ $game.$resources = {
 
 			displayAnswers += '</ul>';
 		}
-		$('.resourceArea .speakerName').text(_who);
+		$('.resourceArea .speakerName').text(_who + ': ');
 		$('.resourceArea .message').text(_speak);
 		$('.resourceContent').html(finalQuestion + displayAnswers);
 	},

@@ -200,19 +200,25 @@ exports.actions = function(req, res, ss) {
 											//add tile count to our progress
 											var oldCount = result.tilesColored,
 												newCount = oldCount + bombed.length;
-												oldPercent = Math.floor((oldCount / 18744) * 100),
-												newPercent = Math.floor((newCount / 18744) * 100);
+												oldPercent = Math.floor((oldCount / 3200) * 100),
+												newPercent = Math.floor((newCount / 3200) * 100);
 
 											//update leadeboard
 											var oldBoard = result.leaderboard,
+												gState = result.state,
 												i = oldBoard.length,
 												found = false,
+												leader = false,
+												newNameForStatus = false,
 												newGuy = {
 													name: info.name,
 													count: info.dropped + bombed.length
 												};
 
 											//if new guy exists, update him
+											if(i > 0) {
+												leader = oldBoard[i].name;
+											}
 											while(--i > -1) {
 												if(oldBoard[i].name === newGuy.name) {
 													oldBoard[i].count = newGuy.count;
@@ -223,6 +229,7 @@ exports.actions = function(req, res, ss) {
 											//add new guy
 											if(!found) {
 												oldBoard.push(newGuy);
+												newNameForStatus = newGuy.name;
 											}
 
 											//sort them
@@ -235,16 +242,25 @@ exports.actions = function(req, res, ss) {
 												oldBoard.pop();
 											}
 
+											if(newPercent > 99) {
+												result.set('state', 2);
+											}
+
 											//save all changes
 											result.set('tilesColored', newCount);
 											result.set('leaderboard', oldBoard);
 											result.save();
 											
-											ss.publish.all('ss-leaderChange', oldBoard);
+											
+											//check if the leaderboard changed
+											if(!found || leader !== oldBoard[0].name) {
+												ss.publish.all('ss-leaderChange', oldBoard, newNameForStatus);
+											}
 											//send out new percent if it has changed
 											if(oldPercent !== newPercent) {
 												ss.publish.all('ss-progressChange', newCount);
 											}
+
 										}
 										res(bombed.length);
 									});

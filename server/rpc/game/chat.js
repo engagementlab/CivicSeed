@@ -23,7 +23,7 @@ exports.actions = function(req, res, ss) {
 				var logChat = {
 					who: data.name,
 					id: data.id,
-					what: data.msg,
+					what: data.log,
 					when: Date.now()
 				};
 				chatModel.create(logChat, function(err, suc) {

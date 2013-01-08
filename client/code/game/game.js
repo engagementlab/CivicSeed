@@ -57,11 +57,13 @@ exports.$game = {
 
 	levelQuestion: null,
 	tilesColored: 0,
+	tilesColoredGoal: 0,
 	leaderboard: null,
 	percent: 0,
 	percentString: null,
 	numPlayers: 0,
 	currentArea: 'botanist\'s garden',
+	badWords: ['fuck','shit', 'bitch', 'cunt', 'ass', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
 
 	init: function() {
 		
@@ -105,12 +107,14 @@ exports.$game = {
 		//get gnomes local coords to place him
 		$game.$gnome.getMaster();
 
+		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			console.log(response);
 			$game.levelQuestion = response.levelQuestion;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
-			$game.percent = Math.floor(($game.tilesColored / 18744) * 100);
+			$game.tilesColoredGoal = response.tilesColoredGoal;
+			$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
 			$game.percentString = $game.percent + '%';
 			$('.hudBar').css('width', $game.percentString);
 		});
@@ -582,8 +586,20 @@ exports.$game = {
 			}
 			else {
 				$('.displayBoxText').text('the ' + $game.currentArea);
-			}	
+			}
 		}
+	},
+
+	checkPotty: function(msg) {
+		var temp = msg.toLowerCase();
+			
+		for(var i = 0; i < $game.badWords.length; i++) {
+			if(temp.indexOf($game.badWords[i]) > -1) {
+				return 'I have a potty mouth and I am sorry for cussing.';
+			}
+		}
+		return msg;
+		
 	}
 };
 

@@ -61,13 +61,28 @@ ss.event.on('ss-newMessage', function(message, id) {
 
 ss.event.on('ss-progressChange', function(num) {
 	$game.tilesColored = num;
-	$game.percent = Math.floor(($game.tilesColored / 18744) * 100);
+	$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
 	$game.percentString = $game.percent + '%';
 	$('.hudBar').css('width', $game.percentString);
+
+	//if we have gone up a milestone, feedback it
+	if($game.percent > 99) {
+		//do something for game over?
+		$game.statusUpdate('the color has been restored!');
+	}
+	else if($game.percent % 5 === 0) {
+		$game.statusUpdate('the world is now ' + $game.percentString + ' colored!');
+	}
 });
 
-ss.event.on('ss-leaderChange', function(board) {
+ss.event.on('ss-leaderChange', function(board, newOne) {
 	$game.leaderboard = board;
+	if(newOne) {
+		$game.statusUpdate(newOne + ' is now a top seeder.');
+	}
+	else {
+		$game.statusUpdate(board[0].name + ' is top dog!');
+	}
 });
 
 ss.event.on('ss-addPlayerAnswer', function(data, id) {
@@ -137,7 +152,7 @@ $('.gameboard').click(function(m) {
 			y: m.pageY,
 			offX: this.offsetLeft,
 			offY: this.offsetTop,
-			debug: true
+			debug: false
 		};
 			$game.$mouse.updateMouse(mInfo,true);
 	}
@@ -147,10 +162,12 @@ $('.gameboard').click(function(m) {
 $('#chatButton').click(function(e) {
 	e.preventDefault();
 	if(!$game.$npc.isResource && !$game.inTransit && !$game.$player.isMoving) {
+		var sentence = $('#chatText').val();
 		var data = {
-			msg: $('#chatText').val(),
+			msg: $game.checkPotty(sentence),
 			who: $game.$player.name,
-			id: $game.$player.id
+			id: $game.$player.id,
+			log: sentence
 		};
 		ss.rpc('game.chat.sendMessage', data);
 		$('#chatText').val('');
