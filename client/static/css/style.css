@@ -5272,6 +5272,13 @@ a.badge:hover {
   margin: 15px 0 15px 40px;
   width: 40%;
 }
+.waitingForSeed {
+  width: 32px;
+  height: 32px;
+  z-index: 99999;
+  position: absolute;
+  display: none;
+}
 body {
   padding-top: 80px;
 }
