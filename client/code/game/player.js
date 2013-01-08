@@ -540,8 +540,8 @@ $game.$player = {
 				//increase the drop count for the player
 				if(result > 0) {
 					$game.$player.game.seeds.dropped += bombed.length;
-					$('.waitingForSeed').fadeOut();
 				}
+				$('.waitingForSeed').fadeOut();
 			});
 			
 			//update seed count in HUD
