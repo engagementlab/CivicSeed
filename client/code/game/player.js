@@ -534,7 +534,7 @@ $game.$player = {
 			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
 				//increase the drop count for the player
 				if(result > 0) {
-					$game.$player.game.seeds.dropped += 1;
+					$game.$player.game.seeds.dropped += bombed.length;
 				}
 			});
 			

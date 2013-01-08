@@ -39,7 +39,7 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 });
 //all this breakdown will be on the server side, not client side,
 //but we will pass the tiles info
-ss.event.on('ss-seedDropped', function(bombed, id, name) {
+ss.event.on('ss-seedDropped', function(bombed, id) {
 	$game.$map.newBomb(bombed, id);
 	if(id === $game.$player.id) {
 		$game.$player.awaitingBomb = false;
@@ -76,11 +76,15 @@ ss.event.on('ss-progressChange', function(num) {
 });
 
 ss.event.on('ss-leaderChange', function(board, newOne) {
+	
+	if($game.leaderboard.length > 0) {
+		var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;	
+	}
 	$game.leaderboard = board;
 	if(newOne) {
 		$game.statusUpdate(newOne + ' is now a top seeder.');
 	}
-	else {
+	else if(leaderChange) {
 		$game.statusUpdate(board[0].name + ' is top dog!');
 	}
 });
