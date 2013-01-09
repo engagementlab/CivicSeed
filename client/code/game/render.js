@@ -135,6 +135,7 @@ $game.$renderer = {
 		$game.$player.clear();
 		$game.$npc.clear();
 		$game.$gnome.clear();
+		$game.$thing.clear();
 
 		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
@@ -158,6 +159,9 @@ $game.$renderer = {
 				else if(all[a].kind === 'gnome') {
 					$game.$renderer.renderGnome(all[a]);
 				}
+				else if(all[a].kind === 'thing') {
+					$game.$renderer.renderThing(all[a]);
+				}
 				else {
 					$game.$renderer.renderPlayer(all[a]);
 				}
@@ -172,13 +176,17 @@ $game.$renderer = {
 			order = [playerInfo],
 			order2 = $game.$others.getRenderInfo(),
 			order3 = $game.$npc.getRenderInfo(),
-			gnomeInfo = $game.$gnome.getRenderInfo();
+			gnomeInfo = $game.$gnome.getRenderInfo(),
+			thingInfo = $game.$thing.getRenderInfo();
 			
 
 		var finalOrder = order.concat(order2, order3);
 		
 		if(gnomeInfo) {
 			finalOrder.push(gnomeInfo);
+		}
+		if(thingInfo) {
+			finalOrder.push(thingInfo);
 		}
 
 		finalOrder.sort(function(a, b){
@@ -232,8 +240,6 @@ $game.$renderer = {
 		if(foreIndex > -1 || foreIndex2 > -1) {
 			$game.$renderer.drawForegroundTile(foreData);
 		}
-
-
 	},
 
 	clearMapTile: function(x, y) {
@@ -561,6 +567,15 @@ $game.$renderer = {
 		);
 	},
 
+	clearThing: function(info) {
+		_charactersContext.clearRect(
+			info.prevX,
+			info.prevY - $game.TILE_SIZE * 4,
+			$game.TILE_SIZE * 6,
+			$game.TILE_SIZE * 5
+		);
+	},
+
 	renderGnome: function(info) {
 		_charactersContext.drawImage(
 			_tilesheets[2],
@@ -572,6 +587,20 @@ $game.$renderer = {
 			info.curY - $game.TILE_SIZE * 4,
 			$game.TILE_SIZE * 6,
 			$game.TILE_SIZE * 5
+		);
+	},
+
+	renderThing: function(info) {
+		_charactersContext.drawImage(
+			_tilesheets[1],
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE * 3,
+			$game.TILE_SIZE * 2,
+			info.curX,
+			info.curY - $game.TILE_SIZE * 1,
+			$game.TILE_SIZE * 3,
+			$game.TILE_SIZE * 2
 		);
 	},
 

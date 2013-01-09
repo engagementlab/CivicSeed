@@ -20,6 +20,10 @@ ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
 	$('.activePlayers p').text(num);
+	if(player.name !== $game.$player.name) {
+		$game.statusUpdate(player.name + ' has joined!');
+	}
+	
 });
 
 ss.event.on('ss-removePlayer', function(num, playerId) {

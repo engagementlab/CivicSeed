@@ -45,7 +45,6 @@ $game.$player = {
 		//initialize DB and let all players know there is a new active one
 		ss.rpc('game.player.init', function(newInfo) {
 			
-			$game.$others.init();
 			_info = {
 				srcX: 0,
 				srcY: 0,
@@ -70,6 +69,10 @@ $game.$player = {
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
 			$game.$player.game = newInfo.game;
+
+			//init everything else that depends on the player info
+			$game.$others.init();
+			$game.$thing.init();
 
 			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
 			$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
