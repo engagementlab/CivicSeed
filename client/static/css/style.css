@@ -5279,6 +5279,9 @@ a.badge:hover {
   position: absolute;
   display: none;
 }
+.centerImage {
+  margin-left: 85px;
+}
 body {
   padding-top: 80px;
 }

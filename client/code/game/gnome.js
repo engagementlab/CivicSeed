@@ -667,20 +667,25 @@ $game.$gnome = {
 			// mX = $game.$gnome.snapTo(x - _dragOffX),
 			// mY = $game.$gnome.snapTo(y - _dragOffY);
 			mX = x - _dragOffX,
-			mY = y - _dragOffY;
+			mY = y - _dragOffY,
+			trashing = false;
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.trash').css('opacity',1);
+			trashing = true;
 		}
 		else {
 			$('.trash').css('opacity',0.5);
+			trashing = false;
 		}
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 		
 		d3.select('.br' + d.id)
-			.attr('transform',trans);
-
+			.attr('transform',trans)
+			.attr('opacity', function() {
+				return trashing ? .5 : 1;
+			});
 	},
 	dropMove: function(d) {
 		var x = d3.event.sourceEvent.offsetX,

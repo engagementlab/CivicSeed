@@ -136,8 +136,10 @@ $game.$resources = {
 					$('.resourceArea .message').text(_speak);
 					//show image on screen
 					//get path from db, make svg with that
-					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
-					$('.resourceContent').html(newSvg);
+					//var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
+					//$('.resourceContent').html(newSvg);
+					newImg = '<img src="/img/game/resources/r' + _curResource.id + '.png" class="centerImage">';
+					$('.resourceContent').html(newImg);
 				}
 				//the next slide will show them recent answers
 				else {
