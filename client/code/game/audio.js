@@ -156,7 +156,7 @@ $game.$audio = {
 			//no man/s land
 			else {
 				trackRegion = 4;
-				$game.currentArea = 'land of nothingness';
+				$game.currentArea = 'welcome to...';
 			}
 			if (absX < absY) {
 				closest = absX;

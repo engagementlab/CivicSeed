@@ -530,9 +530,18 @@ $game.$player = {
 				dropped: $game.$player.game.seeds.dropped
 			};
 
-			ss.rpc('game.player.dropSeed', bombed, info, function(num) {
+			var loc = $game.masterToLocal(options.mX,options.mY);
+			console.log(loc);
+			$('.waitingForSeed').css({
+				top: loc.y * 32,
+				left: loc.x * 32
+			}).show();
+			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
 				//increase the drop count for the player
-			$game.$player.game.seeds.dropped += num;
+				if(result > 0) {
+					$game.$player.game.seeds.dropped += bombed.length;
+				}
+				$('.waitingForSeed').fadeOut();
 			});
 			
 			//update seed count in HUD

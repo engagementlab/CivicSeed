@@ -3,11 +3,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 	var gameSchema = new Schema({
 		players: Number,
 		tilesColored: Number,
+		tilesColoredGoal: Number,
 		state: Number,
-		messages: [{
-			who: String,
-			what: String
-		}],
 		levelQuestion: [String],
 		leaderboard: [{
 			name: String,

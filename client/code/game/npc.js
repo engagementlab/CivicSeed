@@ -61,6 +61,11 @@ $game.$npc = {
 		return all;
 	},
 
+	getName: function(id) {
+		var stringId = String(id);
+		return _allNpcs[stringId].name;
+	},
+
 	createNpc: function(npc) {
 
 		var npcObject = {

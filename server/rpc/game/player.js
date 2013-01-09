@@ -189,7 +189,7 @@ exports.actions = function(req, res, ss) {
 								}
 								else {
 									//we are done,send out the color information to each client to render
-									ss.publish.all('ss-seedDropped', bombed, info.id, info.name);
+									ss.publish.all('ss-seedDropped', bombed, info.id);
 									
 									//access our global game model for status updates
 									gameModel.findOne({}, function (err, result) {
@@ -199,40 +199,58 @@ exports.actions = function(req, res, ss) {
 										else{
 											//add tile count to our progress
 											var oldCount = result.tilesColored,
-												newCount = oldCount + bombed.length;
-												oldPercent = Math.floor((oldCount / 18744) * 100),
-												newPercent = Math.floor((newCount / 18744) * 100);
+												newCount = oldCount + 1;
+												oldPercent = Math.floor((oldCount / 3200) * 100),
+												newPercent = Math.floor((newCount / 3200) * 100);
 
 											//update leadeboard
 											var oldBoard = result.leaderboard,
+												gState = result.state,
 												i = oldBoard.length,
 												found = false,
+												newNameForStatus = false,
+												updateBoard = false,
 												newGuy = {
 													name: info.name,
-													count: info.dropped + bombed.length
+													count: info.dropped + num
 												};
 
-											//if new guy exists, update him
-											while(--i > -1) {
-												if(oldBoard[i].name === newGuy.name) {
-													oldBoard[i].count = newGuy.count;
-													found = true;
-													continue;
+											if(i === 0) {
+												oldBoard.push(newGuy);
+												updateBoard = true;
+												newNameForStatus = newGuy.name;
+											}
+											else {
+												//if new guy exists, update him
+												while(--i > -1) {
+													if(oldBoard[i].name === newGuy.name) {
+														oldBoard[i].count = newGuy.count;
+														found = true;
+														updateBoard = true;
+														continue;
+													}
+												}
+												//add new guy
+												if(!found) {
+													if(oldBoard.length < 5 || newGuy.count > oldBoard[oldBoard.length-1]) {
+														oldBoard.push(newGuy);
+														newNameForStatus = newGuy.name;
+														updateBoard = true;
+													}
+												}
+												//sort them
+												oldBoard.sort(function(a, b){
+													return b.count-a.count;
+												});
+												
+												//get rid of the last one if too many
+												if(oldBoard.length > 5) {
+													oldBoard.pop();
 												}
 											}
-											//add new guy
-											if(!found) {
-												oldBoard.push(newGuy);
-											}
-
-											//sort them
-											oldBoard.sort(function(a, b){
-												return b.count-a.count;
-											});
 											
-											//get rid of the last one if too many
-											if(oldBoard.length > 5) {
-												oldBoard.pop();
+											if(newPercent > 99) {
+												result.set('state', 2);
 											}
 
 											//save all changes
@@ -240,11 +258,20 @@ exports.actions = function(req, res, ss) {
 											result.set('leaderboard', oldBoard);
 											result.save();
 											
-											ss.publish.all('ss-leaderChange', oldBoard);
+											
+											//check if the leaderboard changed
+
+											//if new guy > last
+											//if new guy already on
+											//if new leader
+											if(updateBoard) {
+												ss.publish.all('ss-leaderChange', oldBoard, newNameForStatus);
+											}
 											//send out new percent if it has changed
 											if(oldPercent !== newPercent) {
 												ss.publish.all('ss-progressChange', newCount);
 											}
+
 										}
 										res(bombed.length);
 									});

@@ -39,7 +39,7 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 });
 //all this breakdown will be on the server side, not client side,
 //but we will pass the tiles info
-ss.event.on('ss-seedDropped', function(bombed, id, name) {
+ss.event.on('ss-seedDropped', function(bombed, id) {
 	$game.$map.newBomb(bombed, id);
 	if(id === $game.$player.id) {
 		$game.$player.awaitingBomb = false;
@@ -61,13 +61,36 @@ ss.event.on('ss-newMessage', function(message, id) {
 
 ss.event.on('ss-progressChange', function(num) {
 	$game.tilesColored = num;
-	$game.percent = Math.floor(($game.tilesColored / 18744) * 100);
+	$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
 	$game.percentString = $game.percent + '%';
 	$('.hudBar').css('width', $game.percentString);
+
+	//if we have gone up a milestone, feedback it
+	if($game.percent > 99) {
+		//do something for game over?
+		$game.statusUpdate('the color has been restored!');
+	}
+	else if($game.percent % 5 === 0) {
+		$game.statusUpdate('the world is now ' + $game.percentString + ' colored!');
+	}
 });
 
-ss.event.on('ss-leaderChange', function(board) {
+ss.event.on('ss-leaderChange', function(board, newOne) {
+	
+	if($game.leaderboard.length > 0) {
+		var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;	
+	}
 	$game.leaderboard = board;
+	if(newOne) {
+		$game.statusUpdate(newOne + ' is now a top seeder.');
+	}
+	else if(leaderChange) {
+		$game.statusUpdate(board[0].name + ' is top dog!');
+	}
+});
+
+ss.event.on('ss-addPlayerAnswer', function(data, id) {
+	$game.$resources.addAnswer(data,id);
 });
 
 
@@ -127,7 +150,7 @@ $('.gameboard').mousemove(function(m) {
 //figure out if we shoupdatuld transition (or do other stuff later)
 $('.gameboard').click(function(m) {
 
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat && !$game.showingProgress){
 			var mInfo = {
 			x: m.pageX,
 			y: m.pageY,
@@ -143,10 +166,12 @@ $('.gameboard').click(function(m) {
 $('#chatButton').click(function(e) {
 	e.preventDefault();
 	if(!$game.$npc.isResource && !$game.inTransit && !$game.$player.isMoving) {
+		var sentence = $('#chatText').val();
 		var data = {
-			msg: $('#chatText').val(),
+			msg: $game.checkPotty(sentence),
 			who: $game.$player.name,
-			id: $game.$player.id
+			id: $game.$player.id,
+			log: sentence
 		};
 		ss.rpc('game.chat.sendMessage', data);
 		$('#chatText').val('');
@@ -232,6 +257,14 @@ $('.gnomeArea .answerButton').bind('click', (function (e) {
 	return false;
 }));
 
+$('.progressArea a i').bind('click', (function (e) {
+	e.preventDefault();
+	$('.progressArea').slideUp(function() {
+		$game.showingProgress = false;
+	});
+	return false;
+}));
+
 $('.activePlayers').click(function() {
 	$('#minimapPlayer').toggleClass('hide');
 });
@@ -246,11 +279,12 @@ $('.progress').bind('click', function() {
 		$game.showProgress();
 	}
 });
-$(window).bind('keydown',function(e) {
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
-		$game.$mouse.updateKey(e.which);
-	}
-});
-$(window).bind('keyup',function(e) {
-	$game.$player.keyWalking = false;
-});
+
+// $(window).bind('keydown',function(e) {
+// 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+// 		$game.$mouse.updateKey(e.which);
+// 	}
+// });
+// $(window).bind('keyup',function(e) {
+// 	$game.$player.keyWalking = false;
+// });

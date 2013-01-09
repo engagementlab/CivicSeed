@@ -11,7 +11,8 @@
 	_new = null,
 	_counter = 0,
 	_dragOffX = 0,
-	_dragOffY = 0;
+	_dragOffY = 0,
+	_feedbackTimeout = null;
 
 $game.$gnome = {
 
@@ -142,6 +143,7 @@ $game.$gnome = {
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
+				console.log(_messages);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -167,6 +169,10 @@ $game.$gnome = {
 			//if they have gathered the right resources, prompt to answer 
 			else if($game.$player.game.gnomeState === 3) {
 				$game.$gnome.showPrompt(1);
+			}
+			//they have solved the tangram but not answered the portfolio question
+			else if($game.$player.game.gnomeState === 4) {
+				$game.$gnome.showRiddle(2);
 			}
 		
 		}
@@ -272,8 +278,15 @@ $game.$gnome = {
 
 	showRiddle: function(num) {
 		//if they are solving, change functionality of inventory
-		_promptNum = num;
-		_currentSlide = 0;
+		if(num === 2) {
+			_promptNum = 1;
+			_currentSlide = 2;
+			$game.$gnome.isChat = true;
+		}
+		else {
+			_promptNum = num;
+			_currentSlide = 0;	
+		}
 		$game.$gnome.addContent();
 		$game.$gnome.addButtons();
 		
@@ -285,7 +298,9 @@ $game.$gnome = {
 
 			$('.gnomeArea').slideDown(function() {
 				$game.$gnome.isShowing = true;
-				$('.tangramArea').show();
+				if(_currentSlide !== 2) {
+					$('.tangramArea').show();	
+				}
 			});
 		});
 		
@@ -371,6 +386,8 @@ $game.$gnome = {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
 					$game.$player.inventoryShowing = false;
+					//set the inventory items to draggable in case they were off
+					$('.inventoryItem').attr('draggable','true');
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
@@ -419,7 +436,7 @@ $game.$gnome = {
 
 			//if they just beat a level, then show progreess
 			if($game.$player.game.gnomeState === 0) {
-				$('.progressArea').slideToggle();
+				$game.showProgress();
 			}
 		});
 
@@ -444,8 +461,11 @@ $game.$gnome = {
 		if(_currentSlide === 0) {
 			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
+			numRight = 0,
 			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
-			message = '';
+			message = '',
+			wrongOne = false,
+			nudge = false;
 
 			allTangrams.each(function(i, d) {
 				//pull the coordinates for each tangram
@@ -457,70 +477,90 @@ $game.$gnome = {
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
 					
-					t = aLength - 1;
+					t = aLength,
+					found = false;
 
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
+					
+				while(--t > -1) {
+					var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+					if(answer.id === tanId) {
+						found = true;
+						//this is a distance check if we don't do snapping
+						
+						// var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
+						// console.log('dist: ' + dist);
+						// if(dist < 10) {
+						// 	//console.log('winna');
+						// }
+						// else {
+						// 	//console.log('close');
+						// 	correct = false;
+						// 	message = 'at least one piece is misplaced';
+						// 	continue;
+						// }
 
-					while(--t > -1) {
-						var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
-						if(answer.id === tanId) {
-							//this is a distance check if we don't do snapping
-							var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
-							console.log(dist);
-							if(dist < 10) {
-								console.log('winna');
-							}
-							else {
-								console.log('close');
-								correct = false;
-								message = 'right piece, wrong place.';
-								continue;
-							}
-
-							// //this is a hard check for snapping
-							// if(transX === answer.x && transY === answer.y) {
-							//console.log('winna');
-							// }
-							// else {
-							//console.log('losa');
-							// }
+						//this is a hard check for snapping
+						if(transX === answer.x && transY === answer.y) {
+							numRight += 1;
 						}
 						else {
-							console.log('wrong pieces bruh.');
-							message = 'wrong pieces bruh.';
 							correct = false;
-							continue;
 						}
 					}
-					//correct = true
-			});
+				}
 
+				if(!found) {
+					wrongOne = true;
+					correct = false;
+				}
+				else if(found && !correct) {
+					nudge = true;
+					correct = false;
+				}
+			});
 
 			if(allTangrams.length === 0) {
 				correct = false;
-				message = 'at least TRY to solve it...geesh';
+				message = 'at least TRY to solve it...';
+			}
+			else if(allTangrams.length < aLength) {
+				correct= false;
+				message = 'you are missing some';
+			}
+			else if(wrongOne) {
+				message = 'at least one is incorrect';
+			}
+			else if(nudge) {
+				message = 'try giving them a nudge';
 			}
 
-			correct = true;
 			if(correct) {
-				_currentSlide = 1;
-				$game.$gnome.addContent();
-				$game.$gnome.addButtons();
-				//display item and congrats.
-				//-> next slide is the prompt to answer question
+				//it is correct if none were WRONG
+				//make sure ALL were on the board
+				if(numRight === aLength) {
+					_currentSlide = 1;
+					$game.$gnome.addContent();
+					$game.$gnome.addButtons();
+					//display item and congrats.
+					//-> next slide is the prompt to answer question
 
-				//remove all items from inventory on slide up
-				//remove them from puzzle surface
-				$('.puzzleSvg').empty();
-				$('.tangramArea').hide();
-				//remove them from player's inventory
-				$game.$player.emptyInventory();
-				$game.$player.game.seeds.riddle += 3;
+					//remove all items from inventory on slide up
+					//remove them from puzzle surface
+					$('.puzzleSvg').empty();
+					$('.tangramArea').hide();
+					//remove them from player's inventory
+					$game.$player.emptyInventory();
+					$game.$player.game.seeds.riddle += 3;
+					//update HUD 
+					$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+					$game.$player.game.gnomeState = 4;
+				}
 			}
 			else {
-				$game.$gnome.feedback(message);
 				//display modal on current screen with feedback
+				$game.$gnome.feedback(message);
 			}
 
 		}
@@ -530,6 +570,7 @@ $game.$gnome = {
 			//upload the user's answer to the DB
 			var portAnswer = $('.gnomeContent input').val();
 			$game.$player.game.resume.push(portAnswer);
+			$game.changeStatus('talk to the gnome');
 		}
 		
 	},
@@ -585,13 +626,17 @@ $game.$gnome = {
 
 			//access with shape.path
 
-		$('.r' + npc).css('opacity','.4');
+		$('.r' + npc)
+			.css('opacity','.4')
+			.attr('draggable', 'false');
 		
 		_new = _svg.append('path')
 			.attr('class',selector)
-			.data([{x:x , y: y, id: npc}])
+			.data([{x:x , y: y, id: npc, color: shape.fill}])
 			.attr('d', shape.path)
-			.attr('fill', 'rgb(180,200,230)')
+			.attr('fill', shape.fill)
+			.attr('stroke', 'rgb(255,255,255)')
+			.attr('stroke-width', 0)
 			.attr('transform', 'translate('+x+','+y+')')
 			.call(_drag);
 
@@ -606,11 +651,14 @@ $game.$gnome = {
 	},
 
 	dragMoveStart: function(d) {
+		clearTimeout(_feedbackTimeout);
+		$('.feedback').fadeOut('fast');
+
 		_dragOffX = d3.mouse(this)[0],
 		_dragOffY = d3.mouse(this)[1],
 	
 		d3.select('.br' + d.id)
-			.attr('fill','#fff');
+			.attr('stroke-width', 3);
 	},
 
 	dragMove: function(d) {
@@ -622,18 +670,15 @@ $game.$gnome = {
 			mY = y - _dragOffY;
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
-			col = 'rgba(255,0,0,.3)';
 			$('.trash').css('opacity',1);
 		}
 		else {
-			col = '#fff';
 			$('.trash').css('opacity',0.5);
 		}
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 		
 		d3.select('.br' + d.id)
-			.attr('fill', col)
 			.attr('transform',trans);
 
 	},
@@ -643,15 +688,18 @@ $game.$gnome = {
 			mX = $game.$gnome.snapTo(x - _dragOffX),
 			mY = $game.$gnome.snapTo(y - _dragOffY),
 			trans = 'translate(' + mX  + ', ' + mY + ')';
+			//shape = $game.$resources.getShape(npc);
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
-			$('.r' + d.id).css('opacity', 1);
+			$('.r' + d.id)
+				.css('opacity', 1)
+				.attr('draggable', 'true');
 			$('.trash').css('opacity',0.5);
 		}
 		else {
 			d3.select('.br' + d.id)
-			.attr('fill','#99aadd')
+			.attr('stroke-width',0)
 			.attr('transform',trans);
 		}
 		
@@ -679,7 +727,7 @@ $game.$gnome = {
 			.text(message)
 			.fadeIn();
 
-		setTimeout(function() {
+		_feedbackTimeout = setTimeout(function() {
 			$('.feedback').fadeOut();
 		},3500);
 	}

@@ -168,26 +168,23 @@ $game.$renderer = {
 	},
 
 	makeQueue: function(callback) {
-		var order = $game.$others.getRenderInfo(),
-			order2 = $game.$npc.getRenderInfo(),
+		var playerInfo = $game.$player.getRenderInfo(),
+			order = [playerInfo],
+			order2 = $game.$others.getRenderInfo(),
+			order3 = $game.$npc.getRenderInfo(),
 			gnomeInfo = $game.$gnome.getRenderInfo();
-			playerInfo = $game.$player.getRenderInfo();
+			
 
-		var l = order2.length;
-		while(--l > -1) {
-			order.push(order2[l]);
-		}
-
+		var finalOrder = order.concat(order2, order3);
+		
 		if(gnomeInfo) {
-			order.push(gnomeInfo);
+			finalOrder.push(gnomeInfo);
 		}
 
-		order.push(playerInfo);
-
-		order.sort(function(a, b){
+		finalOrder.sort(function(a, b){
 			return b.curY-a.curY;
 		});
-		callback(order);
+		callback(finalOrder);
 	},
 
 	renderTile: function(i, j) {

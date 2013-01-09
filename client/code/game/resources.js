@@ -30,7 +30,8 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
-		$game.$resources.loadResource(false, e.data.npc, true);
+		var nombre = $game.$npc.getName(e.data.npc);
+		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
 		$game.$resources.isShowing = true;
 		
@@ -58,6 +59,7 @@ $game.$resources = {
 		//if they already got it right, then don't have answer form, but show answer
 		if(num === 2) {
 			_revisiting = true;
+			_correctAnswer = false;
 		}
 
 		$('.speechBubble').slideUp(function() {
@@ -83,12 +85,16 @@ $game.$resources = {
 		
 		if(_answered) {
 			if(_currentSlide === _numSlides + 1) {
-				$('.resourceArea .nextButton').removeClass('hideButton');
+				if(_correctAnswer) {
+					$('.resourceArea .nextButton').removeClass('hideButton');
+				}
+				else {
+					$('.resourceArea .closeButton').removeClass('hideButton');
+				}
 			}
 			else {
-				$('.resourceArea .closeButton').removeClass('hideButton');	
+				$('.resourceArea .closeButton').removeClass('hideButton');
 			}
-			
 		}
 		else {
 			//if its the first page, we DEF. have a next and no back
@@ -115,7 +121,8 @@ $game.$resources = {
 	},
 
 	addContent: function() {
-
+		$('.resourceArea .speakerName').empty();
+		$('.resourceArea .message').empty();
 		//if they answered the question...
 		if(_answered) {
 		
@@ -125,22 +132,23 @@ $game.$resources = {
 				//first, congrats and show them the tangram piece
 				if(_currentSlide === _numSlides + 1) {
 					_speak = _curResource.responses[0];
-					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .speakerName').text(_who + ': ');
 					$('.resourceArea .message').text(_speak);
 					//show image on screen
 					//get path from db, make svg with that
-					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(200,200)"</path></svg>';
+					var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
 					$('.resourceContent').html(newSvg);
 				}
 				//the next slide will show them recent answers
 				else {
+					$('.resourceContent').empty();
 					$game.$resources.showRecentAnswers();
 				}
 			
 			}
 			else {
 				_speak = _curResource.responses[1];
-				$('.resourceArea .speakerName').text(_who);
+				$('.resourceArea .speakerName').text(_who + ': ');
 				$('.resourceArea .message').text(_speak);
 				$('.resourceContent').empty();
 			}
@@ -148,7 +156,6 @@ $game.$resources = {
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				
 				var finalQuestion = '<p>' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
@@ -156,7 +163,7 @@ $game.$resources = {
 				}
 				else {
 					_speak = _curResource.prompt;
-					$('.resourceArea .speakerName').text(_who);
+					$('.resourceArea .speakerName').text(_who + ': ');
 					$('.resourceArea .message').text(_speak);
 					var inputBox = '<form><input></input></form>';
 					$('.resourceContent').html(finalQuestion + inputBox);
@@ -173,9 +180,15 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		var recentAnswers = _curResource.playerAnswers,
 			numAnswers = recentAnswers.length,
-			displayAnswers;
+			displayAnswers,
+			finalQuestion = '<p>' + _curResource.question + '</p>';
 		if(numAnswers === 0) {
 			_speak = 'Congrats! You were the first to answer.';
+			finalQuestion = '';
+		}
+		else if(numAnswers === 1 && recentAnswers[0].name === $game.$player.name) {
+			_speak = 'Congrats! You were the first to answer.';
+			finalQuestion = '';
 		}
 		else {
 			_speak = 'Here are some recent answers by your peers: ';
@@ -191,9 +204,9 @@ $game.$resources = {
 
 			displayAnswers += '</ul>';
 		}
-		$('.resourceArea .speakerName').text(_who);
+		$('.resourceArea .speakerName').text(_who + ': ');
 		$('.resourceArea .message').text(_speak);
-		$('.resourceContent').html(displayAnswers);
+		$('.resourceContent').html(finalQuestion + displayAnswers);
 	},
 
 	hideResource: function() {
@@ -264,6 +277,12 @@ $game.$resources = {
 	getShape: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].shape;
+	},
+
+	addAnswer: function(data, id) {
+		var stringId = String(id);
+		_curResource = _resources[stringId];
+		_curResource.playerAnswers.push(data);
 	}
 
 
