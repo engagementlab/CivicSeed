@@ -30,26 +30,26 @@ $game.$gnome = {
 	ready: false,
 	
 	init: function() {
-		ss.rpc('game.npc.loadGnome', function(response) {
-			$game.$gnome.index = response.id,
-			$game.$gnome.dialog = response.dialog,
-			$game.$gnome.name = response.name,
-			$game.$gnome.tangram = response.tangram;
+		ss.rpc('game.npc.loadGnome', function(gnome) {
+			$game.$gnome.index = gnome.id,
+			$game.$gnome.dialog = gnome.dialog,
+			$game.$gnome.name = gnome.name,
+			$game.$gnome.tangram = gnome.tangram;
 
 			_info = {
-				x: response.x,
-				y: response.y
+				x: gnome.x,
+				y: gnome.y
 			};
 
 			_renderInfo = {
 				kind: 'gnome',
 				srcX: 0,
 				srcY: 0,
-				curX: response.x,
-				curY: response.y,
-				prevX: response.x,
-				prevY: response.y
-			};	
+				curX: gnome.x,
+				curY: gnome.y,
+				prevX: gnome.x,
+				prevY: gnome.y
+			};
 
 			$game.$gnome.setupTangram();
 

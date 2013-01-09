@@ -1,14 +1,11 @@
-// COMPARE SHARED.ACCOUNT JS FILE
-// var rootDir = process.cwd();
-// var service = require(rootDir + '/service');
-// var UserModel = service.useModel('user');
-
-var intervalId = {};
-var numActivePlayers = 0;
-// var numPlayers = 0;
-var players = {};
-
-var service, db, userModel, tileModel, gameModel;
+var intervalId = {},
+	numActivePlayers = 0,
+	players = {},
+	service,
+	db,
+	userModel,
+	tileModel,
+	gameModel;
 
 exports.actions = function(req, res, ss) {
 
@@ -16,15 +13,10 @@ exports.actions = function(req, res, ss) {
 	// req.use('debug');
 	// req.use('account.authenticated');
 
-	// console.log('CS:'.blue + ' player RPC request ---->'.magenta);
-	// console.log(JSON.stringify(req).slice(0, 100).magenta + '...'.magenta);
-	// Russ, it's all hooked up. Access the db via ss.db
-	//console.log(ss.db);
 	return {
 
 		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 		init: function() {
-
 			// load models and database service only once
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
@@ -70,7 +62,7 @@ exports.actions = function(req, res, ss) {
 
 		// ------> this should be moved into our map rpc handler???
 		getMapData: function(x1,y1,x2,y2) {
-			// tileModel.findOne(function(err,query){
+			// tileModel.findOne(function(err,query) {
 			// 	res(query);
 			// });				
 			//tileModel.find().gte('x', x1).gte('y',y1).lt('x',x2).lt('y',y2);
@@ -79,10 +71,10 @@ exports.actions = function(req, res, ss) {
 			.where('y').gte(y1).lt(y2)
 			.sort('mapIndex')
 			.find(function (err, allTiles) {
-			 		if (err){
+			 		if(err) {
 			 			res(false);
 			 		}
-				if (allTiles) {
+				if(allTiles) {
 					res(allTiles);
 				}
 			});
@@ -124,10 +116,10 @@ exports.actions = function(req, res, ss) {
 			.where('y').gte(minY).lt(maxY)
 			.sort('mapIndex')
 			.find(function (err, oldTiles) {
-				if (err){
+				if(err) {
 					res(false);
 				}
-				if (oldTiles) {
+				if(oldTiles) {
 					var saveColors = function(i) {
 						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
 
@@ -239,7 +231,7 @@ exports.actions = function(req, res, ss) {
 													}
 												}
 												//sort them
-												oldBoard.sort(function(a, b){
+												oldBoard.sort(function(a, b) {
 													return b.count-a.count;
 												});
 												
@@ -305,8 +297,8 @@ exports.actions = function(req, res, ss) {
 					res(data);
 				}
 			});
-			
 		},
+
 		getGameInfo: function() {
 			gameModel.findOne({}, function (err, result) {
 				if(err) {
@@ -317,5 +309,6 @@ exports.actions = function(req, res, ss) {
 				}
 			});
 		}
+
 	};
 }
