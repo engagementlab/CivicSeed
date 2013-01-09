@@ -15,9 +15,12 @@ var rootDir = process.cwd(),
 	server,
 	redisConfig;
 
-console.log('\n\n < < < = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = > > > '.green);
-console.log(' < < < = = = = = = = = = = = =   Starting the Civic Seed Game Engine   = = = = = = = = = = = = > > > '.green.inverse);
-console.log(' < < < = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = > > > '.green);
+console.log('\n\n     ___      _               _                       ___                       _   '.red);
+console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red);
+console.log('   | (__     | |    \\ V /    | |    / _|     '.red + 'o'.white + '       \\__ \\   / -_)   / -_)  / _` |  '.red);
+console.log('    \\___|   _|_|_   _\\_/_   _|_|_   \\__|_   '.red + 'TS__['.green + 'O'.white + ']'.green + '  |___/   \\___|   \\___|  \\__,_|  '.red);
+console.log('  _'.white + '|"""""|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""| {======|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""|'.green + '_'.white + '|"""""| '.green);
+console.log('  '.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\'./'.green + 'o--000'.white + '\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\''.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.white + '-\' '.green);
 
 // Setup database services, based on the config
 service.connectMongoose(app, function(databases) {
