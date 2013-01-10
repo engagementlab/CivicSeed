@@ -2,6 +2,10 @@
 
 // to run in production mode:
 // NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+// UNFORTUNATELY, you may also have to run it on sudo to listen to any port lower than 1024:
+// sudo NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+
+// for longer deployment timeout: jitsu config set timeout 860000
 
 var rootDir = process.cwd(),
 	ss = require('socketstream'),
