@@ -52,9 +52,8 @@ $game.$gnome = {
 			};
 
 			$game.$gnome.setupTangram();
-
+			$game.$gnome.getMaster();
 			$game.$gnome.ready = true;
-
 		});
 	},
 
@@ -74,7 +73,6 @@ $game.$gnome = {
 	},
 
 	update: function() {
-
 		if(!$game.inTransit) {
 			if(_onScreen) {
 				$game.$gnome.idle();
@@ -88,6 +86,7 @@ $game.$gnome = {
 
 	getMaster: function() {
 		var loc = $game.masterToLocal(_info.x, _info.y);
+		
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE,
 				prevY = loc.y * $game.TILE_SIZE,
@@ -143,7 +142,6 @@ $game.$gnome = {
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
-				console.log(_messages);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
@@ -667,20 +665,25 @@ $game.$gnome = {
 			// mX = $game.$gnome.snapTo(x - _dragOffX),
 			// mY = $game.$gnome.snapTo(y - _dragOffY);
 			mX = x - _dragOffX,
-			mY = y - _dragOffY;
+			mY = y - _dragOffY,
+			trashing = false;
 
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.trash').css('opacity',1);
+			trashing = true;
 		}
 		else {
 			$('.trash').css('opacity',0.5);
+			trashing = false;
 		}
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 		
 		d3.select('.br' + d.id)
-			.attr('transform',trans);
-
+			.attr('transform',trans)
+			.attr('opacity', function() {
+				return trashing ? .5 : 1;
+			});
 	},
 	dropMove: function(d) {
 		var x = d3.event.sourceEvent.offsetX,

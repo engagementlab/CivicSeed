@@ -32,7 +32,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Russell',
@@ -63,7 +64,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Stephen',
@@ -94,7 +96,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Eric',
@@ -125,7 +128,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Sam',
@@ -156,7 +160,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Joe',
@@ -187,7 +192,8 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }, {
 	name: 'Frank',
@@ -218,6 +224,7 @@ module.exports.global = [{
 				dropped: 0
 			},
 			gnomeState: 0,
-			resume: []
+			resume: [],
+			seenThing: false
 		}
 }];

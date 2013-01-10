@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/npcs.png', 'img/game/botanist.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -67,7 +67,7 @@ $game.$renderer = {
 
 		//load the images recursively until done
 		_tilesheets[num] = new Image();
-		_tilesheets[num].src = _allImages[num];
+		_tilesheets[num].src = '/img/game/' + _allImages[num];
 
 		_tilesheets[num].onload = function() {
 			//if it is the map tile data, render to canvas
@@ -80,16 +80,10 @@ $game.$renderer = {
 				_tilesheetCanvas.setAttribute('height', _tilesheets[num].height);
 				_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
-				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE,
-				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE,
-
-
-				_tilesheetContext.drawImage(
-					_tilesheets[num],
-					0,
-					0
-					);
+				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE;
+				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE;
 			}
+
 			if(num === _allImages.length - 1) {
 				$game.$renderer.loadPlayerImages(0);
 			}
@@ -119,6 +113,7 @@ $game.$renderer = {
 				0
 			);
 
+			//TODO: replace this with the number of image files
 			if(next === 6) {
 				$game.$renderer.ready = true;
 				$game.$player.init();
@@ -135,6 +130,7 @@ $game.$renderer = {
 		$game.$player.clear();
 		$game.$npc.clear();
 		$game.$gnome.clear();
+		$game.$thing.clear();
 
 		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
@@ -158,6 +154,9 @@ $game.$renderer = {
 				else if(all[a].kind === 'gnome') {
 					$game.$renderer.renderGnome(all[a]);
 				}
+				else if(all[a].kind === 'thing') {
+					$game.$renderer.renderThing(all[a]);
+				}
 				else {
 					$game.$renderer.renderPlayer(all[a]);
 				}
@@ -172,13 +171,17 @@ $game.$renderer = {
 			order = [playerInfo],
 			order2 = $game.$others.getRenderInfo(),
 			order3 = $game.$npc.getRenderInfo(),
-			gnomeInfo = $game.$gnome.getRenderInfo();
+			gnomeInfo = $game.$gnome.getRenderInfo(),
+			thingInfo = $game.$thing.getRenderInfo();
 			
 
 		var finalOrder = order.concat(order2, order3);
 		
 		if(gnomeInfo) {
 			finalOrder.push(gnomeInfo);
+		}
+		if(thingInfo) {
+			finalOrder.push(thingInfo);
 		}
 
 		finalOrder.sort(function(a, b){
@@ -232,8 +235,6 @@ $game.$renderer = {
 		if(foreIndex > -1 || foreIndex2 > -1) {
 			$game.$renderer.drawForegroundTile(foreData);
 		}
-
-
 	},
 
 	clearMapTile: function(x, y) {
@@ -439,7 +440,7 @@ $game.$renderer = {
 	renderNpc: function (npcData) {
 
 		_charactersContext.drawImage(
-			_tilesheets[1],
+			_tilesheets[5],
 			npcData.srcX,
 			npcData.srcY,
 			$game.TILE_SIZE,
@@ -561,9 +562,18 @@ $game.$renderer = {
 		);
 	},
 
+	clearThing: function(info) {
+		_charactersContext.clearRect(
+			info.prevX,
+			info.prevY - $game.TILE_SIZE * 4,
+			$game.TILE_SIZE * 6,
+			$game.TILE_SIZE * 5
+		);
+	},
+
 	renderGnome: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[2],
+			_tilesheets[6],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE * 6,
@@ -575,6 +585,20 @@ $game.$renderer = {
 		);
 	},
 
+	renderThing: function(info) {
+		_charactersContext.drawImage(
+			_tilesheets[5],
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE * 3,
+			$game.TILE_SIZE * 2,
+			info.curX,
+			info.curY - $game.TILE_SIZE * 1,
+			$game.TILE_SIZE * 3,
+			$game.TILE_SIZE * 2
+		);
+	},
+
 	imageToCanvas: function(map) {
 		var newImg = new Image();
 		
@@ -582,6 +606,18 @@ $game.$renderer = {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
 		newImg.src = map;
+	},
+
+	changeTilesheet: function(num, now) {
+		_tilesheetContext.drawImage(
+			_tilesheets[num],
+			0,
+			0
+		);
+		if(now) {
+			//redraw all tiles
+			$game.$renderer.renderAllTiles();
+		}
 	}
 	
 };

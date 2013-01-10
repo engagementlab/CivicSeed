@@ -75,8 +75,6 @@ exports.$game = {
 		
 		$game.$resources.init();
 		
-		$game.$gnome.init();
-		
 		$game.$audio.init();
 
 	},
@@ -103,13 +101,10 @@ exports.$game = {
 
 		//load up npcs
 		$game.$npc.init();
-
-		//get gnomes local coords to place him
-		$game.$gnome.getMaster();
+		$game.$gnome.init();
 
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
-			console.log(response);
 			$game.levelQuestion = response.levelQuestion;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
@@ -191,6 +186,14 @@ exports.$game = {
 			}
 			callback();
 		});
+
+		//if we have NOT seen the THING, do a check to see if we are in the area
+		if(!$game.$player.game.seenThing) {
+			var loc = $game.$thing.getLoc();
+			if(Math.abs(loc.x - x) < 2 && Math.abs(loc.y - y) < 2) {
+				$game.$thing.makeActive();
+			}
+		}
 	},
 
 	copyTileArray: function(callback) {
@@ -506,7 +509,7 @@ exports.$game = {
 		requestAnimFrame($game.stepTransition);
 	},
 
-	masterToLocal: function(x, y) {
+	masterToLocal: function(x, y, offscreen) {
 
 		//if this works I am a dolt for not doing it earlier (I am a dolt)
 		var local = {
@@ -519,7 +522,12 @@ exports.$game = {
 
 		}
 		else {
-			return false;
+			if(offscreen) {
+				return local;
+			}
+			else {
+				return false;	
+			}
 		}
 	},
 
@@ -529,6 +537,7 @@ exports.$game = {
 			$game.$player.update();
 			$game.$npc.update();
 			$game.$gnome.update();
+			$game.$thing.update();
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}

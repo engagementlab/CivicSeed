@@ -38,7 +38,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			},
 			gnomeState: Number,
 			colorMap: String,
-			resume: [String]
+			resume: [String],
+			seenThing: Boolean
 		}
 	});
 

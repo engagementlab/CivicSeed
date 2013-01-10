@@ -20,6 +20,10 @@ ss.event.on('ss-addPlayer', function(num, player) {
 	$game.numPlayers = num;
 	$game.$others.add(player);
 	$('.activePlayers p').text(num);
+	if(player.name !== $game.$player.name) {
+		$game.statusUpdate(player.name + ' has joined!');
+	}
+	
 });
 
 ss.event.on('ss-removePlayer', function(num, playerId) {
@@ -41,9 +45,6 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 //but we will pass the tiles info
 ss.event.on('ss-seedDropped', function(bombed, id) {
 	$game.$map.newBomb(bombed, id);
-	if(id === $game.$player.id) {
-		$game.$player.awaitingBomb = false;
-	}
 });
 
 
