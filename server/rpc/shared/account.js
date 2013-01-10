@@ -54,11 +54,9 @@ exports.actions = function(req, res, ss) {
 		getUserSession: function() {
 			if(req.session.userId) {
 				res({
-					user: {
-						id: req.session.userId,
-						name: req.session.name,
-						email: req.session.email
-					}
+					id: req.session.userId,
+					name: req.session.name,
+					email: req.session.email
 				});
 			} else {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);

@@ -38,8 +38,6 @@ var self = module.exports = {
 		$app.get('/admin/invitecodes', function(req) {
 
 			$container.empty().append(JT['partials-navigation']());
-
-
 			$container.append(JT['admin-startup']({
 				title: 'Startup',
 				bodyClass: 'admin startup',

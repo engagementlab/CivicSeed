@@ -17,14 +17,18 @@ div.row
 				i.icon-trophy.icon-large
 				span(style='font-size:20px;') Have fun while learning!
 	div.span4.offset1
-		form.well#loginForm(method='post', action='/')
-			h2 Sign In:
-			//- p #{message}
-			div.control-group
-				div.controls
-					input#username.input-large(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
-			div.control-group
-				div.controls
-					input#password.input-large(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
-			button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
-			p.moreTopMargin: a(href='/forgot') Forget your password?
+		- if(!sessionStorage.userId)
+			form.well#loginForm(method='post', action='/')
+				h2 Sign In:
+				//- p #{message}
+				div.control-group
+					div.controls
+						input#username.input-large(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
+				div.control-group
+					div.controls
+						input#password.input-large(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
+				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
+				p.moreTopMargin: a(href='/forgot') Forget your password?
+		- else
+			.well
+				h2: a(href='/game') Continue playing...

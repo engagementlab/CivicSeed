@@ -11,8 +11,6 @@ ss.server.on('ready', function() {
 
 		if(!appInitialized) {
 
-			ss.rpc('shared.setup.init', function(response) { window.CivicSeed = response; });
-
 			require('/game-setup').init(function() {
 
 				appInitialized = true;

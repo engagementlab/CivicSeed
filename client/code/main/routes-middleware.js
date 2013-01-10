@@ -20,6 +20,11 @@ var self = module.exports = {
 					}
 				} else {
 					// console.log('Authenticated...');
+					if(!sessionStorage.getItem('userId')) {
+						sessionStorage.setItem('userId', userSessionObject.id);
+						sessionStorage.setItem('userName', userSessionObject.name);
+						sessionStorage.setItem('userEmail', userSessionObject.email);
+					}
 				}
 
 			});

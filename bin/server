@@ -8,13 +8,25 @@ var rootDir = process.cwd(),
 	config = require(rootDir + '/config'),
 	domain = config.get('DOMAIN'),
 	port = config.get('PORT'),
+	version = config.get('VERSION'),
 	nodeEnv = config.get('ENVIRONMENT'),
 	flash = require('connect-flash'),
 	passport = require('passport'),
 	service = require(rootDir + '/service'),
 	controllers = require(rootDir + '/controllers'),
 	server,
-	redisConfig;
+	redisConfig,
+	now = new Date(),
+	CivicSeed = {
+		VERSION: version,
+		CACHE: nodeEnv === 'development' ? String(now.getFullYear()) +
+			String(now.getMonth()) +
+			String(now.getDate()) +
+			String(now.getHours()) +
+			String(now.getMinutes()) +
+			String(now.getSeconds()) : version,
+		ENVIRONMENT: nodeEnv
+	};
 
 console.log('\n\n     ___      _               _                       ___                       _   '.red);
 console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red);
@@ -73,11 +85,10 @@ service.connectMongoose(app, function(databases) {
 	ss.client.formatters.add(ssJade, {
 		locals: {
 			// title: 'Hollow :: Home',
-			// Griffin: JSON.stringify(Griffin)
+			CivicSeed: JSON.stringify(CivicSeed)
 		}
 	});
 	ss.client.formatters.add(require('ss-stylus'));
-
 
 	// // Server-side compiled templates for client
 	// ss.client.templateEngine.use(require('ss-hogan'));
