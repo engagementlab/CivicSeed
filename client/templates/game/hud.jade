@@ -1,0 +1,31 @@
+.container.hud
+	.row
+		.span4.playerHud
+			.inventoryButton
+				i.icon-briefcase.icon-large
+				p.hudCount 0
+			.seedButton
+				i.icon-leaf.icon-large
+				p.hudCount 0
+			.seedButton2
+				i.icon-tint.icon-large
+				p.hudCount 0
+			.chatButton
+				i.icon-comment.icon-large
+		.span4.displayHud
+			form.form-inline.chatBox.hide
+				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='say something...')
+				button#chatButton.btn(type='submit') Chat
+			p.displayBox
+				span.displayBoxText
+		.span4.globalHud
+			.helpButton
+				i.icon-question-sign.icon-large
+			.muteButton
+				i.icon-volume-up.icon-large
+			.progressButton
+				i.icon-desktop.icon-large
+				p.hudCount 0%
+			.activePlayers
+				i.icon-group.icon-large
+				p.hudCount 0

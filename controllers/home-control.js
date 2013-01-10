@@ -5,7 +5,7 @@ var self = module.exports = {
 	init: function(app) {
 
 		ss.client.define('main', {
-			view: 'main.html',
+			view: 'main.jade',
 			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.8.2.min.js',

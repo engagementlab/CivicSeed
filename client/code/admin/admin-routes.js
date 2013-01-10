@@ -1,15 +1,13 @@
-// var content = $('#content');
-
 var self = module.exports = {
 
 	loadRoutes: function(ss, $app) {
 
 		var $body = $(document.body);
-		var tmplEngine = ss.tmpl;
+		var $container = $('#container');
 
 		$app.get('/admin', function(req) {
-			$('#container').empty().append(tmplEngine['partials-navigation'].render());
-			$('#container').append(tmplEngine['admin-panel'].render({
+			$container.empty().append(JT['partials-navigation']());
+			$container.append(JT['admin-panel']({
 				message: 'User admin panel.'
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel ::: }');
@@ -17,32 +15,73 @@ var self = module.exports = {
 		});
 
 
+		$app.get('/admin/startup', function(req) {
+			$container.empty().append(JT['partials-navigation']());
+			$container.append(JT['admin-startup']({
+				title: 'Startup',
+				bodyClass: 'admin startup',
+				nodeEnv: 'nodeEnv',
+				// consoleOutput: consoleOutput,
+				message: 'Startup admin panel.'
+			}));
+			$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
+			$body.attr('class', 'adminPage startupPage');
+			require('./admin').init();
+		});
 
 
 
-		// // nodeEnv = app.get('env');
-		// // User = service.useModel('user');
-		// Invitee = service.useModel('user', 'preload');
+		// // // nodeEnv = app.get('env');
+		// // // User = service.useModel('user');
+		// // Invitee = service.useModel('user', 'preload');
 
-		// app.get('/admin/invitecodes', function(req, res) {
+		$app.get('/admin/invitecodes', function(req) {
 
-		// 	// var consoleOutput;
-		// 	Invitee.collection.distinct('sessionName', function(err, invitees) {
-		// 		if(err) {
-		// 			console.error('Could not find document: %s', err);
-		// 		}
-		// 		// console.log(invitees);
-		// 		res.render('admin/invitecodes.hbs', {
-		// 			title: 'Invite Codes',
-		// 			bodyClass: 'admin invitecodes',
-		// 			// nodeEnv: nodeEnv,
-		// 			// consoleOutput: consoleOutput,
-		// 			message: 'Invite codes.',
-		// 			invitees: invitees,
-		// 		});
-		// 	});
+			$container.empty().append(JT['partials-navigation']());
 
-		// });
+
+			$container.append(JT['admin-startup']({
+				title: 'Startup',
+				bodyClass: 'admin startup',
+				nodeEnv: 'nodeEnv',
+				// consoleOutput: consoleOutput,
+				message: 'Startup admin panel.'
+			}));
+		// 	$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
+		// 	$body.attr('class', 'adminPage startupPage');
+		// 	require('./admin').init();
+
+
+
+			// // var consoleOutput;
+			// Invitee.collection.distinct('sessionName', function(err, invitees) {
+			// 	if(err) {
+			// 		console.error('Could not find document: %s', err);
+			// 	}
+			// 	// console.log(invitees);
+			// 	res.render('admin/invitecodes.hbs', {
+			// 		title: 'Invite Codes',
+			// 		bodyClass: 'admin invitecodes',
+			// 		// nodeEnv: nodeEnv,
+			// 		// consoleOutput: consoleOutput,
+			// 		message: 'Invite codes.',
+			// 		invitees: invitees,
+			// 	});
+			// });
+
+		});
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// // create a set of codes
 		// app.get('/admin/action/create-invite-codes/:sessionName', function(req, res) {

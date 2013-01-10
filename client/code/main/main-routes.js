@@ -29,12 +29,11 @@ var self = module.exports = {
 		// }
 
 		var $body = $(document.body);
-		var tmplEngine = ss.tmpl;
 
 		$app.get('/', function(req) {
 
-			$('#container').empty().append(tmplEngine['partials-navigation'].render());
-			$('#container').append(tmplEngine['main-home'].render());
+			$('#container').empty().append(JT['partials-navigation']());
+			$('#container').append(JT['main-home']());
 
 		});
 

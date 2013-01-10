@@ -4,6 +4,7 @@ var rootDir = process.cwd(),
 	ss = require('socketstream'),
 	express = require('express'),
 	app = module.exports = express(),
+	ssJade = require('ss-jade'),
 	config = require(rootDir + '/config'),
 	domain = config.get('DOMAIN'),
 	port = config.get('PORT'),
@@ -32,9 +33,9 @@ service.connectMongoose(app, function(databases) {
 	console.log('   * * * * * * * * * * * *   Configuring Express   * * * * * * * * * * * *   '.yellow);
 
 	app.set('views', rootDir + '/client/views');
-	app.set('view engine', 'hbs');
-	service.useModule('middleware/hbs-helpers').init();
-
+	app.set('view engine', 'jade');
+	// app.set('view engine', 'hbs');
+	// service.useModule('middleware/hbs-helpers').init();
 	// app.set('view engine', 'html');
 	// app.engine('html', require('hbs').__express);
 	app.use(express.logger(':method :url :status'));
@@ -69,10 +70,19 @@ service.connectMongoose(app, function(databases) {
 	console.log('   * * * * * * * * * * * *   Configuring SocketStream   * * * * * * * * * * * *   '.yellow);
 
 	// Code Formatters
+	ss.client.formatters.add(ssJade, {
+		locals: {
+			// title: 'Hollow :: Home',
+			// Griffin: JSON.stringify(Griffin)
+		}
+	});
 	ss.client.formatters.add(require('ss-stylus'));
 
-	// Server-side compiled templates for client
-	ss.client.templateEngine.use(require('ss-hogan'));
+
+	// // Server-side compiled templates for client
+	// ss.client.templateEngine.use(require('ss-hogan'));
+
+	ss.client.templateEngine.use(require('ss-clientjade'));
 
 	// using engine.io for web sockets transport
 	ss.ws.transport.use(require('ss-engine.io'), {

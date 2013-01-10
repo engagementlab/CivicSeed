@@ -1,0 +1,62 @@
+.gameboard
+	canvas#background(width='960px', height='480px')
+	canvas#npcs(width='960px', height='480px')
+	canvas#characters(width='960px', height='480px')
+	canvas#foreground(width='960px', height='480px')
+	canvas#minimapTile(width='142px', height='132px')
+	canvas#minimapPlayer(width='142px', height='132px')
+	p.loading Loading...
+	.resourceArea
+		a(href='#', style='font-size: 24px;')
+			i.icon-remove-sign.icon-large
+		p.dialog
+			span.speakerName
+			span.message
+		div.resourceContent
+		button.nextButton.btn.btn-info(type='button') Next
+		button.backButton.btn.btn-inverse(type='button') Back
+		button.answerButton.btn.btn-success(type='button') Answer
+		button.closeButton.btn.btn-primary(type='button') Close
+	div.gnomeArea
+		p.dialog
+			span.speakerName
+			span.message
+		
+		div.gnomeContent
+		div.tangramArea
+			p.feedback
+			
+		button.nextButton.btn.btn-info(type='button') Next
+		button.backButton.btn.btn-inverse(type='button') Back
+		button.answerButton.btn.btn-success(type='button') Answer
+		button.closeButton.btn.btn-primary(type='button') Close
+		a(href='#', style='font-size: 24px;')
+			i.icon-remove-sign.icon-large
+	div.progressArea
+		a(href='#', style='font-size: 24px;')
+			i.icon-remove-sign.icon-large
+		h2 Game Progress
+			div.megaBar
+			
+			h3.seedersHeader Top Seeders:
+			div.topSeeders
+
+		div.colorMap
+			img(src='')
+	
+	div.inventory
+		button.closeButton.btn.btn-primary(type='button') Close
+	p.speechBubble
+		span.speakerName
+		span.message
+		button.nextChatButton.btn.btn-success(type='button') Next
+		button.closeChatButton.btn.btn-primary(type='button') Close
+		button.noButton.btn.btn-danger(type='button') No
+		button.yesButton.btn.btn-success(type='button') Yes
+	
+	div.pauseMenu
+		p please re-focus your mind, body, and the window...
+		p
+			button.unPause.btn.btn-success(type='button') Resume Game
+	div.waitingForSeed
+		img(src='/img/game/spinloader.gif')
