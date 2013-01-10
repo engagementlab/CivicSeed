@@ -111,7 +111,7 @@ exports.$game = {
 			$game.tilesColoredGoal = response.tilesColoredGoal;
 			$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
 			$game.percentString = $game.percent + '%';
-			$('.hudBar').css('width', $game.percentString);
+			$('.progressButton .hudCount').text($game.percentString);
 		});
 		ss.rpc('game.chat.init');
 

@@ -64,7 +64,7 @@ ss.event.on('ss-progressChange', function(num) {
 	$game.tilesColored = num;
 	$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
 	$game.percentString = $game.percent + '%';
-	$('.hudBar').css('width', $game.percentString);
+	$('.progressButton .hudCount').text($game.percentString);
 
 	//if we have gone up a milestone, feedback it
 	if($game.percent > 99) {
@@ -270,17 +270,37 @@ $('.activePlayers').click(function() {
 	$('#minimapPlayer').toggleClass('hide');
 });
 
-$('.progress').bind('click', function() {
+$('.progressButton').bind('click', function() {
 	if($game.showingProgress) {
 		$('.progressArea').slideUp(function() {
 			$game.showingProgress = false;
+			$game.changeStatus();
 		});
 	}
 	else {
-		$game.showProgress();
+		if(!$game.$gnome.isChat && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running) {
+			$game.showProgress();
+			$game.changeStatus('global game information');
+		}
+	}
+});
+$('.muteButton').bind('click', function() {
+	var musicOff = $game.$audio.toggleMute();
+
+	if(musicOff) {
+		$('.muteButton i').removeClass('icon-volume-up').addClass('icon-volume-off');
+	}
+	else {
+		$('.muteButton i').removeClass('icon-volume-off').addClass('icon-volume-up');
 	}
 });
 
+$('.globalHud > div').bind('mouseenter',function() {
+	$('.tooltip').fadeIn();
+});
+$('.globalHud > div').bind('mouseleave',function() {
+	$('.tooltip').fadeOut();
+});
 // $(window).bind('keydown',function(e) {
 // 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
 // 		$game.$mouse.updateKey(e.which);
