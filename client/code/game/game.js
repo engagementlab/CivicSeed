@@ -75,8 +75,6 @@ exports.$game = {
 		
 		$game.$resources.init();
 		
-		$game.$gnome.init();
-		
 		$game.$audio.init();
 
 	},
@@ -103,13 +101,10 @@ exports.$game = {
 
 		//load up npcs
 		$game.$npc.init();
-
-		//get gnomes local coords to place him
-		$game.$gnome.getMaster();
+		$game.$gnome.init();
 
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
-			console.log(response);
 			$game.levelQuestion = response.levelQuestion;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;

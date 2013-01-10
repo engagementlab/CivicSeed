@@ -49,12 +49,11 @@ $game.$gnome = {
 				curY: response.y,
 				prevX: response.x,
 				prevY: response.y
-			};	
-
+			};
+			
 			$game.$gnome.setupTangram();
-
+			$game.$gnome.getMaster();
 			$game.$gnome.ready = true;
-
 		});
 	},
 
@@ -74,7 +73,6 @@ $game.$gnome = {
 	},
 
 	update: function() {
-
 		if(!$game.inTransit) {
 			if(_onScreen) {
 				$game.$gnome.idle();
@@ -88,6 +86,7 @@ $game.$gnome = {
 
 	getMaster: function() {
 		var loc = $game.masterToLocal(_info.x, _info.y);
+		
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE,
 				prevY = loc.y * $game.TILE_SIZE,
@@ -143,7 +142,6 @@ $game.$gnome = {
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
-				console.log(_messages);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 

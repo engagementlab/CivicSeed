@@ -45,9 +45,6 @@ ss.event.on('ss-playerMoved', function(moves, id) {
 //but we will pass the tiles info
 ss.event.on('ss-seedDropped', function(bombed, id) {
 	$game.$map.newBomb(bombed, id);
-	if(id === $game.$player.id) {
-		$game.$player.awaitingBomb = false;
-	}
 });
 
 

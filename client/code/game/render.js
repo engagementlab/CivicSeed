@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['img/game/tilesheet.png','img/game/npcs.png', 'img/game/botanist.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -67,7 +67,7 @@ $game.$renderer = {
 
 		//load the images recursively until done
 		_tilesheets[num] = new Image();
-		_tilesheets[num].src = _allImages[num];
+		_tilesheets[num].src = '/img/game/' + _allImages[num];
 
 		_tilesheets[num].onload = function() {
 			//if it is the map tile data, render to canvas
@@ -80,16 +80,10 @@ $game.$renderer = {
 				_tilesheetCanvas.setAttribute('height', _tilesheets[num].height);
 				_tilesheetContext = _tilesheetCanvas.getContext('2d');
 
-				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE,
-				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE,
-
-
-				_tilesheetContext.drawImage(
-					_tilesheets[num],
-					0,
-					0
-					);
+				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE;
+				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE;
 			}
+
 			if(num === _allImages.length - 1) {
 				$game.$renderer.loadPlayerImages(0);
 			}
@@ -119,6 +113,7 @@ $game.$renderer = {
 				0
 			);
 
+			//TODO: replace this with the number of image files
 			if(next === 6) {
 				$game.$renderer.ready = true;
 				$game.$player.init();
@@ -445,7 +440,7 @@ $game.$renderer = {
 	renderNpc: function (npcData) {
 
 		_charactersContext.drawImage(
-			_tilesheets[1],
+			_tilesheets[5],
 			npcData.srcX,
 			npcData.srcY,
 			$game.TILE_SIZE,
@@ -578,7 +573,7 @@ $game.$renderer = {
 
 	renderGnome: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[2],
+			_tilesheets[6],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE * 6,
@@ -592,7 +587,7 @@ $game.$renderer = {
 
 	renderThing: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[1],
+			_tilesheets[5],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE * 3,
@@ -611,6 +606,18 @@ $game.$renderer = {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
 		newImg.src = map;
+	},
+
+	changeTilesheet: function(num, now) {
+		_tilesheetContext.drawImage(
+			_tilesheets[num],
+			0,
+			0
+		);
+		if(now) {
+			//redraw all tiles
+			$game.$renderer.renderAllTiles();
+		}
 	}
 	
 };

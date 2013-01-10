@@ -70,6 +70,9 @@ $game.$player = {
 			$game.$player.name = newInfo.name,
 			$game.$player.game = newInfo.game;
 
+
+			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
+				
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
@@ -518,7 +521,6 @@ $game.$player = {
 
 		if(bombed.length > 0) {
 			
-			//change background to a flower for epicenter like a loading bar
 		
 			//set a waiting boolean so we don't plant more until receive data back from rpc
 			$game.$player.awaitingBomb = true;
@@ -534,28 +536,35 @@ $game.$player = {
 			};
 
 			var loc = $game.masterToLocal(options.mX,options.mY);
-			console.log(loc);
-			$('.waitingForSeed').css({
-				top: loc.y * 32,
-				left: loc.x * 32
-			}).show();
+
+			$('.waitingForSeed')
+				.css({
+					top: loc.y * 32,
+					left: loc.x * 32
+				})
+				.show();
+
 			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
 				//increase the drop count for the player
+				$game.$player.awaitingBomb = false;
+				$('.waitingForSeed').fadeOut();
 				if(result > 0) {
 					$game.$player.game.seeds.dropped += bombed.length;
+								//update seed count in HUD
+					if(mode === 1) {
+						$game.$player.game.seeds.normal -= 1;
+						$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+					}
+					else if(mode === 2) {
+						$game.$player.game.seeds.riddle -= 1;
+						$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+					}
 				}
-				$('.waitingForSeed').fadeOut();
+				else {
+					$game.changeStatus('sorry, someone beat you to that tile');
+				}
 			});
 			
-			//update seed count in HUD
-			if(mode === 1) {
-				$game.$player.game.seeds.normal -= 1;
-				$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
-			}
-			else if(mode === 2) {
-				$game.$player.game.seeds.riddle -= 1;
-				$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
-			}
 		}
 		
 	},
@@ -755,7 +764,7 @@ $game.$player = {
 	nextLevel: function() {
 		$game.$player.game.currentLevel += 1;
 		$game.$player.game.gnomeState = 0;
-
+		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
 		//send status to message board
 		var stat = $game.$player.name + 'is on level' + $game.$player.game.currentLevel + '!';
 		//ss.rpc('game.player.status', stat);
