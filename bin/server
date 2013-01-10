@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// to run in production mode:
+// NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+
 var rootDir = process.cwd(),
 	ss = require('socketstream'),
 	express = require('express'),
