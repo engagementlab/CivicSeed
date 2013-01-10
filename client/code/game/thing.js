@@ -6,7 +6,7 @@ var _coords = [
 		{x: 0, y: 79}
 		],
 	_positions = [
-		{x: 4, y: 20, d: -1, target: -3},
+		{x: 6, y: 20, d: -1, target: -3},
 		{x: 133, y: 33, d: 1, target: 145},
 		{x: 135, y: 124, d: 1, target: 145},
 		{x: 8, y: 86, d: -1, target: -3}
@@ -39,8 +39,8 @@ $game.$thing = {
 			prevY: 0,
 			curX: 0,
 			curY: 0,
-			srcX: 0,
-			srcY: 0
+			srcX: 16,
+			srcY: 18
 		};
 		if(!$game.$player.game.seenThing) {
 			$game.$thing.setPosition();

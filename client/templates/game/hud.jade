@@ -2,16 +2,16 @@
 	.row
 		.span4.playerHud
 			.inventoryButton
-				i.icon-briefcase.icon-large
+				i.icon-briefcase.icon-large(title='toggle inventory', data-placement='bottom')
 				p.hudCount 0
 			.seedButton
-				i.icon-leaf.icon-large
+				i.icon-leaf.icon-large(title='seeds', data-placement='bottom')
 				p.hudCount 0
 			.seedButton2
-				i.icon-tint.icon-large
+				i.icon-tint.icon-large(title='special seeds', data-placement='bottom')
 				p.hudCount 0
 			.chatButton
-				i.icon-comment.icon-large
+				i.icon-comment.icon-large(title='chat input', data-placement='bottom')
 		.span4.displayHud
 			form.form-inline.chatBox.hide
 				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='say something...')
@@ -20,12 +20,12 @@
 				span.displayBoxText
 		.span4.globalHud
 			.helpButton
-				i.icon-question-sign.icon-large
+				i.icon-question-sign.icon-large(title='help', data-placement='bottom')
 			.muteButton
-				i.icon-volume-up.icon-large
+				i.icon-volume-up.icon-large(title='toggle music', data-placement='bottom')
 			.progressButton
-				i.icon-desktop.icon-large
+				i.icon-desktop.icon-large(title='display progress', data-placement='bottom')
 				p.hudCount 0%
 			.activePlayers
-				i.icon-group.icon-large
+				i.icon-globe.icon-large(title='active players', data-placement='bottom')
 				p.hudCount 0

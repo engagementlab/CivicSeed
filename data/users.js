@@ -11,8 +11,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 66,
+				y: 77,
 				inTransit: false
 			},
 			colorInfo: {
@@ -43,8 +43,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 2,
-				y: 5,
+				x: 65,
+				y: 77,
 				inTransit: false
 			},
 			colorInfo: {
@@ -75,8 +75,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 64,
+				y: 77,
 				inTransit: false
 			},
 			colorInfo: {
@@ -107,8 +107,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 63,
+				y: 77,
 				inTransit: false
 			},
 			colorInfo: {
@@ -139,8 +139,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 66,
+				y: 76,
 				inTransit: false
 			},
 			colorInfo: {
@@ -171,8 +171,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 65,
+				y: 76,
 				inTransit: false
 			},
 			colorInfo: {
@@ -203,8 +203,8 @@ module.exports.global = [{
 	game: {
 			currentLevel: 0,
 			position: {
-				x: 20,
-				y: 10,
+				x: 64,
+				y: 76,
 				inTransit: false
 			},
 			colorInfo: {
