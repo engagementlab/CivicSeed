@@ -1,0 +1,41 @@
+//- {{#extend 'stylesheets'}}
+//- <link rel='stylesheet', href='/css/admin.css'/>
+//- {{/extend}}
+
+div.console
+	form.form-horizontal
+
+		p Create a new group of 30 invite codes:
+
+		div.control-group
+			label.control-label(for='sessionName') Session Name:
+			div.controls
+				input#sessionName.span4(type='text', placeholder='Give this session a name...')
+		div.control-group
+			label.control-label(for='emailList') Email Addresses:
+			div.controls
+				textarea#emailList.span4(rows='6', placeholder='Enter a list of email addresses...')
+		div.control-group
+
+			div.controls
+				button#inviteCodesBtn.btn.btn-mini.btn-info(type='button') Create and Send Invite Codes
+
+		p Select an existing session to apply an action:
+
+		div.control-group
+			label.control-label(for='sessionSelect') Existing Session:
+			div.controls
+				//- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
+				select#sessionSelect.span4
+					//- {{#each invitees}}
+					//- 	option value='{{this}}'>{{this}}
+					//- {{/each}}
+				button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
+				button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
+
+		pre#inviteCodes.hidden
+
+
+//- {{#extend 'scripts'}}
+//- <script src='/js/admin.js'></script>
+//- {{/extend}}
