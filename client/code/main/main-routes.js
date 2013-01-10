@@ -31,10 +31,7 @@ var self = module.exports = {
 		var $body = $(document.body);
 
 		$app.get('/', function(req) {
-
-			$('#container').empty().append(JT['partials-navigation']());
 			$('#container').append(JT['main-home']());
-
 		});
 
 		$app.bind('routeNotFound', function (req) {

@@ -6,7 +6,6 @@ var self = module.exports = {
 		var $container = $('#container');
 
 		$app.get('/admin', function(req) {
-			$container.empty().append(JT['partials-navigation']());
 			$container.append(JT['admin-panel']({
 				message: 'User admin panel.'
 			}));
@@ -16,7 +15,6 @@ var self = module.exports = {
 
 
 		$app.get('/admin/startup', function(req) {
-			$container.empty().append(JT['partials-navigation']());
 			$container.append(JT['admin-startup']({
 				title: 'Startup',
 				bodyClass: 'admin startup',
@@ -36,9 +34,7 @@ var self = module.exports = {
 		// // Invitee = service.useModel('user', 'preload');
 
 		$app.get('/admin/invitecodes', function(req) {
-
-			$container.empty().append(JT['partials-navigation']());
-			$container.append(JT['admin-startup']({
+			$container.append(JT['admin-invitecodes']({
 				title: 'Startup',
 				bodyClass: 'admin startup',
 				nodeEnv: 'nodeEnv',

@@ -2,11 +2,15 @@ var self = module.exports = {
 
 	loadMiddleware: function(ss, $app) {
 
+		var $body = $(document.body);
+		var $container = $('#container');
 
 		// // check if user experiences/authentic
 		$app.before(function(req) {
 
 			var fullPath;
+
+			$container.empty().append(JT['partials-navigation']());
 
 			// check if user experiences/authentic
 			ss.rpc('shared.account.getUserSession', function(userSessionObject) {
