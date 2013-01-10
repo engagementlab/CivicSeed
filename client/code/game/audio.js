@@ -3,14 +3,15 @@ var _soundtracks = [],
 	_currentTrack = 0,
 	_numTracks = 5,
 	_numEffects = 0,
-	_tweenTimeout = null;
+	_tweenTimeout = null,
+	_targetV = 0;
 
 $game.$audio = {
 	
 	ready: false,
+	isMuted: false,
 
 	init: function() {
-		$game.$audio.ready = true;
 		$game.$audio.loadTrack(0);
 	},
 
@@ -30,7 +31,7 @@ $game.$audio = {
 			} else {
 				_soundtracks[num].src = '/audio/music/' + num + '.wav?VERSION=' + CivicSeed.VERSION;
 			}
-			_soundtracks[num].volume = 0.0;
+			_soundtracks[num].volume = 0;
 			_soundtracks[num].load();
 
 			_soundtracks[num].addEventListener('canplaythrough', function (e) {
@@ -89,7 +90,7 @@ $game.$audio = {
 		//that means we aren't changing tracks, so just transition volume
 		if(swap < 0) {
 			$(_soundtracks[_currentTrack]).stop(true,true).animate({
-				//volume: val
+				// volume: val
 				volume: 0
 			}, 2000, function() {
 				
@@ -106,7 +107,7 @@ $game.$audio = {
 				_currentTrack = swap;
 				$game.$audio.playTheme();
 				$(_soundtracks[_currentTrack]).stop(true,true).animate({
-					//volume: val
+					// volume: val
 					volume: 0
 				}, 2000, function() {
 					
@@ -125,11 +126,11 @@ $game.$audio = {
 			absX = Math.abs(diffX),
 			absY = Math.abs(diffY);
 
-		var closest, targetV;
+		var closest;
 		//check for gnome/s place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 4;
-			targetV = 0.4;
+			_targetV = 0.4;
 			$game.currentArea = 'botanist\'s garden';
 		}
 		else {
@@ -141,7 +142,7 @@ $game.$audio = {
 			//2 top right
 			else if(diffX > 0 && diffY < 0) {
 				trackRegion = 1;
-				$game.currentArea = 'towm';
+				$game.currentArea = 'town';
 			}
 			//1 top left
 			else if(diffX < 0 && diffY < 0) {
@@ -166,18 +167,31 @@ $game.$audio = {
 			}
 
 			if(closest < 30) {
-				targetV = closest * 0.01;
+				_targetV = closest * 0.01;
 			}
 			else {
-				targetV = 0.4;
+				_targetV = 0.4;
 			}
 		}
 
 		trackRegion = trackRegion === _currentTrack ? -1 : trackRegion;
 		
 		$game.changeStatus();
-		$game.$audio.slideVolume(targetV, trackRegion);
+		$game.$audio.slideVolume(_targetV, trackRegion);
 
+	},
+
+	toggleMute: function() {
+		$game.$audio.isMute = $game.$audio.isMute ? false: true;
+		if($game.$audio.isMute) {
+			_soundtracks[_currentTrack].volume = 0;
+		}
+		else {
+			$(_soundtracks[_currentTrack]).animate({
+				volume: _targetV
+			}, 1000);
+		}
+		return $game.$audio.isMute;
 	}
 
 };

@@ -549,15 +549,29 @@ $game.$player = {
 				$game.$player.awaitingBomb = false;
 				$('.waitingForSeed').fadeOut();
 				if(result > 0) {
+					//play sound clip
+					$game.$audio.playSound(0);
 					$game.$player.game.seeds.dropped += bombed.length;
 								//update seed count in HUD
 					if(mode === 1) {
 						$game.$player.game.seeds.normal -= 1;
 						$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+						
+						//bounce outta seed mode
+						if($game.$player.game.seeds.normal === 0) {
+							$game.$player.seedMode = 0;
+							$game.changeStatus();
+							$game.statusUpdate('you are out seeds');
+						}	
 					}
 					else if(mode === 2) {
 						$game.$player.game.seeds.riddle -= 1;
 						$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+						if($game.$player.game.seeds.riddle === 0) {
+							$game.$player.seedMode = 0;
+							$game.changeStatus();
+							$game.changeStatus('no more seeds for you!');
+						}	
 					}
 				}
 				else {
@@ -764,6 +778,7 @@ $game.$player = {
 	nextLevel: function() {
 		$game.$player.game.currentLevel += 1;
 		$game.$player.game.gnomeState = 0;
+		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
 		//send status to message board
 		var stat = $game.$player.name + 'is on level' + $game.$player.game.currentLevel + '!';

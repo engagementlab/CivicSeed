@@ -71,10 +71,8 @@ $game.$map = {
 				if(id === $game.$player.id) {
 					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
 				}
-				//play sound clip
-				//$game.$audio.playSound(0);
 			}
-		}
+		}	
 	},
 
 	saveImage: function() {
