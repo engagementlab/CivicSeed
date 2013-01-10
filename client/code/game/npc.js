@@ -205,6 +205,7 @@ $game.$npc = {
 	//choose prompt based on PLAYERs memory of interaction
 	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
 	showPrompt: function() {
+		$('.speechBubble button').addClass('hideButton');
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
 		$('.speechBubble .speakerName').text(_who+': ');
