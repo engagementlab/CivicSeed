@@ -74,6 +74,7 @@ $game.$resources = {
 			$game.$resources.addButtons();
 			$('.inventory').fadeOut(function() {
 				$game.$player.inventoryShowing = false;
+				$('.resourceArea').addClass('patternBg1')
 				$('.resourceArea').fadeIn();
 			});
 		});
@@ -158,7 +159,7 @@ $game.$resources = {
 		}
 		else {
 			if(_currentSlide === _numSlides) {
-				var finalQuestion = '<p>' + _curResource.question + '</p>';
+				var finalQuestion = '<p class="finalQuestion">' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
 					$game.$resources.showRecentAnswers();
@@ -167,7 +168,7 @@ $game.$resources = {
 					_speak = _curResource.prompt;
 					$('.resourceArea .speakerName').text(_who + ': ');
 					$('.resourceArea .message').text(_speak);
-					var inputBox = '<form><input></input></form>';
+					var inputBox = '<form><textarea placeholder="type your answere here..."></textarea></form>';
 					$('.resourceContent').html(finalQuestion + inputBox);
 				}
 					
@@ -182,7 +183,7 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		var recentAnswers = _curResource.playerAnswers,
 			numAnswers = recentAnswers.length,
-			displayAnswers,
+			displayAnswers = '',
 			finalQuestion = '<p>' + _curResource.question + '</p>';
 		if(numAnswers === 0) {
 			_speak = 'Congrats! You were the first to answer.';
@@ -215,6 +216,7 @@ $game.$resources = {
 		$('.resourceArea').fadeOut(function() {
 			$game.$resources.isShowing = false;
 			$('.resourceArea button').addClass('hideButton');
+			$('.resourceArea').removeClass('patternBg1');
 		});
 
 		//if the resource was being displayed from the inventory, keep it up.
@@ -253,7 +255,7 @@ $game.$resources = {
 	submitAnswer: function() {
 	
 		//get the answer from the field
-		var response = $('.resourceArea input').val();
+		var response = $('.resourceArea textarea').val();
 		
 		if(response === _curResource.answer) {
 			//update player stuff 

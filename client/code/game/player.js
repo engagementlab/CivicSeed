@@ -16,6 +16,7 @@ var _curFrame = 0,
 	_hideTimer = null,
 	_chatId = null,
 	_chatIdSelector = null,
+	_rgb = null,
 	_numRequired = [1,1,1,1];
 
 
@@ -72,6 +73,8 @@ $game.$player = {
 
 
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
+			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
+			$('.hudCount').css('background', _rgb);
 				
 			//init everything else that depends on the player info
 			$game.$others.init();

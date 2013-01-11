@@ -542,11 +542,14 @@ textarea {
 }
 body {
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'InconsolataMedium', monospace;
   font-size: 15px;
   line-height: 24px;
   color: #333333;
   background-color: #ffffff;
+}
+.gameboard {
+  font-family: 'InconsolataMedium', monospace;
 }
 a {
   color: #e6742e;
@@ -5153,6 +5156,12 @@ a.badge:hover {
 .invisible {
   visibility: hidden;
 }
+.gameboard {
+  font-family: 'InconsolataMedium', monospace;
+}
+.btn {
+  font-family: 'InconsolataMedium', monospace;
+}
 @font-face {
   font-family: 'InconsolataMedium';
   src: url('Inconsolata-webfont.woff') format('woff'), url('Inconsolata-webfont.ttf') format('truetype');
@@ -5164,6 +5173,7 @@ body {
 }
 .gameboard {
   position: relative;
+  font-family: 'InconsolataMedium', monospace;
   margin: 0 auto;
   width: 960px;
   height: 480px;
@@ -5172,6 +5182,7 @@ body {
   border: 4px solid #222;
   z-index: 0;
   background: #eee;
+  color: #333;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -5190,17 +5201,30 @@ body {
 .resourceStage {
   display: none;
 }
+.resourceContent {
+  overflow: hidden;
+}
 .resourceArea {
   position: absolute;
   top: 15px;
   left: 15px;
   width: 930px;
   height: 450px;
-  background: #333;
+  background: #efefef;
   padding: 0;
+  box-shadow: 2px 2px 4px 4px #333;
   border-radius: 5px;
   z-index: 9999;
   display: none;
+}
+.patternBg1 {
+  background: url(../img/bg/maze.png) #efefef;
+}
+.patternBg2 {
+  background: url(../img/bg/lines.png) #efefef;
+}
+.patternBg3 {
+  background: url(../img/bg/squares.png) #efefef;
 }
 .gnomeArea {
   position: absolute;
@@ -5208,9 +5232,9 @@ body {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: #333;
   padding: 0;
   border-radius: 5px;
+  box-shadow: 2px 2px 4px 4px #333;
   z-index: 9997;
   display: none;
 }
@@ -5230,7 +5254,8 @@ body {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: rgba(20, 20, 20, 0.8);
+  background: url(../img/bg/lines.png) #efefef;
+  box-shadow: 2px 2px 4px 4px #333;
   padding: 0;
   border-radius: 5px;
   z-index: 9990;
@@ -5245,7 +5270,7 @@ body {
   left: 15px;
   width: 930px;
   height: 60px;
-  background: rgba(30, 30, 30, 0.8);
+  background: rgba(20, 20, 20, 0.7);
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
@@ -5255,8 +5280,7 @@ body {
 .resourceArea p,
 .gnomeArea h2,
 .gnomeArea p {
-  color: white;
-  text-shadow: 1px 1px 1px #222;
+  color: #333;
   padding: 10px 10px 0px 15px;
 }
 .nextButton,
@@ -5287,13 +5311,13 @@ body {
   left: 10px;
   width: 920px;
   min-height: 35px;
-  background: #eee;
+  background: #efefef;
   border-radius: 5px;
   z-index: 9999;
   display: none;
   color: #222;
   padding: 10px;
-  box-shadow: 2px 2px 2px 2px #333;
+  box-shadow: 2px 2px 4px 4px #333;
 }
 .speechBubble p {
   margin: 5px 0 0 0;
@@ -5365,15 +5389,14 @@ body {
 }
 .playerChat {
   position: absolute;
-  font-family: 'InconsolataMedium', monospace, Sans-serif;
   font-size: 16px;
   width: 200px;
   height: 20px;
-  background: rgba(30, 30, 30, 0.7);
+  background: rgba(20, 20, 20, 0.7);
   border-radius: 5px;
   padding: 0 0 5px 10px;
   z-index: 9999;
-  color: white;
+  color: #eee;
   text-shadow: 1px 1px 1px #333;
 }
 .pauseMenu {
@@ -5382,7 +5405,7 @@ body {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: rgba(30, 30, 30, 0.8);
+  background: #efefef;
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
@@ -5391,7 +5414,7 @@ body {
 .pauseMenu p {
   text-align: center;
   font-family: 'InconsolataMedium', monospace, Sans-serif;
-  color: white;
+  color: #222;
   font-size: 2em;
   margin-top: 100px;
 }
@@ -5416,7 +5439,7 @@ body {
 .hideButton {
   display: none;
 }
-.chatButton {
+#chatButton {
   margin-left: 10px;
 }
 .riddleText {
@@ -5440,6 +5463,17 @@ body {
   width: 75%;
   font-size: 16px;
   font-family: 'InconsolataMedium', monospace, monospace;
+}
+textarea {
+  width: 800px;
+  height: 200px;
+  max-width: 800px;
+  max-height: 200px;
+  resize: none;
+  font-family: 'InconsolataMedium', monospace;
+}
+.finalQuestion {
+  font-size: 1.2em;
 }
 .globalHud {
   margin-left: 20px;
@@ -5476,7 +5510,7 @@ body {
   padding: 0px 5px 5px 5px;
   top: -12px;
   right: 5px;
-  color: #eee;
+  color: #333;
   background: rgba(0, 120, 130, 0.8);
   border-radius: 10px;
 }
@@ -5490,6 +5524,7 @@ body {
   padding: 10px;
   margin-left: 10px;
   color: #ccff00;
+  text-shadow: 0px 0px 2px #333;
 }
 .seedersHeader {
   margin-left: 40px;
@@ -5498,9 +5533,9 @@ body {
 .topSeeders {
   padding: 10px;
   margin-left: 30px;
-  color: #ccc;
+  color: #333;
 }
-.feedback {
+.tangramArea > .feedback {
   width: 320px;
   height: 36px;
   position: absolute;
@@ -5508,13 +5543,12 @@ body {
   font-size: 20px;
   top: 150px;
   left: 310px;
-  color: #eee;
   border-radius: 5px;
   border: 2px solid white;
-  background: #f90;
+  background: rgba(20, 20, 20, 0.8);
   display: none;
-  padding-bottom: 20px;
   z-index: 9999;
+  color: #eee;
 }
 .colorMap {
   background: rgba(0, 0, 0, 0.8);
@@ -5539,13 +5573,17 @@ body {
   padding: 20px;
 }
 .playerAnswers {
-  color: #ccc;
+  color: #555;
+  font-family: 'InconsolataMedium', monospace;
   list-style: none;
 }
 .megaBar {
-  color: #eee;
+  color: #333;
   margin: 15px 0 15px 40px;
   width: 40%;
+}
+.progress {
+  border: 2px solid #333;
 }
 .waitingForSeed {
   width: 32px;

@@ -117,6 +117,7 @@ $game.$mouse = {
 							}
 
 							else {
+								$('.speechBubble button').addClass('hideButton');
 								$game.$gnome.show();
 							}
 						}

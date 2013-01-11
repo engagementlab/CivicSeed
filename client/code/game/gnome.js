@@ -294,11 +294,13 @@ $game.$gnome = {
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
 
-			$('.gnomeArea').fadeIn(function() {
-				$game.$gnome.isShowing = true;
-				if(_currentSlide !== 2) {
-					$('.tangramArea').show();	
-				}
+			$('.gnomeArea')
+				.addClass('patternBg3')
+				.fadeIn(function() {
+					$game.$gnome.isShowing = true;
+					if(_currentSlide !== 2) {
+						$('.tangramArea').show();	
+					}
 			});
 		});
 		
@@ -425,7 +427,9 @@ $game.$gnome = {
 		$('.gnomeArea').fadeOut(function() {
 			$game.$gnome.isShowing = false;
 			$('.gnome button').addClass('hideButton');
-			$('.gnomeArea').css('height','450px');
+			$(this)
+				.removeClass('patternBg3')
+				.css('height','450px');
 			$game.$gnome.isChat = false;
 			$game.$gnome.isSolving = false;
 			$game.changeStatus();

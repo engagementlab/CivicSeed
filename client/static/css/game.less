@@ -12,6 +12,7 @@ body {
 }
 .gameboard{
 	position: relative;
+	font-family: @mono;
 	margin: 0 auto;
 	width: 960px;
 	height: 480px;
@@ -20,6 +21,7 @@ body {
 	border: 4px solid #222;
 	z-index:0;
 	background:#eee;
+	color: #333;
 	-webkit-touch-callout: none;
 -webkit-user-select: none;
 -khtml-user-select: none;
@@ -38,18 +40,33 @@ user-select: none;
 .resourceStage {
 	display:none;	
 }
-
+.resourceContent {
+	overflow: hidden;
+}
 .resourceArea{
 	position: absolute;
 	top:15px;
 	left:15px;
 	width: 930px;
 	height: 450px;
-	background: #333;
+	background: #efefef;
 	padding: 0;
+	box-shadow: 2px 2px 4px 4px #333;
 	border-radius: 5px;
 	z-index:9999;
 	display:none;
+}
+
+.patternBg1 {
+	background: url(../img/bg/maze.png) #efefef;
+}
+
+.patternBg2 {
+	background: url(../img/bg/lines.png) #efefef;
+}
+
+.patternBg3 {
+	background: url(../img/bg/squares.png) #efefef;
 }
 
 .gnomeArea{
@@ -58,9 +75,10 @@ user-select: none;
 	left:15px;
 	width: 930px;
 	height: 450px;
-	background: #333;
 	padding: 0;
-	border-radius: 5px;
+	
+	border-radius: 5px;	
+	box-shadow: 2px 2px 4px 4px #333;
 	z-index:9997;
 	display:none;
 }
@@ -82,7 +100,8 @@ user-select: none;
 	left:15px;
 	width: 930px;
 	height: 450px;
-	background: rgba(20,20,20,0.8);
+	background: url(../img/bg/lines.png) #efefef;
+	box-shadow: 2px 2px 4px 4px #333;
 	padding: 0;
 	border-radius: 5px;
 	z-index:9990;
@@ -98,7 +117,7 @@ user-select: none;
 	left:15px;
 	width: 930px;
 	height: 60px;
-	background: rgba(30,30,30,.8);
+	background: rgba(20,20,20,.7);
 	padding: 0;
 	border-radius: 5px;
 	z-index:9999;
@@ -106,8 +125,7 @@ user-select: none;
 }
 
 .resourceArea h2, .resourceArea p, .gnomeArea h2, .gnomeArea p {
-	color:white;
-	text-shadow: 1px 1px 1px #222;
+	color:#333;
 	padding:10px 10px 0px 15px;
 	
 }
@@ -137,13 +155,13 @@ user-select: none;
 	left:10px;
 	width: 920px;
 	min-height:35px;
-	background: #eee;
+	background: #efefef;
 	border-radius: 5px;
 	z-index:9999;
 	display:none;
 	color: #222;
 	padding: 10px;
-	box-shadow: 2px 2px 2px 2px #333;
+	box-shadow: 2px 2px 4px 4px #333;
 }
 .speechBubble p {
 	margin: 5px 0 0 0;
@@ -215,15 +233,14 @@ user-select: none;
 }
 .playerChat {
 	position: absolute;
-	font-family: @mono, Sans-serif;
 	font-size: 16px;
 	width: 200px;
 	height: 20px;
-	background: rgba(30,30,30,.7);
+	background: rgba(20,20,20,.7);
 	border-radius: 5px;
 	padding:0 0 5px 10px;
 	z-index:9999;
-	color:white;
+	color:#eee;
 	text-shadow: 1px 1px 1px #333;
 }
 .pauseMenu {
@@ -232,7 +249,7 @@ user-select: none;
 	left:15px;
 	width: 930px;
 	height: 450px;
-	background: rgba(30,30,30,.8);
+	background: #efefef;
 	padding: 0;
 	border-radius: 5px;
 	z-index:9999;
@@ -241,7 +258,7 @@ user-select: none;
 .pauseMenu p{
 	text-align: center;
 	font-family: @mono, Sans-serif;
-	color: white;
+	color: #222;
 	font-size: 2em;
 	margin-top: 100px;
 
@@ -267,7 +284,7 @@ user-select: none;
 .hideButton {
 	display:none;
 }
-.chatButton {
+#chatButton {
 	margin-left: 10px;
 }
 .riddleText {
@@ -291,6 +308,17 @@ user-select: none;
 	width: 75%;
 	font-size: 16px;
 	font-family: @mono, monospace;
+}
+textarea {
+	width: 800px;
+	height: 200px;
+	max-width: 800px;
+	max-height: 200px;
+	resize: none;
+	font-family: @mono;
+}
+.finalQuestion {
+	font-size: 1.2em;
 }
 
 .globalHud {
@@ -329,7 +357,7 @@ user-select: none;
 	padding: 0px 5px 5px 5px;
 	top:-12px;
 	right:5px;
-	color: #eee;
+	color: #333;
 	background: rgba(0, 120, 130,.8);
 	border-radius:10px;
 }
@@ -344,6 +372,7 @@ user-select: none;
 	padding:10px;
 	margin-left:10px;
 	color: #ccff00;
+	text-shadow: 0px 0px 2px #333;
 }
 .seedersHeader {
 	margin-left: 40px;
@@ -352,9 +381,9 @@ user-select: none;
 .topSeeders {
 	padding:10px;
 	margin-left:30px;
-	color: #ccc;
+	color: #333;
 }
-.feedback {
+.tangramArea > .feedback{
 	width: 320px;
 	height: 36px;
 	position: absolute;
@@ -362,13 +391,12 @@ user-select: none;
 	font-size:20px;
 	top: 150px;
 	left: 310px;
-	color: #eee;
 	border-radius: 5px;
 	border: 2px solid white;
-	background: #f90;
+	background: rgba(20,20,20,.8);
 	display: none;
-	padding-bottom: 20px;
 	z-index: 9999;
+	color: #eee;
 }
 .colorMap {
 	background: rgba(0,0,0,.8);
@@ -393,13 +421,17 @@ user-select: none;
 	padding:20px;
 }
 .playerAnswers {
-	color: #ccc;
+	color: #555;
+	font-family: @mono;
 	list-style: none;
 }
 .megaBar {
-	color: #eee;
+	color: #333;
 	margin: 15px 0 15px 40px;
 	width:40%;
+}
+.progress {
+	border: 2px solid #333;
 }
 .waitingForSeed {
 	width: 32px;
