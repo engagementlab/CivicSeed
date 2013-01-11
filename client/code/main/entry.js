@@ -18,6 +18,7 @@ ss.server.on('ready', function() {
 				require('/routes-middleware.js').loadMiddleware(ss, $app);
 				require('/main-routes').loadRoutes(ss, $app);
 				require('/admin-routes').loadRoutes(ss, $app);
+				require('/profile-routes').loadRoutes(ss, $app);
 				// require('/game-routes').loadRoutes(ss, $app);
 
 				$app.configure(function(config) {

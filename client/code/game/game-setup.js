@@ -12,6 +12,7 @@ exports.init = function(callback) {
 				sessionStorage.setItem('userId', userSessionObject.id);
 				sessionStorage.setItem('userName', userSessionObject.name);
 				sessionStorage.setItem('userEmail', userSessionObject.email);
+				sessionStorage.setItem('userRole', userSessionObject.role);
 			}
 			$body.append(JT['partials-navigation']());
 			$body.append(JT['game-gameboard']());

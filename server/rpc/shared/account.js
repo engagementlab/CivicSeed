@@ -56,7 +56,8 @@ exports.actions = function(req, res, ss) {
 				res({
 					id: req.session.userId,
 					name: req.session.name,
-					email: req.session.email
+					email: req.session.email,
+					role: req.session.role
 				});
 			} else {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
