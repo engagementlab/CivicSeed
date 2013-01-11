@@ -2,23 +2,14 @@
 
 ## Setup/Installation
 
-### Install SocketStream as a global dependency
-
-    [sudo] npm install -g socketstream
-
 ### Clone the repository
 
     git clone git@github.com:americanyak/CivicSeed.git
 
-### Install the project and nodemon
+### Install the project
 
     cd CivicSeed
-    [sudo] npm install -g nodemon
     npm install
-
-### Environmental Configuration
-
-...to come...[using nconf package JSON]...
 
 ### Startup
 
@@ -26,19 +17,46 @@ To start the app:
 
     node app.js
 
-To start the app in dev mode, use nodemon for node file monitoring and autobuild:
+For development purposes, you may wish to use nodemon or another file monitor instead of node alone:
 
+    [sudo] npm install -g nodemon
     nodemon app.js
 
-To change the node or database environment settings, use command line variables like such:
+#### Environmental Configuration
 
-    NODE_ENV=development ALT_DB=testing nodemon app.js
+CivicSeed uses nconf to access environment variables, which include:
 
-Please be very careful about using alternate databases (especially on production or staging) as data protections are not yet in place when using databases and node environments that do not match. **PLEASE TAKE EXTRA PRECAUTION WHEN STARTING THE APP THIS WAY!!!**
+ * NAME
+ * DOMAIN
+ * PORT
+ * USE_REDIS
+ * REDIS_HOST
+ * REDIS_PORT
+ * REDIS_PW
+ * REDIS_DB
+ * MONGO_URL
+ * MAP_TILES_WIDTH
+ * MAP_TILES_HEIGHT
 
-Or to specificy both node and database environments in one go, just launch with the correct NODE_ENV variable: 
+#### Development
 
-    NODE_ENV=production node app.js
+For ease of development, nconf looks for a hidden config file (see ```.gitignore```) called ```config.json```, instead of environment variables in development mode. Create this file by duplicating and renaming the ```config-sample.json``` file.
+
+#### Production/Staging
+
+Development of CivicSeed was done with Nodejitsu, so these are Nodejitsu specific instructions, but generally apply if you're using your own server instances or some other situation.
+
+Make sure to create all the environment variables listed above. These variables imply a running instance of REDIS and MongoDB.
+
+Before deploying the application, you'll want to pack the assets for production. You'll need to use the ```sudo``` command if you're using a production client port lower than 1024:
+
+    [sudo] NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+
+If you're having issues with sockets hanging up based on launch time, you can up the deployment timeout:
+
+    jitsu config set timeout 860000
+
+
 
 Once the app is running you may visit `/startup` to initialize data in the app. (Data is found in .json files in the `/data` folder.) Please note, **you may only initialize data once in production or staging modes**. This is for protection of data. However, you may run it in testing or development as many times as needed, but it should be noted that **this will wipe the database of all previous existing data**.
 
@@ -52,9 +70,8 @@ Running "node --version" should return:
 
     v0.8.2
 
-You must install Cairo for server side  canvas.  Simple instructions available here:
+You must install Cairo for server side canvas. Simple instructions available here:
 https://github.com/LearnBoost/node-canvas/wiki/_pages
-
 
 ## Deployment
 
