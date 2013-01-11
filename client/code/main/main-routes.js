@@ -29,9 +29,18 @@ var self = module.exports = {
 		// }
 
 		var $body = $(document.body);
+		var $container = $('#container');
 
 		$app.get('/', function(req) {
-			$('#container').append(JT['main-home']());
+			$container.append(JT['main-home']());
+		});
+
+		$app.get('/about', function(req) {
+			$container.append(JT['main-about']());
+		});
+
+		$app.get('/contact', function(req) {
+			$container.append(JT['main-contactus']());
 		});
 
 		$app.bind('routeNotFound', function (req) {

@@ -18,12 +18,20 @@
 						li.divider
 						li.signOut: a(href='/signout') Sign Out
 
-			.nav-collapse
+
+			#mainNavigation.nav-collapse
+				- if(locals && locals.fullPath)
+					style
+						#mainNavigation a[href='#{locals.fullPath}'] {
+							color: #dce12f;
+							text-decoration: none;
+							background-color: #555555;
+						}
 				ul.nav
-					li.active: a(href='/') Home
+					li: a(href='/') Home
 					li: a(href='/about') About
 					li: a(href='/profiles') Profiles
 					li: a(href='/contact') Contact Us
 
-					//- - if(CivicSeed.)
-						//- {{#if isAdmin}}<li class="admin"><a href="/admin">Admin</a></li>{{/if}}
+					- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
+						li: a(href='/admin') Admin Console

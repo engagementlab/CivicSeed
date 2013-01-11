@@ -32,6 +32,7 @@ var $account = module.exports = {
 			sessionStorage.removeItem('userId');
 			sessionStorage.removeItem('userName');
 			sessionStorage.removeItem('userEmail');
+			sessionStorage.removeItem('userRole');
 			if(deAuthenticate) {
 				location.href = '/';
 				// console.log('Logging out...');
