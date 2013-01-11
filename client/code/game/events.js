@@ -295,11 +295,9 @@ $('.muteButton').bind('click', function() {
 	}
 });
 
-$('.globalHud > div').bind('mouseenter',function() {
-	$('.tooltip').fadeIn();
-});
-$('.globalHud > div').bind('mouseleave',function() {
-	$('.tooltip').fadeOut();
+$('.globalHud > div > i, .playerHud > div > i').bind('mouseenter',function() {
+	var info = $(this).attr('title');
+	$(this).tooltip('show');
 });
 // $(window).bind('keydown',function(e) {
 // 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){

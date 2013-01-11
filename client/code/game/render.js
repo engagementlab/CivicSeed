@@ -587,9 +587,9 @@ $game.$renderer = {
 
 	renderThing: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[5],
-			info.srcX,
-			info.srcY,
+			_tilesheets[4],
+			16*32,
+			18*32,
 			$game.TILE_SIZE * 3,
 			$game.TILE_SIZE * 2,
 			info.curX,

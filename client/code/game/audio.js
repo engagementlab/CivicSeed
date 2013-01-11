@@ -2,7 +2,7 @@ var _soundtracks = [],
 	_effects = [],
 	_currentTrack = 0,
 	_numTracks = 5,
-	_numEffects = 0,
+	_numEffects = 1,
 	_tweenTimeout = null,
 	_targetV = 0;
 
@@ -36,7 +36,6 @@ $game.$audio = {
 
 			_soundtracks[num].addEventListener('canplaythrough', function (e) {
 				this.removeEventListener('canplaythrough', arguments.callee, false);
-				console.log(num, 'ready to play.');
 				num += 1;
 				$game.$audio.loadTrack(num);
 			},false);
@@ -54,18 +53,25 @@ $game.$audio = {
 			$game.$audio.ready = true;
 		}
 		else {
+			if(CivicSeed.ENVIRONMENT === 'development') {
+				_effects[num].src = Modernizr.audio.ogg ? '/audio/fx/' + num + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000):
+									Modernizr.audio.mp3 ? '/audio/fx/' + num + '.mp3?VERSION=' + Math.round(Math.random(1) * 1000000000):
+									'/audio/fx/' + num  + '.mp3?VERSION' + Math.round(Math.random(1) * 1000000000);
 
+			} else {
+				_effects[num].src = Modernizr.audio.ogg ? '/audio/fx/' + num + '.ogg?VERSION=' + CivicSeed.VERSION:
+									Modernizr.audio.mp3 ? '/audio/fx/' + num + '.mp3?VERSION=' + CivicSeed.VERSION:
+									'/audio/fx/' + num  + '.mp3?VERSION' + CivicSeed.VERSION;
+			}
 			_effects[num].preload = "auto",
 			_effects[num].autobuffer = true,
-			_effects[num].src = '/audio/tile.mp3',
 			_effects[num].volume = 0.4,
 			_effects[num].load();
-
 			_effects[num].addEventListener('canplaythrough', function (e) {
 				this.removeEventListener('canplaythrough', arguments.callee, false);
 				//console.log(num, 'ready to play.');
 				num += 1;
-				$game.$audio.loadeEffect(num);
+				$game.$audio.loadEffect(num);
 			},false);
 			
 			_effects[num].addEventListener('error', function (e) {

@@ -109,23 +109,23 @@ $game.$gnome = {
 		
 		_counter += 1;
 		
-		if(_counter >= 40) {
+		if(_counter >= 24) {
 			_counter = 0,
 			_renderInfo.srcX = 0,
 			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 30) {
+		else if(_counter == 18) {
 			_renderInfo.srcX = 32 * 6;
 			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 20) {
+		else if(_counter == 12) {
 			_renderInfo.srcX = 32 * 12;
 			_renderInfo.srcY = 0;
 		}
 
-		else if(_counter == 10) {
+		else if(_counter == 6) {
 			_renderInfo.srcX = 32 * 18;
 			_renderInfo.srcY = 0;
 		}
@@ -209,7 +209,7 @@ $game.$gnome = {
 		});
 	},
 	addChatContent: function() {
-		
+		$('.speechBubble button').addClass('hideButton');
 		$('.speechBubble .nextChatButton').removeClass('hideButton');
 		$('.speechBubble .speakerName').text($game.$gnome.name+": ");
 		$('.speechBubble .message').text(_messages[_currentMessage]);

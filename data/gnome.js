@@ -1,7 +1,7 @@
 module.exports.global = {
 	id: 99999,
-	x: 69,
-	y: 72,
+	x: 71,
+	y: 74,
 	name: 'Gnome Gnome',
 	spriteMap: [{
 		x: 0,
