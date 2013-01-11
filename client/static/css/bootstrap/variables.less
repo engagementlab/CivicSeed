@@ -16,7 +16,15 @@
 
 //font
 @import url(http://fonts.googleapis.com/css?family=Noticia+Text);
+@font-face {
+    font-family: 'InconsolataMedium';
+    src: url('../Inconsolata-webfont.woff') format('woff'),
+         url('../Inconsolata-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
+@mono: 'InconsolataMedium', monospace;
 
 // Grays
 // -------------------------
@@ -84,22 +92,22 @@
 @btnBorder:                         #ccc;
 
 @btnPrimaryBackground:              @csOrange;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 5%);
+@btnPrimaryBackgroundHighlight:     darken(@btnPrimaryBackground, 10%);
 
-@btnInfoBackground:                 #5bc0de;
-@btnInfoBackgroundHighlight:        #2f96b4;
+@btnInfoBackground:                 @csYellow;
+@btnInfoBackgroundHighlight:        darken(@btnInfoBackground, 10%);
 
-@btnSuccessBackground:              #62c462;
-@btnSuccessBackgroundHighlight:     #51a351;
+@btnSuccessBackground:              @csLightGreen;
+@btnSuccessBackgroundHighlight:     darken(@btnSuccessBackground, 10%);
 
-@btnWarningBackground:              lighten(@orange, 15%);
-@btnWarningBackgroundHighlight:     @orange;
+@btnWarningBackground:              @csPurple;
+@btnWarningBackgroundHighlight:     darken(@btnWarningBackground, 10%);
 
 @btnDangerBackground:               #ee5f5b;
 @btnDangerBackgroundHighlight:      #bd362f;
 
-@btnInverseBackground:              @gray;
-@btnInverseBackgroundHighlight:     @grayDarker;
+@btnInverseBackground:              @csDarkGreen;
+@btnInverseBackgroundHighlight:     darken(@btnInverseBackground, 10%);
 
 
 // Forms

@@ -260,7 +260,7 @@ $('.gnomeArea .answerButton').bind('click', (function (e) {
 
 $('.progressArea a i').bind('click', (function (e) {
 	e.preventDefault();
-	$('.progressArea').slideUp(function() {
+	$('.progressArea').fadeOut(function() {
 		$game.showingProgress = false;
 	});
 	return false;
@@ -272,7 +272,7 @@ $('.activePlayers').click(function() {
 
 $('.progressButton').bind('click', function() {
 	if($game.showingProgress) {
-		$('.progressArea').slideUp(function() {
+		$('.progressArea').fadeOut(function() {
 			$game.showingProgress = false;
 			$game.changeStatus();
 		});

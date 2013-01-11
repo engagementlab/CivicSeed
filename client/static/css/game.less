@@ -6,8 +6,10 @@
     font-style: normal;
 }
 
-@mono: 'InconsolataMedium';
-
+@mono: 'InconsolataMedium', monospace;
+body {
+	font-family: @mono;
+}
 .gameboard{
 	position: relative;
 	margin: 0 auto;
@@ -15,7 +17,7 @@
 	height: 480px;
 	padding: 0;
 	border-radius: 5px;
-	border: 2px solid #222;
+	border: 4px solid #222;
 	z-index:0;
 	background:#eee;
 	-webkit-touch-callout: none;
@@ -134,18 +136,24 @@ user-select: none;
 	top:10px;
 	left:10px;
 	width: 920px;
-	max-height: 55px;
-	background: rgba(30,30,30,.7);
+	min-height:35px;
+	background: #eee;
 	border-radius: 5px;
 	z-index:9999;
 	display:none;
-	color: white;
+	color: #222;
 	padding: 10px;
-	text-shadow: 1px 1px 1px #333;
+	box-shadow: 2px 2px 2px 2px #333;
+}
+.speechBubble p {
+	margin: 5px 0 0 0;
+	padding: 0;
+	width: 800px;
 }
 
 .speakerName {
-	color: #ccff33;
+	color: #555;
+	text-shadow:1px 1px #333;
 }
 .speechBubble button {
 	float: right;
@@ -259,8 +267,8 @@ user-select: none;
 .hideButton {
 	display:none;
 }
-.nextChatButton {
-
+.chatButton {
+	margin-left: 10px;
 }
 .riddleText {
 	position: absolute;
@@ -299,7 +307,7 @@ user-select: none;
 	display:none;
 }
 .displayBox {
-	width:90%;
+	width:95%;
 	height: 24px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
@@ -402,4 +410,9 @@ user-select: none;
 }
 .centerImage {
 	margin-left:85px;
+}
+.buttonCorner {
+	position:absolute;
+	bottom: 10px;
+	right: 5px;
 }

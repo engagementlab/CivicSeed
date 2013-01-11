@@ -178,7 +178,7 @@ $game.$npc = {
 	hideChat: function() {
 		
 		clearTimeout($game.$npc.hideTimer);
-		$('.speechBubble').slideUp(function() {
+		$('.speechBubble').fadeOut(function() {
 			$game.$npc.isChat = false;
 			$game.$resources.isShowing = false;
 			$('.speechBubble button').addClass('hideButton');
@@ -211,7 +211,7 @@ $game.$npc = {
 		$('.speechBubble .speakerName').text(_who+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
-		$('.speechBubble').slideDown(function() {
+		$('.speechBubble').fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				$game.$resources.showResource(promptNum);
 			}));
@@ -230,7 +230,7 @@ $game.$npc = {
 		$('.speechBubble .speakerName').text(_who);
 		$('.speechBubble .message').text(_speak);
 
-		$('.speechBubble').slideDown(function() {
+		$('.speechBubble').fadeIn(function() {
 			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
 		});
 	},

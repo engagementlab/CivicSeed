@@ -569,7 +569,7 @@ exports.$game = {
 		$('.megaBar').append(percentShow + percentBar);
 		$('.topSeeders').empty();
 		$('.topSeeders').append(topPlayers + seedCount);
-		$('.progressArea').slideDown(function() {
+		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});
 	},

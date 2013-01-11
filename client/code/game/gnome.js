@@ -197,7 +197,7 @@ $game.$gnome = {
 		$game.$gnome.nextChatContent();
 	},
 	hideChat: function() {
-		$('.speechBubble').slideUp(function() {
+		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .closeChatButton').unbind('click');
 			$game.$gnome.isChat = false;
@@ -216,7 +216,7 @@ $game.$gnome = {
 
 		//first item, then drop
 		if(_currentMessage === 0) {
-			$('.speechBubble').slideDown(function() {
+			$('.speechBubble').fadeIn(function() {
 				$(".speechBubble .nextChatButton").bind('click', (function () {
 					$game.$gnome.nextChatContent();
 				}));
@@ -246,7 +246,7 @@ $game.$gnome = {
 		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
-		$('.speechBubble').slideDown(function() {
+		$('.speechBubble').fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				if(p === 1) {
 					$game.$gnome.isSolving = true;
@@ -289,12 +289,12 @@ $game.$gnome = {
 		$game.$gnome.addButtons();
 		
 		
-		$('.speechBubble').slideUp(function() {
+		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
 
-			$('.gnomeArea').slideDown(function() {
+			$('.gnomeArea').fadeIn(function() {
 				$game.$gnome.isShowing = true;
 				if(_currentSlide !== 2) {
 					$('.tangramArea').show();	
@@ -422,7 +422,7 @@ $game.$gnome = {
 		//slide up the gnome area that contains big content
 		//re-enable clicking by setting bools to false
 		$('.tangramArea').hide();
-		$('.gnomeArea').slideUp(function() {
+		$('.gnomeArea').fadeOut(function() {
 			$game.$gnome.isShowing = false;
 			$('.gnome button').addClass('hideButton');
 			$('.gnomeArea').css('height','450px');

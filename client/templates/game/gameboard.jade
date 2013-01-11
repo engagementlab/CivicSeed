@@ -13,10 +13,10 @@
 			span.speakerName
 			span.message
 		div.resourceContent
-		button.nextButton.btn.btn-info(type='button') Next
+		button.nextButton.btn.btn-primary(type='button') Next
 		button.backButton.btn.btn-inverse(type='button') Back
 		button.answerButton.btn.btn-success(type='button') Answer
-		button.closeButton.btn.btn-primary(type='button') Close
+		button.closeButton.btn.btn-info(type='button') Close
 	div.gnomeArea
 		p.dialog
 			span.speakerName
@@ -26,10 +26,10 @@
 		div.tangramArea
 			p.feedback
 			
-		button.nextButton.btn.btn-info(type='button') Next
+		button.nextButton.btn.btn-primary(type='button') Next
 		button.backButton.btn.btn-inverse(type='button') Back
 		button.answerButton.btn.btn-success(type='button') Answer
-		button.closeButton.btn.btn-primary(type='button') Close
+		button.closeButton.btn.btn-info(type='button') Close
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
 	div.progressArea
@@ -46,13 +46,15 @@
 	
 	div.inventory
 		button.closeButton.btn.btn-primary(type='button') Close
-	p.speechBubble
-		span.speakerName
-		span.message
-		button.nextChatButton.btn.btn-success(type='button') Next
-		button.closeChatButton.btn.btn-primary(type='button') Close
-		button.noButton.btn.btn-danger(type='button') No
-		button.yesButton.btn.btn-success(type='button') Yes
+	div.speechBubble
+		p
+			span.speakerName
+			span.message
+		div.buttonCorner
+			button.nextChatButton.btn.btn-success(type='button') Next
+			button.closeChatButton.btn.btn-info(type='button') Close
+			button.noButton.btn.btn-warning(type='button') No
+			button.yesButton.btn.btn-success(type='button') Yes
 	
 	div.pauseMenu
 		p please re-focus your mind, body, and the window...

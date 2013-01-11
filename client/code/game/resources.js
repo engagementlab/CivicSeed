@@ -62,7 +62,7 @@ $game.$resources = {
 			_correctAnswer = false;
 		}
 
-		$('.speechBubble').slideUp(function() {
+		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$(".speechBubble .yesButton").unbind("click");
 			$(".speechBubble .noButton").unbind("click");
@@ -72,9 +72,9 @@ $game.$resources = {
 			$('.resourceArea .dialog > span, .resourceArea .resourceContent').empty();
 			$game.$resources.addContent();
 			$game.$resources.addButtons();
-			$('.inventory').slideUp(function() {
+			$('.inventory').fadeOut(function() {
 				$game.$player.inventoryShowing = false;
-				$('.resourceArea').slideDown();
+				$('.resourceArea').fadeIn();
 			});
 		});
 		
@@ -212,14 +212,14 @@ $game.$resources = {
 	},
 
 	hideResource: function() {
-		$('.resourceArea').slideUp(function() {
+		$('.resourceArea').fadeOut(function() {
 			$game.$resources.isShowing = false;
 			$('.resourceArea button').addClass('hideButton');
 		});
 
 		//if the resource was being displayed from the inventory, keep it up.
 		if(_inventory) {
-			$('.inventory').slideDown(function() {
+			$('.inventory').fadeIn(function() {
 				_inventory = false;
 				if($game.$gnome.isSolving) {
 					$game.$player.inventoryShowing = false;
