@@ -571,7 +571,7 @@ $game.$gnome = {
 			$game.$player.nextLevel();
 			$game.$gnome.hideResource();
 			//upload the user's answer to the DB
-			var portAnswer = $('.gnomeContent input').val();
+			var portAnswer = $('.gnomeContent textarea').val();
 			$game.$player.game.resume.push(portAnswer);
 			$game.changeStatus('talk to the gnome');
 		}
