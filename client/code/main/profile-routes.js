@@ -4,8 +4,10 @@ var self = module.exports = {
 
 		var $container = $('#container');
 
-		$app.get('/profiles', function(req) {
-			$container.append(JT['profiles-singleprofile']());
+		$app.get('/profiles/:name', function(req) {
+			ss.rpc('shared.account.getProfileInformation', req.params['name'], function(info) {
+					$container.append(JT['profiles-singleprofile'](info));
+			});
 		});
 
 	}

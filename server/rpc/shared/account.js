@@ -63,6 +63,22 @@ exports.actions = function(req, res, ss) {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
+		},
+
+		getProfileInformation: function(name) {
+			UserModel.findOne({name: name} , function(err, user) {
+				if(user) {
+					var profileInfo = {
+						name: user.name,
+						resume: user.game.resume,
+						img: user.game.colorMap
+					};
+					res(profileInfo);
+				}
+				else {
+					res(false);
+				}
+			});
 		}
 
 	};
