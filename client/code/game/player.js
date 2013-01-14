@@ -17,7 +17,14 @@ var _curFrame = 0,
 	_chatId = null,
 	_chatIdSelector = null,
 	_rgb = null,
-	_numRequired = [1,1,1,1];
+	_numRequired = [1,1,1,1],
+	_seedHudCount = null,
+	_seedHudCount2 = null,
+	_waitingSel = null,
+	_gameboardSel = null,
+	_inventoryBtnSel = null,
+	_inventorySel = null,
+	_playerGameInfo = null;
 
 
 $game.$player = {
@@ -65,11 +72,22 @@ $game.$player = {
 			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
 			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
 			_renderInfo.kind = 'player',
+			
+			//we have retrieved player info, so it is ready
 			$game.$player.ready = true;
 
 			$game.$player.id = newInfo.id,
 			$game.$player.name = newInfo.name,
 			$game.$player.game = newInfo.game;
+			_playerGameInfo = newInfo.game;
+
+			//set variables for dom selectors
+			_seedHudCount = $('.seedButton .hudCount');
+			_seedHudCount2 = $('.seedButton2 .hudCount');
+			_waitingSel = $('.waitingForSeed');
+			_gameboardSel = $('.gameboard');
+			_inventoryBtnSel = $('.inventoryButton > .hudCount');
+			_inventorySel = $('.inventory');
 
 
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
@@ -80,8 +98,9 @@ $game.$player = {
 			$game.$others.init();
 			$game.$thing.init();
 
-			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
-			$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+			//set HUD values
+			_seedHudCount.text($game.$player.game.seeds.normal);
+			_seedHudCount2.text($game.$player.game.seeds.riddle);
 			$game.$player.fillInventory();
 
 			_chatId = 'player'+ newInfo.id,
@@ -89,7 +108,7 @@ $game.$player = {
 
 			$game.firstLoad(_info.x, _info.y);
 			$game.$player.updateRenderInfo();
-			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, 'rgb(255,0,0)');
+			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, _rgb);
 
 			var src = $game.$player.game.colorMap;
 			if(src !== undefined) {
@@ -457,6 +476,7 @@ $game.$player = {
 			else {
 				options.sz = ($game.$player.game.currentLevel * 2) + 5;
 				$game.$player.calculateSeeds(options);
+				return true;
 			}
 		}
 		
@@ -540,7 +560,7 @@ $game.$player = {
 
 			var loc = $game.masterToLocal(options.mX,options.mY);
 
-			$('.waitingForSeed')
+			_waitingSel
 				.css({
 					top: loc.y * 32,
 					left: loc.x * 32
@@ -550,7 +570,7 @@ $game.$player = {
 			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
 				//increase the drop count for the player
 				$game.$player.awaitingBomb = false;
-				$('.waitingForSeed').fadeOut();
+				_waitingSel.fadeOut();
 				if(result > 0) {
 					//play sound clip
 					$game.$audio.playSound(0);
@@ -558,7 +578,7 @@ $game.$player = {
 								//update seed count in HUD
 					if(mode === 1) {
 						$game.$player.game.seeds.normal -= 1;
-						$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+						_seedHudCount.text($game.$player.game.seeds.normal);
 						
 						//bounce outta seed mode
 						if($game.$player.game.seeds.normal === 0) {
@@ -569,7 +589,7 @@ $game.$player = {
 					}
 					else if(mode === 2) {
 						$game.$player.game.seeds.riddle -= 1;
-						$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
+						_seedHudCount2.text($game.$player.game.seeds.riddle);
 						if($game.$player.game.seeds.riddle === 0) {
 							$game.$player.seedMode = 0;
 							$game.changeStatus();
@@ -599,7 +619,7 @@ $game.$player = {
 			$(_chatIdSelector).text('me: '+ message);
 		}
 		else {
-			$('.gameboard').append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
+			_gameboardSel.append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
 		}
 		
 		var half = sz / 2,
@@ -707,7 +727,7 @@ $game.$player = {
 		//the answer was correct, add item to inventory
 		if(correct) {
 			$game.$player.game.seeds.normal += (6 - rs.attempts);
-			$('.seedButton .hudCount').text($game.$player.game.seeds.normal);
+			_seedHudCount.text($game.$player.game.seeds.normal);
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
 			$game.$player.checkGnomeState();
@@ -738,7 +758,7 @@ $game.$player = {
 	fillInventory: function() {
 		//on first load, fill inventory from DB
 		var l = $game.$player.game.inventory.length;
-		$('.inventoryButton .hudCount').text(l);
+		_inventoryBtnSel.text(l);
 		while(--l > -1) {
 			$game.$player.addToInventory($game.$player.game.inventory[l]);
 		}
@@ -753,9 +773,9 @@ $game.$player = {
 		//create the class / ref to the image
 		var file = 'r' + id;
 		//put image on page in inventory
-		$('.inventory').prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
+		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
 		
-		$('.inventoryButton .hudCount').text($game.$player.game.inventory.length);
+		_inventoryBtnSel.text($game.$player.game.inventory.length);
 
 		//bind click and drag functions, pass npc #
 		$('img.inventoryItem.'+ file)
@@ -765,7 +785,7 @@ $game.$player = {
 
 	tangramToInventory: function() {
 		var gFile = 'puzzle' + $game.$player.game.currentLevel;
-		$('.inventory').append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png" draggable = "false"></div>');
+		_inventorySel.append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png" draggable = "false"></div>');
 		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
 
@@ -775,7 +795,7 @@ $game.$player = {
 
 	emptyInventory: function() {
 		$game.$player.game.inventory = [];
-		$('.hudCount').text('0');
+		_inventoryBtnSel.text('0');
 	},
 
 	nextLevel: function() {

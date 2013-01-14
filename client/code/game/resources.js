@@ -8,7 +8,16 @@ var _resources = [],
 	_correctAnswer = false,
 	_curResource = null,
 	_revisiting = false,
-	_inventory = false;
+	_inventory = false,
+	_resourceStateSel = null,
+	_speechBubbleSel = null,
+	_inventorySel = null,
+	_resourceAreaSel = null,
+	_speechButtonSel = null,
+	_resourceButtonSel = null,
+	_speakerNameSel = null,
+	_resourceMessageSel = null,
+	_resourceContentSel = null;
 
 $game.$resources = {
 
@@ -25,6 +34,18 @@ $game.$resources = {
 				var stringId = String(resource.id);
 				_resources[stringId] = resource;
 			});
+
+			//set dom selectors
+			_resourceStateSel = $('.resourceStage');
+			_speechBubbleSel = $('.speechBubble');
+			_inventorySel = $('.inventory');
+			_resourceAreaSel = $('.resourceArea');
+			_speechButtonSel = $('.speechBubble button');
+			_resourceButtonSel = $('.resourceArea button');
+			_speakerNameSel = $('.resourceArea .speakerName');
+			_resourceMessageSel = $('.resourceArea .message');
+			_resourceContentSel = $('.resourceContent');
+
 			$game.$resources.ready = true;
 		});
 	},
@@ -42,11 +63,11 @@ $game.$resources = {
 		_answered = false,
 		_currentSlide = 0;
 
-		$('.resourceStage').empty();
+		_resourceStateSel.empty();
 		var stringId = String(index);
 		_curResource = _resources[stringId];
 		var url = _curResource.url;
-		$('.resourceStage').load(url,function() {
+		_resourceStateSel.load(url,function() {
 			_numSlides = $('.resourceStage .pages > .page').length;
 			if(now) {
 				$game.$resources.showResource(2);
@@ -62,8 +83,8 @@ $game.$resources = {
 			_correctAnswer = false;
 		}
 
-		$('.speechBubble').fadeOut(function() {
-			$('.speechBubble button').addClass('hideButton');
+		_speechBubbleSel.fadeOut(function() {
+			_speechButtonSel.addClass('hideButton');
 			$(".speechBubble .yesButton").unbind("click");
 			$(".speechBubble .noButton").unbind("click");
 
@@ -72,17 +93,17 @@ $game.$resources = {
 			$('.resourceArea .dialog > span, .resourceArea .resourceContent').empty();
 			$game.$resources.addContent();
 			$game.$resources.addButtons();
-			$('.inventory').fadeOut(function() {
+			_inventorySel.fadeOut(function() {
 				$game.$player.inventoryShowing = false;
-				$('.resourceArea').addClass('patternBg1')
-				$('.resourceArea').fadeIn();
+				_resourceAreaSel.addClass('patternBg1')
+				_resourceAreaSel.fadeIn();
 			});
 		});
 		
 	},
 
 	addButtons: function() {
-		$('.resourceArea button').addClass('hideButton');
+		_resourceButtonSel.addClass('hideButton');
 		
 		if(_answered) {
 			if(_currentSlide === _numSlides + 1) {
@@ -122,8 +143,8 @@ $game.$resources = {
 	},
 
 	addContent: function() {
-		$('.resourceArea .speakerName').empty();
-		$('.resourceArea .message').empty();
+		_speakerNameSel.empty();
+		_resourceMessageSel.empty();
 		//if they answered the question...
 		if(_answered) {
 		
@@ -133,27 +154,27 @@ $game.$resources = {
 				//first, congrats and show them the tangram piece
 				if(_currentSlide === _numSlides + 1) {
 					_speak = _curResource.responses[0];
-					$('.resourceArea .speakerName').text(_who + ': ');
-					$('.resourceArea .message').text(_speak);
+					_speakerNameSel.text(_who + ': ');
+					_resourceMessageSel.text(_speak);
 					//show image on screen
 					//get path from db, make svg with that
 					//var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
-					//$('.resourceContent').html(newSvg);
+					//_resourceContentSel.html(newSvg);
 					newImg = '<img src="/img/game/resources/r' + _curResource.id + '.png" class="centerImage">';
-					$('.resourceContent').html(newImg);
+					_resourceContentSel.html(newImg);
 				}
 				//the next slide will show them recent answers
 				else {
-					$('.resourceContent').empty();
+					_resourceContentSel.empty();
 					$game.$resources.showRecentAnswers();
 				}
 			
 			}
 			else {
 				_speak = _curResource.responses[1];
-				$('.resourceArea .speakerName').text(_who + ': ');
-				$('.resourceArea .message').text(_speak);
-				$('.resourceContent').empty();
+				_speakerNameSel.text(_who + ': ');
+				_resourceMessageSel.text(_speak);
+				_resourceContentSel.empty();
 			}
 			
 		}
@@ -166,16 +187,16 @@ $game.$resources = {
 				}
 				else {
 					_speak = _curResource.prompt;
-					$('.resourceArea .speakerName').text(_who + ': ');
-					$('.resourceArea .message').text(_speak);
-					var inputBox = '<form><textarea placeholder="type your answere here..."></textarea></form>';
-					$('.resourceContent').html(finalQuestion + inputBox);
+					_speakerNameSel.text(_who + ': ');
+					_resourceMessageSel.text(_speak);
+					var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+					_resourceContentSel.html(finalQuestion + inputBox);
 				}
 					
 			}
 			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
-				$('.resourceContent').html(content);
+				_resourceContentSel.html(content);
 			}
 		}
 	},
@@ -207,21 +228,21 @@ $game.$resources = {
 
 			displayAnswers += '</ul>';
 		}
-		$('.resourceArea .speakerName').text(_who + ': ');
-		$('.resourceArea .message').text(_speak);
-		$('.resourceContent').html(finalQuestion + displayAnswers);
+		_speakerNameSel.text(_who + ': ');
+		_resourceMessageSel.text(_speak);
+		_resourceContentSel.html(finalQuestion + displayAnswers);
 	},
 
 	hideResource: function() {
-		$('.resourceArea').fadeOut(function() {
+		_resourceAreaSel.fadeOut(function() {
 			$game.$resources.isShowing = false;
-			$('.resourceArea button').addClass('hideButton');
-			$('.resourceArea').removeClass('patternBg1');
+			_resourceButtonSel.addClass('hideButton');
+			_resourceAreaSel.removeClass('patternBg1');
 		});
 
 		//if the resource was being displayed from the inventory, keep it up.
 		if(_inventory) {
-			$('.inventory').fadeIn(function() {
+			_inventorySel.fadeIn(function() {
 				_inventory = false;
 				if($game.$gnome.isSolving) {
 					$game.$player.inventoryShowing = false;

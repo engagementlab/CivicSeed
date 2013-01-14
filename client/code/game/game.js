@@ -556,7 +556,9 @@ exports.$game = {
 		var percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
 			percentShow = '<p>Collective: ' + $game.percentString + ' complete...</p>';
 			
-		var	seedCount = '<p class="highlight">You: ' + $game.$player.game.seeds.dropped + ' tiles colored</p>',
+		var	personal = '<p>Current Level: ' + $game.$player.game.currentLevel + '</p>' +
+						'<p>Tiles Colored: ' + $game.$player.game.seeds.dropped + '</p>',
+						
 			topPlayers = '<ol>';
 		
 		for(var i = 0; i < $game.leaderboard.length; i++) {
@@ -565,10 +567,9 @@ exports.$game = {
 		topPlayers += '</ol>';
 		//show player's seed droppings
 
-		$('.megaBar').empty();
-		$('.megaBar').append(percentShow + percentBar);
-		$('.topSeeders').empty();
-		$('.topSeeders').append(topPlayers + seedCount);
+		$('.megaBar').empty().append(percentShow + percentBar);
+		$('.topSeeders').empty().append(topPlayers);
+		$('.personalProgress').empty().append(personal);
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});

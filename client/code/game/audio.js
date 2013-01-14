@@ -9,7 +9,7 @@ var _soundtracks = [],
 $game.$audio = {
 	
 	ready: false,
-	isMuted: false,
+	isMuted: true,
 
 	init: function() {
 		$game.$audio.loadTrack(0);
@@ -193,9 +193,7 @@ $game.$audio = {
 			_soundtracks[_currentTrack].volume = 0;
 		}
 		else {
-			$(_soundtracks[_currentTrack]).animate({
-				volume: _targetV
-			}, 1000);
+			_soundtracks[_currentTrack].volume = _targetV;
 		}
 		return $game.$audio.isMute;
 	}

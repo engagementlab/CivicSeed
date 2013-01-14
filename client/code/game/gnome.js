@@ -413,7 +413,7 @@ $game.$gnome = {
 			else {
 				var endQuestion = $game.levelQuestion[$game.$player.game.currentLevel];
 				$('.gnomeArea .message').text(endQuestion);
-				var inputBox = '<form><input></input></form>';
+				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 				$('.gnomeContent').html(inputBox);
 			}
 			
@@ -439,6 +439,7 @@ $game.$gnome = {
 			//if they just beat a level, then show progreess
 			if($game.$player.game.gnomeState === 0) {
 				$game.showProgress();
+				$game.changeStatus('game progress and leaderboard');
 			}
 		});
 

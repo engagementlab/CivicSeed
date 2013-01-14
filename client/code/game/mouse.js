@@ -67,7 +67,10 @@ $game.$mouse = {
 							y: $game.$mouse.curY,
 							mode: $game.$player.seedMode
 						};
-					$game.$player.dropSeed(m);
+					var r = $game.$player.dropSeed(m);
+					if(!r) {
+						$game.statusUpdate('you have not seeds to drop');
+					}
 				}
 			}
 			else {

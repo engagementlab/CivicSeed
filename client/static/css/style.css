@@ -5261,6 +5261,22 @@ body {
   z-index: 9990;
   display: none;
 }
+.helpArea {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 930px;
+  height: 450px;
+  background: url(../img/bg/maze.png) #efefef;
+  box-shadow: 2px 2px 4px 4px #333;
+  padding: 0;
+  border-radius: 5px;
+  z-index: 9999;
+  display: none;
+}
+.helpArea p {
+  margin-left: 20px;
+}
 .centerText {
   text-align: center;
 }
@@ -5325,8 +5341,9 @@ body {
   width: 800px;
 }
 .speakerName {
-  color: #555;
-  text-shadow: 1px 1px #333;
+  font-size: 1.2em;
+  color: #dce12f;
+  text-shadow: 1px 1px #333333, -1px 1px #333333, -1px -1px #333333, 1px -1px #333333;
 }
 .speechBubble button {
   float: right;
@@ -5397,7 +5414,7 @@ body {
   padding: 0 0 5px 10px;
   z-index: 9999;
   color: #eee;
-  text-shadow: 1px 1px 1px #333;
+  text-shadow: 1px 1px #333333, -1px 1px #333333, -1px -1px #333333, 1px -1px #333333;
 }
 .pauseMenu {
   position: absolute;
@@ -5405,7 +5422,8 @@ body {
   left: 15px;
   width: 930px;
   height: 450px;
-  background: #efefef;
+  background: url(../img/bg/maze.png) #efefef;
+  box-shadow: 2px 2px 4px 4px #333;
   padding: 0;
   border-radius: 5px;
   z-index: 9999;
@@ -5520,20 +5538,35 @@ textarea {
 .seedButton2 > p {
   right: 20px;
 }
-.progressArea h2 {
+.progressArea h2,
+.helpArea h2 {
   padding: 10px;
   margin-left: 10px;
-  color: #ccff00;
-  text-shadow: 0px 0px 2px #333;
+  color: #7ccab0;
+  text-shadow: 1px 1px #333333, -1px 1px #333333, -1px -1px #333333, 1px -1px #333333;
 }
 .seedersHeader {
   margin-left: 40px;
-  color: #999;
+  color: #e6742e;
+  text-shadow: 1px 1px #333333, -1px 1px #333333, -1px -1px #333333, 1px -1px #333333;
+}
+.personalHeader {
+  margin-left: 40px;
+  color: #dce12f;
+  text-shadow: 1px 1px #333333, -1px 1px #333333, -1px -1px #333333, 1px -1px #333333;
+}
+.personalProgress {
+  margin-left: 60px;
+  margin-top: 10px;
 }
 .topSeeders {
   padding: 10px;
-  margin-left: 30px;
+  margin-left: 50px;
   color: #333;
+}
+.topSeeders > ol > li {
+  font-family: 'InconsolataMedium', monospace;
+  font-size: 16px;
 }
 .tangramArea > .feedback {
   width: 320px;
@@ -5579,7 +5612,7 @@ textarea {
 }
 .megaBar {
   color: #333;
-  margin: 15px 0 15px 40px;
+  margin: 0 0 15px 40px;
   width: 40%;
 }
 .progress {
