@@ -5633,6 +5633,38 @@ textarea {
   bottom: 10px;
   right: 5px;
 }
+.goals {
+  background: #dce12f;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.box > h2,
+.box > p {
+  padding: 10px;
+}
+.profiles > .row {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.motivations {
+  background: #7ccab0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.values {
+  background: #099b7e;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.background {
+  background: #e6742e;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
 body {
   padding-top: 80px;
 }

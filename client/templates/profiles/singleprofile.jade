@@ -1,5 +1,19 @@
 .profiles
 	if name
 		h1 #{name}
+		.row
+			.span6.goals.box
+				h2 Goals
+				p #{resume[3]}
+			.span6.motivations.box
+				h2 Motivations
+				p #{resume[2]}
+		.row
+			.span6.values.box
+				h2 Values
+				p #{resume[1]}
+			.span6.background.box
+				h2 Background
+				p #{resume[0]}
 	else
 		h1 This person does not exist in our database.
