@@ -3,13 +3,17 @@ var _coords = [
 		{x: 0, y: 14},
 		{x: 113, y: 27},
 		{x: 113, y: 79},
-		{x: 0, y: 79}
+		{x: 0, y: 79},
+		{x: 0, y: 0},
+		{x: 0, y: 0}
 		],
 	_positions = [
 		{x: 6, y: 20, d: -1, target: -3},
 		{x: 133, y: 33, d: 1, target: 145},
 		{x: 135, y: 124, d: 1, target: 145},
-		{x: 8, y: 86, d: -1, target: -3}
+		{x: 8, y: 86, d: -1, target: -3},
+		{x: 0, y: 0, d: 0, target: 0},
+		{x: 0, y: 0, d: 0, target: 0}
 		],
 	_info = null,
 	_renderInfo = null,
