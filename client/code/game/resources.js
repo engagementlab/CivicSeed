@@ -106,7 +106,9 @@ $game.$resources = {
 		_resourceButtonSel.addClass('hideButton');
 		
 		if(_answered) {
-			if(_currentSlide === _numSlides + 1) {
+			console.log(_currentSlide, _numSlides);
+			//this is the medal page
+			if(_currentSlide === _numSlides + 1 &&  _curResource.questionType === 'open') {
 				if(_correctAnswer) {
 					$('.resourceArea .nextButton').removeClass('hideButton');
 				}
@@ -119,26 +121,51 @@ $game.$resources = {
 			}
 		}
 		else {
-			//if its the first page, we DEF. have a next and no back
-			if(_currentSlide === 0) {
-				$('.resourceArea .nextButton').removeClass('hideButton');
-			}
-			
-			//if its not the first page or the last page, we have both
-			else if(_currentSlide > 0 && _currentSlide < _numSlides) {
-				$('.resourceArea .nextButton,.resourceArea  .backButton').removeClass('hideButton');
-			}
-
-			//if its the last page, we have an answer button and a back
-			else if(_currentSlide === _numSlides) {
-				if(_revisiting) {
-					$('.resourceArea .closeButton').removeClass('hideButton');
+			console.log(_currentSlide, _numSlides,_revisiting);
+			if(_revisiting) {
+				//if its the last slide
+				if(_currentSlide === _numSlides - 1) {
+					//not open ended
+					if( _curResource.questionType !== 'open') {
+						$('.resourceArea .closeButton').removeClass('hideButton');
+					}
+					//answers to show
+					else {
+						if(_currentSlide > 0) {
+							$('.resourceArea  .backButton').removeClass('hideButton');
+						}
+						$('.resourceArea  .nextButton').removeClass('hideButton');
+					}
+				}
+				else if(_currentSlide === _numSlides) {
+					$('.resourceArea  .closeButton, .resourceArea .backButton').removeClass('hideButton');
 				}
 				else {
-					$('.resourceArea .answerButton').removeClass('hideButton');
+					$('.resourceArea  .nextButton').removeClass('hideButton');
+					if(_currentSlide > 0) {
+						$('.resourceArea  .backButton').removeClass('hideButton');
+					}
 				}
-				$('.resourceArea .backButton').removeClass('hideButton');
 			}
+			else {
+				//if its the first page, we DEF. have a next and no back
+				if(_currentSlide === 0) {
+					$('.resourceArea .nextButton').removeClass('hideButton');
+				}
+				
+				//if its not the first page or the last page, we have both
+				else if(_currentSlide > 0 && _currentSlide < _numSlides) {
+					$('.resourceArea .nextButton,.resourceArea  .backButton').removeClass('hideButton');
+				}
+
+				//if its the last page, we have an answer button and a back
+				else if(_currentSlide === _numSlides) {
+					console.log('wuh');
+					$('.resourceArea .answerButton').removeClass('hideButton');
+					$('.resourceArea .backButton').removeClass('hideButton');
+				}	
+			}
+			
 		}
 	},
 
@@ -170,12 +197,12 @@ $game.$resources = {
 				}
 			
 			}
-			else {
-				_speak = _curResource.responses[1];
-				_speakerNameSel.text(_who + ': ');
-				_resourceMessageSel.text(_speak);
-				_resourceContentSel.empty();
-			}
+			// else {
+			// 	_speak = _curResource.responses[1];
+			// 	_speakerNameSel.text(_who + ': ');
+			// 	_resourceMessageSel.text(_speak);
+			// 	_resourceContentSel.empty();
+			// }
 			
 		}
 		else {
@@ -206,27 +233,24 @@ $game.$resources = {
 			numAnswers = recentAnswers.length,
 			displayAnswers = '',
 			finalQuestion = '<p>' + _curResource.question + '</p>';
-		if(numAnswers === 0) {
-			_speak = 'Congrats! You were the first to answer.';
-			finalQuestion = '';
+
+		displayAnswers = '<ul>';
+		var numToShow = numAnswers < 3 ? numAnswers: 3,
+			counter = 0,
+			spot = numAnswers - 1;
+		
+		while(counter < numToShow) {
+			displayAnswers += '<li class="playerAnswers">' + recentAnswers[spot-counter].name + ': ' + recentAnswers[spot-counter].answer + '</li>';
+			counter += 1;
 		}
-		else if(numAnswers === 1 && recentAnswers[0].name === $game.$player.name) {
+
+		displayAnswers += '</ul>';
+		if(numAnswers < 2) {
 			_speak = 'Congrats! You were the first to answer.';
-			finalQuestion = '';
+			displayAnswers += '<p>More answers from your peers will appear shortly.  Be sure to check back.</p>';
 		}
 		else {
 			_speak = 'Here are some recent answers by your peers: ';
-			displayAnswers = '<ul>';
-			var numToShow = numAnswers < 3 ? numAnswers: 3,
-				counter = 0,
-				spot = numAnswers - 1;
-			
-			while(counter < numToShow) {
-				displayAnswers += '<li class="playerAnswers">' + recentAnswers[spot-counter].name + ': ' + recentAnswers[spot-counter].answer + '</li>';
-				counter += 1;
-			}
-
-			displayAnswers += '</ul>';
 		}
 		_speakerNameSel.text(_who + ': ');
 		_resourceMessageSel.text(_speak);
@@ -265,12 +289,36 @@ $game.$resources = {
 		
 		_currentSlide += 1;
 
-		//wipe the resource area
+		//if its answered, determine if we need to show npc chat style instead
+		if(_answered) {
+			console.log('answered');
+			//if they got it wrong
+			if(!_correctAnswer) {
+				console.log('wrong');
+				_speak = _curResource.responses[1];
+				//_speakerNameSel.text(_who + ': ');
+				//_resourceMessageSel.text(_speak);
+				//_resourceContentSel.empty();
+				//hide resource
+				$game.$resources.hideResource();
+				$('.speechBubble .speakerName').text(_who + ': ');
+				$('.speechBubble .message').text('Wrong answer, sorry. Maybe click me again?');
 
-		$game.$resources.addContent();
-
-		$game.$resources.addButtons();
-	
+				$('.speechBubble').fadeIn(function() {
+					$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,4000);
+				});
+			}
+			else {
+				
+				$game.$resources.addContent();
+				$game.$resources.addButtons();		
+			}
+		}
+		else {
+			console.log('other');
+			$game.$resources.addContent();
+			$game.$resources.addButtons();	
+		}
 	},
 
 	submitAnswer: function() {
@@ -278,8 +326,9 @@ $game.$resources = {
 		//get the answer from the field
 		var response = $('.resourceArea textarea').val();
 		
-		if(response === _curResource.answer) {
-			//update player stuff 
+		//if its an open ended question or the right answer, then validation is true
+		if(_curResource.questionType === 'open' || response === _curResource.answer) {
+			//update player stuff
 			$game.$player.answerResource(true,_curResource.id, response);
 			
 			//add this to the DB of resources for all player answers

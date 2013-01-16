@@ -7,6 +7,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		tagline: String,
 		prompt: String,
 		question: String,
+		questionType: String,
 		answer: String,
 		responses: [String],
 		shape: {

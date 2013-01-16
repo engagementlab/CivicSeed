@@ -119,6 +119,7 @@ $game.$player = {
 			if(src !== undefined) {
 				$game.$renderer.imageToCanvas(src);
 			}
+			$game.$map.createCollectiveImage();
 		});
 
 	},

@@ -227,7 +227,7 @@ $game.$npc = {
 		_speak = _curNpc.dialog.random[ran];
 		
 
-		$('.speechBubble .speakerName').text(_who);
+		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
 
 		$('.speechBubble').fadeIn(function() {

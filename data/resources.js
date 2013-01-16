@@ -7,6 +7,7 @@ module.exports.global = [
 	tagline: 'from the mississippi down to the east coast',
 	prompt: 'Answer this right and I will give you a piece',
 	question: 'What did the student say was his motivation for joining Jumpstart?',
+	questionType: 'open',
 	answer: 'something',
 	responses: ['you are so smaht','ouch, laters.'],
 	shape: {
@@ -24,6 +25,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -41,6 +43,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -58,6 +61,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -75,6 +79,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -92,6 +97,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -109,6 +115,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -125,7 +132,8 @@ module.exports.global = [
 	url: '/articles/7283.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
-	question: 'Who are you?',
+	question: 'This is a trick question',
+	questionType: 'closed',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -143,6 +151,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -160,6 +169,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -177,6 +187,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -194,6 +205,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -211,6 +223,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -228,6 +241,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -245,6 +259,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {
@@ -262,6 +277,7 @@ module.exports.global = [
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'Who are you?',
+	questionType: 'open',
 	answer: 'player',
 	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
 	shape: {

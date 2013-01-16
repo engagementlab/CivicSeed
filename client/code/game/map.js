@@ -16,7 +16,6 @@ $game.$map = {
 		// ss.rpc('game.map.init', function(bigMap) {
 		// 	$game.$map.collectiveImage = bigMap;
 		// });
-		//$game.$map.createCollectiveImage();
 		$game.$map.ready = true;
 	},
 	paintMini: function() {
