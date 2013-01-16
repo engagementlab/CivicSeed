@@ -93,7 +93,8 @@ $game.$player = {
 			_inventoryBtnSel = $('.inventoryButton > .hudCount');
 			_inventorySel = $('.inventory');
 
-
+			$game.changeStatus();
+			
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
 			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
 			$('.hudCount').css('background', _rgb);

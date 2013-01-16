@@ -16,6 +16,7 @@ $game.$map = {
 		// ss.rpc('game.map.init', function(bigMap) {
 		// 	$game.$map.collectiveImage = bigMap;
 		// });
+		//$game.$map.createCollectiveImage();
 		$game.$map.ready = true;
 	},
 	paintMini: function() {
@@ -72,7 +73,7 @@ $game.$map = {
 					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
 				}
 			}
-		}	
+		}
 	},
 
 	saveImage: function() {
@@ -82,12 +83,11 @@ $game.$map = {
 	},
 
 	createCollectiveImage: function() {
-		ss.rpc('player.getAllImages', function(data) {
-			var dataLength = data.length;
-			
+		ss.rpc('game.player.getAllImages', function(data) {
+			var index = data.length;
 			//go thru each image create a new image using canvas?
-			while(--dataLength > -1) {
-
+			while(--index > -1) {
+				$('.colorMapGroup').append('<img src="'+ data[index] + '">');
 			}
 		});
 	}

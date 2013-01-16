@@ -311,6 +311,24 @@ exports.actions = function(req, res, ss) {
 					res(result);
 				}
 			});
+		},
+
+		getAllImages: function() {
+			var maps = [];
+			userModel.find(function(err, users) {
+				if(err) {
+					console.log('issue');
+				}
+				else {
+					for(var i = 0; i < users.length; i +=1) {
+						var map = users[i].game.colorMap;
+						if(map) {
+							maps.push(users[i].game.colorMap);
+						}
+					}
+					res(maps);
+				}
+			});
 		}
 
 	};

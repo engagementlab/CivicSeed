@@ -63,8 +63,9 @@ exports.$game = {
 	percent: 0,
 	percentString: null,
 	numPlayers: 0,
-	currentArea: 'botanist\'s garden',
 	badWords: ['fuck','shit', 'bitch', 'cunt', 'ass', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
+	levelNames: [],
+	displayTimeout: null,
 
 	init: function() {
 		
@@ -107,6 +108,7 @@ exports.$game = {
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			$game.levelQuestion = response.levelQuestion;
+			$game.levelNames = response.levelNames;
 			$game.seedsDropped = response.seedsDropped;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
@@ -560,12 +562,12 @@ exports.$game = {
 			seconds = playingTime % 60,
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
-		console.log($game.$player.game.tilesColored, $game.tilesColored);
 		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
 			percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
-			percentShow = '<p>Color is ' + $game.percentString + ' restored...</p>';
+			percentShow = '<p>Color is ' + $game.percentString + ' restored...</p>',
+			displayLevel = $game.$player.game.currentLevel + 1;
 			
-		var	personalInfo = '<p>Current Level: ' + $game.$player.game.currentLevel + '</p>' +
+		var	personalInfo = '<p>Current Level: ' + displayLevel + '</p>' +
 			'<p>' + $game.$player.game.rank + '</p>',
 
 			personalStats = '<p>Tiles Colored: ' + $game.$player.game.tilesColored + '</p>' +
@@ -595,13 +597,14 @@ exports.$game = {
 			$(this)
 				.text(msg)
 				.fadeIn(600,function() {
-					setTimeout(function() {
+					$game.displayTimeout = setTimeout(function() {
 						$('.displayBoxText').text(prevM);
 					}, 3000);
 				});
 		});
 	},
 	changeStatus: function(custom) {
+		clearTimeout($game.displayTimeout);
 		if(custom) {
 			$('.displayBoxText').text(custom);
 		}
@@ -610,7 +613,7 @@ exports.$game = {
 				$('.displayBoxText').text('click a tile to drop a seed');
 			}
 			else {
-				$('.displayBoxText').text('the ' + $game.currentArea);
+				$('.displayBoxText').text($game.levelNames[$game.$player.game.currentLevel]);
 			}
 		}
 	},

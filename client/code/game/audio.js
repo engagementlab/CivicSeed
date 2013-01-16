@@ -4,6 +4,7 @@ var _soundtracks = [],
 	_numTracks = 5,
 	_numEffects = 1,
 	_tweenTimeout = null,
+	_newPlace = 'welcome...',
 	_targetV = 0;
 
 $game.$audio = {
@@ -104,7 +105,7 @@ $game.$audio = {
 		}
 		//slide current track to 0, then use val to transition new track
 		else {
-			
+			$game.statusUpdate(_newPlace);
 			$(_soundtracks[_currentTrack]).stop(true,true).animate({
 				volume: 0
 			}, 1000, function() {
@@ -137,33 +138,33 @@ $game.$audio = {
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 4;
 			_targetV = 0.4;
-			$game.currentArea = 'botanist\'s garden';
+			_newPlace = 'entering the botanist\'s garden';
 		}
 		else {
 			//3 bottom right
 			if(diffX > 0 && diffY > 0) {
 				trackRegion = 2;
-				$game.currentArea = 'ranch';
+				_newPlace = 'entering the ranch';
 			}
 			//2 top right
 			else if(diffX > 0 && diffY < 0) {
 				trackRegion = 1;
-				$game.currentArea = 'town';
+				_newPlace = 'entering the town';
 			}
 			//1 top left
 			else if(diffX < 0 && diffY < 0) {
 				trackRegion = 0;
-				$game.currentArea = 'forest';
+				_newPlace = 'entering the forrest';
 			}
 			//4 bottom left
 			else if(diffX < 0 && diffY > 0) {
 				trackRegion = 3;
-				$game.currentArea = 'port';
+				_newPlace = 'entering the port';
 			}
 			//no man/s land
 			else {
 				trackRegion = 4;
-				$game.currentArea = 'equator...';
+				_newPlace = 'you are on the equator';
 			}
 			if (absX < absY) {
 				closest = absX;
