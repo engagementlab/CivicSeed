@@ -49,7 +49,9 @@ user-select: none;
 	display:none;	
 }
 .resourceContent {
-	overflow: hidden;
+	max-height: 340px;
+	overflow: auto;
+	padding-right: 10px;
 }
 .resourceArea{
 	position: absolute;
@@ -135,7 +137,7 @@ user-select: none;
 .centerText {
 	text-align: center;
 }
-.inventory{
+.inventory, .seedventory{
 	position: absolute;
 	bottom:15px;
 	left:15px;
@@ -247,6 +249,18 @@ user-select: none;
 .playerHud {
 	cursor: pointer;
 }
+.seedventory div {
+	font-size: 24px;
+	margin: 20px 0 0 10px;
+	float: left;
+	width: 48px;
+	cursor: pointer;
+	position: relative;
+}
+.seedventory {
+	padding-left: 20px;
+	width: 190px;
+}
 .hud div {
 	font-size: 22px;
 	float: left;
@@ -295,7 +309,7 @@ user-select: none;
 	margin-left:10px;
 	position:relative;
 }
-.inventory button {
+.inventory button, .seedventory button {
 	bottom: 15px;
 	right:10px;
 }
@@ -384,9 +398,6 @@ textarea {
 
 .activePlayers > p {
 	right: 10px;
-}
-.seedButton2 > p {
-	right: 20px;
 }
 .progressArea h2, .helpArea h2 {
 	padding: 10px;
@@ -499,4 +510,8 @@ textarea {
 .gameboard ul, .gameboard ol{
 	font-family: @mono;
 	font-size: 16px;
+}
+.puzzle0, .puzzle1, .puzzle2, .puzzle3 {
+	float: right;
+	margin-right: 100px;
 }

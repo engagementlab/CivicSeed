@@ -557,7 +557,6 @@ $game.$gnome = {
 					$game.$player.emptyInventory();
 					$game.$player.game.seeds.riddle += 3;
 					//update HUD 
-					$('.seedButton2 .hudCount').text($game.$player.game.seeds.riddle);
 					$game.$player.game.gnomeState = 4;
 				}
 			}

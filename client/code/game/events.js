@@ -76,8 +76,11 @@ $(function() {
 			//do something for game over?
 			$game.statusUpdate('the color has been restored!');
 		}
-		else if($game.percent % 5 === 0) {
-			$game.statusUpdate('the world is now ' + $game.percentString + ' colored!');
+		if($game.prevPercent != $game.percent) {
+			$game.prevPercent = $game.percent;
+			if($game.percent % 5 === 0) {
+				$game.statusUpdate('the world is now ' + $game.percentString + ' colored!');
+			}
 		}
 	});
 
@@ -102,7 +105,7 @@ $(function() {
 
 	/********** BUTTON / MOUSE EVENTS **********/
 
-	$('.seedButton').bind('click', (function () {
+	$('.seedButton').bind('click', function () {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 		if(!$game.inTransit && !$game.$player.isMoving) {
 			
@@ -112,26 +115,21 @@ $(function() {
 				$game.changeStatus();
 			}
 			else {
-				$game.$player.seedMode = 1;
-				$game.changeStatus();
+				$game.$player.chooseSeed();
 			}
 		}
-	}));
-	$('.seedButton2').bind('click', (function () {
-		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
-		if(!$game.inTransit && !$game.$player.isMoving) {
-			
-			//turn it off if on
-			if($game.$player.seedMode > 0) {
-				$game.$player.seedMode = 0;
-				$game.changeStatus();
-			}
-			else {
-				$game.$player.seedMode = 2;
-				$game.changeStatus();
-			}
-		}
-	}));
+	});
+
+	$('.normalButton').bind('click', function () {
+		$game.$player.startSeeding(1);
+	});
+	$('.riddleButton').bind('click', function () {
+		$game.$player.startSeeding(2);
+	});
+	$('.specialButton').bind('click', function () {
+		$game.$player.startSeeding(3);
+	});
+
 	_w.bind('keypress', (function (key) {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 		if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
@@ -155,7 +153,7 @@ $(function() {
 	//figure out if we shoupdatuld transition (or do other stuff later)
 	_gameboard.bind('click', function(m) {
 
-		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat && !$game.showingProgress){
+		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !$game.showingProgress){
 				var mInfo = {
 				x: m.pageX,
 				y: m.pageY,
@@ -211,7 +209,7 @@ $(function() {
 	});
 
 	$('.inventoryButton, .inventory button').click(function () {
-		if(!$game.$resources.isShowing && !$game.$gnome.isShowing) {
+		if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$gnome.isShowing) {
 			if($game.$player.inventoryShowing) {
 				_inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
@@ -227,7 +225,6 @@ $(function() {
 		}
 		return false;
 	});
-
 	$('.resourceArea a i, .resourceArea .closeButton').bind('click', (function (e) {
 		e.preventDefault();
 		$game.$resources.hideResource();
@@ -283,7 +280,7 @@ $(function() {
 			});
 		}
 		else {
-			if(!$game.$gnome.isChat && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running) {
+			if(!$game.$gnome.isChat && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$player.seedventoryShowing && $game.running) {
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
 			}
@@ -304,18 +301,18 @@ $(function() {
 		$('.helpArea').fadeToggle();
 	});
 
-	$('.globalHud > div > i, .playerHud > div > i').bind('mouseenter',function() {
+	$('.globalHud > div > i, .playerHud > div > i, .seedventory > div > i').bind('mouseenter',function() {
 		var info = $(this).attr('title');
 		$(this).tooltip('show');
 	});
-// _w.bind('keydown',function(e) {
-//	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
-//		$game.$mouse.updateKey(e.which);
-//	}
-// });
-// $(window).bind('keyup',function(e) {
-//	$game.$player.keyWalking = false;
-// });
+	_w.bind('keydown',function(e) {
+		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat){
+			$game.$mouse.updateKey(e.which);
+		}
+	});
+	$(window).bind('keyup',function(e) {
+		$game.$player.keyWalking = false;
+	});
 });
 
 function leaveThisJoint() {

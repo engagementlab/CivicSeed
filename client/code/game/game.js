@@ -61,6 +61,7 @@ exports.$game = {
 	tilesColored: 0,
 	leaderboard: null,
 	percent: 0,
+	prevPercent: 0,
 	percentString: null,
 	numPlayers: 0,
 	badWords: ['fuck','shit', 'bitch', 'cunt', 'ass', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
@@ -114,6 +115,7 @@ exports.$game = {
 			$game.leaderboard = response.leaderboard;
 			$game.seedsDroppedGoal = response.seedsDroppedGoal;
 			$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
+			$game.prevPercent = $game.percent;
 			$game.percentString = $game.percent + '%';
 			$('.progressButton .hudCount').text($game.percentString);
 		});

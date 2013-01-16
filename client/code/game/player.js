@@ -19,7 +19,9 @@ var _curFrame = 0,
 	_rgb = null,
 	_numRequired = [1,1,1,1],
 	_seedHudCount = null,
-	_seedHudCount2 = null,
+	_normalHudCount = null,
+	_riddleHudCount = null,
+	_specialHudCount = null,
 	_waitingSel = null,
 	_gameboardSel = null,
 	_inventoryBtnSel = null,
@@ -38,6 +40,8 @@ $game.$player = {
 	currentStep: 0,
 	isMoving: false,
 	inventoryShowing: false,
+	seedventoryShowing: false,
+	seedPlanting: false,
 	npcOnDeck: false,
 	ready: false,
 	seedMode: 0,
@@ -87,7 +91,9 @@ $game.$player = {
 
 			//set variables for dom selectors
 			_seedHudCount = $('.seedButton .hudCount');
-			_seedHudCount2 = $('.seedButton2 .hudCount');
+			_normalHudCount = $('.normalButton .hudCount');
+			_riddleHudCount = $('.riddleButton .hudCount');
+			_specialHudCount = $('.specialButton .hudCount');
 			_waitingSel = $('.waitingForSeed');
 			_gameboardSel = $('.gameboard');
 			_inventoryBtnSel = $('.inventoryButton > .hudCount');
@@ -97,15 +103,21 @@ $game.$player = {
 			
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
 			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
-			$('.hudCount').css('background', _rgb);
+			var rgba = 'rgba(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ', .6)';
+			$('.hudCount').css('background', rgba);
 				
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
 
 			//set HUD values
-			_seedHudCount.text($game.$player.game.seeds.normal);
-			_seedHudCount2.text($game.$player.game.seeds.riddle);
+			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
+
+			_seedHudCount.text(numSeeds);
+			_normalHudCount.text($game.$player.game.seeds.normal);
+			_riddleHudCount.text($game.$player.game.seeds.riddle);
+			_specialHudCount.text($game.$player.game.seeds.special);
+			
 			$game.$player.fillInventory();
 
 			_chatId = 'player'+ newInfo.id,
@@ -407,18 +419,16 @@ $game.$player = {
 		$game.$player.keyMoving = true;
 		
 		$game.isMapEdge(locEnd.x, locEnd.y, function(anEdge) {
-			
 			_willTravel = false;
 			//if a transition is necessary, load new data
 			if(!anEdge) {
 				if(locEnd.x === 0 || locEnd.x === 29 || locEnd.y === 0 || locEnd.y === 14) {
 					_willTravel = true;
-					$game.calculateNext(locEnd.x, locEnd.y, function() {
-						
-					});
+					$game.calculateNext(locEnd.x, locEnd.y,function(){});
 				}
+				$game.$player.sendMoveInfo(result);
 			}
-			$game.$player.sendMoveInfo(result);
+			
 		});
 	},
 	slide: function(slideX, slideY) {
@@ -587,24 +597,37 @@ $game.$player = {
 								//update seed count in HUD
 					if(mode === 1) {
 						$game.$player.game.seeds.normal -= 1;
-						_seedHudCount.text($game.$player.game.seeds.normal);
-						
 						//bounce outta seed mode
 						if($game.$player.game.seeds.normal === 0) {
 							$game.$player.seedMode = 0;
+							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.statusUpdate('you are out seeds');
-						}	
+						}
+						_normalHudCount.text($game.$player.game.seeds.normal);
 					}
 					else if(mode === 2) {
 						$game.$player.game.seeds.riddle -= 1;
-						_seedHudCount2.text($game.$player.game.seeds.riddle);
 						if($game.$player.game.seeds.riddle === 0) {
 							$game.$player.seedMode = 0;
+							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
-						}	
+						}
+						_riddleHudCount.text($game.$player.game.seeds.riddle);
 					}
+					else if(mode === 3) {
+						$game.$player.game.seeds.special -= 1;
+						if($game.$player.game.seeds.special === 0) {
+							$game.$player.seedMode = 0;
+							$game.$player.seedPlanting = false;
+							$game.changeStatus();
+							$game.changeStatus('no more seeds for you!');
+						}
+						_specialHudCount.text($game.$player.game.seeds.special);
+					}
+					var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
+					_seedHudCount.text(numSeeds);
 				}
 				else {
 					$game.changeStatus('sorry, someone beat you to that tile');
@@ -779,7 +802,7 @@ $game.$player = {
 		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
 		if($game.$player.game.gnomeState > 1) {
 			$game.$player.tangramToInventory();
-		}	
+		}
 	},
 
 	addToInventory: function(id) {
@@ -826,6 +849,57 @@ $game.$player = {
 		var currentTime = new Date().getTime() / 1000,
 			totalTime = Math.round((currentTime - _startTime) + $game.$player.game.playingTime);
 		return totalTime;
+	},
+
+	chooseSeed: function() {
+		//check if we have multi kinds of seeds, if so, show them
+		//else, go into reg seed mode
+		if($game.$player.seedventoryShowing) {
+			
+			$('.seedventory').slideUp(function() {
+				$game.$player.seedventoryShowing = false;
+				$game.$player.seedMode = 0;
+				$game.changeStatus();
+			});
+		}
+		else {
+			if($game.$player.seedPlanting) {
+				$game.$player.seedPlanting = false;
+				$game.seedMode = 0;
+				$game.statusUpdate('seed mode ended, as you were');
+			}
+			else {
+				var col0 = $game.$player.game.seeds.normal > 0 ? '#eee': '#333',
+					col1 = $game.$player.game.seeds.riddle > 0 ? '#eee': '#333',
+					col2 = $game.$player.game.seeds.special > 0 ? '#eee': '#333';
+
+					$('.normalButton').css('color',col0);
+					$('.riddleButton').css('color',col1);
+					$('.specialButton').css('color',col2);
+				
+				if($game.$player.game.seeds.riddle > 0 || $game.$player.game.seeds.special > 0 && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$gnome.isShowing) {
+					$('.seedventory').slideDown(function() {
+						$game.$player.seedventoryShowing = true;
+						$game.changeStatus('choose a seed to plant');
+					});
+				}
+				else if($game.$player.game.seeds.normal > 0) {
+					$game.$player.seedMode = 1;
+					$game.changeStatus();
+				}
+				else {
+					$game.statusUpdate('you need some seeds child');
+				}
+			}
+		}
+	},
+	startSeeding: function(choice) {
+		$game.$player.seedMode = choice;
+		$('.seedventory').slideUp(function() {
+			$game.$player.seedventoryShowing = false;
+			$game.$player.seedPlanting = true;
+		});
+		$game.changeStatus();
 	}
 };
 
