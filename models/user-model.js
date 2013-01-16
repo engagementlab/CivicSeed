@@ -10,6 +10,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		role: String,
 		game: {
 			currentLevel: Number,
+			rank: String,
 			position: {
 				x: Number,
 				y: Number,
@@ -39,7 +40,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			gnomeState: Number,
 			colorMap: String,
 			resume: [String],
-			seenThing: Boolean
+			seenThing: Boolean,
+			resourcesDiscovered: Number,
+			playingTime: Number,
+			tilesColored: Number
 		}
 	});
 

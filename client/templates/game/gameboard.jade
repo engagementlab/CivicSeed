@@ -33,16 +33,27 @@
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
 	div.progressArea
+		h2 Progress Area
+		.tabbable
+			ul.nav.nav-pills
+				li.active
+					a(href='#tab1', data-toggle='tab') You
+				li
+					a(href='#tab2', data-toggle='tab') Everyone
+			.tab-content
+				.tab-pane.active#tab1
+					div.personalInfo
+					div.personalStats
+					div.colorMap
+						img(src='')
+
+				.tab-pane#tab2
+					div.megaBar
+					div.topSeeders
+
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
-		h2 Game Progress
-		div.megaBar
-		h3.seedersHeader Top Seeders:
-		div.topSeeders
-		h3.personalHeader Your Stats:
-		div.personalProgress
-		div.colorMap
-			img(src='')
+		
 	div.helpArea
 		h2 How to Play the Game (by Omar)
 		p You either play the game or the game plays you. 

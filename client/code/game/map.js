@@ -79,6 +79,17 @@ $game.$map = {
 		var myDrawing = document.getElementById('minimapTile');
 		var drawingURL = myDrawing.toDataURL('img/png');
 		return drawingURL;
+	},
+
+	createCollectiveImage: function() {
+		ss.rpc('player.getAllImages', function(data) {
+			var dataLength = data.length;
+			
+			//go thru each image create a new image using canvas?
+			while(--dataLength > -1) {
+
+			}
+		});
 	}
 };
 

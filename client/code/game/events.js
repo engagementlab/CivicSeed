@@ -5,7 +5,7 @@
 
 $(function() {
 	var _w = $(window),
-		_activePlayers = $('.activePlayers p'),
+		_activePlayers = $('.activePlayers span'),
 		_progressHudCount = $('.progressButton .hudCount'),
 		_gameboard = $('.gameboard'),
 		_chatText = $('#chatText'),
@@ -64,8 +64,10 @@ $(function() {
 	});
 
 	ss.event.on('ss-progressChange', function(num) {
-		$game.tilesColored = num;
-		$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
+		$game.seedsDropped = num.dropped;
+		$game.tilesColored = num.colored;
+
+		$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
 		$game.percentString = $game.percent + '%';
 		_progressHudCount.text($game.percentString);
 
@@ -307,12 +309,12 @@ $(function() {
 		$(this).tooltip('show');
 	});
 // _w.bind('keydown',function(e) {
-// 	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
-// 		$game.$mouse.updateKey(e.which);
-// 	}
+//	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && $game.running && !$game.$gnome.isChat){
+//		$game.$mouse.updateKey(e.which);
+//	}
 // });
 // $(window).bind('keyup',function(e) {
-// 	$game.$player.keyWalking = false;
+//	$game.$player.keyWalking = false;
 // });
 });
 

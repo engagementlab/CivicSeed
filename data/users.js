@@ -10,6 +10,7 @@ module.exports.global = [{
 	role: 'superadmin',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 66,
 				y: 77,
@@ -33,7 +34,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Russell',
@@ -42,6 +46,7 @@ module.exports.global = [{
 	role: 'superadmin',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 65,
 				y: 77,
@@ -65,7 +70,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Stephen',
@@ -74,6 +82,7 @@ module.exports.global = [{
 	role: 'admin',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 64,
 				y: 77,
@@ -97,7 +106,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Eric',
@@ -106,6 +118,7 @@ module.exports.global = [{
 	role: 'admin',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 63,
 				y: 77,
@@ -129,7 +142,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Sam',
@@ -138,6 +154,7 @@ module.exports.global = [{
 	role: 'admin',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 66,
 				y: 76,
@@ -161,7 +178,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Joe',
@@ -170,6 +190,7 @@ module.exports.global = [{
 	role: 'actor',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 65,
 				y: 76,
@@ -193,7 +214,10 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }, {
 	name: 'Frank',
@@ -202,6 +226,7 @@ module.exports.global = [{
 	role: 'actor',
 	game: {
 			currentLevel: 0,
+			rank: 'novice gardener',
 			position: {
 				x: 64,
 				y: 76,
@@ -225,6 +250,9 @@ module.exports.global = [{
 			},
 			gnomeState: 0,
 			resume: [],
-			seenThing: false
+			seenThing: false,
+			resourcesDiscovered: 0,
+			playingTime: 0,
+			tilesColored: 0
 		}
 }];

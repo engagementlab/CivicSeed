@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', 'fanny.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -368,6 +368,17 @@ $game.$renderer = {
 		$game.TILE_SIZE,
 		$game.TILE_SIZE*2
 		);
+		// _charactersContext.drawImage(
+		// _tilesheets[7],
+		// 0,
+		// 0,
+		// $game.TILE_SIZE,
+		// $game.TILE_SIZE*2,
+		// info.curX,
+		// info.curY - $game.TILE_SIZE,
+		// $game.TILE_SIZE,
+		// $game.TILE_SIZE*2
+		// );
 	},
 
 	renderCharacter: function(info) {

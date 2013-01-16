@@ -7,11 +7,6 @@
 }
 
 @mono: 'InconsolataMedium', monospace;
-@csYellow: 		#DCE12f; 
-@csLightGreen:	#7CCAB0;
-@csDarkGreen:	#099B7E;
-@csPurple: 		#2C345B;
-@csOrange:		#E6742E; 
 
 .textOutline() {
 	text-shadow: 
@@ -379,18 +374,12 @@ textarea {
 	cursor: default;
 }
 
-.hudCount {
+.badge {
 	font-family: @mono, monospace;
 	position:absolute;
-	font-size:14px;
-	height:16px;
-	margin:0;
-	padding: 0px 5px 5px 5px;
 	top:-12px;
 	right:5px;
 	color: #333;
-	background: rgba(0, 120, 130,.8);
-	border-radius:10px;
 }
 
 .activePlayers > p {
@@ -402,31 +391,33 @@ textarea {
 .progressArea h2, .helpArea h2 {
 	padding: 10px;
 	margin-left:10px;
-	color: @csLightGreen;
+	color: @csDarkGreen;
 	.textOutline();
 }
-.seedersHeader {
-	margin-left: 40px;
-	color: @csOrange;
-	.textOutline();
-}
-.personalHeader {
+.progressArea h3 {
 	margin-left: 40px;
 	color: @csYellow;
 	.textOutline();
 }
-.personalProgress {
-	margin-left: 60px;
-	margin-top: 10px;
+.personalInfo, .personalStats, .topSeeders, .megaBar {
+	margin-bottom: 20px;
+	border-radius: 5px;
+	padding: 10px 5px 5px 15px;
+	width: 360px;
+	font-size: 16px;
+}
+.personalInfo {
+	background: @csYellow;
+}
+.personalStats {
+	background: @csLightGreen;
 }
 .topSeeders {
-	padding:10px;
-	margin-left:50px;
+	background: @csYellow;
 	color: #333;
 }
-.topSeeders > ol > li {
-	font-family: @mono;
-	font-size: 16px;
+.topSeeders ol {
+	padding-left: 10px;
 }
 .tangramArea > .feedback{
 	width: 320px;
@@ -472,10 +463,11 @@ textarea {
 }
 .megaBar {
 	color: #333;
-	margin: 0 0 15px 40px;
-	width:40%;
+	background: @csLightGreen;
 }
+
 .progress {
+	width: 95%;
 	border: 2px solid #333;
 }
 .waitingForSeed {
@@ -492,4 +484,11 @@ textarea {
 	position:absolute;
 	bottom: 10px;
 	right: 5px;
+}
+.progressArea > .tabbable {
+	margin-left: 20px;
+}
+.gameboard ul, .gameboard ol{
+	font-family: @mono;
+	font-size: 16px;
 }

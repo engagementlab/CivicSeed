@@ -56,8 +56,9 @@ exports.$game = {
 	showingProgress : false,
 
 	levelQuestion: null,
+	seedsDropped: 0,
+	seedsDroppedGoal: 0,
 	tilesColored: 0,
-	tilesColoredGoal: 0,
 	leaderboard: null,
 	percent: 0,
 	percentString: null,
@@ -106,10 +107,11 @@ exports.$game = {
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			$game.levelQuestion = response.levelQuestion;
+			$game.seedsDropped = response.seedsDropped;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
-			$game.tilesColoredGoal = response.tilesColoredGoal;
-			$game.percent = Math.floor(($game.tilesColored / $game.tilesColoredGoal) * 100);
+			$game.seedsDroppedGoal = response.seedsDroppedGoal;
+			$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
 			$game.percentString = $game.percent + '%';
 			$('.progressButton .hudCount').text($game.percentString);
 		});
@@ -551,15 +553,27 @@ exports.$game = {
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		
-		$game.percentString = $game.percent + '%';
-		
-		var percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
-			percentShow = '<p>Collective: ' + $game.percentString + ' complete...</p>';
+		var playingTime = $game.$player.getPlayingTime(),
+			hours = Math.floor(playingTime / 3600),
+			hoursRemainder = playingTime % 3600,
+			minutes = Math.floor(hoursRemainder / 60),
+			seconds = playingTime % 60,
+			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
+
+		console.log($game.$player.game.tilesColored, $game.tilesColored);
+		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
+			percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
+			percentShow = '<p>Color is ' + $game.percentString + ' restored...</p>';
 			
-		var	personal = '<p>Current Level: ' + $game.$player.game.currentLevel + '</p>' +
-						'<p>Tiles Colored: ' + $game.$player.game.seeds.dropped + '</p>',
+		var	personalInfo = '<p>Current Level: ' + $game.$player.game.currentLevel + '</p>' +
+			'<p>' + $game.$player.game.rank + '</p>',
+
+			personalStats = '<p>Tiles Colored: ' + $game.$player.game.tilesColored + '</p>' +
+				'<p>Your Contribution: ' + contribution + '</p>' +
+				'<p>Resources Discovered: ' + $game.$player.game.resourcesDiscovered + '</p>' +
+				'<p>Time Played: ' + displayTime + '</p>';
 						
-			topPlayers = '<ol>';
+			topPlayers = '<p>Top Seeders</p><ol>';
 		
 		for(var i = 0; i < $game.leaderboard.length; i++) {
 			topPlayers += '<li>' + $game.leaderboard[i].name + ': ' + $game.leaderboard[i].count + ' tiles colored</li>';
@@ -569,7 +583,8 @@ exports.$game = {
 
 		$('.megaBar').empty().append(percentShow + percentBar);
 		$('.topSeeders').empty().append(topPlayers);
-		$('.personalProgress').empty().append(personal);
+		$('.personalInfo').empty().append(personalInfo);
+		$('.personalStats').empty().append(personalStats);
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});

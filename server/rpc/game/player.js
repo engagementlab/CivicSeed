@@ -190,10 +190,12 @@ exports.actions = function(req, res, ss) {
 										}
 										else{
 											//add tile count to our progress
-											var oldCount = result.tilesColored,
+											var oldCount = result.seedsDropped,
 												newCount = oldCount + 1;
-												oldPercent = Math.floor((oldCount / 3200) * 100),
-												newPercent = Math.floor((newCount / 3200) * 100);
+												oldColored = result.tilesColored,
+												newColored = oldColored + bombed.length,
+												oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
+												newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
 
 											//update leadeboard
 											var oldBoard = result.leaderboard,
@@ -204,7 +206,7 @@ exports.actions = function(req, res, ss) {
 												updateBoard = false,
 												newGuy = {
 													name: info.name,
-													count: info.dropped + num
+													count: info.tilesColored + num
 												};
 
 											if(i === 0) {
@@ -246,8 +248,9 @@ exports.actions = function(req, res, ss) {
 											}
 
 											//save all changes
-											result.set('tilesColored', newCount);
+											result.set('seedsDropped', newCount);
 											result.set('leaderboard', oldBoard);
+											result.set('tilesColored', newColored);
 											result.save();
 											
 											
@@ -259,10 +262,10 @@ exports.actions = function(req, res, ss) {
 											if(updateBoard) {
 												ss.publish.all('ss-leaderChange', oldBoard, newNameForStatus);
 											}
-											//send out new percent if it has changed
-											if(oldPercent !== newPercent) {
-												ss.publish.all('ss-progressChange', newCount);
-											}
+											// //send out new percent if it has changed
+											// if(oldPercent !== newPercent) {
+											ss.publish.all('ss-progressChange', {dropped: newCount, colored: newColored});
+											//}
 
 										}
 										res(bombed.length);
@@ -289,7 +292,7 @@ exports.actions = function(req, res, ss) {
 				}
 				else {
 					var data = {
-						dropped: user.game.seeds.dropped,
+						dropped: user.game.seeds.tilesColored,
 						level: user.game.currentLevel,
 						name: user.name,
 						color: user.game.color

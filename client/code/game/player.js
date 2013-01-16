@@ -24,7 +24,8 @@ var _curFrame = 0,
 	_gameboardSel = null,
 	_inventoryBtnSel = null,
 	_inventorySel = null,
-	_playerGameInfo = null;
+	_playerGameInfo = null,
+	_startTime = null;
 
 
 $game.$player = {
@@ -53,6 +54,9 @@ $game.$player = {
 		//initialize DB and let all players know there is a new active one
 		ss.rpc('game.player.init', function(newInfo) {
 			
+			//time in seconds since 1970 or whatever
+			_startTime = new Date().getTime() / 1000;
+
 			_info = {
 				srcX: 0,
 				srcY: 0,
@@ -431,6 +435,9 @@ $game.$player = {
 
 	idle: function () {
 		_idleCounter += 1;
+		// if(_idleCounter % 8 === 0) {
+		// 	_renderInfo.colorNum = Math.floor(Math.random() * 6);
+		// }
 		if(_idleCounter >= 64) {
 			_idleCounter = 0;
 			_info.srcX = 0;
@@ -438,7 +445,7 @@ $game.$player = {
 			_getMaster = true;
 		}
 
-		else if(_idleCounter == 48) {
+		else if(_idleCounter === 48) {
 			_info.srcX = 32;
 			_info.srcY = 0;
 			_getMaster = true;
@@ -555,7 +562,7 @@ $game.$player = {
 				sz: options.sz,
 				x: origX,
 				y: origY,
-				dropped: $game.$player.game.seeds.dropped
+				tilesColored: $game.$player.game.tilesColored
 			};
 
 			var loc = $game.masterToLocal(options.mX,options.mY);
@@ -574,7 +581,7 @@ $game.$player = {
 				if(result > 0) {
 					//play sound clip
 					$game.$audio.playSound(0);
-					$game.$player.game.seeds.dropped += bombed.length;
+					$game.$player.game.tilesColored += result;
 								//update seed count in HUD
 					if(mode === 1) {
 						$game.$player.game.seeds.normal -= 1;
@@ -666,6 +673,9 @@ $game.$player = {
 	},
 
 	exitAndSave: function() {
+		var endTime = new Date().getTime() / 1000,
+			totalTime = endTime - _startTime;
+		$game.$player.game.playingTime += totalTime;
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
@@ -726,6 +736,7 @@ $game.$player = {
 
 		//the answer was correct, add item to inventory
 		if(correct) {
+			$game.$player.game.resourcesDiscovered += 1;
 			$game.$player.game.seeds.normal += (6 - rs.attempts);
 			_seedHudCount.text($game.$player.game.seeds.normal);
 			$game.$player.game.inventory.push(id);
@@ -807,6 +818,12 @@ $game.$player = {
 		var stat = $game.$player.name + 'is on level' + $game.$player.game.currentLevel + '!';
 		//ss.rpc('game.player.status', stat);
 		//load in other tree file
+	},
+
+	getPlayingTime: function() {
+		var currentTime = new Date().getTime() / 1000,
+			totalTime = Math.round((currentTime - _startTime) + $game.$player.game.playingTime);
+		return totalTime;
 	}
 };
 
