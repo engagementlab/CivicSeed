@@ -1,9 +1,6 @@
 var self = module.exports = {
 
-	loadRoutes: function(ss, $app) {
-
-		var $body = $(document.body);
-		var $container = $('#container');
+	loadRoutes: function(ss, $app, $html, $body, $container) {
 
 		$app.get('/admin', function(req) {
 			$container.append(JT['admin-panel']({

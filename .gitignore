@@ -6,8 +6,8 @@ node_modules
 #/client/static/assets/
 /data/map/expanded/
 /models/_temp/
-/controllers/_temp/
-/controllers/game/_temp/
+/server/controllers/_temp/
+/server/controllers/game/_temp/
 /client/static/audio/music/temp.mp3
 /config.json
 /config_*.json

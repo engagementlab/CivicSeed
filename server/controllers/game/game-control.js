@@ -4,22 +4,26 @@ var self = module.exports = {
 
 	init: function(app) {
 
-		ss.client.define('main', {
-			view: 'main.jade',
+		ss.client.define('game', {
+			view: 'game.jade',
 			css: 'game.stylus',
 			code: [
 				'libs/jquery-1.8.2.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
-				'admin',
-				'main',
+				'libs/d3.v2.min.js',
+				'routes',
+				'game',
 				'shared'
 			],
-			tmpl: '*'
+			tmpl: [
+				'game',
+				'partials'
+			]
 		});
 
-		ss.http.route('/', function(req, res) {
-			res.serveClient('main');
+		ss.http.route('/game', function(req, res) {
+			res.serveClient('game');
 		});
 
 	}

@@ -2,5 +2,7 @@
 	h1 Site Administration
 	ul
 		li: a(href="/admin/startup") Startup
-		li: a(href="/admin/invitecodes") Invite Codes
+
+		- if(sessionStorage.userRole === 'superadmin')
+			li: a(href="/admin/invitecodes") Invite Codes
 		li: a(href="/game") Main Game

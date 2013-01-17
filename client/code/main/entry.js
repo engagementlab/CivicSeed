@@ -1,5 +1,9 @@
+var appInitialized,
+	$html,
+	$body,
+	$container;
+
 window.ss = require('socketstream');
-var appInitialized = false;
 
 // TODO: only do this in dev mode
 ss.server.on('disconnect', function() { console.log('Lost connection to server...'); });
@@ -11,15 +15,20 @@ ss.server.on('ready', function() {
 
 		if(!appInitialized) {
 
+			$html = $('html');
+			$body = $(document.body);
+			$container = $('#container');
+
 			Davis(function() {
 
 				var $app = this;
 
-				require('/routes-middleware.js').loadMiddleware(ss, $app);
-				require('/main-routes').loadRoutes(ss, $app);
-				require('/admin-routes').loadRoutes(ss, $app);
-				require('/profile-routes').loadRoutes(ss, $app);
-				// require('/game-routes').loadRoutes(ss, $app);
+				require('/routes-middleware.js').loadMiddleware(ss, $app, $html, $body, $container);
+				require('/routes-main').loadRoutes(ss, $app, $html, $body, $container);
+				require('/routes-admin').loadRoutes(ss, $app, $html, $body, $container);
+				require('/routes-profile').loadRoutes(ss, $app, $html, $body, $container);
+				// should always be last
+				require('/routes-errors').loadRoutes(ss, $app, $html, $body, $container);
 
 				$app.configure(function(config) {
 					// config.linkSelector = 'a.davis';

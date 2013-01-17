@@ -1,9 +1,6 @@
 var self = module.exports = {
 
-	loadMiddleware: function(ss, $app) {
-
-		var $body = $(document.body);
-		var $container = $('#container');
+	loadMiddleware: function(ss, $app, $html, $body, $container) {
 
 		// // check if user experiences/authentic
 		$app.before(function(req) {
@@ -28,14 +25,16 @@ var self = module.exports = {
 						if(fullPath.indexOf('/admin') > -1) {
 							// console.log('not admin rights...rerouting...');
 							sessionStorage.setItem('userRole', userSessionObject.role);
-							req.redirect('/');
+							// req.redirect('/');
+							Davis.location.replace('/');
 						}
 					}
 				} else {
 					// console.log('Not authenticated...');
 					if(fullPath.indexOf('/admin') > -1 || fullPath.indexOf('/game') > -1) {
 						// console.log('not authenticated...rerouting...');
-						req.redirect('/');
+						// req.redirect('/');
+						Davis.location.replace('/');
 					}
 				}
 

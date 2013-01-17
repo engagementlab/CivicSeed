@@ -2,9 +2,9 @@
 
 ## Setup/Installation
 
-### Clone the repository
+### Clone the repository (or fork it)
 
-    git clone git@github.com:americanyak/CivicSeed.git
+    git clone https://github.com/engagementgamelab/CivicSeed.git
 
 ### Install the project
 

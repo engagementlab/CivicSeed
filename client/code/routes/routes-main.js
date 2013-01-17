@@ -21,15 +21,12 @@
 
 var self = module.exports = {
 
-	loadRoutes: function(ss, $app) {
+	loadRoutes: function(ss, $app, $html, $body, $container) {
 		// if (valid(text)) {
 		// 	return ss.rpc('demo.sendMessage', text, cb);
 		// } else {
 		// 	return cb(false);
 		// }
-
-		var $body = $(document.body);
-		var $container = $('#container');
 
 		$app.get('/', function(req) {
 			$container.append(JT['main-home']());
@@ -41,10 +38,6 @@ var self = module.exports = {
 
 		$app.get('/contact', function(req) {
 			$container.append(JT['main-contactus']());
-		});
-
-		$app.bind('routeNotFound', function (req) {
-			console.log('404');
 		});
 
 	}
