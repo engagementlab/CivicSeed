@@ -40,6 +40,11 @@ var self = module.exports = {
 			$container.append(JT['main-contactus']());
 		});
 
+		$app.get('/game', function(req) {
+			// have to force it unfortunately
+			location.href = '/game';
+		});
+
 	}
 
 };

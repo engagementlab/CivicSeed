@@ -9,6 +9,9 @@ var self = module.exports = {
 
 			$container.empty().append(JT['partials-navigation']({ fullPath: fullPath }));
 
+			// TODO: SOMEHOW PAUSE DAVIS HANDLING UNTIL THE RPC IS FINISHED!!!!
+			// OTHERWISE, IT HANDLES STUFF, THEN DOES THIS, ARGH....
+			// see: https://github.com/olivernn/davis.js/issues/67
 			// check if user experiences/authentic
 			ss.rpc('shared.account.getUserSession', function(userSessionObject) {
 
@@ -27,6 +30,14 @@ var self = module.exports = {
 							sessionStorage.setItem('userRole', userSessionObject.role);
 							// req.redirect('/');
 							Davis.location.replace('/');
+						}
+					} else if(userSessionObject.role !== 'superadmin') {
+						// console.log('No super admin rights...');
+						if(fullPath.indexOf('/admin/invitecodes') > -1) {
+							// console.log('not super admin rights...rerouting...');
+							sessionStorage.setItem('userRole', userSessionObject.role);
+							// req.redirect('/admin');
+							Davis.location.replace('/admin');
 						}
 					}
 				} else {
