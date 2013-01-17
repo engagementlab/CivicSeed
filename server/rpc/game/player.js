@@ -329,7 +329,10 @@ exports.actions = function(req, res, ss) {
 					res(maps);
 				}
 			});
-		}
+		},
 
+		statusUpdate: function(msg) {
+			ss.publish.all('ss-statusUpdate', msg);
+		}
 	};
 }

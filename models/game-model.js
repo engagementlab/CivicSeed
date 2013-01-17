@@ -11,7 +11,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			name: String,
 			count: Number
 		}],
-		levelNames: [String]
+		levelNames: [String],
+		resourceCount: [Number]
 	});
 
 	var GameModel = db.model('Game', gameSchema, 'game');

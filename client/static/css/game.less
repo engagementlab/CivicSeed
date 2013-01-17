@@ -313,14 +313,7 @@ user-select: none;
 	bottom: 15px;
 	right:10px;
 }
-.inventoryItem {
-	float: left;
-	padding: 15px;
-	margin: 0;
-	width: 32px;
-	height: 32px;
-	cursor:pointer;
-}
+
 .hideButton {
 	display:none;
 }
@@ -511,7 +504,31 @@ textarea {
 	font-family: @mono;
 	font-size: 16px;
 }
-.puzzle0, .puzzle1, .puzzle2, .puzzle3 {
+.inventoryItem.puzzle0, .inventoryItem.puzzle1, .inventoryItem.puzzle2, .inventoryItem.puzzle3 {
 	float: right;
 	margin-right: 100px;
+}
+
+.inventoryOutline {
+	float: left;
+	margin: 13px 0 10px 25px;
+	width: 32px;
+	height: 32px;
+	border: 1px dashed gray;
+}
+
+.inventoryItem {
+	float: left;
+	margin: 13px 0 10px 25px;
+	width: 32px;
+	height: 32px;
+	cursor:pointer;
+}
+
+.inventory > .outlines, .inventory > .pieces {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height:99%;
+	width: 100%;
 }

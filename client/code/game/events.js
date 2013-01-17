@@ -63,6 +63,10 @@ $(function() {
 		}
 	});
 
+	ss.event.on('ss-statusUpdate', function(message) {
+		$game.statusUpdate(message);
+	});
+
 	ss.event.on('ss-progressChange', function(num) {
 		$game.seedsDropped = num.dropped;
 		$game.tilesColored = num.colored;

@@ -66,6 +66,7 @@ exports.$game = {
 	numPlayers: 0,
 	badWords: ['fuck','shit', 'bitch', 'cunt', 'ass', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
 	levelNames: [],
+	resourceCount: [],
 	displayTimeout: null,
 
 	init: function() {
@@ -110,6 +111,7 @@ exports.$game = {
 		ss.rpc('game.player.getGameInfo', function(response) {
 			$game.levelQuestion = response.levelQuestion;
 			$game.levelNames = response.levelNames;
+			$game.resourceCount = response.resourceCount;
 			$game.seedsDropped = response.seedsDropped;
 			$game.tilesColored = response.tilesColored;
 			$game.leaderboard = response.leaderboard;
@@ -118,6 +120,7 @@ exports.$game = {
 			$game.prevPercent = $game.percent;
 			$game.percentString = $game.percent + '%';
 			$('.progressButton .hudCount').text($game.percentString);
+			$game.$player.createInventoryOutlines();
 		});
 		ss.rpc('game.chat.init');
 

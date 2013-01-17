@@ -97,7 +97,7 @@ $game.$player = {
 			_waitingSel = $('.waitingForSeed');
 			_gameboardSel = $('.gameboard');
 			_inventoryBtnSel = $('.inventoryButton > .hudCount');
-			_inventorySel = $('.inventory');
+			_inventorySel = $('.inventory > .pieces');
 
 			$game.changeStatus();
 			
@@ -739,7 +739,6 @@ $game.$player = {
 		var rs = null,
 			l = $game.$player.game.resources.length;
 
-		
 		//see if the resource is already in the list
 		while(--l > -1) {
 			if(id === $game.$player.game.resources[l].npc) {
@@ -762,7 +761,9 @@ $game.$player = {
 		//the answer was correct, add item to inventory
 		if(correct) {
 			$game.$player.game.resourcesDiscovered += 1;
-			$game.$player.game.seeds.normal += (6 - rs.attempts);
+			var rawAttempts = 6 - rs.attempts,
+				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
+			$game.$player.game.seeds.normal += numToAdd;
 			_seedHudCount.text($game.$player.game.seeds.normal);
 			$game.$player.game.inventory.push(id);
 			$game.$player.addToInventory(id);
@@ -825,13 +826,21 @@ $game.$player = {
 		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
 
-	getPosition: function() {
-		return _info;
-	},
-
 	emptyInventory: function() {
 		$game.$player.game.inventory = [];
 		_inventoryBtnSel.text('0');
+	},
+
+	createInventoryOutlines: function() {
+		var io = $('.inventory > .outlines');
+		io.empty();
+		for(var i = 0; i < $game.resourceCount[$game.$player.game.currentLevel]; i +=1) {
+			io.append('<div class="inventoryOutline"></div>');
+		}
+	},
+
+	getPosition: function() {
+		return _info;
 	},
 
 	nextLevel: function() {
@@ -839,9 +848,12 @@ $game.$player = {
 		$game.$player.game.gnomeState = 0;
 		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
+
+		$game.$player.createInventoryOutlines();
 		//send status to message board
-		var stat = $game.$player.name + 'is on level' + $game.$player.game.currentLevel + '!';
-		//ss.rpc('game.player.status', stat);
+		var newLevelMsg = $game.$player.game.currentLevel + 1;
+		var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
+		ss.rpc('game.player.statusUpdate', stat);
 		//load in other tree file
 	},
 
