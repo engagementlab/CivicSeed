@@ -6,7 +6,7 @@ module.exports.global = [
 	spriteY: 0,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -26,7 +26,7 @@ module.exports.global = [
 	spriteY: 128,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -46,7 +46,7 @@ module.exports.global = [
 	spriteY: 256,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -66,7 +66,7 @@ module.exports.global = [
 	spriteY: 64,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -86,7 +86,7 @@ module.exports.global = [
 	spriteY: 64,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -106,7 +106,7 @@ module.exports.global = [
 	spriteY: 64,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -126,7 +126,7 @@ module.exports.global = [
 	spriteY: 64,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {
@@ -146,7 +146,7 @@ module.exports.global = [
 	spriteY: 64,
 	dialog: {
 		random: ['Can\'t touch this!', 'Hammertime!', 'Pop pop!', 'I wanna dance with somebody!'],
-		prompts: ['Hi there! Thanks for pitching in around here. I have a resource that might come in handy. Wanna see it?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
+		prompts: ['Hi there! Would you like to take a look at my resource and maybe get some seeds?','Back for more huh...How about you try again?', 'I already gave you something but want to look at my resource again?']
 	}
 },
 {

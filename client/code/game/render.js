@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', 'fanny.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', 'fanny.png', 'glasses.png','beanie.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -94,7 +94,7 @@ $game.$renderer = {
 	},
 	loadPlayerImages: function(num) {
 		var next = num + 1,
-			playerFile = "img/game/player" + num + ".png";
+			playerFile = "img/game/players/player" + num + ".png";
 		_playerImages[num] = new Image();
 		_playerImages[num].src = playerFile;
 
@@ -114,7 +114,7 @@ $game.$renderer = {
 			);
 
 			//TODO: replace this with the number of image files
-			if(next === 6) {
+			if(next === 7) {
 				$game.$renderer.ready = true;
 				$game.$player.init();
 				return;
@@ -358,27 +358,36 @@ $game.$renderer = {
 
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
-		_offscreen_playerCanvas[info.colorNum],
-		info.srcX,
-		info.srcY,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2,
-		info.curX,
-		info.curY - $game.TILE_SIZE,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2
+			_offscreen_playerCanvas[info.colorNum],
+			info.srcX,
+			info.srcY,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2,
+			info.curX,
+			info.curY - $game.TILE_SIZE,
+			$game.TILE_SIZE,
+			$game.TILE_SIZE*2
 		);
-		// _charactersContext.drawImage(
-		// _tilesheets[7],
-		// 0,
-		// 0,
-		// $game.TILE_SIZE,
-		// $game.TILE_SIZE*2,
-		// info.curX,
-		// info.curY - $game.TILE_SIZE,
-		// $game.TILE_SIZE,
-		// $game.TILE_SIZE*2
-		// );
+
+		var accX = 0;
+		if(info.squat) {
+			accX = 32;
+		}
+		for(var i = 0; i < info.level; i += 1) {
+			var cur = 7 + i;
+			_charactersContext.drawImage(
+				_tilesheets[cur],
+				accX,
+				0,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE*2,
+				info.curX,
+				info.curY - $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE*2
+			);
+		}
+		
 	},
 
 	renderCharacter: function(info) {

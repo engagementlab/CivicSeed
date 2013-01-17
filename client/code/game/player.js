@@ -27,7 +27,8 @@ var _curFrame = 0,
 	_inventoryBtnSel = null,
 	_inventorySel = null,
 	_playerGameInfo = null,
-	_startTime = null;
+	_startTime = null,
+	_playerColorNum = null;
 
 
 $game.$player = {
@@ -72,14 +73,8 @@ $game.$player = {
 				prevOffY: 0
 			};
 			
-			_renderInfo.colorNum = newInfo.game.colorInfo.tilesheet,
-			_renderInfo.srcX = 0,
-			_renderInfo.srcY = 0,
-			_renderInfo.curX = _info.x * $game.TILE_SIZE,
-			_renderInfo.curY = _info.y * $game.TILE_SIZE,
-			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
-			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
-			_renderInfo.kind = 'player',
+			_playerColorNum = newInfo.game.colorInfo.tilesheet;
+			
 			
 			//we have retrieved player info, so it is ready
 			$game.$player.ready = true;
@@ -88,6 +83,16 @@ $game.$player = {
 			$game.$player.name = newInfo.name,
 			$game.$player.game = newInfo.game;
 			_playerGameInfo = newInfo.game;
+
+			_renderInfo.colorNum = _playerColorNum,
+			_renderInfo.srcX = 0,
+			_renderInfo.srcY = 0,
+			_renderInfo.curX = _info.x * $game.TILE_SIZE,
+			_renderInfo.curY = _info.y * $game.TILE_SIZE,
+			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
+			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
+			_renderInfo.kind = 'player',
+			_renderInfo.level = $game.$player.game.currentLevel;
 
 			//set variables for dom selectors
 			_seedHudCount = $('.seedButton .hudCount');
@@ -447,20 +452,27 @@ $game.$player = {
 
 	idle: function () {
 		_idleCounter += 1;
-		// if(_idleCounter % 8 === 0) {
-		// 	_renderInfo.colorNum = Math.floor(Math.random() * 6);
-		// }
+		if($game.$player.seedMode > 0) {
+			if(_idleCounter % 32 < 16) {
+				_renderInfo.colorNum = 0;
+			}
+			else {
+				_renderInfo.colorNum = _playerColorNum;
+			}
+		}
 		if(_idleCounter >= 64) {
 			_idleCounter = 0;
 			_info.srcX = 0;
 			_info.srcY = 0;
 			_getMaster = true;
+			_renderInfo.squat = false;
 		}
 
 		else if(_idleCounter === 48) {
 			_info.srcX = 32;
 			_info.srcY = 0;
 			_getMaster = true;
+			_renderInfo.squat = true;
 		}
 
 		else {
@@ -478,13 +490,13 @@ $game.$player = {
 
 		//regular seed mode
 		if(mode === 1) {
-
 			if($game.$player.game.seeds.normal < 1) {
 				return false;
 			}
 			else {
 				options.sz = 3;
 				$game.$player.calculateSeeds(options);
+				return true;
 			}
 		}
 		//riddle seed mode
@@ -494,6 +506,16 @@ $game.$player = {
 			}
 			else {
 				options.sz = ($game.$player.game.currentLevel * 2) + 5;
+				$game.$player.calculateSeeds(options);
+				return true;
+			}
+		}
+		else if(mode === 3 ){
+			if($game.$player.game.seeds.special < 1) {
+				return false;
+			}
+			else {
+				//options.sz = ($game.$player.game.currentLevel * 2) + 5;
 				$game.$player.calculateSeeds(options);
 				return true;
 			}
@@ -540,9 +562,9 @@ $game.$player = {
 							y: origY + b,
 							color:
 							{
-								r: $game.$player.game.colorInfo.rgb.r,
-								g: $game.$player.game.colorInfo.rgb.g,
-								b: $game.$player.game.colorInfo.rgb.b,
+								r: $game.$player.game.colorInfo.rgb.r - 20,
+								g: $game.$player.game.colorInfo.rgb.g - 20,
+								b: $game.$player.game.colorInfo.rgb.b - 20,
 								a: tempA,
 								owner: 'nobody'
 							}
@@ -600,6 +622,7 @@ $game.$player = {
 						//bounce outta seed mode
 						if($game.$player.game.seeds.normal === 0) {
 							$game.$player.seedMode = 0;
+							_renderInfo.colorNum = _playerColorNum;
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.statusUpdate('you are out seeds');
@@ -610,6 +633,7 @@ $game.$player = {
 						$game.$player.game.seeds.riddle -= 1;
 						if($game.$player.game.seeds.riddle === 0) {
 							$game.$player.seedMode = 0;
+							_renderInfo.colorNum = _playerColorNum;
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
@@ -620,6 +644,7 @@ $game.$player = {
 						$game.$player.game.seeds.special -= 1;
 						if($game.$player.game.seeds.special === 0) {
 							$game.$player.seedMode = 0;
+							_renderInfo.colorNum = _playerColorNum;
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
@@ -849,6 +874,7 @@ $game.$player = {
 		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
 
+		_renderInfo.level = $game.$player.game.currentLevel;
 		$game.$player.createInventoryOutlines();
 		//send status to message board
 		var newLevelMsg = $game.$player.game.currentLevel + 1;
@@ -871,6 +897,7 @@ $game.$player = {
 			$('.seedventory').slideUp(function() {
 				$game.$player.seedventoryShowing = false;
 				$game.$player.seedMode = 0;
+				_renderInfo.colorNum = _playerColorNum;
 				$game.changeStatus();
 			});
 		}
@@ -878,6 +905,7 @@ $game.$player = {
 			if($game.$player.seedPlanting) {
 				$game.$player.seedPlanting = false;
 				$game.seedMode = 0;
+				_renderInfo.colorNum = _playerColorNum;
 				$game.statusUpdate('seed mode ended, as you were');
 			}
 			else {
