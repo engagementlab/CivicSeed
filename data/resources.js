@@ -27,7 +27,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
@@ -45,7 +45,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
@@ -63,7 +63,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
@@ -81,7 +81,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
@@ -99,7 +99,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 0 l 100 0 l -5 0 l 0 -100',
 		fill: 'rgb(250,0,0)',
@@ -113,11 +113,11 @@ module.exports.global = [
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
 	url: '/articles/7283.html',
 	tagline: 'like butter play toast',
-	prompt: 'Answer this right to get something.',
-	question: 'Who are you?',
+	prompt: 'Tell me about yourself and I shall give you some seeds.',
+	question: 'Describe your background as it applies to civic engagement',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['Thanks for the insight. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
 		fill: 'rgb(44,52,91)',
@@ -132,10 +132,10 @@ module.exports.global = [
 	url: '/articles/7283.html',
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
-	question: 'This is a trick question',
+	question: 'What one word could best summarize the article?',
 	questionType: 'closed',
-	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	answer: 'motivation',
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
 		fill: 'rgb(230,116,46)',
@@ -149,11 +149,11 @@ module.exports.global = [
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
 	url: '/articles/7283.html',
 	tagline: 'like butter play toast',
-	prompt: 'Answer this right to get something.',
-	question: 'Who are you?',
+	prompt: 'Tell me about your motivations and I will give you some seeds.',
+	question: 'Why do you want to volunteer in the community?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['Ahh very interesting indeed.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
 		fill: 'rgb(220,225,47)',
@@ -171,7 +171,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
@@ -189,7 +189,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
@@ -207,7 +207,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
@@ -225,7 +225,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
@@ -243,7 +243,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm 0 0 l 50 50 l -100 0 l 50 -50',
 		fill: 'rgb(250,0,0)',
@@ -257,11 +257,11 @@ module.exports.global = [
 	//url: 'http://75eea06f1054d4744d1f-d2e02d108aac5382b47661a6ff656abe.r46.cf2.rackcdn.com/7283.html'
 	url: '/articles/7283.html',
 	tagline: 'like butter play toast',
-	prompt: 'Answer this right to get something.',
-	question: 'Who are you?',
-	questionType: 'open',
-	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	prompt: 'Answer this right to get some seeds.',
+	question: 'What is the biggest issue in the community?',
+	questionType: 'closed',
+	answer: 'education',
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
 		fill: 'rgb(124,202,176)',
@@ -279,7 +279,7 @@ module.exports.global = [
 	question: 'Who are you?',
 	questionType: 'open',
 	answer: 'player',
-	responses: ['You got it right. Take this medal.','Wrong. Leave me alone.'],
+	responses: ['You got it right. Take this puzzle piece.','Wrong. Leave me alone.'],
 	shape: {
 		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
 		fill: 'rgb(250,0,0)',

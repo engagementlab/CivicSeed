@@ -106,7 +106,7 @@ $game.$resources = {
 		_resourceButtonSel.addClass('hideButton');
 		
 		if(_answered) {
-			console.log(_currentSlide, _numSlides);
+			
 			//this is the medal page
 			if(_currentSlide === _numSlides + 1 &&  _curResource.questionType === 'open') {
 				if(_correctAnswer) {
@@ -121,7 +121,7 @@ $game.$resources = {
 			}
 		}
 		else {
-			console.log(_currentSlide, _numSlides,_revisiting);
+			
 			if(_revisiting) {
 				//if its the last slide
 				if(_currentSlide === _numSlides - 1) {
@@ -160,10 +160,10 @@ $game.$resources = {
 
 				//if its the last page, we have an answer button and a back
 				else if(_currentSlide === _numSlides) {
-					console.log('wuh');
+					
 					$('.resourceArea .answerButton').removeClass('hideButton');
 					$('.resourceArea .backButton').removeClass('hideButton');
-				}	
+				}
 			}
 			
 		}

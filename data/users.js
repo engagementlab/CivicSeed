@@ -22,7 +22,7 @@ module.exports.global = [{
 					g: 129,
 					b: 82
 				},
-				tilesheet: 0
+				tilesheet: 6
 			},
 			resources: [],
 			inventory: [],

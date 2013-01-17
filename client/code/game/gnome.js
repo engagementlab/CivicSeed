@@ -353,7 +353,7 @@ $game.$gnome = {
 		//if _promptNum is 0, then it is the just showing the riddle and tangram
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
-				$('.gnomeArea .message').text('here is your next riddle whale thing.');
+				$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
 				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {

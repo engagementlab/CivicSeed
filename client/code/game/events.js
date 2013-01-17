@@ -116,6 +116,7 @@ $(function() {
 			//turn it off if on
 			if($game.$player.seedMode > 0) {
 				$game.$player.seedMode = 0;
+				_renderInfo.colorNum = _playerColorNum;
 				$game.changeStatus();
 			}
 			else {
