@@ -43,7 +43,8 @@
     "walk": "~2.2.1",
     "ss-clientjade": "~0.0.5",
     "jade": "~0.28.0",
-    "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master"
+    "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
+    "ss-less": "~0.1.1"
   },
   "devDependencies": {
     "mocha": "*",

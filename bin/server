@@ -88,6 +88,7 @@ service.connectMongoose(app, function(databases) {
 			CivicSeed: JSON.stringify(CivicSeed)
 		}
 	});
+	ss.client.formatters.add(require('ss-less'));
 	ss.client.formatters.add(require('ss-stylus'));
 
 	// // Server-side compiled templates for client
