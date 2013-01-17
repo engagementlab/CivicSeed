@@ -33,7 +33,7 @@ var self = module.exports = {
 						}
 					} else if(userSessionObject.role !== 'superadmin') {
 						// console.log('No super admin rights...');
-						if(fullPath.indexOf('/admin/invitecodes') > -1) {
+						if(fullPath.indexOf('/admin/startup') > -1) {
 							// console.log('not super admin rights...rerouting...');
 							sessionStorage.setItem('userRole', userSessionObject.role);
 							// req.redirect('/admin');
