@@ -8,6 +8,6 @@
 	"REDIS_PW": "",
 	"REDIS_DB": "[redis_db]",
 	"MONGO_URL": "mongodb://192.168.1.xxx/[mongo_db]",
-	"MAP_TILES_WIDTH": 142,
-	"MAP_TILES_HEIGHT": 132
+	"ACCOUNT_EMAIL": "[email@account.com]",
+	"ACCOUNT_PW": "[password]"
 }

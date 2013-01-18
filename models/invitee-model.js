@@ -9,7 +9,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var InviteeModel = db.model('Invitee', InviteeSchema, 'invitees');
 
-
 	return InviteeModel;
 
 };

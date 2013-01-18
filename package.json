@@ -35,7 +35,7 @@
     "colors": "~0.6.0",
     "passport": "~0.1.12",
     "passport-local": "~0.1.6",
-    "nodemailer": "~0.3.26",
+    "nodemailer": "~0.3.37",
     "password-hash": "~1.2.1",
     "connect-flash": "~0.1.0",
     "cloudfiles": "~0.3.4",
@@ -44,7 +44,8 @@
     "ss-clientjade": "~0.0.5",
     "jade": "~0.28.0",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
-    "ss-less": "~0.1.1"
+    "ss-less": "~0.1.1",
+    "xkcd-pwgen": "0.0.1"
   },
   "devDependencies": {
     "mocha": "*",

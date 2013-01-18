@@ -1,41 +1,36 @@
-//- {{#extend 'stylesheets'}}
-//- <link rel='stylesheet', href='/css/admin.css'/>
-//- {{/extend}}
-
-div.console
+.console
 	form.form-horizontal
 
-		p Create a new group of 30 invite codes:
+		p Create a new group of up to 20 invites.
+		p(style='font-size:12px') <em>NOTE: if more than 20 emails are entered, only the first 20 will be used.</em>
+		p(style='font-size:12px') <em>ALSO NOTE: if you have previously sent invites, this new send will cancel and invalidate those invites.
 
-		div.control-group
-			label.control-label(for='sessionName') Session Name:
-			div.controls
-				input#sessionName.span4(type='text', placeholder='Give this session a name...')
+		//- div.control-group
+		//- 	label.control-label(for='sessionName') Session Name:
+		//- 	div.controls
+		//- 		input#sessionName.span4(type='text', placeholder='Give this session a name...')
 		div.control-group
 			label.control-label(for='emailList') Email Addresses:
 			div.controls
-				textarea#emailList.span4(rows='6', placeholder='Enter a list of email addresses...')
+				//- textarea#emailList.span4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
+				textarea#emailList.span4(rows='6') russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com
 		div.control-group
 
 			div.controls
-				button#inviteCodesBtn.btn.btn-mini.btn-info(type='button') Create and Send Invite Codes
+				//- .btn-success
+				button#inviteCodesBtn.btn.btn-mini(type='button') Create and Send Invites
 
-		p Select an existing session to apply an action:
+		//- p Select an existing session to apply an action:
 
-		div.control-group
-			label.control-label(for='sessionSelect') Existing Session:
-			div.controls
-				//- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
-				select#sessionSelect.span4
-					//- {{#each invitees}}
-					//- 	option value='{{this}}'>{{this}}
-					//- {{/each}}
-				button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
-				button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
+		//- div.control-group
+		//- 	label.control-label(for='sessionSelect') Existing Session:
+		//- 	div.controls
+		//- 		//- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
+		//- 		select#sessionSelect.span4
+		//- 			//- {{#each invitees}}
+		//- 			//- 	option value='{{this}}'>{{this}}
+		//- 			//- {{/each}}
+		//- 		button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
+		//- 		button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
 
 		pre#inviteCodes.hidden
-
-
-//- {{#extend 'scripts'}}
-//- <script src='/js/admin.js'></script>
-//- {{/extend}}

@@ -2,6 +2,8 @@ var self = module.exports = {
 
 	loadRoutes: function(ss, $app, $html, $body, $container) {
 
+		require('/admin').init();
+
 		$app.get('/admin', function(req) {
 			$container.append(JT['admin-panel']({
 				message: 'User admin panel.'
@@ -21,7 +23,6 @@ var self = module.exports = {
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
 			$body.attr('class', 'adminPage startupPage');
-			require('./admin').init();
 		});
 
 

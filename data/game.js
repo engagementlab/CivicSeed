@@ -4,8 +4,8 @@ module.exports.global = {
 	seedsDropped: 0,
 	seedsDroppedGoal: 3200,
 	state: 1,
-	levelQuestion: ['What is your background?', 'Where do you like to work?','What time is it?','When are you done?'],
+	levelQuestion: ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'],
 	leaderboard: [],
-	levelNames: ['Level 1: Who are you?','Level 2: Where are you?', 'Level 3: When are you?', 'Level 4: Why are you?', 'Level 5: What are you?'],
-	resourceCount: [10,8,11,9]
+	levelNames: ['Level 1: Who are you?', 'Level 2: Where are you?', 'Level 3: When are you?', 'Level 4: Why are you?', 'Level 5: What are you?'],
+	resourceCount: [10, 8, 11, 9]
 };
