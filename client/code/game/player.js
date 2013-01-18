@@ -912,6 +912,9 @@ $game.$player = {
 				$game.$player.seedMode = 1;
 				$game.changeStatus();
 			}
+			else {
+				$game.statusUpdate('you have no seeds');
+			}
 		}
 	},
 

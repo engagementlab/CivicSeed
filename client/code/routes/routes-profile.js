@@ -6,8 +6,8 @@ var self = module.exports = {
 			$container.append('<h1>PROFILES!</h1>');
 		});
 
-		$app.get('/profiles/:name', function(req) {
-			ss.rpc('shared.account.getProfileInformation', req.params['name'], function(info) {
+		$app.get('/profiles/:profileUrl', function(req) {
+			ss.rpc('shared.account.getProfileInformation', req.params['profileUrl'], function(info) {
 					$container.append(JT['profiles-singleprofile'](info));
 			});
 		});

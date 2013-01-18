@@ -48,8 +48,9 @@ $(function() {
 	});
 	//all this breakdown will be on the server side, not client side,
 	//but we will pass the tiles info
-	ss.event.on('ss-seedDropped', function(bombed, id) {
-		$game.$map.newBomb(bombed, id);
+	ss.event.on('ss-seedDropped', function(data) {
+		$game.$map.newBomb(data.bombed, data.id);
+		$game.$others.updateTilesColored(data.id, data.tilesColored);
 	});
 
 	//new message from chat

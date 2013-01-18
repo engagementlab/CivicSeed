@@ -576,8 +576,8 @@ $game.$gnome = {
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
 					$game.$player.game.seeds.riddle += 3;
-					$('.riddleButton .hudCount') = $game.$player.game.seeds.riddle;
-					//update HUD 
+					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
+					//update HUD
 					$game.$player.game.gnomeState = 4;
 				}
 			}

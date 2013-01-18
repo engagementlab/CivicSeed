@@ -4,7 +4,9 @@ module.exports.global = [{
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
-	name: 'Robert',
+	firstName: 'Robert',
+	lastName: 'Nobody',
+	profileUrl: 'robert.nobody',
 	password: '',
 	email: 'b',
 	role: 'superadmin',
@@ -40,7 +42,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Russell',
+	firstName: 'Russell',
+	lastName: 'Nobody',
+	profileUrl: 'russell.nobody',
 	password: '',
 	email: 'r',
 	role: 'superadmin',
@@ -76,7 +80,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Stephen',
+	firstName: 'Stephen',
+	lastName: 'Nobody',
+	profileUrl: 'stephen.nobody',
 	password: '',
 	email: 's',
 	role: 'admin',
@@ -112,7 +118,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Eric',
+	firstName: 'Eric',
+	lastName: 'Nobody',
+	profileUrl: 'eric.nobody',
 	password: '',
 	email: 'e',
 	role: 'admin',
@@ -148,7 +156,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Sam',
+	firstName: 'Sam',
+	lastName: 'Nobody',
+	profileUrl: 'sam.nobody',
 	password: '',
 	email: 'a',
 	role: 'admin',
@@ -184,7 +194,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Joe',
+	firstName: 'Joe',
+	lastName: 'Nobody',
+	profileUrl: 'joe.nobody',
 	password: '',
 	email: 'j',
 	role: 'actor',
@@ -220,7 +232,9 @@ module.exports.global = [{
 			tilesColored: 0
 		}
 }, {
-	name: 'Frank',
+	firstName: 'Frank',
+	lastName: 'Nobody',
+	profileUrl: 'frank.nobody',
 	password: '',
 	email: 'f',
 	role: 'actor',
