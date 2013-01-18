@@ -292,8 +292,9 @@ exports.actions = function(req, res, ss) {
 				}
 				else {
 					var data = {
-						dropped: user.game.seeds.tilesColored,
+						tilesColored: user.game.tilesColored,
 						level: user.game.currentLevel,
+						rank: user.game.rank,
 						name: user.name,
 						color: user.game.color
 					};

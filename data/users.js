@@ -27,7 +27,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -63,7 +63,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -99,7 +99,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -135,7 +135,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -171,7 +171,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -207,7 +207,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0
@@ -243,7 +243,7 @@ module.exports.global = [{
 			resources: [],
 			inventory: [],
 			seeds: {
-				normal: 1,
+				normal: 0,
 				riddle: 0,
 				special: 0,
 				dropped: 0

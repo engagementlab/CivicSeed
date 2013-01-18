@@ -572,15 +572,15 @@ exports.$game = {
 			percentShow = '<p>Color is ' + $game.percentString + ' restored...</p>',
 			displayLevel = $game.$player.game.currentLevel + 1;
 			
-		var	personalInfo = '<p>Current Level: ' + displayLevel + '</p>' +
+		var	personalInfo = '<p><span>Current Level:</span> ' + displayLevel + '</p>' +
 			'<p>' + $game.$player.game.rank + '</p>',
 
-			personalStats = '<p>Tiles Colored: ' + $game.$player.game.tilesColored + '</p>' +
-				'<p>Your Contribution: ' + contribution + '</p>' +
-				'<p>Resources Discovered: ' + $game.$player.game.resourcesDiscovered + '</p>' +
-				'<p>Time Played: ' + displayTime + '</p>';
+			personalStats = '<p><span>Tiles Colored:</span> ' + $game.$player.game.tilesColored + '</p>' +
+				'<p><span>Your Contribution: </span>' + contribution + '</p>' +
+				'<p><span>Resources Discovered: </span>' + $game.$player.game.resourcesDiscovered + '</p>' +
+				'<p><span>Time Played: </span>' + displayTime + '</p>';
 						
-			topPlayers = '<p>Top Seeders</p><ol>';
+			topPlayers = '<p><span>Top Seeders:</span></p><ol>';
 		
 		for(var i = 0; i < $game.leaderboard.length; i++) {
 			topPlayers += '<li>' + $game.leaderboard[i].name + ': ' + $game.leaderboard[i].count + ' tiles colored</li>';

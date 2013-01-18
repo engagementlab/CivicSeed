@@ -188,11 +188,11 @@ $game.$resources = {
 					//var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
 					//_resourceContentSel.html(newSvg);
 					newImg = '<img src="/img/game/resources/r' + _curResource.id + '.png" class="centerImage">';
-					_resourceContentSel.html(newImg);
+					_resourceContentSel.html(newImg).css('overflow', 'hidden');
 				}
 				//the next slide will show them recent answers
 				else {
-					_resourceContentSel.empty();
+					_resourceContentSel.empty().css('overflow','auto');
 					$game.$resources.showRecentAnswers();
 				}
 			
@@ -206,8 +206,9 @@ $game.$resources = {
 			
 		}
 		else {
+			_resourceContentSel.css('overflow', 'auto');
 			if(_currentSlide === _numSlides) {
-				var finalQuestion = '<p class="finalQuestion">' + _curResource.question + '</p>';
+				var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
 					$game.$resources.showRecentAnswers();
@@ -232,7 +233,7 @@ $game.$resources = {
 		var recentAnswers = _curResource.playerAnswers,
 			numAnswers = recentAnswers.length,
 			displayAnswers = '',
-			finalQuestion = '<p>' + _curResource.question + '</p>';
+			finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 
 		displayAnswers = '<ul>';
 		var numToShow = numAnswers < 3 ? numAnswers: 3,
@@ -240,14 +241,14 @@ $game.$resources = {
 			spot = numAnswers - 1;
 		
 		while(counter < numToShow) {
-			displayAnswers += '<li class="playerAnswers">' + recentAnswers[spot-counter].name + ': ' + recentAnswers[spot-counter].answer + '</li>';
+			displayAnswers += '<li class="playerAnswers"><span>' + recentAnswers[spot-counter].name + ': </span> ' + recentAnswers[spot-counter].answer + '</li>';
 			counter += 1;
 		}
 
 		displayAnswers += '</ul>';
 		if(numAnswers < 2) {
 			_speak = 'Congrats! You were the first to answer.';
-			displayAnswers += '<p>More answers from your peers will appear shortly.  Be sure to check back.</p>';
+			displayAnswers += '<p>** More answers from your peers will appear shortly.  Be sure to check back. **</p>';
 		}
 		else {
 			_speak = 'Here are some recent answers by your peers: ';
@@ -291,10 +292,10 @@ $game.$resources = {
 
 		//if its answered, determine if we need to show npc chat style instead
 		if(_answered) {
-			console.log('answered');
+			
 			//if they got it wrong
 			if(!_correctAnswer) {
-				console.log('wrong');
+				
 				_speak = _curResource.responses[1];
 				//_speakerNameSel.text(_who + ': ');
 				//_resourceMessageSel.text(_speak);
@@ -315,7 +316,7 @@ $game.$resources = {
 			}
 		}
 		else {
-			console.log('other');
+			
 			$game.$resources.addContent();
 			$game.$resources.addButtons();	
 		}

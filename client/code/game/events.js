@@ -111,17 +111,35 @@ $(function() {
 
 	$('.seedButton').bind('click', function () {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
-		if(!$game.inTransit && !$game.$player.isMoving) {
-			
-			//turn it off if on
+		var goAhead = startNewAction();
+		if(goAhead) {
+			//this mean seedventory is DOWN
+			//the user clicked meaning they want to open or end seed mode
+			//END seed mode
 			if($game.$player.seedMode > 0) {
 				$game.$player.seedMode = 0;
+				$game.$player.seedPlanting = false;
 				_renderInfo.colorNum = _playerColorNum;
 				$game.changeStatus();
 			}
 			else {
-				$game.$player.chooseSeed();
+				//open it up OR turn it on
+				$game.$player.openSeedventory();
 			}
+		}
+		else {
+			//if it is UP, then we want to clsoe it and turn it off
+			if($game.$player.seedventoryShowing) {
+				$('.seedventory').slideUp(function() {
+					$game.$player.seedventoryShowing = false;
+					$game.changeStatus();
+				});	
+			}
+			else {
+				$game.$player.seedPlanting = false;
+				$game.statusUpdate('seed mode ended, as you were');
+			}
+			
 		}
 	});
 
@@ -158,7 +176,8 @@ $(function() {
 	//figure out if we shoupdatuld transition (or do other stuff later)
 	_gameboard.bind('click', function(m) {
 
-		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !$game.showingProgress){
+		var goAhead = startNewAction();
+		if(goAhead) {
 				var mInfo = {
 				x: m.pageX,
 				y: m.pageY,
@@ -285,7 +304,8 @@ $(function() {
 			});
 		}
 		else {
-			if(!$game.$gnome.isChat && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$player.seedventoryShowing && $game.running) {
+			var goAhead = startNewAction();
+			if(goAhead) {
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
 			}
@@ -311,15 +331,28 @@ $(function() {
 		$(this).tooltip('show');
 	});
 	_w.bind('keydown',function(e) {
-		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat){
-			$game.$mouse.updateKey(e.which);
+		var goAhead = startNewAction();
+		if(!$('#chatText').is(':focus')) {
+			if(goAhead) {
+				$game.$mouse.updateKey(e.which);
+			}
 		}
 	});
 	$(window).bind('keyup',function(e) {
 		$game.$player.keyWalking = false;
 	});
+
 });
 
+function startNewAction() {
+	//check all the game states (if windows are open ,in transit, etc.) to begin a new action
+	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 function leaveThisJoint() {
 	$game.$player.exitAndSave();
 }

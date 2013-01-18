@@ -84,7 +84,7 @@ $game.$mouse = {
 
 					if(ret) {
 						ss.rpc('game.player.getInfo', ret, function(user) {
-							var msg = user.dropped + ' tiles colored || level ' + user.level;
+							var msg = 'A ' + user.rank + ' in level ' + user.level + ' who has colored ' + user.tilesColored + ' tiles. Jealous?';
 							$game.$others.message(msg, ret);
 						});
 					}
