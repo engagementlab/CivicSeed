@@ -149,7 +149,23 @@ $game.$gnome = {
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
 			else if($game.$player.game.gnomeState === 1) {
-				$game.$gnome.showPrompt(0);
+				if($game.$player.game.currentLevel === 0 && $game.$player.game.seeds.normal > 0) {
+					//make them plant first seed
+					_speak =  'plant the damn seed son! bottom left corner. come on man...';
+
+					$('.speechBubble .speakerName').text($game.$gnome.name+': ');
+					$('.speechBubble .message').text(_speak);
+					$('.speechBubble').fadeIn(function() {
+						setTimeout(function() {
+							$('.speechBubble').fadeOut();
+						}, 3000);
+					});
+	
+	
+				}
+				else {
+					$game.$gnome.showPrompt(0);	
+				}				
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
 			else if($game.$player.game.gnomeState === 2) {
@@ -205,6 +221,10 @@ $game.$gnome = {
 			//save that the player has looked at the instructions
 			if($game.$player.game.gnomeState === 0) {
 				$game.$player.game.gnomeState = 1;
+				if($game.$player.game.currentLevel === 0) {
+					$game.$player.game.seeds.normal = 1;
+					$('.seedButton > .hudCount').text(1);
+				}
 			}
 		});
 	},
@@ -556,7 +576,8 @@ $game.$gnome = {
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
 					$game.$player.game.seeds.riddle += 3;
-					//update HUD 
+					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
+					//update HUD
 					$game.$player.game.gnomeState = 4;
 				}
 			}

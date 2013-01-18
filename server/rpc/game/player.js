@@ -26,10 +26,9 @@ exports.actions = function(req, res, ss) {
 			//should we pull the game info from the db instead of it being passed in a session?
 			var playerInfo = {
 				id: req.session.userId,
-				name: req.session.name,
+				name: req.session.firstName,
 				game: req.session.game
 			};
-
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
 
@@ -180,8 +179,15 @@ exports.actions = function(req, res, ss) {
 									saveColors(curOld);
 								}
 								else {
+									var newTileCount = info.tilesColored + bombed.length;
+									
+									var sendData = {
+										bombed: bombed,
+										id: info.id,
+										tilesColored: newTileCount
+									};
 									//we are done,send out the color information to each client to render
-									ss.publish.all('ss-seedDropped', bombed, info.id);
+									ss.publish.all('ss-seedDropped', sendData);
 									
 									//access our global game model for status updates
 									gameModel.findOne({}, function (err, result) {
@@ -292,8 +298,9 @@ exports.actions = function(req, res, ss) {
 				}
 				else {
 					var data = {
-						dropped: user.game.seeds.tilesColored,
+						tilesColored: user.game.tilesColored,
 						level: user.game.currentLevel,
+						rank: user.game.rank,
 						name: user.name,
 						color: user.game.color
 					};

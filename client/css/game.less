@@ -350,8 +350,9 @@ textarea {
 	resize: none;
 	font-family: @mono;
 }
-.finalQuestion {
+p.finalQuestion {
 	font-size: 1.2em;
+	color: @csPurple;
 }
 
 .globalHud {
@@ -433,7 +434,7 @@ textarea {
 	left: 310px;
 	border-radius: 5px;
 	border: 2px solid white;
-	background: rgba(20,20,20,.8);
+	background: @csPurple;
 	display: none;
 	z-index: 9999;
 	color: #eee;
@@ -472,6 +473,14 @@ textarea {
 	color: #555;
 	font-family: @mono;
 	list-style: none;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top:10px;
+	width: 860px;
+}
+.playerAnswers > span {
+	.textOutline();
+	color: #eee;
 }
 .megaBar {
 	color: #333;
@@ -531,4 +540,14 @@ textarea {
 	left: 0;
 	height:99%;
 	width: 100%;
+}
+li.playerAnswers:nth-child(odd) {
+	background: @csLightGreen;
+}
+li.playerAnswers:nth-child(even) {
+	background: @csYellow;
+}
+.tab-pane > div > p > span {
+	.textOutline();
+	color: #eee;
 }

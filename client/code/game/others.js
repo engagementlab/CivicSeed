@@ -56,6 +56,7 @@ $game.$others = {
 			player.resetRenderValues();
 		});
 	},
+
 	hideAllChats: function() {
 		$.each(_onScreenPlayers, function(key, player) {
 			player.hideChat();
@@ -79,22 +80,26 @@ $game.$others = {
 		//console.log(_onScreenPlayers);
 	},
 
-	playerCard: function(x, y, callback) {
+	playerCard: function(x, y) {
 		var found = false;
 		$.each(_onScreenPlayers, function(key, player) {
 			if(player.info.x === x && player.info.y === y) {
-					callback(player.id);
+					player.showPlayerCard();
 					found = true;
 			}
 		});
 
-		if(!found) {
-			callback(false);	
-		}
-		
-
+		return found;
 	},
 
+	updateTilesColored: function(id, count) {
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.id === id) {
+				console.log(id, player.tilesColored, count);
+				player.setTilesColored(count);
+			}
+		});
+	},
 
 	createOther: function(player) {
 		var otherPlayer = {
@@ -117,6 +122,9 @@ $game.$others = {
 			hideTimer: null,
 			isChatting: false,
 			offScreen: true,
+			tilesColored: player.game.tilesColored,
+			rank: player.game.rank,
+			level: player.game.currentLevel,
 
 			info: {
 				x: player.game.position.x,
@@ -224,6 +232,10 @@ $game.$others = {
 				}
 			},
 
+			getPlayerInfo: function() {
+
+			},
+
 			beginMove: function(moves) {
 				otherPlayer.seriesOfMoves = new Array(moves.length);
 				otherPlayer.seriesOfMoves = moves;
@@ -327,10 +339,10 @@ $game.$others = {
 
 				if(!otherPlayer.offScreen) {
 					var len = message.length + otherPlayer.name.length + 2,
-						fadeTime = len * 150 + 1000,
+						fadeTime = len * 80 + 1000,
 						sz = Math.floor(len * 8) + 10;
 					
-					fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
+					fadeTime = (fadeTime > 9000) ? 9000 : fadeTime;
 
 					
 					if(otherPlayer.isChatting) {
@@ -383,6 +395,15 @@ $game.$others = {
 					$(this).remove();
 					otherPlayer.isChatting = false;
 				});
+			},
+
+			setTilesColored: function(num) {
+				otherPlayer.tilesColored = num;
+			},
+
+			showPlayerCard: function() {
+				var msg = 'A ' + otherPlayer.rank + ' in level ' + (otherPlayer.level + 1) + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
+				otherPlayer.message(msg);
 			}
 		};
 		return otherPlayer;

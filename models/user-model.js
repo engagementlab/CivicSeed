@@ -4,7 +4,9 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var UserSchema = new Schema({
 		gameChannel: String, // not sure what type this should be...
-		name: String,
+		firstName: String,
+		lastName: String,
+		profileUrl: String,
 		password: String,
 		email: String,
 		role: String,

@@ -21,7 +21,7 @@ exports.actions = function(req, res, ss) {
 					// }
 					if(user.password === password) {
 						req.session.setUserId(user.id);
-						req.session.name =  user.name;
+						req.session.firstName =  user.firstName;
 						req.session.email = user.email;
 						req.session.role = user.role;
 						req.session.game = user.game;
@@ -65,11 +65,12 @@ exports.actions = function(req, res, ss) {
 			}
 		},
 
-		getProfileInformation: function(name) {
-			UserModel.findOne({name: name} , function(err, user) {
+		getProfileInformation: function(fullName) {
+			UserModel.findOne({profileUrl: fullName} , function(err, user) {
 				if(user) {
 					var profileInfo = {
-						name: user.name,
+						firstName: user.firstName,
+						lastName: user.lastName,
 						resume: user.game.resume,
 						img: user.game.colorMap
 					};

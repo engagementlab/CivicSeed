@@ -535,7 +535,7 @@ $game.$player = {
 		
 		if($game.currentTiles[options.x][options.y].color) {
 			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
-				console.log('owned');
+				$game.statusUpdate('that tile has been planted on');
 				return false;
 			}
 		}
@@ -889,50 +889,35 @@ $game.$player = {
 		return totalTime;
 	},
 
-	chooseSeed: function() {
-		//check if we have multi kinds of seeds, if so, show them
-		//else, go into reg seed mode
-		if($game.$player.seedventoryShowing) {
-			
-			$('.seedventory').slideUp(function() {
-				$game.$player.seedventoryShowing = false;
-				$game.$player.seedMode = 0;
-				_renderInfo.colorNum = _playerColorNum;
-				$game.changeStatus();
+	openSeedventory: function() {
+		//open up the inventory
+		if($game.$player.game.seeds.riddle > 0 || $game.$player.game.seeds.special > 0) {
+			$('.seedventory').slideDown(function() {
+				var col0 = $game.$player.game.seeds.normal > 0 ? '#eee': '#333',
+				col1 = $game.$player.game.seeds.riddle > 0 ? '#eee': '#333',
+				col2 = $game.$player.game.seeds.special > 0 ? '#eee': '#333';
+
+				$('.normalButton').css('color',col0);
+				$('.riddleButton').css('color',col1);
+				$('.specialButton').css('color',col2);
+
+				$game.$player.seedventoryShowing = true;
+				$game.changeStatus('choose a seed to plant');
 			});
 		}
+		//start seed mode on 0
 		else {
-			if($game.$player.seedPlanting) {
-				$game.$player.seedPlanting = false;
-				$game.seedMode = 0;
-				_renderInfo.colorNum = _playerColorNum;
-				$game.statusUpdate('seed mode ended, as you were');
+			if($game.$player.game.seeds.normal > 0) {
+				$game.$player.seedPlanting = true;
+				$game.$player.seedMode = 1;
+				$game.changeStatus();
 			}
 			else {
-				var col0 = $game.$player.game.seeds.normal > 0 ? '#eee': '#333',
-					col1 = $game.$player.game.seeds.riddle > 0 ? '#eee': '#333',
-					col2 = $game.$player.game.seeds.special > 0 ? '#eee': '#333';
-
-					$('.normalButton').css('color',col0);
-					$('.riddleButton').css('color',col1);
-					$('.specialButton').css('color',col2);
-				
-				if($game.$player.game.seeds.riddle > 0 || $game.$player.game.seeds.special > 0 && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.$gnome.isShowing) {
-					$('.seedventory').slideDown(function() {
-						$game.$player.seedventoryShowing = true;
-						$game.changeStatus('choose a seed to plant');
-					});
-				}
-				else if($game.$player.game.seeds.normal > 0) {
-					$game.$player.seedMode = 1;
-					$game.changeStatus();
-				}
-				else {
-					$game.statusUpdate('you need some seeds child');
-				}
+				$game.statusUpdate('you have no seeds');
 			}
 		}
 	},
+
 	startSeeding: function(choice) {
 		$game.$player.seedMode = choice;
 		$('.seedventory').slideUp(function() {
