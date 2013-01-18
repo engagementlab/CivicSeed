@@ -15,7 +15,7 @@ var rootDir = process.cwd(),
 		from: accountName + ' ✔ <' + accountEmail + '>',
 		replyTo: accountEmail,
 		to: null,
-		subject: 'Hello from Civic Seed (Working Test 1) ✔',
+		subject: 'Hello from Civic Seed (Working Test 2) ✔',
 		// text: 'Hello world ✔',
 		html: null,
 		generateTextFromHTML: true
@@ -23,7 +23,9 @@ var rootDir = process.cwd(),
 	emailListLength,
 	emailIterator;
 
-var html = '<p><a href="http://xkcd.com/936/">xkcd</a> generatoed yo password, yo: ';
+var html = '<h2>Why hello there, #{firstName}!</h2>';
+html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
+html += '<p><a href="http://xkcd.com/936/">xkcd</a> generatoed yo password, yo: ';
 html += '&ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
 html += '<p>Yo us\'oname is yo email: <strong>#{email}</strong> ✔</p>';
 
@@ -38,32 +40,26 @@ var _private = {
 
 	createUser: function(email, callback) {
 		userModel.findOne({ email: email }, function(err, user) {
+			var nameParts;
 			if(err) { console.error('  Could not find \'actor\' user: %s'.red.inverse, err); } 
 			else {
 				if(!user) {
+					nameParts = email.split('@');
 					user = new userModel();
-					user.name = email.split('@')[0];
+					user.firstName = nameParts[0];
+					user.lastName = nameParts[1];
 					user.password = xkcd.generatePassword();
 					user.email = email;
 					user.role = 'actor';
 					console.log('Created user: ' + user.email);
 					user.save(function(err) {
 						if(err) {
-							console.error('  Could not save \'actor\' user: '.red.inverse + user.name.red.inverse, err);
+							console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
 						} else {
-							_private.sendEmail(user.email, user.password);
+							_private.sendEmail(user.firstName, user.email, user.password);
 						}
 					});
 				}
-				// user.name = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-				// user.password = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-				// user.email = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-				// user.role = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
-				// user.save(function(err) {
-				// 	if(err) { console.error('  Could not save \'actor\' user: '.red.inverse + user.name.red.inverse, err); }
-				// 	console.log(user.name, String(email).red);
-				// });
-				// console.log(user);
 			}
 		});
 	},
@@ -78,8 +74,9 @@ var _private = {
 		});
 	},
 
-	sendEmail: function(email, password) {
-		singleHtml = html.replace('#{password}', password);
+	sendEmail: function(firstName, email, password) {
+		singleHtml = html.replace('#{firstName}', firstName);
+		singleHtml = singleHtml.replace('#{password}', password);
 		singleHtml = singleHtml.replace('#{email}', email);
 		mailOptions.to = email;
 		mailOptions.html = singleHtml;
@@ -97,7 +94,6 @@ var _private = {
 	}
 
 };
-
 
 // **** RPC ACTIONS ****
 // **** RPC ACTIONS ****

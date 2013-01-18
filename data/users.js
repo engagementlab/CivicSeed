@@ -1,5 +1,7 @@
 module.exports.global = [{
-	name: 'Robert Hall',
+	firstName: 'Robert',
+	lastName: 'Hall',
+	profileUrl: 'TODO: THESE NEED TO BE REMOVED -- CREATE A TICKET FOR IT',
 	password: 'do not change me',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
@@ -269,4 +271,11 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0
 	}
+}, {
+	firstName: 'Russell',
+	lastName: 'Test B',
+	profileUrl: 'russell.testb',
+	password: 'testonly',
+	email: 'russell_goldenberg@emerson.edu',
+	role: 'actor'
 }];

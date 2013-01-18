@@ -21,13 +21,13 @@ exports.actions = function(req, res, ss) {
 					// }
 					if(user.password === password) {
 						req.session.setUserId(user.id);
-						req.session.firstName =  user.firstName;
+						req.session.firstName = user.firstName;
 						req.session.email = user.email;
 						req.session.role = user.role;
 						req.session.game = user.game;
 						// req.session.gameChannel = channel....
 						req.session.save();
-						// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
+						// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
 						res(true);
 					} else {
 						res(false);
@@ -41,13 +41,13 @@ exports.actions = function(req, res, ss) {
 		},
 
 		deAuthenticate: function() {
-			// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			req.session.setUserId(null);
-			req.session.name = null;
+			req.session.firstName = null;
 			req.session.email = null;
 			req.session.role = null;
 			req.session.save();
-			// console.log(req.session.name, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			res(true);
 		},
 
@@ -55,7 +55,7 @@ exports.actions = function(req, res, ss) {
 			if(req.session.userId) {
 				res({
 					id: req.session.userId,
-					name: req.session.name,
+					name: req.session.firstName,
 					email: req.session.email,
 					role: req.session.role
 				});
@@ -63,23 +63,6 @@ exports.actions = function(req, res, ss) {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
-		},
-
-		getProfileInformation: function(fullName) {
-			UserModel.findOne({profileUrl: fullName} , function(err, user) {
-				if(user) {
-					var profileInfo = {
-						firstName: user.firstName,
-						lastName: user.lastName,
-						resume: user.game.resume,
-						img: user.game.colorMap
-					};
-					res(profileInfo);
-				}
-				else {
-					res(false);
-				}
-			});
 		}
 
 	};

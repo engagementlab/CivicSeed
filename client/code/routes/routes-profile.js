@@ -7,7 +7,7 @@ var self = module.exports = {
 		});
 
 		$app.get('/profiles/:profileUrl', function(req) {
-			ss.rpc('shared.account.getProfileInformation', req.params['profileUrl'], function(info) {
+			ss.rpc('shared.profiles.getProfileInformation', req.params['profileUrl'], function(info) {
 					$container.append(JT['profiles-singleprofile'](info));
 			});
 		});
