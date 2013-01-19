@@ -13,22 +13,7 @@ html += '<p><a href="http://xkcd.com/936/">xkcd</a> generatoed yo password, yo: 
 html += '&ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
 html += '<p>Yo us\'oname is yo email: <strong>#{email}</strong> ✔</p>';
 
-
-// **** PRIVATE MEMBERS & FUNCTIONS ****
-// **** PRIVATE MEMBERS & FUNCTIONS ****
-// **** PRIVATE MEMBERS & FUNCTIONS ****
-
 // http://www.youtube.com/watch?v=nCCxpgVvQXo
-
-var _private = {
-
-
-
-};
-
-// **** RPC ACTIONS ****
-// **** RPC ACTIONS ****
-// **** RPC ACTIONS ****
 
 exports.actions = function(req, res, ss) {
 

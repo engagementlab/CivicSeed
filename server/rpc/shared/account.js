@@ -1,6 +1,14 @@
-var rootDir = process.cwd();
-var service = require(rootDir + '/service');
-var UserModel = service.useModel('user');
+var rootDir = process.cwd(),
+	emailUtil = require(rootDir + '/server/utils/email'),
+	service = require(rootDir + '/service'),
+	UserModel = service.useModel('user'),
+	singleHtml;
+
+var html = '<h2>Password reminder for #{firstName}</h2>';
+html += '<p style="color:red;">Someone is requesting access to your account. ';
+html += 'If you did not request this information, you can ignore and delete this email.</p>';
+html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>';
+html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
 
 exports.actions = function(req, res, ss) {
 
@@ -12,7 +20,7 @@ exports.actions = function(req, res, ss) {
 
 		authenticate: function(email, password) {
 
-			UserModel.findOne({email: email} , function(err, user) {
+			UserModel.findOne({ email: email } , function(err, user) {
 
 				if(user) {
 					// var hashedPassword = user.password;
@@ -63,6 +71,24 @@ exports.actions = function(req, res, ss) {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
+		},
+
+		remindMeMyPassword: function(email) {
+			UserModel.findOne({ email: email } , function(err, user) {
+				if(!err && user) {
+					// TODO: validate email before sending
+					singleHtml = html.replace('#{firstName}', user.firstName);
+					singleHtml = singleHtml.replace('#{email}', user.email);
+					singleHtml = singleHtml.replace('#{password}', user.password);
+					emailUtil.openEmailConnection();
+					emailUtil.sendEmail('Password reminder from Civic Seed (Working Test 1) ✔', singleHtml, user.email);
+					// TODO: close connection on *** CALLBACK ***
+					emailUtil.closeEmailConnection();
+					res(true);
+				} else {
+					res(false);
+				}
+			});
 		}
 
 	};

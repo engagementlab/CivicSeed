@@ -1,14 +1,26 @@
 var $account = module.exports = {
 
 	accountHandlers: function() {
-		$('#loginForm').on('submit', function() {
+		var $body = $(document.body);
+		$body.on('submit', '#loginForm', function() {
 			var email = document.getElementById('username').value,
 				password = document.getElementById('password').value;
 			$account.authenticate(email, password);
 			return false;
 		});
-		$(document.body).on('click', '.signOut', function() {
+		$body.on('click', '.signOut', function() {
 			$account.deAuthenticate();
+			return false;
+		});
+		$body.on('submit', '#remindMeForm', function() {
+			var email = document.getElementById('username').value;
+			ss.rpc('shared.account.remindMeMyPassword', email, function(response) {
+				if(response) {
+					$('#message').removeClass('error').text('A reminder email was successfully sent to you! ✔');
+				} else {
+					$('#message').addClass('error').text('There was an error. Please enter the correct email.');
+				}
+			});
 			return false;
 		});
 	},

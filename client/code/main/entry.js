@@ -25,6 +25,7 @@ ss.server.on('ready', function() {
 
 				require('/routes-middleware.js').loadMiddleware(ss, $app, $html, $body, $container);
 				require('/routes-main').loadRoutes(ss, $app, $html, $body, $container);
+				require('/routes-account').loadRoutes(ss, $app, $html, $body, $container);
 				require('/routes-admin').loadRoutes(ss, $app, $html, $body, $container);
 				require('/routes-profile').loadRoutes(ss, $app, $html, $body, $container);
 				// should always be last

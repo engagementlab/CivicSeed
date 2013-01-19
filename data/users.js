@@ -2,7 +2,7 @@ module.exports.global = [{
 	firstName: 'Robert',
 	lastName: 'Hall',
 	profileUrl: 'TODO: THESE NEED TO BE REMOVED -- CREATE A TICKET FOR IT',
-	password: 'do not change me',
+	password: 'do-not-change-me',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
