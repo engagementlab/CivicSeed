@@ -1,34 +1,34 @@
-div.row
+.row
 	.span7
 		h1 Welcome to Civic Seed!
 		h4 Where civic engagement meets social gaming.
 		p <br>Civic Seed is a new platform that facilitates civic engagement through a unique combination of game play and social networking.  We believe that the most effective way to learn is when you actual enjoy the process.
-		div.iconInfo(style='font-size:28px;')
+		.iconInfo(style='font-size:28px;')
 			p
 				br
 				i.icon-book.icon-large
 				span(style='font-size:20px;') Equip yourself with the necessary knowledge.
-		div.iconInfo(style='font-size:28px;')
+		.iconInfo(style='font-size:28px;')
 			p
 				i.icon-group.icon-large
 				span(style='font-size:20px;') Connect with like-minded individuals.
-		div.iconInfo(style='font-size:28px;')
+		.iconInfo(style='font-size:28px;')
 			p
 				i.icon-trophy.icon-large
 				span(style='font-size:20px;') Have fun while learning!
-	div.span4.offset1
+	.span4.offset1
 		- if(!sessionStorage.userId)
 			form.well#loginForm(method='post', action='/')
 				h2 Sign In:
 				//- p #{message}
-				div.control-group
-					div.controls
+				.control-group
+					.controls
 						input#username.input-large(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
-				div.control-group
-					div.controls
+				.control-group
+					.controls
 						input#password.input-large(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
 				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
-				p.moreTopMargin: a(href='/forgot') Forget your password?
+				p.moreTopMargin: a(href='/remind-me') Forget your password?
 		- else
 			.well
 				h2: a(href='/game') Continue playing...

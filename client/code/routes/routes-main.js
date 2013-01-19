@@ -29,15 +29,15 @@ var self = module.exports = {
 		// }
 
 		$app.get('/', function(req) {
-			$container.append(JT['main-home']());
+			$container.append(JT['pages-home']());
 		});
 
 		$app.get('/about', function(req) {
-			$container.append(JT['main-about']());
+			$container.append(JT['pages-about']());
 		});
 
 		$app.get('/contact', function(req) {
-			$container.append(JT['main-contactus']());
+			$container.append(JT['pages-contactus']());
 		});
 
 		$app.get('/game', function(req) {
