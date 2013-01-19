@@ -1,27 +1,11 @@
-// "xkcd-pwgen": "https://github.com/americanyak/xkcd-pwgen/tarball/master"
-
 var rootDir = process.cwd(),
-	nodemailer = require('nodemailer'),
+	emailUtil = require(rootDir + '/server/utils/email'),
 	xkcd = require('xkcd-pwgen'),
 	service = require(rootDir + '/service'),
-	config = require(rootDir + '/config'),
-	accountName = config.get('NAME'),
-	accountEmail = config.get('ACCOUNT_EMAIL'),
-	accountPassword = config.get('ACCOUNT_PW'),
 	userModel = service.useModel('user', 'preload'),
 	emailListLength,
-	smtpTransport,
-	mailOptions = {
-		from: accountName + ' ✔ <' + accountEmail + '>',
-		replyTo: accountEmail,
-		to: null,
-		subject: 'Hello from Civic Seed (Working Test 2) ✔',
-		// text: 'Hello world ✔',
-		html: null,
-		generateTextFromHTML: true
-	},
-	emailListLength,
-	emailIterator;
+	emailIterator,
+	singleHtml;
 
 var html = '<h2>Why hello there, #{firstName}!</h2>';
 html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
@@ -38,60 +22,7 @@ html += '<p>Yo us\'oname is yo email: <strong>#{email}</strong> ✔</p>';
 
 var _private = {
 
-	createUser: function(email, callback) {
-		userModel.findOne({ email: email }, function(err, user) {
-			var nameParts;
-			if(err) { console.error('  Could not find \'actor\' user: %s'.red.inverse, err); } 
-			else {
-				if(!user) {
-					nameParts = email.split('@');
-					user = new userModel();
-					user.firstName = nameParts[0];
-					user.lastName = nameParts[1];
-					user.password = xkcd.generatePassword();
-					user.email = email;
-					user.role = 'actor';
-					console.log('Created user: ' + user.email);
-					user.save(function(err) {
-						if(err) {
-							console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
-						} else {
-							_private.sendEmail(user.firstName, user.email, user.password);
-						}
-					});
-				}
-			}
-		});
-	},
 
-	openEmailConnection: function() {
-		smtpTransport = nodemailer.createTransport('SMTP', {
-			service: 'Gmail',
-			auth: {
-				user: accountEmail,
-				pass: accountPassword
-			}
-		});
-	},
-
-	sendEmail: function(firstName, email, password) {
-		singleHtml = html.replace('#{firstName}', firstName);
-		singleHtml = singleHtml.replace('#{password}', password);
-		singleHtml = singleHtml.replace('#{email}', email);
-		mailOptions.to = email;
-		mailOptions.html = singleHtml;
-		smtpTransport.sendMail(mailOptions, function(err, response) {
-			if(err) {
-				console.log('ERROR sending email to ' + email + '!', err);
-			} else {
-				console.log('Message sent to : ' + response.message);
-			}
-		});
-	},
-
-	closeEmailConnection: function() {
-		smtpTransport.close();
-	}
 
 };
 
@@ -105,6 +36,41 @@ exports.actions = function(req, res, ss) {
 	// req.use('debug');
 	req.use('account.authenticated');
 
+	var createUserAndSendInvite = function(email, i) {
+		userModel.findOne({ email: email }, function(err, user) {
+			var nameParts;
+			if(err) {
+				console.error('  Could not find \'actor\' user: %s'.red.inverse, err);
+			} else {
+				if(!user) {
+					nameParts = email.split('@');
+					user = new userModel();
+					user.firstName = nameParts[0];
+					user.lastName = nameParts[1];
+					user.password = xkcd.generatePassword();
+					user.email = email;
+					user.role = 'actor';
+					console.log('Created user: ' + user.email);
+					user.save(function(err) {
+						if(err) {
+							console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
+						} else {
+							singleHtml = html.replace('#{firstName}', user.firstName);
+							singleHtml = singleHtml.replace('#{password}', user.password);
+							singleHtml = singleHtml.replace('#{email}', user.email);
+							emailUtil.sendEmail('Hello from Civic Seed (Working Test 5) ✔', singleHtml, user.email);
+							if(i === emailListLength - 1) {
+								emailUtil.closeEmailConnection();
+								console.log('All emails have been sent...');
+								res(true);
+							}
+						}
+					});
+				}
+			}
+		});
+	};
+
 	return {
 
 		sendInvites: function(emailList) {
@@ -114,17 +80,13 @@ exports.actions = function(req, res, ss) {
 
 				console.log('\n\n   * * * * * * * * * * * *   Sending User Invites via Email   * * * * * * * * * * * *   \n\n'.yellow);
 				console.log(emailList.join(', ') + '\n\n');
-				_private.openEmailConnection();
+				emailUtil.openEmailConnection();
 
 				emailList = emailList.slice(0, 20);
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-					_private.createUser(emailList[emailIterator], _private.closeEmailConnection);
+					createUserAndSendInvite(emailList[emailIterator], emailIterator);
 				}
-
-				// HOW DO I SEND UP THE RESPONSE AFTER IT'S ALL DONE???
-				// res('ERROR sending email to ' + email + '!');
-
 			} else {
 				res(false);
 			}

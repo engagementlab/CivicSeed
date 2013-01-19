@@ -1,51 +1,58 @@
+var rootDir = process.cwd(),
+	nodemailer = require('nodemailer'),
+	config = require(rootDir + '/config'),
+	accountName = config.get('NAME'),
+	accountEmail = config.get('ACCOUNT_EMAIL'),
+	accountPassword = config.get('ACCOUNT_PW'),
+	smtpTransport,
+	mailOptions = {
+		from: accountName + ' ✔ <' + accountEmail + '>',
+		replyTo: accountEmail,
+		to: '',
+		subject: '',
+		html: '',
+		generateTextFromHTML: true
+	};
+
+var self = module.exports = {
+
+	openEmailConnection: function() {
+		smtpTransport = nodemailer.createTransport('SMTP', {
+			service: 'Gmail',
+			auth: {
+				user: accountEmail,
+				pass: accountPassword
+			}
+		});
+	},
+
+	sendEmail: function(subject, html, email) {
+		mailOptions.subject = subject;
+		mailOptions.html = html;
+		mailOptions.to = email;
+		smtpTransport.sendMail(mailOptions, function(err, response) {
+			if(err) {
+				console.log('ERROR sending email to ' + email + '!', err);
+			} else {
+				console.log('Message sent to : ' + response.message);
+			}
+		});
+	},
+
+	closeEmailConnection: function() {
+		smtpTransport.close();
+	}
+
+};
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-// var mail = require('nodemailer'),
 // mailPassword = require('./password.js'),
 // super_secret = mailPassword.gmail,
-// transport = mail.createTransport("SMTP",{
-//     service: "Gmail",
-//     auth: {
-//         user: "codenberg@gmail.com",
-//         pass: super_secret
-//     }
-// });
 
-
-// exports.sendInvite = function(whom,random,callback){
-//     var inviteOptions = {
-// 	    from: "codenberg@gmail.com", // sender address
-// 	    to: whom, // list of receivers
-// 	    subject: "You made the cut!", // Subject line
-// 	    html: "<h2>Hey kid!</h2><p>Verify you exist by clicking <a href='http://www.civicseed.org/signup/"+whom+"/"+random+"'>here</a>. You won't regret it.</p>" // html body
-// 	}
-//     transport.sendMail(inviteOptions, function(error, response){
-//         if(error){
-//             console.log(error);
-//             return callback(true);    
-//         }
-//         else{
-//             console.log("Message sent: " + response.message);
-//             return callback(false);
-//         }
-
-//         // if you don't want to use this transport object anymore, uncomment following line
-//         smtpTransport.close(); // shut down the connection pool, no more messages
-//     });
-// };
 
 // exports.sendPassword = function(whom,it,callback){
 //     var passOptions = {
