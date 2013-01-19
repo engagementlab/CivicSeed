@@ -45,13 +45,17 @@ exports.actions = function(req, res, ss) {
 			
 			//update mongo
 			userModel.findById(id, function (err, user) {
-				user.game = info;
-
-				user.save(function (y) {
-					numActivePlayers -= 1;
-					ss.publish.all('ss-removePlayer', numActivePlayers, id);
-					delete players[id];
-				});
+				if(!err && user) {
+					user.game = info;
+					user.save(function (y) {
+						numActivePlayers -= 1;
+						ss.publish.all('ss-removePlayer', numActivePlayers, id);
+						delete players[id];
+					});
+				} else {
+					// MIGHT NEED TO DO THIS HERE STILL???
+					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+				}
 			});
 		},
 
