@@ -1,6 +1,3 @@
-//current values are there for the inbetween squares
-//master is the most previously gridded position
-
 var _curFrame = 0,
 	_numFrames = 4,
 	_numSteps = 8,
@@ -26,7 +23,6 @@ var _curFrame = 0,
 	_gameboardSel = null,
 	_inventoryBtnSel = null,
 	_inventorySel = null,
-	_playerGameInfo = null,
 	_startTime = null,
 	_playerColorNum = null;
 
@@ -52,11 +48,8 @@ $game.$player = {
 	keyY: 0,
 	keyMoving: false,
 
-
-	//private methods
-
 	init: function() {
-		//initialize DB and let all players know there is a new active one
+		//get the players info from the db, alert other users of presence
 		ss.rpc('game.player.init', function(newInfo) {
 			
 			//time in seconds since 1970 or whatever
@@ -73,17 +66,17 @@ $game.$player = {
 				prevOffY: 0
 			};
 			
+			//the number that corresponds to a player image sheet for their color
 			_playerColorNum = newInfo.game.colorInfo.tilesheet;
 			
-			
-			//we have retrieved player info, so it is ready
-			$game.$player.ready = true;
+			//set the client side variables based on the database info for the player
+			$game.$player.id = newInfo.id;
+			$game.$player.name = newInfo.name;
 
-			$game.$player.id = newInfo.id,
-			$game.$player.name = newInfo.name,
+			//TODO: REMOVE THIS AND CREATE VARS FOR EACH PROPERTY DIRECTLY UNDER PLAYER
 			$game.$player.game = newInfo.game;
-			_playerGameInfo = newInfo.game;
 
+			//set the render info
 			_renderInfo.colorNum = _playerColorNum,
 			_renderInfo.srcX = 0,
 			_renderInfo.srcY = 0,
@@ -104,10 +97,15 @@ $game.$player = {
 			_inventoryBtnSel = $('.inventoryButton > .hudCount');
 			_inventorySel = $('.inventory > .pieces');
 
-			$game.changeStatus();
+			//$game.changeStatus();
 			
+			//render the correct level's tilesheet to the offscreen canvas
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
+
+			//the player's color
 			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
+			
+			//set the color of the hud to personalize it
 			var rgba = 'rgba(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ', .6)';
 			$('.hudCount').css('background', rgba);
 				
@@ -123,20 +121,32 @@ $game.$player = {
 			_riddleHudCount.text($game.$player.game.seeds.riddle);
 			_specialHudCount.text($game.$player.game.seeds.special);
 			
+			//fill the inventory if there were things when we last left
 			$game.$player.fillInventory();
 
+			//selectors for chat stuff
 			_chatId = 'player'+ newInfo.id,
 			_chatIdSelector = '#' + _chatId;
 
+			//tell the game to load all its necessary info
 			$game.firstLoad(_info.x, _info.y);
+
 			$game.$player.updateRenderInfo();
+
+			//put the player on the minimap
 			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, _rgb);
 
+			//if their was a color map, then render it now
 			var src = $game.$player.game.colorMap;
 			if(src !== undefined) {
 				$game.$renderer.imageToCanvas(src);
 			}
+
+			//create the collective color map
 			$game.$map.createCollectiveImage();
+
+			//we are ready, let everyone know dat
+			$game.$player.ready = true;
 		});
 
 	},
@@ -158,16 +168,8 @@ $game.$player = {
 		}
 	},
 
-	updateGnomeState: function() {
-		// //update gnome state when: 
-		// 	-resource added to inventory 
-		// 	-riddle solved (level change)
-		// 	-instructions viewed
-
-		
-	},
-
 	updateRenderInfo: function() {
+		//get local render information. update if appropriate.
 		var loc = $game.masterToLocal(_info.x, _info.y);
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
@@ -185,7 +187,6 @@ $game.$player = {
 		}
 	},
 
-	
 	clear: function() {
 		$game.$renderer.clearCharacter(_renderInfo);
 	},
@@ -205,13 +206,13 @@ $game.$player = {
 			$game.$player.currentMove += 1;
 			//render mini map every spot player moves
 			$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
-		}	
+		}
 
 		//if we done, finish
 		if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
 			if($game.$player.keyMoving) {
 				$game.$player.endKeyMove();
-			}	
+			}
 			else {
 				$game.$player.endMove();
 			}
@@ -376,8 +377,8 @@ $game.$player = {
 				if(x === 0 || x === 29 || y === 0 || y === 14) {
 					_willTravel = true;
 					$game.calculateNext(x, y, function() {
-					// 	//data is loaded!
-					// 	// $game.$player.getPath();
+					//	//data is loaded!
+					//	// $game.$player.getPath();
 					});
 				}
 			}
@@ -411,6 +412,7 @@ $game.$player = {
 		$game.$player.isMoving = true;
 
 	},
+
 	getKeyMove: function() {
 		
 		var locStart = $game.masterToLocal(_info.x, _info.y),
@@ -436,6 +438,7 @@ $game.$player = {
 			
 		});
 	},
+
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
 		_info.prevOffY = slideY * _numSteps;
@@ -554,7 +557,7 @@ $game.$player = {
 					//if you are basic, then do it regardless
 					if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
 
-						var tempA = Math.round((0.7 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.5) * 100) / 100;
+						var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
 						
 						//set x,y and color info for each square
 						var square = {
@@ -562,9 +565,9 @@ $game.$player = {
 							y: origY + b,
 							color:
 							{
-								r: $game.$player.game.colorInfo.rgb.r - 20,
-								g: $game.$player.game.colorInfo.rgb.g - 20,
-								b: $game.$player.game.colorInfo.rgb.b - 20,
+								r: $game.$player.game.colorInfo.rgb.r - 30,
+								g: $game.$player.game.colorInfo.rgb.g - 30,
+								b: $game.$player.game.colorInfo.rgb.b - 30,
 								a: tempA,
 								owner: 'nobody'
 							}
@@ -572,7 +575,7 @@ $game.$player = {
 
 						//assign the middle one the owner
 						if( a === mid && b === mid) {
-							square.color.a = 0.8;
+							square.color.a = 0.6;
 							square.color.owner = $game.$player.name;
 						}
 						bombed.push(square);
@@ -659,8 +662,7 @@ $game.$player = {
 				}
 			});
 			
-		}
-		
+		}	
 	},
 
 	message: function(message) {
@@ -729,8 +731,7 @@ $game.$player = {
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
-		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
-		
+		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);	
 	},
 
 	getPrompt: function(id) {
@@ -803,6 +804,7 @@ $game.$player = {
 				$game.$player.game.gnomeState = 3;
 			}
 	},
+	
 	getAnswer: function(id) {
 		var l = $game.$player.game.resources.length;
 		while(--l > -1) {

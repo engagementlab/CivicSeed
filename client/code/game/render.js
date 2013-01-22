@@ -68,7 +68,6 @@ $game.$renderer = {
 		//load the images recursively until done
 		_tilesheets[num] = new Image();
 		_tilesheets[num].src = '/img/game/' + _allImages[num];
-
 		_tilesheets[num].onload = function() {
 			//if it is the map tile data, render to canvas
 			var next = num + 1;

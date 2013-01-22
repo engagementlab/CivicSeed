@@ -140,7 +140,7 @@ exports.actions = function(req, res, ss) {
 									//new one should be modified
 									else {
 										//if there is still room
-										if(oldTiles[i].color.a < 0.7 ) {
+										if(oldTiles[i].color.a < 0.5 ) {
 
 											var prevR = oldTiles[i].color.r,
 												prevG = oldTiles[i].color.g,
