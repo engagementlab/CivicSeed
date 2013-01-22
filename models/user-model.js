@@ -6,7 +6,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		gameChannel: String, // not sure what type this should be...
 		firstName: String,
 		lastName: String,
-		profileUrl: String,
 		password: String,
 		email: String,
 		role: String,

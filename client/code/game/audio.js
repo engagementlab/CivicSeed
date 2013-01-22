@@ -125,7 +125,7 @@ $game.$audio = {
 
 	update: function(posX, posY) {
 	
-		//compare player position to centers of the world 
+		//compare player position to centers of the world
 		//var pos = $game.$player.getPosition();
 		var diffX = posX - $game.TOTAL_WIDTH / 2,
 			diffY = posY - $game.TOTAL_HEIGHT / 2,
@@ -154,7 +154,7 @@ $game.$audio = {
 			//1 top left
 			else if(diffX < 0 && diffY < 0) {
 				trackRegion = 0;
-				_newPlace = 'entering the forrest';
+				_newPlace = 'entering the forest';
 			}
 			//4 bottom left
 			else if(diffX < 0 && diffY > 0) {

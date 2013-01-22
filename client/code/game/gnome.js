@@ -149,7 +149,7 @@ $game.$gnome = {
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
 			else if($game.$player.game.gnomeState === 1) {
-				if($game.$player.game.currentLevel === 0 && $game.$player.game.seeds.normal > 0) {
+				if($game.$player.game.currentLevel === 0 && $game.$player.game.dropped < 1) {
 					//make them plant first seed
 					_speak =  'plant the damn seed son! bottom left corner. come on man...';
 
@@ -222,8 +222,8 @@ $game.$gnome = {
 			if($game.$player.game.gnomeState === 0) {
 				$game.$player.game.gnomeState = 1;
 				if($game.$player.game.currentLevel === 0) {
-					$game.$player.game.seeds.normal = 1;
-					$('.seedButton > .hudCount').text(1);
+					$game.$player.game.seeds.normal += 1;
+					$('.seedButton > .hudCount').text($game.$player.game.seeds.normal);
 				}
 			}
 		});
@@ -435,6 +435,7 @@ $game.$gnome = {
 				$('.gnomeArea .message').text(endQuestion);
 				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 				$('.gnomeContent').html(inputBox);
+				$game.changeStatus('this will go in your profile');
 			}
 			
 		}
@@ -579,6 +580,8 @@ $game.$gnome = {
 					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
 					//update HUD
 					$game.$player.game.gnomeState = 4;
+
+					$game.changeStatus('congrats!');
 				}
 			}
 			else {

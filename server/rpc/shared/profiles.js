@@ -11,18 +11,21 @@ exports.actions = function(req, res, ss) {
 	return {
 
 		getProfileInformation: function(fullName) {
-			UserModel.findOne({ profileUrl: fullName } , function(err, user) {
+			//parse name, search in db
+			var name = fullName.split('.');
+			UserModel.findOne({ firstName: name[0], lastName: name[1]} , function(err, user) {
 				if(user) {
 					var profileInfo = {
 						firstName: user.firstName,
 						lastName: user.lastName,
 						resume: user.game.resume,
-						img: user.game.colorMap
+						colorMap: user.game.colorMap
 					};
+					console.log(profileInfo.colorMap);
 					res(profileInfo);
 				}
 				else {
-					res(false);
+					res({firstName: false});
 				}
 			});
 		}

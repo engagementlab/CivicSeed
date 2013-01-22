@@ -14,7 +14,7 @@ module.exports.global = {
 			prompts: ['Want to take a look at the puzzle?', 'Do you think you are ready to solve the puzzle?'],
 			responses: ['Correct', 'Wrong', 'Close']
 		},
-		hint: ['I think you should talk to more friends in the forrest...', 'You should maybe get the right pieces first...']
+		hint: ['I think you should talk to more friends in the forest...', 'You should maybe get the right pieces first...']
 	}, {
 		instructions: ['Ahh yes, level 2.', 'You will probably die here....', 'AHAHAHAHAHAHAHAHAHA!!!!!!!'],
 		riddle: {

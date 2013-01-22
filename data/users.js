@@ -1,14 +1,12 @@
 module.exports.global = [{
 	firstName: 'Robert',
 	lastName: 'Hall',
-	profileUrl: 'TODO: THESE NEED TO BE REMOVED -- CREATE A TICKET FOR IT',
 	password: 'do-not-change-me',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
 	firstName: 'Robert',
 	lastName: 'Nobody',
-	profileUrl: 'robert.nobody',
 	password: '',
 	email: 'b',
 	role: 'superadmin',
@@ -46,7 +44,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Russell',
 	lastName: 'Nobody',
-	profileUrl: 'russell.nobody',
 	password: '',
 	email: 'r',
 	role: 'superadmin',
@@ -84,7 +81,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Stephen',
 	lastName: 'Nobody',
-	profileUrl: 'stephen.nobody',
 	password: '',
 	email: 's',
 	role: 'admin',
@@ -122,7 +118,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Eric',
 	lastName: 'Nobody',
-	profileUrl: 'eric.nobody',
 	password: '',
 	email: 'e',
 	role: 'admin',
@@ -160,7 +155,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Sam',
 	lastName: 'Nobody',
-	profileUrl: 'sam.nobody',
 	password: '',
 	email: 'a',
 	role: 'admin',
@@ -198,7 +192,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Joe',
 	lastName: 'Nobody',
-	profileUrl: 'joe.nobody',
 	password: '',
 	email: 'j',
 	role: 'actor',
@@ -236,7 +229,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Frank',
 	lastName: 'Nobody',
-	profileUrl: 'frank.nobody',
 	password: '',
 	email: 'f',
 	role: 'actor',
@@ -274,7 +266,6 @@ module.exports.global = [{
 }, {
 	firstName: 'Russell',
 	lastName: 'Test B',
-	profileUrl: 'russell.testb',
 	password: 'testonly',
 	email: 'russell_goldenberg@emerson.edu',
 	role: 'actor'
