@@ -463,6 +463,7 @@ $game.$player = {
 				_renderInfo.colorNum = _playerColorNum;
 			}
 		}
+		
 		if(_idleCounter >= 64) {
 			_idleCounter = 0;
 			_info.srcX = 0;
@@ -565,9 +566,9 @@ $game.$player = {
 							y: origY + b,
 							color:
 							{
-								r: $game.$player.game.colorInfo.rgb.r - 30,
-								g: $game.$player.game.colorInfo.rgb.g - 30,
-								b: $game.$player.game.colorInfo.rgb.b - 30,
+								r: $game.$player.game.colorInfo.rgb.r + 10,
+								g: $game.$player.game.colorInfo.rgb.g + 10,
+								b: $game.$player.game.colorInfo.rgb.b + 10,
 								a: tempA,
 								owner: 'nobody'
 							}

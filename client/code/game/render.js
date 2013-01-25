@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', 'fanny.png', 'glasses.png','beanie.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -354,7 +354,10 @@ $game.$renderer = {
 		
 	},
 	
-
+	accessoriesToCanvas: function(lvl) {
+		
+	},
+	
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
 			_offscreen_playerCanvas[info.colorNum],
@@ -367,26 +370,6 @@ $game.$renderer = {
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
 		);
-
-		var accX = 0;
-		if(info.squat) {
-			accX = 32;
-		}
-		for(var i = 0; i < info.level; i += 1) {
-			var cur = 7 + i;
-			_charactersContext.drawImage(
-				_tilesheets[cur],
-				accX,
-				0,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2,
-				info.curX,
-				info.curY - $game.TILE_SIZE,
-				$game.TILE_SIZE,
-				$game.TILE_SIZE*2
-			);
-		}
-		
 	},
 
 	renderCharacter: function(info) {
