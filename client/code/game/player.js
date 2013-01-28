@@ -146,6 +146,8 @@ $game.$player = {
 			//create the collective color map
 			$game.$map.createCollectiveImage();
 
+			$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum);
+
 			//we are ready, let everyone know dat
 			$game.$player.ready = true;
 		});

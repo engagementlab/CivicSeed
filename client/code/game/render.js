@@ -13,8 +13,8 @@ _tilesheetContext= null,
 _offscreen_backgroundCanvas= null,
 _offscreen_backgroundContext = null,
 
-_offscreen_playerCanvas = [],
-_offscreen_playerContext = [],
+_offscreenCharacterCanvas = [],
+_offscreenCharacterContext = [],
 
 _backgroundContext= null,
 _foregroundContext= null,
@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -100,17 +100,17 @@ $game.$renderer = {
 		_playerImages[num].onload = function() {
 
 
-			_offscreen_playerCanvas[num] = document.createElement('canvas');
-			_offscreen_playerCanvas[num].setAttribute('width', _playerImages[num].width);
-			_offscreen_playerCanvas[num].setAttribute('height', _playerImages[num].height);
-			_offscreen_playerContext[num] = _offscreen_playerCanvas[num].getContext('2d');
-			_offscreen_playerContext[num] = _offscreen_playerCanvas[num].getContext('2d');
+			_offscreenCharacterCanvas[num] = document.createElement('canvas');
+			_offscreenCharacterCanvas[num].setAttribute('width', _playerImages[num].width);
+			_offscreenCharacterCanvas[num].setAttribute('height', _playerImages[num].height);
+			_offscreenCharacterContext[num] = _offscreenCharacterCanvas[num].getContext('2d');
 
-			_offscreen_playerContext[num].drawImage(
+			_offscreenCharacterContext[num].drawImage(
 				_playerImages[num],
 				0,
 				0
 			);
+
 
 			//TODO: replace this with the number of image files
 			if(next === 7) {
@@ -354,13 +354,119 @@ $game.$renderer = {
 		
 	},
 	
-	accessoriesToCanvas: function(lvl) {
-		
+	playerToCanvas: function(lvl, color) {
+		//MAKE  SHIT MORE EFFICIENT
+		var h = 64,
+			w = 32,
+			level = lvl + 7;
+
+		//+7 gets us to the RIGHT sheet in the array
+		if(lvl > 0) {
+			//go thru each level
+			for(var curLevel = 7; curLevel < level; curLevel += 1) {
+				//go through each accessory image, put it where approp. (there are 5)
+				var j = 0;
+				for (var i = 0; i < 5; i += 1) {
+					var x = w * i;
+					console.log(x);
+					//0 - forward / down
+					if(i === 0) {
+						_offscreenCharacterContext[color].drawImage(
+							_tilesheets[curLevel],
+							x,
+							0,
+							w,
+							h,
+							0,
+							0,
+							w,
+							h
+						);
+						for(j = 0; j < 4; j += 1) {
+							_offscreenCharacterContext[color].drawImage(
+								_tilesheets[curLevel],
+								x,
+								0,
+								w,
+								h,
+								w * j,
+								h * 3,
+								w,
+								h
+							);
+						}
+
+					}
+					//1 - idle
+					else if(i === 1) {
+						_offscreenCharacterContext[color].drawImage(
+							_tilesheets[curLevel],
+							x,
+							0,
+							w,
+							h,
+							x,
+							0,
+							w,
+							h
+						);
+					}
+					//2 - left
+					else if(i === 2) {
+						for(j = 0; j < 4; j += 1) {
+							_offscreenCharacterContext[color].drawImage(
+								_tilesheets[curLevel],
+								x,
+								0,
+								w,
+								h,
+								w * j,
+								h * 1,
+								w,
+								h
+							);
+						}
+					}
+					//3 - right
+					else if(i === 3) {
+						for(j = 0; j < 4; j += 1) {
+							_offscreenCharacterContext[color].drawImage(
+								_tilesheets[curLevel],
+								x,
+								0,
+								w,
+								h,
+								w * j,
+								h * 2,
+								w,
+								h
+							);
+						}
+					}
+					//4 - up
+					else {
+						for(j = 0; j < 4; j += 1) {
+							_offscreenCharacterContext[color].drawImage(
+								_tilesheets[curLevel],
+								x,
+								0,
+								w,
+								h,
+								w * j,
+								h * 4,
+								w,
+								h
+							);
+						}
+					}
+				}
+			}
+		}
 	},
 	
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
-			_offscreen_playerCanvas[info.colorNum],
+			_offscreenCharacterCanvas[info.colorNum],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -375,7 +481,7 @@ $game.$renderer = {
 	renderCharacter: function(info) {
 
 		_charactersContext.drawImage(
-		_offscreen_playerCanvas[info.colorNum],
+		_offscreenCharacterCanvas[info.colorNum],
 		info.srcX,
 		info.srcY,
 		$game.TILE_SIZE,
