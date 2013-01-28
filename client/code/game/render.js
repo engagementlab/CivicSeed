@@ -354,7 +354,35 @@ $game.$renderer = {
 		
 	},
 	
-	playerToCanvas: function(lvl, color) {
+	drawAccessories: function(srcX,destX,destY, level, color, client) {
+		if(client) {
+			//this will add your stuff to the gray player (for seed mode) as well
+			_offscreenCharacterContext[0].drawImage(
+				_tilesheets[level],
+				srcX,
+				0,
+				32,
+				64,
+				destX,
+				destY,
+				32,
+				64
+			);	
+		}
+		_offscreenCharacterContext[color].drawImage(
+			_tilesheets[level],
+			srcX,
+			0,
+			32,
+			64,
+			destX,
+			destY,
+			32,
+			64
+		);
+	},
+
+	playerToCanvas: function(lvl, color, client) {
 		//MAKE  SHIT MORE EFFICIENT
 		var h = 64,
 			w = 32,
@@ -370,92 +398,31 @@ $game.$renderer = {
 					var x = w * i;
 					//0 - forward / down
 					if(i === 0) {
-						_offscreenCharacterContext[color].drawImage(
-							_tilesheets[curLevel],
-							x,
-							0,
-							w,
-							h,
-							0,
-							0,
-							w,
-							h
-						);
+						$game.$renderer.drawAccessories(x,0,0,curLevel, color, client);
 						for(j = 0; j < 4; j += 1) {
-							_offscreenCharacterContext[color].drawImage(
-								_tilesheets[curLevel],
-								x,
-								0,
-								w,
-								h,
-								w * j,
-								h * 3,
-								w,
-								h
-							);
+							$game.$renderer.drawAccessories(x,w * j, h * 3,curLevel, color, client);
 						}
-
 					}
 					//1 - idle
 					else if(i === 1) {
-						_offscreenCharacterContext[color].drawImage(
-							_tilesheets[curLevel],
-							x,
-							0,
-							w,
-							h,
-							x,
-							0,
-							w,
-							h
-						);
+						$game.$renderer.drawAccessories(x,w,0,curLevel, color, client);
 					}
 					//2 - left
 					else if(i === 2) {
 						for(j = 0; j < 4; j += 1) {
-							_offscreenCharacterContext[color].drawImage(
-								_tilesheets[curLevel],
-								x,
-								0,
-								w,
-								h,
-								w * j,
-								h * 1,
-								w,
-								h
-							);
+							$game.$renderer.drawAccessories(x, w * j, h * 1,curLevel, color, client);
 						}
 					}
 					//3 - right
 					else if(i === 3) {
 						for(j = 0; j < 4; j += 1) {
-							_offscreenCharacterContext[color].drawImage(
-								_tilesheets[curLevel],
-								x,
-								0,
-								w,
-								h,
-								w * j,
-								h * 2,
-								w,
-								h
-							);
+							$game.$renderer.drawAccessories(x, w * j, h * 2,curLevel, color, client);
 						}
 					}
 					//4 - up
 					else {
 						for(j = 0; j < 4; j += 1) {
-							_offscreenCharacterContext[color].drawImage(
-								_tilesheets[curLevel],
-								x,
-								0,
-								w,
-								h,
-								w * j,
-								h * 4,
-								w,
-								h
-							);
+							$game.$renderer.drawAccessories(x, w * j, h * 4,curLevel, color, client);
 						}
 					}
 				}

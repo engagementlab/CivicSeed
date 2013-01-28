@@ -217,7 +217,20 @@ $game.$resources = {
 					_speak = _curResource.prompt;
 					_speakerNameSel.text(_who + ': ');
 					_resourceMessageSel.text(_speak);
-					var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+					var inputBox = null;
+					if(_curResource.questionType === 'multiple') {
+						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[0] + '"> ' + _curResource.possibleAnswers[0] + '</input>' +
+									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[1] + '"> ' + _curResource.possibleAnswers[1] + '</input>' +
+									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[2] + '"> ' + _curResource.possibleAnswers[2] + '</input>' +
+									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[3] + '"> ' + _curResource.possibleAnswers[3] + '</form';
+					}
+					else if(_curResource.questionType === 'open') {
+						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+					}
+					else if(_curResource.questionType === 'closed') {
+						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+					}
+					
 					_resourceContentSel.html(finalQuestion + inputBox);
 				}
 					
@@ -324,8 +337,14 @@ $game.$resources = {
 
 	submitAnswer: function() {
 	
+		var response = null;
 		//get the answer from the field
-		var response = $('.resourceArea textarea').val();
+		if(_curResource.questionType === 'open') {
+			response = $('.resourceContent textarea').val();
+		}
+		else if(_curResource.questionType === 'multiple') {
+			response = $('input[name=resourceMultipleChoice]:checked').val();
+		}
 		
 		//if its an open ended question or the right answer, then validation is true
 		if(_curResource.questionType === 'open' || response === _curResource.answer) {

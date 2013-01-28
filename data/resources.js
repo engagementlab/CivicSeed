@@ -125,7 +125,8 @@ module.exports.global = [{
 	tagline: 'like butter play toast',
 	prompt: 'Answer this right to get something.',
 	question: 'What one word could best summarize the article?',
-	questionType: 'closed',
+	questionType: 'multiple',
+	possibleAnswers: ['hatred', 'steve', 'motivation', 'none of the above'],
 	answer: 'motivation',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {

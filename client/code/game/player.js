@@ -146,7 +146,7 @@ $game.$player = {
 			//create the collective color map
 			$game.$map.createCollectiveImage();
 
-			$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum);
+			$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum, true);
 
 			//we are ready, let everyone know dat
 			$game.$player.ready = true;
@@ -886,7 +886,7 @@ $game.$player = {
 		var newLevelMsg = $game.$player.game.currentLevel + 1;
 		// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
 		ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.game.currentLevel);
-		$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum);
+		$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum, true);
 		//load in other tree file
 	},
 
