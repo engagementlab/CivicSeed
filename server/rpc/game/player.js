@@ -346,6 +346,10 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
+		levelChange: function(id, level) {
+			ss.publish.all('ss-levelChange', id, level);
+		},
+
 		statusUpdate: function(msg) {
 			ss.publish.all('ss-statusUpdate', msg);
 		}

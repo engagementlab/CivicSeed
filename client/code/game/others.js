@@ -27,7 +27,7 @@ $game.$others = {
 			_onScreenPlayers[player.id] = newbie;
 			newbie.updateRenderInfo();
 			//console.log("added: " + player.id);
-			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(255,255,255)');  
+			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(255,255,255)');
 		}
 	},
 
@@ -96,8 +96,15 @@ $game.$others = {
 	updateTilesColored: function(id, count) {
 		$.each(_onScreenPlayers, function(key, player) {
 			if(player.id === id) {
-				console.log(id, player.tilesColored, count);
 				player.setTilesColored(count);
+			}
+		});
+	},
+
+	levelChange: function(id, level) {
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.id === id) {
+				player.changeLevel(level);
 			}
 		});
 	},
@@ -187,6 +194,9 @@ $game.$others = {
 				else {
 					otherPlayer.offScreen = true;
 				}
+
+				//add accessories to player
+				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
 			},
 			
 			idle: function() {
@@ -403,8 +413,14 @@ $game.$others = {
 			},
 
 			showPlayerCard: function() {
-				var msg = 'A ' + otherPlayer.rank + ' in level ' + (otherPlayer.level + 1) + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
+				var lvl = otherPlayer.level + 1;
+				var msg = 'A ' + otherPlayer.rank + ' in level ' + lvl + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
 				otherPlayer.message(msg);
+			},
+
+			changeLevel: function(level) {
+				otherPlayer.level = level;
+				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
 			}
 		};
 		return otherPlayer;

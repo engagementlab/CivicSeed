@@ -884,8 +884,9 @@ $game.$player = {
 		$game.$player.createInventoryOutlines();
 		//send status to message board
 		var newLevelMsg = $game.$player.game.currentLevel + 1;
-		var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
-		ss.rpc('game.player.statusUpdate', stat);
+		// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
+		ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.game.currentLevel);
+		$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum);
 		//load in other tree file
 	},
 

@@ -368,7 +368,6 @@ $game.$renderer = {
 				var j = 0;
 				for (var i = 0; i < 5; i += 1) {
 					var x = w * i;
-					console.log(x);
 					//0 - forward / down
 					if(i === 0) {
 						_offscreenCharacterContext[color].drawImage(

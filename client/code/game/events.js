@@ -96,18 +96,25 @@ $(function() {
 		
 		if($game.leaderboard.length > 0) {
 			var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;
+			if(leaderChange) {
+				$game.statusUpdate(board[0].name + ' is top dog!');
+				return;
+			}
 		}
 		$game.leaderboard = board;
 		if(newOne) {
 			$game.statusUpdate(newOne + ' is now a top seeder');
 		}
-		else if(leaderChange) {
-			$game.statusUpdate(board[0].name + ' is top dog!');
-		}
+		
 	});
 
 	ss.event.on('ss-addPlayerAnswer', function(data, id) {
 		$game.$resources.addAnswer(data,id);
+	});
+
+	//level change for a player
+	ss.event.on('ss-levelChange', function(id, level) {
+		$game.$others.levelChange(id, level);
 	});
 
 
