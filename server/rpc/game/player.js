@@ -32,6 +32,7 @@ exports.actions = function(req, res, ss) {
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
 
+			console.log('init: ', playerInfo);
 			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
@@ -41,6 +42,7 @@ exports.actions = function(req, res, ss) {
 			
 			//update redis
 			req.session.game = info;
+			console.log('exit: ', info);
 			req.session.save();
 			
 			//update mongo
@@ -61,6 +63,7 @@ exports.actions = function(req, res, ss) {
 
 		getOthers: function() {
 			res(players);
+			console.log('getOthers: ', players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
@@ -69,6 +72,7 @@ exports.actions = function(req, res, ss) {
 			// 	res(query);
 			// });				
 			//tileModel.find().gte('x', x1).gte('y',y1).lt('x',x2).lt('y',y2);
+			console.log('getMapData:', x1,y1);
 			tileModel
 			.where('x').gte(x1).lt(x2)
 			.where('y').gte(y1).lt(y2)
@@ -88,7 +92,7 @@ exports.actions = function(req, res, ss) {
 		},
 		
 		movePlayer: function(pos, id) {
-
+			console.log('movePlayer: ', id);
 			//send out the moves to everybody
 			ss.publish.all('ss-playerMoved', pos, id);
 			res(true);
@@ -101,7 +105,7 @@ exports.actions = function(req, res, ss) {
 			req.session.game = info;
 		},
 		dropSeed: function(bombed, info) {
-
+			console.log('dropSeed: ', info);
 			//welcome to the color server
 			//here, we will run through the array of tiles passed to us, call them from the db,
 			//and update them if necessary (better way? is to do this on client, but client needs

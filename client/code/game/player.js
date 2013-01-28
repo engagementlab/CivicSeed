@@ -52,6 +52,7 @@ $game.$player = {
 		//get the players info from the db, alert other users of presence
 		ss.rpc('game.player.init', function(newInfo) {
 			
+			console.log('rpc init: ', newInfo);
 			//time in seconds since 1970 or whatever
 			_startTime = new Date().getTime() / 1000;
 

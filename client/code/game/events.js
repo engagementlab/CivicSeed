@@ -25,6 +25,7 @@ $(function() {
 
 	//new player joining to keep track of
 	ss.event.on('ss-addPlayer', function(num, player) {
+		console.log('ss-addPlayer: ',num, player );
 		$game.numPlayers = num;
 		$game.$others.add(player);
 		_activePlayers.text(num);
@@ -40,6 +41,7 @@ $(function() {
 	});
 
 	ss.event.on('ss-playerMoved', function(moves, id) {
+		console.log('ss-playerMoved: ', id);
 		//check if that quad is relevant to the current player
 		//this will also have the player info so as to id the appropriate one	
 		if(id != $game.$player.id) {
@@ -49,13 +51,14 @@ $(function() {
 	//all this breakdown will be on the server side, not client side,
 	//but we will pass the tiles info
 	ss.event.on('ss-seedDropped', function(data) {
+		console.log('ss-seedDropped: ',data);
 		$game.$map.newBomb(data.bombed, data.id);
 		$game.$others.updateTilesColored(data.id, data.tilesColored);
 	});
 
 	//new message from chat
 	ss.event.on('ss-newMessage', function(message, id) {
-		
+		console.log('ss-newMessage: ',message, id );
 		if(id === $game.$player.id) {
 			$game.$player.message(message);
 		}

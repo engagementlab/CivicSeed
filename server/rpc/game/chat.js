@@ -8,10 +8,12 @@ exports.actions = function(req, res, ss) {
 
 		init: function() {
 			service = ss.service;
+			console.log('initChat');
 			chatModel = service.useModel('chat', 'ss');
 		},
 
 		sendMessage: function(data) {
+			console.log('sendMessage: ', data);
 			if (data.msg && data.msg.length > 0) {         // Check for blank messages
 				var logChat = {
 					who: data.name,
