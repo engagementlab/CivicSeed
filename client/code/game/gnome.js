@@ -1,4 +1,4 @@
-	var _info = null,
+var _info = null,
 	_renderInfo = null,
 	_onScreen = false,
 	_messages = null,

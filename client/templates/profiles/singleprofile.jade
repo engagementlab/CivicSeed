@@ -1,20 +1,35 @@
 .profiles
 	if firstName
-		h1 #{firstName} #{lastName}
+		h1.nombre #{firstName} #{lastName}
 		.row
-			.span6.goals.box
-				h2 Goals
-				p #{resume[3]}
-			.span6.motivations.box
-				h2 Motivations
-				p #{resume[2]}
-		.row
-			.span6.values.box
-				h2 Values
-				p #{resume[1]}
-			.span6.background.box
-				h2 Background
-				p #{resume[0]}
+			.span4.info
+				img(src='http://russellgoldenberg.com/img/cowboy.jpg')
+				.about
+					table
+						tr
+							td School
+							td Emerson College
+						tr
+							td Concentration
+							td Programming
+						tr
+							td Interests
+							td Basketball, Food
+
+			.span4
+				.goals.box
+					h2 Objectives & Goals
+					p #{resume[3]}
+				.motivations.box
+					h2 Motivations
+					p #{resume[2]}
+			.span4
+				.values.box
+					h2 Values
+					p #{resume[1]}
+				.background.box
+					h2 Background & Skills
+					p #{resume[0]}
 	else
 		h1 This person does not exist in our database.
 		
