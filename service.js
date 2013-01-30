@@ -1,8 +1,9 @@
 var rootDir = process.cwd(),
-config = require(rootDir + '/config'),
-mongoose = require('mongoose'),
-Schema = mongoose.Schema,
-ObjectId = Schema.ObjectId;
+	config = require(rootDir + '/config'),
+	serverHelpers = require(rootDir + '/server/utils/server-helpers'),
+	mongoose = require('mongoose'),
+	Schema = mongoose.Schema,
+	ObjectId = Schema.ObjectId;
 
 var self = module.exports = {
 
@@ -37,6 +38,21 @@ var self = module.exports = {
 
 	useModule: function (moduleName, state) {
 		return require(rootDir + '/modules/' + moduleName);
+	},
+
+	getAndSetNetworkIp: function(callback) {
+		serverHelpers.getNetworkIPs(function(err, ips) {
+			if(err) {
+				config.set('IP', 'localhost');
+				console.log('   * * * * * * * * * * * *   Civic Seed:'.yellow + ' could not find network ip. Defaulting to \'localhost.\'\n\n'.red);
+			} else {
+				config.set('IP', ips[0]);
+				console.log('   * * * * * * * * * * * *   Civic Seed:'.yellow + ' running on network ip: ' + ips[0].yellow + '\n\n');
+			}
+			if(typeof callback === 'function') {
+				callback();
+			}
+		});
 	}
 
 };
