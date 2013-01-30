@@ -5,15 +5,24 @@
 	background: @csYellow;
 	.border-radius(6px);
 }
-.box > h2, .box > p {
-	padding: 10px;
+.box {
+	p {
+		padding: 10px;
+	}
+	h2 {
+		padding: 10px;
+		font-size: 1.5em;	
+	}
+	
 }
 .profiles > .row {
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
-.profiles h1, h2, p {
-	color: #fff;
+.profiles {
+	h1, h2, p {
+		color: #fff;
+	}
 }
 .motivations {
 	background: @csLightGreen;
@@ -28,15 +37,34 @@
 	.border-radius(6px);
 }
 .info {
-	background: #aaa;
+	background: #ccc;
 	.border-radius(6px);
 	text-align: center;
 }
-.info > img {
-	margin: 10px 0;	
-	max-width: 280px;
-	max-height: 280px;
+.info {
+	img {
+		margin: 10px 0;	
+		max-width: 280px;
+		max-height: 280px;
+	}
+	table {
+		tr, td {
+			border: none;
+			color: #666;
+		}
+		td:nth-child(odd) {
+			text-align: right;
+		}
+		td:nth-child(even) {
+			text-align: left;
+		}
+	}
 }
 h1.nombre {
 	color: #aaa;
+}
+h3.linkage {
+	color: #ccc;
+	font-size: 1.5em;
+	margin-top:10px;
 }
