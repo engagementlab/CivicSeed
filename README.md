@@ -27,7 +27,6 @@ For development purposes, you may wish to use nodemon or another file monitor in
 CivicSeed uses nconf to access environment variables, which include:
 
  * NAME
- * DOMAIN
  * PORT
  * USE_REDIS
  * REDIS_HOST
@@ -35,8 +34,8 @@ CivicSeed uses nconf to access environment variables, which include:
  * REDIS_PW
  * REDIS_DB
  * MONGO_URL
- * MAP_TILES_WIDTH
- * MAP_TILES_HEIGHT
+ * ACCOUNT_EMAIL
+ * ACCOUNT_PW
 
 #### Development
 

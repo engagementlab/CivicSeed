@@ -6,7 +6,6 @@ var rootDir = process.cwd(),
 	app = module.exports = express(),
 	ssJade = require('ss-jade'),
 	config = require(rootDir + '/config'),
-	domain = config.get('DOMAIN'),
 	port = config.get('PORT'),
 	version = config.get('VERSION'),
 	nodeEnv = config.get('ENVIRONMENT'),
@@ -97,12 +96,14 @@ service.connectMongoose(app, function(databases) {
 	ss.client.templateEngine.use(require('ss-clientjade'));
 
 	// using engine.io for web sockets transport
-	ss.ws.transport.use(require('ss-engine.io'), {
-		client: {
-			host: domain,
-			port: port
-		}
-	});
+	if(nodeEnv === 'development') {
+		service.getAndSetNetworkIp(function() {
+			var ip = config.get('IP');
+			ss.ws.transport.use(require('ss-engine.io'), { client: { host: ip, port: port } });
+		});
+	} else {
+		ss.ws.transport.use(require('ss-engine.io'));
+	}
 
 	// use redis
 	if(config.get('USE_REDIS')) {
