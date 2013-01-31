@@ -22,6 +22,7 @@ $game.$others = {
 		//don't add it if its yourself
 		
 		if(player.id != $game.$player.id) {
+			console.log('new player added!');
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;

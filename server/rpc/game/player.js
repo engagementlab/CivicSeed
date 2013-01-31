@@ -32,7 +32,8 @@ exports.actions = function(req, res, ss) {
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
 
-			console.log('init: ', playerInfo);
+			console.log('rpc.player.init: ', playerInfo);
+			console.log('rpc number of active players: ',  numActivePlayers);
 			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
@@ -63,7 +64,7 @@ exports.actions = function(req, res, ss) {
 
 		getOthers: function() {
 			res(players);
-			console.log('getOthers: ', players);
+			console.log('rpc.player.getOthers: ', players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
@@ -91,10 +92,10 @@ exports.actions = function(req, res, ss) {
 			//return set of tiles based no bounds
 		},
 		
-		movePlayer: function(pos, id) {
-			console.log('movePlayer: ', id);
+		movePlayer: function(moves, id) {
+			console.log('rpc.player.movePlayer: ', id);
 			//send out the moves to everybody
-			ss.publish.all('ss-playerMoved', pos, id);
+			ss.publish.all('ss-playerMoved', moves, id);
 			res(true);
 		},
 
