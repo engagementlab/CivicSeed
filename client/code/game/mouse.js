@@ -130,35 +130,42 @@ $game.$mouse = {
 		var currentSpot = $game.$player.getPosition(),
 			local = $game.masterToLocal(currentSpot.x,currentSpot.y),
 			targetX = 0,
-			targetY = 0;
+			targetY = 0,
+			willWalk = false;
 
 		//up
 		if(keyInfo === 87) {
 			targetY = -1;
+			willWalk = true;
 		}
 		//down
 		else if(keyInfo === 83) {
 			targetY = 1;
+			willWalk = true;
 		}
 		//left
 		else if(keyInfo === 65) {
 			targetX = -1;
+			willWalk = true;
 		}
 		//right
 		else if(keyInfo === 68) {
 			targetX = 1;
+			willWalk = true;
 		}
 
 
 		//go
+		if(willWalk) {
+			$game.$player.beginKeyWalk(targetX,targetY);
+			if($game.$npc.isChat) {
+				$game.$npc.hideChat();
+			}
+			else if($game.$gnome.isChat) {
+				$game.$gnome.hideChat();
+			}
+		}
 		
-		$game.$player.beginKeyWalk(targetX,targetY);
-		if($game.$npc.isChat) {
-			$game.$npc.hideChat();
-		}
-		else if($game.$gnome.isChat) {
-			$game.$gnome.hideChat();
-		}
 	}
 
 };

@@ -187,7 +187,7 @@ $(function() {
 
 	//figure out if we shoupdatuld transition (or do other stuff later)
 	_gameboard.bind('click', function(m) {
-
+		
 		var goAhead = startNewAction();
 		if(goAhead) {
 				var mInfo = {
@@ -195,9 +195,9 @@ $(function() {
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
-				debug: false
+				debug: true
 			};
-				$game.$mouse.updateMouse(mInfo,true);
+			$game.$mouse.updateMouse(mInfo,true);
 		}
 	});
 
