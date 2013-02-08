@@ -8,12 +8,12 @@ exports.actions = function(req, res, ss) {
 
 		init: function() {
 			service = ss.service;
-			console.log('initChat');
+			console.log('rpc.chat.initChat');
 			chatModel = service.useModel('chat', 'ss');
 		},
 
 		sendMessage: function(data) {
-			console.log('sendMessage: ', data);
+			console.log('rpc.chat.sendMessage: ', data);
 			if (data.msg && data.msg.length > 0) {         // Check for blank messages
 				var logChat = {
 					who: data.name,
@@ -22,11 +22,18 @@ exports.actions = function(req, res, ss) {
 					when: Date.now()
 				};
 				chatModel.create(logChat, function(err, suc) {
-					
+					if(err) {
+						console.log('error saving chat: ', err);
+						return res(false);
+					}
+					else {
+						ss.publish.all('ss-newMessage', data.msg, data.id);     // Broadcast the message to everyone
+						return res(true);                          // Confirm it was sent to the originating client
+					}
 				});
-				ss.publish.all('ss-newMessage', data.msg, data.id);     // Broadcast the message to everyone
-				return res(true);                          // Confirm it was sent to the originating client
-			} else {
+				
+			}
+			else {
 				return res(false);
 			}
 		}

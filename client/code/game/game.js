@@ -598,15 +598,10 @@ exports.$game = {
 	},
 	statusUpdate: function(msg) {
 		var prevM = $('.displayBoxText').text();
-		$('.displayBoxText').fadeOut(200,function() {
-			$(this)
-				.text(msg)
-				.fadeIn(600,function() {
-					$game.displayTimeout = setTimeout(function() {
-						$('.displayBoxText').text(prevM);
-					}, 3000);
-				});
-		});
+		$('.displayBoxText').text(msg);
+		$game.displayTimeout = setTimeout(function() {
+			$('.displayBoxText').text(prevM);
+		}, 3000);
 	},
 	changeStatus: function(custom) {
 		clearTimeout($game.displayTimeout);
@@ -632,7 +627,6 @@ exports.$game = {
 			}
 		}
 		return msg;
-		
 	}
 };
 

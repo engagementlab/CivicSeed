@@ -62,7 +62,6 @@ $game.$renderer = {
 		//renderer is ready
 		$game.$renderer.loadImages(0);
 	},
-
 	loadImages: function(num) {
 
 		//load the images recursively until done
@@ -124,25 +123,17 @@ $game.$renderer = {
 		};
 	},
 	renderFrame: function() {
-		//only re-render all the tiles if the viewport is tranisitioning
+		
 		$game.$others.clear();
 		$game.$player.clear();
 		$game.$npc.clear();
 		$game.$gnome.clear();
 		$game.$thing.clear();
 
+		//only re-render all the tiles if the viewport is tranisitioning
 		if($game.inTransit) {
 			$game.$renderer.renderAllTiles();
 		}
-		/*
-		else {
-			if($game.onScreenNpcs.length > 0) {
-				$game.$npc.animateFrame();
-			}
-			if($game.$map.growingSeed) {
-				$game.$map.growSeeds();
-			}
-		}*/
 
 		$game.$renderer.makeQueue(function(all) {
 			var a = all.length;
@@ -159,7 +150,6 @@ $game.$renderer = {
 				else {
 					$game.$renderer.renderPlayer(all[a]);
 				}
-				
 			}
 		});
 
@@ -213,8 +203,6 @@ $game.$renderer = {
 				destY: j
 			};
 
-
-
 		//color tile first if it needs to be done
 		if(colorVal) {
 			tileData.color = colorVal;
@@ -243,7 +231,6 @@ $game.$renderer = {
 			$game.TILE_SIZE,
 			$game.TILE_SIZE
 			);
-
 	},
 
 	drawMapTile: function(tileData) {

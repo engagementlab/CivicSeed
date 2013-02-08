@@ -29,7 +29,7 @@ $(function() {
 		$game.numPlayers = num;
 		$game.$others.add(player);
 		_activePlayers.text(num);
-		if(player.name !== $game.$player.name) {
+		if(player.id !== $game.$player.id) {
 			$game.statusUpdate(player.name + ' has joined!');
 		}
 	});
@@ -41,9 +41,10 @@ $(function() {
 	});
 
 	ss.event.on('ss-playerMoved', function(moves, id) {
-		console.log('ss-playerMoved: ', id);
+		console.log('ss-playerMoved: ', id, moves);
 		//check if that quad is relevant to the current player
-		//this will also have the player info so as to id the appropriate one	
+		//this will also have the player info so as to id the appropriate one
+		console.log('check ids for player move:', id, $game.$player.id);
 		if(id != $game.$player.id) {
 			$game.$others.sendMoveInfo(moves, id);
 		}
@@ -186,7 +187,7 @@ $(function() {
 
 	//figure out if we shoupdatuld transition (or do other stuff later)
 	_gameboard.bind('click', function(m) {
-
+		
 		var goAhead = startNewAction();
 		if(goAhead) {
 				var mInfo = {
@@ -194,9 +195,9 @@ $(function() {
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
-				debug: false
+				debug: true
 			};
-				$game.$mouse.updateMouse(mInfo,true);
+			$game.$mouse.updateMouse(mInfo,true);
 		}
 	});
 
@@ -211,7 +212,10 @@ $(function() {
 				id: $game.$player.id,
 				log: sentence
 			};
-			ss.rpc('game.chat.sendMessage', data);
+			ss.rpc('game.chat.sendMessage', data, function(r) {
+				console.log('chat worked: ', r);
+			});
+			
 			_chatText.val('');
 		}
 		return false;

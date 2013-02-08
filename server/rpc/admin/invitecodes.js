@@ -35,6 +35,37 @@ exports.actions = function(req, res, ss) {
 					user.password = xkcd.generatePassword();
 					user.email = email;
 					user.role = 'actor';
+					user.game = {
+						currentLevel: 0,
+						rank: 'nothing',
+						position: {
+							x: 66,
+							y: 77,
+							inTransit: false
+						},
+						colorInfo: {
+							rgb: {
+								r: 0,
+								g: 0,
+								b: 0
+							},
+							tilesheet: 0
+						},
+						resources: [],
+						inventory: [],
+						seeds: {
+							normal: 0,
+							riddle: 0,
+							special: 0,
+							dropped: 0
+						},
+						gnomeState: 0,
+						resume: [],
+						seenThing: false,
+						resourcesDiscovered: 0,
+						playingTime: 0,
+						tilesColored: 0
+					};
 					console.log('Created user: ' + user.email);
 					user.save(function(err) {
 						if(err) {

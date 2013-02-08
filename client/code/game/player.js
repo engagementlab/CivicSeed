@@ -25,7 +25,7 @@ var _curFrame = 0,
 	_inventorySel = null,
 	_startTime = null,
 	_playerColorNum = null;
-
+	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]];
 
 $game.$player = {
 
@@ -522,7 +522,8 @@ $game.$player = {
 				return false;
 			}
 			else {
-				//options.sz = ($game.$player.game.currentLevel * 2) + 5;
+				options.sz = 11;
+				options.special = Math.floor(Math.random()*4);
 				$game.$player.calculateSeeds(options);
 				return true;
 			}
@@ -538,7 +539,8 @@ $game.$player = {
 			sX = options.x - mid,
 			sY = options.y - mid,
 			bombed = [],
-			mode = options.mode;
+			mode = options.mode,
+			square = null;
 		
 		if($game.currentTiles[options.x][options.y].color) {
 			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
@@ -555,35 +557,62 @@ $game.$player = {
 				//only add if it is in the map!
 				if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
 					
-					//only make circles if not mode 1 (basic)
-					
-					//this says: if you are part of the circle radius
-					//if you are basic, then do it regardless
-					if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
+				
+					//only dynamically calculate seeds if riddle or normal mode
+					if(mode < 3) {
+						//this says: if you are part of the circle radius
+						//if you are basic, then do it regardless
+						if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
 
-						var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
-						
-						//set x,y and color info for each square
-						var square = {
-							x: origX + a,
-							y: origY + b,
-							color:
-							{
-								r: $game.$player.game.colorInfo.rgb.r + 10,
-								g: $game.$player.game.colorInfo.rgb.g + 10,
-								b: $game.$player.game.colorInfo.rgb.b + 10,
-								a: tempA,
-								owner: 'nobody'
+							var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
+							
+							//set x,y and color info for each square
+							square = {
+								x: origX + a,
+								y: origY + b,
+								color:
+								{
+									r: $game.$player.game.colorInfo.rgb.r + 10,
+									g: $game.$player.game.colorInfo.rgb.g + 10,
+									b: $game.$player.game.colorInfo.rgb.b + 10,
+									a: tempA,
+									owner: 'nobody'
+								}
+							};
+
+							//assign the middle one the owner
+							if( a === mid && b === mid) {
+								square.color.a = 0.6;
+								square.color.owner = $game.$player.name;
 							}
-						};
-
-						//assign the middle one the owner
-						if( a === mid && b === mid) {
-							square.color.a = 0.6;
-							square.color.owner = $game.$player.name;
+							bombed.push(square);
 						}
-						bombed.push(square);
 					}
+					//special seed, pull from data of
+					else {
+
+						//find the index based on the a,b values
+						var specialIndex = (b * options.sz) + a;
+
+						//only add a square if it exists in our special array
+						if(_specialSeedData[options.special][specialIndex] === 1) {
+							//set x,y and color info for each square
+							square = {
+								x: origX + a,
+								y: origY + b,
+								color:
+								{
+									r: $game.$player.game.colorInfo.rgb.r + 10,
+									g: $game.$player.game.colorInfo.rgb.g + 10,
+									b: $game.$player.game.colorInfo.rgb.b + 10,
+									a: 0.3,
+									owner: 'nobody'
+								}
+							};
+							bombed.push(square);
+						}
+					}
+					
 				}
 				a += 1;
 			}

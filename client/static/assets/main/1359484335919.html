@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" class="no-js"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>{ ::: Civic Seed ::: }</title><meta name="viewport" content="width=device-width"><meta name="description" content=""><meta name="author" content=""><script src="/js/modernizr-2.6.2.min.js"></script><script>window.CivicSeed = {"VERSION":"0.0.7-6","CACHE":"0.0.7-6","ENVIRONMENT":"production"};</script><link href="/assets/main/1359518994752.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1359518994752.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+<!DOCTYPE html><html lang="en" class="no-js"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>{ ::: Civic Seed ::: }</title><meta name="viewport" content="width=device-width"><meta name="description" content=""><meta name="author" content=""><script src="/js/modernizr-2.6.2.min.js"></script><script>window.CivicSeed = {"VERSION":"0.0.7-8","CACHE":"0.0.7-8","ENVIRONMENT":"production"};</script><link href="/assets/main/1359484335919.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1359484335919.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
 window.JT['admin-invitecodes'] = (function anonymous(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
@@ -174,7 +174,43 @@ var interp;
 buf.push('<div class="profiles">');
 if ( firstName)
 {
-buf.push('<h1 class="nombre">' + escape((interp = firstName) == null ? '' : interp) + ' ' + escape((interp = lastName) == null ? '' : interp) + '</h1><div class="row"><div class="span4 info"><img src="http://russellgoldenberg.com/img/cowboy.jpg"/><div class="about"><table><tr><td>School</td><td>Emerson College</td></tr><tr><td>Concentration</td><td>Programming</td></tr><tr><td>Interests</td><td>Basketball, Food</td></tr></table></div></div><div class="span4"><div class="goals box"><h2>Objectives & Goals</h2><p>' + escape((interp = resume[3]) == null ? '' : interp) + '</p></div><div class="motivations box"><h2>Motivations</h2><p>' + escape((interp = resume[2]) == null ? '' : interp) + '</p></div></div><div class="span4"><div class="values box"><h2>Values</h2><p>' + escape((interp = resume[1]) == null ? '' : interp) + '</p></div><div class="background box"><h2>Background & Skills</h2><p>' + escape((interp = resume[0]) == null ? '' : interp) + '</p></div></div></div>');
+buf.push('<div class="row"><div class="span4"><h1 class="nombre">' + escape((interp = firstName) == null ? '' : interp) + ' ' + escape((interp = lastName) == null ? '' : interp) + '</h1></div></div><div class="row"><div class="span4 info"><img src="http://russellgoldenberg.com/img/cowboy.jpg"/><div class="about"><table><tr><td>School:</td><td>Emerson College</td></tr><tr><td>Concentration:</td><td>programming</td></tr><tr><td>Interests:</td><td>basketball, food, backstreet boys</td></tr></table></div></div><div class="span4"><div class="goals box"><h2>Objectives & Goals</h2>');
+if ( resume[3])
+{
+buf.push('<p>' + escape((interp = resume[3]) == null ? '' : interp) + '</p>');
+}
+else
+{
+buf.push('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. </p>');
+}
+buf.push('</div><div class="motivations box"><h2>Motivations</h2>');
+if ( resume[2])
+{
+buf.push('<p>' + escape((interp = resume[2]) == null ? '' : interp) + '</p>');
+}
+else
+{
+buf.push('<p>Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. </p>');
+}
+buf.push('</div></div><div class="span4"><div class="values box"><h2>Values</h2>');
+if ( resume[1])
+{
+buf.push('<p>' + escape((interp = resume[1]) == null ? '' : interp) + '</p>');
+}
+else
+{
+buf.push('<p>Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. </p>');
+}
+buf.push('</div><div class="background box"><h2>Background & Skills</h2>');
+if ( resume[0])
+{
+buf.push('<p>' + escape((interp = resume[0]) == null ? '' : interp) + '</p>');
+}
+else
+{
+buf.push('<p>Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor.</p>');
+}
+buf.push('</div></div></div>');
 }
 else
 {
