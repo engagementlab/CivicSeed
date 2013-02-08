@@ -45,7 +45,8 @@
     "jade": "~0.28.0",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
     "ss-less": "~0.1.1",
-    "xkcd-pwgen": "0.0.1"
+    "xkcd-pwgen": "0.0.1",
+    "stylus": "~0.32.0"
   },
   "devDependencies": {
     "mocha": "*",

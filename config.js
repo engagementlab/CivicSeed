@@ -6,7 +6,7 @@
 var rootDir = process.cwd(),
 	nconf = require('nconf'),
 	fs = require('fs'),
-	nodeEnv = require(rootDir + '/bin/server').get('env'),
+	nodeEnv = require(rootDir + '/bin/server').app.get('env'),
 	configFilename = nodeEnv !== 'development' ? '/config_' + nodeEnv + '.json' : '/config.json',
 	json = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8'));
 
