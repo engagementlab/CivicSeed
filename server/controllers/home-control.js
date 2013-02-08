@@ -6,7 +6,7 @@ var self = module.exports = {
 
 		ss.client.define('main', {
 			view: 'main.jade',
-			css: ['style.less', 'game.stylus'],
+			css: ['styles.styl'],
 			code: [
 				'libs/jquery-1.8.2.min.js',
 				'libs/davis-0.9.6.min.js',

@@ -1,6 +1,6 @@
 
 
-/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> BASICS */
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> BASICS
 
 
 ::-moz-selection{background:#f8d36f;color:#000;text-shadow:none;}
@@ -25,7 +25,7 @@ hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padd
 small{font-size:85%;}
 
 
-/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HTML5 */
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HTML5
 
 
 article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block;}
@@ -33,10 +33,10 @@ audio,canvas,video{display:inline-block;*display:inline;*zoom:1;}
 audio:not([controls]){display:none;}
 [hidden]{display:none;}
 svg:not(:root){overflow:hidden;}
-figure{margin:0;} /* Addresses margin not present */
+figure{margin:0;}
 
 
-/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> COMMON BLOCK TAGS */
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> COMMON BLOCK TAGS
 
 
 p{margin:0 0 1em;}
@@ -47,7 +47,7 @@ h3{margin:42px 0 10px;font:700 24px/32px Lato,Arial,sans-serif;text-transform:up
 h4{margin:24px 0 3px;font:24px/42px Lato,Arial,sans-serif;color:#999;}
 h5{margin:24px 0 3px;font:700 18px/18px Lato,Arial,sans-serif;color:#4559ac;}
 h6{margin:24px 0 3px;font:900 italic 15px/1 Lato,Arial,sans-serif;}
-.image{
+.image {
 	margin: 0 0 22px;
 	padding: 8px;
 	background-color: white;
@@ -73,9 +73,9 @@ nav{margin:0 0 1em;}
 nav ul{list-style:none;margin:0;}
 nav ol{list-style:none;margin:0;}
 dl{margin:0 0 1em;}
-dt{margin:1em 0 0;} /* ??? */
-dt:first-child{margin:0;} /* ??? */
-dt + dt{margin:0;} /* ??? */
+dt{margin:1em 0 0;}
+dt:first-child{margin:0;}
+dt + dt{margin:0;}
 dd{margin:0 0 0 3em;}
 blockquote,q{quotes:none;margin:1em 40px;font:italic 18px/24px Lato,Arial,sans-serif;color:#b3b3b3;}
 q:before,q:after{content:'';content:none;}
@@ -91,61 +91,58 @@ table {
 	margin: 0 -85px 18px;
 	width: 830px !important;
 }
-	caption {
-		margin: 0 0 8px;
-		padding: 0;
-		font: bold 14px/18px Lato, Arial, sans-serif;
-		letter-spacing: 1.5px;
-		text-transform: uppercase;
-		text-align:left;
-		color: #67a4d8;
-	}
-	th {
-		padding: 8px 12px;
-		vertical-align:bottom;
-		background-color: #f9d573;
-		color: white;
-		font: 15px/21px Lato, Arial, sans-serif;
-		letter-spacing: 1.5px;
-		text-shadow: 0 -1px 3px #ccc;
-		text-transform: uppercase;
-		text-align: left;
-		-webkit-transition: background-color ease .5s;
-		-moz-transition: background-color ease .5s;
-		transition: background-color ease .5s;
-	}
-	.content th:hover { background-color: #f9ca49; }
-	td {
-		padding: 6px 12px;
-		vertical-align: top;
-		font: 16px/20px Lato,Arial,sans-serif;
-		border-bottom: 1px solid #929efa;
-		-webkit-transition: background-color ease .5s;
-		-moz-transition: background-color ease .5s;
-		transition: background-color ease .5s;
-	}
-	.content tr:hover td { background-color: #f6f6f6; }
-
+caption {
+	margin: 0 0 8px;
+	padding: 0;
+	font: bold 14px/18px Lato, Arial, sans-serif;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	text-align:left;
+	color: #67a4d8;
+}
+th {
+	padding: 8px 12px;
+	vertical-align:bottom;
+	background-color: #f9d573;
+	color: white;
+	font: 15px/21px Lato, Arial, sans-serif;
+	letter-spacing: 1.5px;
+	text-shadow: 0 -1px 3px #ccc;
+	text-transform: uppercase;
+	text-align: left;
+	-webkit-transition: background-color ease .5s;
+	-moz-transition: background-color ease .5s;
+	transition: background-color ease .5s;
+}
+.content th:hover { background-color: #f9ca49; }
+td {
+	padding: 6px 12px;
+	vertical-align: top;
+	font: 16px/20px Lato,Arial,sans-serif;
+	border-bottom: 1px solid #929efa;
+	-webkit-transition: background-color ease .5s;
+	-moz-transition: background-color ease .5s;
+	transition: background-color ease .5s;
+}
+.content tr:hover td { background-color: #f6f6f6; }
 .console h1 {margin:15px 0 0;font:28px/36px Lato,Arial,sans-serif;color:#3a3a3a;}
 .console hgroup h1 {font-weight:700;}
 .console hgroup h2 {font:28px/36px Lato,Arial,sans-serif;}
 .console header .button {float:right;margin:3px 0 0;width:200px;}
 
 
-/* :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HELPER CLASSES AND ADDITIONAL TYPICAL STYLES */
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: >>>>> HELPER CLASSES AND ADDITIONAL TYPICAL STYLES
 
 
-.nocallout{-webkit-touch-callout:none;} /* prevent callout */
-.ellipsis{text-overflow:ellipsis;overflow:hidden;white-space:nowrap;} /* Text overflow with ellipsis */
-.gifhidden{position:absolute;left:-100%;} /* A workaround for S60 3.x and 5.0 devices */
-.ir{display:block;border:0;text-indent:-999em;overflow:hidden;background-color:transparent;background-repeat:no-repeat;text-align:left;direction:ltr;} /* For image replacement */
+.nocallout{-webkit-touch-callout:none;}
+.ellipsis{text-overflow:ellipsis;overflow:hidden;white-space:nowrap;}
+.gifhidden{position:absolute;left:-100%;}
+.ir{display:block;border:0;text-indent:-999em;overflow:hidden;background-color:transparent;background-repeat:no-repeat;text-align:left;direction:ltr;}
 .ir br{display:none;}
-.hidden{display:none !important;visibility:hidden;} /* Hide for both screenreaders and browsers: */
-/* Hide only visually, but have it available for screenreaders: by Jon Neal. www.webaim.org/techniques/css/invisiblecontent/ & j.mp/visuallyhidden */
+.hidden{display:none !important;visibility:hidden;}
 .visuallyhidden{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;}
-/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: drupal.org/node/897638 */
 .visuallyhidden.focusable:active,.visuallyhidden.focusable:focus{clip:auto;height:auto;margin:0;overflow:visible;position:static;width:auto;}
-.invisible{visibility:hidden;} /* Hide visually and from screenreaders, but maintain layout */
+.invisible{visibility:hidden;}
 .clearfix:before,.clearfix:after{content:"";display:table;}
 .clearfix:after{clear:both;}
 .clearfix{zoom:1;}
