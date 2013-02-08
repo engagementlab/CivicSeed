@@ -5,7 +5,9 @@ var _soundtracks = [],
 	_numEffects = 1,
 	_tweenTimeout = null,
 	_newPlace = 'welcome...',
-	_targetV = 0;
+	_targetV = 0,
+	_musicPath = CivicSeed.CLOUD_PATH + 'audio/music/',
+	_audioFxPath = CivicSeed.CLOUD_PATH + 'audio/fx/';
 
 $game.$audio = {
 	
@@ -28,11 +30,11 @@ $game.$audio = {
 			_soundtracks[num].autobuffer = true;
 			_soundtracks[num].loop = true;
 			if(CivicSeed.ENVIRONMENT === 'development') {
-				_soundtracks[num].src = Modernizr.audio.ogg ? '/audio/music/' + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000):
-										'/audio/music/' + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000);
+				_soundtracks[num].src = Modernizr.audio.ogg ? _musicPath + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000):
+										_musicPath + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000);
 			} else {
-				_soundtracks[num].src = Modernizr.audio.wav ? '/audio/music/' + num + '.wav?VERSION=' + CivicSeed.VERSION:
-										'/audio/music/' + num + '.wav?VERSION=' + CivicSeed.VERSION;
+				_soundtracks[num].src = Modernizr.audio.wav ? _musicPath + num + '.wav?VERSION=' + CivicSeed.VERSION:
+										_musicPath + num + '.wav?VERSION=' + CivicSeed.VERSION;
 			}
 			_soundtracks[num].volume = 0;
 			_soundtracks[num].load();
@@ -57,12 +59,12 @@ $game.$audio = {
 		}
 		else {
 			if(CivicSeed.ENVIRONMENT === 'development') {
-				_effects[num].src = Modernizr.audio.ogg ? '/audio/fx/' + num + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000):
-									'/audio/fx/' + num  + '.mp3?VERSION' + Math.round(Math.random(1) * 1000000000);
+				_effects[num].src = Modernizr.audio.ogg ? _audioFxPath + num + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000):
+									_audioFxPath + num  + '.mp3?VERSION' + Math.round(Math.random(1) * 1000000000);
 
 			} else {
-				_effects[num].src = Modernizr.audio.ogg ? '/audio/fx/' + num + '.ogg?VERSION=' + CivicSeed.VERSION:
-									'/audio/fx/' + num  + '.mp3?VERSION' + CivicSeed.VERSION;
+				_effects[num].src = Modernizr.audio.ogg ? _audioFxPath + num + '.ogg?VERSION=' + CivicSeed.VERSION:
+									_audioFxPath + num  + '.mp3?VERSION' + CivicSeed.VERSION;
 			}
 			_effects[num].preload = "auto",
 			_effects[num].autobuffer = true,
