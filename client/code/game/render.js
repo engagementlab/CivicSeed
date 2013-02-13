@@ -92,7 +92,7 @@ $game.$renderer = {
 	},
 	loadPlayerImages: function(num) {
 		var next = num + 1,
-			playerFile = "img/game/players/player" + num + ".png";
+			playerFile = 'img/game/players/' + num + '.png';
 		_playerImages[num] = new Image();
 		_playerImages[num].src = playerFile;
 
@@ -557,20 +557,20 @@ $game.$renderer = {
 			//
 			else {
 				if(state == -1) {
-					col = 'rgba(100,240,200,.4)';
-					_foregroundContext.strokeStyle = 'rgba(100,240,200,.4)'; // red
+					col = 'rgba(50,255,50,.5)';
+					_foregroundContext.strokeStyle = col;
 
 				}
 				//nogo
 				else if(state === -2) {
-					col = 'rgba(255,0,0,.4)';
-					_foregroundContext.strokeStyle = 'rgba(255,0,0,.4)'; // red
+					col = 'rgba(255,50,50,.5)';
+					_foregroundContext.strokeStyle = col;
 
 				}
 				//npc
 				else {
-					col = 'rgba(0,150,235,.4)';
-					_foregroundContext.strokeStyle = 'rgba(0,150,235,.4)'; // blue
+					col = 'rgba(50,50,235,.5)';
+					_foregroundContext.strokeStyle = col;
 				}
 				_foregroundContext.strokeRect(
 					mX + 2,
