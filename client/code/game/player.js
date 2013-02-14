@@ -868,9 +868,10 @@ $game.$player = {
 
 	addToInventory: function(id) {
 		//create the class / ref to the image
-		var file = 'r' + id;
+		var file = 'r' + id,
+			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/small/'+file+'.png';
 		//put image on page in inventory
-		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="img\/game\/resources\/small\/'+file+'.png">');
+		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="' + imgPath + '">');
 		
 		_inventoryBtnSel.text($game.$player.game.inventory.length);
 
@@ -881,8 +882,10 @@ $game.$player = {
 	},
 
 	tangramToInventory: function() {
-		var gFile = 'puzzle' + $game.$player.game.currentLevel;
-		_inventorySel.append('<div class="inventoryItem '+gFile+'"><img src="img\/game\/tangram\/'+gFile+'small.png" draggable = "false"></div>');
+		var gFile = 'puzzle' + $game.$player.game.currentLevel,
+			imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/tangram/'+gFile+'small.png';
+
+		_inventorySel.append('<div class="inventoryItem '+gFile+'"><img src="' + imgPath2 + '" draggable = "false"></div>');
 		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
 

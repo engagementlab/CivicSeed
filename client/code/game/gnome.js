@@ -204,7 +204,7 @@ $game.$gnome = {
 	},
 
 	showTangram: function() {
-		var file = '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';
+		var file = CivicSeed.CLOUD_PATH + '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';
 		
 	},
 
@@ -393,7 +393,8 @@ $game.$gnome = {
 					$game.$player.checkGnomeState();
 				}
 				
-				$('.gnomeContent').html('<img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png" class="tangramOutline">');
+				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.game.currentLevel+ '.png';
+				$('.gnomeContent').html('<img src="' + imgPath + '" class="tangramOutline">');
 				
 			}
 		}
@@ -411,7 +412,9 @@ $game.$gnome = {
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png" class="tangramOutline"><img class="trash" src="/img/game/trash.png">';
+				var imgPath1 = CivicSeed.CLOUD_PATH + 'img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png',
+					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img class="trash" src="' + imgPath2 + '">';
 				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
