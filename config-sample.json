@@ -8,5 +8,6 @@
 	"REDIS_DB": "[redis_db]",
 	"MONGO_URL": "mongodb://192.168.1.xxx/[mongo_db]",
 	"ACCOUNT_EMAIL": "[email@account.com]",
-	"ACCOUNT_PW": "[password]"
+	"ACCOUNT_PW": "[password]",
+	"CLOUD_PATH": ""
 }

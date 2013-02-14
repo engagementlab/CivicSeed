@@ -9,14 +9,14 @@ var rootDir = process.cwd() || '.',
 	config = require(rootDir + '/config'),
 	port = config.get('PORT'),
 	nodeEnv = config.get('ENVIRONMENT'),
+	cloudPath = config.get('CLOUD_PATH'),
 	flash = require('connect-flash'),
 	passport = require('passport'),
 	service = require(rootDir + '/service'),
 	controllers = require(rootDir + '/controllers'),
 	CivicSeed = require(rootDir + '/CivicSeed'),
 	server,
-	redisConfig,
-	cloudPath;
+	redisConfig;
 
 console.log('\n\n     ___      _               _                       ___                       _   '.red);
 console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red);
@@ -36,10 +36,6 @@ service.connectMongoose(app, function(databases) {
 
 	app.set('views', rootDir + '/client/views');
 	app.set('view engine', 'jade');
-	// app.set('view engine', 'hbs');
-	// service.useModule('middleware/hbs-helpers').init();
-	// app.set('view engine', 'html');
-	// app.engine('html', require('hbs').__express);
 	app.use(express.logger(':method :url :status'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
@@ -60,11 +56,6 @@ service.connectMongoose(app, function(databases) {
 	// // console.log(temply1, temply2);
 	// app.use(expressMiddleware.account.authenticated('express'));
 
-	// app.use(function(req, res, next){
-	//   console.log('%s %s', req.method, req.url);
-	//   next();
-	// });
-
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>> SOCKET STREAM
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
@@ -72,21 +63,13 @@ service.connectMongoose(app, function(databases) {
 	console.log('   * * * * * * * * * * * *   Configuring SocketStream   * * * * * * * * * * * *   '.yellow);
 
 	// Code Formatters
-	if(nodeEnv === 'development') {
-		CivicSeed.set('CLOUD_PATH', '/');
-		// CivicSeed.set('CLOUD_PATH', 'http://localhost:3333/');
-		// CivicSeed.set('CLOUD_PATH', 'https://s3.amazonaws.com/civicseed/');
-	} else {
-		CivicSeed.set('CLOUD_PATH', 'https://s3.amazonaws.com/civicseed/');
-	}
-	cloudPath = CivicSeed.get('CLOUD_PATH');
 	ss.client.formatters.add(ssJade, {
 		locals: {
 			// title: 'Hollow :: Home',
 			CivicSeed: JSON.stringify(CivicSeed.getGlobals())
 		}
 	});
-	ssStylus.prependStylus('$cloudPath = \'' + cloudPath + '\'');
+	ssStylus.prependStylus('$cloudPath = \'' + cloudPath + '/\'');
 	ss.client.formatters.add(ssStylus);
 
 	// // Server-side compiled templates for client
@@ -132,15 +115,9 @@ service.connectMongoose(app, function(databases) {
 		if(nodeEnv === 'testing' || nodeEnv === 'production') {
 			ss.client.packAssets({
 				cdn: {
-					js: function(file) {
-						return cloudPath + '/' + file.path.replace(/^.*[\\\/]/, '');
-					},
-					css: function(file) {
-						return cloudPath + '/' + file.path.replace(/^.*[\\\/]/, '');
-					},
-					html: function(file) {
-						return cloudPath + '/' + file.path.replace(/^.*[\\\/]/, '');
-					}
+					js: function(file) { return cloudPath + file.path; },
+					css: function(file) { return cloudPath + file.path; },
+					html: function(file) { return cloudPath + file.path; }
 				}
 			});
 			// var oneYear = 31557600000;
