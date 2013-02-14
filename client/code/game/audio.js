@@ -6,8 +6,8 @@ var _soundtracks = [],
 	_tweenTimeout = null,
 	_newPlace = 'welcome...',
 	_targetV = 0,
-	_musicPath = CivicSeed.CLOUD_PATH + 'audio/music/',
-	_audioFxPath = CivicSeed.CLOUD_PATH + 'audio/fx/';
+	_musicPath = CivicSeed.CLOUD_PATH + '/audio/music/',
+	_audioFxPath = CivicSeed.CLOUD_PATH + '/audio/fx/';
 
 $game.$audio = {
 	
