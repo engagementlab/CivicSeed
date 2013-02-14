@@ -13,7 +13,7 @@ var _CivicSeed = {
 		String(now.getMinutes()) +
 		String(now.getSeconds()) : version,
 	ENVIRONMENT: nodeEnv,
-	CLOUD_PATH: null
+	CLOUD_PATH: config.get('CLOUD_PATH')
 };
 
 var self = module.exports = {
