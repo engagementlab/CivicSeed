@@ -9,9 +9,10 @@ var rootDir = process.cwd(),
 
 var html = '<h2>Why hello there, #{firstName}!</h2>';
 html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
-html += '<p><a href="http://xkcd.com/936/">xkcd</a> generatoed yo password, yo: ';
-html += '&ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
-html += '<p>Yo us\'oname is yo email: <strong>#{email}</strong> ✔</p>';
+html += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
+html += '<strong>#{password}</strong></p>';
+html += '<p>Your username is your email: <strong>#{email}</strong></p>';
+html += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org">here.</a></h3>';
 
 // http://www.youtube.com/watch?v=nCCxpgVvQXo
 
@@ -21,6 +22,8 @@ exports.actions = function(req, res, ss) {
 	// req.use('debug');
 	req.use('account.authenticated');
 
+	var colorData = require(rootDir + '/data/colors');
+
 	var createUserAndSendInvite = function(email, i) {
 		userModel.findOne({ email: email }, function(err, user) {
 			var nameParts;
@@ -28,6 +31,10 @@ exports.actions = function(req, res, ss) {
 				console.error('  Could not find \'actor\' user: %s'.red.inverse, err);
 			} else {
 				if(!user) {
+						
+					var newColor = colorData.global[i],
+						tilesheetNum = i + 1;
+
 					nameParts = email.split('@');
 					user = new userModel();
 					user.firstName = nameParts[0];
@@ -44,12 +51,8 @@ exports.actions = function(req, res, ss) {
 							inTransit: false
 						},
 						colorInfo: {
-							rgb: {
-								r: 0,
-								g: 0,
-								b: 0
-							},
-							tilesheet: 0
+							rgb: newColor,
+							tilesheet: tilesheetNum
 						},
 						resources: [],
 						inventory: [],
@@ -74,7 +77,7 @@ exports.actions = function(req, res, ss) {
 							singleHtml = html.replace('#{firstName}', user.firstName);
 							singleHtml = singleHtml.replace('#{password}', user.password);
 							singleHtml = singleHtml.replace('#{email}', user.email);
-							emailUtil.sendEmail('Hello from Civic Seed (Working Test 5) ✔', singleHtml, user.email);
+							emailUtil.sendEmail('Greetings from Civic Seed', singleHtml, user.email);
 							if(i === emailListLength - 1) {
 								emailUtil.closeEmailConnection();
 								console.log('All emails have been sent...');

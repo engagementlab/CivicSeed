@@ -339,13 +339,14 @@ $game.$resources = {
 	
 		var response = null;
 		//get the answer from the field
-		if(_curResource.questionType === 'open') {
+		if(_curResource.questionType === 'open' || _curResource.questionType === 'closed') {
 			response = $('.resourceContent textarea').val();
 		}
 		else if(_curResource.questionType === 'multiple') {
 			response = $('input[name=resourceMultipleChoice]:checked').val();
 		}
 		
+		console.log(response);
 		//if its an open ended question or the right answer, then validation is true
 		if(_curResource.questionType === 'open' || response === _curResource.answer) {
 			//update player stuff
