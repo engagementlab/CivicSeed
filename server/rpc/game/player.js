@@ -32,8 +32,8 @@ exports.actions = function(req, res, ss) {
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
 
-			console.log('rpc.player.init: ', playerInfo);
-			console.log('rpc number of active players: ',  numActivePlayers);
+			// console.log('rpc.player.init: ', playerInfo);
+			// console.log('rpc number of active players: ',  numActivePlayers);
 			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
@@ -43,7 +43,7 @@ exports.actions = function(req, res, ss) {
 			
 			//update redis
 			req.session.game = info;
-			console.log('exit: ', info);
+			// console.log('exit: ', info);
 			req.session.save();
 			
 			//update mongo
@@ -64,7 +64,7 @@ exports.actions = function(req, res, ss) {
 
 		getOthers: function() {
 			res(players);
-			console.log('rpc.player.getOthers: ', players);
+			// console.log('rpc.player.getOthers: ', players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
@@ -73,7 +73,7 @@ exports.actions = function(req, res, ss) {
 			// 	res(query);
 			// });				
 			//tileModel.find().gte('x', x1).gte('y',y1).lt('x',x2).lt('y',y2);
-			console.log('getMapData:', x1,y1);
+			// console.log('getMapData:', x1,y1);
 			tileModel
 			.where('x').gte(x1).lt(x2)
 			.where('y').gte(y1).lt(y2)
@@ -93,7 +93,7 @@ exports.actions = function(req, res, ss) {
 		},
 		
 		movePlayer: function(moves, id) {
-			console.log('rpc.player.movePlayer: ', id);
+			// console.log('rpc.player.movePlayer: ', id);
 			//send out the moves to everybody
 			ss.publish.all('ss-playerMoved', moves, id);
 			res(true);
@@ -106,7 +106,7 @@ exports.actions = function(req, res, ss) {
 			req.session.game = info;
 		},
 		dropSeed: function(bombed, info) {
-			console.log('dropSeed: ', info);
+			// console.log('dropSeed: ', info);
 			//welcome to the color server
 			//here, we will run through the array of tiles passed to us, call them from the db,
 			//and update them if necessary (better way? is to do this on client, but client needs
@@ -139,7 +139,12 @@ exports.actions = function(req, res, ss) {
 									
 									//if the NEW one should be owner
 									if(bombed[index].color.owner !== 'nobody') {
-										oldTiles[i].set('color', bombed[index].color);
+										var rgbString0 = 'rgba(' + bombed[index].color.r + ',' + bombed[index].color.g + ',' + bombed[index].color.b + ',' + bombed[index].color.a  + ')';
+										bombed[index].curColor = rgbString0;
+										oldTiles[i].set({
+											color: bombed[index].color,
+											curColor: rgbString0
+										});
 									}
 
 									//new one should be modified
@@ -164,7 +169,12 @@ exports.actions = function(req, res, ss) {
 											bombed[index].color.g = newG,
 											bombed[index].color.b = newB;
 											
-											oldTiles[i].set('color', bombed[index].color);
+											var rgbString1 = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + bombed[index].color.a + ')';
+											oldTiles[i].set({
+												color: bombed[index].color,
+												curColor: rgbString1
+											});
+											bombed[index].curColor = rgbString1;
 										}
 										//don't incorp. new for sending out, use old one since at max
 										else {
@@ -178,7 +188,12 @@ exports.actions = function(req, res, ss) {
 							}
 							//if there is no color, then full on use the new values
 							else {
-								oldTiles[i].set('color', bombed[index].color);
+								var rgbString2 = 'rgba(' + bombed[index].color.r + ',' + bombed[index].color.g + ',' + bombed[index].color.b + ',' + bombed[index].color.a  + ')';
+								oldTiles[i].set({
+									color: bombed[index].color,
+									curColor: rgbString2
+								});
+								bombed[index].curColor = rgbString2;
 							}
 						
 							oldTiles[i].save(function(y) {

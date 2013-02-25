@@ -85,7 +85,7 @@ $game.$npc = {
 			info: {
 				x: npc.id % $game.TOTAL_WIDTH,
 				y: Math.floor(npc.id / $game.TOTAL_WIDTH),
-				spriteY: npc.spriteY
+				spriteY: npc.sprite * 64
 			},
 
 			renderInfo: {

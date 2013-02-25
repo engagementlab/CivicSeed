@@ -17,7 +17,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			b: Number,
 			a: Number,
 			owner: String
-		}
+		},
+		curColor: String
 	});
 
 

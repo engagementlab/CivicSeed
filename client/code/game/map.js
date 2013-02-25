@@ -64,7 +64,7 @@ $game.$map = {
 				//if there IS a color
 				curTile = $game.currentTiles[loc.x][loc.y];
 				curTile.color = bombed[b].color;
-				
+				curTile.curColor = bombed[b].curColor;
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
 				

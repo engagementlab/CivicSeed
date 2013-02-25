@@ -6,7 +6,7 @@ $game.$others = {
 
 	init: function() {
 		ss.rpc('game.player.getOthers', function(response) {
-			console.log('rpc others: ', response);
+			// console.log('rpc others: ', response);
 			_onScreenPlayers = {};
 
 			$.each(response, function(key, player) {
@@ -22,7 +22,7 @@ $game.$others = {
 		//don't add it if its yourself
 		
 		if(player.id != $game.$player.id) {
-			console.log('new player added!');
+			// console.log('new player added!');
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;

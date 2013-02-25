@@ -152,9 +152,7 @@ $game.$renderer = {
 				}
 			}
 		});
-
 	},
-
 	makeQueue: function(callback) {
 		var playerInfo = $game.$player.getRenderInfo(),
 			order = [playerInfo],
@@ -163,7 +161,6 @@ $game.$renderer = {
 			gnomeInfo = $game.$gnome.getRenderInfo(),
 			thingInfo = $game.$thing.getRenderInfo();
 			
-
 		var finalOrder = order.concat(order2, order3);
 		
 		if(gnomeInfo) {
@@ -192,7 +189,7 @@ $game.$renderer = {
 			foreIndex = curTile.foreground-1,
 			foreIndex2 = curTile.foreground2-1,
 			tileStateVal = curTile.tileState,
-			colorVal = curTile.color,
+			colorVal = curTile.curColor,
 
 			tileData = {
 				b1: backIndex1,
@@ -205,6 +202,7 @@ $game.$renderer = {
 
 		//color tile first if it needs to be done
 		if(colorVal) {
+			//rgb string
 			tileData.color = colorVal;
 		}
 
@@ -239,9 +237,9 @@ $game.$renderer = {
 
 		//draw color tile first
 		if(tileData.color) {
-
-			var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
-			_backgroundContext.fillStyle = rgba;
+			console.log(tileData.color);
+			//var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
+			_backgroundContext.fillStyle = tileData.color;
 			_backgroundContext.fillRect(
 				tileData.destX * $game.TILE_SIZE,
 				tileData.destY * $game.TILE_SIZE,

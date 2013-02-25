@@ -41,10 +41,10 @@ $(function() {
 	});
 
 	ss.event.on('ss-playerMoved', function(moves, id) {
-		console.log('ss-playerMoved: ', id, moves);
+		// console.log('ss-playerMoved: ', id, moves);
 		//check if that quad is relevant to the current player
 		//this will also have the player info so as to id the appropriate one
-		console.log('check ids for player move:', id, $game.$player.id);
+		// console.log('check ids for player move:', id, $game.$player.id);
 		if(id != $game.$player.id) {
 			$game.$others.sendMoveInfo(moves, id);
 		}
@@ -59,7 +59,7 @@ $(function() {
 
 	//new message from chat
 	ss.event.on('ss-newMessage', function(message, id) {
-		console.log('ss-newMessage: ',message, id );
+		// console.log('ss-newMessage: ',message, id );
 		if(id === $game.$player.id) {
 			$game.$player.message(message);
 		}
@@ -213,7 +213,7 @@ $(function() {
 				log: sentence
 			};
 			ss.rpc('game.chat.sendMessage', data, function(r) {
-				console.log('chat worked: ', r);
+				// console.log('chat worked: ', r);
 			});
 			
 			_chatText.val('');
