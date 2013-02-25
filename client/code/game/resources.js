@@ -188,7 +188,7 @@ $game.$resources = {
 					//var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
 					//_resourceContentSel.html(newSvg);
 					var imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/r' + _curResource.id + '.png';
-					newImg = '<img src="' + + '" class="centerImage">';
+					newImg = '<img src="' + imgPath + '" class="centerImage">';
 					_resourceContentSel.html(newImg).css('overflow', 'hidden');
 				}
 				//the next slide will show them recent answers
