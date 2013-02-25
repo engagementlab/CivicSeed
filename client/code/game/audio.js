@@ -15,7 +15,8 @@ $game.$audio = {
 	isMuted: true,
 
 	init: function() {
-		$game.$audio.loadTrack(0);
+		//$game.$audio.loadTrack(0);
+		$game.$audio.ready = true;
 	},
 
 	loadTrack: function(num) {

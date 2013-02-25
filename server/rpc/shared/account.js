@@ -30,9 +30,12 @@ exports.actions = function(req, res, ss) {
 					if(user.password === password) {
 						req.session.setUserId(user.id);
 						req.session.firstName = user.firstName;
+						req.session.lastName = user.lastName;
 						req.session.email = user.email;
 						req.session.role = user.role;
 						req.session.game = user.game;
+						req.session.gameStarted = user.gameStarted;
+						req.session.profileSetup = user.profileSetup;
 						// req.session.gameChannel = channel....
 						req.session.save();
 						// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
@@ -63,9 +66,12 @@ exports.actions = function(req, res, ss) {
 			if(req.session.userId) {
 				res({
 					id: req.session.userId,
-					name: req.session.firstName,
+					firstName: req.session.firstName,
+					lastName: req.session.lastName,
 					email: req.session.email,
-					role: req.session.role
+					role: req.session.role,
+					gameStarted: req.session.gameStarted,
+					profileSetup: req.session.profileSetup
 				});
 			} else {
 				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);

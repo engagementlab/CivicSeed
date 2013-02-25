@@ -10,7 +10,7 @@ exports.init = function(callback) {
 			$body = $(document.body);
 			if(!sessionStorage.getItem('userId')) {
 				sessionStorage.setItem('userId', userSessionObject.id);
-				sessionStorage.setItem('userName', userSessionObject.name);
+				sessionStorage.setItem('userName', userSessionObject.firstName);
 				sessionStorage.setItem('userEmail', userSessionObject.email);
 				sessionStorage.setItem('userRole', userSessionObject.role);
 			}

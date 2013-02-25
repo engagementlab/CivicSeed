@@ -28,10 +28,24 @@ var $account = module.exports = {
 	authenticate: function(email, password) {
 		// ss.rpc('shared.account.authenticate', 's', '', function(authenticated) { console.log(authenticated); });
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
+			console.log(authenticated);
 			if(authenticated) {
 				// console.log(authenticated);
-				location.href = '/game';
+				//TO DO: this should be go to user's profile
+
+				$account.getUserSession(function(userInfo) {
+					if(userInfo.profileSetup) {
+						//send them to their profile page
+						location.href = '/profiles/' + userInfo.firstName + '.' + userInfo.lastName;
+					}
+					else if(userInfo.gameStarted) {
+						//send them to the game
+						location.href = '/game';
+					}
+				});
+				
 			} else {
+				alert('Incorrect email/password pair.');
 				// handle the fact that it isn't authenticating...
 				// console.log('it\'s not authentic!');
 			}
@@ -52,11 +66,11 @@ var $account = module.exports = {
 		});
 	},
 
-	getUserSession: function() {
+	getUserSession: function(callback) {
 		// ss.rpc('shared.account.getUserSession', function(session) { console.log(session); });
 		ss.rpc('shared.account.getUserSession', function(session) {
 			if(session) {
-				// console.log(session);
+				callback(session);
 			}
 		});
 	}

@@ -327,7 +327,7 @@ $(function() {
 		}
 	});
 	$('.muteButton').bind('click', function() {
-		var musicOff = $game.$audio.toggleMute();
+		//var musicOff = $game.$audio.toggleMute();
 
 		if(musicOff) {
 			$('.muteButton i').removeClass('icon-volume-up').addClass('icon-volume-off');

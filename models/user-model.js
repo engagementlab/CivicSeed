@@ -9,6 +9,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		password: String,
 		email: String,
 		role: String,
+		profileSetup: Boolean,
+		gameStarted: Boolean,
 		game: {
 			currentLevel: Number,
 			rank: String,

@@ -144,10 +144,10 @@ exports.$game = {
 				});
 				$game.running = true;
 				$game.$renderer.renderAllTiles();
-				$game.$audio.playTheme();
+				// $game.$audio.playTheme();
 				
 				var playerPos = $game.$player.getPosition();
-				$game.$audio.update(playerPos.x, playerPos.y);
+				// $game.$audio.update(playerPos.x, playerPos.y);
 
 				$game.tick();
 			}
@@ -163,13 +163,13 @@ exports.$game = {
 	pause: function() {
 		$('.pauseMenu').slideDown();
 		$game.running = false;
-		$game.$audio.pauseTheme();
+		// $game.$audio.pauseTheme();
 	},
 
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
-			$game.$audio.playTheme();
+			// $game.$audio.playTheme();
 			$game.tick();
 		});
 		

@@ -400,7 +400,7 @@ $game.$player = {
 				$game.$player.sendMoveInfo(result);
 				
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-					$game.$audio.update(masterEndX, masterEndY);
+					// $game.$audio.update(masterEndX, masterEndY);
 				});
 			}
 		});
@@ -650,7 +650,7 @@ $game.$player = {
 				_waitingSel.fadeOut();
 				if(result > 0) {
 					//play sound clip
-					$game.$audio.playSound(0);
+					// $game.$audio.playSound(0);
 					$game.$player.game.tilesColored += result;
 								//update seed count in HUD
 					if(mode === 1) {
@@ -912,14 +912,22 @@ $game.$player = {
 		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
 
-		_renderInfo.level = $game.$player.game.currentLevel;
-		$game.$player.createInventoryOutlines();
-		//send status to message board
-		var newLevelMsg = $game.$player.game.currentLevel + 1;
-		// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
-		ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.game.currentLevel);
-		$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum, true);
-		//load in other tree file
+		
+		if($game.$player.game.currentLevel === 4) {
+			//they have beat the game!
+			//say there profile is available and send em there.
+			$game.$player.gameOver();
+		}
+		else {
+			_renderInfo.level = $game.$player.game.currentLevel;
+			$game.$player.createInventoryOutlines();
+			//send status to message board
+			var newLevelMsg = $game.$player.game.currentLevel + 1;
+			// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
+			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.game.currentLevel);
+			$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum, true);
+			//load in other tree file
+		}
 	},
 
 	getPlayingTime: function() {
@@ -964,6 +972,22 @@ $game.$player = {
 			$game.$player.seedPlanting = true;
 		});
 		$game.changeStatus();
+	},
+
+	gameOver: function() {
+		var endTime = new Date().getTime() / 1000,
+			totalTime = endTime - _startTime;
+		$game.$player.game.playingTime += totalTime;
+		$game.$player.game.position.x = _info.x,
+		$game.$player.game.position.y = _info.y;
+		$game.$player.game.colorMap = $game.$map.saveImage();
+		ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
+			if(res) {
+				var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+				$('.gameboard').append(hooray);
+			}
+		});
+
 	}
 };
 

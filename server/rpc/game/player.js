@@ -368,6 +368,29 @@ exports.actions = function(req, res, ss) {
 
 		statusUpdate: function(msg) {
 			ss.publish.all('ss-statusUpdate', msg);
+		},
+
+		gameOver: function(info, id) {
+			//update redis
+			req.session.game = info;
+			req.session.profileSetup = true;
+			// console.log('exit: ', info);
+			req.session.save();
+			
+			//update mongo
+			userModel.findById(id, function (err, user) {
+				if(!err && user) {
+					user.game = info;
+					user.profileSetup = true;
+					user.save(function (y) {
+						var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName;
+						res(url);
+					});
+				} else {
+					// MIGHT NEED TO DO THIS HERE STILL???
+					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+				}
+			});
 		}
 	};
 }

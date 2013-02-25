@@ -42,6 +42,8 @@ exports.actions = function(req, res, ss) {
 					user.password = xkcd.generatePassword();
 					user.email = email;
 					user.role = 'actor';
+					user.profileSetup = false;
+					user.gameStarted = true;
 					user.game = {
 						currentLevel: 0,
 						rank: 'nothing',

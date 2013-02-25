@@ -319,7 +319,7 @@ $game.$gnome = {
 				.fadeIn(function() {
 					$game.$gnome.isShowing = true;
 					if(_currentSlide !== 2) {
-						$('.tangramArea').show();	
+						$('.tangramArea').show();
 					}
 			});
 		});
@@ -400,8 +400,6 @@ $game.$gnome = {
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
-			
-
 			//combo riddle and puzzle interface
 			if(_currentSlide === 0) {
 				$('.inventory button').addClass('hideButton');

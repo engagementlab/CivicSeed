@@ -10,6 +10,8 @@ module.exports.global = [{
 	password: '',
 	email: 'b',
 	role: 'superadmin',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -47,6 +49,8 @@ module.exports.global = [{
 	password: '',
 	email: 'r',
 	role: 'superadmin',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -84,6 +88,8 @@ module.exports.global = [{
 	password: '',
 	email: 's',
 	role: 'admin',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -121,6 +127,8 @@ module.exports.global = [{
 	password: '',
 	email: 'e',
 	role: 'admin',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -158,6 +166,8 @@ module.exports.global = [{
 	password: '',
 	email: 'a',
 	role: 'admin',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -195,6 +205,8 @@ module.exports.global = [{
 	password: '',
 	email: 'j',
 	role: 'actor',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
@@ -232,6 +244,8 @@ module.exports.global = [{
 	password: '',
 	email: 'f',
 	role: 'actor',
+	gameStarted: true,
+	profileSetup: false,
 	game: {
 		currentLevel: 0,
 		rank: 'novice gardener',
