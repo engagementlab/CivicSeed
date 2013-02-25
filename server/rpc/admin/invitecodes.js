@@ -12,7 +12,7 @@ html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
 html += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
 html += '<strong>#{password}</strong></p>';
 html += '<p>Your username is your email: <strong>#{email}</strong></p>';
-html += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org">here.</a></h3>';
+html += '<h3 style="color:green;">You can get started by going <a href="http://civicseed-testing.jit.su">here.</a></h3>';
 
 // http://www.youtube.com/watch?v=nCCxpgVvQXo
 
