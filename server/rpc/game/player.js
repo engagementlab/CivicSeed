@@ -179,11 +179,13 @@ exports.actions = function(req, res, ss) {
 										//don't incorp. new for sending out, use old one since at max
 										else {
 											bombed[index].color = oldTiles[i].color;
+											bombed[index].curColor = oldTiles[i].color;
 										}
 									}
 								}
 								else {
 									bombed[index].color = oldTiles[i].color;
+									bombed[index].curColor = oldTiles[i].curColor;
 								}
 							}
 							//if there is no color, then full on use the new values

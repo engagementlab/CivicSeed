@@ -10,8 +10,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
-		fill: 'rgb(44,52,91)',
+		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
+		fill: 'rgb(124,202,176)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -28,8 +28,8 @@ module.exports.global = [
 	answer: 'motivation',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
-		fill: 'rgb(230,116,46)',
+		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
+		fill: 'rgb(220,225,47)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -45,8 +45,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Ahh very interesting indeed.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
-		fill: 'rgb(220,225,47)',
+		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
+		fill: 'rgb(230,116,46)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -62,8 +62,8 @@ module.exports.global = [
 	answer: 'education',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
-		fill: 'rgb(124,202,176)',
+		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
+		fill: 'rgb(44,52,91)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -232,8 +232,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
-		fill: 'rgb(44,52,91)',
+		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
+		fill: 'rgb(124,202,176)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -250,8 +250,8 @@ module.exports.global = [
 	answer: 'motivation',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
-		fill: 'rgb(230,116,46)',
+		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
+		fill: 'rgb(220,225,47)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -267,8 +267,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Ahh very interesting indeed.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
-		fill: 'rgb(220,225,47)',
+		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
+		fill: 'rgb(230,116,46)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -284,8 +284,8 @@ module.exports.global = [
 	answer: 'education',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
-		fill: 'rgb(124,202,176)',
+		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
+		fill: 'rgb(44,52,91)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -437,8 +437,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
-		fill: 'rgb(44,52,91)',
+		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
+		fill: 'rgb(124,202,176)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -455,8 +455,8 @@ module.exports.global = [
 	answer: 'motivation',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
-		fill: 'rgb(230,116,46)',
+		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
+		fill: 'rgb(220,225,47)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -472,8 +472,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Ahh very interesting indeed.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
-		fill: 'rgb(220,225,47)',
+		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
+		fill: 'rgb(230,116,46)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -489,8 +489,8 @@ module.exports.global = [
 	answer: 'education',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
-		fill: 'rgb(124,202,176)',
+		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
+		fill: 'rgb(44,52,91)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -642,8 +642,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
-		fill: 'rgb(44,52,91)',
+		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
+		fill: 'rgb(124,202,176)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -660,13 +660,13 @@ module.exports.global = [
 	answer: 'motivation',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
-		fill: 'rgb(230,116,46)',
-		stroke: 'rgb(200,0,0)'
+			path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
+			fill: 'rgb(220,225,47)',
+			stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
 },
-  {
+{
 	id: '12707',
 	kind: 'article',
 	url: '/articles/7283.html',
@@ -677,8 +677,8 @@ module.exports.global = [
 	answer: 'player',
 	responses: ['Ahh very interesting indeed.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
-		fill: 'rgb(220,225,47)',
+		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
+		fill: 'rgb(230,116,46)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []
@@ -694,8 +694,8 @@ module.exports.global = [
 	answer: 'education',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
-		fill: 'rgb(124,202,176)',
+		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
+		fill: 'rgb(44,52,91)',
 		stroke: 'rgb(200,0,0)'
 	},
 	playerAnswers: []

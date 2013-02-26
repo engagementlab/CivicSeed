@@ -252,7 +252,7 @@ $(function() {
 			if($game.$player.inventoryShowing) {
 				_inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
-					_displayBoxText.text('you are in the forest');
+					$game.changeStatus();
 				});	
 			}
 			else {
