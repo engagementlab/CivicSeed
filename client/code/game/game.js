@@ -535,7 +535,7 @@ exports.$game = {
 				return local;
 			}
 			else {
-				return false;	
+				return false;
 			}
 		}
 	},
@@ -559,7 +559,6 @@ exports.$game = {
 		$('.colorMap img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
-		
 		var playingTime = $game.$player.getPlayingTime(),
 			hours = Math.floor(playingTime / 3600),
 			hoursRemainder = playingTime % 3600,

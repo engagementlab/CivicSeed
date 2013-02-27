@@ -133,6 +133,12 @@ exports.actions = function(req, res, ss) {
 						});
 					});
 				}
+				else if(dataType === 'chat') {
+					console.log('\n\n   * * * * * * * * * * * *   Deleting Chat Logs   * * * * * * * * * * * *   \n\n'.yellow);
+					dbActions.dropCollection('chat', function() {
+						res('Chat logs deleted');
+					});
+				}
 			}
 		}
 

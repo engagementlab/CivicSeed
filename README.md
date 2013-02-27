@@ -69,9 +69,6 @@ Running "node --version" should return:
 
     v0.8.2
 
-You must install Cairo for server side canvas. Simple instructions available here:
-https://github.com/LearnBoost/node-canvas/wiki/_pages
-
 ## Deployment
 
 Currently, we're deploying to NodeJitsu, based on support for MongoDB, Redis, and Sockets. (Note the ```.npmignore``` file is different than the ```.gitignore``` file, as it needs to include ```parameters.js``` and ```package.json```.)
@@ -85,14 +82,6 @@ To deploy to NodeJitsu, from the root of the app just type:
 ### Map Information
 
 ### Front End Dependencies
-
-### Compiling CSS
-
-1. Download http://incident57.com/less/
-2. Drag folder client/static/css to app
-3. Uncheck everything EXCEPT style.less
-4. Make changes to any less file in the /bootstrap folder
-5. Save the style.less folder and it will auto re-compile style.css
 
 ### Calculating Map Size
 
