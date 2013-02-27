@@ -43,7 +43,7 @@ exports.actions = function(req, res, ss) {
 					user.email = email;
 					user.role = 'actor';
 					user.profileSetup = false;
-					user.gameStarted = true;
+					user.gameStarted = false;
 					user.game = {
 						currentLevel: 0,
 						rank: 'nothing',

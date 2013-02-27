@@ -1,0 +1,5 @@
+.profiles
+	h1 Profiles
+	each user in users
+		p	
+			a(href='profiles/' + user.firstName + '.' + user.lastName)= user.firstName

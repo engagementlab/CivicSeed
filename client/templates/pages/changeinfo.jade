@@ -1,0 +1,13 @@
+.row
+	.span6
+		h2 Before you get started...
+		h5 Let us know a little bit about yourself!
+		.span6.offset3.moreTopMargin
+			form.well#changeInfoForm(method='post', action='/change-info')
+				p What is your name?
+				.control-group
+					.controls
+						input#firstname.input-large(type='text', name='firstname', placeholder='first')
+						input#lastname.input-large(type='text', name='lastname', placeholder='last')
+				button.btn.btn-primary.btn-large(type='submit') Submit
+				p#message.moreTopMargin

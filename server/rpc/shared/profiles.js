@@ -14,7 +14,11 @@ exports.actions = function(req, res, ss) {
 			//parse name, search in db
 			var name = fullName.split('.');
 			UserModel.findOne({ firstName: name[0], lastName: name[1]} , function(err, user) {
-				if(user) {
+				if(err) {
+					console.log(err);
+					res({firstName: false});
+				}
+				else if(user) {
 					var profileInfo = {
 						firstName: user.firstName,
 						lastName: user.lastName,
@@ -26,6 +30,26 @@ exports.actions = function(req, res, ss) {
 				}
 				else {
 					res({firstName: false});
+				}
+			});
+		},
+
+		getAllProfiles: function() {
+			UserModel.find({role: 'actor'}, function(err, users) {
+				if(err) {
+					console.log(err);
+					res(false);
+				}
+				else if(users){
+					var all = [];
+					users.forEach(function(u,i) {
+						var profile = {
+							firstName: u.firstName,
+							lastName: u.lastName
+						};
+						all.push(profile);
+					});
+					res(all);
 				}
 			});
 		}

@@ -95,6 +95,27 @@ exports.actions = function(req, res, ss) {
 					res(false);
 				}
 			});
+		},
+		changeInfo: function(first, last) {
+			UserModel.findOne({ email: req.session.email } , function(err, user) {
+				if(!err && user) {
+					user.set({
+						firstName: first,
+						lastName: last,
+						gameStarted: true
+					});
+					user.save(function(err,suc) {
+						if(!err && suc) {
+							res(true);
+						}
+						else {
+							res(false);
+						}
+					});
+				} else {
+					res(false);
+				}
+			});
 		}
 
 	};

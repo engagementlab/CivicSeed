@@ -23,18 +23,34 @@ var $account = module.exports = {
 			});
 			return false;
 		});
+		$body.on('submit', '#changeInfoForm', function() {
+			var first = document.getElementById('firstname').value,
+				last = document.getElementById('lastname').value;
+
+			ss.rpc('shared.account.changeInfo', first, last, function(response) {
+				if(response) {
+					location.href = '/game';
+				}
+				else {
+					$('#message').addClass('error').text('There was an error. Please panic.');
+				}
+			});
+			return false;
+		});
 	},
 
 	authenticate: function(email, password) {
 		// ss.rpc('shared.account.authenticate', 's', '', function(authenticated) { console.log(authenticated); });
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
-			console.log(authenticated);
 			if(authenticated) {
 				// console.log(authenticated);
 				//TO DO: this should be go to user's profile
 
 				$account.getUserSession(function(userInfo) {
-					if(userInfo.profileSetup) {
+					if(!userInfo.gameStarted) {
+						location.href = '/change-info';
+					}
+					else if(userInfo.profileSetup) {
 						//send them to their profile page
 						location.href = '/profiles/' + userInfo.firstName + '.' + userInfo.lastName;
 					}
@@ -43,7 +59,6 @@ var $account = module.exports = {
 						location.href = '/game';
 					}
 				});
-				
 			} else {
 				alert('Incorrect email/password pair.');
 				// handle the fact that it isn't authenticating...
