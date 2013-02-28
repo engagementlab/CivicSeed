@@ -13,7 +13,7 @@ html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	// req.use('debug');
+	req.use('debug');
 	// req.use('account.authenticated');
 
 	return {

@@ -2,6 +2,10 @@ var userModel,service,canvas,ctx,collectiveMap;
 //var Canvas = require('canvas');
 
 exports.actions = function(req, res, ss) {
+
+	req.use('session');
+	req.use('debug');
+
 	// canvas = new Canvas(142,132);
 	// Image = Canvas.Image;
 	// ctx = canvas.getContext('2d');
