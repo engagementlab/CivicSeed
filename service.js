@@ -42,7 +42,7 @@ var self = module.exports = {
 
 	getAndSetNetworkIp: function(callback) {
 		serverHelpers.getNetworkIPs(function(err, ips) {
-			if(err) {
+			if(err || !ips.length) {
 				config.set('IP', 'localhost');
 				console.log('   * * * * * * * * * * * *   Civic Seed:'.yellow + ' could not find network ip. Defaulting to \'localhost.\'\n\n'.red);
 			} else {
