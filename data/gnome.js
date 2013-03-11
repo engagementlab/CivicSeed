@@ -62,7 +62,7 @@ module.exports.global = {
 			x: 500,
 			y: 70
 		}, {
-			id: 4992,
+			id: 4693,
 			x: 500,
 			y: 70
 		}, {
