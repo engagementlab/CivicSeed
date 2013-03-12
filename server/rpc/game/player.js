@@ -5,7 +5,10 @@ var intervalId = {},
 	db,
 	userModel,
 	tileModel,
-	gameModel;
+	gameModel,
+	rootDir = process.cwd(),
+	emailUtil = require(rootDir + '/server/utils/email'),
+	helperFunctions = null;
 
 exports.actions = function(req, res, ss) {
 
@@ -14,7 +17,6 @@ exports.actions = function(req, res, ss) {
 	// req.use('account.authenticated');
 
 	return {
-
 		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 		init: function() {
 			// load models and database service only once
@@ -22,7 +24,7 @@ exports.actions = function(req, res, ss) {
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
 			gameModel = service.useModel('game', 'ss');
-			
+
 			//should we pull the game info from the db instead of it being passed in a session?
 			var playerInfo = {
 				id: req.session.userId,
@@ -31,69 +33,55 @@ exports.actions = function(req, res, ss) {
 			};
 			players[playerInfo.id] = playerInfo;
 			numActivePlayers += 1;
-
-			// console.log('rpc.player.init: ', playerInfo);
-			// console.log('rpc number of active players: ',  numActivePlayers);
 			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
 		},
 
 		exitPlayer: function(info, id) {
-			
 			//update redis
 			req.session.game = info;
-			// console.log('exit: ', info);
 			req.session.save();
-			
+
 			//update mongo
-			userModel.findById(id, function (err, user) {
-				if(!err && user) {
-					user.game = info;
-					user.save(function (y) {
-						numActivePlayers -= 1;
-						ss.publish.all('ss-removePlayer', numActivePlayers, id);
-						delete players[id];
-					});
-				} else {
-					// MIGHT NEED TO DO THIS HERE STILL???
-					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
-				}
-			});
+			userModel
+				.findById(id, function (err, user) {
+					if(err) {
+
+					} else if(user) {
+						user.game = info;
+						user.save(function (y) {
+							numActivePlayers -= 1;
+							ss.publish.all('ss-removePlayer', numActivePlayers, id);
+							delete players[id];
+						});
+					} else {
+						// MIGHT NEED TO DO THIS HERE STILL???
+						// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+					}
+				});
 		},
 
 		getOthers: function() {
 			res(players);
-			// console.log('rpc.player.getOthers: ', players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
 		getMapData: function(x1,y1,x2,y2) {
-			// tileModel.findOne(function(err,query) {
-			// 	res(query);
-			// });				
-			//tileModel.find().gte('x', x1).gte('y',y1).lt('x',x2).lt('y',y2);
-			// console.log('getMapData:', x1,y1);
 			tileModel
-			.where('x').gte(x1).lt(x2)
-			.where('y').gte(y1).lt(y2)
-			.sort('mapIndex')
-			.find(function (err, allTiles) {
-			 		if(err) {
-			 			res(false);
-			 		}
-				if(allTiles) {
-					res(allTiles);
-				}
-			});
-			// quadrants.find({ quadrantNumber: quadNumber }, function(err, quad) {
-			// 	res(err, quad, index);
-			// });
-			//return set of tiles based no bounds
+				.where('x').gte(x1).lt(x2)
+				.where('y').gte(y1).lt(y2)
+				.sort('mapIndex')
+				.find(function (err, allTiles) {
+					if(err) {
+						res(false);
+					} else if(allTiles) {
+						res(allTiles);
+					}
+				});
 		},
-		
+
 		movePlayer: function(moves, id) {
-			// console.log('rpc.player.movePlayer: ', id);
 			//send out the moves to everybody
 			ss.publish.all('ss-playerMoved', moves, id);
 			res(true);
@@ -102,15 +90,11 @@ exports.actions = function(req, res, ss) {
 		savePosition: function(info) {
 			players[info.id].game.position.x = info.x;
 			players[info.id].game.position.y = info.y;
-			//console.log(info);
 			req.session.game = info;
 		},
+
 		dropSeed: function(bombed, info) {
-			// console.log('dropSeed: ', info);
-			//welcome to the color server
-			//here, we will run through the array of tiles passed to us, call them from the db,
-			//and update them if necessary (better way? is to do this on client, but client needs
-			//to have the other viewports loaded as well)
+			//welcome to the color server!
 			var num = bombed.length,
 				curOld = 0,
 				index = 0,
@@ -119,24 +103,23 @@ exports.actions = function(req, res, ss) {
 				minY = info.y,
 				maxY = info.y + info.sz;
 
+			//get a chunk of the bounding tiles from the DB (instead of querying each individually)
 			tileModel
-			.where('x').gte(minX).lt(maxX)
-			.where('y').gte(minY).lt(maxY)
-			.sort('mapIndex')
-			.find(function (err, oldTiles) {
+				.where('x').gte(minX).lt(maxX)
+				.where('y').gte(minY).lt(maxY)
+				.select('x y color curColor')
+				.sort('mapIndex')
+				.find(function (err, oldTiles) {
 				if(err) {
 					res(false);
-				}
-				if(oldTiles) {
+				} else if(oldTiles) {
 					var saveColors = function(i) {
 						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
 
 							//color stuff here:
 							if(oldTiles[i].color.owner !== undefined) {
-
 								//if the old one is a nobody -
 								if(oldTiles[i].color.owner === 'nobody') {
-									
 									//if the NEW one should be owner
 									if(bombed[index].color.owner !== 'nobody') {
 										var rgbString0 = 'rgba(' + bombed[index].color.r + ',' + bombed[index].color.g + ',' + bombed[index].color.b + ',' + bombed[index].color.a  + ')';
@@ -146,29 +129,23 @@ exports.actions = function(req, res, ss) {
 											curColor: rgbString0
 										});
 									}
-
 									//new one should be modified
 									else {
 										//if there is still room
 										if(oldTiles[i].color.a < 0.5 ) {
-
 											var prevR = oldTiles[i].color.r,
 												prevG = oldTiles[i].color.g,
 												prevB = oldTiles[i].color.b,
 												prevA = oldTiles[i].color.a;
-
 											var weightA = prevA / 0.1,
 												weightB = 1;
-
 											var newR = Math.floor((weightA * prevR + weightB * bombed[index].color.r) / (weightA + weightB)),
 												newG = Math.floor((weightA * prevG + weightB * bombed[index].color.g) / (weightA + weightB)),
 												newB = Math.floor((weightA * prevB + weightB * bombed[index].color.b) / (weightA + weightB));
-
 											bombed[index].color.a = Math.round((oldTiles[i].color.a + 0.1) * 100) / 100,
 											bombed[index].color.r = newR,
 											bombed[index].color.g = newG,
 											bombed[index].color.b = newB;
-											
 											var rgbString1 = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + bombed[index].color.a + ')';
 											oldTiles[i].set({
 												color: bombed[index].color,
@@ -197,7 +174,6 @@ exports.actions = function(req, res, ss) {
 								});
 								bombed[index].curColor = rgbString2;
 							}
-						
 							oldTiles[i].save(function(y) {
 								index += 1;
 								curOld += 1;
@@ -205,20 +181,17 @@ exports.actions = function(req, res, ss) {
 									saveColors(curOld);
 								}
 								else {
-									var newTileCount = info.tilesColored + bombed.length;
-									
-									var sendData = {
-										bombed: bombed,
-										id: info.id,
-										tilesColored: newTileCount
-									};
+									var newTileCount = info.tilesColored + bombed.length,
+										sendData = {
+											bombed: bombed,
+											id: info.id,
+											tilesColored: newTileCount
+										};
 									//we are done,send out the color information to each client to render
 									ss.publish.all('ss-seedDropped', sendData);
-									
 									//access our global game model for status updates
 									gameModel.findOne({}, function (err, result) {
 										if(err) {
-									
 										}
 										else{
 											//add tile count to our progress
@@ -228,7 +201,6 @@ exports.actions = function(req, res, ss) {
 												newColored = oldColored + bombed.length,
 												oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
 												newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
-
 											//update leadeboard
 											var oldBoard = result.leaderboard,
 												gState = result.state,
@@ -240,7 +212,6 @@ exports.actions = function(req, res, ss) {
 													name: info.name,
 													count: info.tilesColored + num
 												};
-
 											if(i === 0) {
 												oldBoard.push(newGuy);
 												updateBoard = true;
@@ -268,26 +239,44 @@ exports.actions = function(req, res, ss) {
 												oldBoard.sort(function(a, b) {
 													return b.count-a.count;
 												});
-												
 												//get rid of the last one if too many
 												if(oldBoard.length > 5) {
 													oldBoard.pop();
 												}
 											}
-											
 											if(newPercent > 99) {
+												//the world is fully colored, 
+												//advance the game state to 2 = boss level
+												//send out emails
+												//get all emails from actors
+												userModel
+													.where('role').equals('actor')
+													.select('email')
+													.find(function (err, users) {
+														if(err) {
+															res(false);
+														}
+														else if(users) {
+															var emailListLength = users.length,
+																html = '<h2 style="color:green;">The Color has Returned!</h2>';
+															html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
+															emailUtil.openEmailConnection();
+															for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+																if(emailIterator === 2) {
+																	emailUtil.sendEmail('Breaking news!', html, users[emailIterator].email);
+																}
+															}
+															emailUtil.closeEmailConnection();
+														}
+													});
 												result.set('state', 2);
 											}
-
 											//save all changes
 											result.set('seedsDropped', newCount);
 											result.set('leaderboard', oldBoard);
 											result.set('tilesColored', newColored);
 											result.save();
-											
-											
 											//check if the leaderboard changed
-
 											//if new guy > last
 											//if new guy already on
 											//if new leader
@@ -396,3 +385,12 @@ exports.actions = function(req, res, ss) {
 		}
 	};
 }
+
+helperFunctions = {
+
+	testing: function() {
+		console.log('****************mama goooooos*************');
+	}
+
+}
+

@@ -237,7 +237,6 @@ $game.$renderer = {
 
 		//draw color tile first
 		if(tileData.color) {
-			console.log(tileData.color);
 			//var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
 			_backgroundContext.fillStyle = tileData.color;
 			_backgroundContext.fillRect(
