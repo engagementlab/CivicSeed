@@ -8,7 +8,7 @@ var intervalId = {},
 	gameModel,
 	rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
-	helperFunctions = null;
+	colorHelpers = null;
 
 exports.actions = function(req, res, ss) {
 
@@ -113,195 +113,36 @@ exports.actions = function(req, res, ss) {
 				if(err) {
 					res(false);
 				} else if(oldTiles) {
-					var saveColors = function(i) {
-						if(oldTiles[i].x === bombed[index].x && oldTiles[i].y === bombed[index].y) {
+					colorHelpers.modifyTiles(oldTiles, bombed, function(newTiles, newBombs) {
+						//saveEach tile
+						colorHelpers.saveTiles(newTiles, function() {
+							//send out new bombs AND player info to update score
+							var newTileCount = info.tilesColored + newBombs.length,
+							sendData = {
+								bombed: newBombs,
+								id: info.id,
+								tilesColored: newTileCount
+							};
+							//we are done,send out the color information to each client to render
+							ss.publish.all('ss-seedDropped', sendData);
 
-							//color stuff here:
-							if(oldTiles[i].color.owner !== undefined) {
-								//if the old one is a nobody -
-								if(oldTiles[i].color.owner === 'nobody') {
-									//if the NEW one should be owner
-									if(bombed[index].color.owner !== 'nobody') {
-										var rgbString0 = 'rgba(' + bombed[index].color.r + ',' + bombed[index].color.g + ',' + bombed[index].color.b + ',' + bombed[index].color.a  + ')';
-										bombed[index].curColor = rgbString0;
-										oldTiles[i].set({
-											color: bombed[index].color,
-											curColor: rgbString0
-										});
-									}
-									//new one should be modified
-									else {
-										//if there is still room
-										if(oldTiles[i].color.a < 0.5 ) {
-											var prevR = oldTiles[i].color.r,
-												prevG = oldTiles[i].color.g,
-												prevB = oldTiles[i].color.b,
-												prevA = oldTiles[i].color.a;
-											var weightA = prevA / 0.1,
-												weightB = 1;
-											var newR = Math.floor((weightA * prevR + weightB * bombed[index].color.r) / (weightA + weightB)),
-												newG = Math.floor((weightA * prevG + weightB * bombed[index].color.g) / (weightA + weightB)),
-												newB = Math.floor((weightA * prevB + weightB * bombed[index].color.b) / (weightA + weightB));
-											bombed[index].color.a = Math.round((oldTiles[i].color.a + 0.1) * 100) / 100,
-											bombed[index].color.r = newR,
-											bombed[index].color.g = newG,
-											bombed[index].color.b = newB;
-											var rgbString1 = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + bombed[index].color.a + ')';
-											oldTiles[i].set({
-												color: bombed[index].color,
-												curColor: rgbString1
-											});
-											bombed[index].curColor = rgbString1;
-										}
-										//don't incorp. new for sending out, use old one since at max
-										else {
-											bombed[index].color = oldTiles[i].color;
-											bombed[index].curColor = oldTiles[i].color;
-										}
-									}
-								}
-								else {
-									bombed[index].color = oldTiles[i].color;
-									bombed[index].curColor = oldTiles[i].curColor;
-								}
-							}
-							//if there is no color, then full on use the new values
-							else {
-								var rgbString2 = 'rgba(' + bombed[index].color.r + ',' + bombed[index].color.g + ',' + bombed[index].color.b + ',' + bombed[index].color.a  + ')';
-								oldTiles[i].set({
-									color: bombed[index].color,
-									curColor: rgbString2
-								});
-								bombed[index].curColor = rgbString2;
-							}
-							oldTiles[i].save(function(y) {
-								index += 1;
-								curOld += 1;
-								if(index < num) {
-									saveColors(curOld);
-								}
-								else {
-									var newTileCount = info.tilesColored + bombed.length,
-										sendData = {
-											bombed: bombed,
-											id: info.id,
-											tilesColored: newTileCount
-										};
-									//we are done,send out the color information to each client to render
-									ss.publish.all('ss-seedDropped', sendData);
-									//access our global game model for status updates
-									gameModel.findOne({}, function (err, result) {
-										if(err) {
-										}
-										else{
-											//add tile count to our progress
-											var oldCount = result.seedsDropped,
-												newCount = oldCount + 1;
-												oldColored = result.tilesColored,
-												newColored = oldColored + bombed.length,
-												oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
-												newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
-											//update leadeboard
-											var oldBoard = result.leaderboard,
-												gState = result.state,
-												i = oldBoard.length,
-												found = false,
-												newNameForStatus = false,
-												updateBoard = false,
-												newGuy = {
-													name: info.name,
-													count: info.tilesColored + num
-												};
-											if(i === 0) {
-												oldBoard.push(newGuy);
-												updateBoard = true;
-												newNameForStatus = newGuy.name;
-											}
-											else {
-												//if new guy exists, update him
-												while(--i > -1) {
-													if(oldBoard[i].name === newGuy.name) {
-														oldBoard[i].count = newGuy.count;
-														found = true;
-														updateBoard = true;
-														continue;
-													}
-												}
-												//add new guy
-												if(!found) {
-													if(oldBoard.length < 5 || newGuy.count > oldBoard[oldBoard.length-1]) {
-														oldBoard.push(newGuy);
-														newNameForStatus = newGuy.name;
-														updateBoard = true;
-													}
-												}
-												//sort them
-												oldBoard.sort(function(a, b) {
-													return b.count-a.count;
-												});
-												//get rid of the last one if too many
-												if(oldBoard.length > 5) {
-													oldBoard.pop();
-												}
-											}
-											if(newPercent > 99) {
-												//the world is fully colored, 
-												//advance the game state to 2 = boss level
-												//send out emails
-												//get all emails from actors
-												userModel
-													.where('role').equals('actor')
-													.select('email')
-													.find(function (err, users) {
-														if(err) {
-															res(false);
-														}
-														else if(users) {
-															var emailListLength = users.length,
-																html = '<h2 style="color:green;">The Color has Returned!</h2>';
-															html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
-															emailUtil.openEmailConnection();
-															for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-																if(emailIterator === 2) {
-																	emailUtil.sendEmail('Breaking news!', html, users[emailIterator].email);
-																}
-															}
-															emailUtil.closeEmailConnection();
-														}
-													});
-												result.set('state', 2);
-											}
-											//save all changes
-											result.set('seedsDropped', newCount);
-											result.set('leaderboard', oldBoard);
-											result.set('tilesColored', newColored);
-											result.save();
-											//check if the leaderboard changed
-											//if new guy > last
-											//if new guy already on
-											//if new leader
-											if(updateBoard) {
-												ss.publish.all('ss-leaderChange', oldBoard, newNameForStatus);
-											}
-											// //send out new percent if it has changed
-											// if(oldPercent !== newPercent) {
-											ss.publish.all('ss-progressChange', {dropped: newCount, colored: newColored});
-											//}
+							var newInfo = {
+								name: info.name,
+								numBombs: newBombs.length,
+								count: info.tilesColored
+							};
 
-										}
-										res(bombed.length);
-									});
-
-
+							colorHelpers.gameColorUpdate(newInfo, function(updates) {
+								if(updates.updateBoard) {
+									ss.publish.all('ss-leaderChange', updates.oldBoard, newInfo.name);
 								}
+								ss.publish.all('ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
+								//FINNNALLY done updating and stuff, respond to the player
+								//telling them if it was sucesful
+								res(newBombs.length);
 							});
-						}
-						else {
-							curOld += 1;
-							saveColors(curOld);
-						}
-					};
-					saveColors(curOld);
+						});
+					});
 				}
 			});
 		},
@@ -310,8 +151,7 @@ exports.actions = function(req, res, ss) {
 			userModel.findById(id, function (err, user) {
 				if(err) {
 					res('user not found');
-				}
-				else {
+				} else {
 					var data = {
 						tilesColored: user.game.tilesColored,
 						level: user.game.currentLevel,
@@ -337,19 +177,21 @@ exports.actions = function(req, res, ss) {
 
 		getAllImages: function() {
 			var maps = [];
-			userModel.find(function(err, users) {
-				if(err) {
-					console.log('issue');
-				}
-				else {
-					for(var i = 0; i < users.length; i +=1) {
-						var map = users[i].game.colorMap;
-						if(map) {
-							maps.push(users[i].game.colorMap);
+			userModel
+				.where('role').equals('actor')
+				.select('game.colorMap')
+				.find(function(err, users) {
+					if(err) {
+						console.log('issue');
+					} else {
+						for(var i = 0; i < users.length; i +=1) {
+							var map = users[i].game.colorMap;
+							if(map) {
+								maps.push(users[i].game.colorMap);
+							}
 						}
+						res(maps);
 					}
-					res(maps);
-				}
 			});
 		},
 
@@ -367,7 +209,6 @@ exports.actions = function(req, res, ss) {
 			req.session.profileSetup = true;
 			// console.log('exit: ', info);
 			req.session.save();
-			
 			//update mongo
 			userModel.findById(id, function (err, user) {
 				if(!err && user) {
@@ -384,13 +225,231 @@ exports.actions = function(req, res, ss) {
 			});
 		}
 	};
-}
+};
 
-helperFunctions = {
+colorHelpers = {
 
-	testing: function() {
-		console.log('****************mama goooooos*************');
+	modifyTiles: function(oldTiles, bombed, callback) {
+		//curIndex ALWAYS increases, but bomb only does if we found 
+		//the matching tile, tricky
+		var curIndex = 0,
+			bombIndex = 0,
+			newTiles = [],
+			newBombs = [];
+
+		var mod = function() {
+			//make sure they are the same tile before we modify any colors
+			if(oldTiles[curIndex].x === bombed[bombIndex].x && oldTiles[curIndex].y === bombed[bombIndex].y) {
+				colorHelpers.modifyOneTile(oldTiles[curIndex], bombed[bombIndex], function(newTile, newBomb) {
+					//increase the current spot in the tiles from db regardless
+					curIndex++;
+					bombIndex++;
+					newTiles.push(newTile);
+					newBombs.push(newBomb);
+					if(curIndex >= oldTiles.length) {
+							callback(newTiles, newBombs);
+					} else {
+						mod();
+					}
+				});
+			} else {
+				curIndex++;
+				if(curIndex >= oldTiles.length) {
+						callback(newTiles, newBombs);
+				} else {
+					mod();
+				}
+			}
+		};
+		mod();
+	},
+
+	modifyOneTile: function(tile, bomb, callback)  {
+		//AHHHH SO MANY POSSIBILITIES, stripping this down
+		//there IS a pre-existing color
+		if(tile.color.owner !== undefined) {
+			//if the old one is a nobody (not owned)
+			if(tile.color.owner === 'nobody') {
+				//if the NEW one should be owner, then update tile and bomb curColor
+				if(bomb.color.owner !== 'nobody') {
+					var rgbString0 = 'rgba(' + bomb.color.r + ',' + bomb.color.g + ',' + bomb.color.b + ',' + bomb.color.a  + ')';
+					bomb.curColor = rgbString0;
+					tile.set({
+						color: bomb.color,
+						curColor: rgbString0
+					});
+				}
+				//new one should be modified -- if the opacity hasn't maxed out 
+				else if(tile.color.a < 0.5 ) {
+					var prevR = tile.color.r,
+						prevG = tile.color.g,
+						prevB = tile.color.b,
+						prevA = tile.color.a;
+					var weightA = prevA / 0.1,
+						weightB = 1;
+					var newR = Math.floor((weightA * prevR + weightB * bomb.color.r) / (weightA + weightB)),
+						newG = Math.floor((weightA * prevG + weightB * bomb.color.g) / (weightA + weightB)),
+						newB = Math.floor((weightA * prevB + weightB * bomb.color.b) / (weightA + weightB));
+					bomb.color.a = Math.round((tile.color.a + 0.1) * 100) / 100,
+					bomb.color.r = newR,
+					bomb.color.g = newG,
+					bomb.color.b = newB;
+					var rgbString1 = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + bomb.color.a + ')';
+					tile.set({
+						color: bomb.color,
+						curColor: rgbString1
+					});
+					bomb.curColor = rgbString1;
+				}
+				//don't modify. change bomb for sending out since maxed
+				else {
+					bomb.color = tile.color;
+					bomb.curColor = tile.color;
+				}
+			}
+			//old one is the OWNER, so just modify bomb for user
+			else {
+				bomb.color = tile.color;
+				bomb.curColor = tile.curColor;
+			}
+		}
+		//no color, add it to tile
+		else {
+			var rgbString2 = 'rgba(' + bomb.color.r + ',' + bomb.color.g + ',' + bomb.color.b + ',' + bomb.color.a  + ')';
+			tile.set({
+				color: bomb.color,
+				curColor: rgbString2
+			});
+			bomb.curColor = rgbString2;
+		}
+
+		//now that we have exhausted everything, shall we return this?
+		callback(tile,bomb);
+	},
+
+	saveTiles: function(tiles, callback) {
+		var cur = 0;
+		var saveMe = function() {
+			tiles[cur].save(function(err, result) {
+				if(err) {
+
+				} else if(result) {
+					cur++;
+					if(cur >= tiles.length) {
+						callback();
+					} else{
+						saveMe();
+					}
+				}
+			});
+		};
+		saveMe();
+	},
+
+	gameColorUpdate: function(newInfo, callback) {
+		//access our global game model for status updates
+		gameModel.findOne({}, function (err, result) {
+			if(err) {
+
+			} else {
+				//add tile count to our progress
+				var oldCount = result.seedsDropped,
+					newCount = oldCount + 1;
+					oldColored = result.tilesColored,
+					newColored = oldColored + newInfo.numBombs,
+					oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
+					newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
+				//update leadeboard
+				var oldBoard = result.leaderboard,
+					gState = result.state,
+					ob = oldBoard.length,
+					found = false,
+					updateBoard = false,
+					newGuy = {
+						name: newInfo.name,
+						count: (newInfo.count + newInfo.numBombs)
+					};
+
+				//if this is the first player on the leadeboard, push em and update status
+				if(ob === 0) {
+					oldBoard.push(newGuy);
+					updateBoard = true;
+				} else {
+					//if new guy exists, update him
+					while(--ob > -1) {
+						if(oldBoard[ob].name === newGuy.name) {
+							oldBoard[ob].count = newGuy.count;
+							found = true;
+							updateBoard = true;
+							continue;
+						}
+					}
+					//add new guy
+					if(!found) {
+						//onlly add him if he deserves to be on there!
+						if(oldBoard.length < 5 || newGuy.count > oldBoard[oldBoard.length-1]) {
+							oldBoard.push(newGuy);
+							updateBoard = true;
+						}
+					}
+					//sort them
+					oldBoard.sort(function(a, b) {
+						return b.count-a.count;
+					});
+					//get rid of the last one if too many
+					if(oldBoard.length > 5) {
+						oldBoard.pop();
+					}
+				}
+
+				//check if the world is fully colored
+				if(newPercent > 99) {
+					//change the game state
+					result.set('state', 2);
+					//send out emails
+					colorHelpers.endGameEmails();
+				}
+				//save all changes
+				result.set('seedsDropped', newCount);
+				result.set('leaderboard', oldBoard);
+				result.set('tilesColored', newColored);
+				result.save();
+
+				var returnInfo = {
+					updateBoard: updateBoard,
+					oldBoard: oldBoard,
+					dropped: newCount,
+					colored: newColored
+				};
+				callback(returnInfo);
+			}
+		});
+	},
+
+	endGameEmails: function() {
+		//the world is fully colored, 
+		//advance the game state to 2 = boss level
+		//send out emails
+		//get all emails from actors
+		userModel
+			.where('role').equals('actor')
+			.select('email')
+			.find(function (err, users) {
+				if(err) {
+					res(false);
+				}
+				else if(users) {
+					var emailListLength = users.length,
+						html = '<h2 style="color:green;">The Color has Returned!</h2>';
+					html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
+					emailUtil.openEmailConnection();
+					for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+						if(emailIterator === 2) {
+							emailUtil.sendEmail('Breaking news!', html, users[emailIterator].email);
+						}
+					}
+					emailUtil.closeEmailConnection();
+				}
+			});
 	}
-
-}
-
+};
