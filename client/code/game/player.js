@@ -51,7 +51,6 @@ $game.$player = {
 	init: function() {
 		//get the players info from the db, alert other users of presence
 		ss.rpc('game.player.init', function(newInfo) {
-			
 			// console.log('rpc init: ', newInfo);
 			//time in seconds since 1970 or whatever
 			_startTime = new Date().getTime() / 1000;
@@ -66,10 +65,8 @@ $game.$player = {
 				prevOffX: 0,
 				prevOffY: 0
 			};
-			
 			//the number that corresponds to a player image sheet for their color
 			_playerColorNum = newInfo.game.colorInfo.tilesheet;
-			
 			//set the client side variables based on the database info for the player
 			$game.$player.id = newInfo.id;
 			$game.$player.name = newInfo.name;
