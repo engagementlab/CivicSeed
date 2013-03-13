@@ -9,7 +9,5 @@ node_modules
 /server/controllers/_temp/
 /server/controllers/game/_temp/
 /client/static/audio/music/temp.mp3
-/config.json
-/config_*.json
 _*.wav
 /_HIDDEN

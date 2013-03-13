@@ -78,7 +78,7 @@ service.connectMongoose(app, function(databases) {
 	ss.client.templateEngine.use(require('ss-clientjade'));
 
 	// using engine.io for web sockets transport
-	if(nodeEnv === 'development') {
+	if(config.get('USE_LOCAL_IP')) {
 		service.getAndSetNetworkIp(function() {
 			var ip = config.get('IP');
 			ss.ws.transport.use(require('ss-engine.io'), { client: { host: ip, port: port } });
