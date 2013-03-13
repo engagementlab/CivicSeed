@@ -123,12 +123,12 @@ $game.$renderer = {
 		};
 	},
 	renderFrame: function() {
-		
-		$game.$others.clear();
-		$game.$player.clear();
-		$game.$npc.clear();
-		$game.$gnome.clear();
-		$game.$thing.clear();
+		// $game.$others.clear();
+		// $game.$player.clear();
+		// $game.$npc.clear();
+		// $game.$gnome.clear();
+		// $game.$thing.clear();
+		$game.$renderer.clearAll();
 
 		//only re-render all the tiles if the viewport is tranisitioning
 		if($game.inTransit) {
@@ -237,7 +237,6 @@ $game.$renderer = {
 
 		//draw color tile first
 		if(tileData.color) {
-			console.log(tileData.color);
 			//var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
 			_backgroundContext.fillStyle = tileData.color;
 			_backgroundContext.fillRect(
@@ -441,6 +440,15 @@ $game.$renderer = {
 		info.curY - $game.TILE_SIZE,
 		$game.TILE_SIZE,
 		$game.TILE_SIZE*2
+		);
+	},
+
+	clearAll: function() {
+		_charactersContext.clearRect(
+			0,
+			0,
+			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+			$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
 		);
 	},
 

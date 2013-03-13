@@ -35,7 +35,7 @@ module.exports.global = [
 	playerAnswers: []
 },
   {
-	id: '4992',
+	id: '4693',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -103,7 +103,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '479',
+	id: '2176',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -171,7 +171,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '8276',
+	id: '9536',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -291,7 +291,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '3347',
+	id: '4338',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -342,7 +342,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '6237',
+	id: '7052',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -359,7 +359,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '8916',
+	id: '9069',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -376,7 +376,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '8344',
+	id: '6773',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -410,7 +410,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '8886',
+	id: '9170',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -581,7 +581,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '16688',
+	id: '16546',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -632,7 +632,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '17389',
+	id: '17534',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',
@@ -649,7 +649,7 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
-	id: '17388',
+	id: '17525',
 	kind: 'article',
 	url: '/articles/7283.html',
 	tagline: 'i am a tagline',

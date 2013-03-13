@@ -68,28 +68,21 @@ exports.$game = {
 	levelNames: [],
 	resourceCount: [],
 	displayTimeout: null,
+	prevMessage: null,
 
 	init: function() {
-		
 		$game.$map.init();
-
 		$game.$renderer.init();
 		//then starts player init when done
 		//which in turn starts others init
-		
 		$game.$resources.init();
-		
 		$game.$audio.init();
-
 	},
 
 	firstLoad: function (x, y) {
-		
 		//calculate the top left corner of the viewport based on where the player is
-		
 		var tx = (x === 0) ? 0 : x - 1,
-			ty = (y === 0) ? 0 : y - 1;
-			
+			ty = (y === 0) ? 0 : y - 1,
 			divX = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2 )),
 			divY = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2 )),
 			startX  = divX * ($game.VIEWPORT_WIDTH - 2),
@@ -109,6 +102,14 @@ exports.$game = {
 
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
+			//regular game mode
+			if(response.state === 1) {
+
+			}
+			//game is in boss mode
+			else if(response.state === 2) {
+
+			}
 			$game.levelQuestion = response.levelQuestion;
 			$game.levelNames = response.levelNames;
 			$game.resourceCount = response.resourceCount;
@@ -596,10 +597,10 @@ exports.$game = {
 		});
 	},
 	statusUpdate: function(msg) {
-		var prevM = $('.displayBoxText').text();
 		$('.displayBoxText').text(msg);
+		clearTimeout($game.displayTimeout);
 		$game.displayTimeout = setTimeout(function() {
-			$('.displayBoxText').text(prevM);
+			$('.displayBoxText').text($game.prevMessage);
 		}, 3000);
 	},
 	changeStatus: function(custom) {
@@ -615,6 +616,7 @@ exports.$game = {
 				$('.displayBoxText').text($game.levelNames[$game.$player.game.currentLevel]);
 			}
 		}
+		$game.prevMessage = $('.displayBoxText').text();
 	},
 
 	checkPotty: function(msg) {

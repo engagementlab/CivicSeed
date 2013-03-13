@@ -51,7 +51,6 @@ $game.$player = {
 	init: function() {
 		//get the players info from the db, alert other users of presence
 		ss.rpc('game.player.init', function(newInfo) {
-			
 			// console.log('rpc init: ', newInfo);
 			//time in seconds since 1970 or whatever
 			_startTime = new Date().getTime() / 1000;
@@ -66,10 +65,8 @@ $game.$player = {
 				prevOffX: 0,
 				prevOffY: 0
 			};
-			
 			//the number that corresponds to a player image sheet for their color
 			_playerColorNum = newInfo.game.colorInfo.tilesheet;
-			
 			//set the client side variables based on the database info for the player
 			$game.$player.id = newInfo.id;
 			$game.$player.name = newInfo.name;
@@ -489,7 +486,6 @@ $game.$player = {
 
 	dropSeed: function(options) {
 		//if there are no seeds, send message can't plant
-	
 		options.mX = $game.currentTiles[options.x][options.y].x,
 		options.mY = $game.currentTiles[options.x][options.y].y;
 
@@ -528,7 +524,6 @@ $game.$player = {
 				return true;
 			}
 		}
-		
 	},
 
 	calculateSeeds: function(options) {
@@ -541,31 +536,24 @@ $game.$player = {
 			bombed = [],
 			mode = options.mode,
 			square = null;
-		
 		if($game.currentTiles[options.x][options.y].color) {
 			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
 				$game.statusUpdate('that tile has been planted on');
 				return false;
 			}
 		}
-
-
 		var b = 0;
 		while(b < options.sz) {
 			var a = 0;
 			while(a < options.sz) {
 				//only add if it is in the map!
 				if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-					
-				
 					//only dynamically calculate seeds if riddle or normal mode
 					if(mode < 3) {
 						//this says: if you are part of the circle radius
 						//if you are basic, then do it regardless
 						if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
-
 							var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
-							
 							//set x,y and color info for each square
 							square = {
 								x: origX + a,
@@ -612,7 +600,6 @@ $game.$player = {
 							bombed.push(square);
 						}
 					}
-					
 				}
 				a += 1;
 			}
@@ -620,8 +607,6 @@ $game.$player = {
 		}
 
 		if(bombed.length > 0) {
-			
-		
 			//set a waiting boolean so we don't plant more until receive data back from rpc
 			$game.$player.awaitingBomb = true;
 

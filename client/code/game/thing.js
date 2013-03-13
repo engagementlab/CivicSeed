@@ -9,7 +9,7 @@ var _coords = [
 		],
 	_positions = [
 		{x: 6, y: 20, d: -1, target: -3},
-		{x: 133, y: 33, d: 1, target: 145},
+		{x: 133, y: 31, d: 1, target: 145},
 		{x: 135, y: 124, d: 1, target: 145},
 		{x: 8, y: 86, d: -1, target: -3},
 		{x: 0, y: 0, d: 0, target: 0},
@@ -57,12 +57,12 @@ $game.$thing = {
 		_info.offY = 0;
 		_info.prevOffX = 0;
 		_info.prevOffY = 0;
+		console.log(_info);
 	},
 
 	update: function() {
 		if($game.$thing.active) {
 			//if it is live, then update movement
-			
 			if(_onScreen) {
 				if(_triggered) {
 					$game.$thing.move();
@@ -96,7 +96,7 @@ $game.$thing = {
 				prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS / 2,
 				curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS / 2,
 				curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS / 2;
-			
+
 			_renderInfo.prevX = prevX,
 			_renderInfo.prevY = prevY;
 			_renderInfo.curX = curX,

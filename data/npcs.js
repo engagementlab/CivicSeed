@@ -17,7 +17,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '4992',
+	id: '4693',
 	name: 'NPC',
 	level: 0,
 	sprite: 2,
@@ -53,7 +53,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '479',
+	id: '2176',
 	name: 'NPC',
 	level: 0,
 	sprite: 6,
@@ -89,7 +89,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '8276',
+	id: '9536',
 	name: 'NPC',
 	level: 0,
 	sprite: 10,
@@ -152,7 +152,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '3347',
+	id: '4338',
 	name: 'NPC',
 	level: 1,
 	sprite: 17,
@@ -179,7 +179,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '6237',
+	id: '7052',
 	name: 'NPC',
 	level: 1,
 	sprite: 20,
@@ -188,7 +188,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '8916',
+	id: '9069',
 	name: 'NPC',
 	level: 1,
 	sprite: 21,
@@ -197,7 +197,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '8344',
+	id: '6773',
 	name: 'NPC',
 	level: 1,
 	sprite: 22,
@@ -215,10 +215,91 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '8886',
+	id: '9170',
 	name: 'NPC',
 	level: 1,
 	sprite: 24,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '2649',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '3074',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '5063',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '2803',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '3229',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '3373',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '4937',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '5219',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
+	dialog: {
+		random: ['I am not in your level, maybe you should talk to the botanist'],
+		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
+	}
+}, {
+	id: '5206',
+	name: 'NPC',
+	level: 99,
+	sprite: 25,
 	dialog: {
 		random: ['I am not in your level, maybe you should talk to the botanist'],
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
@@ -305,7 +386,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '16688',
+	id: '16546',
 	name: 'NPC',
 	level: 2,
 	sprite: 34,
@@ -332,7 +413,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '17389',
+	id: '17534',
 	name: 'NPC',
 	level: 3,
 	sprite: 37,
@@ -341,7 +422,7 @@ module.exports.global = [{
 		prompts: ['Check out this resource.', 'Try again.', 'You already did this one.']
 	}
 }, {
-	id: '17388',
+	id: '17525',
 	name: 'NPC',
 	level: 3,
 	sprite: 38,
