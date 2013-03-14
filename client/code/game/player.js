@@ -749,11 +749,11 @@ $game.$player = {
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
-		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);	
+		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
+		ss.rpc('shared.account.deAuthenticate');
 	},
 
 	getPrompt: function(id) {
-		
 		var	l = $game.$player.game.resources.length;
 
 		while(--l > -1) {

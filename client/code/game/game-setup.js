@@ -8,6 +8,8 @@ exports.init = function(callback) {
 			window.location.href = '/';
 		} else {
 			$body = $(document.body);
+			console.log('**** game-setup ***** ');
+			console.log(sessionStorage);
 			if(!sessionStorage.getItem('userId')) {
 				sessionStorage.setItem('userId', userSessionObject.id);
 				sessionStorage.setItem('userName', userSessionObject.firstName);

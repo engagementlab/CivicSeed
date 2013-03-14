@@ -17,6 +17,8 @@ var self = module.exports = {
 
 				if(userSessionObject.role) {
 					// console.log('Authenticated...');
+					console.log('******** middelware ******');
+					console.log(sessionStorage);
 					if(!sessionStorage.getItem('userId')) {
 						sessionStorage.setItem('userId', userSessionObject.id);
 						sessionStorage.setItem('userName', userSessionObject.firstName);

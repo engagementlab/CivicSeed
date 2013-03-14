@@ -36,6 +36,11 @@ exports.actions = function(req, res, ss) {
 						req.session.game = user.game;
 						req.session.gameStarted = user.gameStarted;
 						req.session.profileSetup = user.profileSetup;
+
+						console.log('****** new session being saved ******');
+						console.log(user.id);
+						console.log(user.firstName, user.lastName, user.email, user.role, user.game, user.gameStarted, user.profileSetup, req.session.userId);
+
 						// req.session.gameChannel = channel....
 						req.session.save();
 						// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
@@ -55,26 +60,34 @@ exports.actions = function(req, res, ss) {
 			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			req.session.setUserId(null);
 			req.session.firstName = null;
+			req.session.lastName = null;
 			req.session.email = null;
 			req.session.role = null;
+			req.session.game = null;
+			req.session.gameStarted = null;
+			req.session.profileSetup = null;
 			req.session.save();
-			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+			console.log('****** deauthenticationifcationifcation');
+			console.log(req.session.firstName, req.session.lastName, req.session.email, req.session.role, req.session.game, req.session.gameStarted, req.session.profileSetup, req.session.userId);
 			res(true);
 		},
 
 		getUserSession: function() {
+			console.log('**** getting user session ******');
 			if(req.session.userId) {
+				console.log(req.session.firstName, req.session.lastName, req.session.email, req.session.role, req.session.game, req.session.gameStarted, req.session.profileSetup, req.session.userId);
 				res({
 					id: req.session.userId,
 					firstName: req.session.firstName,
 					lastName: req.session.lastName,
 					email: req.session.email,
 					role: req.session.role,
+					game: req.session.game,
 					gameStarted: req.session.gameStarted,
 					profileSetup: req.session.profileSetup
 				});
 			} else {
-				// console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
+				console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
 		},

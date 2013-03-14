@@ -70,10 +70,13 @@ var $account = module.exports = {
 	deAuthenticate: function() {
 		// ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) { console.log(deAuthenticate); });
 		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
+			console.log(sessionStorage);
 			sessionStorage.removeItem('userId');
 			sessionStorage.removeItem('userName');
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
+			console.log('session storage?:::: ');
+			console.log(sessionStorage);
 			if(deAuthenticate) {
 				location.href = '/';
 				// console.log('Logging out...');
