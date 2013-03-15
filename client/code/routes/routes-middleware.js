@@ -13,12 +13,12 @@ var self = module.exports = {
 			// OTHERWISE, IT HANDLES STUFF, THEN DOES THIS, ARGH....
 			// see: https://github.com/olivernn/davis.js/issues/67
 			// check if user experiences/authentic
+			console.log('middleware session check');
 			ss.rpc('shared.account.getUserSession', function(userSessionObject) {
-
+				console.log('server getUserSession response: ', userSessionObject);
 				if(userSessionObject.role) {
 					// console.log('Authenticated...');
-					console.log('******** middelware ******');
-					console.log(sessionStorage);
+					console.log('session storage:', sessionStorage);
 					if(!sessionStorage.getItem('userId')) {
 						sessionStorage.setItem('userId', userSessionObject.id);
 						sessionStorage.setItem('userName', userSessionObject.firstName);

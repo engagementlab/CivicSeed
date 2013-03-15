@@ -226,7 +226,7 @@ module.exports.global = [{
 }, {
 	id: '2649',
 	name: 'NPC',
-	level: 99,
+	level: 1,
 	sprite: 25,
 	dialog: {
 		random: ['I am not in your level, maybe you should talk to the botanist'],
@@ -253,7 +253,7 @@ module.exports.global = [{
 }, {
 	id: '2803',
 	name: 'NPC',
-	level: 99,
+	level: 1,
 	sprite: 25,
 	dialog: {
 		random: ['I am not in your level, maybe you should talk to the botanist'],
@@ -289,7 +289,7 @@ module.exports.global = [{
 }, {
 	id: '5219',
 	name: 'NPC',
-	level: 99,
+	level: 1,
 	sprite: 25,
 	dialog: {
 		random: ['I am not in your level, maybe you should talk to the botanist'],
@@ -298,7 +298,7 @@ module.exports.global = [{
 }, {
 	id: '5206',
 	name: 'NPC',
-	level: 99,
+	level: 2,
 	sprite: 25,
 	dialog: {
 		random: ['I am not in your level, maybe you should talk to the botanist'],

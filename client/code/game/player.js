@@ -750,7 +750,6 @@ $game.$player = {
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
 		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
-		ss.rpc('shared.account.deAuthenticate');
 	},
 
 	getPrompt: function(id) {

@@ -57,7 +57,6 @@ $game.$thing = {
 		_info.offY = 0;
 		_info.prevOffX = 0;
 		_info.prevOffY = 0;
-		console.log(_info);
 	},
 
 	update: function() {

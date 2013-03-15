@@ -239,6 +239,57 @@ module.exports.global = [
 	playerAnswers: []
 },
 {
+	id: '2649',
+	kind: 'article',
+	url: '/articles/7283.html',
+	tagline: 'i am a tagline',
+	prompt: 'Tell me about yourself and I shall give you some seeds.',
+	question: 'Describe your background as it applies to civic engagement',
+	questionType: 'open',
+	answer: 'player',
+	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
+	shape: {
+		path: 'm0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z',
+		fill: 'rgb(124,202,176)',
+		stroke: 'rgb(200,0,0)'
+	},
+	playerAnswers: []
+},
+{
+	id: '2803',
+	kind: 'article',
+	url: '/articles/7283.html',
+	tagline: 'i am a tagline',
+	prompt: 'Tell me about yourself and I shall give you some seeds.',
+	question: 'Describe your background as it applies to civic engagement',
+	questionType: 'open',
+	answer: 'player',
+	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
+	shape: {
+		path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+		fill: 'rgb(124,202,176)',
+		stroke: 'rgb(200,0,0)'
+	},
+	playerAnswers: []
+},
+{
+	id: '5219',
+	kind: 'article',
+	url: '/articles/7283.html',
+	tagline: 'i am a tagline',
+	prompt: 'Tell me about yourself and I shall give you some seeds.',
+	question: 'Describe your background as it applies to civic engagement',
+	questionType: 'open',
+	answer: 'player',
+	responses: ['Thanks for the insight. Take this puzzle piece.', 'Wrong. Leave me alone.'],
+	shape: {
+		path: 'm0,0l0,-120l60,0c0,0 0,120 0,120c0,0 40,0 40,0c0,0 0,-160 0,-160c0,0 -140,0 -140,0c0,0 0,160 0,160c0,0 40,0 40,0z',
+		fill: 'rgb(124,202,176)',
+		stroke: 'rgb(200,0,0)'
+	},
+	playerAnswers: []
+},
+{
 	id: '1517',
 	kind: 'article',
 	url: '/articles/7283.html',
@@ -352,7 +403,7 @@ module.exports.global = [
 	answer: 'none',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
+		path: 'm0,0l0,-40l50,-40l50,40c0,0 0,40 0,40c0,0 -100,0 -100,0z',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
 	},
@@ -420,7 +471,7 @@ module.exports.global = [
 	answer: 'none',
 	responses: ['You got it right. Take this puzzle piece.', 'Wrong. Leave me alone.'],
 	shape: {
-		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
+		path: 'm0,0l100,-40l100,0l100,40l-300,0z',
 		fill: 'rgb(250,0,0)',
 		stroke: 'rgb(200,0,0)'
 	},

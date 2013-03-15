@@ -43,7 +43,6 @@ exports.actions = function(req, res, ss) {
 			req.session.game = info;
 			req.session.save();
 
-
 			//update mongo
 			userModel
 				.findById(id, function (err, user) {

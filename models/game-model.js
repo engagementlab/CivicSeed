@@ -5,7 +5,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		tilesColored: Number,
 		seedsDropped: Number,
 		seedsDroppedGoal: Number,
-		state: Number,
+		active: Boolean,
+		bossModeUnlocked: Boolean,
 		levelQuestion: [String],
 		leaderboard: [{
 			name: String,

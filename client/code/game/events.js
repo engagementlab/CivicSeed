@@ -36,7 +36,9 @@ $(function() {
 
 	ss.event.on('ss-removePlayer', function(num, playerId) {
 		$game.numPlayers = num;
-		$game.$others.remove(playerId);
+		if(playerId != $game.$player.id) {
+			$game.$others.remove(playerId);	
+		}
 		_activePlayers.text(num);
 	});
 

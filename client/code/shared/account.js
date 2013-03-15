@@ -1,4 +1,4 @@
-var $account = module.exports = {
+	var $account = module.exports = {
 
 	accountHandlers: function() {
 		var $body = $(document.body);
@@ -29,7 +29,7 @@ var $account = module.exports = {
 
 			ss.rpc('shared.account.changeInfo', first, last, function(response) {
 				if(response) {
-					location.href = '/game';
+					location.href = '/introduction';
 				}
 				else {
 					$('#message').addClass('error').text('There was an error. Please panic.');
@@ -37,26 +37,35 @@ var $account = module.exports = {
 			});
 			return false;
 		});
+		$body.on('click', '#startGame', function() {
+			ss.rpc('shared.account.startGame');
+		});
 	},
 
 	authenticate: function(email, password) {
+		console.log('authenticate');
 		// ss.rpc('shared.account.authenticate', 's', '', function(authenticated) { console.log(authenticated); });
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
+			console.log(authenticated);
 			if(authenticated) {
-				// console.log(authenticated);
-				//TO DO: this should be go to user's profile
 
 				$account.getUserSession(function(userInfo) {
-					if(!userInfo.gameStarted) {
+					sessionStorage.setItem('userId', userInfo.id);
+					sessionStorage.setItem('userName', userInfo.firstName);
+					sessionStorage.setItem('userEmail', userInfo.email);
+					sessionStorage.setItem('userRole', userInfo.role);
+					if(!userInfo.profileSetup) {
+						//send them to setup their profile info
 						location.href = '/change-info';
 					}
-					else if(userInfo.profileSetup) {
+					else if(!userInfo.gameStarted) {
+						//send them to watch the intro video
+						location.href = '/introduction';
+					}
+					else {
+						//send them to their profile
 						//send them to their profile page
 						location.href = '/profiles/' + userInfo.firstName + '.' + userInfo.lastName;
-					}
-					else if(userInfo.gameStarted) {
-						//send them to the game
-						location.href = '/game';
 					}
 				});
 			} else {
@@ -69,14 +78,15 @@ var $account = module.exports = {
 
 	deAuthenticate: function() {
 		// ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) { console.log(deAuthenticate); });
+		console.log('deAuthenticate');
 		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
-			console.log(sessionStorage);
+			console.log(deAuthenticate);
+			console.log('before: ', sessionStorage);
 			sessionStorage.removeItem('userId');
 			sessionStorage.removeItem('userName');
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
-			console.log('session storage?:::: ');
-			console.log(sessionStorage);
+			console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
 				location.href = '/';
 				// console.log('Logging out...');
@@ -85,8 +95,10 @@ var $account = module.exports = {
 	},
 
 	getUserSession: function(callback) {
+		console.log('getUserSession');
 		// ss.rpc('shared.account.getUserSession', function(session) { console.log(session); });
 		ss.rpc('shared.account.getUserSession', function(session) {
+			console.log(session);
 			if(session) {
 				callback(session);
 			}

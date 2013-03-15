@@ -19,7 +19,7 @@ exports.actions = function(req, res, ss) {
 	return {
 
 		authenticate: function(email, password) {
-
+			console.log('**** authenticate ******');
 			UserModel.findOne({ email: email } , function(err, user) {
 
 				if(user) {
@@ -38,8 +38,6 @@ exports.actions = function(req, res, ss) {
 						req.session.profileSetup = user.profileSetup;
 
 						console.log('****** new session being saved ******');
-						console.log(user.id);
-						console.log(user.firstName, user.lastName, user.email, user.role, user.game, user.gameStarted, user.profileSetup, req.session.userId);
 
 						// req.session.gameChannel = channel....
 						req.session.save();
@@ -58,6 +56,7 @@ exports.actions = function(req, res, ss) {
 
 		deAuthenticate: function() {
 			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+			console.log('****** deAuthenticate ******');
 			req.session.setUserId(null);
 			req.session.firstName = null;
 			req.session.lastName = null;
@@ -67,15 +66,14 @@ exports.actions = function(req, res, ss) {
 			req.session.gameStarted = null;
 			req.session.profileSetup = null;
 			req.session.save();
-			console.log('****** deauthenticationifcationifcation');
-			console.log(req.session.firstName, req.session.lastName, req.session.email, req.session.role, req.session.game, req.session.gameStarted, req.session.profileSetup, req.session.userId);
+			
 			res(true);
 		},
 
 		getUserSession: function() {
-			console.log('**** getting user session ******');
+			console.log('**** getUserSession ******');
 			if(req.session.userId) {
-				console.log(req.session.firstName, req.session.lastName, req.session.email, req.session.role, req.session.game, req.session.gameStarted, req.session.profileSetup, req.session.userId);
+				console.log('session exists:', req.session.firstName, req.session.userId);
 				res({
 					id: req.session.userId,
 					firstName: req.session.firstName,
@@ -115,7 +113,7 @@ exports.actions = function(req, res, ss) {
 					user.set({
 						firstName: first,
 						lastName: last,
-						gameStarted: true
+						profileSetup: true
 					});
 					user.save(function(err,suc) {
 						if(!err && suc) {
@@ -127,6 +125,21 @@ exports.actions = function(req, res, ss) {
 					});
 				} else {
 					res(false);
+				}
+			});
+		},
+
+		startGame: function() {
+			UserModel.findOne({ email: req.session.email } , function(err, user) {
+				if(err) {
+
+				} else if(user) {
+					user.set({
+						gameStarted: true
+					});
+					user.save(function(err,suc) {
+						res(true);
+					});
 				}
 			});
 		}

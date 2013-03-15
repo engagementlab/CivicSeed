@@ -45,6 +45,11 @@ var self = module.exports = {
 			location.href = '/game';
 		});
 
+		$app.get('/introduction', function(req) {
+			// have to force it unfortunately
+			$container.append(JT['pages-introduction']());
+		});
+
 	}
 
 };

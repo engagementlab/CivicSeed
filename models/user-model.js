@@ -10,6 +10,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		email: String,
 		role: String,
 		profileSetup: Boolean,
+		profileUnlocked: Boolean,
 		gameStarted: Boolean,
 		game: {
 			currentLevel: Number,

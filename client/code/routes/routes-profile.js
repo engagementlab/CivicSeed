@@ -10,7 +10,12 @@ var self = module.exports = {
 
 		$app.get('/profiles/:name', function(req) {
 			ss.rpc('shared.profiles.getProfileInformation', req.params['name'], function(info) {
+				if(!info.profileSetup) {
+					//reroute to change info
+					location.href = 'change-info';
+				} else {
 					$container.append(JT['profiles-singleprofile'](info));
+				}
 			});
 		});
 
