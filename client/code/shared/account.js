@@ -51,7 +51,8 @@
 
 				$account.getUserSession(function(userInfo) {
 					sessionStorage.setItem('userId', userInfo.id);
-					sessionStorage.setItem('userName', userInfo.firstName);
+					sessionStorage.setItem('userFirstName', userInfo.firstName);
+					sessionStorage.setItem('userLastName', userInfo.lastName);
 					sessionStorage.setItem('userEmail', userInfo.email);
 					sessionStorage.setItem('userRole', userInfo.role);
 					if(!userInfo.profileSetup) {
@@ -83,7 +84,8 @@
 			console.log(deAuthenticate);
 			console.log('before: ', sessionStorage);
 			sessionStorage.removeItem('userId');
-			sessionStorage.removeItem('userName');
+			sessionStorage.removeItem('userFirstName');
+			sessionStorage.removeItem('userLastName');
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
 			console.log('after: ', sessionStorage);

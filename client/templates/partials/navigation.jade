@@ -8,13 +8,13 @@
 			
 			a.brand(href='/') Civic Seed
 
-			- if(sessionStorage.userName)
+			- if(sessionStorage.userFirstName)
 				.btn-group.pull-right.tempFixMargin
 					a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
-						i.icon-user &nbsp;#{sessionStorage.userName}&nbsp;
+						i.icon-user &nbsp;#{sessionStorage.userFirstName}&nbsp;
 						span.caret
 					ul.dropdown-menu
-						li: a(href='') Profile
+						li: a(href='/profiles') Profiles
 						li.divider
 						li.signOut: a(href='/signout') Sign Out
 

@@ -96,7 +96,7 @@ $game.$player = {
 			_inventorySel = $('.inventory > .pieces');
 
 			//$game.changeStatus();
-			
+
 			//render the correct level's tilesheet to the offscreen canvas
 			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
 
@@ -110,6 +110,7 @@ $game.$player = {
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
+			$game.$resources.init();
 
 			//set HUD values
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
@@ -119,8 +120,6 @@ $game.$player = {
 			_riddleHudCount.text($game.$player.game.seeds.riddle);
 			_specialHudCount.text($game.$player.game.seeds.special);
 			
-			//fill the inventory if there were things when we last left
-			$game.$player.fillInventory();
 
 			//selectors for chat stuff
 			_chatId = 'player'+ newInfo.id,
@@ -853,10 +852,15 @@ $game.$player = {
 	addToInventory: function(id) {
 		//create the class / ref to the image
 		var file = 'r' + id,
-			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/small/'+file+'.png';
+			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/small/'+file+'.png',
+			tagline = $game.$resources.getTagline(id);
 		//put image on page in inventory
-		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="' + imgPath + '">');
+		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
 
+		$('.' + file).bind('mouseenter',function() {
+			//var info = $(this).attr('title');
+			$(this).tooltip('show');
+		});
 		_inventoryBtnSel.text($game.$player.game.inventory.length);
 
 		//bind click and drag functions, pass npc #

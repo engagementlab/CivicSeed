@@ -21,7 +21,8 @@ var self = module.exports = {
 					console.log('session storage:', sessionStorage);
 					if(!sessionStorage.getItem('userId')) {
 						sessionStorage.setItem('userId', userSessionObject.id);
-						sessionStorage.setItem('userName', userSessionObject.firstName);
+						sessionStorage.setItem('userFirstName', userSessionObject.firstName);
+						sessionStorage.setItem('userLastName', userSessionObject.lastName);
 						sessionStorage.setItem('userEmail', userSessionObject.email);
 						sessionStorage.setItem('userRole', userSessionObject.role);
 					}

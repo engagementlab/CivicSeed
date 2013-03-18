@@ -75,7 +75,6 @@ exports.$game = {
 		$game.$renderer.init();
 		//then starts player init when done
 		//which in turn starts others init
-		$game.$resources.init();
 		$game.$audio.init();
 	},
 

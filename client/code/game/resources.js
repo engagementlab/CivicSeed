@@ -23,7 +23,6 @@ $game.$resources = {
 
 	isShowing: false,
 	ready: false,
-	
 
 	init: function() {
 		ss.rpc('game.npc.getResources', function(response) {
@@ -34,6 +33,9 @@ $game.$resources = {
 				var stringId = String(resource.id);
 				_resources[stringId] = resource;
 			});
+
+			//fill the inventory if there were things when we last left
+			$game.$player.fillInventory();
 
 			//set dom selectors
 			_resourceStateSel = $('.resourceStage');
@@ -55,7 +57,6 @@ $game.$resources = {
 		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
 		$game.$resources.isShowing = true;
-		
 	},
 
 	loadResource: function(who, index, now) {
@@ -95,18 +96,15 @@ $game.$resources = {
 			$game.$resources.addButtons();
 			_inventorySel.fadeOut(function() {
 				$game.$player.inventoryShowing = false;
-				_resourceAreaSel.addClass('patternBg1')
+				_resourceAreaSel.addClass('patternBg1');
 				_resourceAreaSel.fadeIn();
 			});
 		});
-		
 	},
 
 	addButtons: function() {
 		_resourceButtonSel.addClass('hideButton');
-		
 		if(_answered) {
-			
 			//this is the medal page
 			if(_currentSlide === _numSlides + 1 &&  _curResource.questionType === 'open') {
 				if(_correctAnswer) {
@@ -121,7 +119,6 @@ $game.$resources = {
 			}
 		}
 		else {
-			
 			if(_revisiting) {
 				//if its the last slide
 				if(_currentSlide === _numSlides - 1) {
@@ -174,7 +171,6 @@ $game.$resources = {
 		_resourceMessageSel.empty();
 		//if they answered the question...
 		if(_answered) {
-		
 			//if they got it right, give them a tangram
 			if(_correctAnswer) {
 
@@ -373,6 +369,11 @@ $game.$resources = {
 	getShape: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].shape;
+	},
+
+	getTagline: function(id) {
+		var stringId = String(id);
+		return _resources[stringId].tagline;
 	},
 
 	addAnswer: function(data, id) {

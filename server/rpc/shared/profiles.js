@@ -26,7 +26,8 @@ exports.actions = function(req, res, ss) {
 						gameStarted: user.gameStarted,
 						profileUnlocked: user.profileUnlocked,
 						profileSetup: user.profileSetup,
-						colorMap: user.game.colorMap
+						colorMap: user.game.colorMap,
+						email: user.email
 					};
 					console.log(profileInfo.colorMap);
 					res(profileInfo);

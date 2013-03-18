@@ -48,7 +48,8 @@
 		else
 			.row
 				h1 Profile Locked
-				a(href='/game') Resume Game
+				- if(sessionStorage.email === email)
+					a(href='/game') Resume Game
 	else
 		h1 This person does not exist in our database.
 		
