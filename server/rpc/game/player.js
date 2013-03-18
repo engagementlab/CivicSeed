@@ -406,8 +406,8 @@ colorHelpers = {
 				//check if the world is fully colored
 				if(newPercent > 99) {
 					//change the game state
-					result.set('state', 2);
 					//send out emails
+					result.set('bossModeUnlocked', true);
 					colorHelpers.endGameEmails();
 				}
 				//save all changes
@@ -441,13 +441,22 @@ colorHelpers = {
 				}
 				else if(users) {
 					var emailListLength = users.length,
-						html = '<h2 style="color:green;">The Color has Returned!</h2>';
-					html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
+						html = null,
+						subject = null;
 					emailUtil.openEmailConnection();
 					for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-						if(emailIterator === 2) {
-							emailUtil.sendEmail('Breaking news!', html, users[emailIterator].email);
+						//not done
+						if(users[emailIterator].game.currentLevel < 4) {
+							html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
+							html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
+							subject = 'Come back.';
+
+						} else {
+							html = '<h2 style="color:green;">The Color has Returned!</h2>';
+							html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
+							subject = 'Breaking News!';
 						}
+						emailUtil.sendEmail(subject, html, users[emailIterator].email);
 					}
 					emailUtil.closeEmailConnection();
 				}

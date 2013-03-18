@@ -14,7 +14,7 @@ var _curFrame = 0,
 	_chatId = null,
 	_chatIdSelector = null,
 	_rgb = null,
-	_numRequired = [1,1,1,1],
+	_numRequired = [4,5,6,5],
 	_seedHudCount = null,
 	_normalHudCount = null,
 	_riddleHudCount = null,
@@ -821,7 +821,7 @@ $game.$player = {
 				$game.$player.game.gnomeState = 3;
 			}
 	},
-	
+
 	getAnswer: function(id) {
 		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
@@ -856,7 +856,7 @@ $game.$player = {
 			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/small/'+file+'.png';
 		//put image on page in inventory
 		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="' + imgPath + '">');
-		
+
 		_inventoryBtnSel.text($game.$player.game.inventory.length);
 
 		//bind click and drag functions, pass npc #
@@ -896,7 +896,7 @@ $game.$player = {
 		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
 
-		
+
 		if($game.$player.game.currentLevel === 4) {
 			//they have beat the game!
 			//say there profile is available and send em there.

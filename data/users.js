@@ -205,10 +205,10 @@ module.exports.global = [{
 		tilesColored: 0
 	}
 }, {
-	firstName: 'Joe',
-	lastName: 'Nobody',
-	password: '',
-	email: 'j',
+	firstName: 'Demo',
+	lastName: 'User',
+	password: '50seedsofgrey',
+	email: 'demouser@civicseed.org',
 	role: 'actor',
 	gameStarted: false,
 	profileSetup: false,
@@ -217,17 +217,17 @@ module.exports.global = [{
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 65,
+			x: 66,
 			y: 76,
 			inTransit: false
 		},
 		colorInfo: {
 			rgb: {
-				r: 139,
-				g: 203,
-				b: 236
+				r: 157,
+				g: 45,
+				b: 243
 			},
-			tilesheet: 5
+			tilesheet: 4
 		},
 		resources: [],
 		inventory: [],
@@ -244,50 +244,4 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0
 	}
-}, {
-	firstName: 'Frank',
-	lastName: 'Nobody',
-	password: '',
-	email: 'f',
-	role: 'actor',
-	gameStarted: false,
-	profileSetup: false,
-	profileUnlocked: false,
-	game: {
-		currentLevel: 0,
-		rank: 'novice gardener',
-		position: {
-			x: 64,
-			y: 76,
-			inTransit: false
-		},
-		colorInfo: {
-			rgb: {
-				r: 139,
-				g: 203,
-				b: 236
-			},
-			tilesheet: 5
-		},
-		resources: [],
-		inventory: [],
-		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
-			dropped: 0
-		},
-		gnomeState: 0,
-		resume: [],
-		seenThing: false,
-		resourcesDiscovered: 0,
-		playingTime: 0,
-		tilesColored: 0
-	}
-}, {
-	firstName: 'Russell',
-	lastName: 'Test B',
-	password: 'testonly',
-	email: 'russell_goldenberg@emerson.edu',
-	role: 'actor'
 }];
