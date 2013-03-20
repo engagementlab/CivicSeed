@@ -13,13 +13,14 @@ $(function() {
 		_displayBox = $('.displayBox'),
 		_inventory = $('.inventory'),
 		_displayBoxText = $('.displayBoxText'),
-		_progressArea = $('.progressArea');
+		_progressArea = $('.progressArea'),
+		_helpShowing = false;
 
 	_w.on('beforeunload', function() {
 		var x = leaveThisJoint();
 		return x;
 	});
-	
+
 	/******* RPC EVENTS *********/
 
 
@@ -340,6 +341,7 @@ $(function() {
 	});
 
 	$('.helpButton').bind('click', function() {
+		_helpShowing = !_helpShowing;
 		$('.helpArea').fadeToggle();
 	});
 
@@ -359,17 +361,15 @@ $(function() {
 		$game.$player.keyWalking = false;
 	});
 
+	var startNewAction = function() {
+		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
+		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !_helpShowing){
+			return true;
+		}
+		return false;
+	};
 });
 
-function startNewAction() {
-	//check all the game states (if windows are open ,in transit, etc.) to begin a new action
-	if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat){
-		return true;
-	}
-	else {
-		return false;
-	}
-}
 function leaveThisJoint() {
 	$game.$player.exitAndSave();
 }

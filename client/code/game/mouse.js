@@ -20,11 +20,11 @@ $game.$mouse = {
 		$game.$mouse.curX = Math.floor(x/32);
 		$game.$mouse.curY = Math.floor(y/32);
 
-		
+
 		if(mouseInfo.debug){
 			console.log($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY]);
 		}
-		
+
 		//extremes(if at edge it will be just over)
 		if($game.$mouse.curX > 29) {
 			$game.$mouse.curX = 29;
@@ -32,7 +32,7 @@ $game.$mouse = {
 		else if($game.$mouse.curX < 0) {
 			$game.$mouse.curX = 0;
 		}
-		
+
 		if($game.$mouse.curY > 14) {
 			$game.$mouse.curY = 14;
 		}
@@ -52,10 +52,7 @@ $game.$mouse = {
 			$game.$renderer.renderMouse(mouseStuff);
 		}
 
-		
-
 		if(clicked) {
-			
 			//check if it is a nogo or npc
 			//if the tile BELOW the tile clicked is npc,
 			//then user clicked the head, so act like npc
@@ -74,13 +71,10 @@ $game.$mouse = {
 				}
 			}
 			else {
-
 				//if clicking on a player, show their info
 				var mX = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].x,
 					mY = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].y;
-
 				var user = $game.$others.playerCard(mX, mY);
-				
 				if(!user) {
 					var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
 					//go
@@ -92,18 +86,15 @@ $game.$mouse = {
 						else if($game.$gnome.isChat) {
 							$game.$gnome.hideChat();
 						}
-						
 					}
-					
 					//npc
 					else if(state >= 0 ) {
 						//set index val so reousrce can show right one
-		
+
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
 						if(state !== $game.$gnome.index) {
 							$game.$npc.selectNpc(state);
-				
 							//move them to the spot to the
 							//BOTTOM LEFT corner of the npc
 							//(consistent so we leave that open in tilemap)

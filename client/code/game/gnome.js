@@ -510,20 +510,6 @@ $game.$gnome = {
 					var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
 					if(answer.id === tanId) {
 						found = true;
-						//this is a distance check if we don't do snapping
-						
-						// var dist = Math.abs(transX - answer.x) + Math.abs(transY - answer.y);
-						// console.log('dist: ' + dist);
-						// if(dist < 10) {
-						// 	//console.log('winna');
-						// }
-						// else {
-						// 	//console.log('close');
-						// 	correct = false;
-						// 	message = 'at least one piece is misplaced';
-						// 	continue;
-						// }
-
 						//this is a hard check for snapping
 						if(transX === answer.x && transY === answer.y) {
 							numRight += 1;
