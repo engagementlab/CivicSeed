@@ -32,8 +32,6 @@ $game.$npc = {
 		var newbie = $game.$npc.createNpc(npc);
 		newbie.getMaster();
 		_allNpcs[npc.id] = newbie;
-
-
 	},
 
 	update: function() {
@@ -74,6 +72,7 @@ $game.$npc = {
 			id: npc.id,
 			dialog: npc.dialog,
 			level: npc.level,
+			isHolding: npc.isHolding,
 			resource: npc.resource,
 			onScreen: null,
 			numSteps: 64,
@@ -189,7 +188,6 @@ $game.$npc = {
 
 	show: function() {
 		//if there is no other stuff on screen, then show dialog
-		
 		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
 			if(_resourceOnDeck) {
 				$game.$resources.isShowing = true;
@@ -205,6 +203,7 @@ $game.$npc = {
 	//choose prompt based on PLAYERs memory of interaction
 	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
 	showPrompt: function() {
+		clearTimeout($game.$npc.hideTimer);
 		$('.speechBubble button').addClass('hideButton');
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
@@ -222,10 +221,22 @@ $game.$npc = {
 	},
 
 	showRandom: function() {
-		var ran = Math.floor(Math.random() * _curNpc.dialog.random.length);
-		
-		_speak = _curNpc.dialog.random[ran];
-		
+		//they have a resource with just one random response
+		if(_curNpc.isHolding) {
+			_speak = _curNpc.dialog.random[0];
+		}
+		//they have a response for past, present, future
+		else {
+			if($game.$player.game.currentLevel === _curNpc.level) {
+				_speak = _curNpc.dialog.random[1];
+			}
+			else if($game.$player.game.currentLevel < _curNpc.level) {
+				_speak = _curNpc.dialog.random[2];
+			}
+			else {
+				_speak = _curNpc.dialog.random[0];
+			}
+		}
 
 		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
@@ -247,8 +258,13 @@ $game.$npc = {
 
 		_who = _allNpcs[stringId].name;
 
-		if($game.$player.game.currentLevel === _curNpc.level) {
-
+		//check if it is just a random talking npc
+		console.log(_curNpc);
+		if(!_curNpc.isHolding) {
+			_resourceOnDeck = false;
+		}
+		//if it is in player's level or previous
+		else if($game.$player.game.currentLevel >= _curNpc.level) {
 			//here we will tell the resoure object to clear old stuff,
 			//and tell it what to load (and who it corresponds to)
 			$game.$resources.loadResource(_who, _curNpc.id, false);
@@ -257,7 +273,9 @@ $game.$npc = {
 		else {
 			_resourceOnDeck = false;
 		}
-		
+	},
+
+	getNpcLevel: function() {
+		return _curNpc.level;
 	}
-	
 };

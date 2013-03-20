@@ -355,14 +355,12 @@ $game.$player = {
 			beginTravel();
 		}
 		else {
+			//trigger npc to popup _info and stuff
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
 					$game.$npc.show();
-
-					//trigger npc to popup _info and stuff
 			}
 		}
-		
 	},
 
 	beginMove: function(x, y) {
@@ -769,15 +767,14 @@ $game.$player = {
 		return 0;
 	},
 
-	answerResource: function(correct, id, answer) {
-		
+	answerResource: function(correct, id, answer, npcLevel) {
+
 		var r = {
 			npc: id,
 			answers: [answer],
 			attempts: 1,
 			result: correct
 		};
-		
 		var rs = null,
 			l = $game.$player.game.resources.length;
 
@@ -807,9 +804,13 @@ $game.$player = {
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.game.seeds.normal += numToAdd;
 			_seedHudCount.text($game.$player.game.seeds.normal);
-			$game.$player.game.inventory.push(id);
-			$game.$player.addToInventory(id);
-			$game.$player.checkGnomeState();
+
+			if($game.$player.game.currentLevel === npcLevel) {
+				$game.$player.game.inventory.push(id);
+				$game.$player.addToInventory(id);
+				$game.$player.checkGnomeState();
+			}
+			return numToAdd;
 		}
 	},
 
@@ -817,8 +818,8 @@ $game.$player = {
 		//put player to state 3 (solving) if they have enough resources
 		//AND they have already seen the first 2 staes
 		if($game.$player.game.inventory.length >= _numRequired[$game.$player.game.currentLevel] && $game.$player.game.gnomeState > 1) {
-				$game.$player.game.gnomeState = 3;
-			}
+			$game.$player.game.gnomeState = 3;
+		}
 	},
 
 	getAnswer: function(id) {
@@ -896,6 +897,16 @@ $game.$player = {
 
 	nextLevel: function() {
 		$game.$player.game.currentLevel += 1;
+
+		//hack for demo user to never pass level 1
+		if($game.$player.name === 'Demo') {
+			$game.$player.game.currentLevel = 0;
+			$game.$player.game.resources = [],
+			$game.$player.game.inventory = [],
+			$game.$player.game.colorMap = '',
+			$game.$player.game.tilesColored = 0,
+			$game.$player.game.resume = [];
+		}
 		$game.$player.game.gnomeState = 0;
 		$game.$player.game.seenThing = false;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);

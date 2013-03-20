@@ -17,7 +17,10 @@ var _resources = [],
 	_resourceButtonSel = null,
 	_speakerNameSel = null,
 	_resourceMessageSel = null,
-	_resourceContentSel = null;
+	_resourceContentSel = null,
+	_numSeedsToAdd = 0,
+	_questionType = null,
+	_feedbackRight = null;
 
 $game.$resources = {
 
@@ -67,6 +70,8 @@ $game.$resources = {
 		_resourceStateSel.empty();
 		var stringId = String(index);
 		_curResource = _resources[stringId];
+		_questionType = _curResource.questionType;
+		_feedbackRight = _curResource.feedbackRight;
 		var url = _curResource.url;
 		_resourceStateSel.load(url,function() {
 			_numSlides = $('.resourceStage .pages > .page').length;
@@ -106,7 +111,7 @@ $game.$resources = {
 		_resourceButtonSel.addClass('hideButton');
 		if(_answered) {
 			//this is the medal page
-			if(_currentSlide === _numSlides + 1 &&  _curResource.questionType === 'open') {
+			if(_currentSlide === _numSlides + 1 &&  _questionType === 'public') {
 				if(_correctAnswer) {
 					$('.resourceArea .nextButton').removeClass('hideButton');
 				}
@@ -123,7 +128,7 @@ $game.$resources = {
 				//if its the last slide
 				if(_currentSlide === _numSlides - 1) {
 					//not open ended
-					if( _curResource.questionType !== 'open') {
+					if( _questionType !== 'public') {
 						$('.resourceArea .closeButton').removeClass('hideButton');
 					}
 					//answers to show
@@ -162,7 +167,6 @@ $game.$resources = {
 					$('.resourceArea .backButton').removeClass('hideButton');
 				}
 			}
-			
 		}
 	},
 
@@ -173,34 +177,30 @@ $game.$resources = {
 		if(_answered) {
 			//if they got it right, give them a tangram
 			if(_correctAnswer) {
-
 				//first, congrats and show them the tangram piece
 				if(_currentSlide === _numSlides + 1) {
-					_speak = _curResource.responses[0];
+					var npcLevel = $game.$npc.getNpcLevel();
+					if(npcLevel < $game.$player.game.currentLevel) {
+						_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
+						_resourceContentSel.empty().css('overflow','auto');
+					}
+					else {
+						_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
+						//show image on screen
+						//get path from db, make svg with that
+						var imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/r' + _curResource.id + '.png';
+						newImg = '<img src="' + imgPath + '" class="centerImage">';
+						_resourceContentSel.html(newImg).css('overflow', 'hidden');
+					}
 					_speakerNameSel.text(_who + ': ');
 					_resourceMessageSel.text(_speak);
-					//show image on screen
-					//get path from db, make svg with that
-					//var newSvg = '<svg><path d="'+_curResource.shape.path+'" fill="' + _curResource.shape.fill + '" transform = "translate(300,50)"</path></svg>';
-					//_resourceContentSel.html(newSvg);
-					var imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/r' + _curResource.id + '.png';
-					newImg = '<img src="' + imgPath + '" class="centerImage">';
-					_resourceContentSel.html(newImg).css('overflow', 'hidden');
 				}
 				//the next slide will show them recent answers
 				else {
 					_resourceContentSel.empty().css('overflow','auto');
 					$game.$resources.showRecentAnswers();
 				}
-			
 			}
-			// else {
-			// 	_speak = _curResource.responses[1];
-			// 	_speakerNameSel.text(_who + ': ');
-			// 	_resourceMessageSel.text(_speak);
-			// 	_resourceContentSel.empty();
-			// }
-			
 		}
 		else {
 			_resourceContentSel.css('overflow', 'auto');
@@ -215,22 +215,26 @@ $game.$resources = {
 					_speakerNameSel.text(_who + ': ');
 					_resourceMessageSel.text(_speak);
 					var inputBox = null;
-					if(_curResource.questionType === 'multiple') {
+					if(_questionType === 'multiple') {
 						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[0] + '"> ' + _curResource.possibleAnswers[0] + '</input>' +
 									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[1] + '"> ' + _curResource.possibleAnswers[1] + '</input>' +
 									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[2] + '"> ' + _curResource.possibleAnswers[2] + '</input>' +
 									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[3] + '"> ' + _curResource.possibleAnswers[3] + '</form';
 					}
-					else if(_curResource.questionType === 'open') {
+					else if(_questionType === 'public' || _questionType === 'length' || _questionType === 'keyword') {
 						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 					}
-					else if(_curResource.questionType === 'closed') {
-						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+					else if(_questionType === 'truefalse') {
+						//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
+						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="true">true</input>' +
+									'<br><input name="resourceMultipleChoice" type ="radio" value="false">false</input>';
 					}
-					
+					else if(_questionType === 'yesno') {
+						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="yes">yes</input>' +
+									'<br><input name="resourceMultipleChoice" type ="radio" value="no">no</input>';
+					}
 					_resourceContentSel.html(finalQuestion + inputBox);
 				}
-					
 			}
 			else{
 				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
@@ -249,12 +253,11 @@ $game.$resources = {
 		var numToShow = numAnswers < 3 ? numAnswers: 3,
 			counter = 0,
 			spot = numAnswers - 1;
-		
+
 		while(counter < numToShow) {
 			displayAnswers += '<li class="playerAnswers"><span>' + recentAnswers[spot-counter].name + ': </span> ' + recentAnswers[spot-counter].answer + '</li>';
 			counter += 1;
 		}
-
 		displayAnswers += '</ul>';
 		if(numAnswers < 2) {
 			_speak = 'Congrats! You were the first to answer.';
@@ -297,69 +300,98 @@ $game.$resources = {
 	},
 
 	nextSlide: function() {
-		
-		_currentSlide += 1;
 
+		_currentSlide += 1;
 		//if its answered, determine if we need to show npc chat style instead
 		if(_answered) {
-			
 			//if they got it wrong
 			if(!_correctAnswer) {
-				
-				_speak = _curResource.responses[1];
-				//_speakerNameSel.text(_who + ': ');
-				//_resourceMessageSel.text(_speak);
-				//_resourceContentSel.empty();
+				_speak = _curResource.feedbackWrong;
+
 				//hide resource
 				$game.$resources.hideResource();
 				$('.speechBubble .speakerName').text(_who + ': ');
-				$('.speechBubble .message').text('Wrong answer, sorry. Maybe click me again?');
+				$('.speechBubble .message').text(_speak);
 
 				$('.speechBubble').fadeIn(function() {
 					$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,4000);
 				});
 			}
 			else {
-				
 				$game.$resources.addContent();
-				$game.$resources.addButtons();		
+				$game.$resources.addButtons();
 			}
 		}
 		else {
-			
 			$game.$resources.addContent();
-			$game.$resources.addButtons();	
+			$game.$resources.addButtons();
 		}
 	},
 
 	submitAnswer: function() {
-	
+
 		var response = null;
-		//get the answer from the field
-		if(_curResource.questionType === 'open' || _curResource.questionType === 'closed') {
+		_correctAnswer = false;
+		//retrieve the answer
+		if(_questionType === 'public' || _questionType === 'keyword' || _questionType === 'length') {
 			response = $('.resourceContent textarea').val();
 		}
-		else if(_curResource.questionType === 'multiple') {
+		else {
 			response = $('input[name=resourceMultipleChoice]:checked').val();
 		}
-		
-		console.log(response);
-		//if its an open ended question or the right answer, then validation is true
-		if(_curResource.questionType === 'open' || response === _curResource.answer) {
+		//if it is a keyword, search for the keyword
+		if(_questionType === 'keyword') {
+			for(var k = 0; k < _curResource.keywords.length; k++) {
+				var index = response.indexOf(_curResource.keywords[k]);
+				if(index > -1) {
+					_correctAnswer = true;
+					continue;
+				}
+			}
+		}
+		//check open response aganist a specific required length
+		else if(_questionType === 'length') {
+			var splitResponse = response.split(' ');
+			if(splitResponse.length >= _curResource.requiredWords) {
+				_correctAnswer = true;
+			}
+		}
+		else if(_questionType === 'public') {
+			_feedbackRight = 'That will give me a lot to think about.';
+			if(response.length > 0) {
+				_correctAnswer = true;
+			}
+		}
+		//multi choice, truefalse, yesno
+		else{
+			if(response === _curResource.answer) {
+				_correctAnswer = true;
+			}
+		}
+		var npcLevel = $game.$npc.getNpcLevel();
+		//if correct, get seeds, push answer to db
+		if(_correctAnswer) {
 			//update player stuff
-			$game.$player.answerResource(true,_curResource.id, response);
-			
+			_numSeedsToAdd = $game.$player.answerResource(true,_curResource.id, response, npcLevel);
+
+			//if they took more than 1 try to get a binary, drop down more
+			if(_questionType === 'truefalse' || _questionType === 'yesno') {
+				if(_numSeedsToAdd < 5) {
+					_numSeedsToAdd = 2;
+				}
+			}
 			//add this to the DB of resources for all player answers
 			var newAnswer = {
 				name: $game.$player.name,
 				answer: response
 			};
-			ss.rpc('game.npc.answerToResource', newAnswer, _curResource.id);
-			_correctAnswer = true;
+			//hack to not include demo users
+			if($game.$player.game.name !== 'Demo') {
+				ss.rpc('game.npc.answerToResource', newAnswer, _curResource.id);
+			}
 		}
 		else {
-			$game.$player.answerResource(false,_curResource.id, response);
-			_correctAnswer = false;
+			_numSeedsToAdd = $game.$player.answerResource(false,_curResource.id, response, npcLevel);
 		}
 		_answered = true;
 		$game.$resources.nextSlide();

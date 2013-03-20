@@ -8,9 +8,12 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		prompt: String,
 		question: String,
 		questionType: String,
+		keywords: [String],
+		requiredWords: Number,
 		possibleAnswers: [String],
 		answer: String,
-		responses: [String],
+		feedbackWrong: String,
+		feedbackRight: String,
 		shape: {
 			path: String,
 			fill: String,

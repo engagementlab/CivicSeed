@@ -5,6 +5,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		name: String,
 		level: Number,
 		sprite: Number,
+		isHolding: Boolean,
 		dialog: {
 			random: [String],
 			prompts: [String]
