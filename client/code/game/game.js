@@ -620,7 +620,7 @@ exports.$game = {
 
 	checkPotty: function(msg) {
 		var temp = msg.toLowerCase();
-			
+
 		for(var i = 0; i < $game.badWords.length; i++) {
 			if(temp.indexOf($game.badWords[i]) > -1) {
 				return 'I have a potty mouth and I am sorry for cussing.';

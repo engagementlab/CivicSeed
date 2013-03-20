@@ -10,7 +10,7 @@ var self = module.exports = {
 
 		$app.get('/profiles/:name', function(req) {
 			ss.rpc('shared.profiles.getProfileInformation', req.params['name'], function(info) {
-				if(!info.profileSetup) {
+				if(!info.profileSetup && sessionStorage.userEmail === info.email) {
 					//reroute to change info
 					location.href = 'change-info';
 				} else {

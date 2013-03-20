@@ -501,10 +501,8 @@ $game.$gnome = {
 					transD2 = transD.split(','),
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
-					
 					t = aLength,
 					found = false;
-
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
 					
@@ -735,6 +733,7 @@ $game.$gnome = {
 			.attr('transform',trans);
 		}
 		
+		console.log('drop: ',d.id,x,y,mX,mY);
 	},
 
 	snapTo: function(num) {
