@@ -6,7 +6,7 @@
 	font-style normal
 
 body, button, p, a
-	font-family $mono
+	font-family $bodyFont
 
 .gameboard
 	position relative
@@ -95,8 +95,6 @@ body, button, p, a
 	z-index 9990
 	display none
 
-.progressArea p 
-	font-family $mono
 .helpArea
 	position absolute
 	top 15px
@@ -178,8 +176,8 @@ body, button, p, a
 
 .speakerName
 	font-size 1.2em
-	color $csYellow
-	$textOutline()
+	font-weight 700
+	color $csOrange
 .speechBubble button
 	float right
 	margin 0 10px
@@ -352,11 +350,9 @@ p.finalQuestion
 	padding 10px
 	margin-left 10px
 	color $csDarkGreen
-	$textOutline()
 .progressArea h3
 	margin-left 40px
 	color $csYellow
-	$textOutline()
 .personalInfo,
 .personalStats,
 .topSeeders,
@@ -423,7 +419,6 @@ p.finalQuestion
 	margin-top 10px
 	width 860px
 .playerAnswers > span
-	$textOutline()
 	margin-right 5px
 	color #eee
 .megaBar
@@ -483,7 +478,6 @@ li.playerAnswers:nth-child(odd)
 li.playerAnswers:nth-child(even)
 	background $csYellow
 .tab-pane > div > p > span
-	$textOutline()
 	color #eee
 .gameCursor
 	position absolute
@@ -502,6 +496,6 @@ li.playerAnswers:nth-child(even)
 	font-size 2em
 	text-align center
 .message
-	font-family $mono
+	font-family $bodyFont
 button
-	font-family $mono
+	font-family $buttonFont

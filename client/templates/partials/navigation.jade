@@ -11,7 +11,8 @@
 			- if(sessionStorage.userFirstName)
 				.btn-group.pull-right.tempFixMargin
 					a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
-						i.icon-user &nbsp;#{sessionStorage.userFirstName}&nbsp;
+						i.icon-user 
+							span &nbsp;#{sessionStorage.userFirstName}&nbsp;
 						span.caret
 					ul.dropdown-menu
 						li: a(href='/profiles') Profiles

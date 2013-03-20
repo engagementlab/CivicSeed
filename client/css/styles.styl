@@ -3,10 +3,20 @@
 // @import 'bootstrap/bootstrap' <-- old. it will break if you uncomment. left in for legacy.
 @import 'bootstylus/bootstrap'
 @import 'globals/game'
+@import 'globals/pages'
 @import 'globals/profiles'
 
 body
 	padding-top 80px
+	font-family $bodyFont
+
+p, li, h1,h2, h3, h4, h5
+	font-family $bodyFont
+
+a, button, i, span
+	font-family $buttonFont
+	font-weight 300
+
 a:hover
 	text-decoration none
 .moreTopMargin

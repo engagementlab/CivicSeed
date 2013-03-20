@@ -10,8 +10,8 @@ module.exports.global = [
 	question: 'Choose one of the ethics you just read about and explain why it is important to you. Your answer will be public, and afterwards, you\'ll get to see what others have said.',
 	questionType: 'public',
 	shape: {
-		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
-		fill: 'rgb(124,202,176)'
+		path: 'm0,0l0,70l80,0l0,-70l-80,0z',
+		fill: 'rgb(11,75,140)'
 	},
 	playerAnswers: []
 },
@@ -61,8 +61,8 @@ module.exports.global = [
 	question: 'Based on what you\'ve seen, set one goal and one objective for yourself. Your answer will be public, and afterwards, you\'ll get to see what others have said.',
 	questionType: 'public',
 	shape: {
-		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
-		fill: 'rgb(44,52,91)'
+		path: 'm0,0l-50,50l50,50l0,-100z',
+		fill: 'rgb(90, 226, 226)'
 	},
 	playerAnswers: []
 },
@@ -110,8 +110,8 @@ module.exports.global = [
 	question: 'Which of these students resonated most with you? Why? Your answer will be public, and afterwards, you\'ll get to see what others have said.',
 	questionType: 'public',
 	shape: {
-		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
-		fill: 'rgb(250,0,0)'
+		path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
+		fill: 'rgb(229,299,45)'
 	},
 	playerAnswers: []
 },
@@ -194,8 +194,8 @@ module.exports.global = [
 	questionType: 'keyword',
 	keywords: ['gender', 'race', 'culture', 'nationality', 'socioeconomic class', 'religion', 'sexual orientation', 'age group', 'wellness', 'body', 'educated', 'rich', 'poor', 'middle-class', 'white', 'black', 'hispanic', 'latino', 'latina', 'african-american', 'asian', 'chinese', 'japanese', 'korean', 'indian', 'male', 'female', 'man', 'woman', 'guy', 'straight', 'gay', 'heterosexual', 'homosexual', 'christian', 'jewish', 'muslim', 'atheist', 'agnostic', 'religious', 'american', 'low', 'high', 'mid', 'fat', 'thin', 'tall', 'short', 'young', 'college'],
 	shape: {
-		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
-		fill: 'rgb(250,0,0)'
+		path: 'm0,0l0,100l50,-50l-50,-50z',
+		fill: 'rgb(255,120,86)'
 	},
 	playerAnswers: []
 },
