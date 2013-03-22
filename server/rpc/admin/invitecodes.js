@@ -3,6 +3,7 @@ var rootDir = process.cwd(),
 	xkcd = require('xkcd-pwgen'),
 	service = require(rootDir + '/service'),
 	userModel = service.useModel('user', 'preload'),
+	gameModel = service.useModel('game', 'preload'),
 	emailListLength,
 	emailIterator,
 	singleHtml;
@@ -19,19 +20,18 @@ html += '<h3 style="color:green;">You can get started by going <a href="http://t
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	// req.use('debug');
+	req.use('debug');
 	req.use('account.authenticated');
 
 	var colorData = require(rootDir + '/data/colors');
 
-	var createUserAndSendInvite = function(email, i) {
+	var createUserAndSendInvite = function(email, instanceName, i) {
 		userModel.findOne({ email: email }, function(err, user) {
 			var nameParts;
 			if(err) {
 				console.error('  Could not find \'actor\' user: %s'.red.inverse, err);
 			} else {
 				if(!user) {
-						
 					var newColor = colorData.global[i],
 						tilesheetNum = i + 1;
 
@@ -46,6 +46,7 @@ exports.actions = function(req, res, ss) {
 					user.profileUnlocked = false;
 					user.gameStarted = false;
 					user.game = {
+						instanceName: instanceName,
 						currentLevel: 0,
 						rank: 'nothing',
 						position: {
@@ -95,7 +96,7 @@ exports.actions = function(req, res, ss) {
 
 	return {
 
-		sendInvites: function(emailList) {
+		sendInvites: function(emailList, instanceName) {
 
 			if(req.session.role && (req.session.role === 'superadmin' || req.session.role === 'admin')) {
 				// emailList = ['russell@engagementgamelab.org', 'russell@russellgoldenberg.com', 'russell_goldenberg@emerson.edu', 'samuel.a.liberty@gmail.com', 'thebookofrobert@gmail.com', 'langbert@gmail.com', 'arxpoetica@gmail.com'];
@@ -107,11 +108,50 @@ exports.actions = function(req, res, ss) {
 				emailList = emailList.slice(0, 20);
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-					createUserAndSendInvite(emailList[emailIterator], emailIterator);
+					createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);
 				}
 			} else {
 				res(false);
 			}
+		},
+
+		newGameInstance: function(name) {
+			gameModel
+				.where('instanceName').equals(name)
+				.select('instanceName')
+				.find(function(err, results) {
+					//if it doesn't exist, create new game instance					
+					if(err) {
+						res(true, false);
+					} else if(results.length > 0) {
+						res(false, true);
+					} else {
+						newGame = new gameModel();
+						newGame.players = 0;
+						newGame.tilesColored = 0;
+						newGame.seedsDropped = 0;
+						newGame.seedsDroppedGoal = 3200;
+						newGame.active = true;
+						newGame.bossModeUnlocked = false;
+						newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'];
+						newGame.leaderboard = [];
+						newGame.levelNames = ['Level 1: Who are you?', 'Level 2: Where are you?', 'Level 3: When are you?', 'Level 4: Why are you?', 'Level 5 = What are you?'];
+						newGame.resourceCount = [10, 10, 10, 10];
+						newGame.instanceName = name;
+						newGame.resourceResponses = {};
+
+						newGame.save(function(err) {
+							if(err) {
+								console.log(error);
+								res(true, false);
+							}
+							else {
+								console.log('game instance has been created');
+								res(false, false);
+							}
+						});
+					}
+				});
 		}
 
 	};
