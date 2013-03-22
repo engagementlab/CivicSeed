@@ -112,8 +112,8 @@ $(function() {
 		
 	});
 
-	ss.event.on('ss-addPlayerAnswer', function(data, id) {
-		$game.$resources.addAnswer(data,id);
+	ss.event.on('ss-addPlayerAnswer', function(data) {
+		$game.$resources.addAnswer(data);
 	});
 
 	//level change for a player
@@ -136,6 +136,7 @@ $(function() {
 				$game.$player.seedPlanting = false;
 				_renderInfo.colorNum = _playerColorNum;
 				$game.changeStatus();
+				$(this).removeClass('currentButton');
 			}
 			else {
 				//open it up OR turn it on
@@ -148,13 +149,13 @@ $(function() {
 				$('.seedventory').slideUp(function() {
 					$game.$player.seedventoryShowing = false;
 					$game.changeStatus();
-				});	
+				});
 			}
 			else {
 				$game.$player.seedPlanting = false;
 				$game.statusUpdate('seed mode ended, as you were');
 			}
-			
+			$(this).removeClass('currentButton');
 		}
 	});
 
@@ -211,21 +212,21 @@ $(function() {
 			var sentence = _chatText.val();
 			var data = {
 				msg: $game.checkPotty(sentence),
-				who: $game.$player.name,
+				name: $game.$player.name,
 				id: $game.$player.id,
-				log: sentence
+				log: sentence,
+				instanceName: $game.$player.game.instanceName
 			};
 			ss.rpc('game.chat.sendMessage', data, function(r) {
 				// console.log('chat worked: ', r);
 			});
-			
 			_chatText.val('');
 		}
 		return false;
 	});
 
 	$('.chatButton').click(function(e) {
-		
+		$('.chatButton').toggleClass('currentButton');
 		_chatBox.toggleClass('hide');
 		_displayBox.toggleClass('hide');
 		//return false;
@@ -256,12 +257,14 @@ $(function() {
 				_inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
 					$game.changeStatus();
+					$('.inventoryButton').removeClass('currentButton');
 				});	
 			}
 			else {
 				_inventory.slideDown(function() {
 					$game.$player.inventoryShowing = true;
 					_displayBoxText.text('click items to view again');
+					$('.inventoryButton').addClass('currentButton');
 				});	
 			}	
 		}
@@ -315,6 +318,7 @@ $(function() {
 	});
 
 	$('.progressButton').bind('click', function() {
+		$(this).toggleClass('currentButton');
 		if($game.showingProgress) {
 			_progressArea.fadeOut(function() {
 				$game.showingProgress = false;
@@ -342,6 +346,7 @@ $(function() {
 
 	$('.helpButton').bind('click', function() {
 		_helpShowing = !_helpShowing;
+		$(this).toggleClass('currentButton');
 		$('.helpArea').fadeToggle();
 	});
 

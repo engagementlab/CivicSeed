@@ -20,7 +20,7 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
-		
+
 		if(player.id != $game.$player.id) {
 			// console.log('new player added!');
 			//set inview if nearby

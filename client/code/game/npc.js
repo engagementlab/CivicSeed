@@ -203,6 +203,7 @@ $game.$npc = {
 	//choose prompt based on PLAYERs memory of interaction
 	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
 	showPrompt: function() {
+		$('.speechBubble p').removeClass('fitBubble');
 		clearTimeout($game.$npc.hideTimer);
 		$('.speechBubble button').addClass('hideButton');
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
@@ -237,12 +238,12 @@ $game.$npc = {
 				_speak = _curNpc.dialog.random[0];
 			}
 		}
-
+		$('.speechBubble p').addClass('fitBubble');
 		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
 
 		$('.speechBubble').fadeIn(function() {
-			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
+			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,8000);
 		});
 	},
 

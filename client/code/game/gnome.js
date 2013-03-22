@@ -12,7 +12,8 @@ var _info = null,
 	_counter = 0,
 	_dragOffX = 0,
 	_dragOffY = 0,
-	_feedbackTimeout = null;
+	_feedbackTimeout = null,
+	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' };
 
 $game.$gnome = {
 
@@ -633,9 +634,12 @@ $game.$gnome = {
 			selector = 'br' + npc,
 			x = e.originalEvent.offsetX,
 			y =  e.originalEvent.offsetY,
-			shape = $game.$resources.getShape(npc);
+			shape = $game.$resources.getShape(npc),
+			path = shape.path,
+			fill = _svgFills[shape.fill];
 
-			//access with shape.path
+			console.log(shape.fill, fill);
+			
 
 		$('.r' + npc)
 			.css('opacity','.4')
@@ -643,9 +647,9 @@ $game.$gnome = {
 		
 		_new = _svg.append('path')
 			.attr('class',selector)
-			.data([{x:x , y: y, id: npc, color: shape.fill}])
+			.data([{x:x , y: y, id: npc, color: fill}])
 			.attr('d', shape.path)
-			.attr('fill', shape.fill)
+			.attr('fill', fill)
 			.attr('stroke', 'rgb(255,255,255)')
 			.attr('stroke-width', 0)
 			.attr('transform', 'translate('+x+','+y+')')

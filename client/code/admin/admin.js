@@ -40,13 +40,22 @@ var self = module.exports = {
 			var emailList = $('#emailList').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi);
 			// console.log(emailList);
 
-			if(emailList) {
-				ss.rpc('admin.invitecodes.sendInvites', emailList, function(res) {
-					console.log(res);
-					button.addClass('btn-success');
+			var instanceName = $('#instanceName').val().trim();
+
+			if(instanceName && emailList) {
+				ss.rpc('admin.invitecodes.newGameInstance', instanceName, function(err, res) {
+					if(err) {
+						console.log('error with db', err);
+					} else if(res) {
+						alert('game name already exists');
+					} else {
+						ss.rpc('admin.invitecodes.sendInvites', emailList, instanceName, function(res) {
+							console.log(res);
+							button.addClass('btn-success');
+						});
+					}
 				});
 			}
-
 
 			// var sessionName = document.getElementById('sessionName').value;
 			// var date;

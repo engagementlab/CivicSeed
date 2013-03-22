@@ -20,7 +20,8 @@ var _resources = [],
 	_resourceContentSel = null,
 	_numSeedsToAdd = 0,
 	_questionType = null,
-	_feedbackRight = null;
+	_feedbackRight = null,
+	_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'];
 
 $game.$resources = {
 
@@ -101,7 +102,7 @@ $game.$resources = {
 			$game.$resources.addButtons();
 			_inventorySel.fadeOut(function() {
 				$game.$player.inventoryShowing = false;
-				_resourceAreaSel.addClass('patternBg1');
+				// _resourceAreaSel.addClass('patternBg1');
 				_resourceAreaSel.fadeIn();
 			});
 		});
@@ -111,7 +112,7 @@ $game.$resources = {
 		_resourceButtonSel.addClass('hideButton');
 		if(_answered) {
 			//this is the medal page
-			if(_currentSlide === _numSlides + 1 &&  _questionType === 'public') {
+			if(_currentSlide === _numSlides + 1 &&  _questionType === 'open') {
 				if(_correctAnswer) {
 					$('.resourceArea .nextButton').removeClass('hideButton');
 				}
@@ -128,7 +129,7 @@ $game.$resources = {
 				//if its the last slide
 				if(_currentSlide === _numSlides - 1) {
 					//not open ended
-					if( _questionType !== 'public') {
+					if( _questionType !== 'open') {
 						$('.resourceArea .closeButton').removeClass('hideButton');
 					}
 					//answers to show
@@ -188,7 +189,8 @@ $game.$resources = {
 						_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
 						//show image on screen
 						//get path from db, make svg with that
-						var imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/r' + _curResource.id + '.png';
+						var levelFolder = 'level' + ($game.$player.game.currentLevel + 1),
+							imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.id + '.png';
 						newImg = '<img src="' + imgPath + '" class="centerImage">';
 						_resourceContentSel.html(newImg).css('overflow', 'hidden');
 					}
@@ -198,7 +200,7 @@ $game.$resources = {
 				//the next slide will show them recent answers
 				else {
 					_resourceContentSel.empty().css('overflow','auto');
-					$game.$resources.showRecentAnswers();
+					//$game.$resources.showRecentAnswers();
 				}
 			}
 		}
@@ -208,12 +210,12 @@ $game.$resources = {
 				var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
-					$game.$resources.showRecentAnswers();
+					//$game.$resources.showRecentAnswers();
 				}
 				else {
-					_speak = _curResource.prompt;
-					_speakerNameSel.text(_who + ': ');
-					_resourceMessageSel.text(_speak);
+					// _speak = _curResource.prompt;
+					// _speakerNameSel.text(_who + ': ');
+					// _resourceMessageSel.text(_speak);
 					var inputBox = null;
 					if(_questionType === 'multiple') {
 						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[0] + '"> ' + _curResource.possibleAnswers[0] + '</input>' +
@@ -221,7 +223,7 @@ $game.$resources = {
 									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[2] + '"> ' + _curResource.possibleAnswers[2] + '</input>' +
 									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[3] + '"> ' + _curResource.possibleAnswers[3] + '</form';
 					}
-					else if(_questionType === 'public' || _questionType === 'length' || _questionType === 'keyword') {
+					else if(_questionType === 'open') {
 						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 					}
 					else if(_questionType === 'truefalse') {
@@ -275,7 +277,7 @@ $game.$resources = {
 		_resourceAreaSel.fadeOut(function() {
 			$game.$resources.isShowing = false;
 			_resourceButtonSel.addClass('hideButton');
-			_resourceAreaSel.removeClass('patternBg1');
+			// _resourceAreaSel.removeClass('patternBg1');
 		});
 
 		//if the resource was being displayed from the inventory, keep it up.
@@ -333,31 +335,16 @@ $game.$resources = {
 		var response = null;
 		_correctAnswer = false;
 		//retrieve the answer
-		if(_questionType === 'public' || _questionType === 'keyword' || _questionType === 'length') {
+		if(_questionType === 'open') {
 			response = $('.resourceContent textarea').val();
 		}
 		else {
 			response = $('input[name=resourceMultipleChoice]:checked').val();
 		}
-		//if it is a keyword, search for the keyword
-		if(_questionType === 'keyword') {
-			for(var k = 0; k < _curResource.keywords.length; k++) {
-				var index = response.indexOf(_curResource.keywords[k]);
-				if(index > -1) {
-					_correctAnswer = true;
-					continue;
-				}
-			}
-		}
-		//check open response aganist a specific required length
-		else if(_questionType === 'length') {
-			var splitResponse = response.split(' ');
-			if(splitResponse.length >= _curResource.requiredWords) {
-				_correctAnswer = true;
-			}
-		}
-		else if(_questionType === 'public') {
-			_feedbackRight = 'That will give me a lot to think about.';
+
+		if(_questionType === 'open') {
+			var ran = Math.floor(Math.random() * 3);
+			_feedbackRight = _rightOpenRandom[ran];
 			if(response.length > 0) {
 				_correctAnswer = true;
 			}
@@ -382,12 +369,16 @@ $game.$resources = {
 			}
 			//add this to the DB of resources for all player answers
 			var newAnswer = {
+				npc: _curResource.id,
+				id: $game.$player.id,
 				name: $game.$player.name,
-				answer: response
+				answer: response,
+				madePublic: false,
+				instanceName: $game.$player.game.instanceName
 			};
 			//hack to not include demo users
 			if($game.$player.game.name !== 'Demo') {
-				ss.rpc('game.npc.answerToResource', newAnswer, _curResource.id);
+				ss.rpc('game.npc.saveResponse', newAnswer);
 			}
 		}
 		else {
@@ -408,12 +399,9 @@ $game.$resources = {
 		return _resources[stringId].tagline;
 	},
 
-	addAnswer: function(data, id) {
-		var stringId = String(id);
-		_curResource = _resources[stringId];
-		_curResource.playerAnswers.push(data);
+	addAnswer: function(data) {
+		// var stringId = String(data.npc);
+		// _curResource = _resources[stringId];
+		// _curResource.playerAnswers.push(data);
 	}
-
-
-	
 };

@@ -102,6 +102,7 @@ exports.$game = {
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			//regular game mode
+			console.log(response);
 			if(response.state === 1) {
 
 			}

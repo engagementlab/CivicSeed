@@ -644,6 +644,7 @@ $game.$player = {
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.statusUpdate('you are out seeds');
+							$('.seedButton').removeClass('currentButton');
 						}
 						_normalHudCount.text($game.$player.game.seeds.normal);
 					}
@@ -655,6 +656,7 @@ $game.$player = {
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
+							$('.seedButton').removeClass('currentButton');
 						}
 						_riddleHudCount.text($game.$player.game.seeds.riddle);
 					}
@@ -666,6 +668,7 @@ $game.$player = {
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
+							$('.seedButton').removeClass('currentButton');
 						}
 						_specialHudCount.text($game.$player.game.seeds.special);
 					}
@@ -676,8 +679,7 @@ $game.$player = {
 					$game.changeStatus('sorry, someone beat you to that tile');
 				}
 			});
-			
-		}	
+		}
 	},
 
 	message: function(message) {
@@ -852,20 +854,21 @@ $game.$player = {
 
 	addToInventory: function(id) {
 		//create the class / ref to the image
-		var file = 'r' + id,
-			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/small/'+file+'.png',
+		var className = 'r' + id,
+			levelFolder = 'level' + ($game.$player.game.currentLevel + 1),
+			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  id +'.png',
 			tagline = $game.$resources.getTagline(id);
 		//put image on page in inventory
-		_inventorySel.prepend('<img class="inventoryItem '+ file + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
+		_inventorySel.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
 
-		$('.' + file).bind('mouseenter',function() {
+		$('.' + className).bind('mouseenter',function() {
 			//var info = $(this).attr('title');
 			$(this).tooltip('show');
 		});
 		_inventoryBtnSel.text($game.$player.game.inventory.length);
 
 		//bind click and drag functions, pass npc #
-		$('img.inventoryItem.'+ file)
+		$('img.inventoryItem.'+ className)
 			.bind('click',{npc: id}, $game.$resources.beginResource)
 			.bind('dragstart',{npc: id}, $game.$gnome.dragStart);
 	},
@@ -949,16 +952,19 @@ $game.$player = {
 
 				$game.$player.seedventoryShowing = true;
 				$game.changeStatus('choose a seed to plant');
+				$('.seedButton').addClass('currentButton');
 			});
 		}
 		//start seed mode on 0
 		else {
+			$('.seedButton').addClass('currentButton');
 			if($game.$player.game.seeds.normal > 0) {
 				$game.$player.seedPlanting = true;
 				$game.$player.seedMode = 1;
 				$game.changeStatus();
 			}
 			else {
+				$('.seedButton').removeClass('currentButton');
 				$game.statusUpdate('you have no seeds');
 			}
 		}
