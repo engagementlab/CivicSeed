@@ -10,9 +10,12 @@
 		//- 	div.controls
 		//- 		input#sessionName.span4(type='text', placeholder='Give this session a name...')
 		div.control-group
+			label.control-label(for='emailList') Game Name:
+			div.controls
+				input#instanceName.span4(style='margin-bottom: 20px', placeholder='ex. Tufts Round 1')
+				//- textarea#emailList.span4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
 			label.control-label(for='emailList') Email Addresses:
 			div.controls
-				//- textarea#emailList.span4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
 				textarea#emailList.span4(rows='6') russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com
 		div.control-group
 

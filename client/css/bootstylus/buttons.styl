@@ -12,16 +12,17 @@
   margin-bottom: 0 // For input.btn
   font-size: $baseFontSize
   line-height: $baseLineHeight
-  color: $grayDark
+  color: $white
   text-align: center
-  text-shadow: 0 1px 1px rgba(255,255,255,.75)
+  //text-shadow: 0 1px 1px rgba(255,255,255,.75)
   vertical-align: middle
-  $buttonBackground($white, darken($white, 10%))
-  border: 1px solid #ccc
-  border-bottom-color: #bbb
+  //$buttonBackground($white, darken($white, 10%))
+  //border: 1px solid #ccc
+  //border-bottom-color: #bbb
   $border-radius(4px)
-  $shadow = inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)
-  $box-shadow($shadow)
+  border none
+  //$shadow = inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)
+  //$box-shadow($shadow)
   cursor: pointer
 
   // Give IE7 some love
@@ -31,11 +32,12 @@
 
 // Hover state
 .btn:hover
-  color: $grayDark
+  color: #eee
   text-decoration: none
-  background-color: darken($white, 10%)
+  //background-color: darken($white, 10%)
   background-position: 0 -15px
-
+  $shadow = 0px 0px 2px 2px rgba(0,0,0,.2)
+  $box-shadow($shadow)
   // transition is only when going to hover, otherwise the background
   // behind the gradient (there for IE<=9 fallback) gets mismatched
   $transition(background-position .1s linear)
@@ -50,10 +52,10 @@
 .btn.active,
 .btn:active
   background-image: none
-  $shadow = inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)
-  $box-shadow($shadow)
-  background-color: darken($white, 10%)
-  background-color: darken($white, 15%) e("\9")
+  //$shadow = inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)
+  //$box-shadow($shadow)
+  //background-color: darken($white, 10%)
+  //background-color: darken($white, 15%) e("\9")
   outline: 0
 
 
@@ -117,8 +119,8 @@
 .btn-info:hover,
 .btn-inverse,
 .btn-inverse:hover
-  text-shadow: 0 -1px 0 rgba(0,0,0,.25)
-  color: $white
+  //text-shadow: 0 -1px 0 rgba(0,0,0,.25)
+  // color: $white
 
 // Provide *some* extra contrast for those who can get it
 .btn-primary.active,
@@ -133,27 +135,27 @@
 // Set the backgrounds
 // -------------------------
 .btn-primary
-  $buttonBackground($primaryButtonBackground, hsl(hue($primaryButtonBackground) + 20, saturation($primaryButtonBackground), lightness($primaryButtonBackground)))
+  background $btnPrimaryBackground
 
 // Warning appears are orange
 .btn-warning
-  $buttonBackground(lighten($orange, 15%), $orange)
+  background $btnWarningBackground
 
 // Danger and error appear as red
 .btn-danger
-  $buttonBackground(#ee5f5b, #bd362f)
+  background $btnDangerBackground
 
 // Success appears as green
 .btn-success
-  $buttonBackground(#62c462, #51a351)
+  background $btnSuccessBackground
 
 // Info appears as a neutral blue
 .btn-info
-  $buttonBackground(#5bc0de, #2f96b4)
+  background $btnInfoBackground
 
 // Inverse appears as dark gray
 .btn-inverse
-  $buttonBackground(#454545, #262626)
+  background $btnInverseBackground
 
 
 

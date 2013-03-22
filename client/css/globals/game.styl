@@ -119,7 +119,8 @@ body, button, p, a
 	left 15px
 	width 930px
 	height 60px
-	background rgba(20,20,20,0.7)
+	background rgba(50,50,50,0.9)
+	// box-shadow 0 0 2px 2px rgba(0,0,0,.6)
 	padding 0
 	border-radius 5px
 	z-index 9999
@@ -177,7 +178,7 @@ body, button, p, a
 .speakerName
 	font-size 1.2em
 	font-weight 700
-	color $csOrange
+	color $csBlue
 .speechBubble button
 	float right
 	margin 0 10px
@@ -220,7 +221,21 @@ body, button, p, a
 	float left
 	margin-left 20px
 .playerHud
-	cursor pointer
+	div
+		cursor pointer
+		width 48px
+		height 36px
+		line-height 36px
+		margin-right 10px
+		margin-left 10px
+		background #ccc
+		// background rgba(0,0,0,.2)
+		border-radius 5px
+		position relative
+		text-align center
+	div:hover
+		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+
 .seedventory div
 	font-size 24px
 	margin 20px 0 0 10px
@@ -271,15 +286,10 @@ body, button, p, a
 	font-size 2em
 	margin-top 100px
 
-.playerHud div
-	width 48px
-	margin-right 10px
-	margin-left 10px
-	position relative
 .inventory button,
 .seedventory button
 	bottom 15px
-	right 10px
+	right 15px
 
 .hideButton
 	display none
@@ -311,16 +321,26 @@ textarea
 	resize none
 p.finalQuestion
 	font-size 1.2em
-	color $csPurple
+	color #222
 
 .globalHud
 	margin-left 20px
-.globalHud div
-	width 48px
-	margin-left 20px
-	cursor pointer
-	position relative
-	float right
+	div
+		width 48px
+		height 36px
+		margin-left 20px
+		cursor pointer
+		position relative
+		float right
+		line-height 36px
+		text-align center
+		background #ccc
+		// background rgba(0,0,0,.2)
+		border-radius 5px
+	div:hover
+		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+
+
 .hide
 	display none
 .displayBox
@@ -336,12 +356,12 @@ p.finalQuestion
 	cursor default
 	font-family $mono
 
-.badge, monospace
+.badge
 	position absolute
 	top -12px
-	right 5px
 	color #333
-	padding 0 4px
+	padding 3px
+	line-height 1.2em
 
 .activePlayers > p
 	right 10px
@@ -349,10 +369,10 @@ p.finalQuestion
 .helpArea h2
 	padding 10px
 	margin-left 10px
-	color $csDarkGreen
+	color $csGray
 .progressArea h3
 	margin-left 40px
-	color $csYellow
+	color $csBlue
 .personalInfo,
 .personalStats,
 .topSeeders,
@@ -363,11 +383,11 @@ p.finalQuestion
 	width 360px
 	font-size 16px
 .personalInfo
-	background $csYellow
+	background $csBlue
 .personalStats
-	background $csLightGreen
+	background $csGreen
 .topSeeders
-	background $csYellow
+	background $csBlue
 	color #333
 .topSeeders ol
 	padding-left 10px
@@ -412,7 +432,7 @@ p.finalQuestion
 .gnomeContent form
 	padding 20px
 .playerAnswers
-	color #555
+	color #222
 	list-style none
 	border-radius 5px
 	padding 10px
@@ -423,7 +443,7 @@ p.finalQuestion
 	color #eee
 .megaBar
 	color #333
-	background $csLightGreen
+	background $csGreen
 
 .progress
 	width 95%
@@ -474,9 +494,9 @@ p.finalQuestion
 	height 99%
 	width 100%
 li.playerAnswers:nth-child(odd)
-	background $csLightGreen
+	background $csGreen
 li.playerAnswers:nth-child(even)
-	background $csYellow
+	background $csBlue
 .tab-pane > div > p > span
 	color #eee
 .gameCursor
@@ -497,5 +517,7 @@ li.playerAnswers:nth-child(even)
 	text-align center
 .message
 	font-family $bodyFont
-button
-	font-family $buttonFont
+div.currentButton
+	background #666
+.speechBubble p.fitBubble
+	width 900px
