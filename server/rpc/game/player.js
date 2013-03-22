@@ -1,6 +1,5 @@
 var intervalId = {},
-	numActivePlayers = 0,
-	players = {},
+	games = {},
 	service,
 	db,
 	userModel,
@@ -31,9 +30,18 @@ exports.actions = function(req, res, ss) {
 				name: req.session.firstName,
 				game: req.session.game
 			};
-			players[playerInfo.id] = playerInfo;
-			numActivePlayers += 1;
-			ss.publish.all('ss-addPlayer',numActivePlayers, playerInfo);
+
+			if(!games[playerInfo.game.instanceName]) {
+				console.log('create! the game baby');
+				games[playerInfo.game.instanceName] = {
+					players: {},
+					numActivePlayers: 0
+				};
+			}
+			console.log(games);
+			games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
+			games[req.session.game.instanceName].numActivePlayers += 1;
+			ss.publish.all('ss-addPlayer',games[req.session.game.instanceName].numActivePlayers, playerInfo);
 			//send the number of active players and the new player info
 			res(playerInfo);
 		},
@@ -51,9 +59,9 @@ exports.actions = function(req, res, ss) {
 					} else if(user) {
 						user.game = info;
 						user.save(function (y) {
-							numActivePlayers -= 1;
-							ss.publish.all('ss-removePlayer', numActivePlayers, id);
-							delete players[id];
+							games[req.session.game.instanceName].numActivePlayers -= 1;
+							ss.publish.all('ss-removePlayer', games[req.session.game.instanceName].numActivePlayers, id);
+							delete games[req.session.game.instanceName].players[id];
 							res(true);
 						});
 					} else {
@@ -64,7 +72,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getOthers: function() {
-			res(players);
+			res(games[req.session.game.instanceName].players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
@@ -89,8 +97,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			players[info.id].game.position.x = info.x;
-			players[info.id].game.position.y = info.y;
+			games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
+			games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
 			req.session.game = info;
 		},
 
@@ -133,7 +141,7 @@ exports.actions = function(req, res, ss) {
 								count: info.tilesColored
 							};
 
-							colorHelpers.gameColorUpdate(newInfo, function(updates) {
+							colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
 								if(updates.updateBoard) {
 									ss.publish.all('ss-leaderChange', updates.oldBoard, newInfo.name);
 								}
@@ -166,13 +174,17 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getGameInfo: function() {
-			gameModel.findOne({}, function (err, result) {
-				if(err) {
-					console.log('game cannot start');
-				}
-				else{
-					res(result);
-				}
+			console.log(req.session.game.instanceName);
+			gameModel
+				.where('instanceName').equals(req.session.game.instanceName)
+				.find(function (err, result) {
+					console.log(err,result);
+					if(err) {
+						console.log('game cannot start');
+					}
+					else{
+						res(result[0]);
+					}
 			});
 		},
 
@@ -347,14 +359,17 @@ colorHelpers = {
 		saveMe();
 	},
 
-	gameColorUpdate: function(newInfo, callback) {
+	gameColorUpdate: function(newInfo, instanceName, callback) {
 		//access our global game model for status updates
-		gameModel.findOne({}, function (err, result) {
+		gameModel
+			.where('instanceName').equals(instanceName)
+			.find(function (err, results) {
 			if(err) {
 
 			} else {
 				//add tile count to our progress
-				var oldCount = result.seedsDropped,
+				var result = results[0],
+					oldCount = result.seedsDropped,
 					newCount = oldCount + 1;
 					oldColored = result.tilesColored,
 					newColored = oldColored + newInfo.numBombs,

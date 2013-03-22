@@ -9,6 +9,7 @@ var self = exports.actions = function(req, res, ss) {
 	var NpcModel = service.useModel('npc', 'ss');
 	var GnomeModel = service.useModel('gnome', 'ss');
 	var ResourceModel = service.useModel('resource', 'ss');
+	var GameModel = service.useModel('game', 'ss');
 
 	return {
 
@@ -54,16 +55,26 @@ var self = exports.actions = function(req, res, ss) {
 			});
 		},
 
-		answerToResource: function(data, id) {
-			ResourceModel.findOne({id: id}, function (err, resource) {
+		saveResponse: function(data) {
+			GameModel.where('instanceName').equals(data.instanceName)
+				.find(function (err, game) {
 				if(err) {
 					console.error('  Could not find resource', err);
-				}
-				else {
-					resource.playerAnswers.push(data);
-					resource.save(function() {
-						//blast players with new player answers
-						ss.publish.all('ss-addPlayerAnswer', data, id);
+				} else if(game) {
+					var answer = {
+						npc: data.npc,
+						id: data.id,
+						name: data.name,
+						answer: data.answer,
+						madePublic: data.madePublic
+					};
+					game[0].resourceResponses.push(answer);
+					game[0].save(function(err, worked) {
+						if(err) {
+
+						} else {
+							ss.publish.all('ss-addPlayerAnswer', data);
+						}
 					});
 				}
 			});

@@ -22,7 +22,8 @@ exports.actions = function(req, res, ss) {
 					who: data.name,
 					id: data.id,
 					what: data.log,
-					when: Date.now()
+					when: Date.now(),
+					instanceName: data.instanceName
 				};
 				chatModel.create(logChat, function(err, suc) {
 					if(err) {

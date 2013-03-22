@@ -16,7 +16,7 @@ var gameModel = service.useModel('game', 'preload');
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	// req.use('debug');
+	req.use('debug');
 	req.use('account.authenticated');
 
 	return {
@@ -106,7 +106,6 @@ exports.actions = function(req, res, ss) {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
 					npcData = require(rootDir + '/data/npcs');
 					gnomeData = require(rootDir + '/data/gnome');
-					
 					dbActions.dropCollection('npcs', function() {
 						dbActions.saveDocuments(npcModel, npcData.global, function() {
 							dbActions.dropCollection('gnomes', function() {
