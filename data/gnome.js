@@ -56,7 +56,7 @@ module.exports.global = {
 		answer: [{
 			id: 2569,
 			x: 430,
-			y: 200
+			y: 220
 		}, {
 			id: 6265,
 			x: 470,

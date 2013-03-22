@@ -13,7 +13,15 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			count: Number
 		}],
 		levelNames: [String],
-		resourceCount: [Number]
+		resourceCount: [Number],
+		instanceName: String,
+		resourceResponses: [{
+			npc: Number,
+			id: String,
+			name: String,
+			answer: String,
+			madePublic: Boolean
+		}]
 	});
 
 	var GameModel = db.model('Game', gameSchema, 'game');

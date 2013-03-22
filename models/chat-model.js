@@ -4,7 +4,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		id: String,
 		who: String,
 		what: String,
-		when: Date
+		when: Date,
+		instanceName: String
 	});
 
 	//the third param specifies an exact collection to look for in the DB

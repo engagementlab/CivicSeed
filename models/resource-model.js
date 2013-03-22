@@ -5,24 +5,17 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		kind: String,
 		url: String,
 		tagline: String,
-		prompt: String,
 		question: String,
 		questionType: String,
-		keywords: [String],
-		requiredWords: Number,
+		requiredLength: Number,
 		possibleAnswers: [String],
 		answer: String,
 		feedbackWrong: String,
 		feedbackRight: String,
 		shape: {
 			path: String,
-			fill: String,
-			stroke: String
-		},
-		playerAnswers: [{
-			name: String,
-			answer: String
-		}]
+			fill: String
+		}
 	});
 
 	var ResourceModel = db.model('resource', resourceSchema, 'resources');

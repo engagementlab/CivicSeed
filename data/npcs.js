@@ -5,7 +5,7 @@ module.exports.global = [{
 	sprite: 0,
 	isHolding: true,
 	dialog: {
-		random: ['Thank you for helping us, I do hope it wasn\'t such a bother. We truly appreciate your kind work.'],
+		random: [''],
 		prompts: ['What a weird robot that was! I wonder what it was doing? My head is full of fluff, but perhaps you could figure it out. But if it\'s not a bother, could you answer something for me first?  ', 'I\'m still waiting for your answer!', 'A wise bear once said "You can\'t stay in your corner of the Forest waiting for others to come to you. You have to go to them sometimes.” Which I think means you should go talk to my friends in order to help restore color to our world. Would you like to see what other people have said?']
 	}
 }, {
@@ -15,7 +15,7 @@ module.exports.global = [{
 	sprite: 1,
 	isHolding: true,
 	dialog: {
-		random: ['I knew you would prevail! You just needed a little wisdom. Glad I could help.'],
+		random: [''],
 		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I  have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
 	}
 }, {
@@ -25,8 +25,8 @@ module.exports.global = [{
 	sprite: 2,
 	isHolding: true,
 	dialog: {
-		random: ['YAY! Woohoo! Color!'],
-		prompts: ['HI HI HI! I got a thing for you! you might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I said take your time! Come-on-come-on-comon! Try again!', 'I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
+		random: [''],
+		prompts: ['HI HI HI! I got a thing for you! you might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
 	}
 }, {
 	id: '6265',
@@ -35,7 +35,7 @@ module.exports.global = [{
 	sprite: 3,
 	isHolding: true,
 	dialog: {
-		random: ['After seeing your hard work, I see that its better to help others rather than hoard things. Thank you.'],
+		random: [''],
 		prompts: ['I found these shiny objects while digging in my garden. Maybe one can help you? But I like them, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'You took my last shiny thing! I don\'t have any more of them. I can show you what the others have said?']
 	}
 }, {
@@ -45,8 +45,8 @@ module.exports.global = [{
 	sprite: 4,
 	isHolding: true,
 	dialog: {
-		random: ['Have you seen that robot lately? I think it rolled off somewhere near the town square!'],
-		prompts: ['Well hello there. You look like your on a quest of some sort.', 'Ready to go again? I\'ve got a good feeling about this time.', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
+		random: [''],
+		prompts: ['Ah! Bonjour, my friend! Welcome to my french corner of ze Forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
 	}
 }, {
 	id: '8956',
@@ -55,7 +55,7 @@ module.exports.global = [{
 	sprite: 5,
 	isHolding: false,
 	dialog: {
-		random: ['past','present', 'future']
+		random: ['Grandturpy was right! You grew!','My Great Grandturpy used to always say "Unless you try to do something beyond what you have already mastered, you will never grow." I\'m not sure if he meant that literaly or figuratively. It also sounds like something Emerson once said, but what do I know; I\'m just a turnip.', 'future']
 	}
 }, {
 	id: '2176',
@@ -64,7 +64,7 @@ module.exports.global = [{
 	sprite: 6,
 	isHolding: true,
 	dialog: {
-		random: ['Roga knew you could do it. Best day ever!'],
+		random: [''],
 		prompts: ['Roga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
 	}
 }, {
@@ -74,7 +74,7 @@ module.exports.global = [{
 	sprite: 7,
 	isHolding: true,
 	dialog: {
-		random: ['Y-y-you\'re my hero!'],
+		random: [''],
 		prompts: ['O-o-oh... h-h-hi. I\'m h-holding something important for you.', 'This is tough, but important to think about!', 'I wish I was b-b-brave like you!']
 	}
 }, {
@@ -84,7 +84,7 @@ module.exports.global = [{
 	sprite: 8,
 	isHolding: true,
 	dialog: {
-		random: ['Ah! Yes! I was right all along. True happiness comes from helping. Silly "Deep Thought"!'],
+		random: [''],
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
 	}
 }, {
@@ -92,10 +92,9 @@ module.exports.global = [{
 	name: 'Bunzo',
 	level: 0,
 	sprite: 9,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
-		random: ['Seems like Margret Mead was right after all! Thanks for making a difference in our world.'],
-		prompts: ['Heyo! I just came across this killer quote: “Never doubt that a small group of thoughtful, committed people can change the world. Indeed, it is the only thing that ever has.” Just thought it would help inspire you to keep at it! ', '2', '3']
+		random: ['Seems like Margret Mead was right after all! Isn\'t she totally rad!? Thanks for making a difference in our world!', 'I think helping others is so totally awesome. So I think you are so totally awesome for helping us. If I had hands, I would give you a high five!', '']
 	}
 }, {
 	id: '9536',
@@ -104,7 +103,7 @@ module.exports.global = [{
 	sprite: 10,
 	isHolding: true,
 	dialog: {
-		random: ['I remember you! You\'re the one who watched a video and answered a question! We should totally hang out after this.'],
+		random: [''],
 		prompts: ['CHEWY CHOMP! I hear you\'re trying to spread some color. That\'s great. But first, chew on this!', 'I\'m not bad, I\'m just rendered that way. Give it another shot, why don\'t ya?', 'GOT ANY GUM? No? Oh well. I can show you the resource again, if you want.']
 	}
 }, {
@@ -114,7 +113,7 @@ module.exports.global = [{
 	sprite: 11,
 	isHolding: true,
 	dialog: {
-		random: ['Puzzle pieces walk in single file to hide their numbers.'],
+		random: [''],
 		prompts: ['This haircut is new. Tell me I look good, and I\'ll give you the chance to get some really cool stuff. Oh, you flatterer, you. Here\'s something that might help you...', 'This time, for sure. Presto!', 'I\'m tired of this haircut. Or maybe I\'m just bored with life. Either way, something\'s gotta change! You need to get out there and take life by the horns.']
 	}
 }, {
@@ -122,10 +121,9 @@ module.exports.global = [{
 	name: 'Zork',
 	level: 0,
 	sprite: 12,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
-		random: ['It is no longer pitch black! You rule! Now I can adventure without any scary threats.'],
-		prompts: ['I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', '2', '3']
+		random: ['It is no longer pitch black! You rule! Now I can adventure without any scary threats.','I miss my big white house! This big open field is boring without the bright shiny colors. I guess I should be thankful I still have my mailbox.']
 	}
 }, {
 	id: '1547',

@@ -13,6 +13,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		profileUnlocked: Boolean,
 		gameStarted: Boolean,
 		game: {
+			instanceName: String,
 			currentLevel: Number,
 			rank: String,
 			position: {
