@@ -5,6 +5,7 @@ node_modules
 *.sublime-*
 #/client/static/assets/
 /data/map/expanded/
+/data/demo-users.js
 /models/_temp/
 /server/controllers/_temp/
 /server/controllers/game/_temp/
