@@ -21,7 +21,8 @@ var _resources = [],
 	_numSeedsToAdd = 0,
 	_questionType = null,
 	_feedbackRight = null,
-	_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'];
+	_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
+	_publicAnswers = null;
 
 $game.$resources = {
 
@@ -33,26 +34,37 @@ $game.$resources = {
 			//iterate through repsonses, create a key
 			//with the id and value is the object
 			_allNpcs = {};
-			$.each(response, function(key, resource) {
-				var stringId = String(resource.id);
-				_resources[stringId] = resource;
+			ss.rpc('game.npc.getResponses', $game.$player.game.instanceName, function(all) {
+
+				$.each(response, function(key, resource) {
+					var stringId = String(resource.id);
+					_resources[stringId] = resource;
+					_resources[stringId].playerAnswers = [];
+				});
+
+				var allRes = all[0].resourceResponses;
+				$.each(allRes, function(key, answer) {
+					if(answer.madePublic) {
+						var stringId = String(answer.npc);
+						_resources[stringId].playerAnswers.push(answer);
+					}
+				});
+				//fill the inventory if there were things when we last left
+				$game.$player.fillInventory();
+
+				//set dom selectors
+				_resourceStateSel = $('.resourceStage');
+				_speechBubbleSel = $('.speechBubble');
+				_inventorySel = $('.inventory');
+				_resourceAreaSel = $('.resourceArea');
+				_speechButtonSel = $('.speechBubble button');
+				_resourceButtonSel = $('.resourceArea button');
+				_speakerNameSel = $('.resourceArea .speakerName');
+				_resourceMessageSel = $('.resourceArea .message');
+				_resourceContentSel = $('.resourceContent');
+
+				$game.$resources.ready = true;
 			});
-
-			//fill the inventory if there were things when we last left
-			$game.$player.fillInventory();
-
-			//set dom selectors
-			_resourceStateSel = $('.resourceStage');
-			_speechBubbleSel = $('.speechBubble');
-			_inventorySel = $('.inventory');
-			_resourceAreaSel = $('.resourceArea');
-			_speechButtonSel = $('.speechBubble button');
-			_resourceButtonSel = $('.resourceArea button');
-			_speakerNameSel = $('.resourceArea .speakerName');
-			_resourceMessageSel = $('.resourceArea .message');
-			_resourceContentSel = $('.resourceContent');
-
-			$game.$resources.ready = true;
 		});
 	},
 
@@ -200,7 +212,7 @@ $game.$resources = {
 				//the next slide will show them recent answers
 				else {
 					_resourceContentSel.empty().css('overflow','auto');
-					//$game.$resources.showRecentAnswers();
+					$game.$resources.showRecentAnswers();
 				}
 			}
 		}
@@ -210,7 +222,7 @@ $game.$resources = {
 				var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 				//show their answer and the question, not the form
 				if(_revisiting) {
-					//$game.$resources.showRecentAnswers();
+					$game.$resources.showRecentAnswers();
 				}
 				else {
 					// _speak = _curResource.prompt;
@@ -246,31 +258,40 @@ $game.$resources = {
 	},
 
 	showRecentAnswers: function() {
-		var recentAnswers = _curResource.playerAnswers,
-			numAnswers = recentAnswers.length,
-			displayAnswers = '',
-			finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
+		//alway show player's answer with a lock icon (make public button)
+		//if it is public, just show eye icon
+		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>',
+			displayAnswers = '<ul>',
+			yourAnswer = $game.$player.getAnswer(_curResource.id),
+			rightOne = yourAnswer.answers.length - 1;
 
-		displayAnswers = '<ul>';
-		var numToShow = numAnswers < 3 ? numAnswers: 3,
-			counter = 0,
-			spot = numAnswers - 1;
-
-		while(counter < numToShow) {
-			displayAnswers += '<li class="playerAnswers"><span>' + recentAnswers[spot-counter].name + ': </span> ' + recentAnswers[spot-counter].answer + '</li>';
-			counter += 1;
+		console.log(yourAnswer);
+		displayAnswers += '<li class="playerAnswers"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
+		if(yourAnswer.madePublic) {
+			displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
+		} else {
+			displayAnswers += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.id +'">Make Public</button>';
 		}
-		displayAnswers += '</ul>';
-		if(numAnswers < 2) {
+		displayAnswers += '</li>';
+		if(_curResource.playerAnswers) {
+			var recentAnswers = _curResource.playerAnswers,
+				spot = recentAnswers.length;
+
+			while(--spot > -1) {
+				//double check
+				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
+					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p></li>';
+				}
+			}
+			displayAnswers += '</ul>';
+			_speak = 'Here are some recent answers by your peers: ';
+		} else {
 			_speak = 'Congrats! You were the first to answer.';
 			displayAnswers += '<p>** More answers from your peers will appear shortly.  Be sure to check back. **</p>';
 		}
-		else {
-			_speak = 'Here are some recent answers by your peers: ';
-		}
-		_speakerNameSel.text(_who + ': ');
-		_resourceMessageSel.text(_speak);
-		_resourceContentSel.html(finalQuestion + displayAnswers);
+			_speakerNameSel.text(_who + ': ');
+			_resourceMessageSel.text(_speak);
+			_resourceContentSel.html(finalQuestion + displayAnswers);
 	},
 
 	hideResource: function() {
@@ -400,8 +421,8 @@ $game.$resources = {
 	},
 
 	addAnswer: function(data) {
-		// var stringId = String(data.npc);
-		// _curResource = _resources[stringId];
-		// _curResource.playerAnswers.push(data);
+		var stringId = String(data.npc);
+		_curResource = _resources[stringId];
+		_curResource.playerAnswers.push(data);
 	}
 };

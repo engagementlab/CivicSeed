@@ -71,12 +71,54 @@ var self = exports.actions = function(req, res, ss) {
 					game[0].resourceResponses.push(answer);
 					game[0].save(function(err, worked) {
 						if(err) {
-
-						} else {
-							ss.publish.all('ss-addPlayerAnswer', data);
+							console.log(err);
 						}
 					});
 				}
+			});
+		},
+
+		getResponses: function(instance) {
+			GameModel.where('instanceName').equals(instance)
+				.select('resourceResponses')
+				.find(function (err, responses) {
+					console.log(responses);
+				if(err) {
+					console.error('  Could not find game', err);
+				} else if(responses) {
+					res(responses);
+				}
+			});
+		},
+
+		makeResponsePublic: function(data) {
+			GameModel.where('instanceName').equals(data.instanceName)
+				.find(function (err, game) {
+					if(err) {
+						console.error('Could not find game', err);
+					} else if(game) {
+						var all = game[0].resourceResponses,
+							a = 0,
+							found = false,
+							addThis = null;
+						while(!found) {
+							console.log(all[a]);
+							if(all[a].npc == data.npcId && all[a].id == data.playerId) {
+								all[a].madePublic = true;
+								found = true;
+								addThis = all[a];
+							}
+							a++;
+						}
+						game[0].save(function(err, good) {
+							if(err) {
+
+							} else {
+								ss.publish.all('ss-addAnswer', addThis);
+								res(true);
+							}
+						});
+					}
 			});
 		},
 

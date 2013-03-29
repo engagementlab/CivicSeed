@@ -85,4 +85,86 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0
 	}
+}, {
+	firstName: 'Testing',
+	lastName: 'Player',
+	password: '',
+	email: 't',
+	role: 'actor',
+	gameStarted: true,
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'awesome',
+		currentLevel: 0,
+		rank: 'novice gardener',
+		position: {
+			x: 66,
+			y: 76,
+			inTransit: false
+		},
+		colorInfo: {
+			rgb: {
+				r: 157,
+				g: 45,
+				b: 243
+			},
+			tilesheet: 4
+		},
+		resources: [],
+		inventory: [],
+		seeds: {
+			normal: 0,
+			riddle: 0,
+			special: 0,
+			dropped: 0
+		},
+		gnomeState: 0,
+		resume: [],
+		seenThing: false,
+		resourcesDiscovered: 0,
+		playingTime: 0,
+		tilesColored: 0
+	}
+}, {
+	firstName: 'Dummy',
+	lastName: 'Face',
+	password: '',
+	email: 'f',
+	role: 'actor',
+	gameStarted: true,
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'awesome',
+		currentLevel: 0,
+		rank: 'novice gardener',
+		position: {
+			x: 66,
+			y: 76,
+			inTransit: false
+		},
+		colorInfo: {
+			rgb: {
+				r: 157,
+				g: 45,
+				b: 243
+			},
+			tilesheet: 4
+		},
+		resources: [],
+		inventory: [],
+		seeds: {
+			normal: 0,
+			riddle: 0,
+			special: 0,
+			dropped: 0
+		},
+		gnomeState: 0,
+		resume: [],
+		seenThing: false,
+		resourcesDiscovered: 0,
+		playingTime: 0,
+		tilesColored: 0
+	}
 }];

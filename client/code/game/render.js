@@ -195,7 +195,6 @@ $game.$renderer = {
 				b1: backIndex1,
 				b2: backIndex2,
 				b3: backIndex3,
-				f: foreIndex,
 				destX: i,
 				destY: j
 			};

@@ -438,9 +438,19 @@ p.finalQuestion
 	padding 10px
 	margin-top 10px
 	width 860px
-.playerAnswers > span
-	margin-right 5px
-	color #eee
+	position relative
+	span
+		margin-right 5px
+		color #eee
+	p
+		width 750px
+		margin 5px 0 5px 0
+		padding 0
+	.publicButton
+		position absolute
+		right 10px
+		top 10px
+
 .megaBar
 	color #333
 	background $csGreen
@@ -474,17 +484,18 @@ p.finalQuestion
 
 .inventoryOutline
 	float left
-	margin 13px 0 10px 23px
+	margin 12px 0 10px 20px
 	width 32px
 	height 32px
 	border 1px dashed gray
 
 .inventoryItem
 	float left
-	margin 13px 0 10px 25px
+	margin 12px 0 10px 20px
 	width 32px
 	height 32px
 	cursor pointer
+	border 1px solid rgba(0,0,0,0)
 
 .inventory > .outlines,
 .inventory > .pieces
@@ -521,3 +532,4 @@ div.currentButton
 	background #666
 .speechBubble p.fitBubble
 	width 900px
+

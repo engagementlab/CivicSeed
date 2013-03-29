@@ -828,8 +828,7 @@ $game.$player = {
 		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
 			if(id === $game.$player.game.resources[l].npc) {
-				var rightOne = $game.$player.game.resources[l].answers.length - 1;
-				return $game.$player.game.resources[l].answers[rightOne];
+				return $game.$player.game.resources[l];
 			}
 		}
 	},
@@ -992,7 +991,27 @@ $game.$player = {
 				$('.gameboard').append(hooray);
 			}
 		});
+	},
 
+	makePublic: function(npcId) {
+		var l = $game.$player.game.resources.length;
+		while(--l > -1) {
+			if(npcId == $game.$player.game.resources[l].npc) {
+				console.log(npcId);
+				//update this resource
+				$game.$player.game.resources[l].madePublic = true;
+				//update resource db
+				var info = {
+					playerId: $game.$player.id,
+					npcId: npcId,
+					instanceName: $game.$player.game.instanceName
+				};
+				ss.rpc('game.npc.makeResponsePublic', info, function(res) {
+					//take away the make public and replcae with eye?
+					$('.publicButton').addClass('hideButton');
+				});
+			}
+		}
 	}
 };
 

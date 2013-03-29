@@ -102,14 +102,6 @@ exports.$game = {
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			//regular game mode
-			console.log(response);
-			if(response.state === 1) {
-
-			}
-			//game is in boss mode
-			else if(response.state === 2) {
-
-			}
 			$game.levelQuestion = response.levelQuestion;
 			$game.levelNames = response.levelNames;
 			$game.resourceCount = response.resourceCount;

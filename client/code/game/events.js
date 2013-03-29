@@ -109,10 +109,9 @@ $(function() {
 		if(newOne) {
 			$game.statusUpdate(newOne + ' is now a top seeder');
 		}
-		
 	});
 
-	ss.event.on('ss-addPlayerAnswer', function(data) {
+	ss.event.on('ss-addAnswer', function(data) {
 		$game.$resources.addAnswer(data);
 	});
 
@@ -124,7 +123,7 @@ $(function() {
 
 	/********** BUTTON / MOUSE EVENTS **********/
 
-	$('.seedButton').bind('click', function () {
+	$('.seedButton').on('click', function () {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 		var goAhead = startNewAction();
 		if(goAhead) {
@@ -159,24 +158,24 @@ $(function() {
 		}
 	});
 
-	$('.normalButton').bind('click', function () {
+	$('.normalButton').on('click', function () {
 		$game.$player.startSeeding(1);
 	});
-	$('.riddleButton').bind('click', function () {
+	$('.riddleButton').on('click', function () {
 		$game.$player.startSeeding(2);
 	});
-	$('.specialButton').bind('click', function () {
+	$('.specialButton').on('click', function () {
 		$game.$player.startSeeding(3);
 	});
 
-	_w.bind('keypress', (function (key) {
+	_w.on('keypress', (function (key) {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
 		if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
 				//$game.$player.dropSeed({mouse:false});
 		}
 	}));
 	//change cursor on mouse move
-	_gameboard.bind('mousemove', function(m) {
+	_gameboard.on('mousemove', function(m) {
 		if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
 			var mInfo = {
 				x: m.pageX,
@@ -190,8 +189,8 @@ $(function() {
 	});
 
 	//figure out if we shoupdatuld transition (or do other stuff later)
-	_gameboard.bind('click', function(m) {
-		
+	_gameboard.on('click', function(m) {
+
 		var goAhead = startNewAction();
 		if(goAhead) {
 				var mInfo = {
@@ -270,41 +269,41 @@ $(function() {
 		}
 		return false;
 	});
-	$('.resourceArea a i, .resourceArea .closeButton').bind('click', (function (e) {
+	$('.resourceArea a i, .resourceArea .closeButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$resources.hideResource();
 		return false;
 	}));
-	$('.resourceArea .nextButton').bind('click', (function () {
+	$('.resourceArea .nextButton').on('click', (function () {
 		$game.$resources.nextSlide();
 	}));
-	$('.resourceArea .backButton').bind('click', (function () {
+	$('.resourceArea .backButton').on('click', (function () {
 		$game.$resources.previousSlide();
 	}));								
-	$('.resourceArea .answerButton').bind('click', (function (e) {
+	$('.resourceArea .answerButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$resources.submitAnswer();
 		return false;
 	}));
 
-	$('.gnomeArea a i, .gnomeArea .closeButton').bind('click', (function (e) {
+	$('.gnomeArea a i, .gnomeArea .closeButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$gnome.hideResource();
 		return false;
 	}));
-	$('.gnomeArea .nextButton').bind('click', (function () {
+	$('.gnomeArea .nextButton').on('click', (function () {
 		$game.$gnome.nextSlide();
 	}));
-	$('.gnomeArea .backButton').bind('click', (function () {
+	$('.gnomeArea .backButton').on('click', (function () {
 		$game.$gnome.previousSlide();
 	}));
-	$('.gnomeArea .answerButton').bind('click', (function (e) {
+	$('.gnomeArea .answerButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$gnome.submitAnswer();
 		return false;
 	}));
 
-	$('.progressArea a i').bind('click', (function (e) {
+	$('.progressArea a i').on('click', (function (e) {
 		e.preventDefault();
 		_progressArea.fadeOut(function() {
 			$game.showingProgress = false;
@@ -317,7 +316,7 @@ $(function() {
 		$('#minimapPlayer').toggleClass('hide');
 	});
 
-	$('.progressButton').bind('click', function() {
+	$('.progressButton').on('click', function() {
 		$(this).toggleClass('currentButton');
 		if($game.showingProgress) {
 			_progressArea.fadeOut(function() {
@@ -333,7 +332,7 @@ $(function() {
 			}
 		}
 	});
-	$('.muteButton').bind('click', function() {
+	$('.muteButton').on('click', function() {
 		//var musicOff = $game.$audio.toggleMute();
 
 		// if(musicOff) {
@@ -344,17 +343,17 @@ $(function() {
 		// }
 	});
 
-	$('.helpButton').bind('click', function() {
+	$('.helpButton').on('click', function() {
 		_helpShowing = !_helpShowing;
 		$(this).toggleClass('currentButton');
 		$('.helpArea').fadeToggle();
 	});
 
-	$('.globalHud > div > i, .playerHud > div > i, .seedventory > div > i').bind('mouseenter',function() {
+	$('.globalHud > div > i, .playerHud > div > i, .seedventory > div > i').on('mouseenter',function() {
 		var info = $(this).attr('title');
 		$(this).tooltip('show');
 	});
-	_w.bind('keydown',function(e) {
+	_w.on('keydown',function(e) {
 		var goAhead = startNewAction();
 		if(!$('#chatText').is(':focus')) {
 			if(goAhead) {
@@ -362,10 +361,16 @@ $(function() {
 			}
 		}
 	});
-	$(window).bind('keyup',function(e) {
+	$(window).on('keyup',function(e) {
 		$game.$player.keyWalking = false;
 	});
 
+	$('body').on('click', '.publicButton', function() {
+		//update resource
+		$game.$player.makePublic($(this).attr('data-npc'));
+		//update player resources
+
+	});
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
 		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !_helpShowing){

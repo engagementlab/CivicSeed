@@ -33,7 +33,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				npc: Number,
 				answers: [String],
 				attempts: Number,
-				result: Boolean
+				result: Boolean,
+				madePublic: Boolean
 			}],
 			inventory: [Number],
 			seeds: {
