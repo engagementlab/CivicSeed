@@ -351,31 +351,32 @@ $game.$resources = {
 		}
 	},
 
-	submitAnswer: function() {
-
+	submitAnswer: function(bypass) {
 		var response = null;
 		_correctAnswer = false;
 		//retrieve the answer
 		if(_questionType === 'open') {
 			response = $('.resourceContent textarea').val();
+			if(response.length < 1) {
+				$game.$resources.popupCheck();
+				return false;
+			}
+			if(_curResource.requiredLength && response.length < _curResource.requiredLength && !bypass) {
+				$game.$resources.popupCheck();
+				return false;
+			} else {
+				_correctAnswer = true;
+				var ran = Math.floor(Math.random() * 3);
+				_feedbackRight = _rightOpenRandom[ran];
+			}
 		}
 		else {
 			response = $('input[name=resourceMultipleChoice]:checked').val();
-		}
-
-		if(_questionType === 'open') {
-			var ran = Math.floor(Math.random() * 3);
-			_feedbackRight = _rightOpenRandom[ran];
-			if(response.length > 0) {
-				_correctAnswer = true;
-			}
-		}
-		//multi choice, truefalse, yesno
-		else{
 			if(response === _curResource.answer) {
 				_correctAnswer = true;
 			}
 		}
+
 		var npcLevel = $game.$npc.getNpcLevel();
 		//if correct, get seeds, push answer to db
 		if(_correctAnswer) {
@@ -407,7 +408,6 @@ $game.$resources = {
 		}
 		_answered = true;
 		$game.$resources.nextSlide();
-		//otherwise tell them they are wrong, stay on form page
 	},
 
 	getShape: function(id) {
@@ -424,5 +424,10 @@ $game.$resources = {
 		var stringId = String(data.npc);
 		_curResource = _resources[stringId];
 		_curResource.playerAnswers.push(data);
+	},
+
+	popupCheck: function() {
+		$('.check button').removeClass('hideButton');
+		$('.check').show();
 	}
 };

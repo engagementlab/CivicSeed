@@ -279,10 +279,21 @@ $(function() {
 	}));
 	$('.resourceArea .backButton').on('click', (function () {
 		$game.$resources.previousSlide();
-	}));								
+	}));
 	$('.resourceArea .answerButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$resources.submitAnswer();
+		return false;
+	}));
+	$('.resourceArea .sureButton').on('click', (function (e) {
+		e.preventDefault();
+		$('.check').hide();
+		$game.$resources.submitAnswer(true);
+		return false;
+	}));
+	$('.resourceArea .retryButton').on('click', (function (e) {
+		e.preventDefault();
+		$('.check').fadeOut();
 		return false;
 	}));
 
