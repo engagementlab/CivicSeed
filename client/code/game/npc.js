@@ -25,6 +25,7 @@ $game.$npc = {
 			});
 			_loaded = true;
 			$game.$npc.ready = true;
+			$game.$resources.init();
 		});
 	},
 
@@ -278,5 +279,9 @@ $game.$npc = {
 
 	getNpcLevel: function() {
 		return _curNpc.level;
+	},
+
+	getNpcData: function () {
+		return _allNpcs;
 	}
 };

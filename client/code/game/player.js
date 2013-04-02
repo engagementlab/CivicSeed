@@ -110,7 +110,6 @@ $game.$player = {
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
-			$game.$resources.init();
 
 			//set HUD values
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;

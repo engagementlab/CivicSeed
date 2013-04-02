@@ -7,6 +7,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['What a weird robot that was! I wonder what it was doing? My head is full of fluff, but perhaps you could figure it out. But if it\'s not a bother, could you answer something for me first?  ', 'I\'m still waiting for your answer!', 'A wise bear once said "You can\'t stay in your corner of the Forest waiting for others to come to you. You have to go to them sometimes.” Which I think means you should go talk to my friends in order to help restore color to our world. Would you like to see what other people have said?']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,70l80,0l0,-70l-80,0z',
+			fill: 'lightGreen'
+		}
 	}
 }, {
 	id: '4284',
@@ -17,6 +31,21 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I  have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Upstream or Downstream?',
+		feedbackRight: 'Exactly! Maybe think about which approach appeals the most to you, too?',
+		feedbackWrong: 'Hoo...boy. That\'s not right.',
+		question: 'Imagine that you\'ve volunteered to help out as a soup kitchen by organizing donations, performing outreach, and preparing food for people in need. Would this be an example of...?',
+		questionType: 'multiple',
+		possibleAnswers: ['upstream-oriented service', 'downstream-oriented service', 'noble futility', 'none of these'],
+		answer: 'downstream-oriented service',
+		shape: {
+			path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
+			fill: 'blue'
+		}
 	}
 }, {
 	id: '4693',
@@ -27,6 +56,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['HI HI HI! I got a thing for you! you might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'What\'s Important',
+		feedbackRight: 'Yes! They\'re both very important, aren\'t they?',
+		feedbackWrong: 'You might want to think about that a little more and try again.',
+		question: 'The resource talked about understanding root causes vs. just helping out any way you can. Which of these approaches appeals to you more? What do you see yourself doing in the future that addresses one or the other -- or both?',
+		questionType: 'open',
+		requiredLength: 20,
+		shape: {
+			path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
+			fill: 'lightBlue'
+		}
 	}
 }, {
 	id: '6265',
@@ -37,6 +80,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['I found these shiny objects while digging in my garden. Maybe one can help you? But I like them, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'You took my last shiny thing! I don\'t have any more of them. I can show you what the others have said?']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'What You Will Achieve',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Based on what you\'ve seen, set one goal and one objective for yourself.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l-50,50l50,50l0,-100z',
+			fill: 'orange'
+		}
 	}
 }, {
 	id: '8542',
@@ -47,6 +104,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['Ah! Bonjour, my friend! Welcome to my french corner of ze Forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Power and Privilege',
+		feedbackRight: 'You are SO right.',
+		feedbackWrong: 'Are you sure about that? Maybe take another look.',
+		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others, but do so simply to feel good about themselves, or out of a sense of charity, are not approaching service from a productive angle." Why or why not?',
+		questionType: 'yesno',
+		answer: 'yes',
+		shape: {
+			path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
+			fill: 'orange'
+		}
 	}
 }, {
 	id: '8956',
@@ -66,7 +137,21 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['Roga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
-	}
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'What Motivates You',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Which of these students resonated most with you? Why?',
+		questionType: 'open',
+		requiredLength: 50,
+		shape: {
+			path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
+			fill: 'green'
+		}
+	}	
 }, {
 	id: '1608',
 	name: 'Goku',
@@ -76,6 +161,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['O-o-oh... h-h-hi. I\'m h-holding something important for you.', 'This is tough, but important to think about!', 'I wish I was b-b-brave like you!']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Struggles with Identiy',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Describe a time you had difficulty communicating or collaborating with others because of some aspect of your social identities.',
+		questionType: 'open',
+		requiredLength: 150,
+		shape: {
+			path: 'm0,0l0,100l-50,-50l50,-50z',
+			fill: 'lightOrange'
+		}
 	}
 }, {
 	id: '4876',
@@ -86,6 +185,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Your Class',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'The document on classism suggests a number of ways that people of dominant and subordinated classes might work to overcome classism. Which, if any, will you commit to?',
+		questionType: 'open',
+		requiredLength: 50,
+		shape: {
+			path: 'm0,0l0,-50l200,0l0,50l-200,0z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '6707',
@@ -105,6 +218,20 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['CHEWY CHOMP! I hear you\'re trying to spread some color. That\'s great. But first, chew on this!', 'I\'m not bad, I\'m just rendered that way. Give it another shot, why don\'t ya?', 'GOT ANY GUM? No? Oh well. I can show you the resource again, if you want.']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Social Identities At Work',
+		feedbackRight: 'Nailed it!',
+		feedbackWrong: 'Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.',
+		question: 'List one or more aspects of social identity that Dr. Norieta references in the video you just viewed.',
+		questionType: 'open',
+		requiredLength: 4,
+		shape: {
+			path: 'm0,0l80,0l0,90l-80,0l0,-90z',
+			fill: 'lightGreen'
+		}
 	}
 }, {
 	id: '8986',
@@ -115,7 +242,21 @@ module.exports.global = [{
 	dialog: {
 		random: [''],
 		prompts: ['This haircut is new. Tell me I look good, and I\'ll give you the chance to get some really cool stuff. Oh, you flatterer, you. Here\'s something that might help you...', 'This time, for sure. Presto!', 'I\'m tired of this haircut. Or maybe I\'m just bored with life. Either way, something\'s gotta change! You need to get out there and take life by the horns.']
-	}
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'How Your Experiences Shape You',
+		feedbackRight: 'Very revealing, but of course there\'s more to you than that.',
+		feedbackWrong: 'Are you sure you understood the question? Try again!',
+		question: 'List what you believe are the five most important aspects of your identity.',
+		questionType: 'open',
+		requiredLength: 40,
+		shape: {
+			path: 'm0,0l0,100l50,-50l-50,-50z',
+			fill: 'lightOrange'
+		}
+	}	
 }, {
 	id: '8427',
 	name: 'Zork',

@@ -12,8 +12,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,70l80,0l0,-70l-80,0z',
 		fill: 'lightGreen'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '4284',
@@ -29,8 +28,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
 		fill: 'blue'
-	},
-	playerAnswers: []
+	}
 },
   {
 	id: '4693',
@@ -45,8 +43,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
 		fill: 'lightBlue'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '6265',
@@ -61,8 +58,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-50,50l50,50l0,-100z',
 		fill: 'orange'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '8542',
@@ -77,8 +73,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
 		fill: 'orange'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '2176',
@@ -93,8 +88,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
 		fill: 'green'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '1608',
@@ -109,8 +103,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,100l-50,-50l50,-50z',
 		fill: 'lightOrange'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '4876',
@@ -125,8 +118,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-50l200,0l0,50l-200,0z',
 		fill: 'green'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '9536',
@@ -141,8 +133,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l80,0l0,90l-80,0l0,-90z',
 		fill: 'lightGreen'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '8986',
@@ -157,8 +148,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,100l50,-50l-50,-50z',
 		fill: 'lightOrange'
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '1547',
@@ -173,8 +163,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '2649',
@@ -189,8 +178,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '2803',
@@ -205,8 +193,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '5219',
@@ -221,8 +208,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '1517',
@@ -238,8 +224,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
   {
 	id: '352',
@@ -254,8 +239,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '3335',
@@ -270,8 +254,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '4338',
@@ -286,8 +269,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '6176',
@@ -302,8 +284,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '7082',
@@ -318,8 +299,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '7052',
@@ -334,8 +314,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '9069',
@@ -350,8 +329,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '6773',
@@ -366,8 +344,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '8898',
@@ -382,8 +359,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '9170',
@@ -398,8 +374,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '18592',
@@ -414,8 +389,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-30l70,0l0,30l-20,0l0,-10l-30,0l0,10l-20,0z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '16720',
@@ -431,8 +405,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0lc0,0 100,0 100,0c0,0 0,-60 0,-60c0,0 0,-10 0,-10c0,0 -60,0 -60,0c0,0 0,-30 0,-30c0,0 -40,0 -40,0c0,0 0,100 0,100z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
   {
 	id: '18552',
@@ -447,8 +420,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '14588',
@@ -463,8 +435,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '14464',
@@ -479,8 +450,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '15472',
@@ -495,8 +465,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '12760',
@@ -511,8 +480,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '11748',
@@ -527,8 +495,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '14706',
@@ -543,8 +510,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '16546',
@@ -559,8 +525,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '10891',
@@ -575,8 +540,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '10780',
@@ -591,8 +555,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '17534',
@@ -607,8 +570,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l-171,0l0,159.5c0,0 101.5,0.5 102,0.5c0.5,0 0,-110.501007 0,-111c0,-0.498993 68,0.5 68,0c0,-0.5 1,-49 1,-49z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '17525',
@@ -624,8 +586,7 @@ module.exports.global = [
 	shape: {
 			path: 'm0,0l-49,48.499992l48.5,48.500015l0.5,-97.000008z',
 			fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '12707',
@@ -640,8 +601,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l48,48l-48.75,48.5l0.75,-96.5z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '13835',
@@ -656,8 +616,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l0,-49l68.25,0l0,49.5l-68.25,-0.5z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '15668',
@@ -672,8 +631,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '12249',
@@ -688,8 +646,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '12963',
@@ -704,8 +661,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '14380',
@@ -720,8 +676,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '15656',
@@ -736,8 +691,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '16644',
@@ -752,8 +706,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '16636',
@@ -768,8 +721,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '15638',
@@ -784,8 +736,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '16628',
@@ -800,8 +751,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '15626',
@@ -816,8 +766,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '13783',
@@ -832,8 +781,7 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 },
 {
 	id: '10797',
@@ -848,7 +796,6 @@ module.exports.global = [
 	shape: {
 		path: 'm0,0l81,50l-64,37l-61,-29l44,-58z',
 		fill: ''
-	},
-	playerAnswers: []
+	}
 }
 ];

@@ -123,14 +123,14 @@ exports.actions = function(req, res, ss) {
 							res('Data loaded: ' + dataType);
 						});
 					});
-				} else if(dataType === 'resources') {
-					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Resources   * * * * * * * * * * * *   \n\n'.yellow);
-					resourceData = require(rootDir + '/data/resources');
-					dbActions.dropCollection('resources', function() {
-						dbActions.saveDocuments(resourceModel, resourceData.global, function() {
-							res('Data loaded: ' + dataType);
-						});
-					});
+				// } else if(dataType === 'resources') {
+				// 	console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Resources   * * * * * * * * * * * *   \n\n'.yellow);
+				// 	resourceData = require(rootDir + '/data/resources');
+				// 	dbActions.dropCollection('resources', function() {
+				// 		dbActions.saveDocuments(resourceModel, resourceData.global, function() {
+				// 			res('Data loaded: ' + dataType);
+				// 		});
+				// 	});
 				}
 				else if(dataType === 'chat') {
 					console.log('\n\n   * * * * * * * * * * * *   Deleting Chat Logs   * * * * * * * * * * * *   \n\n'.yellow);

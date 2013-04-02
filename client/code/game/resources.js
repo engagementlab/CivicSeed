@@ -30,41 +30,43 @@ $game.$resources = {
 	ready: false,
 
 	init: function() {
-		ss.rpc('game.npc.getResources', function(response) {
+		var response = $game.$npc.getNpcData();
 			//iterate through repsonses, create a key
 			//with the id and value is the object
-			_allNpcs = {};
-			ss.rpc('game.npc.getResponses', $game.$player.game.instanceName, function(all) {
+		ss.rpc('game.npc.getResponses', $game.$player.game.instanceName, function(all) {
 
-				$.each(response, function(key, resource) {
-					var stringId = String(resource.id);
-					_resources[stringId] = resource;
+			$.each(response, function(key, npc) {
+				if(npc.isHolding) {
+					var stringId = String(npc.id);
+					_resources[stringId] = npc.resource;
 					_resources[stringId].playerAnswers = [];
-				});
-
-				var allRes = all[0].resourceResponses;
-				$.each(allRes, function(key, answer) {
-					if(answer.madePublic) {
-						var stringId = String(answer.npc);
-						_resources[stringId].playerAnswers.push(answer);
-					}
-				});
-				//fill the inventory if there were things when we last left
-				$game.$player.fillInventory();
-
-				//set dom selectors
-				_resourceStateSel = $('.resourceStage');
-				_speechBubbleSel = $('.speechBubble');
-				_inventorySel = $('.inventory');
-				_resourceAreaSel = $('.resourceArea');
-				_speechButtonSel = $('.speechBubble button');
-				_resourceButtonSel = $('.resourceArea button');
-				_speakerNameSel = $('.resourceArea .speakerName');
-				_resourceMessageSel = $('.resourceArea .message');
-				_resourceContentSel = $('.resourceContent');
-
-				$game.$resources.ready = true;
+				}
 			});
+
+			var allRes = all[0].resourceResponses;
+			$.each(allRes, function(key, answer) {
+				if(answer.madePublic) {
+					var stringId = String(answer.npc);
+					_resources[stringId].playerAnswers.push(answer);
+				}
+			});
+
+			console.log(_resources);
+			//fill the inventory if there were things when we last left
+			$game.$player.fillInventory();
+
+			//set dom selectors
+			_resourceStateSel = $('.resourceStage');
+			_speechBubbleSel = $('.speechBubble');
+			_inventorySel = $('.inventory');
+			_resourceAreaSel = $('.resourceArea');
+			_speechButtonSel = $('.speechBubble button');
+			_resourceButtonSel = $('.resourceArea button');
+			_speakerNameSel = $('.resourceArea .speakerName');
+			_resourceMessageSel = $('.resourceArea .message');
+			_resourceContentSel = $('.resourceContent');
+
+			$game.$resources.ready = true;
 		});
 	},
 

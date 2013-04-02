@@ -8,7 +8,7 @@ var self = exports.actions = function(req, res, ss) {
 	var UserModel = service.useModel('user', 'ss');
 	var NpcModel = service.useModel('npc', 'ss');
 	var GnomeModel = service.useModel('gnome', 'ss');
-	var ResourceModel = service.useModel('resource', 'ss');
+	//var ResourceModel = service.useModel('resource', 'ss');
 	var GameModel = service.useModel('game', 'ss');
 
 	return {
@@ -46,13 +46,13 @@ var self = exports.actions = function(req, res, ss) {
 		},
 
 		getResources: function() {
-			ResourceModel.find(function (err, resources) {
-				if(err) {
-					console.error('  Could not find resources: %s  '.red.inverse, err);
-				} else {
-					res(resources);
-				}
-			});
+			// ResourceModel.find(function (err, resources) {
+			// 	if(err) {
+			// 		console.error('  Could not find resources: %s  '.red.inverse, err);
+			// 	} else {
+			// 		res(resources);
+			// 	}
+			// });
 		},
 
 		saveResponse: function(data) {
