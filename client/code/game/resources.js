@@ -39,6 +39,7 @@ $game.$resources = {
 				if(npc.isHolding) {
 					var stringId = String(npc.id);
 					_resources[stringId] = npc.resource;
+					_resources[stringId].id = npc.id;
 					_resources[stringId].playerAnswers = [];
 				}
 			});
@@ -51,7 +52,6 @@ $game.$resources = {
 				}
 			});
 
-			console.log(_resources);
 			//fill the inventory if there were things when we last left
 			$game.$player.fillInventory();
 
@@ -118,6 +118,7 @@ $game.$resources = {
 				$game.$player.inventoryShowing = false;
 				// _resourceAreaSel.addClass('patternBg1');
 				_resourceAreaSel.fadeIn();
+				$game.$audio.playTriggerFx('windowShow');
 			});
 		});
 	},
@@ -203,6 +204,7 @@ $game.$resources = {
 						_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
 						//show image on screen
 						//get path from db, make svg with that
+						$game.$audio.playTriggerFx('resourceRight');
 						var levelFolder = 'level' + ($game.$player.game.currentLevel + 1),
 							imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.id + '.png';
 						newImg = '<img src="' + imgPath + '" class="centerImage">';
@@ -267,7 +269,6 @@ $game.$resources = {
 			yourAnswer = $game.$player.getAnswer(_curResource.id),
 			rightOne = yourAnswer.answers.length - 1;
 
-		console.log(yourAnswer);
 		displayAnswers += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
 		if(yourAnswer.madePublic) {
 			displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
@@ -332,7 +333,7 @@ $game.$resources = {
 			//if they got it wrong
 			if(!_correctAnswer) {
 				_speak = _curResource.feedbackWrong;
-
+				$game.$audio.playTriggerFx('resourceWrong');
 				//hide resource
 				$game.$resources.hideResource();
 				$('.speechBubble .speakerName').text(_who + ': ');

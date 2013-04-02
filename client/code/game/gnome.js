@@ -211,6 +211,7 @@ $game.$gnome = {
 	},
 
 	showChat: function() {
+		$game.$audio.playTriggerFx('npcBubble');
 		$game.$gnome.isChat = true;
 		$game.$gnome.nextChatContent();
 	},
@@ -262,6 +263,7 @@ $game.$gnome = {
 	},
 
 	showPrompt: function(p) {
+		$game.$audio.playTriggerFx('npcBubble');
 		$game.$gnome.isChat = true;
 		_speak =  $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.prompts[p];
 

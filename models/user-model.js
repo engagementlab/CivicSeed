@@ -49,7 +49,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			seenThing: Boolean,
 			resourcesDiscovered: Number,
 			playingTime: Number,
-			tilesColored: Number
+			tilesColored: Number,
+			pledges: Number
 		}
 	});
 

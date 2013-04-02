@@ -42,7 +42,8 @@ module.exports.global = [{
 		seenThing: false,
 		resourcesDiscovered: 0,
 		playingTime: 0,
-		tilesColored: 0
+		tilesColored: 0,
+		pledges: 5
 	}
 }, {
 	firstName: 'Demo',
@@ -83,7 +84,8 @@ module.exports.global = [{
 		seenThing: false,
 		resourcesDiscovered: 0,
 		playingTime: 0,
-		tilesColored: 0
+		tilesColored: 0,
+		pledges: 5
 	}
 }, {
 	firstName: 'Testing',
@@ -124,7 +126,8 @@ module.exports.global = [{
 		seenThing: false,
 		resourcesDiscovered: 0,
 		playingTime: 0,
-		tilesColored: 0
+		tilesColored: 0,
+		pledges: 5
 	}
 }, {
 	firstName: 'Dummy',
@@ -165,6 +168,7 @@ module.exports.global = [{
 		seenThing: false,
 		resourcesDiscovered: 0,
 		playingTime: 0,
-		tilesColored: 0
+		tilesColored: 0,
+		pledges: 5
 	}
 }];

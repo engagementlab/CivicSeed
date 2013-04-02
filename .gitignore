@@ -9,6 +9,9 @@ node_modules
 /models/_temp/
 /server/controllers/_temp/
 /server/controllers/game/_temp/
-/client/static/audio/music/temp.mp3
+/client/static/audio/music/
+/client/static/audio/fx/
 _*.wav
+_*.mp3
+_*.ogg
 /_HIDDEN

@@ -67,6 +67,7 @@ $(function() {
 			$game.$player.message(message);
 		}
 		else {
+			$game.$audio.playTriggerFx('chatReceive');
 			$game.$others.message(message, id);
 		}
 	});
@@ -118,6 +119,17 @@ $(function() {
 	//level change for a player
 	ss.event.on('ss-levelChange', function(id, level) {
 		$game.$others.levelChange(id, level);
+	});
+
+	//some one pledged a seed to someone's answer
+	ss.event.on('ss-seedPledged', function(id) {
+		if($game.$player.id === id) {
+			$game.statusUpdate('a peer liked your answer, +1 seed');
+			$game.$player.game.seeds.riddle += 1;
+			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
+			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
+			$('.seedButton .hudCount').text($game.$player.game.seeds.riddle);
+		}
 	});
 
 
@@ -216,8 +228,9 @@ $(function() {
 				log: sentence,
 				instanceName: $game.$player.game.instanceName
 			};
+			$game.$audio.playTriggerFx('chatSend');
 			ss.rpc('game.chat.sendMessage', data, function(r) {
-				// console.log('chat worked: ', r);
+
 			});
 			_chatText.val('');
 		}
@@ -280,7 +293,7 @@ $(function() {
 	$('.resourceArea .backButton').on('click', (function () {
 		$game.$resources.previousSlide();
 	}));
-	$('.resourceArea .answerButton').on('click', (function (e) {
+	$('.resourceArea .answerButton, .resourceArea .sureButton').on('click', (function (e) {
 		e.preventDefault();
 		$game.$resources.submitAnswer();
 		return false;
@@ -377,10 +390,15 @@ $(function() {
 	});
 
 	$('body').on('click', '.publicButton', function() {
-		//update resource
 		$game.$player.makePublic($(this).attr('data-npc'));
-		//update player resources
-
+	});
+	$('body').on('click', '.pledgeButton', function() {
+		var id = $(this).attr('data-player');
+		if($game.$player.game.pledges > 0) {
+			ss.rpc('game.player.pledgeSeed', id, function(r) {
+				$game.$player.game.pledges -= 1;
+			});
+		}
 	});
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action

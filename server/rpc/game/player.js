@@ -236,6 +236,23 @@ exports.actions = function(req, res, ss) {
 					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
 				}
 			});
+		},
+
+		pledgeSeed: function(id) {
+			userModel.findById(id, function (err, user) {
+				if(err) {
+
+				} else if(user) {
+					user.game.seeds.riddle += 1;
+					user.save(function (y) {
+						res(y);
+						ss.publish.all('ss-seedPledged', id);
+					});
+				} else {
+					// MIGHT NEED TO DO THIS HERE STILL???
+					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+				}
+			});
 		}
 	};
 };

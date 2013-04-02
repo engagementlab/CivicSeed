@@ -71,7 +71,8 @@ exports.actions = function(req, res, ss) {
 						seenThing: false,
 						resourcesDiscovered: 0,
 						playingTime: 0,
-						tilesColored: 0
+						tilesColored: 0,
+						pledges: 5
 					};
 					console.log('Created user: ' + user.email);
 					user.save(function(err) {

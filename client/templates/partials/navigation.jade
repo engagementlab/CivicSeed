@@ -1,6 +1,6 @@
 .navbar.navbar-fixed-top
 	.navbar-inner
-		.container-fluid
+		.container-fluid.navPadding
 			a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
 				span.icon-bar
 				span.icon-bar
@@ -24,9 +24,7 @@
 				- if(locals && locals.fullPath)
 					style
 						#mainNavigation a[href='#{locals.fullPath}'] {
-							color: #dce12f;
 							text-decoration: none;
-							background-color: #555555;
 						}
 				ul.nav
 					li: a(href='/') Home

@@ -110,6 +110,8 @@ $game.$player = {
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
+			var playerPos = $game.$player.getPosition();
+			$game.$audio.init(playerPos);
 
 			//set HUD values
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
@@ -393,7 +395,7 @@ $game.$player = {
 				$game.$player.sendMoveInfo(result);
 				
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-					// $game.$audio.update(masterEndX, masterEndY);
+					$game.$audio.update(masterEndX, masterEndY);
 				});
 			}
 		});
@@ -631,7 +633,7 @@ $game.$player = {
 				_waitingSel.fadeOut();
 				if(result > 0) {
 					//play sound clip
-					// $game.$audio.playSound(0);
+					$game.$audio.playTriggerFx('seedDrop');
 					$game.$player.game.tilesColored += result;
 								//update seed count in HUD
 					if(mode === 1) {

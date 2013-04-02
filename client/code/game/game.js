@@ -68,14 +68,13 @@ exports.$game = {
 	levelNames: [],
 	resourceCount: [],
 	displayTimeout: null,
-	prevMessage: null,
+	prevMessage: 'Civic Seed',
 
 	init: function() {
 		$game.$map.init();
 		$game.$renderer.init();
 		//then starts player init when done
 		//which in turn starts others init
-		$game.$audio.init();
 	},
 
 	firstLoad: function (x, y) {
@@ -137,11 +136,6 @@ exports.$game = {
 				});
 				$game.running = true;
 				$game.$renderer.renderAllTiles();
-				// $game.$audio.playTheme();
-				
-				var playerPos = $game.$player.getPosition();
-				// $game.$audio.update(playerPos.x, playerPos.y);
-
 				$game.tick();
 			}
 			

@@ -188,6 +188,7 @@ $game.$npc = {
 	},
 
 	show: function() {
+		$game.$audio.playTriggerFx('npcBubble');
 		//if there is no other stuff on screen, then show dialog
 		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
 			if(_resourceOnDeck) {
@@ -261,7 +262,6 @@ $game.$npc = {
 		_who = _allNpcs[stringId].name;
 
 		//check if it is just a random talking npc
-		console.log(_curNpc);
 		if(!_curNpc.isHolding) {
 			_resourceOnDeck = false;
 		}
