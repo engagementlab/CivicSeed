@@ -3,7 +3,7 @@
 	"PORT": 80,
 	"USE_LOCAL_IP": false,
 	"USE_REDIS": true,
-	"REDIS_HOST": "nodejitsudb2689954699.redis.irstack.com",
+	"REDIS_HOST": "ec2-50-19-181-52.compute-1.amazonaws.com",
 	"REDIS_PORT": 6379,
 	"REDIS_PW": "wouldntyouliketoknow",
 	"REDIS_DB": "civic-redis",

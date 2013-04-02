@@ -19,7 +19,7 @@
     "url": "git://github.com/americanyak/CivicSeed.git"
   },
   "engines": {
-    "node": ">= 0.8.2"
+    "node": ">= 0.10.2"
   },
   "dependencies": {
     "socketstream": "0.3.3",

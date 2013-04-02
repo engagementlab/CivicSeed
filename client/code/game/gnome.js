@@ -13,7 +13,8 @@ var _info = null,
 	_dragOffX = 0,
 	_dragOffY = 0,
 	_feedbackTimeout = null,
-	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' };
+	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
+	_numMegaSeeds = 5;
 
 $game.$gnome = {
 
@@ -366,16 +367,13 @@ $game.$gnome = {
 		$game.$gnome.addButtons();
 	},
 
-	addContent: function() {
-
-		
+	addContent: function() {		
 		$('.gnomeArea .speakerName').text($game.$gnome.name+': ');
-		
 		//if _promptNum is 0, then it is the just showing the riddle and tangram
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-				$('.gnomeContent').html('<p>'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+				$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 			}
 			else {
 				//show them a different version if they already posses it
@@ -506,7 +504,7 @@ $game.$gnome = {
 					found = false;
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
-					
+
 				while(--t > -1) {
 					var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
 					if(answer.id === tanId) {
@@ -533,16 +531,22 @@ $game.$gnome = {
 
 			if(allTangrams.length === 0) {
 				correct = false;
+				_numMegaSeeds -= 1;
 				message = 'at least TRY to solve it...';
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
+				_numMegaSeeds -=1;
 				message = 'you are missing some';
 			}
 			else if(wrongOne) {
+				correct= false;
+				_numMegaSeeds -=1;
 				message = 'at least one is incorrect';
 			}
 			else if(nudge) {
+				correct= false;
+				_numMegaSeeds -=1;
 				message = 'try giving them a nudge';
 			}
 
@@ -562,7 +566,8 @@ $game.$gnome = {
 					$('.tangramArea').hide();
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
-					$game.$player.game.seeds.riddle += 3;
+					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
+					$game.$player.game.seeds.riddle += _numMegaSeeds;
 					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
 					//update HUD
 					$game.$player.game.gnomeState = 4;
@@ -577,6 +582,7 @@ $game.$gnome = {
 
 		}
 		else {
+			_numMegaSeeds = 5;
 			$game.$player.nextLevel();
 			$game.$gnome.hideResource();
 			//upload the user's answer to the DB
@@ -730,7 +736,7 @@ $game.$gnome = {
 
 		var result = num,
 			thresh = 10,
-			half = thresh / 2
+			half = thresh / 2,
 			round = (num % thresh - half);
 
 		if(round > -1) {
@@ -743,7 +749,6 @@ $game.$gnome = {
 	},
 
 	feedback: function(message) {
-		
 		$('.feedback')
 			.text(message)
 			.fadeIn();

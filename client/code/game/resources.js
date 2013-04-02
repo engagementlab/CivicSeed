@@ -260,13 +260,13 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
-		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>',
+		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p><div class="publicAnswers">',
 			displayAnswers = '<ul>',
 			yourAnswer = $game.$player.getAnswer(_curResource.id),
 			rightOne = yourAnswer.answers.length - 1;
 
 		console.log(yourAnswer);
-		displayAnswers += '<li class="playerAnswers"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
+		displayAnswers += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
 		if(yourAnswer.madePublic) {
 			displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
 		} else {
@@ -280,10 +280,10 @@ $game.$resources = {
 			while(--spot > -1) {
 				//double check
 				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
-					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p></li>';
+					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
 				}
 			}
-			displayAnswers += '</ul>';
+			displayAnswers += '</ul></div>';
 			_speak = 'Here are some recent answers by your peers: ';
 		} else {
 			_speak = 'Congrats! You were the first to answer.';

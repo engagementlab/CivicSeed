@@ -314,6 +314,7 @@ body, button, p, a
 	width 75%
 	font-size 16px, monospace
 textarea
+	font-family $buttonFont
 	width 800px
 	height 150px
 	max-width 800px
@@ -431,25 +432,45 @@ p.finalQuestion
 	left 0px
 .gnomeContent form
 	padding 20px
+
+.publicAnswers
+	border 2px solid $csPurple
+	background $csBlue
+	border-radius 5px
+	height 280px
+	width 880px
+	position absolute
+	top 95px
+	left 20px
+	overflow auto
+	ul
+		margin 0
+
 .playerAnswers
 	color #222
 	list-style none
 	border-radius 5px
-	padding 10px
-	margin-top 10px
-	width 860px
+	padding 5px 5px 5px 10px
+	margin 10px 10px 0px 10px
 	position relative
+	background #ddd
+
 	span
+		line-height 2em
 		margin-right 5px
-		color #eee
+		color $csBlue
+		height 100%
 	p
-		width 750px
-		margin 5px 0 5px 0
+		font-family $buttonFont
+		line-height 1em
+		width 740px
 		padding 0
-	.publicButton
+	.publicButton, .pledgeButton
 		position absolute
 		right 10px
 		top 10px
+.yourAnswer 
+	background #fff
 
 .megaBar
 	color #333
@@ -504,10 +525,13 @@ p.finalQuestion
 	left 0
 	height 99%
 	width 100%
-li.playerAnswers:nth-child(odd)
-	background $csGreen
-li.playerAnswers:nth-child(even)
-	background $csBlue
+// li.playerAnswers:nth-child(odd)
+// 	background #ccc
+// 	border 2px solid $csGreen
+// li.playerAnswers:nth-child(even)
+// 	//background $csBlue
+// 	background #ccc
+// 	border 4px solid $csBlue
 .tab-pane > div > p > span
 	color #eee
 .gameCursor
@@ -550,3 +574,8 @@ div.currentButton
 		right 10px
 	.retryButton
 		left 10px
+.firstRiddle
+	width 50%
+	font-size: 1.5em
+	line-height: 1.5em
+	margin 100px auto
