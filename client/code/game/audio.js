@@ -1,20 +1,32 @@
 var _soundtracks = [],
 	_triggerFx = null,
+	_environmentFx = null,
 	_currentTrack = -1,
+	_prevTrack = -1,
 	_numTracks = 7,
 	_tweenTimeout = null,
 	_newPlace = 'welcome...',
 	_targetV = 0,
 	_musicPath = CivicSeed.CLOUD_PATH + '/audio/music/',
 	_audioFxPath = CivicSeed.CLOUD_PATH + '/audio/fx/',
-	_midTransition = false;
+	_midTransition = false,
+	_extension = null,
+	_environmentFxPlaces = [
+		{places: [{sound: 'stream',locations: [{x: 50, y: 50}], prox: 10, playing: false}]},
+		{places: [{sound: 'stream',locations: [{x: 50, y: 50}], prox: 10, playing: false}]},
+		{places: [{sound: 'stream',locations: [{x: 50, y: 50}], prox: 10, playing: false}]},
+		{places: [{sound: 'stream',locations: [{x: 50, y: 50}], prox: 10, playing: false}]}
+	];
 
 $game.$audio = {
 
 	ready: false,
-	isMuted: true,
+	isMuted: false,
 
 	init: function(pos) {
+		if(CivicSeed.ENVIRONMENT !== 'development') {
+			_extension = CivicSeed.version;
+		}
 		var firstTrack = $game.$audio.whichTrack(pos.x, pos.y);
 		console.log(firstTrack);
 		if(firstTrack === -1) {
@@ -25,25 +37,39 @@ $game.$audio = {
 	},
 
 	loadTrack: function(num) {
-		var mp3 = _musicPath + num + '.mp3?VERSION=' + Math.round(Math.random(1) * 1000000000),
-			ogg = _musicPath + num + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000);
+		var mp3 = _musicPath + num + '.mp3?VERSION=',
+			ogg = _musicPath + num + '.ogg?VERSION=';
+
+		if(_extension) {
+			mp3 += _extension;
+			ogg += _extension;
+		} else {
+			mp3 += Math.round(Math.random(1) * 1000000000),
+			ogg += Math.round(Math.random(1) * 1000000000);
+		}
 
 		_soundtracks[num] = new Howl({
 			urls: [mp3, ogg],
 			autoplay: true,
 			loop: true,
 			volume: 0.2,
-			buffer: false,
-			onload: function() {
-				//this goes thru all the tracks, and skips num since its preloaded
-				$game.$audio.loadOtherTrack(0, num);
-				$game.$audio.loadTriggerFx();
-				_currentTrack = num;
-			}
+			buffer: true
+			// onload: function() {
+			// 	//this goes thru all the tracks, and skips num since its preloaded
+			// 	console.log('loaded first track: ', num);
+			// 	$game.$audio.loadOtherTrack(0, num);
+			// 	$game.$audio.loadTriggerFx();
+			// 	_currentTrack = num;
+			// }
 		});
+		//this goes thru all the tracks, and skips num since its preloaded
+		console.log('loaded first track: ', num);
+		$game.$audio.loadOtherTrack(0, num);
+		$game.$audio.loadTriggerFx();
+		_currentTrack = num;
 	},
+
 	loadOtherTrack: function(track, num) {
-		console.log(track, num);
 		if(track !== num) {
 			var mp3 = _musicPath + track + '.mp3?VERSION=' + Math.round(Math.random(1) * 1000000000),
 				ogg = _musicPath + track + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000);
@@ -52,14 +78,20 @@ $game.$audio = {
 				autoplay: false,
 				loop: true,
 				volume: 0.0,
-				buffer: false,
-				onload: function() {
-					track++;
-					if(track !== _numTracks) {
-						$game.$audio.loadOtherTrack(track, num);
-					}
-				}
+				buffer: true
+				// onload: function() {
+				// 	console.log('loaded track: ', track);
+				// 	track++;
+				// 	if(track !== _numTracks) {
+				// 		$game.$audio.loadOtherTrack(track, num);
+				// 	}
+				// }
 			});
+			console.log('loaded track: ', track);
+			track++;
+			if(track !== _numTracks) {
+				$game.$audio.loadOtherTrack(track, num);
+			}
 		} else {
 			track++;
 			if(track !== _numTracks) {
@@ -69,8 +101,15 @@ $game.$audio = {
 	},
 
 	loadTriggerFx: function() {
-		var mp3 = _musicPath + 'triggers.mp3?VERSION=' + Math.round(Math.random(1) * 1000000000),
-			ogg = _musicPath +'triggers.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000);
+		var mp3 = _musicPath + 'triggers.mp3?VERSION=',
+			ogg = _musicPath +'triggers.ogg?VERSION=';
+		if(_extension) {
+			mp3 += _extension;
+			ogg += _extension;
+		} else {
+			mp3 += Math.round(Math.random(1) * 1000000000),
+			ogg += Math.round(Math.random(1) * 1000000000);
+		}
 		_triggerFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -92,82 +131,33 @@ $game.$audio = {
 			},
 			volume: 0.8,
 			onload: function() {
-				console.log('fx loaded');
-				$game.$audio.ready = true;
+				console.log('sound fx loaded');
+				$game.$audio.loadEnvironmentFx();
 			}
 		});
 	},
-	// loadTrack: function(num) {
-	// 	_soundtracks[num] = document.createElement('audio');
 
-	// 	if(num === _numTracks) {
-	// 		$game.$audio.loadEffect(0);
-	// 	}
-	// 	else {
-
-	// 		_soundtracks[num].preload = "auto";
-	// 		_soundtracks[num].autobuffer = true;
-	// 		_soundtracks[num].loop = true;
-	// 		if(CivicSeed.ENVIRONMENT === 'development') {
-	// 			_soundtracks[num].src = Modernizr.audio.ogg ? _musicPath + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000):
-	// 									_musicPath + num + '.wav?VERSION=' + Math.round(Math.random(1) * 1000000000);
-	// 		} else {
-	// 			_soundtracks[num].src = Modernizr.audio.wav ? _musicPath + num + '.wav?VERSION=' + CivicSeed.VERSION:
-	// 									_musicPath + num + '.wav?VERSION=' + CivicSeed.VERSION;
-	// 		}
-	// 		_soundtracks[num].volume = 0;
-	// 		_soundtracks[num].load();
-
-	// 		_soundtracks[num].addEventListener('canplaythrough', function (e) {
-	// 			this.removeEventListener('canplaythrough', arguments.callee, false);
-	// 			num += 1;
-	// 			$game.$audio.loadTrack(num);
-	// 		},false);
-			
-	// 		_soundtracks[num].addEventListener('error', function (e) {
-	// 			console.log(num, 'error sound');
-	// 		}, false);
-	// 	}
-	// },
-
-	// loadEffect: function(num) {
-	// 	_effects[num] = document.createElement('audio');
-
-	// 	if(num === _numEffects) {
-	// 		$game.$audio.ready = true;
-	// 	}
-	// 	else {
-	// 		if(CivicSeed.ENVIRONMENT === 'development') {
-	// 			_effects[num].src = Modernizr.audio.ogg ? _audioFxPath + num + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000):
-	// 								_audioFxPath + num  + '.mp3?VERSION' + Math.round(Math.random(1) * 1000000000);
-
-	// 		} else {
-	// 			_effects[num].src = Modernizr.audio.ogg ? _audioFxPath + num + '.ogg?VERSION=' + CivicSeed.VERSION:
-	// 								_audioFxPath + num  + '.mp3?VERSION' + CivicSeed.VERSION;
-	// 		}
-	// 		_effects[num].preload = "auto",
-	// 		_effects[num].autobuffer = true,
-	// 		_effects[num].volume = 0.4,
-	// 		_effects[num].load();
-	// 		_effects[num].addEventListener('canplaythrough', function (e) {
-	// 			this.removeEventListener('canplaythrough', arguments.callee, false);
-	// 			//console.log(num, 'ready to play.');
-	// 			num += 1;
-	// 			$game.$audio.loadEffect(num);
-	// 		},false);
-			
-	// 		_effects[num].addEventListener('error', function (e) {
-	// 			console.log(num, 'error sound');
-	// 		}, false);
-	// 	}
-	// },
-
-	playTheme: function() {
-		_soundtracks[_currentTrack].play();
-	},
-
-	pauseTheme: function() {
-		_soundtracks[_currentTrack].pause();
+	loadEnvironmentFx: function() {
+		var mp3 = _musicPath + 'environment.mp3?VERSION=',
+			ogg = _musicPath +'environment.ogg?VERSION=';
+		if(_extension) {
+			mp3 += _extension;
+			ogg += _extension;
+		} else {
+			mp3 += Math.round(Math.random(1) * 1000000000),
+			ogg += Math.round(Math.random(1) * 1000000000);
+		}
+		_environmentFx = new Howl({
+			urls: [mp3, ogg],
+			sprite: {
+				stream: [0, 5100]
+			},
+			volume: 0.5,
+			onload: function() {
+				console.log('environment fx loaded');
+				$game.$audio.ready = true;
+			}
+		});
 	},
 
 	playTriggerFx: function(fx) {
@@ -175,26 +165,53 @@ $game.$audio = {
 		_triggerFx.play(fx);
 	},
 
-	switchTrack: function(swap) {
-		if(_soundtracks[swap] && !_midTransition) {
-			_midTransition = true;
-			_soundtracks[_currentTrack].fadeOut(0, 2000, function() {
-				this.stop();
-				_currentTrack = swap;
-				_soundtracks[swap].fadeIn(0.2, 2000, function() {
-					_midTransition = false;
-				});	
-			});
-		}
+	playEnvironmentFx: function(fx) {
+		console.log(fx);
+		_environmentFx.play(fx);
 	},
 
 	update: function(posX, posY) {
 		var trackNum = $game.$audio.whichTrack(posX, posY);
-		console.log(trackNum);
-		if(trackNum > -1) {
-			$game.$audio.switchTrack(trackNum);	
+		$game.statusUpdate(_newPlace);
+		console.log('new:', trackNum, 'cur: ', _currentTrack, _soundtracks[trackNum]._loaded);
+		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
+			$game.$audio.switchTrack(trackNum);
 		}
-		
+		$game.$audio.checkEnvironmentFx(trackNum, posX, posY);
+	},
+
+	checkEnvironmentFx: function(level, posX, posY) {
+		if(level < 4) {
+			var numPlaces = _environmentFxPlaces[level].places.length,
+				p = 0;
+
+			while(p < numPlaces) {
+				var place = _environmentFxPlaces[p].places[p];
+				var dist = Math.abs(posX - place.locations[0].x) + Math.abs(posY - place.locations[0].y);
+
+				//check to see if in proximity
+				if(dist < place.prox && !place.playing) {
+					place.playing = true;
+					$game.$audio.playEnvironmentFx(place.sound);
+				}
+				p++;
+			}
+		}
+	},
+
+	switchTrack: function(swap) {
+		console.log('yannnnnkeeeeee swap', _midTransition);
+		_midTransition = true;
+		_prevTrack = _currentTrack;
+		_soundtracks[_currentTrack].fadeOut(0, 1000, function() {
+			console.log('pause: ', _prevTrack);
+			_soundtracks[_prevTrack].pause();
+		});
+		_currentTrack = swap;
+		_soundtracks[swap].fadeIn(0.2, 3000, function(swap) {
+			_midTransition = false;
+			console.log('fadeddd', _midTransition);
+		});
 	},
 
 	whichTrack: function(posX, posY) {
@@ -205,11 +222,9 @@ $game.$audio = {
 			absX = Math.abs(diffX),
 			absY = Math.abs(diffY);
 
-		var closest;
 		//check for gnome/s place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 5;
-			_targetV = 0.4;
 			_newPlace = 'entering the botanist\'s garden';
 		}
 		else {
@@ -238,33 +253,18 @@ $game.$audio = {
 				trackRegion = 4;
 				_newPlace = 'you are on the equator';
 			}
-			if (absX < absY) {
-				closest = absX;
-			}
-			else {
-				closest = absY;
-			}
-
-			if(closest < 30) {
-				_targetV = closest * 0.01;
-			}
-			else {
-				_targetV = 0.4;
-			}
 		}
 
-		trackRegion = trackRegion === _currentTrack ? -1 : trackRegion;
-		
 		return trackRegion;
 	},
 
 	toggleMute: function() {
 		$game.$audio.isMute = $game.$audio.isMute ? false: true;
 		if($game.$audio.isMute) {
-			_soundtracks[_currentTrack].volume = 0;
+			_soundtracks[_currentTrack].volume(0);
 		}
 		else {
-			_soundtracks[_currentTrack].volume = _targetV;
+			_soundtracks[_currentTrack].volume(0.2);
 		}
 		return $game.$audio.isMute;
 	}

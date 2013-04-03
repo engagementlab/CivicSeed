@@ -357,14 +357,14 @@ $(function() {
 		}
 	});
 	$('.muteButton').on('click', function() {
-		//var musicOff = $game.$audio.toggleMute();
+		var musicOff = $game.$audio.toggleMute();
 
-		// if(musicOff) {
-		// 	$('.muteButton i').removeClass('icon-volume-up').addClass('icon-volume-off');
-		// }
-		// else {
-		// 	$('.muteButton i').removeClass('icon-volume-off').addClass('icon-volume-up');
-		// }
+		if(musicOff) {
+			$('.muteButton i').removeClass('icon-volume-up').addClass('icon-volume-off');
+		}
+		else {
+			$('.muteButton i').removeClass('icon-volume-off').addClass('icon-volume-up');
+		}
 	});
 
 	$('.helpButton').on('click', function() {
