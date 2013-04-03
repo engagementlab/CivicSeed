@@ -13,32 +13,30 @@ var _soundtracks = [],
 	_midTransition = false,
 	_extension = null,
 	_environmentLoopFxPlaces = [
-		{places: [
-			{sound: 'stream',locations: [{x: 30, y: 35}], prox: 10, playing: false}
-		]},
-		{places: [
-			{sound: 'stream',locations: [{x: 30, y: 35}], prox: 10, playing: false}
-		]},
-		{places: [
-			{sound: 'stream',locations: [{x: 30, y: 35}], prox: 10, playing: false}
-		]},
-		{places: [
-			{sound: 'stream',locations: [{x: 30, y: 35}], prox: 10, playing: false}
-		]}
+		{	sound: 'stream',
+			locations: [{x: 30, y: 10}, {x: 30, y: 50}, {x: 30, y: 90}, {x: 30, y: 130}, {x: 30, y: 170}],
+			prox: {x:20,y:20}
+		},
+		{	sound: 'wind',
+			locations: [{x: 15, y: 8},{x: 60, y: 50}],
+			prox: {x:20,y:20}
+		},
+		{	sound: 'chatter',
+			locations: [{x: 100, y: 66}],
+			prox: {x:20,y:20}
+		},
+		{	sound: 'waves',
+			locations: [{x: 10, y: 80}],
+			prox: {x:20,y:20}
+		}
 	],
 	_environmentOnceFxPlaces = [
-		{places: [
-			{location: {x: 50, y: 50}, sounds: ['trek', 'neo', 'bigger', 'dude'], prox: 100, chance: 0.15}
-		]},
-		{places: [
-			{location: {x: 50, y: 50}, sounds: ['trek', 'neo', 'bigger', 'dude'], prox: 100, chance: 0.1}
-		]},
-		{places: [
-			{location: {x: 50, y: 50}, sounds: ['trek', 'neo', 'bigger', 'dude'], prox: 100, chance: 0.1}
-		]},
-		{places: [
-			{location: {x: 50, y: 50}, sounds: ['trek', 'neo', 'bigger', 'dude'], prox: 100, chance: 0.1}
-		]}
+		{location: {x: 10, y: 0}, sounds: ['neo', 'bigger'], prox: {x: 10, y: 10}, chance: 0.50},
+		{location: {x: 35, y: 30}, sounds: ['forest1', 'forest2','forest3', 'bird1', 'bird2','bird3'], prox: {x:35, y:30}, chance: 0.2},
+		{location: {x: 105, y: 30}, sounds: ['churchBells', 'townBells','chatter', 'bird2', 'bird3'], prox: {x:35, y:30}, chance: 0.1},
+		{location: {x: 105, y: 90}, sounds: ['chickens', 'sheep1', 'sheep2', 'horse', 'bird3'], prox: {x:35, y:30}, chance: 0.15},
+		{location: {x: 35, y: 90}, sounds: ['portBells', 'foghorn', 'bird2'], prox: {x:35, y:30}, chance: 0.1}
+
 	],
 	_currentLoop = null,
 	_currentPos = null;
@@ -139,7 +137,7 @@ $game.$audio = {
 				pieceSelect: [15000, 300],
 				pieceDrop: [16000, 200]
 			},
-			volume: 0.8,
+			volume: 0.4,
 			onload: function() {
 				console.log('sound fx loaded');
 				$game.$audio.loadEnvironmentLoopFx();
@@ -160,19 +158,23 @@ $game.$audio = {
 		_environmentLoopFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
-				stream: [0, 5100]
+				stream: [0, 5010],
+				chatter: [6000, 12025],
+				wave: [19000, 16500],
+				wind: [36000, 14350]
 			},
 			loop: true,
 			onend: function() {
 				$game.$audio.checkLoopExit();
 			},
-			volume: 0.3,
+			volume: 0.1,
 			onload: function() {
 				console.log('environment loop fx loaded');
 				$game.$audio.loadEnvironmenOnceFx();
 			}
 		});
 	},
+
 	loadEnvironmenOnceFx: function() {
 		var mp3 = _musicPath + 'environmentOnce.mp3?VERSION=',
 			ogg = _musicPath +'environmentOnce.ogg?VERSION=';
@@ -186,10 +188,23 @@ $game.$audio = {
 		_environmentOnceFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
-				trek: [0,1300],
-				neo: [2000, 2500],
-				bigger: [5000, 5300],
-				dude: [11000,2400]
+				neo: [0, 1520],
+				bigger: [2000, 5300],
+				horse: [8000,11000],
+				sheep1: [11000,1600],
+				sheep2: [13000, 1500],
+				chickens: [15000, 4400],
+				forest1: [20000, 1000],
+				forest2: [21000, 1600],
+				portBells: [23000,4400],
+				churhBells: [28000, 3150],
+				townBells: [32000, 2400],
+				bird1: [35000, 700],
+				bird2: [36000, 500],
+				bird3: [37000, 900],
+				foghorn: [38000, 4300],
+				chatter: [43000, 5500],
+				forest3: [49000, 2700]
 			},
 			volume: 0.4,
 			onend: function() {
@@ -210,14 +225,16 @@ $game.$audio = {
 	},
 
 	playEnvironmentOnceFx: function(fx) {
-		_environmentOnceFx.play(fx);
+		var ranDelay = Math.random() * 2000;
+		setTimeout(function() {
+			_environmentOnceFx.play(fx);
+		}, ranDelay);
 	},
 
 	update: function(posX, posY) {
 		_currentPos = {x: posX, y: posY};
 		var trackNum = $game.$audio.whichTrack(posX, posY);
 		$game.statusUpdate(_newPlace);
-		console.log('new:', trackNum, 'cur: ', _currentTrack, _soundtracks[trackNum]._loaded);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
 			$game.$audio.switchTrack(trackNum);
 		}
@@ -227,58 +244,55 @@ $game.$audio = {
 		$game.$audio.checkEnvironmentOnceFx(trackNum);
 	},
 
-	checkEnvironmentLoopFx: function(level) {
-		if(level < 4) {
-			var numPlaces = _environmentLoopFxPlaces[level].places.length,
-				p = 0;
+	checkEnvironmentLoopFx: function() {
+		var numPlaces = _environmentLoopFxPlaces.length,
+			p = 0;
 
-			while(p < numPlaces) {
-				var place = _environmentLoopFxPlaces[level].places[p],
-					numLocations = place.locations.length,
-					l = 0,
-					insideRange = false;
+		while(p < numPlaces) {
+			var place = _environmentLoopFxPlaces[p],
+				numLocations = place.locations.length,
+				l = 0;
 
-				while(l < numLocations) {
-					var inProx = $game.$audio.getProximity(place.locations[l], place.prox);
-						if(inProx) {
-							_currentLoop = place;
-							$game.$audio.playEnvironmentLoopFx(place.sound);
-							//get out of BOTH loops
-							l = numLocations;
-							p = numPlaces;
-						}
-					l++;
-				}
-				p++;
-			}
-		}
-	},
-
-	checkEnvironmentOnceFx: function(level) {
-		if(level < 4) {
-			var numPlaces = _environmentOnceFxPlaces[level].places.length,
-				p = 0;
-
-			while(p < numPlaces) {
-				var place = _environmentOnceFxPlaces[level].places[p],
-					inProx = $game.$audio.getProximity(place.location, place.prox);
-				if(inProx) {
-					var rollDice = Math.random();
-					if(rollDice < place.chance) {
-						var soundIndex = Math.floor((rollDice / place.chance) * place.sounds.length);
-						console.log(soundIndex, place.sounds[soundIndex]);
-						$game.$audio.playEnvironmentOnceFx(place.sounds[soundIndex]);
+			while(l < numLocations) {
+				var inProx = $game.$audio.getProximity(place.locations[l], place.prox);
+					if(inProx) {
+						_currentLoop = place;
+						console.log('changing to: ', _currentLoop);
+						$game.$audio.playEnvironmentLoopFx(place.sound);
+						//get out of BOTH loops
+						l = numLocations;
 						p = numPlaces;
 					}
-				}
-				p++;
+				l++;
 			}
+			p++;
 		}
 	},
 
-	getProximity: function(location, thresh) {
-		var dist1 = Math.abs(_currentPos.x - location.x) + Math.abs(_currentPos.y - location.y);
-		if(dist1 < thresh) {
+	checkEnvironmentOnceFx: function() {
+		var numPlaces = _environmentOnceFxPlaces.length,
+			p = 0;
+
+		while(p < numPlaces) {
+			var place = _environmentOnceFxPlaces[p],
+				inProx = $game.$audio.getProximity(place.location, place.prox);
+			if(inProx) {
+				var rollDice = Math.random();
+				if(rollDice < place.chance) {
+					var soundIndex = Math.floor((rollDice / place.chance) * place.sounds.length);
+					$game.$audio.playEnvironmentOnceFx(place.sounds[soundIndex]);
+					//if we don't want overlapping of sounds triggered at a time
+					p = numPlaces;
+				}
+			}
+			p++;
+		}
+	},
+
+	getProximity: function(location, prox) {
+		var distX = Math.abs(_currentPos.x - location.x),
+			distY =  Math.abs(_currentPos.y - location.y);
+		if(distX < prox.x && distY < prox.y) {
 			return true;
 		} else {
 			return false;
@@ -286,10 +300,22 @@ $game.$audio = {
 	},
 
 	checkLoopExit: function() {
-		var inProx = $game.$audio.getProximity(_currentLoop.locations[0], _currentLoop.prox);
-		if(!inProx) {
+		console.log(_currentLoop);
+		var numLocations = _currentLoop.locations.length,
+			l = 0,
+			inRange = false;
+
+		while(l < numLocations) {
+			var inProx = $game.$audio.getProximity(_currentLoop.locations[l], _currentLoop.prox);
+			if(inProx) {
+				inRange = true;
+				l = numLocations;
+			}
+			l++;
+		}
+		if(!inRange) {
+			_environmentLoopFx.pause(_currentLoop.sound);
 			_currentLoop = null;
-			_environmentLoopFx.pause();
 		}
 	},
 
@@ -300,7 +326,8 @@ $game.$audio = {
 			_soundtracks[_prevTrack].pause();
 		});
 		_currentTrack = swap;
-		_soundtracks[swap].fadeIn(0.2, 3000, function(swap) {
+
+		_soundtracks[swap].fadeIn(0.15, 3000, function(swap) {
 			_midTransition = false;
 		});
 	},
@@ -341,7 +368,7 @@ $game.$audio = {
 			}
 			//no man/s land
 			else {
-				trackRegion = 4;
+				trackRegion = _currentTrack;
 				_newPlace = 'you are on the equator';
 			}
 		}
