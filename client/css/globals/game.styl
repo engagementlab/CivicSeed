@@ -51,13 +51,13 @@ body, button, p, a
 	display none
 
 .patternBg1
-	background url($cloudPath + 'img/bg/maze.png') #efefef
+	background url($cloudPath + 'img/bg/grey.png') #efefef
 
 .patternBg2
-	background url($cloudPath + 'img/bg/lines.png') #efefef
+	background url($cloudPath + 'img/bg/grey.png') #efefef
 
 .patternBg3
-	background url($cloudPath + 'img/bg/lines.png') #efefef
+	background url($cloudPath + 'img/bg/tri.png') #efefef
 
 .gnomeArea
 	position absolute
@@ -88,12 +88,126 @@ body, button, p, a
 	left 15px
 	width 930px
 	height 450px
-	background url($cloudPath + 'img/bg/lines.png') #efefef
 	box-shadow 2px 2px 4px 4px #333
 	padding 0
 	border-radius 5px
 	z-index 9990
 	display none
+	h2
+		width 230px
+		padding 0
+		margin 20px 0 20px 25px
+		color $csGreen
+		font-size 3.5em
+		letter-spacing 2px
+	h3
+		margin-left 40px
+		color $csBlue
+	.personalInfo
+		position absolute
+		background #ddd
+		width 260px
+		height 300px
+		margin 0 0 0 20px
+		padding 10px
+		border 3px solid $csOrange
+		border-radius 10px
+		.levelImages img
+			margin 8px
+	.tabbable
+		position absolute
+		top 35px
+		left 320px
+		width 310px
+		height 360px
+		margin 0
+		padding 0
+		ul.nav.nav-tabs
+			margin 0
+			border 0
+			li 
+				margin 0
+				padding 0
+				width 155px
+				border-radius 5px 5px 0 0
+			li a
+				font-family $bodyFont
+				font-size 1.2em
+				border 0
+				color white
+				text-align center
+			// li a:hover
+			// 	border-radius 5px 5px
+			li.tabYou, li.active.tabYou, li.active.tabYou a, li.tabYou a:hover
+				margin 0
+				background $csOrange
+				border 0
+			li.tabEveryone, li.active.tabEveryone, li.active.tabEveryone a, li.tabEveryone a:hover
+				margin 0
+				background $csLightOrange
+				border 0
+		.tab-content
+			border-radius 0 0 5px 5px
+			p
+				color white
+				position absolute
+			.displayTime, .displayPercent
+				font-family $buttonFont
+				font-size 1.3em
+				top 326px
+			.displayTime
+				left 10px
+			.displayPercent
+				right 10px
+			.timeTitle
+				top 352px
+				left 10px
+				color #efefef
+			.percentTitle
+				top 352px
+				right 10px
+				color #efefef
+		#tab1
+			background $csOrange
+			width 310px
+			height 350px	
+		#tab2
+			background $csLightOrange
+			width 310px
+			height 350px
+		.colorMapYou,
+		.colorMapEveryone
+			position absolute
+			top 50px
+			left 12px
+			background #ddd
+			border-radius 5px
+			width 284px
+			height 264px
+		.colorMapYou img
+			width 284px
+		.colorMapEveryone img
+			width 284px
+	.topSeeders
+		position absolute
+		top 85px
+		left 690px
+		width 200px
+		height 330px
+		border-radius 5px
+		background $csGreen
+		color #333
+		p
+			font-size 1.2em
+			color white
+			text-align center
+			padding 5px 0 5px 0
+			background $csBlue
+			border-radius 5px 5px 0 0
+	.topSeeders ol
+		padding-left 10px
+		li
+			font-family $buttonFont
 
 .helpArea
 	position absolute
@@ -366,32 +480,6 @@ p.finalQuestion
 
 .activePlayers > p
 	right 10px
-.progressArea h2,
-.helpArea h2
-	padding 10px
-	margin-left 10px
-	color $csGray
-.progressArea h3
-	margin-left 40px
-	color $csBlue
-.personalInfo,
-.personalStats,
-.topSeeders,
-.megaBar
-	margin-bottom 20px
-	border-radius 5px
-	padding 10px 5px 5px 15px
-	width 360px
-	font-size 16px
-.personalInfo
-	background $csBlue
-.personalStats
-	background $csGreen
-.topSeeders
-	background $csBlue
-	color #333
-.topSeeders ol
-	padding-left 10px
 .tangramArea > .feedback
 	width 320px
 	height 36px
@@ -406,25 +494,6 @@ p.finalQuestion
 	display none
 	z-index 9999
 	color #eee
-.colorMap,
-.colorMapGroup
-	background rgba(0,0,0,0.8)
-	margin 0
-	padding 0
-	position absolute
-	top 30px
-	right 50px
-	border-radius 5px
-	width 426px
-	height 396px
-.colorMap img
-	margin 0
-	padding 0
-.colorMapGroup img
-	margin 0
-	padding 0
-	width 426px
-	position absolute
 .tangramOutline
 	position absolute
 	z-index 0
@@ -473,13 +542,6 @@ p.finalQuestion
 .yourAnswer 
 	background #fff
 
-.megaBar
-	color #333
-	background $csGreen
-
-.progress
-	width 95%
-	border 2px solid #333
 .waitingForSeed
 	width 32px
 	height 32px
@@ -526,15 +588,7 @@ p.finalQuestion
 	left 0
 	height 99%
 	width 100%
-// li.playerAnswers:nth-child(odd)
-// 	background #ccc
-// 	border 2px solid $csGreen
-// li.playerAnswers:nth-child(even)
-// 	//background $csBlue
-// 	background #ccc
-// 	border 4px solid $csBlue
-.tab-pane > div > p > span
-	color #eee
+
 .gameCursor
 	position absolute
 	width 24px

@@ -543,7 +543,7 @@ exports.$game = {
 
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
-		$('.colorMap img')
+		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
 		var playingTime = $game.$player.getPlayingTime(),
@@ -553,31 +553,30 @@ exports.$game = {
 			seconds = playingTime % 60,
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
-		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
-			percentBar = '<div class=\'progress progress-info progress-striped\'><div class=\'bar\' style=\'width: '+ $game.percentString+ '></div></div>',
-			percentShow = '<p>Color is ' + $game.percentString + ' restored...</p>',
-			displayLevel = $game.$player.game.currentLevel + 1;
-			
-		var	personalInfo = '<p><span>Current Level:</span> ' + displayLevel + '</p>' +
-			'<p>' + $game.$player.game.rank + '</p>',
 
-			personalStats = '<p><span>Tiles Colored:</span> ' + $game.$player.game.tilesColored + '</p>' +
-				'<p><span>Your Contribution: </span>' + contribution + '</p>' +
-				'<p><span>Resources Discovered: </span>' + $game.$player.game.resourcesDiscovered + '</p>' +
-				'<p><span>Time Played: </span>' + displayTime + '</p>';
+		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
+			displayLevel = $game.$player.game.currentLevel + 1;
+
+		// var	personalInfo = '<p><span>Current Level:</span> ' + displayLevel + '</p>' +
+		// 	'<p>' + $game.$player.game.rank + '</p>',
+
+			// personalStats = '<p><span>Tiles Colored:</span> ' + $game.$player.game.tilesColored + '</p>' +
+			// 	'<p><span>Your Contribution: </span>' + contribution + '</p>' +
+			// 	'<p><span>Resources Discovered: </span>' + $game.$player.game.resourcesDiscovered + '</p>' +
+			// 	'<p><span>Time Played: </span>' + displayTime + '</p>';
 						
-			topPlayers = '<p><span>Top Seeders:</span></p><ol>';
+			topPlayers = '<p>top seeders:</p><ol>';
 		
 		for(var i = 0; i < $game.leaderboard.length; i++) {
-			topPlayers += '<li>' + $game.leaderboard[i].name + ': ' + $game.leaderboard[i].count + ' tiles colored</li>';
+			topPlayers += '<li>' + $game.leaderboard[i].name + ' (' + $game.leaderboard[i].count + ' tiles)</li>';
 		}
 		topPlayers += '</ol>';
 		//show player's seed droppings
 
-		$('.megaBar').empty().append(percentShow + percentBar);
+		$('.displayTime').text(displayTime);
+		$('.displayPercent').text($game.percentString);
 		$('.topSeeders').empty().append(topPlayers);
-		$('.personalInfo').empty().append(personalInfo);
-		$('.personalStats').empty().append(personalStats);
+		//$('.personalInfo').empty().append(personalInfo);
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});

@@ -37,25 +37,35 @@
 		button.closeButton.btn.btn-primary(type='button') Close
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
-	div.progressArea
-		h2 Progress Area
+	div.progressArea.patternBg2
+		h2 Progress
+		div.personalInfo
+			.levelImages
+				img(src='http://placehold.it/48x48.png')
+				img(src='http://placehold.it/48x48.png')
+				img(src='http://placehold.it/48x48.png')
+				img(src='http://placehold.it/48x48.png')
+			p.currentLevel current level: 1 
 		.tabbable
-			ul.nav.nav-pills
-				li.active
-					a(href='#tab1', data-toggle='tab') You
-				li
-					a(href='#tab2', data-toggle='tab') Everyone
+			ul.nav.nav-tabs
+				li.active.tabYou
+					a(href='#tab1', data-toggle='tab') you
+				li.tabEveryone
+					a(href='#tab2', data-toggle='tab') everyone
 			.tab-content
 				.tab-pane.active#tab1
-					div.personalInfo
-					div.personalStats
-					div.colorMap
+					.colorMapYou
 						img(src='')
-
+					p.displayTime
+					p.timeTitle time played
+						
 				.tab-pane#tab2
-					div.megaBar
-					div.topSeeders
-					div.colorMapGroup
+					.colorMapEveryone
+						img(src='')
+					p.displayPercent
+					p.percentTitle colored
+
+		div.topSeeders
 
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large

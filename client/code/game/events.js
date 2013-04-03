@@ -332,6 +332,7 @@ $(function() {
 		_progressArea.fadeOut(function() {
 			$game.showingProgress = false;
 			$game.changeStatus();
+			$('.progressButton').removeClass('currentButton');
 		});
 		return false;
 	}));

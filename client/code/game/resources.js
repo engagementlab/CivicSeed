@@ -22,7 +22,8 @@ var _resources = [],
 	_questionType = null,
 	_feedbackRight = null,
 	_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
-	_publicAnswers = null;
+	_publicAnswers = null,
+	_preloadedPieceImage = null;
 
 $game.$resources = {
 
@@ -102,6 +103,11 @@ $game.$resources = {
 		if(num === 2) {
 			_revisiting = true;
 			_correctAnswer = false;
+		} else {
+			var npcLevel = $game.$npc.getNpcLevel(),
+				levelFolder = 'level' + (npcLevel + 1),
+				imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.id + '.png';
+			_preloadedPieceImage = '<img src="' + imgPath + '" class="centerImage">';
 		}
 
 		_speechBubbleSel.fadeOut(function() {
@@ -116,7 +122,7 @@ $game.$resources = {
 			$game.$resources.addButtons();
 			_inventorySel.fadeOut(function() {
 				$game.$player.inventoryShowing = false;
-				// _resourceAreaSel.addClass('patternBg1');
+				_resourceAreaSel.addClass('patternBg1');
 				_resourceAreaSel.fadeIn();
 				$game.$audio.playTriggerFx('windowShow');
 			});
@@ -205,10 +211,7 @@ $game.$resources = {
 						//show image on screen
 						//get path from db, make svg with that
 						$game.$audio.playTriggerFx('resourceRight');
-						var levelFolder = 'level' + ($game.$player.game.currentLevel + 1),
-							imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.id + '.png';
-						newImg = '<img src="' + imgPath + '" class="centerImage">';
-						_resourceContentSel.html(newImg).css('overflow', 'hidden');
+						_resourceContentSel.html(_preloadedPieceImage).css('overflow', 'hidden');
 					}
 					_speakerNameSel.text(_who + ': ');
 					_resourceMessageSel.text(_speak);
@@ -301,7 +304,7 @@ $game.$resources = {
 		_resourceAreaSel.fadeOut(function() {
 			$game.$resources.isShowing = false;
 			_resourceButtonSel.addClass('hideButton');
-			// _resourceAreaSel.removeClass('patternBg1');
+			_resourceAreaSel.removeClass('patternBg1');
 		});
 
 		//if the resource was being displayed from the inventory, keep it up.
@@ -314,7 +317,6 @@ $game.$resources = {
 				else {
 					$game.$player.inventoryShowing = true;
 				}
-				
 			});
 		}
 	},
