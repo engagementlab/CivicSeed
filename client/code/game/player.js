@@ -1013,6 +1013,18 @@ $game.$player = {
 				});
 			}
 		}
+	},
+
+	compileAnswers: function() {
+		var html = '';
+		for (var a = 0; a < $game.$player.game.resources.length; a++) {
+			var item = $game.$player.game.resources[a],
+				npc = item.npc,
+				answer = item.answers[item.answers.length - 1],
+				question = $game.$resources.getQuestion(npc);
+				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span>' + answer + '</span></p>';
+		}
+		return html;
 	}
 };
 

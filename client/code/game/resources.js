@@ -267,7 +267,7 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
-		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p><div class="publicAnswers">',
+		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>',
 			displayAnswers = '<ul>',
 			yourAnswer = $game.$player.getAnswer(_curResource.id),
 			rightOne = yourAnswer.answers.length - 1;
@@ -434,5 +434,10 @@ $game.$resources = {
 	popupCheck: function() {
 		$('.check button').removeClass('hideButton');
 		$('.check').show();
+	},
+
+	getQuestion: function(id) {
+		var stringId = String(id);
+		return _resources[stringId].question;
 	}
 };

@@ -19,10 +19,10 @@ var _soundtracks = [],
 		},
 		{	sound: 'wind',
 			locations: [{x: 15, y: 8},{x: 60, y: 50}],
-			prox: {x:20,y:20}
+			prox: {x:20,y:15}
 		},
 		{	sound: 'chatter',
-			locations: [{x: 100, y: 66}],
+			locations: [{x: 100, y: 30}],
 			prox: {x:20,y:20}
 		},
 		{	sound: 'waves',
@@ -167,7 +167,7 @@ $game.$audio = {
 			onend: function() {
 				$game.$audio.checkLoopExit();
 			},
-			volume: 0.1,
+			volume: 0.2,
 			onload: function() {
 				console.log('environment loop fx loaded');
 				$game.$audio.loadEnvironmenOnceFx();
@@ -234,9 +234,9 @@ $game.$audio = {
 	update: function(posX, posY) {
 		_currentPos = {x: posX, y: posY};
 		var trackNum = $game.$audio.whichTrack(posX, posY);
-		$game.statusUpdate(_newPlace);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
 			$game.$audio.switchTrack(trackNum);
+			$game.statusUpdate(_newPlace);
 		}
 		if(!_currentLoop) {
 			$game.$audio.checkEnvironmentLoopFx(trackNum);
@@ -327,7 +327,8 @@ $game.$audio = {
 		});
 		_currentTrack = swap;
 
-		_soundtracks[swap].fadeIn(0.15, 3000, function(swap) {
+		var val = $game.$audio.isMute ? 0.0 : 0.2;
+		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
 			_midTransition = false;
 		});
 	},
@@ -380,9 +381,15 @@ $game.$audio = {
 		$game.$audio.isMute = $game.$audio.isMute ? false: true;
 		if($game.$audio.isMute) {
 			_soundtracks[_currentTrack].volume(0);
+			_environmentLoopFx.volume(0);
+			_environmentOnceFx.volume(0);
+			_triggerFx.volume(0);
 		}
 		else {
 			_soundtracks[_currentTrack].volume(0.2);
+			_environmentLoopFx.volume(0.2);
+			_environmentOnceFx.volume(0.4);
+			_triggerFx.volume(0.4);
 		}
 		return $game.$audio.isMute;
 	}

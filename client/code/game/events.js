@@ -342,8 +342,8 @@ $(function() {
 	});
 
 	$('.progressButton').on('click', function() {
-		$(this).toggleClass('currentButton');
 		if($game.showingProgress) {
+			$(this).toggleClass('currentButton');
 			_progressArea.fadeOut(function() {
 				$game.showingProgress = false;
 				$game.changeStatus();
@@ -401,6 +401,14 @@ $(function() {
 			});
 		}
 	});
+	$('body').on('click', '.collectedButton', function() {
+		$('.collectedResources').show();
+	});
+	$('body').on('click', '.collectedResources .backToProgress', function() {
+		$('.collectedResources').hide();
+	});
+
+
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
 		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !_helpShowing){

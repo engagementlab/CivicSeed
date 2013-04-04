@@ -99,25 +99,49 @@ body, button, p, a
 		margin 20px 0 20px 25px
 		color $csGreen
 		font-size 3.5em
-		letter-spacing 2px
+		letter-spacing 3px
 	h3
 		margin-left 40px
 		color $csBlue
 	.personalInfo
 		position absolute
-		background #ddd
+		background $csGray
 		width 260px
-		height 300px
-		margin 0 0 0 20px
+		height 308px
+		margin 0 0 0 25px
 		padding 10px
-		border 3px solid $csOrange
+		// border 3px solid $csLightOrange
 		border-radius 10px
+		color white
 		.levelImages img
-			margin 8px
+			margin 7px
+			border 2px solid rbga(0,0,0,0) 
+		.resourcesCollected
+			position absolute
+			top 220px
+			left 20px
+			font-size 1.5em	
+		.numCollected
+			position absolute
+			font-family $buttonFont
+			top 280px
+			right 20px
+			font-size 2em
+		.currentLevel
+			position absolute
+			width 64px
+			text-align center
+		.currentLevelImage
+			border 2px solid $csLightOrange
+		.collectedButton
+			position absolute
+			top 275px
+			left 20px
+
 	.tabbable
 		position absolute
 		top 35px
-		left 320px
+		left 327px
 		width 310px
 		height 360px
 		margin 0
@@ -140,16 +164,16 @@ body, button, p, a
 			// 	border-radius 5px 5px
 			li.tabYou, li.active.tabYou, li.active.tabYou a, li.tabYou a:hover
 				margin 0
-				background $csOrange
+				background $csLightOrange
 				border 0
 			li.tabEveryone, li.active.tabEveryone, li.active.tabEveryone a, li.tabEveryone a:hover
 				margin 0
-				background $csLightOrange
+				background $csOrange
 				border 0
 		.tab-content
 			border-radius 0 0 5px 5px
 			p
-				color white
+				color #fff
 				position absolute
 			.displayTime, .displayPercent
 				font-family $buttonFont
@@ -167,20 +191,20 @@ body, button, p, a
 				top 352px
 				right 10px
 				color #efefef
-		#tab1
-			background $csOrange
-			width 310px
-			height 350px	
-		#tab2
-			background $csLightOrange
+		#tab1, #tab2
 			width 310px
 			height 350px
+			background $csLightOrange
+		#tab2
+			background $csOrange
+		// 	width 310px
+		// 	height 350px
 		.colorMapYou,
 		.colorMapEveryone
 			position absolute
 			top 50px
 			left 12px
-			background #ddd
+			background #fff
 			border-radius 5px
 			width 284px
 			height 264px
@@ -191,23 +215,73 @@ body, button, p, a
 	.topSeeders
 		position absolute
 		top 85px
-		left 690px
+		left 700px
 		width 200px
 		height 330px
 		border-radius 5px
-		background $csGreen
+		background $csLightGreen
 		color #333
 		p
 			font-size 1.2em
 			color white
 			text-align center
 			padding 5px 0 5px 0
-			background $csBlue
+			background $csGreen
 			border-radius 5px 5px 0 0
 	.topSeeders ol
 		padding-left 10px
 		li
 			font-family $buttonFont
+
+	.collectedResources
+		width 930px
+		height 450px
+		border-radius 5px
+		position absolute
+		top 0
+		left 0
+		display none
+		h2
+			font-size 2em
+			letter-spacing 2px
+			margin 0
+			padding 20px
+			width 300px
+		.backToProgress
+			position absolute
+			bottom 20px
+			left 20px
+		.displayMyAnswers
+			border 3px solid $csGray
+			background $csLightBlue
+			background #eee
+			border-radius 5px
+			height 300px
+			width 880px
+			position absolute
+			top 70px
+			left 20px
+			overflow auto
+			.theQuestion
+				font-size 1.1em
+				padding 10px 10px 5px 10px
+			.theAnswer 	
+				margin 0 10px 15px 10px
+				font-family $buttonFont
+				span
+					padding 10px
+					background $csLightGreen
+					border-radius 5px	
+			
+		// .playerAnswers
+		// 	color #222
+		// 	list-style none
+		// 	border-radius 5px
+		// 	padding 5px 5px 5px 10px
+		// 	margin 15px 15px 10px 15px
+		// 	position relative
+		// 	background #dedede
+		// 	background $csLightGreen
 
 .helpArea
 	position absolute
@@ -215,7 +289,7 @@ body, button, p, a
 	left 15px
 	width 930px
 	height 450px
-	background url($cloudPath + 'img/bg/maze.png') #efefef
+	background #efefef
 	box-shadow 2px 2px 4px 4px #333
 	padding 0
 	border-radius 5px
@@ -263,7 +337,8 @@ body, button, p, a
 	left 20px
 .resourceArea a i,
 .gnomeArea a i,
-.progressArea a i
+.progressArea a i,
+.collectedResources a i
 	position absolute
 	top 10px
 	right 10px
@@ -503,13 +578,14 @@ p.finalQuestion
 	padding 20px
 
 .publicAnswers
-	border 2px solid $csPurple
-	background $csBlue
+	border 3px solid $csGray
+	background $csLightBlue
+	background #eee
 	border-radius 5px
-	height 280px
+	height 320px
 	width 880px
 	position absolute
-	top 95px
+	top 50px
 	left 20px
 	overflow auto
 	ul
@@ -522,12 +598,13 @@ p.finalQuestion
 	padding 5px 5px 5px 10px
 	margin 15px 15px 10px 15px
 	position relative
-	background #ddd
+	background #dedede
+	background $csLightGreen
 
 	span
 		line-height 2em
 		margin-right 5px
-		color $csBlue
+		color white
 		height 100%
 	p
 		font-family $buttonFont
@@ -541,6 +618,7 @@ p.finalQuestion
 		top 10px
 .yourAnswer 
 	background #fff
+	background $csLightBlue
 
 .waitingForSeed
 	width 32px

@@ -572,11 +572,13 @@ exports.$game = {
 		}
 		topPlayers += '</ol>';
 		//show player's seed droppings
-
-		$('.displayTime').text(displayTime);
+		var allAnswers = $game.$player.compileAnswers();
+		console.log(allAnswers);
+		$('.displayMyAnswers').empty().append(allAnswers);
+		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		$('.displayPercent').text($game.percentString);
 		$('.topSeeders').empty().append(topPlayers);
-		//$('.personalInfo').empty().append(personalInfo);
+		$('.numCollected').text($game.$player.game.resourcesDiscovered + ' / 42');
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});
