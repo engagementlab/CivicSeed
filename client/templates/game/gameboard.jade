@@ -41,11 +41,15 @@
 		h2 Progress
 		div.personalInfo
 			.levelImages
+				img(src='http://placehold.it/48x48.png').currentLevelImage
 				img(src='http://placehold.it/48x48.png')
 				img(src='http://placehold.it/48x48.png')
 				img(src='http://placehold.it/48x48.png')
-				img(src='http://placehold.it/48x48.png')
-			p.currentLevel current level: 1 
+			p.currentLevel novice gardener
+			p.resourcesCollected resources collected:
+			p.numCollected 12/40
+			button.btn.collectedButton.btn-success(type='button') View Answers
+				
 		.tabbable
 			ul.nav.nav-tabs
 				li.active.tabYou
@@ -65,10 +69,16 @@
 					p.displayPercent
 					p.percentTitle colored
 
-		div.topSeeders
+		.topSeeders
 
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
+
+		.collectedResources.patternBg3
+			h2 Your Answers
+			button.btn.backToProgress.btn-info(type='button') Back
+			.displayMyAnswers
+			
 		
 	div.helpArea
 		h2 How to Play the Game (by Omar)
