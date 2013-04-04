@@ -44,6 +44,9 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
+	},
+	admin: {
+		instances: ['awesome','testing']
 	}
 }, {
 	firstName: 'Demo',

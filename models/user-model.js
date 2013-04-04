@@ -51,6 +51,9 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			playingTime: Number,
 			tilesColored: Number,
 			pledges: Number
+		},
+		admin: {
+			instances: [String]
 		}
 	});
 

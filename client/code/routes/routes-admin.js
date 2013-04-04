@@ -25,6 +25,18 @@ var self = module.exports = {
 			$body.attr('class', 'adminPage startupPage');
 		});
 
+		$app.get('/admin/monitor', function(req) {
+			$container.append(JT['admin-monitor']({
+				title: 'Monitor',
+				bodyClass: 'admin monitor',
+				nodeEnv: 'nodeEnv',
+				// consoleOutput: consoleOutput,
+				message: 'Game Monitoring Panel'
+			}));
+			$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
+			$body.attr('class', 'adminPage');
+		});
+
 
 
 		// // // nodeEnv = app.get('env');

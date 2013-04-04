@@ -2,6 +2,8 @@ var $body;
 
 var self = module.exports = {
 
+	gameInstances: null,
+
 	init: function() {
 
 		$body = $(document.body);
@@ -9,6 +11,7 @@ var self = module.exports = {
 		// NEED TO DO SOME SORT OF RPC CALL HERE TO MAKE SURE THIS NEVER CAN JUST HAPPEN UNLESS YOU HAVE THE RIGHT ROLE
 		self.setupLoaders();
 		self.setupInviteCodes();
+		self.setupMonitor();
 
 	},
 
@@ -76,6 +79,12 @@ var self = module.exports = {
 			// 		button.addClass('btn-success');
 			// 	}
 			// });
+		});
+	},
+
+	setupMonitor: function() {
+		ss.rpc('admin.monitor.init', sessionStorage.userId, function(info){
+			console.log(info);
 		});
 	}
 
