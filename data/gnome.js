@@ -10,7 +10,7 @@ module.exports.global = {
 	dialog: [{
 		instructions: ['Welcome to the game. I am the local botanist.', 'We have a pesky little problem where our world becomes colorless. We love color....', 'Solve my riddles and I will give you seeds that you can plant and return the color.', 'Here is one seed to test. Try it out. Then come talk to me again.'],
 		riddle: {
-			sonnet: 'This is my awesome riddle that is based on content that is not yet here. It will really tough to solve I bet since it will not make any sense.',
+			sonnet: 'First, you must find a way <br>to tell me what you brought today <br>and how your future and your past <br>combine to form a mold you cast. <br>How does pity become solidarity? <br>One hint: Walk with humility.',
 			prompts: ['Want to take a look at the puzzle?', 'Do you think you are ready to solve the puzzle?'],
 			responses: ['Correct', 'Wrong', 'Close']
 		},

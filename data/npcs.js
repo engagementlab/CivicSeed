@@ -9,8 +9,6 @@ module.exports.global = [{
 		prompts: ['What a weird robot that was! I wonder what it was doing? My head is full of fluff, but perhaps you could figure it out. But if it\'s not a bother, could you answer something for me first?  ', 'I\'m still waiting for your answer!', 'A wise bear once said "You can\'t stay in your corner of the Forest waiting for others to come to you. You have to go to them sometimes.” Which I think means you should go talk to my friends in order to help restore color to our world. Would you like to see what other people have said?']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -33,8 +31,6 @@ module.exports.global = [{
 		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I  have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Upstream or Downstream?',
 		feedbackRight: 'Exactly! Maybe think about which approach appeals the most to you, too?',
 		feedbackWrong: 'Hoo...boy. That\'s not right.',
@@ -58,12 +54,10 @@ module.exports.global = [{
 		prompts: ['HI HI HI! I got a thing for you! you might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'What\'s Important',
 		feedbackRight: 'Yes! They\'re both very important, aren\'t they?',
 		feedbackWrong: 'You might want to think about that a little more and try again.',
-		question: 'The resource talked about understanding root causes vs. just helping out any way you can. Which of these approaches appeals to you more? What do you see yourself doing in the future that addresses one or the other -- or both?',
+		question: 'There are many different ways you might serve the community. The resource talked about understanding root causes vs. just helping out any way you can. Which of these approaches appeals to you more? What do you see yourself doing in the future that addresses one or the other -- or both?',
 		questionType: 'open',
 		requiredLength: 20,
 		shape: {
@@ -82,8 +76,6 @@ module.exports.global = [{
 		prompts: ['I found these shiny objects while digging in my garden. Maybe one can help you? But I like them, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'You took my last shiny thing! I don\'t have any more of them. I can show you what the others have said?']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'What You Will Achieve',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -106,8 +98,6 @@ module.exports.global = [{
 		prompts: ['Ah! Bonjour, my friend! Welcome to my french corner of ze Forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Power and Privilege',
 		feedbackRight: 'You are SO right.',
 		feedbackWrong: 'Are you sure about that? Maybe take another look.',
@@ -139,8 +129,6 @@ module.exports.global = [{
 		prompts: ['Roga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'What Motivates You',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -163,8 +151,6 @@ module.exports.global = [{
 		prompts: ['O-o-oh... h-h-hi. I\'m h-holding something important for you.', 'This is tough, but important to think about!', 'I wish I was b-b-brave like you!']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Struggles with Identiy',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -188,12 +174,10 @@ module.exports.global = [{
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Your Class',
 		feedbackRight: '',
 		feedbackWrong: '',
-		question: 'The document on classism suggests a number of ways that people of dominant and subordinated classes might work to overcome classism. Which, if any, will you commit to?',
+		question: 'Choose and answer one of these 12 questions in detail. How does it effect your goals and objectives?',
 		questionType: 'open',
 		requiredLength: 50,
 		shape: {
@@ -221,12 +205,10 @@ module.exports.global = [{
 		prompts: ['CHEWY CHOMP! I hear you\'re trying to spread some color. That\'s great. But first, chew on this!', 'I\'m not bad, I\'m just rendered that way. Give it another shot, why don\'t ya?', 'GOT ANY GUM? No? Oh well. I can show you the resource again, if you want.']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Social Identities At Work',
 		feedbackRight: 'Nailed it!',
 		feedbackWrong: 'Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.',
-		question: 'List one or more aspects of social identity that Dr. Norieta references in the video you just viewed.',
+		question: 'List three or more aspects of social identity that the students referenced in the video you just viewed.',
 		questionType: 'open',
 		requiredLength: 4,
 		shape: {
@@ -245,19 +227,17 @@ module.exports.global = [{
 		prompts: ['This haircut is new. Tell me I look good, and I\'ll give you the chance to get some really cool stuff. Oh, you flatterer, you. Here\'s something that might help you...', 'This time, for sure. Presto!', 'I\'m tired of this haircut. Or maybe I\'m just bored with life. Either way, something\'s gotta change! You need to get out there and take life by the horns.']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'How Your Experiences Shape You',
 		feedbackRight: 'Very revealing, but of course there\'s more to you than that.',
 		feedbackWrong: 'Are you sure you understood the question? Try again!',
-		question: 'List what you believe are the five most important aspects of your identity.',
+		question: 'List what you believe are five of the most important aspects of your identity, that intersect to make up who you are.',
 		questionType: 'open',
 		requiredLength: 40,
 		shape: {
 			path: 'm0,0l0,100l50,-50l-50,-50z',
 			fill: 'lightOrange'
 		}
-	}	
+	}
 }, {
 	id: '8427',
 	name: 'Zork',
@@ -348,8 +328,6 @@ module.exports.global = [{
 		prompts: ['Hullo. My name is Dewdrop. Do you have any medicine? I have a cold *sniff*. I found this thing. It probably has germs on it, but I\'ll give it to you if you think it will help.  You need to answer something for me first though.', 'I don\'t know why you would want this germ infested thing, but I can\'t give it to you until you answer my question.', 'Remember to always wash your hands, its the best way to prevent getting a cold! I don\'t have hands that I can wash, so thats probably why I\'m always sick.']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'replace',
 		feedbackRight: 'Thank you for the information.',
 		feedbackWrong: '',
@@ -402,8 +380,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -426,8 +402,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'replace',
 		feedbackRight: 'Thank you for the information.',
 		feedbackWrong: '',
@@ -470,8 +444,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'replace',
 		feedbackRight: 'Thank you for the information.',
 		feedbackWrong: '',
@@ -524,8 +496,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -548,7 +518,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '18592',
+	id: '18449',
 	name: 'NPC',
 	level: 2,
 	sprite: 25,
@@ -558,8 +528,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'replace',
 		feedbackRight: 'Thank you for the information.',
 		feedbackWrong: '',
@@ -582,8 +550,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -616,8 +582,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -640,8 +604,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -674,8 +636,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
@@ -718,8 +678,6 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	},
 	resource: {
-		kind: 'article',
-		url: '/articles/7283.html',
 		tagline: 'Guiding Values',
 		feedbackRight: '',
 		feedbackWrong: '',
