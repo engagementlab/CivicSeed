@@ -67,7 +67,7 @@ $game.$mouse = {
 					var r = $game.$player.dropSeed(m);
 					if(!r) {
 						$('.seedButton').removeClass('currentButton');
-						$game.statusUpdate('you have not seeds to drop');
+						$game.temporaryStatus('you have not seeds to drop');
 					}
 				}
 			}

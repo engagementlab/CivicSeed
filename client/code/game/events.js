@@ -14,7 +14,8 @@ $(function() {
 		_inventory = $('.inventory'),
 		_displayBoxText = $('.displayBoxText'),
 		_progressArea = $('.progressArea'),
-		_helpShowing = false;
+		_helpShowing = false,
+		_pledgeFeedbackTimeout = null;
 
 	_w.on('beforeunload', function() {
 		var x = leaveThisJoint();
@@ -31,14 +32,14 @@ $(function() {
 		$game.$others.add(player);
 		_activePlayers.text(num);
 		if(player.id !== $game.$player.id) {
-			$game.statusUpdate(player.name + ' has joined!');
+			$game.temporaryUpdate(player.name + ' has joined!');
 		}
 	});
 
 	ss.event.on('ss-removePlayer', function(num, playerId) {
 		$game.numPlayers = num;
 		if(playerId != $game.$player.id) {
-			$game.$others.remove(playerId);	
+			$game.$others.remove(playerId);
 		}
 		_activePlayers.text(num);
 	});
@@ -73,7 +74,7 @@ $(function() {
 	});
 
 	ss.event.on('ss-statusUpdate', function(message) {
-		$game.statusUpdate(message);
+		$game.temporaryUpdate(message);
 	});
 
 	ss.event.on('ss-progressChange', function(num) {
@@ -87,12 +88,12 @@ $(function() {
 		//if we have gone up a milestone, feedback it
 		if($game.percent > 99) {
 			//do something for game over?
-			$game.statusUpdate('the color has been restored!');
+			$game.temporaryUpdate('the color has been restored!');
 		}
 		if($game.prevPercent != $game.percent) {
 			$game.prevPercent = $game.percent;
 			if($game.percent % 5 === 0) {
-				$game.statusUpdate('the world is now ' + $game.percentString + ' colored!');
+				$game.temporaryUpdate('the world is now ' + $game.percentString + ' colored!');
 			}
 		}
 	});
@@ -102,13 +103,13 @@ $(function() {
 		if($game.leaderboard.length > 0) {
 			var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;
 			if(leaderChange) {
-				$game.statusUpdate(board[0].name + ' is top dog!');
+				$game.temporaryUpdate(board[0].name + ' is top dog!');
 				return;
 			}
 		}
 		$game.leaderboard = board;
 		if(newOne) {
-			$game.statusUpdate(newOne + ' is now a top seeder');
+			$game.temporaryUpdate(newOne + ' is now a top seeder');
 		}
 	});
 
@@ -124,7 +125,7 @@ $(function() {
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(id) {
 		if($game.$player.id === id) {
-			$game.statusUpdate('a peer liked your answer, +1 seed');
+			$game.temporaryUpdate('a peer liked your answer, +1 seed');
 			$game.$player.game.seeds.riddle += 1;
 			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
@@ -164,7 +165,7 @@ $(function() {
 			}
 			else {
 				$game.$player.seedPlanting = false;
-				$game.statusUpdate('seed mode ended, as you were');
+				$game.temporaryUpdate('seed mode ended, as you were');
 			}
 			$(this).removeClass('currentButton');
 		}
@@ -329,10 +330,10 @@ $(function() {
 
 	$('.progressArea a i').on('click', (function (e) {
 		e.preventDefault();
+		$('.progressButton').removeClass('currentButton');
 		_progressArea.fadeOut(function() {
 			$game.showingProgress = false;
 			$game.changeStatus();
-			$('.progressButton').removeClass('currentButton');
 		});
 		return false;
 	}));
@@ -342,8 +343,8 @@ $(function() {
 	});
 
 	$('.progressButton').on('click', function() {
+		$(this).toggleClass('currentButton');
 		if($game.showingProgress) {
-			$(this).toggleClass('currentButton');
 			_progressArea.fadeOut(function() {
 				$game.showingProgress = false;
 				$game.changeStatus();
@@ -398,7 +399,19 @@ $(function() {
 		if($game.$player.game.pledges > 0) {
 			ss.rpc('game.player.pledgeSeed', id, function(r) {
 				$game.$player.game.pledges -= 1;
+				clearTimeout(_pledgeFeedbackTimeout);
+				$('.resourceArea .feedback').text('Thanks! (they will say). You can seed ' + $game.$player.game.pledges + ' more answers this level.').show();
+				_pledgeFeedbackTimeout = setTimeout(function() {
+					$('.resourceArea .feedback').fadeOut();
+				}, 3000);
 			});
+		}
+		else {
+			clearTimeout(_pledgeFeedbackTimeout);
+			$('.resourceArea .feedback').text('You cannot seed any more answers this level.').show();
+			_pledgeFeedbackTimeout = setTimeout(function() {
+				$('.resourceArea .feedback').fadeOut();
+			}, 3000);
 		}
 	});
 	$('body').on('click', '.collectedButton', function() {

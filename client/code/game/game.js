@@ -113,6 +113,8 @@ exports.$game = {
 			$game.percentString = $game.percent + '%';
 			$('.progressButton .hudCount').text($game.percentString);
 			$game.$player.createInventoryOutlines();
+			$game.prevMessage = $game.levelNames[$game.$player.game.currentLevel];
+			$game.changeStatus();
 		});
 		ss.rpc('game.chat.init');
 
@@ -555,22 +557,14 @@ exports.$game = {
 
 
 		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
-			displayLevel = $game.$player.game.currentLevel + 1;
-
-		// var	personalInfo = '<p><span>Current Level:</span> ' + displayLevel + '</p>' +
-		// 	'<p>' + $game.$player.game.rank + '</p>',
-
-			// personalStats = '<p><span>Tiles Colored:</span> ' + $game.$player.game.tilesColored + '</p>' +
-			// 	'<p><span>Your Contribution: </span>' + contribution + '</p>' +
-			// 	'<p><span>Resources Discovered: </span>' + $game.$player.game.resourcesDiscovered + '</p>' +
-			// 	'<p><span>Time Played: </span>' + displayTime + '</p>';
-						
+			displayLevel = $game.$player.game.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
-		
+
 		for(var i = 0; i < $game.leaderboard.length; i++) {
 			topPlayers += '<li>' + $game.leaderboard[i].name + ' (' + $game.leaderboard[i].count + ' tiles)</li>';
 		}
 		topPlayers += '</ol>';
+		topPlayers += '<p class="yourSeeds">You (' + $game.$player.game.tilesColored + ' tiles)</p>';
 		//show player's seed droppings
 		var allAnswers = $game.$player.compileAnswers();
 		console.log(allAnswers);
@@ -583,7 +577,7 @@ exports.$game = {
 			$game.showingProgress = true;
 		});
 	},
-	statusUpdate: function(msg) {
+	temporaryStatus: function(msg) {
 		$('.displayBoxText').text(msg);
 		clearTimeout($game.displayTimeout);
 		$game.displayTimeout = setTimeout(function() {

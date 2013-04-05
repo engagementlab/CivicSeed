@@ -236,7 +236,7 @@ $game.$audio = {
 		var trackNum = $game.$audio.whichTrack(posX, posY);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
 			$game.$audio.switchTrack(trackNum);
-			$game.statusUpdate(_newPlace);
+			$game.temporaryStatus(_newPlace);
 		}
 		if(!_currentLoop) {
 			$game.$audio.checkEnvironmentLoopFx(trackNum);
@@ -257,7 +257,6 @@ $game.$audio = {
 				var inProx = $game.$audio.getProximity(place.locations[l], place.prox);
 					if(inProx) {
 						_currentLoop = place;
-						console.log('changing to: ', _currentLoop);
 						$game.$audio.playEnvironmentLoopFx(place.sound);
 						//get out of BOTH loops
 						l = numLocations;
@@ -300,7 +299,6 @@ $game.$audio = {
 	},
 
 	checkLoopExit: function() {
-		console.log(_currentLoop);
 		var numLocations = _currentLoop.locations.length,
 			l = 0,
 			inRange = false;
@@ -392,6 +390,16 @@ $game.$audio = {
 			_triggerFx.volume(0.4);
 		}
 		return $game.$audio.isMute;
+	},
+
+	fadeLow: function() {
+		_soundtracks[_currentTrack].volume(0.05);
+		_environmentLoopFx.volume(0.03);
+	},
+
+	fadeHi: function() {
+		_soundtracks[_currentTrack].volume(0.2);
+		_environmentLoopFx.volume(0.2);
 	}
 
 };

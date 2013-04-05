@@ -127,6 +127,8 @@ $game.$resources = {
 				$game.$audio.playTriggerFx('windowShow');
 			});
 		});
+
+		$game.$audio.fadeLow();
 	},
 
 	addButtons: function() {
@@ -319,6 +321,7 @@ $game.$resources = {
 				}
 			});
 		}
+		$game.$audio.fadeHi();
 	},
 
 	//super ghetto hack to go back a page
