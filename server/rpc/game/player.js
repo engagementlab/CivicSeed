@@ -226,7 +226,7 @@ exports.actions = function(req, res, ss) {
 			userModel.findById(id, function (err, user) {
 				if(!err && user) {
 					user.game = info;
-					user.profileSetup = true;
+					user.profileUnlocked = true;
 					user.save(function (y) {
 						var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName;
 						res(url);
@@ -269,6 +269,9 @@ colorHelpers = {
 
 		var mod = function() {
 			//make sure they are the same tile before we modify any colors
+			console.log(curIndex, bombIndex);
+			console.log('old', oldTiles[curIndex]);
+			console.log('bombed', bombed[bombIndex]);
 			if(oldTiles[curIndex].x === bombed[bombIndex].x && oldTiles[curIndex].y === bombed[bombIndex].y) {
 				colorHelpers.modifyOneTile(oldTiles[curIndex], bombed[bombIndex], function(newTile, newBomb) {
 					//increase the current spot in the tiles from db regardless
@@ -276,7 +279,7 @@ colorHelpers = {
 					bombIndex++;
 					newTiles.push(newTile);
 					newBombs.push(newBomb);
-					if(curIndex >= oldTiles.length) {
+					if(bombIndex >= bombed.length) {
 							callback(newTiles, newBombs);
 					} else {
 						mod();
@@ -420,7 +423,7 @@ colorHelpers = {
 					//add new guy
 					if(!found) {
 						//onlly add him if he deserves to be on there!
-						if(oldBoard.length < 5 || newGuy.count > oldBoard[oldBoard.length-1]) {
+						if(oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length-1]) {
 							oldBoard.push(newGuy);
 							updateBoard = true;
 						}
@@ -430,7 +433,7 @@ colorHelpers = {
 						return b.count-a.count;
 					});
 					//get rid of the last one if too many
-					if(oldBoard.length > 5) {
+					if(oldBoard.length > 10) {
 						oldBoard.pop();
 					}
 				}
@@ -440,7 +443,8 @@ colorHelpers = {
 					//change the game state
 					//send out emails
 					result.set('bossModeUnlocked', true);
-					colorHelpers.endGameEmails();
+					//colorHelpers.endGameEmails();
+					newPercent = 100;
 				}
 				//save all changes
 				result.set('seedsDropped', newCount);
