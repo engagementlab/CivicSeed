@@ -72,6 +72,7 @@ $game.$npc = {
 			name: npc.name,
 			id: npc.id,
 			dialog: npc.dialog,
+			dependsOn: npc.dependsOn,
 			level: npc.level,
 			isHolding: npc.isHolding,
 			resource: npc.resource,
@@ -172,7 +173,7 @@ $game.$npc = {
 
 		};
 
-		return npcObject;		
+		return npcObject;
 	},
 
 	hideChat: function() {
@@ -189,11 +190,24 @@ $game.$npc = {
 
 	show: function() {
 		$game.$audio.playTriggerFx('npcBubble');
+		console.log(_curNpc);
 		//if there is no other stuff on screen, then show dialog
 		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
 			if(_resourceOnDeck) {
-				$game.$resources.isShowing = true;
-				$game.$npc.showPrompt();
+				//check if visiting this npc depends on other
+				var locked = $game.$npc.npcLocked();
+				if(!locked) {
+					$game.$resources.isShowing = true;
+					$game.$npc.showPrompt();
+				} else {
+					_speak = 'Before I help you out, you need to go see ' + locked + '. Come back when you have their resource.';
+					$('.speechBubble p').addClass('fitBubble');
+					$('.speechBubble .speakerName').text(_who +': ');
+					$('.speechBubble .message').text(_speak);
+					$('.speechBubble').fadeIn(function() {
+						$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,5000);
+					});
+				}
 			}
 			else {
 				$game.$npc.isChat = true;
@@ -202,6 +216,23 @@ $game.$npc = {
 		}
 	},
 
+	npcLocked: function() {
+		if(_curNpc.dependsOn.length > 0) {
+			for(var d = 0; d < _curNpc.dependsOn.length; d++) {
+				var id = _curNpc.dependsOn[d];
+				var playerHasIt = $game.$player.checkForResource(id);
+				console.log(playerHasIt);
+				if(!playerHasIt) {
+					console.log(id);
+					var name = $game.$npc.getName(id);
+					return name;
+				}
+			}
+			return false;
+		} else {
+			return false;
+		}
+	},
 	//choose prompt based on PLAYERs memory of interaction
 	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
 	showPrompt: function() {

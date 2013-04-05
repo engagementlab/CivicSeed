@@ -536,7 +536,7 @@ $game.$player = {
 			square = null;
 		if($game.currentTiles[options.x][options.y].color) {
 			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
-				$game.statusUpdate('that tile has been planted on');
+				$game.temporaryStatus('that tile has been planted on');
 				return false;
 			}
 		}
@@ -644,7 +644,7 @@ $game.$player = {
 							_renderInfo.colorNum = _playerColorNum;
 							$game.$player.seedPlanting = false;
 							$game.changeStatus();
-							$game.statusUpdate('you are out seeds');
+							$game.temporaryStatus('you are out seeds');
 							$('.seedButton').removeClass('currentButton');
 						}
 						_normalHudCount.text($game.$player.game.seeds.normal);
@@ -965,7 +965,7 @@ $game.$player = {
 			}
 			else {
 				$('.seedButton').removeClass('currentButton');
-				$game.statusUpdate('you have no seeds');
+				$game.temporaryStatus('you have no seeds');
 			}
 		}
 	},
@@ -998,7 +998,6 @@ $game.$player = {
 		var l = $game.$player.game.resources.length;
 		while(--l > -1) {
 			if(npcId == $game.$player.game.resources[l].npc) {
-				console.log(npcId);
 				//update this resource
 				$game.$player.game.resources[l].madePublic = true;
 				//update resource db
@@ -1025,6 +1024,15 @@ $game.$player = {
 				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span>' + answer + '</span></p>';
 		}
 		return html;
+	},
+
+	checkForResource: function(id) {
+		for(var r = 0; r < $game.$player.game.resources.length; r++) {
+			if($game.$player.game.resources[r].npc === id) {
+				return true;
+			}
+		}
+		return false;
 	}
 };
 

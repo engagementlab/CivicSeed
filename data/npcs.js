@@ -182,6 +182,7 @@ module.exports.global = [{
 	level: 0,
 	sprite: 8,
 	isHolding: true,
+	dependsOn: [6265],
 	dialog: {
 		random: [''],
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
@@ -338,13 +339,27 @@ module.exports.global = [{
 	}
 }, {
 	id: '7052',
-	name: 'NPC',
+	name: 'Dewdrop',
 	level: 1,
 	sprite: 20,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
-		prompts: ['1', '2', '3']
+		prompts: ['Hullo. My name is Dewdrop. Do you have any medicine? I have a cold *sniff*. I found this thing. It probably has germs on it, but I\'ll give it to you if you think it will help.  You need to answer something for me first though.', 'I don\'t know why you would want this germ infested thing, but I can\'t give it to you until you answer my question.', 'Remember to always wash your hands, its the best way to prevent getting a cold! I don\'t have hands that I can wash, so thats probably why I\'m always sick.']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'replace',
+		feedbackRight: 'Thank you for the information.',
+		feedbackWrong: '',
+		question: 'replace',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '9069',
@@ -385,6 +400,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
+			fill: 'lightOrange'
+		}
 	}
 }, {
 	id: '2649',
@@ -395,6 +424,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'replace',
+		feedbackRight: 'Thank you for the information.',
+		feedbackWrong: '',
+		question: 'replace',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
+			fill: 'lightGreen'
+		}
 	}
 }, {
 	id: '3074',
@@ -425,6 +468,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'replace',
+		feedbackRight: 'Thank you for the information.',
+		feedbackWrong: '',
+		question: 'replace',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+			fill: 'blue'
+		}
 	}
 }, {
 	id: '3229',
@@ -465,6 +522,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
+			fill: 'orange'
+		}
 	}
 }, {
 	id: '5206',
@@ -485,9 +556,23 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'replace',
+		feedbackRight: 'Thank you for the information.',
+		feedbackWrong: '',
+		question: 'replace',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z',
+			fill: 'orange'
+		}
 	}
 }, {
-	id: '16720',
+	id: '16297',
 	name: 'NPC',
 	level: 2,
 	sprite: 26,
@@ -495,6 +580,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z',
+			fill: 'lightOrange'
+		}
 	}
 }, {
 	id: '18552',
@@ -515,6 +614,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '14464',
@@ -525,6 +638,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z',
+			fill: 'lightGreen'
+		}
 	}
 }, {
 	id: '15472',
@@ -545,9 +672,23 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,-70l150,0l0,70l-150,0z',
+			fill: 'lightBlue'
+		}
 	}
 }, {
-	id: '11748',
+	id: '11752',
 	name: 'NPC',
 	level: 2,
 	sprite: 32,
@@ -575,6 +716,20 @@ module.exports.global = [{
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		kind: 'article',
+		url: '/articles/7283.html',
+		tagline: 'Guiding Values',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,40l300,0l-10,-20l-20,-20l-270,0z',
+			fill: 'blue'
+		}
 	}
 }, {
 	id: '10891',
@@ -597,7 +752,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '17534',
+	id: '17535',
 	name: 'NPC',
 	level: 3,
 	sprite: 37,
@@ -627,7 +782,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '13835',
+	id: '13696',
 	name: 'NPC',
 	level: 3,
 	sprite: 40,
@@ -657,7 +812,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '12963',
+	id: '13246',
 	name: 'NPC',
 	level: 3,
 	sprite: 43,
@@ -687,7 +842,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '16644',
+	id: '16928',
 	name: 'NPC',
 	level: 3,
 	sprite: 46,
@@ -697,7 +852,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '16636',
+	id: '16920',
 	name: 'NPC',
 	level: 3,
 	sprite: 47,
@@ -717,7 +872,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '16628',
+	id: '16912',
 	name: 'NPC',
 	level: 3,
 	sprite: 49,
@@ -737,7 +892,7 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '13783',
+	id: '13360',
 	name: 'NPC',
 	level: 3,
 	sprite: 51,

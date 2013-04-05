@@ -10,6 +10,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			random: [String],
 			prompts: [String]
 		},
+		dependsOn: [Number],
 		resource: {
 			kind: String,
 			url: String,
