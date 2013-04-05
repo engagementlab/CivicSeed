@@ -49,6 +49,16 @@ body, button, p, a
 	border-radius 5px
 	z-index 9999
 	display none
+	.feedback
+		display none
+		width 320px
+		position absolute
+		left 300px
+		top 150px
+		padding 10px
+		border-radius 5px
+		background $csPurple
+		color white
 
 .patternBg1
 	background url($cloudPath + 'img/bg/grey.png') #efefef
@@ -221,6 +231,7 @@ body, button, p, a
 		border-radius 5px
 		background $csLightGreen
 		color #333
+		overflow auto
 		p
 			font-size 1.2em
 			color white
@@ -229,9 +240,18 @@ body, button, p, a
 			background $csGreen
 			border-radius 5px 5px 0 0
 	.topSeeders ol
-		padding-left 10px
+		padding-left 15px
 		li
 			font-family $buttonFont
+			font-size .8em
+	p.yourSeeds
+		font-family $buttonFont
+		color $csGreen
+		background none
+		border none
+		padding 0px
+		bottom 0
+		margin 10px 0 0 0px
 
 	.collectedResources
 		width 930px
@@ -295,8 +315,14 @@ body, button, p, a
 	border-radius 5px
 	z-index 9999
 	display none
-.helpArea p
-	margin-left 20px
+	h2
+		color $csBlue
+	h3
+		color $csGreen
+	p
+		font-family $buttonFont
+.helpArea p, h3, h2
+	margin 0 20px 0 20px
 
 .centerText
 	text-align center
@@ -564,7 +590,6 @@ p.finalQuestion
 	top 150px
 	left 310px
 	border-radius 5px
-	border 2px solid white
 	background $csPurple
 	display none
 	z-index 9999
