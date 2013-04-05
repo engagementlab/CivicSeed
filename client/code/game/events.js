@@ -32,7 +32,7 @@ $(function() {
 		$game.$others.add(player);
 		_activePlayers.text(num);
 		if(player.id !== $game.$player.id) {
-			$game.temporaryUpdate(player.name + ' has joined!');
+			$game.temporaryStatus(player.name + ' has joined!');
 		}
 	});
 
@@ -74,7 +74,7 @@ $(function() {
 	});
 
 	ss.event.on('ss-statusUpdate', function(message) {
-		$game.temporaryUpdate(message);
+		$game.temporaryStatus(message);
 	});
 
 	ss.event.on('ss-progressChange', function(num) {
@@ -88,28 +88,27 @@ $(function() {
 		//if we have gone up a milestone, feedback it
 		if($game.percent > 99) {
 			//do something for game over?
-			$game.temporaryUpdate('the color has been restored!');
+			$game.temporaryStatus('the color has been restored!');
 		}
 		if($game.prevPercent != $game.percent) {
 			$game.prevPercent = $game.percent;
 			if($game.percent % 5 === 0) {
-				$game.temporaryUpdate('the world is now ' + $game.percentString + ' colored!');
+				$game.temporaryStatus('the world is now ' + $game.percentString + ' colored!');
 			}
 		}
 	});
 
 	ss.event.on('ss-leaderChange', function(board, newOne) {
-		
 		if($game.leaderboard.length > 0) {
 			var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;
 			if(leaderChange) {
-				$game.temporaryUpdate(board[0].name + ' is top dog!');
+				$game.temporaryStatus(board[0].name + ' is top dog!');
 				return;
 			}
 		}
 		$game.leaderboard = board;
 		if(newOne) {
-			$game.temporaryUpdate(newOne + ' is now a top seeder');
+			$game.temporaryStatus(newOne + ' is now a top seeder');
 		}
 	});
 
@@ -125,7 +124,7 @@ $(function() {
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(id) {
 		if($game.$player.id === id) {
-			$game.temporaryUpdate('a peer liked your answer, +1 seed');
+			$game.temporaryStatus('a peer liked your answer, +1 seed');
 			$game.$player.game.seeds.riddle += 1;
 			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
@@ -165,7 +164,7 @@ $(function() {
 			}
 			else {
 				$game.$player.seedPlanting = false;
-				$game.temporaryUpdate('seed mode ended, as you were');
+				$game.temporaryStatus('seed mode ended, as you were');
 			}
 			$(this).removeClass('currentButton');
 		}

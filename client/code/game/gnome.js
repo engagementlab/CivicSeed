@@ -571,7 +571,9 @@ $game.$gnome = {
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
 					$game.$player.game.seeds.riddle += _numMegaSeeds;
 					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
+					var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
 					//update HUD
+					$('.seedButton .hudCount').text(numSeeds);
 					$game.$player.game.gnomeState = 4;
 
 					$game.changeStatus('congrats!');

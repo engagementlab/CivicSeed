@@ -9,7 +9,7 @@ var _resources = [],
 	_curResource = null,
 	_revisiting = false,
 	_inventory = false,
-	_resourceStateSel = null,
+	_resourceStageSel = null,
 	_speechBubbleSel = null,
 	_inventorySel = null,
 	_resourceAreaSel = null,
@@ -18,6 +18,7 @@ var _resources = [],
 	_speakerNameSel = null,
 	_resourceMessageSel = null,
 	_resourceContentSel = null,
+	_resourceContentBodySel = null,
 	_numSeedsToAdd = 0,
 	_questionType = null,
 	_feedbackRight = null,
@@ -57,7 +58,7 @@ $game.$resources = {
 			$game.$player.fillInventory();
 
 			//set dom selectors
-			_resourceStateSel = $('.resourceStage');
+			_resourceStageSel = $('.resourceStage');
 			_speechBubbleSel = $('.speechBubble');
 			_inventorySel = $('.inventory');
 			_resourceAreaSel = $('.resourceArea');
@@ -66,6 +67,7 @@ $game.$resources = {
 			_speakerNameSel = $('.resourceArea .speakerName');
 			_resourceMessageSel = $('.resourceArea .message');
 			_resourceContentSel = $('.resourceContent');
+			_resourceContentBodySel = $('.resourceContentBody');
 
 			$game.$resources.ready = true;
 		});
@@ -83,14 +85,15 @@ $game.$resources = {
 		_answered = false,
 		_currentSlide = 0;
 
-		_resourceStateSel.empty();
+		_resourceStageSel.empty();
 		var stringId = String(index);
 		_curResource = _resources[stringId];
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
-		var url = _curResource.url;
-		_resourceStateSel.load(url,function() {
-			_numSlides = $('.resourceStage .pages > .page').length;
+		var url = '/articles/level' + ($game.$player.game.currentLevel + 1) + '/' + _curResource.id + '.html';
+		console.log(url);
+		_resourceStageSel.load(url,function() {
+			_numSlides = $('.resourceStage .pages > section').length;
 			if(now) {
 				$game.$resources.showResource(2);
 			}
@@ -186,7 +189,6 @@ $game.$resources = {
 
 				//if its the last page, we have an answer button and a back
 				else if(_currentSlide === _numSlides) {
-					
 					$('.resourceArea .answerButton').removeClass('hideButton');
 					$('.resourceArea .backButton').removeClass('hideButton');
 				}
@@ -197,6 +199,7 @@ $game.$resources = {
 	addContent: function() {
 		_speakerNameSel.empty();
 		_resourceMessageSel.empty();
+		_resourceContentBodySel.empty().hide();
 		//if they answered the question...
 		if(_answered) {
 			//if they got it right, give them a tangram
@@ -260,8 +263,9 @@ $game.$resources = {
 				}
 			}
 			else{
-				var content = $('.resourceStage .pages .page').get(_currentSlide).innerHTML;
-				_resourceContentSel.html(content);
+				var content = $('.resourceStage .pages > section').get(_currentSlide).innerHTML;
+				_resourceContentSel.empty();
+				_resourceContentBodySel.html(content).show();
 			}
 		}
 	},
