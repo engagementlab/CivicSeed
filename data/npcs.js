@@ -249,17 +249,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '1547',
-	name: 'NPC',
+	name: 'Awaa',
 	level: 1,
 	sprite: 13,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '1517',
-	name: 'NPC',
+	name: 'Hampton',
 	level: 1,
 	sprite: 14,
 	isHolding: true,
@@ -269,17 +269,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '352',
-	name: 'NPC',
+	name: 'Frampton',
 	level: 1,
 	sprite: 15,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '3335',
-	name: 'NPC',
+	name: 'Nosezo',
 	level: 1,
 	sprite: 16,
 	isHolding: true,
@@ -289,10 +289,10 @@ module.exports.global = [{
 	}
 }, {
 	id: '4338',
-	name: 'NPC',
+	name: 'Siri',
 	level: 1,
 	sprite: 17,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
@@ -309,10 +309,10 @@ module.exports.global = [{
 	}
 }, {
 	id: '7082',
-	name: 'NPC',
+	name: 'Hummer',
 	level: 1,
 	sprite: 19,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
@@ -341,7 +341,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '9069',
-	name: 'NPC',
+	name: 'Zeebo',
 	level: 1,
 	sprite: 21,
 	isHolding: true,
@@ -351,7 +351,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '6773',
-	name: 'NPC',
+	name: 'BeepBoop',
 	level: 1,
 	sprite: 22,
 	isHolding: true,
@@ -361,17 +361,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '8898',
-	name: 'NPC',
+	name: 'Beholder',
 	level: 1,
 	sprite: 23,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '9170',
-	name: 'NPC',
+	name: 'Blooper',
 	level: 1,
 	sprite: 24,
 	isHolding: true,
@@ -393,7 +393,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '2649',
-	name: 'NPC',
+	name: 'Royo',
 	level: 1,
 	sprite: 25,
 	isHolding: true,
@@ -415,27 +415,27 @@ module.exports.global = [{
 	}
 }, {
 	id: '3074',
-	name: 'NPC',
+	name: 'Jesse',
 	level: 99,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '5063',
-	name: 'NPC',
+	name: 'Eric',
 	level: 99,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '2803',
-	name: 'NPC',
+	name: 'Verida',
 	level: 1,
 	sprite: 25,
 	isHolding: true,
@@ -457,37 +457,37 @@ module.exports.global = [{
 	}
 }, {
 	id: '3229',
-	name: 'NPC',
+	name: 'Sam',
 	level: 99,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '3373',
-	name: 'NPC',
+	name: 'Jedd',
 	level: 99,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '4937',
-	name: 'NPC',
+	name: 'Aidan',
 	level: 99,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '5219',
-	name: 'NPC',
+	name: 'Derrpa',
 	level: 1,
 	sprite: 25,
 	isHolding: true,
@@ -509,17 +509,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '5206',
-	name: 'NPC',
+	name: 'steve',
 	level: 2,
 	sprite: 25,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '18449',
-	name: 'NPC',
+	name: 'FryGuy',
 	level: 2,
 	sprite: 25,
 	isHolding: true,
@@ -541,7 +541,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '16297',
-	name: 'NPC',
+	name: 'BigBird',
 	level: 2,
 	sprite: 26,
 	isHolding: true,
@@ -563,7 +563,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '18552',
-	name: 'NPC',
+	name: 'Scallop',
 	level: 2,
 	sprite: 27,
 	isHolding: true,
@@ -573,7 +573,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '14588',
-	name: 'NPC',
+	name: 'PenPen',
 	level: 2,
 	sprite: 28,
 	isHolding: true,
@@ -595,7 +595,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '14464',
-	name: 'NPC',
+	name: 'Combover',
 	level: 2,
 	sprite: 29,
 	isHolding: true,
@@ -617,17 +617,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '15472',
-	name: 'NPC',
+	name: 'Funguy',
 	level: 2,
 	sprite: 30,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '12760',
-	name: 'NPC',
+	name: 'Rapscallion',
 	level: 2,
 	sprite: 31,
 	isHolding: true,
@@ -649,7 +649,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '11752',
-	name: 'NPC',
+	name: 'Oriole',
 	level: 2,
 	sprite: 32,
 	isHolding: true,
@@ -659,7 +659,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '14706',
-	name: 'NPC',
+	name: 'Toad',
 	level: 2,
 	sprite: 33,
 	isHolding: true,
@@ -669,7 +669,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '16546',
-	name: 'NPC',
+	name: 'Threepee',
 	level: 2,
 	sprite: 34,
 	isHolding: true,
@@ -691,7 +691,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '10891',
-	name: 'NPC',
+	name: 'Beanie',
 	level: 2,
 	sprite: 35,
 	isHolding: true,
@@ -701,7 +701,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '10780',
-	name: 'NPC',
+	name: 'Vogon',
 	level: 2,
 	sprite: 36,
 	isHolding: true,
@@ -711,36 +711,48 @@ module.exports.global = [{
 	}
 }, {
 	id: '17535',
-	name: 'NPC',
+	name: 'Quinto',
 	level: 3,
 	sprite: 37,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '17525',
-	name: 'NPC',
+	name: 'Archibald',
 	level: 3,
 	sprite: 38,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Replace',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Replace.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
+			fill: 'orange'
+		}
 	}
 }, {
 	id: '12707',
-	name: 'NPC',
+	name: 'Esther',
 	level: 3,
 	sprite: 39,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: '13696',
+	id: 'Brumble',
 	name: 'NPC',
 	level: 3,
 	sprite: 40,
@@ -751,17 +763,17 @@ module.exports.global = [{
 	}
 }, {
 	id: '15668',
-	name: 'NPC',
+	name: 'Mageline',
 	level: 3,
 	sprite: 41,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '12249',
-	name: 'NPC',
+	name: 'Banksi',
 	level: 3,
 	sprite: 42,
 	isHolding: true,
@@ -771,17 +783,29 @@ module.exports.global = [{
 	}
 }, {
 	id: '13246',
-	name: 'NPC',
+	name: 'Grebulon',
 	level: 3,
 	sprite: 43,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Replace',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Replace.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0c0,0 -100,0 -100,0c0,0 40,200 40,200c0,0 60,0 60,0c0,0 0,-70 0,-70c0,0 -20,-50 -20,-50c0,0 -40,0 -40,0c0,0 60,-80 60,-80z',
+			fill: 'lightGreen'
+		}
 	}
 }, {
 	id: '14380',
-	name: 'NPC',
+	name: 'Prefect',
 	level: 3,
 	sprite: 44,
 	isHolding: true,
@@ -791,27 +815,27 @@ module.exports.global = [{
 	}
 }, {
 	id: '15656',
-	name: 'NPC',
+	name: 'Ford',
 	level: 3,
 	sprite: 45,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '16928',
-	name: 'NPC',
+	name: 'Tali',
 	level: 3,
 	sprite: 46,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
 	}
 }, {
 	id: '16920',
-	name: 'NPC',
+	name: 'Boomer',
 	level: 3,
 	sprite: 47,
 	isHolding: true,
@@ -821,27 +845,51 @@ module.exports.global = [{
 	}
 }, {
 	id: '15638',
-	name: 'NPC',
+	name: 'Goober',
 	level: 3,
 	sprite: 48,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Replace',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Replace.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z',
+			fill: 'blue'
+		}
 	}
 }, {
 	id: '16912',
-	name: 'NPC',
+	name: 'Crumb',
 	level: 3,
 	sprite: 49,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Replace',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Replace.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z',
+			fill: 'lightOrange'
+		}
 	}
 }, {
 	id: '15626',
-	name: 'NPC',
+	name: 'Derp',
 	level: 3,
 	sprite: 50,
 	isHolding: true,
@@ -851,17 +899,29 @@ module.exports.global = [{
 	}
 }, {
 	id: '13360',
-	name: 'NPC',
+	name: 'Overcoat',
 	level: 3,
 	sprite: 51,
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Replace',
+		feedbackRight: '',
+		feedbackWrong: '',
+		question: 'Replace.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '10797',
-	name: 'NPC',
+	name: 'Smalls',
 	level: 3,
 	sprite: 52,
 	isHolding: true,
