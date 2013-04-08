@@ -190,7 +190,6 @@ $game.$npc = {
 
 	show: function() {
 		$game.$audio.playTriggerFx('npcBubble');
-		console.log(_curNpc);
 		//if there is no other stuff on screen, then show dialog
 		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
 			if(_resourceOnDeck) {
@@ -221,9 +220,7 @@ $game.$npc = {
 			for(var d = 0; d < _curNpc.dependsOn.length; d++) {
 				var id = _curNpc.dependsOn[d];
 				var playerHasIt = $game.$player.checkForResource(id);
-				console.log(playerHasIt);
 				if(!playerHasIt) {
-					console.log(id);
 					var name = $game.$npc.getName(id);
 					return name;
 				}
@@ -308,8 +305,14 @@ $game.$npc = {
 		}
 	},
 
-	getNpcLevel: function() {
-		return _curNpc.level;
+	getNpcLevel: function(id) {
+		if(id) {
+			var stringId = String(id),
+				level = _allNpcs[stringId].level;
+				return level;
+		} else {
+			return _curNpc.level;
+		}
 	},
 
 	getNpcData: function () {

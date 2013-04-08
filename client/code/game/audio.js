@@ -167,7 +167,7 @@ $game.$audio = {
 			onend: function() {
 				$game.$audio.checkLoopExit();
 			},
-			volume: 0.2,
+			volume: 0.1,
 			onload: function() {
 				console.log('environment loop fx loaded');
 				$game.$audio.loadEnvironmenOnceFx();
@@ -206,7 +206,7 @@ $game.$audio = {
 				chatter: [43000, 5500],
 				forest3: [49000, 2700]
 			},
-			volume: 0.4,
+			volume: 0.3,
 			onend: function() {
 			},
 			onload: function() {
@@ -385,8 +385,8 @@ $game.$audio = {
 		}
 		else {
 			_soundtracks[_currentTrack].volume(0.2);
-			_environmentLoopFx.volume(0.2);
-			_environmentOnceFx.volume(0.4);
+			_environmentLoopFx.volume(0.1);
+			_environmentOnceFx.volume(0.3);
 			_triggerFx.volume(0.4);
 		}
 		return $game.$audio.isMute;

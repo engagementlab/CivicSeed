@@ -69,6 +69,7 @@ exports.$game = {
 	resourceCount: [],
 	displayTimeout: null,
 	prevMessage: 'Civic Seed',
+	playerRanks: ['level 1', 'level 2', 'level 3', 'level 4'],
 
 	init: function() {
 		$game.$map.init();
@@ -545,6 +546,10 @@ exports.$game = {
 
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
+
+		$('.levelImages img').removeClass('currentLevelImage');
+		$('.levelImages img:nth-child(' + ($game.$player.game.currentLevel + 1) + ')').addClass('currentLevelImage');
+		$('.personalInfo .currentLevel').text($game.playerRanks[$game.$player.game.currentLevel]);
 		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
@@ -567,7 +572,6 @@ exports.$game = {
 		topPlayers += '<p class="yourSeeds">You (' + $game.$player.game.tilesColored + ' tiles)</p>';
 		//show player's seed droppings
 		var allAnswers = $game.$player.compileAnswers();
-		console.log(allAnswers);
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		$('.displayPercent').text($game.percentString);

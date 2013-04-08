@@ -74,6 +74,7 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
+		console.log(e);
 		var nombre = $game.$npc.getName(e.data.npc);
 		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
@@ -81,6 +82,7 @@ $game.$resources = {
 	},
 
 	loadResource: function(who, index, now) {
+
 		_who = who,
 		_answered = false,
 		_currentSlide = 0;
@@ -90,14 +92,18 @@ $game.$resources = {
 		_curResource = _resources[stringId];
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
-		var url = '/articles/level' + ($game.$player.game.currentLevel + 1) + '/' + _curResource.id + '.html';
-		console.log(url);
-		_resourceStageSel.load(url,function() {
-			_numSlides = $('.resourceStage .pages > section').length;
-			if(now) {
-				$game.$resources.showResource(2);
-			}
-		});
+
+		var npcLevel = $game.$npc.getNpcLevel(8986);
+		if(npcLevel <= $game.$player.game.currentLevel) {
+			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
+			console.log(url);
+			_resourceStageSel.load(url,function() {
+				_numSlides = $('.resourceStage .pages > section').length;
+				if(now) {
+					$game.$resources.showResource(2);
+				}
+			});
+		}
 	},
 
 	showResource: function(num) {
@@ -369,8 +375,8 @@ $game.$resources = {
 		//retrieve the answer
 		if(_questionType === 'open') {
 			response = $('.resourceContent textarea').val();
-			if(response.length < 1) {
-				$game.$resources.popupCheck();
+			if(response.length < 1 && !bypass) {
+				$game.$resources.popupCheck(true);
 				return false;
 			}
 			if(_curResource.requiredLength && response.length < _curResource.requiredLength && !bypass) {
