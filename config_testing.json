@@ -7,7 +7,7 @@
 	"REDIS_PORT": 6379,
 	"REDIS_PW": "wouldntyouliketoknow",
 	"REDIS_DB": "civic-redis",
-	"MONGO_URL": "mongodb://nodejitsu:569751d119d82e3741e515009cb2afe0@linus.mongohq.com:10099/nodejitsudb2709176694",
+	"MONGO_URL": "ec2-23-22-252-195.compute-1.amazonaws.com/civicseed_testing",
 	"ACCOUNT_EMAIL": "civicseed@gmail.com",
 	"ACCOUNT_PW": "wouldntyouliketoknow",
 	"CLOUD_PATH": ""

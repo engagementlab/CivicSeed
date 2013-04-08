@@ -461,6 +461,7 @@ $game.$gnome = {
 
 			//if they just beat a level, then show progreess
 			if($game.$player.game.gnomeState === 0) {
+				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
 			}

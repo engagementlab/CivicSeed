@@ -377,7 +377,7 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
-		prompts: ['1', '2', '3']
+		prompts: ['Bloop dee doop bloop! Beep boop? Oh. Sorry. You don\'t speak bloopian. What I said was: Are you here to help us? If so, help me help you help us find da colors!', 'This bloopin thing won\'t answer itself! ', 'I know BigBird probably has some junk you could use to fix this mess! ']
 	},
 	resource: {
 		tagline: 'Guiding Values',
@@ -487,7 +487,7 @@ module.exports.global = [{
 	}
 }, {
 	id: '5219',
-	name: 'Derrpa',
+	name: 'Bozo',
 	level: 1,
 	sprite: 25,
 	isHolding: true,
@@ -525,7 +525,7 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
-		prompts: ['1', '2', '3']
+		prompts: ['Listen. I\'m taking precious time out of my scientific research to talk to you. If you need some material from me, the least you can do is help me with my research.', 'Theres no way I\'m helping you without you helping me first.', 'Thanks for the help. Maybe there is some hope in the human race after all.']
 	},
 	resource: {
 		tagline: 'replace',
@@ -547,7 +547,7 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		random: ['replace'],
-		prompts: ['1', '2', '3']
+		prompts: ['Hello there! Have you ever thought about how the alphabet would sound if it was one big word? Something like "ab-keddef-gajihkel-monop-quristuv-wixyz." My head hurts just saying that! Anyway, I found this lid looking thing. Would this help you? ', 'Youre silly. Maybe you should say that alphabet-word outloud. Or at least answer that question for me.', 'You are the best! Make good use of that resource.']
 	},
 	resource: {
 		tagline: 'Guiding Values',

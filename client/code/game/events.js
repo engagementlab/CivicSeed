@@ -27,7 +27,7 @@ $(function() {
 
 	//new player joining to keep track of
 	ss.event.on('ss-addPlayer', function(num, player) {
-		console.log('ss-addPlayer: ',num, player );
+		//console.log('ss-addPlayer: ',num, player );
 		$game.numPlayers = num;
 		$game.$others.add(player);
 		_activePlayers.text(num);
@@ -56,7 +56,7 @@ $(function() {
 	//all this breakdown will be on the server side, not client side,
 	//but we will pass the tiles info
 	ss.event.on('ss-seedDropped', function(data) {
-		console.log('ss-seedDropped: ',data);
+		//console.log('ss-seedDropped: ',data);
 		$game.$map.newBomb(data.bombed, data.id);
 		$game.$others.updateTilesColored(data.id, data.tilesColored);
 	});

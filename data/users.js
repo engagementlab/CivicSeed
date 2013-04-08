@@ -5,10 +5,10 @@ module.exports.global = [{
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
-	firstName: 'Russell',
-	lastName: 'Nobody',
+	firstName: 'codenberg',
+	lastName: 'nolastname',
 	password: '',
-	email: 'r',
+	email: 'c',
 	role: 'superadmin',
 	gameStarted: true,
 	profileSetup: true,
