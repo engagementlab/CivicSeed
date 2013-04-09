@@ -7,7 +7,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		sprite: Number,
 		isHolding: Boolean,
 		dialog: {
-			random: [String],
+			smalltalk: [String],
 			prompts: [String]
 		},
 		dependsOn: [Number],

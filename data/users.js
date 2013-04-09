@@ -6,18 +6,19 @@ module.exports.global = [{
 	role: 'superadmin'
 }, {
 	firstName: 'codenberg',
-	lastName: 'nolastname',
+	lastName: 'theGreat',
 	password: '',
 	email: 'c',
 	role: 'superadmin',
 	gameStarted: true,
 	profileSetup: true,
-	profileUnlocked: false,
+	profileUnlocked: true,
 	game: {
+		instanceName: 'awesome',
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 65,
+			x: 64,
 			y: 77,
 			inTransit: false
 		},
@@ -62,8 +63,8 @@ module.exports.global = [{
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 66,
-			y: 76,
+			x: 64,
+			y: 77,
 			inTransit: false
 		},
 		colorInfo: {
@@ -104,8 +105,8 @@ module.exports.global = [{
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 66,
-			y: 76,
+			x: 64,
+			y: 77,
 			inTransit: false
 		},
 		colorInfo: {
@@ -146,8 +147,8 @@ module.exports.global = [{
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 66,
-			y: 76,
+			x: 64,
+			y: 77,
 			inTransit: false
 		},
 		colorInfo: {
@@ -188,8 +189,8 @@ module.exports.global = [{
 		currentLevel: 0,
 		rank: 'novice gardener',
 		position: {
-			x: 66,
-			y: 76,
+			x: 64,
+			y: 77,
 			inTransit: false
 		},
 		colorInfo: {

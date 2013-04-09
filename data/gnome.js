@@ -114,7 +114,7 @@ module.exports.global = {
 			x: 480,
 			y: 280
 		}, {
-			id: 16546,
+			id: 16547,
 			x: 320,
 			y: 110
 		}]
