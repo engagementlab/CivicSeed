@@ -93,7 +93,7 @@ $game.$resources = {
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
 
-		var npcLevel = $game.$npc.getNpcLevel(8986);
+		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.game.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
 			console.log(url);

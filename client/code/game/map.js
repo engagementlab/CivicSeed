@@ -69,7 +69,7 @@ $game.$map = {
 				console.log(curTile);
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
-				
+
 				if(id === $game.$player.id) {
 					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
 				}

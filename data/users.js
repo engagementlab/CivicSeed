@@ -23,11 +23,11 @@ module.exports.global = [{
 		},
 		colorInfo: {
 			rgb: {
-				r: 140,
-				g: 225,
-				b: 161
+				r: 106,
+				g: 220,
+				b: 230
 			},
-			tilesheet: 1
+			tilesheet: 2
 		},
 		resources: [],
 		inventory: [],
@@ -110,11 +110,11 @@ module.exports.global = [{
 		},
 		colorInfo: {
 			rgb: {
-				r: 157,
-				g: 45,
+				r: 205,
+				g: 95,
 				b: 243
 			},
-			tilesheet: 4
+			tilesheet: 1
 		},
 		resources: [],
 		inventory: [],
@@ -152,9 +152,51 @@ module.exports.global = [{
 		},
 		colorInfo: {
 			rgb: {
-				r: 157,
-				g: 45,
-				b: 243
+				r: 242,
+				g: 202,
+				b: 93
+			},
+			tilesheet: 3
+		},
+		resources: [],
+		inventory: [],
+		seeds: {
+			normal: 0,
+			riddle: 0,
+			special: 0,
+			dropped: 0
+		},
+		gnomeState: 0,
+		resume: [],
+		seenThing: false,
+		resourcesDiscovered: 0,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5
+	}
+}, {
+	firstName: 'Another',
+	lastName: 'Tester',
+	password: '',
+	email: 'a',
+	role: 'actor',
+	gameStarted: true,
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'awesome',
+		currentLevel: 0,
+		rank: 'novice gardener',
+		position: {
+			x: 66,
+			y: 76,
+			inTransit: false
+		},
+		colorInfo: {
+			rgb: {
+				r: 184,
+				g: 239,
+				b: 98
 			},
 			tilesheet: 4
 		},

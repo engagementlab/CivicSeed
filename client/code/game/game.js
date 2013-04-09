@@ -546,6 +546,7 @@ exports.$game = {
 
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
+		$game.$map.createCollectiveImage();
 
 		$('.levelImages img').removeClass('currentLevelImage');
 		$('.levelImages img:nth-child(' + ($game.$player.game.currentLevel + 1) + ')').addClass('currentLevelImage');
