@@ -12,8 +12,8 @@ var intervalId = {},
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	req.use('debug');
-	// req.use('account.authenticated');
+	//req.use('debug');
+	req.use('account.authenticated');
 
 	return {
 		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION

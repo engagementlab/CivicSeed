@@ -189,9 +189,9 @@ $game.$npc = {
 	},
 
 	show: function() {
-		$game.$audio.playTriggerFx('npcBubble');
 		//if there is no other stuff on screen, then show dialog
 		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
+			$game.$audio.playTriggerFx('npcBubble');
 			if(_resourceOnDeck) {
 				//check if visiting this npc depends on other
 				var locked = $game.$npc.npcLocked();
@@ -210,7 +210,7 @@ $game.$npc = {
 			}
 			else {
 				$game.$npc.isChat = true;
-				$game.$npc.showRandom();
+				$game.$npc.showSmalltalk();
 			}
 		}
 	},
@@ -251,21 +251,21 @@ $game.$npc = {
 		});
 	},
 
-	showRandom: function() {
+	showSmalltalk: function() {
 		//they have a resource with just one random response
 		if(_curNpc.isHolding) {
-			_speak = _curNpc.dialog.random[0];
+			_speak = 'It\'s too gray too talk, maybe stop by when the world is more colorful';
 		}
 		//they have a response for past, present, future
 		else {
 			if($game.$player.game.currentLevel === _curNpc.level) {
-				_speak = _curNpc.dialog.random[1];
+				_speak = _curNpc.dialog.smalltalk[1];
 			}
 			else if($game.$player.game.currentLevel < _curNpc.level) {
-				_speak = _curNpc.dialog.random[2];
+				_speak = _curNpc.dialog.smalltalk[2];
 			}
 			else {
-				_speak = _curNpc.dialog.random[0];
+				_speak = _curNpc.dialog.smalltalk[0];
 			}
 		}
 		$('.speechBubble p').addClass('fitBubble');

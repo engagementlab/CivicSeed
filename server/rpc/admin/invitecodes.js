@@ -50,7 +50,7 @@ exports.actions = function(req, res, ss) {
 						currentLevel: 0,
 						rank: 'nothing',
 						position: {
-							x: 66,
+							x: 64,
 							y: 77,
 							inTransit: false
 						},
