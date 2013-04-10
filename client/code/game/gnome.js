@@ -135,25 +135,21 @@ $game.$gnome = {
 	},
 
 	show: function() {
-		
 		//decide what to show based on the player's current status
-				
 		//if they are in a level 0-4
 		if($game.$player.game.currentLevel < 5) {
-
 			//show instructions first
 			if($game.$player.game.gnomeState === 0) {
 				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
 				_currentMessage = 0;
 				$game.$gnome.showChat();
-
 			}
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
 			else if($game.$player.game.gnomeState === 1) {
-				if($game.$player.game.currentLevel === 0 && $game.$player.game.dropped < 1) {
+				if($game.$player.game.currentLevel === 0 && $game.$player.game.seeds.dropped < 1) {
 					//make them plant first seed
-					_speak =  'plant the damn seed son! bottom left corner. come on man...';
+					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
 
 					$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 					$('.speechBubble .message').text(_speak);
@@ -162,12 +158,10 @@ $game.$gnome = {
 							$('.speechBubble').fadeOut();
 						}, 3000);
 					});
-	
-	
 				}
 				else {
-					$game.$gnome.showPrompt(0);	
-				}				
+					$game.$gnome.showPrompt(0);
+				}
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
 			else if($game.$player.game.gnomeState === 2) {
@@ -190,7 +184,6 @@ $game.$gnome = {
 			else if($game.$player.game.gnomeState === 4) {
 				$game.$gnome.showRiddle(2);
 			}
-		
 		}
 		//they have beaten the INDIVIDUAL part of the game
 		else {
@@ -201,13 +194,10 @@ $game.$gnome = {
 
 			//and final task is solved
 		}
-
-		
 	},
 
 	showTangram: function() {
-		var file = CivicSeed.CLOUD_PATH + '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';
-		
+		var file = CivicSeed.CLOUD_PATH + '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';	
 	},
 
 	showChat: function() {
@@ -279,7 +269,6 @@ $game.$gnome = {
 				}
 
 				$game.$gnome.showRiddle(p);
-				
 			}));
 			$(".speechBubble .noButton").bind("click", (function () {
 				$game.$gnome.hideChat();
@@ -307,7 +296,7 @@ $game.$gnome = {
 		}
 		else {
 			_promptNum = num;
-			_currentSlide = 0;	
+			_currentSlide = 0;
 		}
 		$game.$gnome.addContent();
 		$game.$gnome.addButtons();
@@ -369,13 +358,18 @@ $game.$gnome = {
 		$game.$gnome.addButtons();
 	},
 
-	addContent: function() {		
+	addContent: function() {
 		$('.gnomeArea .speakerName').text($game.$gnome.name+': ');
-		//if _promptNum is 0, then it is the just showing the riddle and tangram
+		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
-				$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-				$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+				if($game.$player.game.currentLevel === 0) {
+					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+				} else {
+					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+				}
 			}
 			else {
 				//show them a different version if they already posses it

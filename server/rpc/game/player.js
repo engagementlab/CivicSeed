@@ -12,7 +12,7 @@ var intervalId = {},
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	//req.use('debug');
+	// req.use('debug');
 	req.use('account.authenticated');
 
 	return {
@@ -50,12 +50,11 @@ exports.actions = function(req, res, ss) {
 			//update redis
 			req.session.game = info;
 			req.session.save();
-
 			//update mongo
 			userModel
 				.findById(id, function (err, user) {
 					if(err) {
-
+						console.log(err);
 					} else if(user) {
 						user.game = info;
 						user.save(function (y) {

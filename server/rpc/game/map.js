@@ -4,7 +4,7 @@ var userModel,service,canvas,ctx,collectiveMap;
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	req.use('debug');
+	// req.use('debug');
 
 	// canvas = new Canvas(142,132);
 	// Image = Canvas.Image;

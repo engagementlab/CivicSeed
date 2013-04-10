@@ -5,7 +5,7 @@ var UserModel = service.useModel('user');
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	req.use('debug');
+	// req.use('debug');
 	// req.use('account.authenticated');
 
 	return {

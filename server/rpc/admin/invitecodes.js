@@ -20,7 +20,7 @@ html += '<h3 style="color:green;">You can get started by going <a href="http://t
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	req.use('debug');
+	// req.use('debug');
 	req.use('account.authenticated');
 
 	var colorData = require(rootDir + '/data/colors');
@@ -67,6 +67,7 @@ exports.actions = function(req, res, ss) {
 							dropped: 0
 						},
 						gnomeState: 0,
+						firstTime: true,
 						resume: [],
 						seenThing: false,
 						resourcesDiscovered: 0,
