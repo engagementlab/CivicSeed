@@ -44,6 +44,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				dropped: Number
 			},
 			gnomeState: Number,
+			firstTime: Boolean,
 			colorMap: String,
 			resume: [String],
 			seenThing: Boolean,

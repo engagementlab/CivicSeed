@@ -266,9 +266,9 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'Working With Chinatown',
-		feedbackRight: 'So sick. You nailed that. I\'m impressed.',
+		feedbackRight: 'Interesting. Very interesting!',
 		feedbackWrong: '',
-		question: 'replace',
+		question: 'Think about your preconceptions of Chinatown as a neighborhood. How do they differ from what you saw in the resource videos?',
 		questionType: 'open',
 		requiredLength: 100,
 		shape: {
@@ -281,9 +281,21 @@ module.exports.global = [{
 	name: 'Frampton',
 	level: 1,
 	sprite: 15,
-	isHolding: false,
+	isHolding: true,
 	dialog: {
-		smalltalk: ['See? I told you Hamp isn\'t such a bad dude! He just loves his town and wants to be a part of helping restore the color. We all want to help make our home a better place.','YO! Framp is stoked you came to visit! You meet my bro Hamp yet? He is a little intense, but he just wants to make sure we are partners working together to help our community.','Did you know there are wacky secrets hidden around town? You need to talk to us to find them!']
+		prompts: ['1','2','3']
+	},
+	resource: {
+		tagline: 'Digital Chinatown',
+		feedbackRight: 'That\'s great! Thanks for sharing!',
+		feedbackWrong: '',
+		question: 'What did you learn from the video you selected?',
+		questionType: 'open',
+		requiredLength: 50,
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '3335',
@@ -293,6 +305,18 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		prompts: ['You know the worst thing about having a giant nose? The jokes people tell you. I got this one recently: "He who put face in fruit drink get punch in the nose." Anyway, enough about me. You need help finding the color right? I can help!', 'Ah. I think you need to try again.', 'I think my nose is beautiful. Thanks for not making any dumb jokes about it!']
+	},
+	resource: {
+		tagline: 'All About Somerville',
+		feedbackRight: 'Great work!',
+		feedbackWrong: 'Maybe you should review the resource and try again...',
+		question: 'True or False: Somerville has a very large number of non-profit organizations.',
+		questionType: 'truefalse',
+		answer: 'true',
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '4338',
@@ -311,6 +335,18 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		prompts: ['Listen. I\'m taking precious time out of my scientific research to talk to you. If you need some material from me, the least you can do is help me with my research.', 'Theres no way I\'m helping you without you helping me first.', 'Thanks for the help. Maybe there is some hope in the human race after all.']
+	},
+	resource: {
+		tagline: 'All About Medford',
+		feedbackRight: 'That\'s right!  Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.',
+		feedbackWrong: 'Maybe you should review the resource and try again...',
+		question: 'True or False: The elementary schools in Medford are mostly outdated.',
+		questionType: 'truefalse',
+		answer: 'false',
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '7082',
@@ -350,6 +386,18 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		prompts: ['Hello there! Have you ever thought about how the alphabet would sound if it was one big word? Something like "ab-keddef-gajihkel-monop-quristuv-wixyz." My head hurts just saying that! Anyway, I found this weird looking thing. I will give it to you, but first I have make sure you will use it properly.', 'You\'re silly. Maybe you should say that alphabet-word outloud. Or at least answer that question for me.', 'You are the best! Make good use of that shape.']
+	},
+	resource: {
+		tagline: 'Working With Somerville',
+		feedbackRight: 'I think that\'s probably true.',
+		feedbackWrong: '',
+		question: 'Based on what students, instructors, and stakeholders in Somerville said in the videos, what do you think makes Somerville unique in how it should be approached?',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '6773',
@@ -359,6 +407,18 @@ module.exports.global = [{
 	isHolding: true,
 	dialog: {
 		prompts: ['We need our color back. This is a community based need. You helping us solve a problem that we need help with is important to us, but its also important to learn about our community so you understand us! Heres a question for you.', 'Still waiting for that answer bub!', 'I\'m glad you are taking the time to learn about our world! By working with us and learning about our history your help will be so much more appreciated!']
+	},
+	resource: {
+		tagline: 'All About Chinatown',
+		feedbackRight: 'Bingo! Now that\'s what I\'m talkin\' about!',
+		feedbackWrong: 'That\'s not right! Check the resource and give it another shot.',
+		question: 'True or False: The overwhelming majority of youth in Chinatown who speak an Asian dialect also speak English.',
+		questionType: 'truefalse',
+		answer: 'true',
+		shape: {
+			path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+			fill: 'green'
+		}
 	}
 }, {
 	id: '8898',
@@ -403,11 +463,11 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'Give And Take',
-		feedbackRight: 'Thank you for the information.',
+		feedbackRight: 'Insightful response, thanks!',
 		feedbackWrong: '',
 		question: 'Is there a time that you learned something from a community member, whether a child or an elderly resident, an organization leader or member, where you were “providing service’? Please describe',
 		questionType: 'open',
-		requiredLength: 50,
+		requiredLength: 30,
 		shape: {
 			path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
 			fill: 'lightGreen'
@@ -442,8 +502,8 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'The Neighborhoods You\'ll Work With',
-		feedbackRight: 'You betcha!',
-		feedbackWrong: '',
+		feedbackRight: 'Yup, that\'s right!',
+		feedbackWrong: 'Confused? Check out the resource one more time and try again.',
 		question: 'You will choose to work in one of the three host communities closest to Tufts main campus. What are the three communities?',
 		questionType: 'multiple',
 		possibleAnswers: ['Somerville, Chinatown, and Medford', 'Somerville, Chinatown, and Worcester', 'Somerville, Worcester, and Medford', 'Grafton, Worcester, and Medford'],
@@ -458,9 +518,21 @@ module.exports.global = [{
 	name: 'Goose',
 	level: 1,
 	sprite: 25,
-	isHolding: false,
+	isHolding: true,
 	dialog: {
-		smalltalk: ['I heard that this far off place called Medford is one of the oldest Afro-American communities in the United States.Thats pretty cool! I wonder if our community has cool history?', 'If you haven\'t already, you should probably talk to Dunks. If you can put up with all the yucky sports talk there might be something that can help you.', 'By reading about our history, I learned that the gray shroud was here before. It said that the seeds helped bring back color, though I am not sure how you get them.']
+		prompts: ['1','2','3']
+	},
+	resource: {
+		tagline: 'Working With Medford',
+		feedbackRight: 'That\'s an idea!',
+		feedbackWrong: '',
+		question: 'Select one of the challenges facing Medford discussed in the videos, and talk about one of the ways you might work to overcome it.',
+		questionType: 'open',
+		requiredLength: 100,
+		shape: {
+			path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+			fill: 'blue'
+		}
 	}
 }, {
 	id: '3373',
@@ -491,7 +563,7 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'A Change of Perspective',
-		feedbackRight: 'Interesting repsonse.',
+		feedbackRight: 'Hm, interesting. Thanks for sharing!',
 		feedbackWrong: '',
 		question: 'What do you think was gained by the youths that made this video? Do you think it was successful?',
 		questionType: 'open',
@@ -503,13 +575,25 @@ module.exports.global = [{
 	}
 }, {
 	id: '5206',
-	name: 'steve',
+	name: 'blobby',
 	level: 2,
 	sprite: 25,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['replace'],
 		prompts: ['1', '2', '3']
+	},
+	resource: {
+		tagline: 'Digital Somerville',
+		feedbackRight: 'Thanks for sharing that!',
+		feedbackWrong: '',
+		question: 'What is one thing you learned from the website?',
+		questionType: 'open',
+		requiredLength: 50,
+		shape: {
+			path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
+			fill: 'orange'
+		}
 	}
 }, {
 	id: '18449',
@@ -560,10 +644,9 @@ module.exports.global = [{
 	name: 'Scallop',
 	level: 2,
 	sprite: 27,
-	isHolding: true,
+	isHolding: false,
 	dialog: {
-		smalltalk: ['replace'],
-		prompts: ['1', '2', '3']
+		smalltalk: ['replace']
 	}
 }, {
 	id: '14588',
@@ -690,8 +773,7 @@ module.exports.global = [{
 	sprite: 35,
 	isHolding: true,
 	dialog: {
-		smalltalk: ['replace'],
-		prompts: ['1', '2', '3']
+		smalltalk: ['replace']
 	}
 }, {
 	id: '10780',
@@ -782,7 +864,6 @@ module.exports.global = [{
 	sprite: 43,
 	isHolding: true,
 	dialog: {
-		smalltalk: ['replace'],
 		prompts: ['1', '2', '3']
 	},
 	resource: {
@@ -793,7 +874,7 @@ module.exports.global = [{
 		questionType: 'open',
 		requiredLength: 100,
 		shape: {
-			path: 'm0,0c0,0 -100,0 -100,0c0,0 40,200 40,200c0,0 60,0 60,0c0,0 0,-70 0,-70c0,0 -20,-50 -20,-50c0,0 -40,0 -40,0c0,0 60,-80 60,-80z',
+			path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
 			fill: 'lightGreen'
 		}
 	}

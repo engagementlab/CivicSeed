@@ -39,6 +39,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		gnomeState: 0,
+		firstTime: true,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,
@@ -84,6 +85,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		gnomeState: 0,
+		firstTime: true,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,
@@ -126,6 +128,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		gnomeState: 0,
+		firstTime: true,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,
@@ -168,6 +171,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		gnomeState: 0,
+		firstTime: true,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,
@@ -210,6 +214,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		gnomeState: 0,
+		firstTime: true,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,
