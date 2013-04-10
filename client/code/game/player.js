@@ -628,6 +628,7 @@ $game.$player = {
 				.show();
 
 			ss.rpc('game.player.dropSeed', bombed, info, function(result) {
+				$game.$player.game.seeds.dropped += 1;
 				//increase the drop count for the player
 				$game.$player.awaitingBomb = false;
 				_waitingSel.fadeOut();
@@ -749,7 +750,6 @@ $game.$player = {
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
-		console.log('exit and save', sessionStorage.isPlaying);
 		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id, function(res) {
 			callback();
 		});

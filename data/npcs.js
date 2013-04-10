@@ -828,8 +828,8 @@ module.exports.global = [{
 		prompts: ['1', '2', '3']
 	}
 }, {
-	id: 'Brumble',
-	name: 'NPC',
+	id: '13696',
+	name: 'Brumble',
 	level: 3,
 	sprite: 40,
 	isHolding: true,

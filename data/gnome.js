@@ -18,7 +18,7 @@ module.exports.global = {
 	}, {
 		instructions: ['Ahh yes, level 2.', 'You will probably die here....', 'AHAHAHAHAHAHAHAHAHA!!!!!!!'],
 		riddle: {
-			sonnet: 'Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and <b>what they contain</b>?<br<Do you see <b>assets</b> or do you see need <br>when you look at <b>partners</b> in the <b>community</b>?<br><b>Expand your view<b><br>and tell me too, <br>who can see it better than you?',
+			sonnet: 'Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and <b>what they contain</b>?<br<Do you see <b>assets</b> or do you see need <br>when you look at <b>partners</b> in the <b>community</b>?<br><b>Expand your view</b><br>and tell me too, <br>who can see it better than you?',
 			prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 			responses: ['Correct', 'Wrong', 'Close']
 		},

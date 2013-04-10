@@ -10,12 +10,14 @@
 		});
 		$body.on('click', '.signOut', function() {
 			//if the user is playing the game? be sure to save their progress?
-			if(sessionStorage.isPlaying) {
+			// console.log('look here dummy', sessionStorage.isPlaying);
+			if(sessionStorage.isPlaying === 'yes') {
 				$game.$player.exitAndSave(function() {
 					$account.deAuthenticate();
 				});
+			} else {
+				$account.deAuthenticate();
 			}
-			
 			return false;
 		});
 		$body.on('submit', '#remindMeForm', function() {
@@ -52,7 +54,7 @@
 		console.log('authenticate');
 		// ss.rpc('shared.account.authenticate', 's', '', function(authenticated) { console.log(authenticated); });
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
-			console.log(authenticated);
+			// console.log(authenticated);
 			if(authenticated) {
 
 				$account.getUserSession(function(userInfo) {
@@ -61,7 +63,7 @@
 					sessionStorage.setItem('userLastName', userInfo.lastName);
 					sessionStorage.setItem('userEmail', userInfo.email);
 					sessionStorage.setItem('userRole', userInfo.role);
-					sessionStorage.setItem('isPlaying', false);
+					sessionStorage.setItem('isPlaying', 'no');
 					if(!userInfo.profileSetup) {
 						//send them to setup their profile info
 						location.href = '/change-info';
@@ -87,15 +89,15 @@
 	deAuthenticate: function() {
 		// ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) { console.log(deAuthenticate); });
 	 	ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
-			console.log(deAuthenticate);
-			console.log('before: ', sessionStorage);
+			// console.log(deAuthenticate);
+			// console.log('before: ', sessionStorage);
 			sessionStorage.removeItem('userId');
 			sessionStorage.removeItem('userFirstName');
 			sessionStorage.removeItem('userLastName');
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
 			sessionStorage.removeItem('isPlaying');
-			console.log('after: ', sessionStorage);
+			// console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
 				location.href = '/';
 				// console.log('Logging out...');
@@ -104,10 +106,10 @@
 	},
 
 	getUserSession: function(callback) {
-		console.log('getUserSession');
+		// console.log('getUserSession');
 		// ss.rpc('shared.account.getUserSession', function(session) { console.log(session); });
 		ss.rpc('shared.account.getUserSession', function(session) {
-			console.log(session);
+			// console.log(session);
 			if(session) {
 				callback(session);
 			}

@@ -311,7 +311,7 @@ $game.$gnome = {
 				.addClass('patternBg3')
 				.fadeIn(function() {
 					$game.$gnome.isShowing = true;
-					if(_currentSlide !== 2) {
+					if(_currentSlide === 1) {
 						$('.tangramArea').show();
 					}
 			});
@@ -327,8 +327,15 @@ $game.$gnome = {
 				$('.gnomeArea .nextButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-				$('.gnomeArea .closeButton').removeClass('hideButton');
 				$('.gnomeArea .backButton').removeClass('hideButton');
+				if($game.$player.game.firstTime) {
+					$('.gnomeArea .nextButton').removeClass('hideButton');
+				} else {
+					$('.gnomeArea .closeButton').removeClass('hideButton');
+				}
+			}
+			else {
+				$('.gnomeArea .closeButton').removeClass('hideButton');
 			}
 		}
 		else {
@@ -363,17 +370,16 @@ $game.$gnome = {
 		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
-				if($game.$player.game.currentLevel === 0) {
+				if($game.$player.game.firstTime) {
+					$game.$player.game.firstTime = false;
 					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.First, you must find a way<br>to tell me <b>what you brought</b> today<br>and how <b>your future</b> and <b>your past</b><br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: <b>Walk with humility</b><br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and <b>what they contain</b>?<br<Do you see <b>assets</b> or do you see need <br>when you look at <b>partners</b> in the <b>community</b>?<br><b>Expand your view</b><br>and tell me too, <br>who can see it better than you?<br><br>You know <b>how you got here</b>and so do I --<br>can you forget it? Should you try?<br>How do <b>peoplefrom here</b> and there<br>build a dream that they <b>both share</b><br>When is a <b>goal</b>obtainable? <br><b>Responsibility</b> / <b>maintainable</b>? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, <b>who should own it</b>?<br>Will you grow connections,<br>become a <b>leader</b> by <b>reflection</b>,<br> be inspired, plant roots, or <b>discover direction?</b><br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will <b>your mark</b> be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
 					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
 					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 				}
 			}
-			else {
-				//show them a different version if they already posses it
-				
+			else if(_currentSlide === 1) {
 				if($game.$player.game.gnomeState > 1) {
 					$('.gnomeArea .message').text('Here is the outline to view again.');
 				}
@@ -392,11 +398,19 @@ $game.$gnome = {
 				$('.gnomeContent').html('<img src="' + imgPath + '" class="tangramOutline">');
 				
 			}
+			else {
+				if($game.$player.game.currentLevel === 0) {
+					$('.gnomeArea .message').text('To answer it, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.');
+					$('.gnomeContent').html('<p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the enigma civica.</p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Graywood Forest, to the northwest of here. Good luck!</p>');	
+				}
+			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
-			//combo riddle and puzzle interface
 			if(_currentSlide === 0) {
+				$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+				$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+			} else if(_currentSlide === 1) {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
 					$game.$player.inventoryShowing = false;
@@ -407,11 +421,9 @@ $game.$gnome = {
 				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + 'img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img class="trash" src="' + imgPath2 + '">';
-				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
-			else if(_currentSlide === 1) {
+			else if(_currentSlide === 2) {
 				$('.gnomeArea').animate({
 						'height':'450px'
 				});
