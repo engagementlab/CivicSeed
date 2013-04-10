@@ -9,7 +9,13 @@
 			return false;
 		});
 		$body.on('click', '.signOut', function() {
-			$account.deAuthenticate();
+			//if the user is playing the game? be sure to save their progress?
+			if(sessionStorage.isPlaying) {
+				$game.$player.exitAndSave(function() {
+					$account.deAuthenticate();
+				});
+			}
+			
 			return false;
 		});
 		$body.on('submit', '#remindMeForm', function() {
@@ -55,6 +61,7 @@
 					sessionStorage.setItem('userLastName', userInfo.lastName);
 					sessionStorage.setItem('userEmail', userInfo.email);
 					sessionStorage.setItem('userRole', userInfo.role);
+					sessionStorage.setItem('isPlaying', false);
 					if(!userInfo.profileSetup) {
 						//send them to setup their profile info
 						location.href = '/change-info';
@@ -79,8 +86,7 @@
 
 	deAuthenticate: function() {
 		// ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) { console.log(deAuthenticate); });
-		console.log('deAuthenticate');
-		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
+	 	ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 			console.log(deAuthenticate);
 			console.log('before: ', sessionStorage);
 			sessionStorage.removeItem('userId');
@@ -88,6 +94,7 @@
 			sessionStorage.removeItem('userLastName');
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
+			sessionStorage.removeItem('isPlaying');
 			console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
 				location.href = '/';

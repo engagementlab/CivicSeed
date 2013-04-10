@@ -742,14 +742,17 @@ $game.$player = {
 
 	},
 
-	exitAndSave: function() {
+	exitAndSave: function(callback) {
 		var endTime = new Date().getTime() / 1000,
 			totalTime = endTime - _startTime;
 		$game.$player.game.playingTime += totalTime;
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
-		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id);
+		console.log('exit and save', sessionStorage.isPlaying);
+		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id, function(res) {
+			callback();
+		});
 	},
 
 	getPrompt: function(id) {

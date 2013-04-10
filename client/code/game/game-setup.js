@@ -17,7 +17,9 @@ exports.init = function(callback) {
 				sessionStorage.setItem('userLastName', userSessionObject.lastName);
 				sessionStorage.setItem('userEmail', userSessionObject.email);
 				sessionStorage.setItem('userRole', userSessionObject.role);
+				sessionStorage.setItem('isPlaying', true);
 			}
+			sessionStorage.setItem('isPlaying', true);
 			$body.append(JT['partials-navigation']());
 			$body.append(JT['game-gameboard']());
 			$body.append(JT['game-resourceStage']());

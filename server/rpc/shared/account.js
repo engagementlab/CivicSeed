@@ -13,7 +13,7 @@ html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
-	req.use('debug');
+	// req.use('debug');
 	// req.use('account.authenticated');
 
 	return {
@@ -36,6 +36,7 @@ exports.actions = function(req, res, ss) {
 						req.session.game = user.game;
 						req.session.gameStarted = user.gameStarted;
 						req.session.profileSetup = user.profileSetup;
+						req.session.isPlaying = false;
 
 						console.log('****** new session being saved ******');
 
@@ -65,8 +66,8 @@ exports.actions = function(req, res, ss) {
 			req.session.game = null;
 			req.session.gameStarted = null;
 			req.session.profileSetup = null;
+			req.session.isPlaying = null;
 			req.session.save();
-			
 			res(true);
 		},
 
@@ -82,7 +83,8 @@ exports.actions = function(req, res, ss) {
 					role: req.session.role,
 					game: req.session.game,
 					gameStarted: req.session.gameStarted,
-					profileSetup: req.session.profileSetup
+					profileSetup: req.session.profileSetup,
+					isPlaying: req.session.isPlaying
 				});
 			} else {
 				console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);

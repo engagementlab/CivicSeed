@@ -431,5 +431,11 @@ $(function() {
 });
 
 function leaveThisJoint() {
-	$game.$player.exitAndSave();
+	console.log(sessionStorage.isPlaying);
+	if(sessionStorage.isPlaying) {
+		$game.$player.exitAndSave(function() {
+			console.log('exit');
+		});
+	}
+	
 }
