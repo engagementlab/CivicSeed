@@ -11,7 +11,7 @@
 		$body.on('click', '.signOut', function() {
 			//if the user is playing the game? be sure to save their progress?
 			// console.log('look here dummy', sessionStorage.isPlaying);
-			if(sessionStorage.isPlaying === 'yes') {
+			if(sessionStorage.isPlaying === 'true') {
 				$game.$player.exitAndSave(function() {
 					$account.deAuthenticate();
 				});
@@ -51,8 +51,7 @@
 	},
 
 	authenticate: function(email, password) {
-		console.log('authenticate');
-		// ss.rpc('shared.account.authenticate', 's', '', function(authenticated) { console.log(authenticated); });
+		console.log('client: account.authenticate');
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
 			// console.log(authenticated);
 			if(authenticated) {
@@ -63,7 +62,7 @@
 					sessionStorage.setItem('userLastName', userInfo.lastName);
 					sessionStorage.setItem('userEmail', userInfo.email);
 					sessionStorage.setItem('userRole', userInfo.role);
-					sessionStorage.setItem('isPlaying', 'no');
+					sessionStorage.setItem('isPlaying', userInfo.isPlaying);
 					if(!userInfo.profileSetup) {
 						//send them to setup their profile info
 						location.href = '/change-info';

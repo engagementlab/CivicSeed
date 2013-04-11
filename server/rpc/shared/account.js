@@ -21,7 +21,6 @@ exports.actions = function(req, res, ss) {
 		authenticate: function(email, password) {
 			console.log('**** authenticate ******');
 			UserModel.findOne({ email: email } , function(err, user) {
-
 				if(user) {
 					// var hashedPassword = user.password;
 					// if(hash.verify(pass, hashedPassword)){
@@ -36,13 +35,12 @@ exports.actions = function(req, res, ss) {
 						req.session.game = user.game;
 						req.session.gameStarted = user.gameStarted;
 						req.session.profileSetup = user.profileSetup;
-						req.session.isPlaying = false;
-
-						console.log('****** new session being saved ******');
+						req.session.isPlaying = user.isPlaying;
+						// if(!user.isPlaying) {}
+						req.session.channel.subscribe(user.game.instanceName);
 
 						// req.session.gameChannel = channel....
 						req.session.save();
-						// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId, user.id);
 						res(true);
 					} else {
 						res(false);
@@ -58,6 +56,7 @@ exports.actions = function(req, res, ss) {
 		deAuthenticate: function() {
 			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			console.log('****** deAuthenticate ******');
+			req.session.channel.reset();
 			req.session.setUserId(null);
 			req.session.firstName = null;
 			req.session.lastName = null;
@@ -74,7 +73,7 @@ exports.actions = function(req, res, ss) {
 		getUserSession: function() {
 			console.log('**** getUserSession ******');
 			if(req.session.userId) {
-				console.log('session exists:', req.session.firstName, req.session.userId);
+				console.log('session exists:', req.session);
 				res({
 					id: req.session.userId,
 					firstName: req.session.firstName,
@@ -109,6 +108,7 @@ exports.actions = function(req, res, ss) {
 				}
 			});
 		},
+
 		changeInfo: function(first, last) {
 			UserModel.findOne({ email: req.session.email } , function(err, user) {
 				if(!err && user) {
@@ -141,6 +141,23 @@ exports.actions = function(req, res, ss) {
 					});
 					user.save(function(err,suc) {
 						res(true);
+					});
+				}
+			});
+		},
+
+		setPlaying: function(id) {
+			UserModel.findById(id, function(err, user) {
+				if(err) {
+					res(false);
+				} else {
+					user.isPlaying = true;
+					user.save(function(err,suc) {
+						if(err) {
+							res(false);
+						} else {
+							res(true);
+						}
 					});
 				}
 			});

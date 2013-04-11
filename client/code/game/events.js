@@ -26,60 +26,60 @@ $(function() {
 
 
 	//new player joining to keep track of
-	ss.event.on('ss-addPlayer', function(num, player) {
-		//console.log('ss-addPlayer: ',num, player );
-		$game.numPlayers = num;
-		$game.$others.add(player);
-		_activePlayers.text(num);
-		if(player.id !== $game.$player.id) {
-			$game.temporaryStatus(player.name + ' has joined!');
+	ss.event.on('ss-addPlayer', function(data, chan) {
+		console.log(data, chan);
+		$game.numPlayers = data.num;
+		$game.$others.add(data.info);
+		_activePlayers.text(data.num);
+		if(data.info.id !== $game.$player.id) {
+			$game.temporaryStatus(data.info.name + ' has joined!');
 		}
 	});
 
-	ss.event.on('ss-removePlayer', function(num, playerId) {
-		$game.numPlayers = num;
-		if(playerId != $game.$player.id) {
-			$game.$others.remove(playerId);
+	ss.event.on('ss-removePlayer', function(data, chan) {
+		$game.numPlayers = data.num;
+		if(data.id != $game.$player.id) {
+			$game.$others.remove(data.id);
 		}
 		_activePlayers.text(num);
 	});
 
-	ss.event.on('ss-playerMoved', function(moves, id) {
+	ss.event.on('ss-playerMoved', function(data, chan) {
 		// console.log('ss-playerMoved: ', id, moves);
 		//check if that quad is relevant to the current player
 		//this will also have the player info so as to id the appropriate one
 		// console.log('check ids for player move:', id, $game.$player.id);
-		if(id != $game.$player.id) {
-			$game.$others.sendMoveInfo(moves, id);
+		if(data.id != $game.$player.id) {
+			$game.$others.sendMoveInfo(data.moves, data.id);
 		}
 	});
 	//all this breakdown will be on the server side, not client side,
 	//but we will pass the tiles info
-	ss.event.on('ss-seedDropped', function(data) {
+	ss.event.on('ss-seedDropped', function(data, chan) {
 		//console.log('ss-seedDropped: ',data);
 		$game.$map.newBomb(data.bombed, data.id);
 		$game.$others.updateTilesColored(data.id, data.tilesColored);
 	});
 
 	//new message from chat
-	ss.event.on('ss-newMessage', function(message, id) {
+	ss.event.on('ss-newMessage', function(data, chan) {
 		// console.log('ss-newMessage: ',message, id );
-		if(id === $game.$player.id) {
-			$game.$player.message(message);
+		if(data.id === $game.$player.id) {
+			$game.$player.message(data.message);
 		}
 		else {
 			$game.$audio.playTriggerFx('chatReceive');
-			$game.$others.message(message, id);
+			$game.$others.message(data.message, data.id);
 		}
 	});
 
-	ss.event.on('ss-statusUpdate', function(message) {
-		$game.temporaryStatus(message);
+	ss.event.on('ss-statusUpdate', function(data, chan) {
+		$game.temporaryStatus(data);
 	});
 
-	ss.event.on('ss-progressChange', function(num) {
-		$game.seedsDropped = num.dropped;
-		$game.tilesColored = num.colored;
+	ss.event.on('ss-progressChange', function(data, chan) {
+		$game.seedsDropped = data.dropped;
+		$game.tilesColored = data.colored;
 
 		$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
 		$game.percentString = $game.percent + '%';
@@ -98,32 +98,32 @@ $(function() {
 		}
 	});
 
-	ss.event.on('ss-leaderChange', function(board, newOne) {
+	ss.event.on('ss-leaderChange', function(data, chan) {
 		if($game.leaderboard.length > 0) {
-			var leaderChange = ($game.leaderboard[0].name === board[0].name) ? false : true;
+			var leaderChange = ($game.leaderboard[0].name === data.board[0].name) ? false : true;
 			if(leaderChange) {
-				$game.temporaryStatus(board[0].name + ' is top dog!');
+				$game.temporaryStatus(data.board[0].name + ' is top dog!');
 				return;
 			}
 		}
 		$game.leaderboard = board;
-		if(newOne) {
-			$game.temporaryStatus(newOne + ' is now a top seeder');
+		if(data.name) {
+			$game.temporaryStatus(data.name + ' is now a top seeder');
 		}
 	});
 
-	ss.event.on('ss-addAnswer', function(data) {
+	ss.event.on('ss-addAnswer', function(data, chan) {
 		$game.$resources.addAnswer(data);
 	});
 
 	//level change for a player
-	ss.event.on('ss-levelChange', function(id, level) {
-		$game.$others.levelChange(id, level);
+	ss.event.on('ss-levelChange', function(data, chan) {
+		$game.$others.levelChange(data.id, data.level);
 	});
 
 	//some one pledged a seed to someone's answer
-	ss.event.on('ss-seedPledged', function(id) {
-		if($game.$player.id === id) {
+	ss.event.on('ss-seedPledged', function(data, chan) {
+		if($game.$player.id === data.id) {
 			$game.temporaryStatus('a peer liked your answer, +1 seed');
 			$game.$player.game.seeds.riddle += 1;
 			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
@@ -420,7 +420,6 @@ $(function() {
 		$('.collectedResources').hide();
 	});
 
-
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
 		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !_helpShowing){
@@ -431,10 +430,9 @@ $(function() {
 });
 
 function leaveThisJoint() {
-	if(sessionStorage.isPlaying === 'yes') {
+	if(sessionStorage.isPlaying === 'true') {
 		$game.$player.exitAndSave(function() {
 			console.log('exit');
 		});
 	}
-	
 }

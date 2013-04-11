@@ -13,6 +13,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profileSetup: true,
 	profileUnlocked: true,
+	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -59,6 +60,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profileSetup: true,
 	profileUnlocked: false,
+	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -102,6 +104,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profileSetup: true,
 	profileUnlocked: false,
+	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -145,6 +148,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profileSetup: true,
 	profileUnlocked: false,
+	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -188,6 +192,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profileSetup: true,
 	profileUnlocked: false,
+	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,

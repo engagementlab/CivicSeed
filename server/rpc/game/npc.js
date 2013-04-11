@@ -114,7 +114,7 @@ var self = exports.actions = function(req, res, ss) {
 							if(err) {
 
 							} else {
-								ss.publish.all('ss-addAnswer', addThis);
+								ss.publish.channel(req.session.game.instanceName,'ss-addAnswer', addThis);
 								res(true);
 							}
 						});

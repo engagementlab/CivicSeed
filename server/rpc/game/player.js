@@ -38,10 +38,10 @@ exports.actions = function(req, res, ss) {
 					numActivePlayers: 0
 				};
 			}
-			console.log(games);
+			console.log(req.session.game.instanceName);
 			games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
 			games[req.session.game.instanceName].numActivePlayers += 1;
-			ss.publish.all('ss-addPlayer',games[req.session.game.instanceName].numActivePlayers, playerInfo);
+			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
 			//send the number of active players and the new player info
 			res(playerInfo);
 		},
@@ -57,15 +57,16 @@ exports.actions = function(req, res, ss) {
 						console.log(err);
 					} else if(user) {
 						user.game = info;
+						user.isPlaying = false;
 						user.save(function (y) {
 							games[req.session.game.instanceName].numActivePlayers -= 1;
-							ss.publish.all('ss-removePlayer', games[req.session.game.instanceName].numActivePlayers, id);
+							ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
 							delete games[req.session.game.instanceName].players[id];
 							res(true);
 						});
 					} else {
 						// MIGHT NEED TO DO THIS HERE STILL???
-						// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+						// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
 					}
 				});
 		},
@@ -91,7 +92,7 @@ exports.actions = function(req, res, ss) {
 
 		movePlayer: function(moves, id) {
 			//send out the moves to everybody
-			ss.publish.all('ss-playerMoved', moves, id);
+			ss.publish.channel(req.session.game.instanceName,'ss-playerMoved', {moves: moves, id: id});
 			res(true);
 		},
 
@@ -132,7 +133,7 @@ exports.actions = function(req, res, ss) {
 								tilesColored: newTileCount
 							};
 							//we are done,send out the color information to each client to render
-							ss.publish.all('ss-seedDropped', sendData);
+							ss.publish.channel(req.session.game.instanceName,'ss-seedDropped', sendData);
 
 							var newInfo = {
 								name: info.name,
@@ -142,9 +143,9 @@ exports.actions = function(req, res, ss) {
 
 							colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
 								if(updates.updateBoard) {
-									ss.publish.all('ss-leaderChange', updates.oldBoard, newInfo.name);
+									ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.oldBoard, name: newInfo.name});
 								}
-								ss.publish.all('ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
+								ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
 								//FINNNALLY done updating and stuff, respond to the player
 								//telling them if it was sucesful
 								res(newBombs.length);
@@ -208,11 +209,11 @@ exports.actions = function(req, res, ss) {
 		},
 
 		levelChange: function(id, level) {
-			ss.publish.all('ss-levelChange', id, level);
+			ss.publish.channel(req.session.game.instanceName,'ss-levelChange',{id: id, level: level});
 		},
 
 		statusUpdate: function(msg) {
-			ss.publish.all('ss-statusUpdate', msg);
+			ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg);
 		},
 
 		gameOver: function(info, id) {
@@ -232,7 +233,7 @@ exports.actions = function(req, res, ss) {
 					});
 				} else {
 					// MIGHT NEED TO DO THIS HERE STILL???
-					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+					// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
 				}
 			});
 		},
@@ -245,11 +246,11 @@ exports.actions = function(req, res, ss) {
 					user.game.seeds.riddle += 1;
 					user.save(function (y) {
 						res(y);
-						ss.publish.all('ss-seedPledged', id);
+						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', id);
 					});
 				} else {
 					// MIGHT NEED TO DO THIS HERE STILL???
-					// ss.publish.all('ss-removePlayer', numActivePlayers, id);
+					// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
 				}
 			});
 		}
