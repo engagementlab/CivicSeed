@@ -7,7 +7,7 @@ module.exports.global = [{
 	bossModeUnlocked: false,
 	levelQuestion: ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'],
 	leaderboard: [],
-	levelNames: ['Level 1: Who are you?', 'Level 2: Where are you?', 'Level 3: When are you?', 'Level 4: Why are you?', 'Level 5: What are you?'],
+	levelNames: ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
 	resourceCount: [10, 14, 11, 11],
 	instanceName: 'awesome',
 	resourceResponses: []
