@@ -64,12 +64,12 @@ exports.$game = {
 	prevPercent: 0,
 	percentString: null,
 	numPlayers: 0,
-	badWords: ['fuck','shit', 'bitch', 'cunt', 'ass', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
+	badWords: ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
 	levelNames: [],
 	resourceCount: [],
 	displayTimeout: null,
 	prevMessage: 'Civic Seed',
-	playerRanks: ['level 1', 'level 2', 'level 3', 'level 4'],
+	playerRanks: ['novice gardener', 'journeyman gardener', 'expert gardener', 'master gardener','super master gardener'],
 
 	init: function() {
 		$game.$map.init();
@@ -584,13 +584,16 @@ exports.$game = {
 	},
 	temporaryStatus: function(msg) {
 		$('.displayBoxText').text(msg);
+		$('.displayBox').css('background','#a2f0e9');
 		clearTimeout($game.displayTimeout);
 		$game.displayTimeout = setTimeout(function() {
 			$('.displayBoxText').text($game.prevMessage);
+			$('.displayBox').css('background','white');
 		}, 3000);
 	},
 	changeStatus: function(custom) {
 		clearTimeout($game.displayTimeout);
+		$('.displayBox').css('background','white');
 		if(custom) {
 			$('.displayBoxText').text(custom);
 		}

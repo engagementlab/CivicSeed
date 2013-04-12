@@ -201,6 +201,7 @@ $game.$gnome = {
 	},
 
 	showChat: function() {
+		$('.speechBubble p').removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$gnome.isChat = true;
 		$game.$gnome.nextChatContent();
@@ -253,6 +254,7 @@ $game.$gnome = {
 	},
 
 	showPrompt: function(p) {
+		$('.speechBubble p').removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$gnome.isChat = true;
 		_speak =  $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.prompts[p];
@@ -311,7 +313,7 @@ $game.$gnome = {
 				.addClass('patternBg3')
 				.fadeIn(function() {
 					$game.$gnome.isShowing = true;
-					if(_currentSlide === 1) {
+					if(_currentSlide === 0 && !$game.$player.game.firstTime) {
 						$('.tangramArea').show();
 					}
 			});
@@ -371,27 +373,28 @@ $game.$gnome = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				if($game.$player.game.firstTime) {
-					$game.$player.game.firstTime = false;
-					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.First, you must find a way<br>to tell me <b>what you brought</b> today<br>and how <b>your future</b> and <b>your past</b><br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: <b>Walk with humility</b><br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and <b>what they contain</b>?<br<Do you see <b>assets</b> or do you see need <br>when you look at <b>partners</b> in the <b>community</b>?<br><b>Expand your view</b><br>and tell me too, <br>who can see it better than you?<br><br>You know <b>how you got here</b>and so do I --<br>can you forget it? Should you try?<br>How do <b>peoplefrom here</b> and there<br>build a dream that they <b>both share</b><br>When is a <b>goal</b>obtainable? <br><b>Responsibility</b> / <b>maintainable</b>? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, <b>who should own it</b>?<br>Will you grow connections,<br>become a <b>leader</b> by <b>reflection</b>,<br> be inspired, plant roots, or <b>discover direction?</b><br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will <b>your mark</b> be great or small?<br>Will we be glad you came at all?</p>');
+					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the enigma civica. The more you understand, the more powerful your seeds will become. Behold!');
+					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility<br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got hereand so do I --<br>can you forget it? Should you try?<br>How do peoplefrom here and there<br>build a dream that they both share<br>When is a goalobtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
-					$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+					$('.gnomeArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
 					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 				}
 			}
 			else if(_currentSlide === 1) {
 				if($game.$player.game.gnomeState > 1) {
-					$('.gnomeArea .message').text('Here is the outline to view again.');
+					$('.gnomeArea .message').text('Here is the enigma to view again.');
 				}
 				else {
-					$('.gnomeArea .message').text('take this tangram outline, you can view it in the inventory.');
+					$('.gnomeArea .message').text('This puzzle represents the next piece of the enigma. You can view it at anytime in your inventory.');
 					
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
 					
 					//update gnomeState
-					$game.$player.game.gnomeState = 2;
-					$game.$player.checkGnomeState();
+					if($game.$player.game.currentLevel > 0) {
+						$game.$player.game.gnomeState = 2;
+						$game.$player.checkGnomeState();
+					}
 				}
 				
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.game.currentLevel+ '.png';
@@ -400,17 +403,20 @@ $game.$gnome = {
 			}
 			else {
 				if($game.$player.game.currentLevel === 0) {
-					$('.gnomeArea .message').text('To answer it, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.');
-					$('.gnomeContent').html('<p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the enigma civica.</p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Graywood Forest, to the northwest of here. Good luck!</p>');	
+					$game.$player.game.firstTime = false;
+					$game.$player.game.gnomeState = 2;
+					$game.$player.checkGnomeState();
+					$('.gnomeArea .message').text('The enigma has four parts, each with a verse and a puzzle. You can view the enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
+					$('.gnomeContent').html('<p>To answer the enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.</p><p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the enigma civica.</p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Graywood Forest, to the northwest of here. Good luck!</p>');
 				}
 			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
+			// if(_currentSlide === 0) {
+			// 	$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+			// 	$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
 			if(_currentSlide === 0) {
-				$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-				$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
-			} else if(_currentSlide === 1) {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
 					$game.$player.inventoryShowing = false;
@@ -418,12 +424,14 @@ $game.$gnome = {
 					$('.inventoryItem').attr('draggable','true');
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
-				$('.gnomeArea .message').text('Drag the pieces from the inventory to solve the puzzle.');
+				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the enigma.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + 'img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img class="trash" src="' + imgPath2 + '">';
+				$('.gnomeContent').html(newHTML);
 			}
 			//right/wrong screen
-			else if(_currentSlide === 2) {
+			else if(_currentSlide === 1) {
 				$('.gnomeArea').animate({
 						'height':'450px'
 				});
@@ -431,11 +439,12 @@ $game.$gnome = {
 					$game.$player.inventoryShowing = false;
 					$('.inventory button').removeClass('hideButton');
 					$('.inventoryItem').remove();
-					
 				});
 
-				$('.gnomeArea .message').text('Well done fella!  Here is a mega seed.');
-				var newHTML2 = '<p class="riddleText">Mega seed:</p>';
+				var postTangramTalk = $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.response;
+				console.log('posttangramtalk', postTangramTalk);
+				$('.gnomeArea .message').text(postTangramTalk);
+				var newHTML2 = '<p>You got some mega seeds! And earned a promotion: ' + $game.playerRanks[$game.$player.game.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {
@@ -445,7 +454,6 @@ $game.$gnome = {
 				$('.gnomeContent').html(inputBox);
 				$game.changeStatus('this will go in your profile');
 			}
-			
 		}
 	},
 
@@ -543,15 +551,15 @@ $game.$gnome = {
 				_numMegaSeeds -= 1;
 				message = 'at least TRY to solve it...';
 			}
-			else if(allTangrams.length < aLength) {
-				correct= false;
-				_numMegaSeeds -=1;
-				message = 'you are missing some';
-			}
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'at least one is incorrect';
+			}
+			else if(allTangrams.length < aLength) {
+				correct= false;
+				_numMegaSeeds -=1;
+				message = 'you are missing some';
 			}
 			else if(nudge) {
 				correct= false;

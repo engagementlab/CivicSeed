@@ -843,10 +843,13 @@ $game.$player = {
 
 	fillInventory: function() {
 		//on first load, fill inventory from DB
-		var l = $game.$player.game.inventory.length;
+		var l = $game.$player.game.inventory.length,
+			cur = 0;
 		_inventoryBtnSel.text(l);
-		while(--l > -1) {
-			$game.$player.addToInventory($game.$player.game.inventory[l]);
+
+		while(cur < l) {
+			$game.$player.addToInventory($game.$player.game.inventory[cur]);
+			cur++;
 		}
 
 		//if the player has gotten the riddle, put the tangram in the inventory + bind actions

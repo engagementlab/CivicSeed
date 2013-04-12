@@ -393,13 +393,17 @@ $game.$audio = {
 	},
 
 	fadeLow: function() {
-		_soundtracks[_currentTrack].volume(0.05);
-		_environmentLoopFx.volume(0.03);
+		if(!$game.$audio.isMute) {
+			_soundtracks[_currentTrack].volume(0.05);
+			_environmentLoopFx.volume(0.03);
+		}
 	},
 
 	fadeHi: function() {
-		_soundtracks[_currentTrack].volume(0.2);
-		_environmentLoopFx.volume(0.2);
+		if($game.$audio.isMute) {
+			_soundtracks[_currentTrack].volume(0.2);
+			_environmentLoopFx.volume(0.2);
+		}
 	}
 
 };

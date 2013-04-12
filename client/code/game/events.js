@@ -41,7 +41,7 @@ $(function() {
 		if(data.id != $game.$player.id) {
 			$game.$others.remove(data.id);
 		}
-		_activePlayers.text(num);
+		_activePlayers.text(data.num);
 	});
 
 	ss.event.on('ss-playerMoved', function(data, chan) {
@@ -106,7 +106,7 @@ $(function() {
 				return;
 			}
 		}
-		$game.leaderboard = board;
+		$game.leaderboard = data.board;
 		if(data.name) {
 			$game.temporaryStatus(data.name + ' is now a top seeder');
 		}
@@ -123,7 +123,8 @@ $(function() {
 
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(data, chan) {
-		if($game.$player.id === data.id) {
+		console.log('seed pledged to someone', data);
+		if($game.$player.id === data) {
 			$game.temporaryStatus('a peer liked your answer, +1 seed');
 			$game.$player.game.seeds.riddle += 1;
 			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
@@ -180,12 +181,13 @@ $(function() {
 		$game.$player.startSeeding(3);
 	});
 
-	_w.on('keypress', (function (key) {
-		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
-		if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
-				//$game.$player.dropSeed({mouse:false});
-		}
-	}));
+	//disbaling WASD for now until debugging done.
+	// _w.on('keypress', (function (key) {
+	// 	//$game.$player.seedMode = $game.$player.seedMode ? false : true;
+	// 	if(!$game.inTransit && !$game.$player.isMoving && key.which === 115 && $game.ready) {
+	// 			//$game.$player.dropSeed({mouse:false});
+	// 	}
+	// }));
 	//change cursor on mouse move
 	_gameboard.on('mousemove', function(m) {
 		if( !$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && $game.running){
@@ -378,17 +380,17 @@ $(function() {
 		var info = $(this).attr('title');
 		$(this).tooltip('show');
 	});
-	_w.on('keydown',function(e) {
-		var goAhead = startNewAction();
-		if(!$('#chatText').is(':focus')) {
-			if(goAhead) {
-				$game.$mouse.updateKey(e.which);
-			}
-		}
-	});
-	$(window).on('keyup',function(e) {
-		$game.$player.keyWalking = false;
-	});
+	// _w.on('keydown',function(e) {
+	// 	var goAhead = startNewAction();
+	// 	if(!$('#chatText').is(':focus')) {
+	// 		if(goAhead) {
+	// 			$game.$mouse.updateKey(e.which);
+	// 		}
+	// 	}
+	// });
+	// $(window).on('keyup',function(e) {
+	// 	$game.$player.keyWalking = false;
+	// });
 
 	$('body').on('click', '.publicButton', function() {
 		$game.$player.makePublic($(this).attr('data-npc'));

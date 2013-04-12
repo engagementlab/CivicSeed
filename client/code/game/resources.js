@@ -93,10 +93,12 @@ $game.$resources = {
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
 
+		console.log('load resource (who,index,now): ', who,index, now);
+		console.log('current resource:', _curResource);
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.game.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
-			console.log(url);
+			console.log('article url', url);
 			_resourceStageSel.load(url,function() {
 				_numSlides = $('.resourceStage .pages > section').length;
 				if(now) {
@@ -248,10 +250,13 @@ $game.$resources = {
 					// _resourceMessageSel.text(_speak);
 					var inputBox = null;
 					if(_questionType === 'multiple') {
-						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[0] + '"> ' + _curResource.possibleAnswers[0] + '</input>' +
-									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[1] + '"> ' + _curResource.possibleAnswers[1] + '</input>' +
-									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[2] + '"> ' + _curResource.possibleAnswers[2] + '</input>' +
-									'<br><input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[3] + '"> ' + _curResource.possibleAnswers[3] + '</form';
+						var numOptions = _curResource.possibleAnswers.length;
+						inputBox = '<form>';
+						for(var i =0; i<numOptions; i++) {
+						 inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
+						}
+						
+						inputBox += '</form>';
 					}
 					else if(_questionType === 'open') {
 						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';

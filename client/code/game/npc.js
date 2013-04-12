@@ -190,7 +190,11 @@ $game.$npc = {
 
 	show: function() {
 		//if there is no other stuff on screen, then show dialog
-		if(!$game.$resources.isShowing && !$game.$npc.isChat) {
+		if($game.$player.game.firstTime) {
+			$game.$npc.isChat = true;
+			$game.$npc.showSmalltalk(true);
+		}
+		else if(!$game.$resources.isShowing && !$game.$npc.isChat) {
 			$game.$audio.playTriggerFx('npcBubble');
 			if(_resourceOnDeck) {
 				//check if visiting this npc depends on other
@@ -251,23 +255,28 @@ $game.$npc = {
 		});
 	},
 
-	showSmalltalk: function() {
+	showSmalltalk: function(firstTime) {
 		//they have a resource with just one random response
-		if(_curNpc.isHolding) {
-			_speak = 'It\'s too gray too talk, maybe stop by when the world is more colorful';
-		}
-		//they have a response for past, present, future
-		else {
-			if($game.$player.game.currentLevel === _curNpc.level) {
-				_speak = _curNpc.dialog.smalltalk[1];
+		if(firstTime) {
+			_speak = 'You should really see the botanist before exploring the world.';
+		} else {
+			if(_curNpc.isHolding) {
+				_speak = 'It\'s too gray too talk, maybe stop by when the world is more colorful';
 			}
-			else if($game.$player.game.currentLevel < _curNpc.level) {
-				_speak = _curNpc.dialog.smalltalk[2];
-			}
+			//they have a response for past, present, future
 			else {
-				_speak = _curNpc.dialog.smalltalk[0];
+				if($game.$player.game.currentLevel === _curNpc.level) {
+					_speak = _curNpc.dialog.smalltalk[1];
+				}
+				else if($game.$player.game.currentLevel < _curNpc.level) {
+					_speak = _curNpc.dialog.smalltalk[2];
+				}
+				else {
+					_speak = _curNpc.dialog.smalltalk[0];
+				}
 			}
 		}
+		
 		$('.speechBubble p').addClass('fitBubble');
 		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
