@@ -22,10 +22,6 @@ exports.actions = function(req, res, ss) {
 			console.log('**** authenticate ******');
 			UserModel.findOne({ email: email } , function(err, user) {
 				if(user) {
-					// var hashedPassword = user.password;
-					// if(hash.verify(pass, hashedPassword)){
-					//     return callback(null,user);
-					// }
 					if(user.password === password) {
 						req.session.setUserId(user.id);
 						req.session.firstName = user.firstName;
@@ -73,7 +69,6 @@ exports.actions = function(req, res, ss) {
 		getUserSession: function() {
 			console.log('**** getUserSession ******');
 			if(req.session.userId) {
-				console.log('session exists:', req.session);
 				res({
 					id: req.session.userId,
 					firstName: req.session.firstName,
@@ -89,6 +84,20 @@ exports.actions = function(req, res, ss) {
 				console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
+		},
+
+		checkGameSession: function() {
+			UserModel
+				.findById(req.session.userId, function(err,result) {
+					if(!result.isPlaying) {
+						result.isPlaying = true;
+						result.save(function(err,okay) {
+							res(err,false);
+						});
+					} else {
+						res(err,result.isPlaying);
+					}
+				});
 		},
 
 		remindMeMyPassword: function(email) {
@@ -119,7 +128,9 @@ exports.actions = function(req, res, ss) {
 					});
 					user.save(function(err,suc) {
 						if(!err && suc) {
-							res(true);
+							res({firstName: first, lastName: last});
+							req.session.firstName = first;
+							req.session.lastName = last;
 						}
 						else {
 							res(false);
@@ -141,23 +152,6 @@ exports.actions = function(req, res, ss) {
 					});
 					user.save(function(err,suc) {
 						res(true);
-					});
-				}
-			});
-		},
-
-		setPlaying: function(id) {
-			UserModel.findById(id, function(err, user) {
-				if(err) {
-					res(false);
-				} else {
-					user.isPlaying = true;
-					user.save(function(err,suc) {
-						if(err) {
-							res(false);
-						} else {
-							res(true);
-						}
 					});
 				}
 			});

@@ -38,7 +38,8 @@ exports.actions = function(req, res, ss) {
 					numActivePlayers: 0
 				};
 			}
-			console.log(req.session.game.instanceName);
+
+			console.log('initializing ', playerInfo.name);
 			games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
 			games[req.session.game.instanceName].numActivePlayers += 1;
 			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
@@ -174,13 +175,11 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getGameInfo: function() {
-			console.log(req.session.game.instanceName);
 			gameModel
 				.where('instanceName').equals(req.session.game.instanceName)
 				.find(function (err, result) {
-					console.log(err,result);
 					if(err) {
-						console.log('game cannot start');
+						console.log(err);
 					}
 					else{
 						res(result[0]);
@@ -195,7 +194,7 @@ exports.actions = function(req, res, ss) {
 				.select('game.colorMap')
 				.find(function(err, users) {
 					if(err) {
-						console.log('issue');
+						console.log(err);
 					} else {
 						for(var i = 0; i < users.length; i +=1) {
 							var map = users[i].game.colorMap;
@@ -244,13 +243,10 @@ exports.actions = function(req, res, ss) {
 
 				} else if(user) {
 					user.game.seeds.riddle += 1;
-					user.save(function (y) {
-						res(y);
+					user.save(function (err,suc) {
+						res(suc);
 						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', id);
 					});
-				} else {
-					// MIGHT NEED TO DO THIS HERE STILL???
-					// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
 				}
 			});
 		}
@@ -269,9 +265,9 @@ colorHelpers = {
 
 		var mod = function() {
 			//make sure they are the same tile before we modify any colors
-			console.log(curIndex, bombIndex);
-			console.log('old', oldTiles[curIndex]);
-			console.log('bombed', bombed[bombIndex]);
+			// console.log(curIndex, bombIndex);
+			// console.log('old', oldTiles[curIndex]);
+			// console.log('bombed', bombed[bombIndex]);
 			if(oldTiles[curIndex].x === bombed[bombIndex].x && oldTiles[curIndex].y === bombed[bombIndex].y) {
 				colorHelpers.modifyOneTile(oldTiles[curIndex], bombed[bombIndex], function(newTile, newBomb) {
 					//increase the current spot in the tiles from db regardless

@@ -45,6 +45,7 @@ exports.actions = function(req, res, ss) {
 					user.profileSetup = false;
 					user.profileUnlocked = false;
 					user.gameStarted = false;
+					user.isPlaying = false;
 					user.game = {
 						instanceName: instanceName,
 						currentLevel: 0,
@@ -137,8 +138,8 @@ exports.actions = function(req, res, ss) {
 						newGame.bossModeUnlocked = false;
 						newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'];
 						newGame.leaderboard = [];
-						newGame.levelNames = ['Level 1: Who are you?', 'Level 2: Where are you?', 'Level 3: When are you?', 'Level 4: Why are you?', 'Level 5 = What are you?'];
-						newGame.resourceCount = [10, 10, 10, 10];
+						newGame.levelNames= ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'];
+						newGame.resourceCount = [10, 14, 9, 10];
 						newGame.instanceName = name;
 						newGame.resourceResponses = {};
 

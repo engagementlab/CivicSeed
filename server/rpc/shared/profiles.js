@@ -29,7 +29,6 @@ exports.actions = function(req, res, ss) {
 						colorMap: user.game.colorMap,
 						email: user.email
 					};
-					console.log(profileInfo.colorMap);
 					res(profileInfo);
 				}
 				else {

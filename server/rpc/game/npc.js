@@ -82,7 +82,6 @@ var self = exports.actions = function(req, res, ss) {
 			GameModel.where('instanceName').equals(instance)
 				.select('resourceResponses')
 				.find(function (err, responses) {
-					console.log(responses);
 				if(err) {
 					console.error('  Could not find game', err);
 				} else if(responses) {
@@ -102,7 +101,6 @@ var self = exports.actions = function(req, res, ss) {
 							found = false,
 							addThis = null;
 						while(!found) {
-							console.log(all[a]);
 							if(all[a].npc == data.npcId && all[a].id == data.playerId) {
 								all[a].madePublic = true;
 								found = true;
