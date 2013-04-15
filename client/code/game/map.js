@@ -62,11 +62,11 @@ $game.$map = {
 				curTile = null;
 			if(loc) {
 				//if there IS a color
-				console.log(bombed[b]);
+				//console.log(bombed[b]);
 				curTile = $game.currentTiles[loc.x][loc.y];
 				curTile.color = bombed[b].color;
 				curTile.curColor = bombed[b].curColor;
-				console.log(curTile);
+				//console.log(curTile);
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
 
@@ -85,10 +85,11 @@ $game.$map = {
 
 	createCollectiveImage: function() {
 		ss.rpc('game.player.getAllImages', function(data) {
+			console.log(data.length);
 			var index = data.length;
 			//go thru each image create a new image using canvas?
 			while(--index > -1) {
-				$('.colorMapGroup').append('<img src="'+ data[index] + '">');
+				$('.colorMapEveryone').append('<img src="'+ data[index] + '">');
 			}
 		});
 	}

@@ -11,7 +11,7 @@ var _coords = [
 		{x: 6, y: 20, d: -1, target: -3},
 		{x: 133, y: 31, d: 1, target: 145},
 		{x: 135, y: 124, d: 1, target: 145},
-		{x: 8, y: 86, d: -1, target: -3},
+		{x: 8, y: 83, d: -1, target: -3},
 		{x: 0, y: 0, d: 0, target: 0},
 		{x: 0, y: 0, d: 0, target: 0}
 		],

@@ -374,7 +374,7 @@ $game.$gnome = {
 			if(_currentSlide === 0) {
 				if($game.$player.game.firstTime) {
 					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the enigma civica. The more you understand, the more powerful your seeds will become. Behold!');
-					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility<br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got hereand so do I --<br>can you forget it? Should you try?<br>How do peoplefrom here and there<br>build a dream that they both share<br>When is a goalobtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
+					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility<br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I --<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
 					$('.gnomeArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
 					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
@@ -619,25 +619,28 @@ $game.$gnome = {
 			.attr('height','380px');
 
 		_drag = d3.behavior.drag()
-    		.origin(Object)
-    		.on('drag', $game.$gnome.dragMove)
-    		.on('dragstart', $game.$gnome.dragMoveStart)
-    		.on('dragend', $game.$gnome.dropMove);
+			.origin(Object)
+			.on('drag', $game.$gnome.dragMove)
+			.on('dragstart', $game.$gnome.dragMoveStart)
+			.on('dragend', $game.$gnome.dropMove);
 	},
 
 	dragStart: function(e) {
 		if($game.$gnome.isSolving) {
+
+			$('.tangramArea')
+				.unbind('dragover')
+				.unbind('drop');
+
 			var id = e.data.npc,
 				dt = e.originalEvent.dataTransfer,
 				select = '.r' + id;
-			
+
 			dt.setData('text/plain', id);
 			//set drag over shit
 			$('.tangramArea')
 				.bind('dragover',$game.$gnome.dragOver)
 				.bind('drop', $game.$gnome.drop);
-
-			
 		}
 	},
 	dragEnd: function(e) {
@@ -663,13 +666,10 @@ $game.$gnome = {
 			path = shape.path,
 			fill = _svgFills[shape.fill];
 
-			console.log(shape.fill, fill);
-			
-
 		$('.r' + npc)
 			.css('opacity','.4')
 			.attr('draggable', 'false');
-		
+
 		_new = _svg.append('path')
 			.attr('class',selector)
 			.data([{x:x , y: y, id: npc, color: fill}])
@@ -683,7 +683,7 @@ $game.$gnome = {
 		$('.tangramArea')
 			.unbind('dragover')
 			.unbind('drop');
-	
+
 		//clear data from drag bind
 		e.originalEvent.dataTransfer.clearData();
 		return false;
@@ -696,7 +696,7 @@ $game.$gnome = {
 
 		_dragOffX = d3.mouse(this)[0],
 		_dragOffY = d3.mouse(this)[1],
-	
+
 		d3.select('.br' + d.id)
 			.attr('stroke-width', 3);
 	},

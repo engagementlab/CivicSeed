@@ -242,12 +242,17 @@ $game.$npc = {
 		$('.speechBubble button').addClass('hideButton');
 		var promptNum = $game.$player.getPrompt(_curNpc.id);
 		_speak = _curNpc.dialog.prompts[promptNum];
+		if(promptNum === 2) {
+			_speak += ' Want to view again?';
+		}
 		$('.speechBubble .speakerName').text(_who+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
 		$('.speechBubble').fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
-				$game.$resources.showResource(promptNum);
+				var revisit = promptNum < 2 ? false : true;
+				$game.$resources.loadResource(_who, _curNpc.id, revisit);
+				//$game.$resources.showResource(promptNum);
 			}));
 			$(".speechBubble .noButton").bind("click", (function () {
 				$game.$npc.hideChat();
@@ -287,6 +292,7 @@ $game.$npc = {
 	},
 
 	selectNpc: function(i) {
+		$game.$npc.hideChat();
 		_index = i;
 		var stringId = String(_index);
 		_curNpc = _allNpcs[stringId];
@@ -304,14 +310,12 @@ $game.$npc = {
 		}
 		//if it is in player's level or previous
 		else if($game.$player.game.currentLevel >= _curNpc.level) {
-			//here we will tell the resoure object to clear old stuff,
-			//and tell it what to load (and who it corresponds to)
-			$game.$resources.loadResource(_who, _curNpc.id, false);
 			_resourceOnDeck = true;
 		}
 		else {
 			_resourceOnDeck = false;
 		}
+		$game.$player.npcOnDeck = true;
 	},
 
 	getNpcLevel: function(id) {

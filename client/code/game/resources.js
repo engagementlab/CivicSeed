@@ -81,7 +81,7 @@ $game.$resources = {
 		$game.$resources.isShowing = true;
 	},
 
-	loadResource: function(who, index, now) {
+	loadResource: function(who, index, revisit) {
 
 		_who = who,
 		_answered = false,
@@ -93,26 +93,23 @@ $game.$resources = {
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
 
-		console.log('load resource (who,index,now): ', who,index, now);
+		console.log('load resource (who,index,now): ', who,index, revisit);
 		console.log('current resource:', _curResource);
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.game.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
-			console.log('article url', url);
-			_resourceStageSel.load(url,function() {
+			_resourceStageSel.empty().load(url,function() {
+				console.log('ready: ', url);
 				_numSlides = $('.resourceStage .pages > section').length;
-				if(now) {
-					$game.$resources.showResource(2);
-				}
+				$game.$resources.showResource(revisit);
 			});
 		}
 	},
 
-	showResource: function(num) {
-		_revisiting = false;
+	showResource: function(revisit) {
+		_revisiting = revisit;
 		//if they already got it right, then don't have answer form, but show answer
-		if(num === 2) {
-			_revisiting = true;
+		if(_revisiting) {
 			_correctAnswer = false;
 		} else {
 			var npcLevel = $game.$npc.getNpcLevel(),
@@ -208,6 +205,7 @@ $game.$resources = {
 		_speakerNameSel.empty();
 		_resourceMessageSel.empty();
 		_resourceContentBodySel.empty().hide();
+		_resourceContentSel.empty();
 		//if they answered the question...
 		if(_answered) {
 			//if they got it right, give them a tangram

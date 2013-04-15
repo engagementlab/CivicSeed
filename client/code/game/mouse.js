@@ -100,7 +100,6 @@ $game.$mouse = {
 							//BOTTOM LEFT corner of the npc
 							//(consistent so we leave that open in tilemap)
 							//also make sure it is not a transition tile
-							$game.$player.npcOnDeck = true;
 							$game.$player.beginMove($game.$mouse.curX-2,$game.$mouse.curY+1);
 						}
 

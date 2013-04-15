@@ -397,6 +397,8 @@ $game.$player = {
 				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
 					$game.$audio.update(masterEndX, masterEndY);
 				});
+			} else {
+				$game.$player.npcOnDeck = false;
 			}
 		});
 			
@@ -992,6 +994,7 @@ $game.$player = {
 		$game.$player.game.position.x = _info.x,
 		$game.$player.game.position.y = _info.y;
 		$game.$player.game.colorMap = $game.$map.saveImage();
+		sessionStorage.setItem('isPlaying', false);
 		ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
 			if(res) {
 				var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';

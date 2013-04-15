@@ -55,7 +55,6 @@ exports.$game = {
 
 	showingProgress : false,
 
-	levelQuestion: null,
 	seedsDropped: 0,
 	seedsDroppedGoal: 0,
 	tilesColored: 0,
@@ -65,7 +64,8 @@ exports.$game = {
 	percentString: null,
 	numPlayers: 0,
 	badWords: ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'],
-	levelNames: [],
+	levelNames: ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
+	levelQuestion: ['What motivates you to volunteer? Your answer will become a permanent part of your Civic Resume, so think carefully!', 'Please describe your past experience in volunteer service and civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!',' What What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
 	resourceCount: [],
 	displayTimeout: null,
 	prevMessage: 'Civic Seed',
@@ -102,8 +102,6 @@ exports.$game = {
 		//get the global game information stats
 		ss.rpc('game.player.getGameInfo', function(response) {
 			//regular game mode
-			$game.levelQuestion = response.levelQuestion;
-			$game.levelNames = response.levelNames;
 			$game.resourceCount = response.resourceCount;
 			$game.seedsDropped = response.seedsDropped;
 			$game.tilesColored = response.tilesColored;
