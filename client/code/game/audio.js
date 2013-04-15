@@ -128,6 +128,7 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
+		console.log(mp3);
 		_triggerFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -165,6 +166,7 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
+		console.log(mp3);
 		_environmentLoopFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -195,6 +197,7 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
+		console.log(mp3);
 		_environmentOnceFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -220,8 +223,8 @@ $game.$audio = {
 			onend: function() {
 			},
 			onload: function() {
-				$game.$audio.ready = true;
 				console.log('environment once fx loaded');
+				$game.$audio.ready = true;
 			}
 		});
 	},
