@@ -180,12 +180,12 @@ $game.$audio = {
 			volume: 0.1,
 			onload: function() {
 				console.log('environment loop fx loaded');
-				$game.$audio.loadEnvironmenOnceFx();
+				$game.$audio.loadEnvironmentOnceFx();
 			}
 		});
 	},
 
-	loadEnvironmenOnceFx: function() {
+	loadEnvironmentOnceFx: function() {
 		var mp3 = _musicPath + 'environmentOnce.mp3?VERSION=',
 			ogg = _musicPath +'environmentOnce.ogg?VERSION=';
 		if(_extension) {
