@@ -48,8 +48,6 @@ $game.$audio = {
 
 	init: function(pos) {
 		if(CivicSeed.ENVIRONMENT !== 'development') {
-			//temp hack cuz its not loading properly
-			//_musicPath = '/audio/music/';
 			_extension = CivicSeed.version;
 		}
 		var firstTrack = $game.$audio.whichTrack(pos.x, pos.y);
@@ -128,7 +126,6 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
-		console.log(mp3);
 		_triggerFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -157,8 +154,8 @@ $game.$audio = {
 	},
 
 	loadEnvironmentLoopFx: function() {
-		var mp3 = _musicPath + 'environmentLoop.mp3?VERSION=',
-			ogg = _musicPath +'environmentLoop.ogg?VERSION=';
+		var mp3 = _musicPath + 'environmentloop.mp3?VERSION=',
+			ogg = _musicPath +'environmentloop.ogg?VERSION=';
 		if(_extension) {
 			mp3 += _extension;
 			ogg += _extension;
@@ -166,7 +163,6 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
-		console.log(mp3);
 		_environmentLoopFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
@@ -188,8 +184,8 @@ $game.$audio = {
 	},
 
 	loadEnvironmentOnceFx: function() {
-		var mp3 = _musicPath + 'environmentOnce.mp3?VERSION=',
-			ogg = _musicPath +'environmentOnce.ogg?VERSION=';
+		var mp3 = _musicPath + 'environmentonce.mp3?VERSION=',
+			ogg = _musicPath +'environmentonce.ogg?VERSION=';
 		if(_extension) {
 			mp3 += _extension;
 			ogg += _extension;
@@ -197,7 +193,6 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
-		console.log(mp3);
 		_environmentOnceFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
