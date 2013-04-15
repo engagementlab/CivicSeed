@@ -74,7 +74,7 @@ $game.$resources = {
 	},
 
 	beginResource: function(e) {
-		console.log(e);
+		//console.log(e);
 		var nombre = $game.$npc.getName(e.data.npc);
 		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
@@ -99,7 +99,7 @@ $game.$resources = {
 		if(npcLevel <= $game.$player.game.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
 			_resourceStageSel.empty().load(url,function() {
-				console.log('ready: ', url);
+				//console.log('ready: ', url);
 				_numSlides = $('.resourceStage .pages > section').length;
 				$game.$resources.showResource(revisit);
 			});

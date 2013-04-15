@@ -442,7 +442,7 @@ $game.$gnome = {
 				});
 
 				var postTangramTalk = $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.response;
-				console.log('posttangramtalk', postTangramTalk);
+				//console.log('posttangramtalk', postTangramTalk);
 				$('.gnomeArea .message').text(postTangramTalk);
 				var newHTML2 = '<p>You got some mega seeds! And earned a promotion: ' + $game.playerRanks[$game.$player.game.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
 				$('.gnomeContent').html(newHTML2);
@@ -748,7 +748,7 @@ $game.$gnome = {
 			.attr('transform',trans);
 		}
 		
-		console.log('drop: ',d.id,x,y,mX,mY);
+		//console.log('drop: ',d.id,x,y,mX,mY);
 	},
 
 	snapTo: function(num) {

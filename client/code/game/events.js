@@ -123,7 +123,6 @@ $(function() {
 
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(data, chan) {
-		console.log('seed pledged to someone', data);
 		if($game.$player.id === data) {
 			$game.temporaryStatus('a peer liked your answer, +1 seed');
 			$game.$player.game.seeds.riddle += 1;
@@ -212,7 +211,7 @@ $(function() {
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
-				debug: true
+				debug: false
 			};
 			$game.$mouse.updateMouse(mInfo,true);
 		}

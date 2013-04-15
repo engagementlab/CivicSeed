@@ -85,7 +85,7 @@ $game.$map = {
 
 	createCollectiveImage: function() {
 		ss.rpc('game.player.getAllImages', function(data) {
-			console.log(data.length);
+			//console.log(data.length);
 			var index = data.length;
 			//go thru each image create a new image using canvas?
 			while(--index > -1) {
