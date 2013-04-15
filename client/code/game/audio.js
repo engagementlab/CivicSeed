@@ -49,7 +49,7 @@ $game.$audio = {
 	init: function(pos) {
 		if(CivicSeed.ENVIRONMENT !== 'development') {
 			//temp hack cuz its not loading properly
-			_musicPath = '/audio/music/';
+			//_musicPath = '/audio/music/';
 			_extension = CivicSeed.version;
 		}
 		var firstTrack = $game.$audio.whichTrack(pos.x, pos.y);
