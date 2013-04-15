@@ -48,6 +48,8 @@ $game.$audio = {
 
 	init: function(pos) {
 		if(CivicSeed.ENVIRONMENT !== 'development') {
+			//temp hack cuz its not loading properly
+			_musicPath = '/audio/music/';
 			_extension = CivicSeed.version;
 		}
 		var firstTrack = $game.$audio.whichTrack(pos.x, pos.y);
@@ -117,7 +119,6 @@ $game.$audio = {
 	},
 
 	loadTriggerFx: function() {
-		console.log('loading triggers');
 		var mp3 = _musicPath + 'triggers.mp3?VERSION=',
 			ogg = _musicPath +'triggers.ogg?VERSION=';
 		if(_extension) {
@@ -127,7 +128,6 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
-		console.log(mp3);
 		_triggerFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
