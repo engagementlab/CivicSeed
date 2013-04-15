@@ -128,9 +128,10 @@ exports.actions = function(req, res, ss) {
 					});
 					user.save(function(err,suc) {
 						if(!err && suc) {
-							res({firstName: first, lastName: last});
 							req.session.firstName = first;
 							req.session.lastName = last;
+							req.session.save();
+							res({firstName: first, lastName: last});
 						}
 						else {
 							res(false);

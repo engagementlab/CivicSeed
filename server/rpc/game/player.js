@@ -226,6 +226,7 @@ exports.actions = function(req, res, ss) {
 				if(!err && user) {
 					user.game = info;
 					user.profileUnlocked = true;
+					user.isPlaying = false;
 					user.save(function (y) {
 						var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName;
 						res(url);

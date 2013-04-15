@@ -7,12 +7,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		seedsDroppedGoal: Number,
 		active: Boolean,
 		bossModeUnlocked: Boolean,
-		levelQuestion: [String],
 		leaderboard: [{
 			name: String,
 			count: Number
 		}],
-		levelNames: [String],
 		resourceCount: [Number],
 		instanceName: String,
 		resourceResponses: [{

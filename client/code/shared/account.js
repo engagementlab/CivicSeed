@@ -32,19 +32,25 @@
 			return false;
 		});
 		$body.on('submit', '#changeInfoForm', function() {
-			var first = document.getElementById('firstname').value,
-				last = document.getElementById('lastname').value;
+			var first = document.getElementById('firstname').value.trim(),
+				last = document.getElementById('lastname').value.trim();
 
-			ss.rpc('shared.account.changeInfo', first, last, function(response) {
-				if(response) {
-					sessionStorage.setItem('userFirstName', response.firstName);
-					sessionStorage.setItem('userLastName', response.lastName);
-					location.href = '/introduction';
-				}
-				else {
-					$('#message').addClass('error').text('There was an error. Please panic.');
-				}
-			});
+			var firstCheck = /^[a-zA-Z]*$/.test(first),
+				secondCheck = /^[a-zA-Z]*$/.test(last);
+			if(firstCheck && secondCheck) {
+				ss.rpc('shared.account.changeInfo', first, last, function(response) {
+					if(response) {
+						sessionStorage.setItem('userFirstName', response.firstName);
+						sessionStorage.setItem('userLastName', response.lastName);
+						location.href = '/introduction';
+					}
+					else {
+						$('#message').addClass('error').text('There was an error. Please panic.');
+					}
+				});
+			} else {
+				alert('only letters and no spaces please.');
+			}
 			return false;
 		});
 		$body.on('click', '#startGame', function() {
