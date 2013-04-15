@@ -86,8 +86,16 @@ $game.$audio = {
 
 	loadOtherTrack: function(track, num) {
 		if(track !== num) {
-			var mp3 = _musicPath + track + '.mp3?VERSION=' + Math.round(Math.random(1) * 1000000000),
-				ogg = _musicPath + track + '.ogg?VERSION=' + Math.round(Math.random(1) * 1000000000);
+			var mp3 = _musicPath + track + '.mp3?VERSION=',
+			ogg = _musicPath + track + '.ogg?VERSION=';
+
+			if(_extension) {
+				mp3 += _extension;
+				ogg += _extension;
+			} else {
+				mp3 += Math.round(Math.random(1) * 1000000000),
+				ogg += Math.round(Math.random(1) * 1000000000);
+			}
 			_soundtracks[track] = new Howl({
 				urls: [mp3, ogg],
 				autoplay: false,
@@ -109,6 +117,7 @@ $game.$audio = {
 	},
 
 	loadTriggerFx: function() {
+		console.log('loading triggers');
 		var mp3 = _musicPath + 'triggers.mp3?VERSION=',
 			ogg = _musicPath +'triggers.ogg?VERSION=';
 		if(_extension) {
@@ -118,6 +127,7 @@ $game.$audio = {
 			mp3 += Math.round(Math.random(1) * 1000000000),
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
+		console.log(mp3);
 		_triggerFx = new Howl({
 			urls: [mp3, ogg],
 			sprite: {
