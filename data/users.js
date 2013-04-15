@@ -102,7 +102,7 @@ module.exports.global = [{
 	email: 't',
 	role: 'actor',
 	gameStarted: true,
-	profileSetup: true,
+	profileSetup: false,
 	profileUnlocked: false,
 	isPlaying: false,
 	game: {

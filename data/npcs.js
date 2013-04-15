@@ -34,8 +34,8 @@ module.exports.global = [{
 		feedbackWrong: 'Hoo...boy. That\'s not right.',
 		question: 'Imagine that you\'ve volunteered to help out as a soup kitchen by organizing donations, performing outreach, and preparing food for people in need. Would this be an example of...?',
 		questionType: 'multiple',
-		possibleAnswers: ['upstream-oriented service', 'downstream-oriented service', 'noble futility', 'none of these'],
-		answer: 'downstream-oriented service',
+		possibleAnswers: ['A) upstream-oriented service', 'B) downstream-oriented service', 'C) noble futility', 'D) none of these'],
+		answer: 'B) downstream-oriented service',
 		shape: {
 			path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
 			fill: 'blue'
@@ -96,7 +96,7 @@ module.exports.global = [{
 		tagline: 'Power and Privilege',
 		feedbackRight: 'You are SO right.',
 		feedbackWrong: 'Are you sure about that? Maybe take another look.',
-		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others, but do so simply to feel good about themselves, or out of a sense of charity, are not approaching service from a productive angle." Why or why not?',
+		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others, but do so simply to feel good about themselves, or out of a sense of charity, are not approaching service from a productive angle."',
 		questionType: 'yesno',
 		answer: 'yes',
 		shape: {
@@ -435,8 +435,8 @@ module.exports.global = [{
 		feedbackWrong: 'That\'s not what we think. Try again, please!',
 		question: 'In an assets-based philosophy, who should identify the challenges (needs) that should be addressed in the community?',
 		questionType: 'multiple',
-		possibleAnswers: ['Volunteers from outside should identify them, because they have a better perspective', 'Needs should be identified by assets within the community', 'Everyone should assess needs and act upon them without deliberation', 'Use a "take-it-as-it-comes" philosophy'],
-		answer: 'Needs should be identified by assets within the community',
+		possibleAnswers: ['A) Volunteers from outside should identify them, because they have a better perspective', 'B) Needs should be identified by assets within the community', 'C) Everyone should assess needs and act upon them without deliberation', 'D) Use a "take-it-as-it-comes" philosophy'],
+		answer: 'B) Needs should be identified by assets within the community',
 		shape: {
 			path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
 			fill: 'lightOrange'
@@ -455,7 +455,7 @@ module.exports.global = [{
 		tagline: 'Give And Take',
 		feedbackRight: 'Insightful response, thanks!',
 		feedbackWrong: '',
-		question: 'Is there a time that you learned something from a community member, whether a child or an elderly resident, an organization leader or member, where you were “providing service’? Please describe',
+		question: 'Is there a time that you learned something from a community member, whether a child or an elderly resident, an organization leader or member, where you were “providing service’? Please describe below.',
 		questionType: 'open',
 		requiredLength: 30,
 		shape: {
@@ -500,7 +500,7 @@ module.exports.global = [{
 	sprite: 42,
 	isHolding: true,
 	dialog: {
-		prompts: ['You\'re the one organizing the resrouces right? I seen types like you before. Coming in and trying to help our community without knowing anything about us. Maybe if you prove you aren\'t just here for glory and fame, and that you do want to help make Calliope a colorful world again, I will give you something that can help.', 'Try again, kid. ', 'My intial judgements about you might have been wrong. Still, I am keeping my eye on you! Don\'t try anything funny!']
+		prompts: ['You\'re the one organizing the resources right? I seen types like you before. Coming in and trying to help our community without knowing anything about us. Maybe if you prove you aren\'t just here for glory and fame, and that you do want to help make Calliope a colorful world again, I will give you something that can help.', 'Try again, kid. ', 'My intial judgements about you might have been wrong. Still, I am keeping my eye on you! Don\'t try anything funny!']
 	},
 	resource: {
 		tagline: 'Who You\'ll Work With',
@@ -508,8 +508,8 @@ module.exports.global = [{
 		feedbackWrong: 'Confused? Check out the resource one more time and try again.',
 		question: 'You will choose to work in one of the three host communities closest to Tufts main campus. What are the three communities?',
 		questionType: 'multiple',
-		possibleAnswers: ['Somerville, Chinatown, and Medford', 'Somerville, Chinatown, and Worcester', 'Somerville, Worcester, and Medford', 'Grafton, Worcester, and Medford'],
-		answer: 'Somerville, Chinatown, and Medford',
+		possibleAnswers: ['A) Somerville, Chinatown, and Medford', 'B) Somerville, Chinatown, and Worcester', 'C) Somerville, Worcester, and Medford', 'D) Grafton, Worcester, and Medford'],
+		answer: 'A) Somerville, Chinatown, and Medford',
 		shape: {
 			path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
 			fill: 'blue'
@@ -662,8 +662,8 @@ module.exports.global = [{
 		feedbackWrong: 'Perhaps you should re-read the resource and try again!',
 		question: 'Which of the following are important aspects of making sure your efforts benefit both yourself and the community?',
 		questionType: 'multiple',
-		possibleAnswers: ['Maintaining a balance between your own learning and the service that you\'re providing', 'Respecting community members as co-educators and partners', 'Learning about the community’s assets as well as its needs', 'Truly addressing a need that the community itself identifies', 'All of These', 'A and B'],
-		answer: 'All of These',
+		possibleAnswers: ['A) Maintaining a balance between your own learning and the service that you\'re providing', 'B) Respecting community members as co-educators and partners', 'C) Learning about the community’s assets as well as its needs', 'D) Truly addressing a need that the community itself identifies', 'E) All of These', 'F) A and B'],
+		answer: 'E) All of These',
 		shape: {
 			path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
 			fill: 'green'
@@ -731,11 +731,11 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'Safety First',
-		feedbackRight: '',
-		feedbackWrong: '',
-		question: '',
-		questionType: 'open',
-		requiredLength: 100,
+		feedbackRight: 'Glad to hear it!',
+		feedbackWrong: 'This is important! Please go back and take another look.',
+		question: 'Do you understand the safety policy of Tufts? If you will be working with people under the age of 17, have you taken the proper precautions and measures?',
+		questionType: 'yesno',
+		answer: 'yes',
 		shape: {
 			path: 'm0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z',
 			fill: 'blue'
@@ -837,8 +837,8 @@ module.exports.global = [{
 		feedbackWrong: 'Not quite. Remember, "An Ounce of Prevetion" and all that.',
 		question: 'When should you begin to think about the sustailabity of your work?',
 		questionType: 'multiple',
-		possibleAnswers: ['When your work commitment is over','During the last few weeks of your commitment','During the first few weeks of your commitment','Before you even begin'],
-		answer: 'Before you even begin',
+		possibleAnswers: ['A) When your work commitment is over','B) During the last few weeks of your commitment','C) During the first few weeks of your commitment','D) Before you even begin'],
+		answer: 'D) Before you even begin',
 		shape: {
 			path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
 			fill: 'orange'
@@ -914,13 +914,12 @@ module.exports.global = [{
 		prompts: ['Are you hear to take my order? Finally! I\'ll have three large black coffees. Oh, it\'s you! I have something for you that might help...', 'I\'ll give you a hint if you give me some COFFEE! Eh, just try again.', 'I know you\'re doing a good job, because most of the color has come back!']
 	},
 	resource: {
-		tagline: 'What You Leave Behind',
-		feedbackRight: 'Excellent!',
+		tagline: 'Leading the Way',
+		feedbackRight: 'That\'s something I can get behind.',
 		feedbackWrong: '',
-		question: 'Evaluation is important for which stakeholders in the process?',
-		questionType: 'multiple',
-		possibleAnswers: ['Community Members', 'The Sponsoring Organizations', 'You', 'All of These', 'A and B'],
-		answer: 'All of These',
+		question: 'Are you interested in developing your capacity to be a leader? Why or why not?',
+		questionType: 'open',
+		requiredLength: 30,
 		shape: {
 			path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
 			fill: 'lightGreen'
@@ -1061,12 +1060,12 @@ module.exports.global = [{
 	},
 	resource: {
 		tagline: 'What You Leave Behind...',
-		feedbackRight: 'Right on!',
-		feedbackWrong: 'Not quite. Remember, "An Ounce of Prevetion" and all that.',
-		question: 'When should you begin to think about the sustailabity of your work?',
+		feedbackRight: 'Perfect',
+		feedbackWrong: 'Close, but think bigger!',
+		question: 'Who benefits from evaluating the impact of your work?',
 		questionType: 'multiple',
-		possibleAnswers: ['When your work commitment is over','During the last few weeks of your commitment','During the first few weeks of your commitment','Before you even begin'],
-		answer: 'Before you even begin',
+		possibleAnswers: ['A) You','B) The organization(s) running the program','C) The host community where the program was run','D) All of these','E) B and C'],
+		answer: 'D) All of these',
 		shape: {
 			path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
 			fill: 'green'
