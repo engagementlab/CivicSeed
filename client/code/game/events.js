@@ -285,17 +285,21 @@ $(function() {
 	});
 	$('.resourceArea a i, .resourceArea .closeButton').on('click', (function (e) {
 		e.preventDefault();
+		$('.check').hide();
 		$game.$resources.hideResource();
 		return false;
 	}));
 	$('.resourceArea .nextButton').on('click', (function () {
+		$('.check').hide();
 		$game.$resources.nextSlide();
 	}));
 	$('.resourceArea .backButton').on('click', (function () {
+		$('.check').hide();
 		$game.$resources.previousSlide();
 	}));
 	$('.resourceArea .answerButton, .resourceArea .sureButton').on('click', (function (e) {
 		e.preventDefault();
+		$('.check').hide();
 		$game.$resources.submitAnswer();
 		return false;
 	}));

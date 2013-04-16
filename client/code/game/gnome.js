@@ -197,7 +197,7 @@ $game.$gnome = {
 	},
 
 	showTangram: function() {
-		var file = CivicSeed.CLOUD_PATH + '/img/game/tangrams/puzzle' + $game.$player.game.currentLevel + '.png';	
+		var file = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.game.currentLevel + '.png';	
 	},
 
 	showChat: function() {
@@ -425,7 +425,7 @@ $game.$gnome = {
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the enigma.');
-				var imgPath1 = CivicSeed.CLOUD_PATH + 'img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png',
+				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img class="trash" src="' + imgPath2 + '">';
 				$('.gnomeContent').html(newHTML);
