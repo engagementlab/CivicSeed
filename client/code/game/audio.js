@@ -342,7 +342,7 @@ $game.$audio = {
 	whichTrack: function(posX, posY) {
 		//compare player position to centers of the world
 		var diffX = posX - $game.TOTAL_WIDTH / 2,
-			diffY = posY - $game.TOTAL_HEIGHT / 2,
+			diffY = posY - ($game.TOTAL_HEIGHT+2) / 2,
 			trackRegion = null,
 			absX = Math.abs(diffX),
 			absY = Math.abs(diffY);

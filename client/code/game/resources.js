@@ -443,8 +443,7 @@ $game.$resources = {
 
 	addAnswer: function(data) {
 		var stringId = String(data.npc);
-		_curResource = _resources[stringId];
-		_curResource.playerAnswers.push(data);
+		_resources[stringId].playerAnswers.push(data);
 	},
 
 	popupCheck: function() {
