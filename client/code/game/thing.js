@@ -43,8 +43,8 @@ $game.$thing = {
 			prevY: 0,
 			curX: 0,
 			curY: 0,
-			srcX: 16,
-			srcY: 18
+			srcX: 0,
+			srcY: 0
 		};
 		if(!$game.$player.game.seenThing) {
 			$game.$thing.setPosition();
@@ -57,6 +57,13 @@ $game.$thing = {
 		_info.offY = 0;
 		_info.prevOffX = 0;
 		_info.prevOffY = 0;
+		_renderInfo.dir = _positions[$game.$player.game.currentLevel].d;
+		if(_renderInfo.dir === -1) {
+			_renderInfo.srcY = 64;	
+		} else {
+			_renderInfo.srcY = 0;	
+		}
+		
 	},
 
 	update: function() {
@@ -129,7 +136,7 @@ $game.$thing = {
 				//$game.$thing.info.y = $game.$thing.seriesOfMoves[$game.$thing.currentMove].masterY;
 				_info.x += _info.d;
 			}
-			
+
 			//check to see if done
 			if(_info.x === _info.target) {
 				_onScreen = false;
@@ -145,27 +152,24 @@ $game.$thing = {
 				if($game.$thing.currentStep === 1) {
 					$game.$thing.currentStepIncX = _info.d;
 					$game.$thing.currentStepIncY = 0;
-					
 					//set the previous offsets to 0 because the last visit
 					//was the actual rounded master
 					_info.prevOffX = 0;
 					_info.prevOffY = 0;
 
-					//set direction for sprite sheets
-					if($game.$thing.currentStepIncX === 1) {
-						_renderInfo.srcY = $game.TILE_SIZE * 2;
-					}
-					else {
-						_renderInfo.srcY = $game.TILE_SIZE * 2;
-					}
 				}
 
 				//if it is not the first step:
 				else {
 					_info.prevOffX = _info.offX;
 					_info.prevOffY = _info.offY;
+					//set direction for sprite sheets
+					if($game.$thing.currentStep % 4 === 0) {
+						// console.log('currentStep', $game.$thing.currentStep);
+						_renderInfo.srcX = $game.TILE_SIZE * ($game.$thing.currentStep / 4) * 2 - 64;
+					}
 				}
-				
+
 				_info.offX = $game.$thing.currentStep * $game.$thing.currentStepIncX;
 				_info.offY = $game.$thing.currentStep * $game.$thing.currentStepIncY;
 
@@ -176,12 +180,10 @@ $game.$thing = {
 				// 		$game.$thing.curFrame = 0;
 				// 	}
 				// }
-
-			// 	$game.$thing.info.srcX = $game.$thing.curFrame * $game.TILE_SIZE,
+			// $game.$thing.info.srcX = $game.$thing.curFrame * $game.TILE_SIZE,
 				$game.$thing.updateRenderInfo();
 			}
 		}
-		
 	},
 
 	clear: function() {

@@ -57,7 +57,7 @@ $game.$renderer = {
 		_foregroundContext.save();
 
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png'];
 		//loop through allimages, load in each one, when done,
 		//renderer is ready
 		$game.$renderer.loadImages(0);
@@ -687,22 +687,23 @@ $game.$renderer = {
 	},
 
 	renderThing: function(info) {
+		// console.log(info.srcX);
 		_charactersContext.drawImage(
-			_tilesheets[4],
-			16*32,
-			18*32,
-			$game.TILE_SIZE * 3,
-			$game.TILE_SIZE * 2,
+			_tilesheets[10],
+			info.srcX,
+			info.srcY,
+			64,
+			64,
 			info.curX,
 			info.curY - $game.TILE_SIZE * 1,
-			$game.TILE_SIZE * 3,
-			$game.TILE_SIZE * 2
+			64,
+			64
 		);
 	},
 
 	imageToCanvas: function(map) {
 		var newImg = new Image();
-		
+
 		newImg.onload = function() {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
