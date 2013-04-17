@@ -124,6 +124,7 @@ exports.actions = function(req, res, ss) {
 					res(false);
 				} else if(oldTiles) {
 					colorHelpers.modifyTiles(oldTiles, bombed, function(newTiles, newBombs) {
+						console.log(newTiles, newBombs);
 						//saveEach tile
 						colorHelpers.saveTiles(newTiles, function() {
 							//send out new bombs AND player info to update score
@@ -191,6 +192,7 @@ exports.actions = function(req, res, ss) {
 			var maps = [];
 			userModel
 				.where('role').equals('actor')
+				.where('game.instanceName').equals(req.session.game.instanceName)
 				.select('game.colorMap')
 				.find(function(err, users) {
 					if(err) {
@@ -334,7 +336,7 @@ colorHelpers = {
 				//don't modify. change bomb for sending out since maxed
 				else {
 					bomb.color = tile.color;
-					bomb.curColor = tile.color;
+					bomb.curColor = tile.curColor;
 				}
 			}
 			//old one is the OWNER, so just modify bomb for user

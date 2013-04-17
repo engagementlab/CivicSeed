@@ -93,8 +93,8 @@ $game.$resources = {
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
 
-		console.log('load resource (who,index,now): ', who,index, revisit);
-		console.log('current resource:', _curResource);
+		//console.log('load resource (who,index,now): ', who,index, revisit);
+		//console.log('current resource:', _curResource);
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.game.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';

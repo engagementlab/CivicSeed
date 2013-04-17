@@ -28,7 +28,7 @@ $game.$others = {
 			_onScreenPlayers[player.id] = newbie;
 			newbie.updateRenderInfo();
 			//console.log("added: " + player.id);
-			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(255,255,255)');
+			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
 		}
 	},
 
@@ -414,8 +414,7 @@ $game.$others = {
 			},
 
 			showPlayerCard: function() {
-				var lvl = otherPlayer.level + 1;
-				var msg = 'A ' + otherPlayer.rank + ' in level ' + lvl + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
+				var msg = 'A ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
 				otherPlayer.message(msg);
 			},
 

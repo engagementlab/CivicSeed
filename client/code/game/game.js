@@ -69,7 +69,7 @@ exports.$game = {
 	resourceCount: [],
 	displayTimeout: null,
 	prevMessage: 'Civic Seed',
-	playerRanks: ['novice gardener', 'journeyman gardener', 'expert gardener', 'master gardener','super master gardener'],
+	playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
 
 	init: function() {
 		$game.$map.init();

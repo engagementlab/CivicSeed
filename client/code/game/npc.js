@@ -266,7 +266,17 @@ $game.$npc = {
 			_speak = 'You should really see the botanist before exploring the world.';
 		} else {
 			if(_curNpc.isHolding) {
-				_speak = 'It\'s too gray too talk, maybe stop by when the world is more colorful';
+				var levelPlace = '';
+				if($game.$player.game.currentLevel === 0) {
+					levelPlace = 'northeast';
+				} else if($game.$player.game.currentLevel === 1) {
+					levelPlace = 'northwest';
+				} else if($game.$player.game.currentLevel === 2) {
+					levelPlace = 'southwest';
+				} else {
+					levelPlace = 'southeast';
+				}
+				_speak = 'You should go check out the ' + levelPlace;
 			}
 			//they have a response for past, present, future
 			else {

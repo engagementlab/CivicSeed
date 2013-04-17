@@ -15,7 +15,7 @@ var _soundtracks = [],
 	_environmentLoopFxPlaces = [
 		{	sound: 'stream',
 			locations: [{x: 30, y: 10}, {x: 30, y: 50}, {x: 30, y: 90}, {x: 30, y: 130}, {x: 30, y: 170}],
-			prox: {x:20,y:20}
+			prox: {x:10,y:10}
 		},
 		{	sound: 'wind',
 			locations: [{x: 15, y: 8},{x: 60, y: 50}],
@@ -31,11 +31,10 @@ var _soundtracks = [],
 		}
 	],
 	_environmentOnceFxPlaces = [
-		{location: {x: 10, y: 0}, sounds: ['neo', 'bigger'], prox: {x: 10, y: 10}, chance: 0.50},
 		{location: {x: 35, y: 30}, sounds: ['forest1', 'forest2','forest3', 'bird1', 'bird2','bird3'], prox: {x:35, y:30}, chance: 0.2},
-		{location: {x: 105, y: 30}, sounds: ['churchBells', 'townBells','chatter', 'bird2', 'bird3'], prox: {x:35, y:30}, chance: 0.1},
+		{location: {x: 105, y: 30}, sounds: ['churchBells', 'townBells','chatter', 'bird2', 'bird3'], prox: {x:20, y:20}, chance: 0.1},
 		{location: {x: 105, y: 90}, sounds: ['chickens', 'sheep1', 'sheep2', 'horse', 'bird3'], prox: {x:35, y:30}, chance: 0.15},
-		{location: {x: 35, y: 90}, sounds: ['portBells', 'foghorn', 'bird2'], prox: {x:35, y:30}, chance: 0.1}
+		{location: {x: 35, y: 90}, sounds: ['portBells', 'foghorn', 'bird2'], prox: {x:25, y:20}, chance: 0.1}
 
 	],
 	_currentLoop = null,
@@ -341,8 +340,8 @@ $game.$audio = {
 
 	whichTrack: function(posX, posY) {
 		//compare player position to centers of the world
-		var diffX = posX - $game.TOTAL_WIDTH / 2,
-			diffY = posY - ($game.TOTAL_HEIGHT+2) / 2,
+		var diffX = posX - ($game.TOTAL_WIDTH - 4) / 2,
+			diffY = posY - ($game.TOTAL_HEIGHT+8) / 2,
 			trackRegion = null,
 			absX = Math.abs(diffX),
 			absY = Math.abs(diffY);
@@ -408,7 +407,7 @@ $game.$audio = {
 	},
 
 	fadeHi: function() {
-		if($game.$audio.isMute) {
+		if(!$game.$audio.isMute) {
 			_soundtracks[_currentTrack].volume(0.2);
 			_environmentLoopFx.volume(0.2);
 		}

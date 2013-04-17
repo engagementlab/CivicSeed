@@ -371,6 +371,18 @@ $game.$renderer = {
 			w = 32,
 			level = lvl + 7;
 
+		//clear and redraw then add accessories
+		_offscreenCharacterContext[color].clearRect(
+			0,
+			0,
+			_playerImages[color].width,
+			_playerImages[color].height
+		);
+		_offscreenCharacterContext[color].drawImage(
+			_playerImages[color],
+			0,
+			0
+		);
 		//+7 gets us to the RIGHT sheet in the array
 		if(lvl > 0) {
 			//go thru each level
@@ -603,6 +615,29 @@ $game.$renderer = {
 			player.y,
 			4,
 			4
+		);
+	},
+
+	renderMiniMapConstants: function() {
+		_minimapPlayerContext.fillStyle = 'rgb(150,150,150)';
+		_minimapPlayerContext.fillRect(
+			0,
+			72,
+			142,
+			1
+		);
+		_minimapPlayerContext.fillRect(
+			71,
+			0,
+			1,
+			132
+		);
+		_minimapPlayerContext.fillStyle = 'rgb(255,255,255)';
+		_minimapPlayerContext.fillRect(
+			67,
+			68,
+			8,
+			8
 		);
 	},
 
