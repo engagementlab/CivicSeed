@@ -8,13 +8,13 @@ module.exports.global = {
 		y: 0
 	}],
 	dialog: [{
-		instructions: ['Thanks for coming to lend a hand today. As you can see, things are pretty gray. You’ll fix that by planting color seeds.', 'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.'],
+		instructions: ['Thanks for coming to lend a hand today. As you can see, things are pretty gray. You’ll fix that by planting color seeds.', 'Once you’re done talking to me, you’ll have a seed! Plant it by clicking on the leaf icon at the bottom of your display. Try planting the seed now, then come back and talk to me.'],
 		riddle: {
 			sonnet: 'First, you must find a way<br>to tell me <b>what you brought</b> today<br>and how <b>your future</b> and <b>your past</b><br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: <b>Walk with humility</b>.',
 			prompts: ['Good work! But you need to plant a lot more. To fully color the world, you must work together with your peers and others in our community. Click the computer-screen icon on your display at any time to see your progress! When it reaches 100%, the world will be saved. Want find out how to get more seeds?', 'I think you have enough pieces to solve the enigma! Want to try?'],
 			response: 'That’s right! Great work! Now you’re ready to move to level 2. I’ve given you some Mega Seeds that cover more area. Now, when you enter seed-planting mode, you will have the ability to plant a Mega or normal seed.'
 		},
-		hint: ['Hmmm... It looks like you don’t have enough pieces to solve the enigma! Go back into Mirkwood Forest, in the north west section of the world, and talk to some more people.', 'You should maybe get the right pieces first...']
+		hint: ['Hmmm... It looks like you don’t have enough pieces to solve the enigma! Go back into Brightwood Forest, in the north west section of the world, and talk to some more people.', 'You should maybe get the right pieces first...']
 	}, {
 		instructions: ['To answer the second section of the enigma, journey to the town of Calliope, located in the northeast section of the world.'],
 		riddle: {
@@ -24,9 +24,9 @@ module.exports.global = {
 		},
 		hint: ['you need to gather more resources', 'you need to go talk to some citizens']
 	}, {
-		instructions: ['To answer the third section of the enigma, journey to the Cool Ranch, located in the southeast section of the world.'],
+		instructions: ['To answer the third section of the enigma, journey to the Ranch, located in the southeast section of the world.'],
 		riddle: {
-			sonnet: 'You know <b>how you got here</b> and so do I<br>can you forget it? Should you try?<br>How do <b>people from here</b> and there<br>build a dream that they <b>both share</b><br>When is a <b>goal</b> obtainable? <br><b>Responsibility</b> / <b>maintainable</b>? <br>Are your thoughts explainable? <br>Is what we teach retainable?',
+			sonnet: 'You know <b>how you got here</b> and so do I<br>can you forget it? Should you try?<br>How do <b>people from here and there</b><br>build a dream that they <b>both share</b><br>When is a <b>goal</b> obtainable? <br><b>Responsibility</b> / <b>maintainable</b>? <br>Are your thoughts explainable? <br>Is what we teach retainable?',
 			prompts: ['Here, take a look at the next part of the enigma', 'It looks like you have enough pieces to solve the enigma, ready to try?'],
 			response: 'Great work! Now you’re ready to move to level 4. Your Mega Seeds have become more powerful than ever.'
 		},

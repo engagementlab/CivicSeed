@@ -90,7 +90,7 @@ module.exports.global = [{
 	sprite: 4,
 	isHolding: true,
 	dialog: {
-		prompts: ['Ah! Bonjour, my friend! Welcome to my french corner of ze Forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
+		prompts: ['Ah! Bonjour, my friend! Welcome to my French corner of ze forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
 	},
 	resource: {
 		tagline: 'Power and Privilege',
@@ -120,7 +120,7 @@ module.exports.global = [{
 	sprite: 6,
 	isHolding: true,
 	dialog: {
-		prompts: ['Roga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
+		prompts: ['Rogga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
 	},
 	resource: {
 		tagline: 'What Motivates You',
@@ -235,7 +235,7 @@ module.exports.global = [{
 	sprite: 12,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Would you like to volunteer in the community as a means of deciding if a certain career is right for you? 6.Are you hoping to find your passion?','There is some thing sucking up all the color. I heard it looked like a weird robot?','future']
+		smalltalk: ['Would you like to volunteer in the community as a means of deciding if a certain career is right for you? 6.Are you hoping to find your passion?','It\'s so sad the color was taken away, but I can’t shake the feeling that this has all happened before. It\'s almost like something is stealing it...?','future']
 	}
 }, {
 	id: '1547',
@@ -487,11 +487,11 @@ module.exports.global = [{
 }, {
 	id: '5063',
 	name: 'Zork',
-	level: 12,
+	level: 1,
 	sprite: 25,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['This big open field is boring without all the colors. I guess I should be thankful I still have my mailbox and big house!','"I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', 'You only get five seeds for each area so make sure you use them wisely! Don\'t give them to Grues!']
+		smalltalk: ['This big open field is boring without all the colors. I guess I should be thankful I still have my mailbox and big house!','"I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', 'Did you know you can give out seeds to other players? Click "Seed It!" if you like their public answers.  Make your answers public and others can give you seeds, too.']
 	}
 }, {
 	id: '2803',
@@ -727,7 +727,7 @@ module.exports.global = [{
 	sprite: 32,
 	isHolding: true,
 	dialog: {
-		prompts: ['Oh sweetheart, don\'t you just love Calliope? I swear to you its much more beautiful with the colors. That evil, evil, robot! Maybe I can help you put a stop to this gray madness? Then again, I wouldn\'t want to put you in any danger. Can I trust that you know how to be safe?', 'I\'m still waiting for that answer!', 'You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
+		prompts: ['Oh, don\'t you just love Calliope? I swear to you its much more beautiful with the colors. That evil, evil, robot! Maybe I can help you put a stop to this gray madness? Then again, I wouldn\'t want to put you in any danger. Can I trust that you know how to be safe?', 'I\'m still waiting for that answer!', 'You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
 	},
 	resource: {
 		tagline: 'Safety First',
@@ -748,7 +748,7 @@ module.exports.global = [{
 	sprite: 33,
 	isHolding: true,
 	dialog: {
-		prompts: ['Before I came to Calliope, I used to live in this place with other mushrooms. It was cool, until this huge spiky turtle dragon thing started wrecking everything! Thats when I found this place. I loved it here, that is until a dumb robot stole all the color. Can\'t a mushshroom get a break? I\'m sick of moving, so I\'ll help you stop this thing if you do something for me first.', 'Be a star. Answer the question!', 'Sorry, but your other resources are probably in another castle...er...area.']
+		prompts: ['Before I came to Calliope, I used to live in this place with other mushrooms. It was cool, until this huge spiky turtle dragon thing started wrecking everything! That\'s when I found this place. I loved it here, that is until a dumb robot stole all the color. Can\'t a mushshroom get a break? I\'m sick of moving, so I\'ll help you stop this thing if you do something for me first.', 'Be a star. Answer the question!', 'Sorry, but your other resources are probably in another castle...er...area.']
 	},
 	resource: {
 		tagline: 'Power and Privilege: Poverty',
