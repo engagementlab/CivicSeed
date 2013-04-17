@@ -118,6 +118,17 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
+		sendProblem: function(email, problem) {
+			var problemHTML = '<h2>BUG! ahhhhh!</h2>';
+				problemHTML += '<p>User: ' + email + '</p>';
+				problemHTML += '<p>Problem: ' + problem + '</p>';
+				emailUtil.openEmailConnection();
+				emailUtil.sendEmail('User submitted issue', problemHTML, 'russellgoldenberg@gmail.com');
+				// TODO: close connection on *** CALLBACK ***
+				emailUtil.closeEmailConnection();
+				res(true);
+		},
+
 		changeInfo: function(first, last) {
 			UserModel.findOne({ email: req.session.email } , function(err, user) {
 				if(!err && user) {

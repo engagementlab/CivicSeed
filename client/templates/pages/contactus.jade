@@ -1,2 +1,15 @@
-.contactus
-	h1 Contact us...
+.row
+	.span6
+		h2 Contact Us
+		h5 Found a bug? Having a problem? Let us know...
+		.span6.offset3.moreTopMargin
+			form.well#contactUs(method='post', action='/contact-us')
+				p Provide us with your email address and some information and we'll look into the problem.
+				.control-group
+					.controls
+						input#username.input-large(type='text', name='username', placeholder='Email')
+						textarea#problem.input-large(type='text', name='problem', placeholder='details here...')
+				button.btn.btn-primary.btn-large(type='submit') Send
+				p#message.moreTopMargin
+			p.moreTopMargin Please be as detailed as possible
+			p: small Any additional information you have regarding your issue will be super helpful for us to figure this out quicker.

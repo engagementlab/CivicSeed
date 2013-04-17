@@ -31,6 +31,18 @@
 			});
 			return false;
 		});
+		$body.on('submit', '#contactUs', function() {
+			var email = document.getElementById('username').value,
+				problem = document.getElementById('problem').value;
+			ss.rpc('shared.account.sendProblem', email, problem, function(response) {
+				if(response) {
+					$('#message').removeClass('error').text('Thanks! We\'ll get on it right away.');
+				} else {
+					$('#message').addClass('error').text('There was an error. Email civicseed@gmail.com directly please.');
+				}
+			});
+			return false;
+		});
 		$body.on('submit', '#changeInfoForm', function() {
 			var first = document.getElementById('firstname').value.trim(),
 				last = document.getElementById('lastname').value.trim();
