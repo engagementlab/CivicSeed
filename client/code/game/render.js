@@ -639,6 +639,11 @@ $game.$renderer = {
 			8,
 			8
 		);
+		//_minimapPlayerContext.beginPath();
+      	// _minimapPlayerContext.arc(71, 72, 20, 0, 2 * Math.PI, false);
+      	// _minimapPlayerContext.lineWidth = 2;
+      	// _minimapPlayerContext.strokeStyle = 'rgb(220,220,220)';
+      	// _minimapPlayerContext.stroke();
 	},
 
 	renderMiniTile: function(x, y, col) {

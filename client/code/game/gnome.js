@@ -407,7 +407,7 @@ $game.$gnome = {
 					$game.$player.game.gnomeState = 2;
 					$game.$player.checkGnomeState();
 					$('.gnomeArea .message').text('The enigma has four parts, each with a verse and a puzzle. You can view the enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$('.gnomeContent').html('<p>To answer the enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.</p><p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the enigma civica.</p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Graywood Forest, to the northwest of here. Good luck!</p>');
+					$('.gnomeContent').html('<p>To answer the enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.</p><p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the <em>enigma civica.</em></p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Brightwood Forest, to the northwest of here. Good luck!</p>');
 				}
 			}
 		}

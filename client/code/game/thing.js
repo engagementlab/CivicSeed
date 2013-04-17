@@ -9,7 +9,7 @@ var _coords = [
 		],
 	_positions = [
 		{x: 6, y: 20, d: -1, target: -3},
-		{x: 133, y: 31, d: 1, target: 145},
+		{x: 135, y: 31, d: 1, target: 145},
 		{x: 137, y: 123, d: 1, target: 145},
 		{x: 7, y: 84, d: -1, target: -3},
 		{x: 0, y: 0, d: 0, target: 0},
@@ -58,12 +58,15 @@ $game.$thing = {
 		_info.prevOffX = 0;
 		_info.prevOffY = 0;
 		_renderInfo.dir = _positions[$game.$player.game.currentLevel].d;
+		$game.$thing.isMoving = false;
+		$game.$thing.counter = Math.floor(Math.random() * 64);
+		$game.$thing.curFrame = 0;
+		$game.$thing.currentStep = 0;
 		if(_renderInfo.dir === -1) {
-			_renderInfo.srcY = 64;	
+			_renderInfo.srcY = 64;
 		} else {
-			_renderInfo.srcY = 0;	
+			_renderInfo.srcY = 0;
 		}
-		
 	},
 
 	update: function() {

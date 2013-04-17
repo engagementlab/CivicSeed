@@ -68,7 +68,6 @@ $(function() {
 			$game.$player.message(data.message);
 		}
 		else {
-			$game.$audio.playTriggerFx('chatReceive');
 			$game.$others.message(data.message, data.id);
 		}
 	});

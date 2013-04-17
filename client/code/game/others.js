@@ -68,6 +68,7 @@ $game.$others = {
 	message: function(message, id) {
 		$.each(_onScreenPlayers, function(key, player) {
 			if(player.id === id) {
+				$game.$audio.playTriggerFx('chatReceive');
 				player.message(message);
 			}
 		});

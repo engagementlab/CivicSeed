@@ -812,6 +812,7 @@ $game.$player = {
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.game.seeds.normal += numToAdd;
 			_seedHudCount.text($game.$player.game.seeds.normal);
+			_normalHudCount.text($game.$player.game.seeds.normal);
 
 			if($game.$player.game.currentLevel === npcLevel) {
 				$game.$player.game.inventory.push(id);
@@ -920,8 +921,9 @@ $game.$player = {
 		}
 		$game.$player.game.gnomeState = 0;
 		$game.$player.game.seenThing = false;
+		$game.$player.game.pledges = 5;
 		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
-
+		$game.$thing.setPosition();
 
 		if($game.$player.game.currentLevel === 4) {
 			//they have beat the game!
