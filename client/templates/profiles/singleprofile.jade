@@ -1,7 +1,7 @@
 .profiles
 	if firstName
 		.row.headerRow
-			.span6.withPlayer
+			.span8.withPlayer
 				h1.nombre #{firstName} #{lastName}
 				img(src='/img/game/players/mini/#{colorNum}.png')
 		if profileUnlocked
@@ -74,7 +74,7 @@
 				.row
 					h1 Profile Locked
 					if (sessionStorage.userEmail === email)
-						button.buttonResume.btn.btn-success(type='button')
+						p.buttonResume
 							a(href='/game') Resume Game
 	else
 		h1 This person does not exist in our database.

@@ -316,7 +316,7 @@ module.exports.global = [{
 	sprite: 17,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Remember, our community has so many assets  that will be beneficial to making it a better place. We might need help, but let us be involved!', 'People keep confusing me with another Siri. Apparently she is pretty and is super smart! Maybe she is related to that other weird robot that is wrecking everything?', 'I think your keyboard will help you move around. Remember, Walk forward, Step backward, Angle left, and Dodge right. WASD!']
+		smalltalk: ['Remember, our community has so many assets  that will be beneficial to making it a better place. We might need help, but let us be involved!', 'People keep confusing me with another Siri. Apparently she is pretty and is super smart! Maybe she is related to that other weird robot that is wrecking everything?', 'Don\'t forget to plant your seeds to retun color to the world!']
 	}
 }, {
 	id: '6177',

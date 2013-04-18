@@ -112,7 +112,7 @@ $game.$renderer = {
 
 
 			//TODO: replace this with the number of image files
-			if(next === 7) {
+			if(next === 21) {
 				$game.$renderer.ready = true;
 				$game.$player.init();
 				return;

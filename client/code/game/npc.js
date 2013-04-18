@@ -268,9 +268,9 @@ $game.$npc = {
 			if(_curNpc.isHolding) {
 				var levelPlace = '';
 				if($game.$player.game.currentLevel === 0) {
-					levelPlace = 'northeast';
-				} else if($game.$player.game.currentLevel === 1) {
 					levelPlace = 'northwest';
+				} else if($game.$player.game.currentLevel === 1) {
+					levelPlace = 'northeast';
 				} else if($game.$player.game.currentLevel === 2) {
 					levelPlace = 'southwest';
 				} else {

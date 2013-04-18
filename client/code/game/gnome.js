@@ -83,7 +83,6 @@ $game.$gnome = {
 		else if($game.inTransit) {
 			$game.$gnome.getMaster();
 		}
-
 	},
 
 	getMaster: function() {
@@ -206,6 +205,7 @@ $game.$gnome = {
 		$game.$gnome.isChat = true;
 		$game.$gnome.nextChatContent();
 	},
+
 	hideChat: function() {
 		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
@@ -222,6 +222,7 @@ $game.$gnome = {
 			}
 		});
 	},
+
 	addChatContent: function() {
 		$('.speechBubble button').addClass('hideButton');
 		$('.speechBubble .nextChatButton').removeClass('hideButton');
@@ -317,8 +318,7 @@ $game.$gnome = {
 						$('.tangramArea').show();
 					}
 			});
-		});
-		
+		});		
 	},
 
 	addButtons: function() {
@@ -609,7 +609,6 @@ $game.$gnome = {
 			$game.$player.game.resume.push(portAnswer);
 			$game.changeStatus('talk to the gnome');
 		}
-		
 	},
 
 	setupTangram: function() {
@@ -637,31 +636,36 @@ $game.$gnome = {
 				select = '.r' + id;
 
 			dt.setData('text/plain', id);
+
 			//set drag over shit
 			$('.tangramArea')
 				.bind('dragover',$game.$gnome.dragOver)
 				.bind('drop', $game.$gnome.drop);
 		}
 	},
+
 	dragEnd: function(e) {
 		e.preventDefault();
 	},
+
 	dragOver: function(e) {
 		if (e.preventDefault) {
 			e.preventDefault();
 		}
 		return false;
 	},
+
 	drop: function(e) {
 		e.preventDefault();
 		if (e.stopPropagation) {
 			e.stopPropagation();
 		}
 		//set class name for new shape and fetch shape data
+		//e.originalEvent.offsetX
 		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
 			selector = 'br' + npc,
-			x = e.originalEvent.offsetX,
-			y =  e.originalEvent.offsetY,
+			x = e.originalEvent.layerX,
+			y =  e.originalEvent.layerY,
 			shape = $game.$resources.getShape(npc),
 			path = shape.path,
 			fill = _svgFills[shape.fill];
@@ -687,7 +691,6 @@ $game.$gnome = {
 		//clear data from drag bind
 		e.originalEvent.dataTransfer.clearData();
 		return false;
-
 	},
 
 	dragMoveStart: function(d) {
@@ -702,8 +705,8 @@ $game.$gnome = {
 	},
 
 	dragMove: function(d) {
-		var x = d3.event.sourceEvent.offsetX,
-			y = d3.event.sourceEvent.offsetY,
+		var x = d3.event.sourceEvent.layerX,
+			y = d3.event.sourceEvent.layerY,
 			// mX = $game.$gnome.snapTo(x - _dragOffX),
 			// mY = $game.$gnome.snapTo(y - _dragOffY);
 			mX = x - _dragOffX,
@@ -727,9 +730,10 @@ $game.$gnome = {
 				return trashing ? .5 : 1;
 			});
 	},
+
 	dropMove: function(d) {
-		var x = d3.event.sourceEvent.offsetX,
-			y = d3.event.sourceEvent.offsetY,
+		var x = d3.event.sourceEvent.layerX,
+			y = d3.event.sourceEvent.layerY,
 			mX = $game.$gnome.snapTo(x - _dragOffX),
 			mY = $game.$gnome.snapTo(y - _dragOffY),
 			trans = 'translate(' + mX  + ', ' + mY + ')';

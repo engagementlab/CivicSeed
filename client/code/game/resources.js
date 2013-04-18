@@ -251,9 +251,8 @@ $game.$resources = {
 						var numOptions = _curResource.possibleAnswers.length;
 						inputBox = '<form>';
 						for(var i =0; i<numOptions; i++) {
-						 inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
+							inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
 						}
-						
 						inputBox += '</form>';
 					}
 					else if(_questionType === 'open') {
