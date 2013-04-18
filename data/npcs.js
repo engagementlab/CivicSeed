@@ -593,7 +593,7 @@ module.exports.global = [{
 		requiredLength: 50,
 		shape: {
 			path: 'm0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z',
-			fill: 'green'
+			fill: 'blue'
 		}
 	}
 }, {

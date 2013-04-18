@@ -8,7 +8,7 @@ var _coords = [
 		{x: 0, y: 0}
 		],
 	_positions = [
-		{x: 6, y: 20, d: -1, target: -3},
+		{x: 7, y: 20, d: -1, target: -3},
 		{x: 135, y: 31, d: 1, target: 145},
 		{x: 137, y: 123, d: 1, target: 145},
 		{x: 7, y: 84, d: -1, target: -3},
@@ -63,9 +63,9 @@ $game.$thing = {
 		$game.$thing.curFrame = 0;
 		$game.$thing.currentStep = 0;
 		if(_renderInfo.dir === -1) {
-			_renderInfo.srcY = 64;
-		} else {
 			_renderInfo.srcY = 0;
+		} else {
+			_renderInfo.srcY = 64;
 		}
 	},
 
@@ -110,10 +110,37 @@ $game.$thing = {
 			_renderInfo.prevY = prevY;
 			_renderInfo.curX = curX,
 			_renderInfo.curY = curY;
+
+			if($game.$thing.isMoving) {
+				//left
+				if(_renderInfo.dir === -1) {
+					_renderInfo.srcY = 0;
+				} else {
+					_renderInfo.srcY = 64;
+				}
+			} else {
+				if(_renderInfo.dir === -1) {
+					_renderInfo.srcY = 128;
+				} else {
+					_renderInfo.srcY = 196;
+				}
+			}
 		}
+		console.log(_renderInfo.srcY);
 	},
 
 	idleCheckTrigger: function() {
+		$game.$thing.currentStep++;
+		if($game.$thing.currentStep % 8 === 0) {
+			if($game.$thing.currentStep > $game.$thing.numSteps) {
+				$game.$thing.currentStep = 0;
+			}
+			$game.$thing.curFrame++;
+			if($game.$thing.curFrame === $game.$thing.numFrames) {
+				$game.$thing.curFrame = 0;
+			}
+			_renderInfo.srcX = $game.TILE_SIZE * $game.$thing.curFrame * 2;
+		}
 		$game.$thing.updateRenderInfo();
 
 		//check distance between player and thing
@@ -125,6 +152,10 @@ $game.$thing = {
 		if(dX + dY < 6) {
 			_triggered = true;
 			$game.$player.game.seenThing = true;
+			$game.$thing.isMoving = true;
+			$game.$thing.currentStep = 0;
+			$game.$thing.counter = 0;
+			$game.$thing.curFrame = 0;
 		}
 
 	},
