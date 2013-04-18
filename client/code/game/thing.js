@@ -126,7 +126,6 @@ $game.$thing = {
 				}
 			}
 		}
-		console.log(_renderInfo.srcY);
 	},
 
 	idleCheckTrigger: function() {
