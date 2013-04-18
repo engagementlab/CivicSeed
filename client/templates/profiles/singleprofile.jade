@@ -1,8 +1,9 @@
 .profiles
 	if firstName
-		.row
-			.span6
+		.row.headerRow
+			.span6.withPlayer
 				h1.nombre #{firstName} #{lastName}
+				img(src='/img/game/players/mini/#{colorNum}.png')
 		if profileUnlocked
 			.row
 				.span4.info

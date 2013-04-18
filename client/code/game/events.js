@@ -98,17 +98,16 @@ $(function() {
 	});
 
 	ss.event.on('ss-leaderChange', function(data, chan) {
+		// console.log(data);
+		var leaderChange = true;
 		if($game.leaderboard.length > 0) {
-			var leaderChange = ($game.leaderboard[0].name === data.board[0].name) ? false : true;
-			if(leaderChange) {
-				$game.temporaryStatus(data.board[0].name + ' is top dog!');
-				return;
-			}
+			leaderChange = ($game.leaderboard[0].name === data.board[0].name) ? false : true;
+			// console.log($game.leaderboard[0], data.board[0], leaderChange);
+		}
+		if(leaderChange) {
+			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
 		}
 		$game.leaderboard = data.board;
-		if(data.name) {
-			$game.temporaryStatus(data.name + ' is now a top seeder');
-		}
 	});
 
 	ss.event.on('ss-addAnswer', function(data, chan) {

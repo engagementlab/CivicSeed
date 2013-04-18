@@ -145,7 +145,7 @@ exports.actions = function(req, res, ss) {
 
 							colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
 								if(updates.updateBoard) {
-									ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.oldBoard, name: newInfo.name});
+									ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
 								}
 								ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
 								//FINNNALLY done updating and stuff, respond to the player
@@ -453,7 +453,7 @@ colorHelpers = {
 
 				var returnInfo = {
 					updateBoard: updateBoard,
-					oldBoard: oldBoard,
+					board: oldBoard,
 					dropped: newCount,
 					colored: newColored
 				};
