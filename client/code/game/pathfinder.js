@@ -239,6 +239,7 @@ $game.$astar = {
                 var rev = ret.reverse();
                 //change here
                 callback(rev);
+                return true;
 			}
 
 			// Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -285,6 +286,7 @@ $game.$astar = {
 		//return [];
         //change here
         callback([]);
+        return false;
 	},
 	manhattan: function(pos0, pos1) {
 		// See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html

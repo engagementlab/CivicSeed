@@ -383,11 +383,9 @@ $game.$player = {
 					});
 				}
 			}
-			
-
 			//calc local for start point for pathfinding
 			var loc = $game.masterToLocal(_info.x, _info.y);
-			
+
 			var masterEndX = $game.currentTiles[x][y].x,
 				masterEndY = $game.currentTiles[x][y].y;
 

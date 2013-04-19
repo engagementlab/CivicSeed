@@ -430,7 +430,7 @@ $game.$gnome = {
 					$game.$player.checkGnomeState();
 					$game.$gnome.setGnomeState(2);
 					$('.gnomeArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$('.gnomeContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p>');
+					$('.gnomeContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
 				}
 			}
 		}
@@ -471,7 +471,8 @@ $game.$gnome = {
 				var postTangramTalk = $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
 				$('.gnomeArea .message').text(postTangramTalk);
-				var newHTML2 = '<p>You got some mega seeds! And earned a promotion: ' + $game.playerRanks[$game.$player.game.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
+				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.game.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
+					newHTML2 += '<p style="text-align:center;"><img src="/img/game/megaseed.png"></p>';
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {

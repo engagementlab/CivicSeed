@@ -1,48 +1,67 @@
-.box
-	margin 0 5px
-	p
-		padding: 10px
+.demoProfile 
+	h1
+		color $csGreen
+	p, li
 		font-family $buttonFont
+		font-size 1.2em
 
-		
-.profiles > .row {
-	//margin 10px 0px 20px 0px
-}
+.headerRow
+	padding 20px 0 0 0
+.withPlayer
+	text-align center
+	img 
+		padding 5px 10px
+		border 4px solid $csGray
+		border-radius 5px
 
-.profiles > .row > div {
-	margin 0
-}
-
-.profiles
-	h1, h2
-		color #222
-	p 
-	color white
+.nombre
+	font-family $bodyFont
+	font-weight 700
+	font-size 3.5em
+	color $csGray
+	padding 0 0 15px 0
+.school
+	font-family $bodyFont
+	font-weight 300
+	font-size 2em
+	color $csLightGray2
+.box
+	padding 20px 0 0 0
+	p
+		font-size 1.7em
+		font-weight 700 
+		font-family $buttonFont
+		line-height 1.2
+	.profileTitle 
+		padding 0 10px 0 0
+		font-family $bodyFont
+		font-weight 700
+		font-size 1.5em
 .motivations
-	background $csGreen
-	$borderRadius(6px)
-	h2
-		color $csLightGreen
-.objectives
-	background $csGray
-	$borderRadius(6px)
-	h2
-		color #ccc
-
+	.profileTitle
+		color $csLightGreen2
+	p 
+		color $csGreen
 .background
-	background $csOrange
-	$borderRadius(6px)
-	h2
-		color $csLightOrange
+	.profileTitle
+		color $csLightOrange2
+	p 
+		color $csOrange
 .goals
-	background $csBlue
-	$borderRadius(6px)
-	h2
-		color $csLightBlue
+	.profileTitle
+		color $csLightGray2
+	p 
+		color $csGray
+.objectives
+	.profileTitle
+		color $csLightBlue2
+	p
+		color $csBlue
+
+
 
 .info
 	background #000
-	$borderRadius(6px)
 	text-align center
 
 .info
@@ -65,9 +84,6 @@
 		}
 	}
 
-h1.nombre {
-	color: #aaa;
-}
 h3.linkage {
 	color: #ccc;
 	font-size: 1.5em;
@@ -82,13 +98,3 @@ h3.linkage {
 		color white
 		padding 10px
 		border-radius 5px
-
-.headerRow
-	margin 0 0 20px -20px
-.withPlayer
-	h1
-		float left
-		line-height	2em
-		margin-right 20px
-	img
-		float left

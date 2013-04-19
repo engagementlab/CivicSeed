@@ -68,7 +68,6 @@ $game.$others = {
 	message: function(message, id) {
 		$.each(_onScreenPlayers, function(key, player) {
 			if(player.id === id) {
-				$game.$audio.playTriggerFx('chatReceive');
 				player.message(message);
 			}
 		});
@@ -348,16 +347,11 @@ $game.$others = {
 			},
 
 			message: function(message) {
-				
-
 				if(!otherPlayer.offScreen) {
 					var len = message.length + otherPlayer.name.length + 2,
 						fadeTime = len * 80 + 1000,
 						sz = Math.floor(len * 8) + 10;
-					
 					fadeTime = (fadeTime > 9000) ? 9000 : fadeTime;
-
-					
 					if(otherPlayer.isChatting) {
 						clearTimeout(otherPlayer.hideTimer);
 						$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
@@ -365,7 +359,6 @@ $game.$others = {
 					else {
 						$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
 					}
-					
 					var half = sz / 2,
 						placeX;
 
@@ -393,12 +386,11 @@ $game.$others = {
 						'left': placeX,
 						'width': sz
 					});
-					
+					$game.$audio.playTriggerFx('chatReceive');
 					otherPlayer.isChatting = true;
 					//make it remove after 5 seconds...
 					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,fadeTime);
 				}
-				
 			},
 
 			hideChat: function() {

@@ -1,83 +1,63 @@
 .profiles
 	if firstName
 		.row.headerRow
-			.span8.withPlayer
-				h1.nombre #{firstName} #{lastName}
-				img(src='/img/game/players/mini/#{colorNum}.png')
+			.span1.withPlayer
+				p 
+					img(src='/img/game/players/mini/#{colorNum}.png')
+			.span11
+				p.nombre #{firstName} #{lastName}
+				p.school <em>Tufts University</em>
 		if profileUnlocked
 			.row
-				.span4.info
-					img(src='http://placehold.it/280x280.png')
-					.about
-						table
-							tr
-								td School:
-								td Tufts University
-							//- tr
-							//- 	td Concentration:
-							//- 	td programming
-							//- tr
-							//- 	td Interests:
-							//- 	td basketball, food, backstreet boys
-
-				.span4
-					.goals.box
-						h2 Personal Goals
-						if resume[3]
-							p #{resume[3]}
-						else
-							p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur sodales ligula in libero. 
-					.objectives.box
-						h2 Civic Objectives
-						if resume[2]
-							p #{resume[2]}
-						else
-							p Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. 
-				.span4
-					.background.box
-						h2 Background & Skills
-						if resume[1]
-							p #{resume[1]}
-						else
-							p Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. 
-					.motivations.box
-						h2 Motivations
-						if resume[0]
-							p #{resume[0]}
-						else
-							p Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor.
+				.span12.motivations.box
+					if resume[0]
+						p <span class="profileTitle">Motivations </span> #{resume[0]}
+			.row
+				.span12.box.background
+					if resume[1]
+						p <span class="profileTitle">Background & Skills </span> #{resume[1]}
+			.row
+				.span12.box.goals
+					if resume[2]
+						p <span class="profileTitle">Personal Goals </span> #{resume[2]}
+			.row
+				.span12.box.objectives
+					if resume[3]
+						p <span class="profileTitle">Civic Objectives </span> #{resume[3]}
 		else
 			if (firstName === 'Demo')
 				.row.demoProfile
-					h1 The Story of Civic Seed
-					h2 Call to Action
-					p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
-					p Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.
-					h2 Exploring the Mystery
-					p As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.
-					h2 The Big Reveal
-					p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color. 
-					p The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.
-					h2 Boss Battle and Final Sequence
-					p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each. 
-					p This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.
-					h2 Features of the full version of Civic Seed
-					ul
-						li Music and sound effects
-						li Animated intro and finale sequences
-						li Timed boss level
-						li Hidden “Easter Egg” seeds
-						li Heads-up knowledge contests between players
-						li Sharable Community Service Resumes
-					<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-					p.demoUserPlayLink
-						a(href='/game') Play the Game
+					.span12
+						h1 The Story of Civic Seed
+						h2 Call to Action
+						p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
+						p Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.
+						h2 Exploring the Mystery
+						p As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.
+						h2 The Big Reveal
+						p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color. 
+						p The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.
+						h2 Boss Battle and Final Sequence
+						p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each. 
+						p This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.
+						h2 Features of the full version of Civic Seed
+						ul
+							li Music and sound effects
+							li Animated intro and finale sequences
+							li Timed boss level
+							li Hidden “Easter Egg” seeds
+							li Heads-up knowledge contests between players
+							li Sharable Community Service Resumes
+						<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+						p.demoUserPlayLink
+							a(href='/game') Play the Game
 			else
 				.row
-					h2 Your profile is locked. Play the game to complete your profile!
-					if (sessionStorage.userEmail === email)
-						p.buttonResume
-							a(href='/game') Resume Game
+					.span12
+						h2 Your profile is locked. Play the game to complete your profile!
+						if (sessionStorage.userEmail === email)
+							p.buttonResume
+								a(href='/game') Resume Game
 	else
 		h1 This person does not exist in our database.
 		
