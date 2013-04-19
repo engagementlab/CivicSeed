@@ -48,7 +48,7 @@
 							p Sed lectus. Integer euismod lacus luctus magna. Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor.
 		else
 			if (firstName === 'Demo')
-				.row
+				.row.demoProfile
 					h1 The Story of Civic Seed
 					h2 Call to Action
 					p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
@@ -69,10 +69,12 @@
 						li Hidden “Easter Egg” seeds
 						li Heads-up knowledge contests between players
 						li Sharable Community Service Resumes
-					a.demoUserPlayLink(href='/game') Play the Game
+					<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					p.demoUserPlayLink
+						a(href='/game') Play the Game
 			else
 				.row
-					h1 Profile Locked
+					h2 Your profile is locked. Play the game to complete your profile!
 					if (sessionStorage.userEmail === email)
 						p.buttonResume
 							a(href='/game') Resume Game

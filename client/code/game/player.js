@@ -833,7 +833,7 @@ $game.$player = {
 
 	saveMapImage: function() {
 		//only do this if we have dropped X more seeds?
-		console.log('saving image');
+		//console.log('saving image');
 		if($game.$player.game.seeds.dropped - _previousSeedsDropped > 4) {
 			$game.$player.game.colorMap = $game.$map.saveImage();
 			ss.rpc('game.player.saveImage', $game.$player.game.colorMap);
@@ -850,16 +850,16 @@ $game.$player = {
 				a = answers.length;
 			//go through the answer sheet to see if the current tangram is there &&
 			//in the right place
+			//console.log(answers[a], $game.$player.game.resources);
 			while(--a > -1) {
 				var curAnswerId = answers[a].id;
-				console.log(curAnswerId);
 				//look thru player's resources for this answer 
 				var p = 0,
 					found = false;
 				while(p < $game.$player.game.resources.length) {
 					if($game.$player.game.resources[p].npc === curAnswerId) {
 						found = true;
-						console.log('found');
+						//console.log('found');
 						//get out of the loop
 						p = $game.$player.game.resources.length;
 					}
@@ -868,11 +868,10 @@ $game.$player = {
 				if(!found) {
 					return false;
 				}
-
-				//if we made it here, that means you have all pieces
-				$game.$player.game.gnomeState = 3;
-				$game.$gnome.setGnomeState(3);
 			}
+			//if we made it here, that means you have all pieces
+			$game.$player.game.gnomeState = 3;
+			$game.$gnome.setGnomeState(3);
 		}
 	},
 
@@ -931,7 +930,7 @@ $game.$player = {
 		var gFile = 'puzzle' + $game.$player.game.currentLevel,
 			imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/tangram/'+gFile+'small.png';
 
-		_inventorySel.append('<div class="inventoryItem '+gFile+'"><img src="' + imgPath2 + '" draggable = "false"></div>');
+		_inventorySel.append('<div class="inventoryItem inventoryPuzzle '+gFile+'"><img src="' + imgPath2 + '" draggable = "false"></div>');
 		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
 	},
 

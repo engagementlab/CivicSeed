@@ -151,7 +151,6 @@ $game.$gnome = {
 		// 		}
 		// 	}
 		// }
-		
 	},
 
 	show: function() {
@@ -357,7 +356,6 @@ $game.$gnome = {
 				}
 			}
 			else {
-				$('.gnomeArea .nextButton').removeClass('hideButton');
 				$('.gnomeArea .closeButton').removeClass('hideButton');
 			}
 		}
@@ -396,7 +394,7 @@ $game.$gnome = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				if($game.$player.game.firstTime) {
-					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the enigma civica. The more you understand, the more powerful your seeds will become. Behold!');
+					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
 					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility<br><br>.Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I --<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
 					$('.gnomeArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
@@ -405,10 +403,10 @@ $game.$gnome = {
 			}
 			else if(_currentSlide === 1) {
 				if($game.$player.game.gnomeState > 1) {
-					$('.gnomeArea .message').text('Here is the enigma to view again.');
+					$('.gnomeArea .message').text('Here is the Enigma to view again.');
 				}
 				else {
-					$('.gnomeArea .message').text('This puzzle represents the next piece of the enigma. You can view it at anytime in your inventory.');
+					$('.gnomeArea .message').text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
 
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
@@ -431,8 +429,8 @@ $game.$gnome = {
 					$game.$player.game.gnomeState = 2;
 					$game.$player.checkGnomeState();
 					$game.$gnome.setGnomeState(2);
-					$('.gnomeArea .message').text('The enigma has four parts, each with a verse and a puzzle. You can view the enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$('.gnomeContent').html('<p>To answer the enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.</p><p>Answer the questions to gain more seeds and, more importantly, pieces that will enable to you solve the <em>enigma civica.</em></p><p>When you think you have enough pieces to solve the enigma, come see me again.</p><p>The answers to the first part can be found in Brightwood Forest, to the northwest of here. Good luck!</p><p><img src="/img/game/minimap.png"></p>');
+					$('.gnomeArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
+					$('.gnomeContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p>');
 				}
 			}
 		}
@@ -449,11 +447,15 @@ $game.$gnome = {
 					$('.inventoryItem').attr('draggable','true');
 				});
 				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
-				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the enigma.');
+				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png';
 					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
 				$('.gnomeContent').html(newHTML);
+
+				//replace the tangram image in the inventory with tip
+				$('.inventoryPuzzle').hide();
+				$('.inventoryHelp').show();
 			}
 			//right/wrong screen
 			else if(_currentSlide === 1) {
@@ -517,6 +519,8 @@ $game.$gnome = {
 			$('.inventory').slideUp(function() {
 				$game.$player.inventoryShowing = false;
 				$('.inventory button').removeClass('hideButton');
+				$('.inventoryHelp').hide();
+				$('.inventoryPuzzle').show();
 			});
 		}
 	},
@@ -580,19 +584,19 @@ $game.$gnome = {
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
-				message = 'At least one is incorrect. Review the resources by clicking them in the inventory.';
+				message = 'Oh! That’s not quite right. Think more about how the pieces of the Enigma relate to one another, and try again.';
 				$game.$gnome.clearBoard();
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
 				_numMegaSeeds -=1;
-				message = 'You are missing some pieces. Be sure to read the riddle carefully to help pick out the right pieces.';
+				message = 'You are missing some pieces. Be sure to read the Enigma carefully to help pick out the right pieces.';
 				$game.$gnome.clearBoard();
 			}
 			else if(nudge) {
 				correct= false;
 				_numMegaSeeds -=1;
-				message = 'So close! You have the right pieces, just give them a nudge.';
+				message = 'So close! You have the right pieces, just fix the placement.';
 				$game.$gnome.clearBoard();
 			}
 

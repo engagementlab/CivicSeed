@@ -6,9 +6,9 @@ module.exports.global = [{
 	role: 'superadmin'
 }, {
 	firstName: 'codenberg',
-	lastName: 'theGreat',
+	lastName: 'supercoder',
 	password: '',
-	email: 'c',
+	email: 'codenberg',
 	role: 'superadmin',
 	gameStarted: true,
 	profileSetup: true,
@@ -49,51 +49,7 @@ module.exports.global = [{
 		pledges: 5
 	},
 	admin: {
-		instances: ['awesome','testing']
-	}
-}, {
-	firstName: 'Demo',
-	lastName: 'User',
-	password: '',
-	email: 'd',
-	role: 'actor',
-	gameStarted: true,
-	profileSetup: true,
-	profileUnlocked: false,
-	isPlaying: false,
-	game: {
-		instanceName: 'awesome',
-		currentLevel: 0,
-		rank: 'novice gardener',
-		position: {
-			x: 64,
-			y: 77,
-			inTransit: false
-		},
-		colorInfo: {
-			rgb: {
-				r: 157,
-				g: 45,
-				b: 243
-			},
-			tilesheet: 4
-		},
-		resources: [],
-		inventory: [],
-		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
-			dropped: 0
-		},
-		gnomeState: 0,
-		firstTime: true,
-		resume: [],
-		seenThing: false,
-		resourcesDiscovered: 0,
-		playingTime: 0,
-		tilesColored: 0,
-		pledges: 5
+		instances: ['awesome','testing','demo']
 	}
 }, {
 	firstName: 'Testing',
@@ -120,7 +76,7 @@ module.exports.global = [{
 				g: 95,
 				b: 243
 			},
-			tilesheet: 1
+			tilesheet: 11
 		},
 		resources: [],
 		inventory: [],
@@ -141,9 +97,9 @@ module.exports.global = [{
 	}
 }, {
 	firstName: 'Dummy',
-	lastName: 'Face',
+	lastName: 'Tester',
 	password: '',
-	email: 'f',
+	email: 'd',
 	role: 'actor',
 	gameStarted: true,
 	profileSetup: true,

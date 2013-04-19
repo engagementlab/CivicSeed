@@ -96,7 +96,7 @@ module.exports.global = [{
 		tagline: 'Power and Privilege',
 		feedbackRight: 'You are SO right.',
 		feedbackWrong: 'Are you sure about that? Maybe take another look.',
-		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others, but do so simply to feel good about themselves, or out of a sense of charity, are not approaching service from a productive angle."',
+		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others out of a sense of charity are not approaching service from a productive angle."',
 		questionType: 'yesno',
 		answer: 'yes',
 		shape: {

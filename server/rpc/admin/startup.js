@@ -30,9 +30,59 @@ exports.actions = function(req, res, ss) {
 				if(dataType === 'users') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
 					userData = require(rootDir + '/data/users');
+					var colorData = require(rootDir + '/data/colors');
 					dbActions.dropCollection('users', function() {
 						dbActions.saveDocuments(userModel, userData.global, function() {
-							res('Data loaded: ' + dataType);
+							//create demo users
+							demoUsers = [];
+							for(var i = 0; i < 15; i++) {
+								var newColor = colorData.global[i];
+								var d = {
+									firstName: 'Demo',
+									lastName: 'User',
+									password: 'demo',
+									email: ('demo' + i),
+									role: 'actor',
+									gameStarted: true,
+									profileSetup: true,
+									profileUnlocked: false,
+									isPlaying: false,
+									game: {
+										instanceName: 'demo',
+										currentLevel: 0,
+										rank: 'novice gardener',
+										position: {
+											x: 64,
+											y: 77,
+											inTransit: false
+										},
+										colorInfo: {
+											rgb: newColor,
+											tilesheet: (i+1)
+										},
+										resources: [],
+										inventory: [],
+										seeds: {
+											normal: 0,
+											riddle: 0,
+											special: 0,
+											dropped: 0
+										},
+										gnomeState: 0,
+										firstTime: true,
+										resume: [],
+										seenThing: false,
+										resourcesDiscovered: 0,
+										playingTime: 0,
+										tilesColored: 0,
+										pledges: 5
+									}
+								};
+								demoUsers.push(d);
+							}
+							dbActions.saveDocuments(userModel, demoUsers, function() {
+								res('Data loaded: ' + dataType);
+							});
 						});
 					});
 				} else if(dataType === 'tiles') {
