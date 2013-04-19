@@ -120,6 +120,36 @@ var self = exports.actions = function(req, res, ss) {
 			});
 		},
 
+		makeResponsePrivate: function(data) {
+			GameModel.where('instanceName').equals(data.instanceName)
+				.find(function (err, game) {
+					if(err) {
+						console.error('Could not find game', err);
+					} else if(game) {
+						var all = game[0].resourceResponses,
+							a = 0,
+							found = false,
+							removeThis = null;
+						while(!found) {
+							if(all[a].npc == data.npcId && all[a].id == data.playerId) {
+								all[a].madePublic = false;
+								found = true;
+								removeThis = all[a];
+							}
+							a++;
+						}
+						game[0].save(function(err, good) {
+							if(err) {
+
+							} else {
+								ss.publish.channel(req.session.game.instanceName,'ss-removeAnswer', removeThis);
+								res(true);
+							}
+						});
+					}
+			});
+		},
+
 		loadGnome: function() {
 			GnomeModel.findOne(function(err, gnome) {
 				res(gnome);

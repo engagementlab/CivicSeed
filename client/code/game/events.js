@@ -114,6 +114,10 @@ $(function() {
 		$game.$resources.addAnswer(data);
 	});
 
+	ss.event.on('ss-removeAnswer', function(data, chan) {
+		$game.$resources.removeAnswer(data);
+	});
+
 	//level change for a player
 	ss.event.on('ss-levelChange', function(data, chan) {
 		$game.$others.levelChange(data.id, data.level);
@@ -146,6 +150,7 @@ $(function() {
 				_renderInfo.colorNum = _playerColorNum;
 				$game.changeStatus();
 				$(this).removeClass('currentButton');
+				$game.$player.saveMapImage();
 			}
 			else {
 				//open it up OR turn it on
@@ -165,6 +170,7 @@ $(function() {
 				$game.temporaryStatus('seed mode ended, as you were');
 			}
 			$(this).removeClass('currentButton');
+			$game.$player.saveMapImage();
 		}
 	});
 
@@ -345,8 +351,9 @@ $(function() {
 	});
 
 	$('.progressButton').on('click', function() {
-		$(this).toggleClass('currentButton');
+		
 		if($game.showingProgress) {
+			$(this).toggleClass('currentButton');
 			_progressArea.fadeOut(function() {
 				$game.showingProgress = false;
 				$game.changeStatus();
@@ -355,6 +362,7 @@ $(function() {
 		else {
 			var goAhead = startNewAction();
 			if(goAhead) {
+				$(this).toggleClass('currentButton');
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
 			}
@@ -376,7 +384,12 @@ $(function() {
 		$(this).toggleClass('currentButton');
 		$('.helpArea').fadeToggle();
 	});
-
+	$('.helpArea a i').on('click', function() {
+		$('.helpButton').toggleClass('currentButton');
+		$('.helpArea').fadeOut('fast', function() {
+			_helpShowing = false;
+		});
+	});
 	$('.globalHud > div > i, .playerHud > div > i, .seedventory > div > i').on('mouseenter',function() {
 		var info = $(this).attr('title');
 		$(this).tooltip('show');
@@ -395,6 +408,9 @@ $(function() {
 
 	$('body').on('click', '.publicButton', function() {
 		$game.$player.makePublic($(this).attr('data-npc'));
+	});
+	$('body').on('click', '.privateButton', function() {
+		$game.$player.makePrivate($(this).attr('data-npc'));
 	});
 	$('body').on('click', '.pledgeButton', function() {
 		var id = $(this).attr('data-player');

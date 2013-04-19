@@ -25,7 +25,8 @@ var _curFrame = 0,
 	_inventorySel = null,
 	_startTime = null,
 	_playerColorNum = null;
-	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]];
+	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]],
+	_previousSeedsDropped = null;
 
 $game.$player = {
 
@@ -47,6 +48,7 @@ $game.$player = {
 	keyX: 0,
 	keyY: 0,
 	keyMoving: false,
+	pathfinding: false,
 
 	init: function() {
 		//get the players info from the db, alert other users of presence
@@ -73,7 +75,7 @@ $game.$player = {
 
 			//TODO: REMOVE THIS AND CREATE VARS FOR EACH PROPERTY DIRECTLY UNDER PLAYER
 			$game.$player.game = newInfo.game;
-
+			_previousSeedsDropped = $game.$player.game.seeds.dropped;
 			//set the render info
 			_renderInfo.colorNum = _playerColorNum,
 			_renderInfo.srcX = 0,
@@ -359,12 +361,13 @@ $game.$player = {
 			//trigger npc to popup _info and stuff
 			if($game.$player.npcOnDeck) {
 				$game.$player.npcOnDeck = false;
-					$game.$npc.show();
+				$game.$npc.show();
 			}
 		}
 	},
 
 	beginMove: function(x, y) {
+		$game.$player.pathfinding = true;
 		_info.offX = 0,
 		_info.offY = 0;
 		//check if it is an edge of the world
@@ -391,6 +394,8 @@ $game.$player = {
 			var start = $game.graph.nodes[loc.y][loc.x],
 				end = $game.graph.nodes[y][x],
 				result = $game.$astar.search($game.graph.nodes, start, end);
+
+			pathfinding = false;
 			if(result.length > 0) {
 				$game.$player.sendMoveInfo(result);
 				
@@ -649,6 +654,7 @@ $game.$player = {
 							$game.changeStatus();
 							$game.temporaryStatus('you are out seeds');
 							$('.seedButton').removeClass('currentButton');
+							$game.$player.saveMapImage();
 						}
 						_normalHudCount.text($game.$player.game.seeds.normal);
 					}
@@ -661,6 +667,7 @@ $game.$player = {
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
 							$('.seedButton').removeClass('currentButton');
+							$game.$player.saveMapImage();
 						}
 						_riddleHudCount.text($game.$player.game.seeds.riddle);
 					}
@@ -673,6 +680,7 @@ $game.$player = {
 							$game.changeStatus();
 							$game.changeStatus('no more seeds for you!');
 							$('.seedButton').removeClass('currentButton');
+							$game.$player.saveMapImage();
 						}
 						_specialHudCount.text($game.$player.game.seeds.special);
 					}
@@ -820,6 +828,16 @@ $game.$player = {
 				$game.$player.checkGnomeState();
 			}
 			return numToAdd;
+		}
+	},
+
+	saveMapImage: function() {
+		//only do this if we have dropped X more seeds?
+		console.log('saving image');
+		if($game.$player.game.seeds.dropped - _previousSeedsDropped > 4) {
+			$game.$player.game.colorMap = $game.$map.saveImage();
+			ss.rpc('game.player.saveImage', $game.$player.game.colorMap);
+			_previousSeedsDropped = $game.$player.game.seeds.dropped;
 		}
 	},
 
@@ -1019,7 +1037,29 @@ $game.$player = {
 				};
 				ss.rpc('game.npc.makeResponsePublic', info, function(res) {
 					//take away the make public and replcae with eye?
-					$('.publicButton').addClass('hideButton');
+					$('.publicButton').remove();
+					$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
+				});
+			}
+		}
+	},
+
+	makePrivate: function(npcId) {
+		var l = $game.$player.game.resources.length;
+		while(--l > -1) {
+			if(npcId == $game.$player.game.resources[l].npc) {
+				//update this resource
+				$game.$player.game.resources[l].madePublic = false;
+				//update resource db
+				var info = {
+					playerId: $game.$player.id,
+					npcId: npcId,
+					instanceName: $game.$player.game.instanceName
+				};
+				ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
+					//take away the make public and replcae with eye?
+					$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
+					$('.privateButton').remove();
 				});
 			}
 		}

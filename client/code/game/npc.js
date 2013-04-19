@@ -276,7 +276,7 @@ $game.$npc = {
 				} else {
 					levelPlace = 'southeast';
 				}
-				_speak = 'You should go check out the ' + levelPlace;
+				_speak = 'You should go explore the ' + levelPlace + '.';
 			}
 			//they have a response for past, present, future
 			else {
@@ -302,7 +302,6 @@ $game.$npc = {
 	},
 
 	selectNpc: function(i) {
-		$game.$npc.hideChat();
 		_index = i;
 		var stringId = String(_index);
 		_curNpc = _allNpcs[stringId];

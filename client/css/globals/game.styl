@@ -383,12 +383,17 @@ body, button, p, a
 .resourceArea a i,
 .gnomeArea a i,
 .progressArea a i,
-.collectedResources a i
+.collectedResources a i,
+.helpArea a i
 	position absolute
 	top 10px
 	right 10px
 .resourceArea form
-	padding 20px
+	padding 20px 0 0 20px
+	margin 0
+	textarea
+		padding 10px
+		margin 0
 	input
 		margin 10px
 .speechBubble
@@ -655,7 +660,7 @@ p.finalQuestion
 		width 725px
 		padding 0 
 		margin 5px 0
-	.publicButton, .pledgeButton
+	.publicButton, .pledgeButton, .privateButton
 		position absolute
 		right 10px
 		top 10px
@@ -812,4 +817,12 @@ p.townSite
 	margin 150px 100px 0 100px
 .resourceContentBody ul li
 	margin 0 20px
+	font-size .9em
+.hideLock
+	display none
+.privateButton
+	cursor pointer
+p.privacyMessage
+	margin 0 0 0 10px
+	color $csOrange
 	font-size .9em

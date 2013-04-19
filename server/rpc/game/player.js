@@ -100,7 +100,22 @@ exports.actions = function(req, res, ss) {
 		savePosition: function(info) {
 			games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
 			games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
-			req.session.game = info;
+			// req.session.save();
+		},
+
+		saveImage: function(info) {
+			userModel
+				.findById(req.session.userId, function (err, user) {
+					if(err) {
+						console.log(err);
+						res(err);
+					} else if(user) {
+						user.game.colorMap = info;
+						user.save(function (y) {
+							res(true);
+						});
+					}
+				});
 		},
 
 		dropSeed: function(bombed, info) {
@@ -124,7 +139,7 @@ exports.actions = function(req, res, ss) {
 					res(false);
 				} else if(oldTiles) {
 					colorHelpers.modifyTiles(oldTiles, bombed, function(newTiles, newBombs) {
-						console.log(newTiles, newBombs);
+						//console.log(newTiles, newBombs);
 						//saveEach tile
 						colorHelpers.saveTiles(newTiles, function() {
 							//send out new bombs AND player info to update score

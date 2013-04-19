@@ -256,7 +256,7 @@ $game.$resources = {
 						inputBox += '</form>';
 					}
 					else if(_questionType === 'open') {
-						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
 					}
 					else if(_questionType === 'truefalse') {
 						//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
@@ -287,10 +287,11 @@ $game.$resources = {
 			rightOne = yourAnswer.answers.length - 1;
 
 		displayAnswers += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
-		if(yourAnswer.madePublic) {
-			displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
-		} else {
+		if(!yourAnswer.madePublic) {
+			// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
 			displayAnswers += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.id +'">Make Public</button>';
+		} else {
+			displayAnswers += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.id +'"></i>';
 		}
 		displayAnswers += '</li>';
 		if(_curResource.playerAnswers) {
@@ -356,9 +357,9 @@ $game.$resources = {
 				$('.speechBubble .speakerName').text(_who + ': ');
 				$('.speechBubble .message').text(_speak);
 
-				$('.speechBubble').fadeIn(function() {
-					$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,4000);
-				});
+				$('.speechBubble').fadeIn();
+				$game.$npc.isChat = true;
+				$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,4000);
 			}
 			else {
 				$game.$resources.addContent();
@@ -443,6 +444,23 @@ $game.$resources = {
 	addAnswer: function(data) {
 		var stringId = String(data.npc);
 		_resources[stringId].playerAnswers.push(data);
+	},
+
+	removeAnswer: function(data) {
+		var stringId = String(data.npc);
+		var found = false,
+			i = 0;
+		console.log(_resources[stringId].playerAnswers);
+		while(!found) {
+			if(_resources[stringId].playerAnswers[i].id === data.id) {
+				_resources[stringId].playerAnswers.splice(i, 1);
+				found = true;
+			}
+			i++;
+			if(i >= _resources[stringId].playerAnswers.length) {
+				found = true;
+			}
+		}
 	},
 
 	popupCheck: function() {
