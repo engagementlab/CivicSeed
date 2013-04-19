@@ -376,7 +376,7 @@ body, button, p, a
 	bottom 20px
 	right 20px
 
-.backButton
+.backButton, .clearBoardButton
 	position absolute
 	bottom 20px
 	left 20px
@@ -539,8 +539,7 @@ body, button, p, a
 	color #999
 	font-size .8em
 	font-family $buttonFont
-.gnomeArea .answerButton,
-.gnomeArea i
+.gnomeArea .answerButton, .gnomeArea .clearBoardButton, .gnomeArea i
 	z-index 9999
 .gnomeArea .trash
 	opacity .5
@@ -607,10 +606,11 @@ p.finalQuestion
 	right 10px
 .tangramArea > .feedback
 	width 320px
-	height 36px
+	height auto
 	position absolute
-	text-align center
-	font-size 20px
+	text-align left
+	font-size 1.2em
+	padding 10px
 	top 150px
 	left 310px
 	border-radius 5px

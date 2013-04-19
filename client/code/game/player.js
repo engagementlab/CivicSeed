@@ -104,11 +104,11 @@ $game.$player = {
 
 			//the player's color
 			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
-			
+
 			//set the color of the hud to personalize it
 			var rgba = 'rgba(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ', .6)';
 			$('.hudCount').css('background', rgba);
-				
+
 			//init everything else that depends on the player info
 			$game.$others.init();
 			$game.$thing.init();
@@ -122,7 +122,7 @@ $game.$player = {
 			_normalHudCount.text($game.$player.game.seeds.normal);
 			_riddleHudCount.text($game.$player.game.seeds.riddle);
 			_specialHudCount.text($game.$player.game.seeds.special);
-			
+
 
 			//selectors for chat stuff
 			_chatId = 'player'+ newInfo.id,
@@ -842,10 +842,37 @@ $game.$player = {
 	},
 
 	checkGnomeState: function() {
-		//put player to state 3 (solving) if they have enough resources
+		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
-		if($game.$player.game.inventory.length >= _numRequired[$game.$player.game.currentLevel] && $game.$player.game.gnomeState > 1) {
-			$game.$player.game.gnomeState = 3;
+		if($game.$player.game.gnomeState > 1) {
+			//compare each player's resource to the correct answer
+			var answers = $game.$gnome.tangram[$game.$player.game.currentLevel].answer,
+				a = answers.length;
+			//go through the answer sheet to see if the current tangram is there &&
+			//in the right place
+			while(--a > -1) {
+				var curAnswerId = answers[a].id;
+				console.log(curAnswerId);
+				//look thru player's resources for this answer 
+				var p = 0,
+					found = false;
+				while(p < $game.$player.game.resources.length) {
+					if($game.$player.game.resources[p].npc === curAnswerId) {
+						found = true;
+						console.log('found');
+						//get out of the loop
+						p = $game.$player.game.resources.length;
+					}
+					p++;
+				}
+				if(!found) {
+					return false;
+				}
+
+				//if we made it here, that means you have all pieces
+				$game.$player.game.gnomeState = 3;
+				$game.$gnome.setGnomeState(3);
+			}
 		}
 	},
 

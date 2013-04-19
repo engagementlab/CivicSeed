@@ -336,6 +336,12 @@ $(function() {
 		return false;
 	}));
 
+	$('.gnomeArea .clearBoardButton').on('click', (function (e) {
+		e.preventDefault();
+		$game.$gnome.clearBoard();
+		return false;
+	}));
+
 	$('.progressArea a i').on('click', (function (e) {
 		e.preventDefault();
 		$('.progressButton').removeClass('currentButton');
