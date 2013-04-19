@@ -392,21 +392,20 @@ $game.$player = {
 				masterEndY = $game.currentTiles[x][y].y;
 
 			var start = $game.graph.nodes[loc.y][loc.x],
-				end = $game.graph.nodes[y][x],
-				result = $game.$astar.search($game.graph.nodes, start, end);
+				end = $game.graph.nodes[y][x];
 
-			pathfinding = false;
-			if(result.length > 0) {
-				$game.$player.sendMoveInfo(result);
-				
-				ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-					$game.$audio.update(masterEndX, masterEndY);
-				});
-			} else {
-				$game.$player.npcOnDeck = false;
-			}
+			$game.$astar.search($game.graph.nodes, start, end, function(result) {
+				$game.$player.pathfinding = false;
+				if(result.length > 0) {
+					$game.$player.sendMoveInfo(result);
+					ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
+						$game.$audio.update(masterEndX, masterEndY);
+					});
+				} else {
+					$game.$player.npcOnDeck = false;
+				}
+			});
 		});
-			
 	},
 
 	beginKeyWalk: function(dirX, dirY) {

@@ -211,7 +211,7 @@ $game.$astar = {
 			return node.f; 
 		});
 	},
-	search: function(grid, start, end, diagonal, heuristic) {
+	search: function(grid, start, end, callback, diagonal, heuristic) {
 		$game.$astar.init(grid);
 		heuristic = heuristic || $game.$astar.manhattan;
 
@@ -235,7 +235,10 @@ $game.$astar = {
 					curr = curr.parent;
 				}
 				ret.push(start);
-				return ret.reverse();
+				// return ret.reverse();
+                var rev = ret.reverse();
+                //change here
+                callback(rev);
 			}
 
 			// Normal case -- move currentNode from open to closed, process each of its neighbors.
@@ -279,7 +282,9 @@ $game.$astar = {
 		}
 
 		// No result was found - empty array signifies failure to find path.
-		return [];
+		//return [];
+        //change here
+        callback([]);
 	},
 	manhattan: function(pos0, pos1) {
 		// See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html

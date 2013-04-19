@@ -79,7 +79,7 @@ $game.$mouse = {
 				if(!user) {
 					var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
 					//go
-					if(state === -1) {
+					if(state === -1 && !$game.$player.pathfinding) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
 						if($game.$npc.isChat) {
 							$game.$npc.hideChat();
@@ -94,7 +94,7 @@ $game.$mouse = {
 
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
-						if(state !== $game.$gnome.index) {
+						if(state !== $game.$gnome.index && !game.$player.pathfinding) {
 							$game.$npc.selectNpc(state);
 							//move them to the spot to the
 							//BOTTOM LEFT corner of the npc
