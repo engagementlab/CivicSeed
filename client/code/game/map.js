@@ -56,18 +56,16 @@ $game.$map = {
 	newBomb: function(bombed, id) {
 		//THIS WILL MOVE TO THE RPC on server, NOT local
 		//this will simply send out the coords of the tiles to redraw
-		// console.log(bombed);
+		console.log(bombed);
 		for(var b = 0; b < bombed.length; b += 1) {
 			//only add it to render list if it is on current screen
 			var loc = $game.masterToLocal(bombed[b].x, bombed[b].y),
 				curTile = null;
 			if(loc) {
 				//if there IS a color
-				//console.log(bombed[b]);
 				curTile = $game.currentTiles[loc.x][loc.y];
 				curTile.color = bombed[b].color;
 				curTile.curColor = bombed[b].curColor;
-				//console.log(curTile);
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
 

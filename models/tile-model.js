@@ -10,15 +10,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		background3: Number,
 		foreground: Number,
 		foreground2: Number,
-		mapIndex: Number,
-		color: {
-			r: Number,
-			g: Number,
-			b: Number,
-			a: Number,
-			owner: String
-		},
-		curColor: String
+		mapIndex: Number
 	});
 
 

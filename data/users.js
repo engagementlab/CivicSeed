@@ -49,7 +49,7 @@ module.exports.global = [{
 		pledges: 5
 	},
 	admin: {
-		instances: ['awesome','testing','demo']
+		instances: ['awesome','demo']
 	}
 }, {
 	firstName: 'Testing',
@@ -125,13 +125,13 @@ module.exports.global = [{
 		resources: [],
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
+			normal: 5,
+			riddle: 5,
 			special: 0,
 			dropped: 0
 		},
-		gnomeState: 0,
-		firstTime: true,
+		gnomeState: 2,
+		firstTime: false,
 		resume: [],
 		seenThing: false,
 		resourcesDiscovered: 0,

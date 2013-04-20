@@ -298,8 +298,6 @@ $game.$renderer = {
 				$game.TILE_SIZE
 				);
 		}
-
-		
 	},
 
 	drawForegroundTile: function(tileData) {
@@ -510,9 +508,6 @@ $game.$renderer = {
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
 			$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
 			);
-
-
-
 	},
 
 	renderNpc: function (npcData) {

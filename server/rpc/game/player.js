@@ -5,6 +5,7 @@ var intervalId = {},
 	userModel,
 	tileModel,
 	gameModel,
+	colorModel,
 	rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	colorHelpers = null;
@@ -22,6 +23,7 @@ exports.actions = function(req, res, ss) {
 			service = ss.service;
 			userModel = service.useModel('user', 'ss');
 			tileModel = service.useModel('tile', 'ss');
+			colorModel = service.useModel('color', 'ss');
 			gameModel = service.useModel('game', 'ss');
 
 			//should we pull the game info from the db instead of it being passed in a session?
@@ -86,7 +88,18 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						res(false);
 					} else if(allTiles) {
-						res(allTiles);
+						colorModel
+							.where('instanceName').equals(req.session.game.instanceName)
+							.where('x').gte(x1).lt(x2)
+							.where('y').gte(y1).lt(y2)
+							.sort('mapIndex')
+							.find(function (err, colorTiles) {
+								if(err) {
+									res(false);
+								} else if(colorTiles) {
+									res(allTiles, colorTiles);
+								}
+							});
 					}
 				});
 		},
@@ -126,51 +139,62 @@ exports.actions = function(req, res, ss) {
 				minX = info.x,
 				maxX = info.x + info.sz,
 				minY = info.y,
-				maxY = info.y + info.sz;
+				maxY = info.y + info.sz,
+				allTiles = null,
+				updateTiles = [],
+				insertTiles = [];
 
 			//get a chunk of the bounding tiles from the DB (instead of querying each individually)
-			tileModel
+			colorModel
+				.where('instanceName').equals(req.session.game.instanceName)
 				.where('x').gte(minX).lt(maxX)
 				.where('y').gte(minY).lt(maxY)
-				.select('x y color curColor')
 				.sort('mapIndex')
 				.find(function (err, oldTiles) {
-				if(err) {
-					res(false);
-				} else if(oldTiles) {
-					colorHelpers.modifyTiles(oldTiles, bombed, function(newTiles, newBombs) {
-						//console.log(newTiles, newBombs);
+					if(err) {
+						res(false);
+					} else if(oldTiles) {
+						//console.log('oldTiles: ', oldTiles);
+						var modifiedTiles = null;
+						if(oldTiles.length > 0) {
+							modifiedTiles = colorHelpers.modifyTiles(oldTiles, bombed);
+						} else {
+							modifiedTiles = {
+								insert: bombed,
+								update: []
+							};
+						}
 						//saveEach tile
-						colorHelpers.saveTiles(newTiles, function() {
-							//send out new bombs AND player info to update score
-							var newTileCount = info.tilesColored + newBombs.length,
-							sendData = {
-								bombed: newBombs,
-								id: info.id,
-								tilesColored: newTileCount
-							};
-							//we are done,send out the color information to each client to render
-							ss.publish.channel(req.session.game.instanceName,'ss-seedDropped', sendData);
+						colorHelpers.saveTiles(modifiedTiles, function(done) {
+							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
+								//send out new bombs AND player info to update score
+								var newTileCount = info.tilesColored + allTiles.length,
+								sendData = {
+									bombed: allTiles,
+									id: info.id,
+									tilesColored: newTileCount
+								};
+								// //we are done,send out the color information to each client to render
+								ss.publish.channel(req.session.game.instanceName,'ss-seedDropped', sendData);
 
-							var newInfo = {
-								name: info.name,
-								numBombs: newBombs.length,
-								count: info.tilesColored
-							};
+								var newInfo = {
+									name: info.name,
+									numBombs: allTiles.length,
+									count: info.tilesColored
+								};
 
-							colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
-								if(updates.updateBoard) {
-									ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
-								}
-								ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
-								//FINNNALLY done updating and stuff, respond to the player
-								//telling them if it was sucesful
-								res(newBombs.length);
+								colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
+									if(updates.updateBoard) {
+										ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+									}
+									ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
+									//FINNNALLY done updating and stuff, respond to the player
+									//telling them if it was sucesful
+									res(allTiles.length);
+								});
 							});
-						});
-					});
-				}
-			});
+					}
+				});
 		},
 
 		getInfo: function(id) {
@@ -273,124 +297,111 @@ exports.actions = function(req, res, ss) {
 
 colorHelpers = {
 
-	modifyTiles: function(oldTiles, bombed, callback) {
+	modifyTiles: function(oldTiles, bombed) {
+		//console.log('old: ',oldTiles, 'new: ', bombed);
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
-		var curIndex = 0,
-			bombIndex = 0,
-			newTiles = [],
-			newBombs = [];
+		var oIndex = oldTiles.length-1,
+			bIndex = bombed.length,
+			updateTiles = [],
+			insertTiles = [];
 
-		var mod = function() {
-			//make sure they are the same tile before we modify any colors
-			// console.log(curIndex, bombIndex);
-			// console.log('old', oldTiles[curIndex]);
-			// console.log('bombed', bombed[bombIndex]);
-			if(oldTiles[curIndex].x === bombed[bombIndex].x && oldTiles[curIndex].y === bombed[bombIndex].y) {
-				colorHelpers.modifyOneTile(oldTiles[curIndex], bombed[bombIndex], function(newTile, newBomb) {
-					//increase the current spot in the tiles from db regardless
-					curIndex++;
-					bombIndex++;
-					newTiles.push(newTile);
-					newBombs.push(newBomb);
-					if(bombIndex >= bombed.length) {
-							callback(newTiles, newBombs);
+		//go thru each new tile (bombed)
+		while(--bIndex > -1) {
+			//if we haven't hit the beginning (-1) of the old index, look thru it
+			//console.log(bIndex, oIndex);
+			if(oIndex > -1) {
+				//console.log(bombed[bIndex].mapIndex, oldTiles[oIndex].mapIndex);
+				//make sure they are the same tile before we modify any colors
+				if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
+					//modify tile
+					var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
+					if(modifiedTile.insert) {
+						insertTiles.push(modifiedTile.tile);
+						// console.log('new owner');
 					} else {
-						mod();
+						updateTiles.push(modifiedTile.tile);
+						//console.log('modded');
 					}
-				});
-			} else {
-				curIndex++;
-				if(curIndex >= oldTiles.length) {
-						callback(newTiles, newBombs);
+					oIndex--;
 				} else {
-					mod();
+					//if we made it here, we are out of olds, must add it
+					insertTiles.push(bombed[bIndex]);
+					// console.log('new');
 				}
+			} else {
+				insertTiles.push(bombed[bIndex]);
+				//console.log('newb');
 			}
-		};
-		mod();
+		}
+		return {insert: insertTiles, update: updateTiles};
 	},
 
-	modifyOneTile: function(tile, bomb, callback)  {
+	modifyOneTile: function(tile, bomb)  {
 		//AHHHH SO MANY POSSIBILITIES, stripping this down
 		//there IS a pre-existing color
-		if(tile.color.owner !== undefined) {
-			//if the old one is a nobody (not owned)
-			if(tile.color.owner === 'nobody') {
-				//if the NEW one should be owner, then update tile and bomb curColor
-				if(bomb.color.owner !== 'nobody') {
-					var rgbString0 = 'rgba(' + bomb.color.r + ',' + bomb.color.g + ',' + bomb.color.b + ',' + bomb.color.a  + ')';
-					bomb.curColor = rgbString0;
-					tile.set({
-						color: bomb.color,
-						curColor: rgbString0
-					});
-				}
-				//new one should be modified -- if the opacity hasn't maxed out 
-				else if(tile.color.a < 0.5 ) {
-					var prevR = tile.color.r,
-						prevG = tile.color.g,
-						prevB = tile.color.b,
-						prevA = tile.color.a;
-					var weightA = prevA / 0.1,
-						weightB = 1;
-					var newR = Math.floor((weightA * prevR + weightB * bomb.color.r) / (weightA + weightB)),
-						newG = Math.floor((weightA * prevG + weightB * bomb.color.g) / (weightA + weightB)),
-						newB = Math.floor((weightA * prevB + weightB * bomb.color.b) / (weightA + weightB));
-					bomb.color.a = Math.round((tile.color.a + 0.1) * 100) / 100,
-					bomb.color.r = newR,
-					bomb.color.g = newG,
-					bomb.color.b = newB;
-					var rgbString1 = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + bomb.color.a + ')';
-					tile.set({
-						color: bomb.color,
-						curColor: rgbString1
-					});
-					bomb.curColor = rgbString1;
-				}
-				//don't modify. change bomb for sending out since maxed
-				else {
-					bomb.color = tile.color;
-					bomb.curColor = tile.curColor;
-				}
+		//if the old one is a nobody (not owned)
+		if(tile.color.owner === 'nobody') {
+			//if the NEW one should be owner, then update tile and bomb curColor
+			if(bomb.color.owner !== 'nobody') {
+				return {insert: true, tile: bomb};
 			}
-			//old one is the OWNER, so just modify bomb for user
+			//new one should be modified -- if the opacity hasn't maxed out 
+			else if(tile.color.a < 0.5 ) {
+				var prevR = tile.color.r,
+					prevG = tile.color.g,
+					prevB = tile.color.b,
+					prevA = tile.color.a;
+				var weightA = prevA / 0.1,
+					weightB = 1;
+				var newR = Math.floor((weightA * prevR + weightB * bomb.color.r) / (weightA + weightB)),
+					newG = Math.floor((weightA * prevG + weightB * bomb.color.g) / (weightA + weightB)),
+					newB = Math.floor((weightA * prevB + weightB * bomb.color.b) / (weightA + weightB)),
+					newA = Math.round((tile.color.a + 0.1) * 100) / 100,
+					rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
+				tile.color.r = newR;
+				tile.color.g = newG;
+				tile.color.b = newB;
+				tile.color.a = newA;
+				tile.curColor = rgbString;
+				return {insert: false, tile: tile};
+			}
+			//don't modify. change tile for sending out since maxed
 			else {
-				bomb.color = tile.color;
-				bomb.curColor = tile.curColor;
+				return {insert: false, tile: tile};
 			}
 		}
-		//no color, add it to tile
+		//old one is the OWNER, so just modify tile for user
 		else {
-			var rgbString2 = 'rgba(' + bomb.color.r + ',' + bomb.color.g + ',' + bomb.color.b + ',' + bomb.color.a  + ')';
-			tile.set({
-				color: bomb.color,
-				curColor: rgbString2
-			});
-			bomb.curColor = rgbString2;
+			return {insert: false, tile: tile};
 		}
-
-		//now that we have exhausted everything, shall we return this?
-		callback(tile,bomb);
 	},
 
 	saveTiles: function(tiles, callback) {
-		var cur = 0;
-		var saveMe = function() {
-			tiles[cur].save(function(err, result) {
-				if(err) {
-
-				} else if(result) {
-					cur++;
-					if(cur >= tiles.length) {
-						callback();
-					} else{
-						saveMe();
-					}
+		var num = tiles.update.length,
+			cur = 0;
+		var save = function() {
+			console.log(tiles.update[cur]);
+			tiles.update[cur].save(function(err,suc) {
+				cur++;
+				if(cur >= num) {
+					insertNew();
+				} else {
+					save();
 				}
 			});
 		};
-		saveMe();
+
+		var insertNew = function() {
+			colorModel.create(tiles.insert, function(err,suc) {
+				callback(true);
+			});
+		};
+		if(num > 0) {
+			save();
+		} else {
+			insertNew();
+		}
 	},
 
 	gameColorUpdate: function(newInfo, instanceName, callback) {

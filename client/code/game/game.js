@@ -164,12 +164,11 @@ exports.$game = {
 	},
 
 	getTiles: function(x, y, x2, y2, callback) {
-		ss.rpc('game.player.getMapData', x, y, x + x2, y + y2, function(response) {
+		ss.rpc('game.player.getMapData', x, y, x + x2, y + y2, function(map, colors) {
 			//breakdown single array into 2d array
-			var index;
+			var index = null;
 
 			$game.nextTiles = new Array(x2);
-			
 			var i = x2;
 
 			while(--i >= 0) {
@@ -178,8 +177,33 @@ exports.$game = {
 
 				while(--j >= 0) {
 					index = j * x2 + (i % x2);
-					$game.nextTiles[i][j] = response[index];
+					$game.nextTiles[i][j] = map[index];
 				}
+			}
+			//now go thru colors and attach to proper tile
+			//should be going left to right, top to bottom
+			var cLength = colors.length,
+				a = 0,
+				b = 0,
+				c = 0;
+			while(c < cLength) {
+				var found = false;
+				while(!found) {
+					// console.log(a,b,c);
+					// console.log($game.nextTiles[a][b].mapIndex, colors[c].mapIndex);
+					if($game.nextTiles[a][b].mapIndex === colors[c].mapIndex) {
+						$game.nextTiles[a][b].color = colors[c].color;
+						$game.nextTiles[a][b].curColor = colors[c].curColor;
+						found = true;
+					} else {
+						a++;
+						if(a >= $game.VIEWPORT_WIDTH) {
+							b++;
+							a = 0;
+						}
+					}
+				}
+				c++;
 			}
 			callback();
 		});
@@ -196,7 +220,7 @@ exports.$game = {
 	copyTileArray: function(callback) {
 
 		$game.currentTiles = new Array($game.VIEWPORT_WIDTH);
-		
+
 		var i = $game.VIEWPORT_WIDTH;
 
 		while(--i >= 0) {
@@ -239,7 +263,6 @@ exports.$game = {
 					//any npcs (by index)
 					stringId = String(val),
 					found = false;
-					
 					//see if that is in there already (because of the two tiles)
 
 					var i = $game.onScreenNpcs.length;

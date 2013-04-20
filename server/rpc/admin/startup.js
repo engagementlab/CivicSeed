@@ -6,6 +6,7 @@ var dbActions = require(rootDir + '/server/utils/databaseActions');
 
 var userModel = service.useModel('user', 'preload');
 var tileModel = service.useModel('tile', 'preload');
+var colorModel = service.useModel('color', 'preload');
 var npcModel = service.useModel('npc', 'preload');
 var resourceModel = service.useModel('resource','preload');
 var gnomeModel = service.useModel('gnome', 'preload');
@@ -146,10 +147,30 @@ exports.actions = function(req, res, ss) {
 								foreground2: foreground2Array[i],
 								mapIndex: i
 							});
-
 						}
+
 						dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function() {
-							res('Data loaded: ' + numberOfTiles + ' ' + dataType);
+							res('Data loaded: ' + dataType);
+						});
+					});
+				} else if(dataType === 'colors') {
+					var colors = [{
+						instanceName: 'test',
+						x: 0,
+						y: 0,
+						mapIndex: 0,
+						color: {
+							r: 255,
+							g: 0,
+							b: 0,
+							a: 0.5,
+							owner: 'nobody'
+						},
+						curColor: 'rgba(255,0,0,0.5)'
+					}];
+					dbActions.dropCollection('colors', function() {
+						dbActions.saveDocuments(colorModel, colors, function() {
+							res('Data loaded: ' + dataType);
 						});
 					});
 				} else if(dataType === 'npcs') {

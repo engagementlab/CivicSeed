@@ -26,7 +26,8 @@ var _curFrame = 0,
 	_startTime = null,
 	_playerColorNum = null;
 	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]],
-	_previousSeedsDropped = null;
+	_previousSeedsDropped = null,
+	_rgbString = null;
 
 $game.$player = {
 
@@ -123,6 +124,7 @@ $game.$player = {
 			_riddleHudCount.text($game.$player.game.seeds.riddle);
 			_specialHudCount.text($game.$player.game.seeds.special);
 
+			_rgbString = 'rgba(' + (newInfo.game.colorInfo.rgb.r + 10) + ',' + (newInfo.game.colorInfo.rgb.g + 10) + ',' + (newInfo.game.colorInfo.rgb.b + 10) + ',';
 
 			//selectors for chat stuff
 			_chatId = 'player'+ newInfo.id,
@@ -544,7 +546,9 @@ $game.$player = {
 				return false;
 			}
 		}
-		var b = 0;
+		var tempRGB = null,
+			tempIndex = null,
+			b = 0;
 		while(b < options.sz) {
 			var a = 0;
 			while(a < options.sz) {
@@ -557,9 +561,12 @@ $game.$player = {
 						if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
 							var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
 							//set x,y and color info for each square
+							tempRGB = _rgbString + tempA + ')';
+							tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
 							square = {
 								x: origX + a,
 								y: origY + b,
+								mapIndex: tempIndex,
 								color:
 								{
 									r: $game.$player.game.colorInfo.rgb.r + 10,
@@ -567,7 +574,9 @@ $game.$player = {
 									b: $game.$player.game.colorInfo.rgb.b + 10,
 									a: tempA,
 									owner: 'nobody'
-								}
+								},
+								curColor: tempRGB,
+								instanceName: $game.$player.game.instanceName
 							};
 
 							//assign the middle one the owner
@@ -587,9 +596,12 @@ $game.$player = {
 						//only add a square if it exists in our special array
 						if(_specialSeedData[options.special][specialIndex] === 1) {
 							//set x,y and color info for each square
+							tempRGB = _rgbString + '0.3)';
+							tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
 							square = {
 								x: origX + a,
 								y: origY + b,
+								mapIndex: tempIndex,
 								color:
 								{
 									r: $game.$player.game.colorInfo.rgb.r + 10,
@@ -597,7 +609,9 @@ $game.$player = {
 									b: $game.$player.game.colorInfo.rgb.b + 10,
 									a: 0.3,
 									owner: 'nobody'
-								}
+								},
+								curColor: tempRGB,
+								instanceName: $game.$player.game.instanceName
 							};
 							bombed.push(square);
 						}

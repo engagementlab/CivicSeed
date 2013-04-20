@@ -58,7 +58,9 @@ $(function() {
 	ss.event.on('ss-seedDropped', function(data, chan) {
 		//console.log('ss-seedDropped: ',data);
 		$game.$map.newBomb(data.bombed, data.id);
-		$game.$others.updateTilesColored(data.id, data.tilesColored);
+		if($game.$player.id !== data.id) {
+			$game.$others.updateTilesColored(data.id, data.tilesColored);
+		}
 	});
 
 	//new message from chat
