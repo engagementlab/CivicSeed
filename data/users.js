@@ -5,8 +5,8 @@ module.exports.global = [{
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
-	firstName: 'codenberg',
-	lastName: 'supercoder',
+	firstName: 'jimmy',
+	lastName: 'dolan',
 	password: '',
 	email: 'codenberg',
 	role: 'superadmin',
@@ -52,13 +52,13 @@ module.exports.global = [{
 		instances: ['awesome','demo']
 	}
 }, {
-	firstName: 'Testing',
-	lastName: 'Player',
+	firstName: 'Michael',
+	lastName: 'Jordan',
 	password: '',
-	email: 't',
+	email: 'm',
 	role: 'actor',
 	gameStarted: true,
-	profileSetup: false,
+	profileSetup: true,
 	profileUnlocked: false,
 	isPlaying: false,
 	game: {
@@ -96,10 +96,10 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
-	firstName: 'Dummy',
-	lastName: 'Tester',
+	firstName: 'Larry',
+	lastName: 'Bird',
 	password: '',
-	email: 'd',
+	email: 'l',
 	role: 'actor',
 	gameStarted: true,
 	profileSetup: true,
@@ -140,10 +140,10 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
-	firstName: 'Another',
-	lastName: 'Tester',
+	firstName: 'Pistol',
+	lastName: 'Pete',
 	password: '',
-	email: 'a',
+	email: 'p',
 	role: 'actor',
 	gameStarted: true,
 	profileSetup: true,

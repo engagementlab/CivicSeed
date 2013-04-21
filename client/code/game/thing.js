@@ -9,8 +9,8 @@ var _coords = [
 		],
 	_positions = [
 		{x: 7, y: 20, d: -1, target: -3},
-		{x: 135, y: 31, d: 1, target: 145},
-		{x: 137, y: 123, d: 1, target: 145},
+		{x: 137, y: 33, d: 1, target: 145},
+		{x: 137, y: 124, d: 1, target: 145},
 		{x: 7, y: 84, d: -1, target: -3},
 		{x: 0, y: 0, d: 0, target: 0},
 		{x: 0, y: 0, d: 0, target: 0}
@@ -122,10 +122,11 @@ $game.$thing = {
 				if(_renderInfo.dir === -1) {
 					_renderInfo.srcY = 128;
 				} else {
-					_renderInfo.srcY = 196;
+					_renderInfo.srcY = 192;
 				}
 			}
 		}
+
 	},
 
 	idleCheckTrigger: function() {

@@ -687,7 +687,7 @@ $game.$renderer = {
 	},
 
 	renderThing: function(info) {
-		// console.log(info.srcX);
+		// console.log(info.srcX, info.srcY);
 		_charactersContext.drawImage(
 			_tilesheets[10],
 			info.srcX,

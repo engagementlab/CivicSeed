@@ -135,12 +135,17 @@ var self = module.exports = {
 	},
 
 	showChat: function(chat) {
-		var html = '<div class="allChat">';
-		for(var i = 0; i < chat.length; i++) {
-			var date = chat[i].when.substring(0,10),
-				time = chat[i].when.substring(11,20);
-			html += '<p><span class="time">[' + date + ' || ' + time + ']</span><span class="who"> ' + chat[i].who + ' </span><span class="what">' + chat[i].what + '</span></p>';
+		var html = '<h2>Recent Chat History</h2><div class="allChat">';
+		if(chat.length === 0) {
+			html += '<p>No one has spoken yet.</p>';
+		} else {
+			for(var i = 0; i < chat.length; i++) {
+				var date = chat[i].when.substring(0,10),
+					time = chat[i].when.substring(11,20);
+				html += '<p><span class="time">[' + date + ' || ' + time + ']</span><span class="who"> ' + chat[i].who + ' </span><span class="what">' + chat[i].what + '</span></p>';
+			}
 		}
+		
 		html += '</div>';
 		$('.output').empty().append(html);
 	},
@@ -216,7 +221,7 @@ var self = module.exports = {
 			}
 		}
 		if(!found) {
-			html += '<p class="allPlayerAnswers">There are no answers yet for this question.</p>';
+			html += '<p class="allPlayerAnswers">There are no answers for this question yet.</p>';
 		}
 
 		$(selector).append(html);

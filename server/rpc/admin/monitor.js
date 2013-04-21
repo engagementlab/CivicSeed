@@ -28,7 +28,7 @@ exports.actions = function(req, res, ss) {
 		getInstanceNames: function(id) {
 			userModel
 				.findById(id, function(err,data) {
-					console.log(err,data);
+					//console.log(err,data);
 					if(err) {
 						res(err, false);
 					} else {
@@ -40,9 +40,10 @@ exports.actions = function(req, res, ss) {
 		getPlayers: function(instance) {
 			userModel
 				.where('game.instanceName').equals(instance)
+				.where('role').equals('actor')
 				.select('firstName lastName id isPlaying profileUnlocked game.resourcesDiscovered game.resources game.playingTime')
 				.find(function(err,data) {
-					console.log(err,data);
+					//console.log(err,data);
 					if(err) {
 						res(err, false);
 					} else {
@@ -76,7 +77,7 @@ exports.actions = function(req, res, ss) {
 monitorHelpers = {
 
 	getInstances: function(instances, callback) {
-		console.log(instances);
+		//console.log(instances);
 		var numInstances = instances.length,
 			cur = 0,
 			allInstances = [];
