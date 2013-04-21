@@ -17,30 +17,56 @@ exports.actions = function(req, res, ss) {
 			npcModel = service.useModel('npc', 'ss');
 			chatModel = service.useModel('chat', 'ss');
 			userModel = service.useModel('user', 'ss');
-			// userModel.findById(id, function(err, user) {
-			// 	if(err) {
-			// 		res('huh?');
-			// 	} else if(user) {
-			// 		if(user.admin.instances) {
-			// 			monitorHelpers.getInstances(user.admin.instances, function(games) {
-			// 				res(games);
-			// 			});
-			// 		} else {
-			// 			res('what?');
-			// 		}
-			// 	}
-			// });
-			res(true);
+			npcModel
+				.where('isHolding').equals(true)
+				.select('id resource.question level resource.questionType')
+				.find(function(err, npcs) {
+					res(err,npcs);
+			});
 		},
-		getGameInstance: function(name) {
-			gameModel
-				.where('instanceName').equals(name)
-				.find(function(err, game) {
-					if(err) {
 
-					} else if(game) {
-						res(game[0]);
+		getInstanceNames: function(id) {
+			userModel
+				.findById(id, function(err,data) {
+					console.log(err,data);
+					if(err) {
+						res(err, false);
+					} else {
+						res(false, data.admin.instances);
 					}
+				});
+		},
+
+		getPlayers: function(instance) {
+			userModel
+				.where('game.instanceName').equals(instance)
+				.select('firstName lastName id isPlaying profileUnlocked game.resourcesDiscovered game.resources game.playingTime')
+				.find(function(err,data) {
+					console.log(err,data);
+					if(err) {
+						res(err, false);
+					} else {
+						res(false, data);
+					}
+				});
+		},
+
+		getRecentChat: function(instance) {
+			chatModel
+				.where('instanceName').equals(instance)
+				.limit(100)
+				.sort('-when')
+				.find(function(err,chat) {
+					res(err,chat);
+				});
+		},
+
+		getInstanceAnswers: function(instance) {
+			gameModel
+				.where('instanceName').equals(instance)
+				.select('resourceResponses')
+				.find(function(err,answers){
+					res(err,answers[0]);
 				});
 		}
 	};

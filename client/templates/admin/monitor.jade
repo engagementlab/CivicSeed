@@ -1,2 +1,16 @@
-.console
-	p This will be the place to monitor the game.
+
+.monitor
+	.row
+		.span12
+			h1 Monitor Panel
+	.row	
+		each instance, i in instances
+			.span4
+				h3 Game: #{instance}
+				p.adminLink#players(data-instance='#{instance}') Players
+				p.adminLink#chat(data-instance='#{instance}') Chat Logs
+				p.adminLink#questions(data-instance='#{instance}') Questions
+				
+	.row
+		.span12.output
+

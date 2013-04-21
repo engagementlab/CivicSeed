@@ -1,0 +1,77 @@
+.monitor
+	.adminLink
+		width 150px
+		cursor pointer
+		padding 10px
+		background $csOrange
+		color white
+		text-align center
+		font-family	$buttonFont
+		$borderRadius(5px)
+
+	#questions
+		background $csBlue
+
+	#chat
+		background $csPurple
+
+	.output
+		margin 20px 0 0 20px
+		.allChat
+			font-family $buttonFont
+			p 
+				margin 20px 0
+			.time
+				color white
+				font-size .8em
+				padding 11px 7px 7px 7px 
+				background $csGray
+			.who
+					padding 5px
+					color white
+					font-size 1.2em
+					background $csPurple
+			p:nth-of-type(even)
+				.what 
+					padding 5px
+					color white
+					font-size 1.2em
+					background $csBlue
+			p:nth-of-type(odd)
+				.what 
+					padding 5px
+					color white
+					font-size 1.2em
+					background $csGreen
+		.question
+			font-family $bodyFont
+			background $csBlue
+			cursor pointer
+			margin 0
+			margin-top 20px
+			color white
+			padding 10px
+			font-size 1.2em
+			
+		.answer
+			background $csGray
+			color white
+			padding 10px
+			margin 0
+			font-size 1.2em
+			font-family $buttonFont
+		
+		.allQuestion
+			p
+				background $csGray
+				color white
+				padding 10px
+				margin 0
+				font-size 1.2em
+				font-family $buttonFont
+			p.mainQ
+				font-family $bodyFont
+				background $csBlue
+				cursor pointer
+				margin-top 20px
+				
