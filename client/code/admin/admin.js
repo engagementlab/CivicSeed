@@ -145,7 +145,7 @@ var self = module.exports = {
 				html += '<p><span class="time">[' + date + ' || ' + time + ']</span><span class="who"> ' + chat[i].who + ' </span><span class="what">' + chat[i].what + '</span></p>';
 			}
 		}
-		
+
 		html += '</div>';
 		$('.output').empty().append(html);
 	},
@@ -154,7 +154,7 @@ var self = module.exports = {
 		ss.rpc('admin.monitor.init', function(err,res) {
 			if(res) {
 				self.allQuestions = res;
-				//console.log(res);
+				// console.log(res);
 			}
 		});
 	},
@@ -171,7 +171,7 @@ var self = module.exports = {
 				if(self.allQuestions[n].id === npc) {
 					found = true;
 					if(self.allQuestions[n].resource.questionType === 'open') {
-						html += '<p class="question">Q: ' + self.allQuestions[n].resource.question + '</p>';
+						html += '<p class="question level' + self.allQuestions[n].level + '">Q: ' + self.allQuestions[n].resource.question + '</p>';
 					}
 				}
 				n++;
@@ -190,7 +190,7 @@ var self = module.exports = {
 		for(var q = 0; q < self.allQuestions.length; q++) {
 			if(self.allQuestions[q].resource.questionType === 'open') {
 				html += '<div class="allQuestion" data-instance="' + instance + '" data-npc="' + self.allQuestions[q].id +'">';
-				html += '<p data-npc="' + self.allQuestions[q].id +'" class="mainQ">' + self.allQuestions[q].resource.question + '</p></div>';
+				html += '<p data-npc="' + self.allQuestions[q].id +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>';
 			}
 		}
 		self.getAllAnswers(instance);
@@ -200,7 +200,7 @@ var self = module.exports = {
 	getAllAnswers: function(instance) {
 		ss.rpc('admin.monitor.getInstanceAnswers', instance, function(err, res){
 			if(res) {
-				self.allAnswers = res.resourceResponses;	
+				self.allAnswers = res.resourceResponses;
 			} else {
 				self.allAnswers = [];
 			}
