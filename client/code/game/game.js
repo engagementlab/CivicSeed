@@ -185,21 +185,28 @@ exports.$game = {
 			var cLength = colors.length,
 				a = 0,
 				b = 0,
-				c = 0;
+				c = 0,
+				aMax = $game.nextTiles.length,
+				bMax = $game.nextTiles[0].length;
+			//console.log(colors, aMax, bMax);
 			while(c < cLength) {
 				var found = false;
 				while(!found) {
-					// console.log(a,b,c);
-					// console.log($game.nextTiles[a][b].mapIndex, colors[c].mapIndex);
+					//console.log(a,b,c);
+					//console.log($game.nextTiles[a][b].mapIndex, colors[c].mapIndex);
 					if($game.nextTiles[a][b].mapIndex === colors[c].mapIndex) {
+						//console.log('found',a,b,c);
 						$game.nextTiles[a][b].color = colors[c].color;
 						$game.nextTiles[a][b].curColor = colors[c].curColor;
 						found = true;
-					} else {
-						a++;
-						if(a >= $game.VIEWPORT_WIDTH) {
-							b++;
-							a = 0;
+					}
+					a++;
+					if(a >= aMax) {
+						a = 0;
+						b++;
+						if(b >= bMax) {
+							console.log('errrr');
+							found = true;
 						}
 					}
 				}

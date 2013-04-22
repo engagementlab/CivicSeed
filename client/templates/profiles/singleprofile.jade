@@ -9,6 +9,10 @@
 				p.school <em>Tufts University</em>
 		if profileUnlocked
 			.row
+				.span12.box
+					p 
+						a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
+			.row
 				.span12.motivations.box
 					if resume[0]
 						p <span class="profileTitle">Motivations </span> #{resume[0]}

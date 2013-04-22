@@ -18,6 +18,6 @@ module.exports.global = [{
 	bossModeUnlocked: false,
 	leaderboard: [],
 	resourceCount: [10, 14, 9, 10],
-	instanceName: 'demo-game',
+	instanceName: 'demo',
 	resourceResponses: []
 }];

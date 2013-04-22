@@ -10,6 +10,7 @@ var rootDir = process.cwd(),
 
 var html = '<h2>Why hello there, #{firstName}!</h2>';
 html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
+html += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
 html += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
 html += '<strong>#{password}</strong></p>';
 html += '<p>Your username is your email: <strong>#{email}</strong></p>';

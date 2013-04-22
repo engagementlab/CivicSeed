@@ -158,6 +158,8 @@ exports.actions = function(req, res, ss) {
 						var modifiedTiles = null;
 						if(oldTiles.length > 0) {
 							modifiedTiles = colorHelpers.modifyTiles(oldTiles, bombed);
+							console.log(modifiedTiles.insert.length);
+							console.log(modifiedTiles.update.length);
 						} else {
 							modifiedTiles = {
 								insert: bombed,
@@ -301,40 +303,68 @@ colorHelpers = {
 		//console.log('old: ',oldTiles, 'new: ', bombed);
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
-		var oIndex = oldTiles.length-1,
-			bIndex = bombed.length,
+		var bIndex = bombed.length,
 			updateTiles = [],
 			insertTiles = [];
 
 		//go thru each new tile (bombed)
 		while(--bIndex > -1) {
-			//if we haven't hit the beginning (-1) of the old index, look thru it
-			//console.log(bIndex, oIndex);
-			if(oIndex > -1) {
-				//console.log(bombed[bIndex].mapIndex, oldTiles[oIndex].mapIndex);
-				//make sure they are the same tile before we modify any colors
+			//unoptimized version:
+			var oIndex = oldTiles.length,
+				found = false;
+			//stop when we find it
+			while(--oIndex > -1) {
 				if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-					//modify tile
 					var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
-					if(modifiedTile.insert) {
-						insertTiles.push(modifiedTile.tile);
-						// console.log('new owner');
-					} else {
-						updateTiles.push(modifiedTile.tile);
-						//console.log('modded');
-					}
-					oIndex--;
-				} else {
-					//if we made it here, we are out of olds, must add it
-					insertTiles.push(bombed[bIndex]);
-					// console.log('new');
+					updateTiles.push(modifiedTile);
+					found = true;
+					oIndex = -1;
 				}
-			} else {
+			}
+			if(!found) {
 				insertTiles.push(bombed[bIndex]);
-				//console.log('newb');
 			}
 		}
 		return {insert: insertTiles, update: updateTiles};
+			// //if we haven't hit the beginning (-1) of the old index, look thru it
+			// //console.log(bIndex, oIndex);
+			// if(oIndex > -1) {
+			// 	console.log(bombed[bIndex].mapIndex, oldTiles[oIndex].mapIndex);
+			// 	//make sure they are the same tile before we modify any colors
+			// 	if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
+			// 		console.log('modify');
+			// 		//modify tile
+			// 		var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
+			// 		updateTiles.push(modifiedTile);
+			// 		//console.log('modded');
+			// 		oIndex--;
+			// 	} else {
+			// 		//if we made it here, we are out of olds, must add it
+			// 		insertTiles.push(bombed[bIndex]);
+			// 		// console.log('new');
+			// 	}
+			// 	//check if new old tile index is <= the next one
+			// 	var lower = false;
+			// 	while(!lower) {
+			// 		if(oIndex < 0) {
+			// 			//exit out so we can continue
+			// 			lower = true;
+			// 		} else {
+			// 			//make sure there is a next bomb
+			// 			if(bIndex > 0) {
+			// 				if(oldTiles[oIndex].mapIndex <= bombed[bIndex-1].mapIndex) {
+			// 					lower = true;
+			// 				} else{
+			// 					oIndex--;
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// } else {
+			// 	insertTiles.push(bombed[bIndex]);
+			// 	//console.log('newb');
+			// }
+		//}
 	},
 
 	modifyOneTile: function(tile, bomb)  {
@@ -344,7 +374,9 @@ colorHelpers = {
 		if(tile.color.owner === 'nobody') {
 			//if the NEW one should be owner, then update tile and bomb curColor
 			if(bomb.color.owner !== 'nobody') {
-				return {insert: true, tile: bomb};
+				tile.color = bomb.color;
+				tile.curColor = bomb.curColor;
+				return tile;
 			}
 			//new one should be modified -- if the opacity hasn't maxed out 
 			else if(tile.color.a < 0.5 ) {
@@ -364,16 +396,16 @@ colorHelpers = {
 				tile.color.b = newB;
 				tile.color.a = newA;
 				tile.curColor = rgbString;
-				return {insert: false, tile: tile};
+				return tile;
 			}
 			//don't modify. change tile for sending out since maxed
 			else {
-				return {insert: false, tile: tile};
+				return tile;
 			}
 		}
 		//old one is the OWNER, so just modify tile for user
 		else {
-			return {insert: false, tile: tile};
+			return tile;
 		}
 	},
 

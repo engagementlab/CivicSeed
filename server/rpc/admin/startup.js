@@ -36,11 +36,11 @@ exports.actions = function(req, res, ss) {
 						dbActions.saveDocuments(userModel, userData.global, function() {
 							//create demo users
 							demoUsers = [];
-							for(var i = 0; i < 15; i++) {
-								var newColor = colorData.global[i];
+							for(var i = 1; i < 16; i++) {
+								var newColor = colorData.global[i-1];
 								var d = {
 									firstName: 'Demo',
-									lastName: 'User',
+									lastName: ('User' + i),
 									password: 'demo',
 									email: ('demo' + i),
 									role: 'actor',
@@ -59,7 +59,7 @@ exports.actions = function(req, res, ss) {
 										},
 										colorInfo: {
 											rgb: newColor,
-											tilesheet: (i+1)
+											tilesheet: i
 										},
 										resources: [],
 										inventory: [],
