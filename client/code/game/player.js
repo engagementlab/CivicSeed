@@ -796,38 +796,39 @@ $game.$player = {
 
 	answerResource: function(correct, id, answer, npcLevel) {
 
-		var r = {
+		var newInfo = {
 			npc: id,
 			answers: [answer],
 			attempts: 1,
-			result: correct
+			result: correct,
+			seeded: 0
 		};
-		var rs = null,
+		var realResource = null,
 			l = $game.$player.game.resources.length;
 
 		//see if the resource is already in the list
 		while(--l > -1) {
 			if(id === $game.$player.game.resources[l].npc) {
-				rs = $game.$player.game.resources[l];
+				realResource = $game.$player.game.resources[l];
 				continue;
 			}
 		}
 
 		//if not, then add it to the list
-		if(!rs) {
-			$game.$player.game.resources.push(r);
-			rs = $game.$player.game.resources[$game.$player.game.resources.length - 1];
+		if(!realResource) {
+			$game.$player.game.resources.push(newInfo);
+			realResource = $game.$player.game.resources[$game.$player.game.resources.length - 1];
 		}
 		else {
-			rs.answers.push(r.answers[0]);
-			rs.attempts += 1;
-			rs.result = r.result;
+			realResource.answers.push(newInfo.answers[0]);
+			realResource.attempts += 1;
+			realResource.result = newInfo.result;
 		}
 
 		//the answer was correct, add item to inventory
 		if(correct) {
 			$game.$player.game.resourcesDiscovered += 1;
-			var rawAttempts = 6 - rs.attempts,
+			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.game.seeds.normal += numToAdd;
 			_seedHudCount.text($game.$player.game.seeds.normal);
@@ -838,7 +839,10 @@ $game.$player = {
 				$game.$player.addToInventory(id);
 				$game.$player.checkGnomeState();
 			}
+			saveResourceToDB(realResource);
 			return numToAdd;
+		} else {
+			saveResourceToDB(realResource);
 		}
 	},
 
@@ -1124,3 +1128,18 @@ $game.$player = {
 	}
 };
 
+//private functions
+function privateFunction() {
+	console.log('I am private');
+}
+
+function saveResourceToDB(resource) {
+	console.log('hoolla');
+	var info = {
+		id: $game.$player.id,
+		resource: resource
+	};
+	ss.rpc('game.player.saveResource', info, function() {
+		console.log('resource saved');
+	});
+}

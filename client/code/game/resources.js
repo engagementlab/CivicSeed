@@ -301,7 +301,7 @@ $game.$resources = {
 			while(--spot > -1) {
 				//double check
 				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
-					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
+					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-npc="' + _curResource.id + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
 				}
 			}
 			displayAnswers += '</ul></div>';

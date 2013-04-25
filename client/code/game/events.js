@@ -132,7 +132,7 @@ $(function() {
 			$game.$player.game.seeds.riddle += 1;
 			$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
-			$('.seedButton .hudCount').text($game.$player.game.seeds.riddle);
+			$('.seedButton .hudCount').text(numSeeds);
 		}
 	});
 
@@ -359,7 +359,7 @@ $(function() {
 	});
 
 	$('.progressButton').on('click', function() {
-		
+
 		if($game.showingProgress) {
 			$(this).toggleClass('currentButton');
 			_progressArea.fadeOut(function() {
@@ -402,17 +402,6 @@ $(function() {
 		var info = $(this).attr('title');
 		$(this).tooltip('show');
 	});
-	// _w.on('keydown',function(e) {
-	// 	var goAhead = startNewAction();
-	// 	if(!$('#chatText').is(':focus')) {
-	// 		if(goAhead) {
-	// 			$game.$mouse.updateKey(e.which);
-	// 		}
-	// 	}
-	// });
-	// $(window).on('keyup',function(e) {
-	// 	$game.$player.keyWalking = false;
-	// });
 
 	$('body').on('click', '.publicButton', function() {
 		$game.$player.makePublic($(this).attr('data-npc'));
@@ -421,9 +410,13 @@ $(function() {
 		$game.$player.makePrivate($(this).attr('data-npc'));
 	});
 	$('body').on('click', '.pledgeButton', function() {
-		var id = $(this).attr('data-player');
+		var info = {
+				id: $(this).attr('data-player'),
+				npc: $(this).attr('data-npc')
+			};
+
 		if($game.$player.game.pledges > 0) {
-			ss.rpc('game.player.pledgeSeed', id, function(r) {
+			ss.rpc('game.player.pledgeSeed', info, function(r) {
 				$game.$player.game.pledges -= 1;
 				clearTimeout(_pledgeFeedbackTimeout);
 				$('.resourceArea .feedback').text('Thanks! (they will say). You can seed ' + $game.$player.game.pledges + ' more answers this level.').show();

@@ -281,18 +281,60 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
-		pledgeSeed: function(id) {
-			userModel.findById(id, function (err, user) {
+		pledgeSeed: function(info) {
+			userModel.findById(info.id, function (err, user) {
 				if(err) {
 
 				} else if(user) {
 					user.game.seeds.riddle += 1;
+					//find resource, update seeded number
+					var found = false,
+						i = 0,
+						npcId = parseInt(info.npc,10);
+					while(!found) {
+						if(user.game.resources[i].npc === npcId) {
+							user.game.resources[i].seeded += 1;
+							found = true;
+						}
+						i++;
+						if(i >= user.game.resources.length) {
+							found = true;
+						}
+					}
 					user.save(function (err,suc) {
 						res(suc);
-						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', id);
+						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info.id);
 					});
 				}
 			});
+		},
+
+		saveResource: function(info) {
+			//update in req.session
+			userModel
+				.findById(info.id, function (err, user) {
+					if(err) {
+						console.log(err);
+					} else if(user) {
+						//look thru resources and update if found
+						var found = false,
+							cur = 0;
+						while(cur < user.game.resources.length) {
+							if(user.game.resources[cur].npc === info.resource.npc) {
+								found = true;
+								user.game.resources[cur] = info.resource;
+								cur = user.game.resources.length;
+							}
+							cur++;
+						}
+						if(!found) {
+							user.game.resources.push(info.resource);
+						}
+						user.save(function (y) {
+							res('good');
+						});
+					}
+				});
 		}
 	};
 };
