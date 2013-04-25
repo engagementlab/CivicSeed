@@ -26,13 +26,13 @@ module.exports.global = [{
 	sprite: 1,
 	isHolding: true,
 	dialog: {
-		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I  have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'I knew you would prevail! You just needed a little wisdom.You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
+		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'I knew you would prevail! You just needed a little wisdom. You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
 	},
 	resource: {
 		tagline: 'Upstream or Downstream?',
-		feedbackRight: 'Exactly! Maybe think about which approach appeals the most to you, too?',
+		feedbackRight: 'Exactly! Maybe you could also think about which approach appeals to you the most.',
 		feedbackWrong: 'Hoo...boy. That\'s not right.',
-		question: 'Imagine that you\'ve volunteered to help out as a soup kitchen by organizing donations, performing outreach, and preparing food for people in need. Would this be an example of...?',
+		question: 'Imagine that you\'ve volunteered to help out at a soup kitchen by organizing donations, performing outreach, and preparing food for people in need. Would this be an example of...?',
 		questionType: 'multiple',
 		possibleAnswers: ['A) upstream-oriented service', 'B) downstream-oriented service', 'C) noble futility', 'D) none of these'],
 		answer: 'B) downstream-oriented service',
@@ -48,7 +48,7 @@ module.exports.global = [{
 	sprite: 2,
 	isHolding: true,
 	dialog: {
-		prompts: ['HI HI HI! I got a thing for you! you might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
+		prompts: ['HI HI HI! I got a thing for you! You might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
 	},
 	resource: {
 		tagline: 'What\'s Important',
@@ -69,7 +69,7 @@ module.exports.global = [{
 	sprite: 3,
 	isHolding: true,
 	dialog: {
-		prompts: ['I found these shiny objects while digging in my garden. Maybe one can help you? But I like them, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'After seeing your hard work, I see that its better to help others rather than hoard things. I don\'t have any more shinies.']
+		prompts: ['I found a shiny object while digging in my garden. Maybe it can help you? But I like it, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'After seeing your hard work, I see that its better to help others rather than hoard things. I don\'t have any more shinies.']
 	},
 	resource: {
 		tagline: 'What You Will Achieve',
@@ -111,7 +111,7 @@ module.exports.global = [{
 	sprite: 5,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Think about your strengths. Is there a way to leverage them further? Assess your challenges. Are there any opportunities to develop an area or skill you would like to improve?','My Great Grandturpy used to always say "Unless you try to do something beyond what you have already mastered, you will never grow." I\'m not sure if he meant that literaly or figuratively. It also sounds like something Emerson once said, but what do I know; I\'m just a turnip.', 'future']
+		smalltalk: ['My Great Grandturpy used to always say "Unless you try to do somethingbeyond what you have already mastered, you will never grow."  I\'m not sure if he meant that literally or figuratively. It also sounds like something Emerson once said, but what do I know; I\'m just a turnip.','Did you know you can chat with other players? Click the speech bubble icon in the display to enter chat mode!', 'future']
 	}
 }, {
 	id: '2176',
@@ -147,7 +147,7 @@ module.exports.global = [{
 		tagline: 'Struggles with Identiy',
 		feedbackRight: 'Thanks for sharing that.',
 		feedbackWrong: '',
-		question: 'Describe a time you had difficulty communicating or collaborating with others because of some aspect of your social identities.',
+		question: 'Describe a time you had difficulty communicating or collaborating with others because of a difference between your respective social identities.',
 		questionType: 'open',
 		requiredLength: 150,
 		shape: {
@@ -184,7 +184,7 @@ module.exports.global = [{
 	sprite: 9,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Is there potential for any aspect of your community work to connect to your academic coursework? Is there a political issue you are unsure about and would like to learn more?', 'I think helping others is so totally awesome. So I think you are so totally awesome for helping us. If I had hands, I would give you a high five!', 'future']
+		smalltalk: ['Is there potential for any aspect of your community work to connect to your academic coursework? Is there a political issue you are unsure about and would like to learn more?', 'How many seeds do you have? Where are you going to plant them? The world is your canvas!', 'future']
 	}
 }, {
 	id: '9536',
@@ -199,9 +199,10 @@ module.exports.global = [{
 		tagline: 'Social Identities At Work',
 		feedbackRight: 'Nailed it! We should totally hang out after this.',
 		feedbackWrong: 'Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.',
-		question: 'List three or more aspects of social identity that the students referenced in the video you just viewed.',
-		questionType: 'open',
-		requiredLength: 15,
+		question: 'Sourney Cruz (the third student in the video) says her passions are derived from her social identity. What are three of the aspects of identity that she mentioned?',
+		questionType: 'multiple',
+		possibleAnswers: ['A) Latina, upper-class/privileged upbringing, Roman Catholic', 'B) Working class upbringing, daughter of immigrants, latina female', 'C) Roman Catholic, latina female, middle-class/working class upbringing', 'D) A daughter of immigrants, bilingual upbringing, latina female'],
+]		answer: 'D) A daughter of immigrants, bilingual upbringing, latina female',
 		shape: {
 			path: 'm0,0l80,0l0,90l-80,0l0,-90z',
 			fill: 'lightGreen'
@@ -235,7 +236,7 @@ module.exports.global = [{
 	sprite: 12,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Would you like to volunteer in the community as a means of deciding if a certain career is right for you? 6.Are you hoping to find your passion?','It\'s so sad the color was taken away, but I can’t shake the feeling that this has all happened before. It\'s almost like something is stealing it...?','future']
+		smalltalk: ['Would you like to volunteer in the community as a means of deciding if a certain career is right for you? Are you hoping to find your passion?','You don\'t need to make your answers public, but if you do, other players can give you extra seeds.','It\'s so sad the color was taken away, but I can’t shake the feeling that this has all happened before. It\'s almost like something is stealing it...?','future']
 	}
 }, {
 	id: '1547',
@@ -316,7 +317,7 @@ module.exports.global = [{
 	sprite: 17,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Remember, our community has so many assets  that will be beneficial to making it a better place. We might need help, but let us be involved!', 'People keep confusing me with another Siri. Apparently she is pretty and is super smart! Maybe she is related to that other weird robot that is wrecking everything?', 'Don\'t forget to plant your seeds to retun color to the world!']
+		smalltalk: ['Remember, our community has so many assets  that will be beneficial to making it a better place. We might need help, but let us be involved!', 'People keep confusing me with another Siri. Apparently she is pretty and is super smart! Maybe she is related to that other weird robot I\'ve seen lurking around?','If I were you, I\'d talk to the Botanist. But don\'t ask him about the robot. He gets touchy for some reason.']
 	}
 }, {
 	id: '6177',
@@ -346,7 +347,7 @@ module.exports.global = [{
 	sprite: 19,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Heyo! I just came across this killer quote: “Never doubt that a small group of thoughtful, committed people can change the world. Indeed, it is the only thing that ever has.” Just thought it would help inspire you to keep at it!', 'Aunty Hums used to tell me stories about the great color thief. How it stole all of the life from our community.Then a hero helped rally the community together to get it back. A real hero is someone who inspires others. Thats what my Hums used to say at least!', 'Did you help everyone in the forest already? I know they got hit pretty hard by the grayness.']
+		smalltalk: ['I wonder why the color keeps disappearing? It happens again and again!', 'Aunty Hums used to tell me stories about the great color thief. How it stole all of the life from our community.Then a hero helped rally the community together to get it back. A real hero is someone who inspires others. Thats what my Hums used to say at least!', 'Did you help everyone in the forest already? I know they got hit pretty hard by the grayness.']
 	}
 }, {
 	id: '7052',
@@ -418,7 +419,7 @@ module.exports.global = [{
 	sprite: 23,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Like the magician\'s circle always says, "THE SHOW MUST GO ON!" You must go on and talk to the others.', 'Wanna see a magic trick? BEHOLD! I WILL PULL A RABBIT OUT OF MY FACE...err..that doesn\'t sound right...', 'How will I ever put on my magicshow if no one will be able to see all the pretty colors?']
+		smalltalk: ['Got any seeds? You should plant them! We miss the magic of color.', 'Wanna see a magic trick? BEHOLD! I WILL PULL A RABBIT OUT OF MY FACE...err..that doesn\'t sound right...', 'How will I ever put on my magicshow if no one will be able to see all the pretty colors?']
 	}
 }, {
 	id: '9170',
@@ -470,7 +471,7 @@ module.exports.global = [{
 	sprite: 25,
 	isHolding: true,
 	dialog: {
-		prompts: ['You humans crack me up. You all look the same! Calliope is filled with diversity. Zork and Framptonare so different, but they care about their home equally. Do you care about our community? Here is a question for you!', 'You have to do better than that!', 'Thanks for working with us. We gotta catch that darn robot! Without you it would be hard to organize all of these resources.']
+		prompts: ['You humans crack me up. You all look the same! Calliope is filled with diversity. Zork and Frampton are so different, but they care about their home equally. Do you care about our community? Here is a question for you!', 'You have to do better than that!', 'Thanks for working with us. We gotta catch that darn robot! Without you it would be hard to organize all of these resources.']
 	},
 	resource: {
 		tagline: 'Digital Medford',
@@ -491,7 +492,7 @@ module.exports.global = [{
 	sprite: 25,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['This big open field is boring without all the colors. I guess I should be thankful I still have my mailbox and big house!','"I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', 'Did you know you can give out seeds to other players? Click "Seed It!" if you like their public answers.  Make your answers public and others can give you seeds, too.']
+		smalltalk: ['This big open field is boring without all the colors. I guess I should be thankful I still have my mailbox and big house!','I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', 'Did you know you can give out seeds to other players? Click "Seed It!" if you like their public answers.  Make your answers public and others can give you seeds, too.']
 	}
 }, {
 	id: '2803',
@@ -500,7 +501,7 @@ module.exports.global = [{
 	sprite: 42,
 	isHolding: true,
 	dialog: {
-		prompts: ['You\'re the one organizing the resources right? I seen types like you before. Coming in and trying to help our community without knowing anything about us. Maybe if you prove you aren\'t just here for glory and fame, and that you do want to help make Calliope a colorful world again, I will give you something that can help.', 'Try again, kid. ', 'My intial judgements about you might have been wrong. Still, I am keeping my eye on you! Don\'t try anything funny!']
+		prompts: ['You\'re the one organizing the resources right? I have seen types like you before. Coming in and trying to help our community without knowing anything about us. Maybe if you prove you aren\'t just here for glory and fame, and that you do want to help make Calliope a colorful world again, I will give you something that can help.', 'Try again, kid. ', 'My intial judgements about you might have been wrong. Still, I am keeping my eye on you! Don\'t try anything funny!']
 	},
 	resource: {
 		tagline: 'Who You\'ll Work With',
@@ -543,7 +544,7 @@ module.exports.global = [{
 	sprite: 34,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['I always think its neat when new residents come to live in Calliope. Because we are from all over the universe, Calliope has so many different langauges and cultures. Diversity keeps things interesting.','I really hope this gray shroud goes away soon. The town just isn\'t the same without all the vibrant color flowing from the storefronts. Hope the resource collecting is going well.','You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
+		smalltalk: ['I always think its neat when new residents come to live in Calliope. Because we are from all over the universe, Calliope has so many different langauges and cultures. Diversity keeps things interesting.','The town just isn\'t the sa me without all the vibrant color flowing from the storefronts. Worse, we still don\'t know WHY the color went away.','You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
 	}
 }, {
 	id: '4655',
@@ -697,7 +698,7 @@ module.exports.global = [{
 	sprite: 30,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Did you know you can walk by using the W,A,S,D keys, or by clicking?','Its great that you came to Calliope to help us. Its a great responsibility. You know, like Spiderman! Great power is responsibility and its important. Something like that.','It would be better for you to visit the Forest or maybe the Town first.']
+		smalltalk: ['I think I saw the robot headed over to the port! Did you see him there??','Its great that you came to Calliope to help us. Its a great responsibility. You know, like Spiderman! Great power is responsibility and its important. Something like that.','It would be better for you to visit the Forest or maybe the Town first.']
 	}
 }, {
 	id: '12760',
@@ -790,7 +791,7 @@ module.exports.global = [{
 	sprite: 35,
 	isHolding: false,
 	dialog: {
-		smalltalk: ['Don\'t forget the true defintion of humility: the state or quality of being humble. Its important!','Remember! Personal goals benefit you and project goals benefit the community! When these two perspectives are both understood and combined, a foundation is set for a mutually beneficial partnership. Am I right!?','I just saw that robot fly into the Forest! Or maybe he went into the town?']
+		smalltalk: ['Don\'t forget the true defintion of humility: the state or quality of being humble. Its important!','Welcome to the Ranch! If you see the robot, shoo him away. We found him sucking up some color yesterday!','I just saw that robot fly into the Forest! Or maybe he went into the town?']
 	}
 }, {
 	id: '10780',
