@@ -217,7 +217,7 @@ $(function() {
 				y: m.pageY,
 				offX: this.offsetLeft,
 				offY: this.offsetTop,
-				debug: false
+				debug: true
 			};
 			$game.$mouse.updateMouse(mInfo,true);
 		}

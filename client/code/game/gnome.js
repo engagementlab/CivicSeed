@@ -14,7 +14,8 @@ var _info = null,
 	_dragOffY = 0,
 	_feedbackTimeout = null,
 	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
-	_numMegaSeeds = 5;
+	_numMegaSeeds = 5,
+	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'];
 
 $game.$gnome = {
 
@@ -31,7 +32,7 @@ $game.$gnome = {
 	isSolving: false,
 	ready: false,
 
-	init: function() {
+	init: function(callback) {
 		ss.rpc('game.npc.loadGnome', function(gnome) {
 			$game.$gnome.index = gnome.id,
 			$game.$gnome.dialog = gnome.dialog,
@@ -57,6 +58,7 @@ $game.$gnome = {
 			$game.$gnome.getMaster();
 			$game.$gnome.setGnomeState($game.$player.game.gnomeState);
 			$game.$gnome.ready = true;
+			callback();
 		});
 	},
 
@@ -95,7 +97,7 @@ $game.$gnome = {
 	},
 
 	getMaster: function() {
-		var loc = $game.masterToLocal(_info.x, _info.y);
+		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE,
@@ -475,7 +477,7 @@ $game.$gnome = {
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {
-				var endQuestion = $game.levelQuestion[$game.$player.game.currentLevel];
+				var endQuestion = _levelQuestion[$game.$player.game.currentLevel];
 				$('.gnomeArea .message').text(endQuestion);
 				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 				$('.gnomeContent').html(inputBox);

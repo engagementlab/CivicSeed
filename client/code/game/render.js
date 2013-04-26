@@ -1,44 +1,41 @@
-
-//TILESHEET iS 0, PlAYER IS 1, NPC is 2
-//private render vars
 var _tilesheets = [],
-_allImages = [],
-_playerImages = [],
-_tilesheetWidth= 0,
-_tilesheetHeight= 0,
+	_currentTilesheet = null,
+	_allImages = [],
+	_playerImages = [],
+	_tilesheetWidth= 0,
+	_tilesheetHeight= 0,
 
-_tilesheetCanvas= null,
-_tilesheetContext= null,
+	_tilesheetCanvas= null,
+	_tilesheetContext= null,
 
-_offscreen_backgroundCanvas= null,
-_offscreen_backgroundContext = null,
+	_offscreen_backgroundCanvas= null,
+	_offscreen_backgroundContext = null,
 
-_offscreenCharacterCanvas = [],
-_offscreenCharacterContext = [],
+	_offscreenCharacterCanvas = [],
+	_offscreenCharacterContext = [],
 
-_backgroundContext= null,
-_foregroundContext= null,
-_charactersContext= null,
+	_backgroundContext= null,
+	_foregroundContext= null,
+	_charactersContext= null,
 
-_minimapPlayerContext = null,
-_minimapTileContext = null,
-_prevMouseX = 0,
-_prevMouseY = 0,
-_hasNpc = false,
-_wasNpc = false;
+	_minimapPlayerContext = null,
+	_minimapTileContext = null,
+	_prevMouseX = 0,
+	_prevMouseY = 0,
+	_hasNpc = false,
+	_wasNpc = false,
+	_playerColorNum = 0,
+	_playerLevelNum = 0;
 
 $game.$renderer = {
 
 	ready: false,
 
-	init: function() {
-		//render the tilesheet to a canvas to pull from their rather than image
-		
+	init: function(callback) {
 		//create offscreen canvases for optimized rendering
 		_offscreen_backgroundCanvas = document.createElement('canvas');
 		_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-		
 		//offscreen contexts
 		_offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
 
@@ -46,42 +43,70 @@ $game.$renderer = {
 		_backgroundContext = document.getElementById('background').getContext('2d');
 		_foregroundContext = document.getElementById('foreground').getContext('2d');
 		_charactersContext = document.getElementById('characters').getContext('2d');
-		
+
 		_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 		_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
-
 
 		//set stroke stuff for mouse
 		_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Greeen default
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-
 		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png'];
-		//loop through allimages, load in each one, when done,
-		//renderer is ready
-		$game.$renderer.loadImages(0);
+
+		_playerColorNum = $game.$player.getColorNum();
+		_playerLevelNum = $game.$player.game.currentLevel;
+		$game.$renderer.loadTilesheet(_playerLevelNum, false);
+
+		//hack to check if all stuff is loaded so we can callback
+		var checkDone = function() {
+			if($game.$renderer.ready) {
+				callback();
+			} else {
+				setTimeout(checkDone, 30);
+			}
+		};
+		checkDone();
 	},
+
+	loadTilesheet: function(num, now) {
+		_currentTilesheet = new Image();
+		_currentTilesheet.src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
+		_currentTilesheet.onload = function() {
+			//we are in the game
+			if(now) {
+				_tilesheetContext.clearRect(0,0,_tilesheetWidth,_tilesheetHeight);
+			} else {
+				_tilesheetCanvas = document.createElement('canvas');
+				_tilesheetCanvas.setAttribute('width', _currentTilesheet.width);
+				_tilesheetCanvas.setAttribute('height', _currentTilesheet.height);
+				_tilesheetContext = _tilesheetCanvas.getContext('2d');
+
+				_tilesheetWidth = _currentTilesheet.width / $game.TILE_SIZE;
+				_tilesheetHeight = _currentTilesheet.height / $game.TILE_SIZE;
+				//loop through all images, load in each one, when done, move on to map loading
+				$game.$renderer.loadImages(0);
+			}
+			_tilesheetContext.drawImage(
+				_currentTilesheet,
+				0,
+				0
+			);
+
+			if(now) {
+				//redraw all tiles
+				$game.$renderer.renderAllTiles();
+			}
+		};
+	},
+
 	loadImages: function(num) {
 
 		//load the images recursively until done
 		_tilesheets[num] = new Image();
 		_tilesheets[num].src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
 		_tilesheets[num].onload = function() {
-			//if it is the map tile data, render to canvas
 			var next = num + 1;
-
-			if(num === 0) {
-
-				_tilesheetCanvas = document.createElement('canvas');
-				_tilesheetCanvas.setAttribute('width', _tilesheets[num].width);
-				_tilesheetCanvas.setAttribute('height', _tilesheets[num].height);
-				_tilesheetContext = _tilesheetCanvas.getContext('2d');
-
-				_tilesheetWidth= _tilesheets[num].width / $game.TILE_SIZE;
-				_tilesheetHeight= _tilesheets[num].height / $game.TILE_SIZE;
-			}
-
 			if(num === _allImages.length - 1) {
 				$game.$renderer.loadPlayerImages(0);
 			}
@@ -98,7 +123,6 @@ $game.$renderer = {
 
 		_playerImages[num].onload = function() {
 
-
 			_offscreenCharacterCanvas[num] = document.createElement('canvas');
 			_offscreenCharacterCanvas[num].setAttribute('width', _playerImages[num].width);
 			_offscreenCharacterCanvas[num].setAttribute('height', _playerImages[num].height);
@@ -110,11 +134,9 @@ $game.$renderer = {
 				0
 			);
 
-
-			//TODO: replace this with the number of image files
 			if(next === 21) {
 				$game.$renderer.ready = true;
-				$game.$player.init();
+				$game.$renderer.playerToCanvas(_playerLevelNum, _playerColorNum, true);
 				return;
 			}
 			else {
@@ -160,9 +182,9 @@ $game.$renderer = {
 			order3 = $game.$npc.getRenderInfo(),
 			gnomeInfo = $game.$gnome.getRenderInfo(),
 			thingInfo = $game.$thing.getRenderInfo();
-			
+
 		var finalOrder = order.concat(order2, order3);
-		
+
 		if(gnomeInfo) {
 			finalOrder.push(gnomeInfo);
 		}
@@ -180,7 +202,7 @@ $game.$renderer = {
 
 		//get the index (which refers to the location of the image)
 		//tilemap reference to images starts at 1 instead of 0
-		var curTile = $game.currentTiles[i][j],
+		var curTile = $game.$map.currentTiles[i][j],
 
 			backIndex1 = curTile.background-1,
 			backIndex2 = curTile.background2-1,
@@ -348,7 +370,7 @@ $game.$renderer = {
 				destY,
 				32,
 				64
-			);	
+			);
 		}
 		_offscreenCharacterContext[color].drawImage(
 			_tilesheets[level],
@@ -469,7 +491,7 @@ $game.$renderer = {
 			$game.TILE_SIZE*2
 		);
 	},
-	
+
 	renderAllTiles: function() {
 
 		_foregroundContext.clearRect(
@@ -511,7 +533,6 @@ $game.$renderer = {
 	},
 
 	renderNpc: function (npcData) {
-
 		_charactersContext.drawImage(
 			_tilesheets[5],
 			npcData.srcX,
@@ -529,9 +550,7 @@ $game.$renderer = {
 
 		var mX = mouse.cX * $game.TILE_SIZE,
 			mY = mouse.cY * $game.TILE_SIZE,
-			state = $game.getTileState(mouse.cX, mouse.cY);
-		
-			
+			state = $game.$map.getTileState(mouse.cX, mouse.cY);
 			//clear previous mouse area
 			_foregroundContext.clearRect(
 				_prevMouseX * $game.TILE_SIZE,
@@ -539,10 +558,10 @@ $game.$renderer = {
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
 			);
-			
+
 			//redraw that area
-			var foreIndex = $game.currentTiles[_prevMouseX][_prevMouseY].foreground-1,
-				foreIndex2 =  $game.currentTiles[_prevMouseX][_prevMouseY].foreground2-1,
+			var foreIndex = $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground-1,
+				foreIndex2 =  $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground2-1,
 
 				foreData = {
 					f1: foreIndex,
@@ -708,19 +727,6 @@ $game.$renderer = {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
 		newImg.src = map;
-	},
-
-	changeTilesheet: function(num, now) {
-		_tilesheetContext.drawImage(
-			_tilesheets[num],
-			0,
-			0
-		);
-		if(now) {
-			//redraw all tiles
-			$game.$renderer.renderAllTiles();
-		}
 	}
-	
 };
 

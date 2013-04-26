@@ -31,7 +31,7 @@ $game.$resources = {
 	isShowing: false,
 	ready: false,
 
-	init: function() {
+	init: function(callback) {
 		var response = $game.$npc.getNpcData();
 			//iterate through repsonses, create a key
 			//with the id and value is the object
@@ -54,22 +54,11 @@ $game.$resources = {
 				}
 			});
 
-			//fill the inventory if there were things when we last left
-			$game.$player.fillInventory();
-
 			//set dom selectors
-			_resourceStageSel = $('.resourceStage');
-			_speechBubbleSel = $('.speechBubble');
-			_inventorySel = $('.inventory');
-			_resourceAreaSel = $('.resourceArea');
-			_speechButtonSel = $('.speechBubble button');
-			_resourceButtonSel = $('.resourceArea button');
-			_speakerNameSel = $('.resourceArea .speakerName');
-			_resourceMessageSel = $('.resourceArea .message');
-			_resourceContentSel = $('.resourceContent');
-			_resourceContentBodySel = $('.resourceContentBody');
+			_setDomSelectors();
 
 			$game.$resources.ready = true;
+			callback();
 		});
 	},
 
@@ -473,3 +462,16 @@ $game.$resources = {
 		return _resources[stringId].question;
 	}
 };
+
+function _setDomSelectors() {
+	_resourceStageSel = $('.resourceStage');
+	_speechBubbleSel = $('.speechBubble');
+	_inventorySel = $('.inventory');
+	_resourceAreaSel = $('.resourceArea');
+	_speechButtonSel = $('.speechBubble button');
+	_resourceButtonSel = $('.resourceArea button');
+	_speakerNameSel = $('.resourceArea .speakerName');
+	_resourceMessageSel = $('.resourceArea .message');
+	_resourceContentSel = $('.resourceContent');
+	_resourceContentBodySel = $('.resourceContentBody');
+}

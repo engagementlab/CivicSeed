@@ -45,16 +45,26 @@ $game.$audio = {
 	ready: false,
 	isMuted: false,
 
-	init: function(pos) {
+	init: function(callback) {
 		if(CivicSeed.ENVIRONMENT !== 'development') {
 			_extension = CivicSeed.version;
 		}
-		var firstTrack = $game.$audio.whichTrack(pos.x, pos.y);
+		var position = $game.$player.getPosition();
+		var firstTrack = $game.$audio.whichTrack(position.x, position.y);
 		if(firstTrack === -1) {
 			firstTrack = 4;
 		}
 		$game.$audio.loadTrack(firstTrack);
 
+		//hack to check if all stuff is loaded so we can callback
+		var checkDone = function() {
+			if($game.$audio.ready) {
+				callback();
+			} else {
+				setTimeout(checkDone, 30);
+			}
+		};
+		checkDone();
 	},
 
 	loadTrack: function(num) {
@@ -77,7 +87,6 @@ $game.$audio = {
 			buffer: true
 		});
 		//this goes thru all the tracks, and skips num since its preloaded
-		console.log('loaded first track: ', num);
 		$game.$audio.loadOtherTrack(0, num);
 		$game.$audio.loadTriggerFx();
 		_currentTrack = num;
@@ -102,7 +111,6 @@ $game.$audio = {
 				volume: 0.0,
 				buffer: true
 			});
-			console.log('loaded track: ', track);
 			track++;
 			if(track !== _numTracks) {
 				$game.$audio.loadOtherTrack(track, num);
@@ -146,7 +154,6 @@ $game.$audio = {
 			},
 			volume: 0.4,
 			onload: function() {
-				console.log('sound fx loaded');
 				$game.$audio.loadEnvironmentLoopFx();
 			}
 		});
@@ -176,7 +183,6 @@ $game.$audio = {
 			},
 			volume: 0.1,
 			onload: function() {
-				console.log('environment loop fx loaded');
 				$game.$audio.loadEnvironmentOnceFx();
 			}
 		});
@@ -217,7 +223,6 @@ $game.$audio = {
 			onend: function() {
 			},
 			onload: function() {
-				console.log('environment once fx loaded');
 				$game.$audio.ready = true;
 			}
 		});

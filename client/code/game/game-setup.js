@@ -10,7 +10,7 @@ exports.init = function(callback) {
 		} else {
 			//check if they are ACTUALLY playing
 			ss.rpc('shared.account.checkGameSession', function(err,response) {
-				console.log('hey now', err, response);
+				// console.log('hey now', err, response);
 				if(err) {
 
 				} else {

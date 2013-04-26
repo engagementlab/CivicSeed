@@ -201,8 +201,8 @@ $game.$astar = {
 				node.parent = null;
 
 				//get masterX and masterY and put them inside node
-				node.masterX = $game.currentTiles[y][x].x;
-				node.masterY = $game.currentTiles[y][x].y;
+				node.masterX = $game.$map.currentTiles[y][x].x;
+				node.masterY = $game.$map.currentTiles[y][x].y;
 			}
 		}
 	},

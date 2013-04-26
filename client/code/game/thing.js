@@ -31,7 +31,7 @@ $game.$thing = {
 	numFrames: 4,
 	isMoving: false,
 
-	init: function() {
+	init: function(callback) {
 		//create things position and render info based on players state
 		_info = {
 			x: 0,
@@ -49,6 +49,7 @@ $game.$thing = {
 		if(!$game.$player.game.seenThing) {
 			$game.$thing.setPosition();
 		}
+		callback();
 	},
 
 	setPosition: function() {
@@ -82,7 +83,7 @@ $game.$thing = {
 			}
 			//if not, check if we need to turn it live
 			else {
-				var loc = $game.masterToLocal(_info.x, _info.y);
+				var loc = $game.$map.masterToLocal(_info.x, _info.y);
 				if(loc) {
 					_onScreen = true;
 				}
@@ -99,7 +100,7 @@ $game.$thing = {
 
 	updateRenderInfo: function() {
 		//must pass true so we get the coords EVEN tho it doesn't exist for off screen stuff
-		var loc = $game.masterToLocal(_info.x, _info.y, true);
+		var loc = $game.$map.masterToLocal(_info.x, _info.y, true);
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS / 2,
 				prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS / 2,

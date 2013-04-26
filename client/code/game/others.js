@@ -4,16 +4,16 @@ _onScreenPlayers = {};
 $game.$others = {
 	ready: false,
 
-	init: function() {
+	init: function(callback) {
 		ss.rpc('game.player.getOthers', function(response) {
 			// console.log('rpc others: ', response);
 			_onScreenPlayers = {};
 
 			$.each(response, function(key, player) {
 				$game.$others.add(player);
-
 			});
 			$game.$others.ready = true;
+			callback();
 		});
 	},
 
@@ -175,7 +175,7 @@ $game.$others = {
 			},
 
 			updateRenderInfo: function() {
-				var loc = $game.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
+				var loc = $game.$map.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
 				if(loc) {
 					var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS,
 						prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS,

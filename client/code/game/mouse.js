@@ -1,6 +1,6 @@
 
 $game.$mouse = {
-	
+
 	prevX: 0,
 	prevY: 0,
 	curX: 0,
@@ -22,7 +22,7 @@ $game.$mouse = {
 
 
 		if(mouseInfo.debug){
-			console.log($game.currentTiles[$game.$mouse.curX][$game.$mouse.curY]);
+			console.log($game.$map.currentTiles[$game.$mouse.curX][$game.$mouse.curY]);
 		}
 
 		//extremes(if at edge it will be just over)
@@ -73,11 +73,11 @@ $game.$mouse = {
 			}
 			else {
 				//if clicking on a player, show their info
-				var mX = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].x,
-					mY = $game.currentTiles[$game.$mouse.curX][$game.$mouse.curY].y;
+				var mX = $game.$map.currentTiles[$game.$mouse.curX][$game.$mouse.curY].x,
+					mY = $game.$map.currentTiles[$game.$mouse.curX][$game.$mouse.curY].y;
 				var user = $game.$others.playerCard(mX, mY);
 				if(!user) {
-					var state = $game.getTileState($game.$mouse.curX, $game.$mouse.curY);
+					var state = $game.$map.getTileState($game.$mouse.curX, $game.$mouse.curY);
 					//go
 					if(state === -1 && !$game.$player.pathfinding) {
 						$game.$player.beginMove($game.$mouse.curX,$game.$mouse.curY);
@@ -119,7 +119,7 @@ $game.$mouse = {
 		//s 115
 		//d 100
 		var currentSpot = $game.$player.getPosition(),
-			local = $game.masterToLocal(currentSpot.x,currentSpot.y),
+			local = $game.$map.masterToLocal(currentSpot.x,currentSpot.y),
 			targetX = 0,
 			targetY = 0,
 			willWalk = false;

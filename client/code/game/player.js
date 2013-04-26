@@ -7,8 +7,8 @@ var _curFrame = 0,
 	_willTravel = null,
 	_idleCounter = 0,
 	_getMaster = true;
-	_info = {},
-	_renderInfo = {},
+	_info = null,
+	_renderInfo = null,
 	_isChatting = false,
 	_hideTimer = null,
 	_chatId = null,
@@ -51,108 +51,73 @@ $game.$player = {
 	keyMoving: false,
 	pathfinding: false,
 
-	init: function() {
-		//get the players info from the db, alert other users of presence
-		ss.rpc('game.player.init', function(newInfo) {
-			// console.log('rpc init: ', newInfo);
+	init: function(callback) {
+		//get the players info from the db, alerts other users of presence
+		ss.rpc('game.player.init', function(playerInfo) {
 			//time in seconds since 1970 or whatever
 			_startTime = new Date().getTime() / 1000;
 
 			_info = {
 				srcX: 0,
 				srcY: 0,
-				x: newInfo.game.position.x,
-				y: newInfo.game.position.y,
+				x: playerInfo.game.position.x,
+				y: playerInfo.game.position.y,
 				offX: 0,
 				offY: 0,
 				prevOffX: 0,
 				prevOffY: 0
 			};
+
 			//the number that corresponds to a player image sheet for their color
-			_playerColorNum = newInfo.game.colorInfo.tilesheet;
-			//set the client side variables based on the database info for the player
-			$game.$player.id = newInfo.id;
-			$game.$player.name = newInfo.name;
+			_playerColorNum = playerInfo.game.colorInfo.tilesheet;
+
+			$game.$player.id = playerInfo.id;
+			$game.$player.name = playerInfo.name;
 
 			//TODO: REMOVE THIS AND CREATE VARS FOR EACH PROPERTY DIRECTLY UNDER PLAYER
-			$game.$player.game = newInfo.game;
+			//so we don't have to do $game.$player.game.property everytime
+			$game.$player.game = playerInfo.game;
+
+			//example of future way;
 			_previousSeedsDropped = $game.$player.game.seeds.dropped;
+
 			//set the render info
-			_renderInfo.colorNum = _playerColorNum,
-			_renderInfo.srcX = 0,
-			_renderInfo.srcY = 0,
-			_renderInfo.curX = _info.x * $game.TILE_SIZE,
-			_renderInfo.curY = _info.y * $game.TILE_SIZE,
-			_renderInfo.prevX = _info.x * $game.TILE_SIZE,
-			_renderInfo.prevY = _info.y * $game.TILE_SIZE,
-			_renderInfo.kind = 'player',
-			_renderInfo.level = $game.$player.game.currentLevel;
+			_renderInfo = {
+				colorNum: _playerColorNum,
+				srcX: 0,
+				srcY: 0,
+				curX: _info.x * $game.TILE_SIZE,
+				curY: _info.y * $game.TILE_SIZE,
+				prevX: _info.x * $game.TILE_SIZE,
+				prevY: _info.y * $game.TILE_SIZE,
+				kind: 'player',
+				level: $game.$player.game.currentLevel
+			};
 
-			//set variables for dom selectors
-			_seedHudCount = $('.seedButton .hudCount');
-			_normalHudCount = $('.normalButton .hudCount');
-			_riddleHudCount = $('.riddleButton .hudCount');
-			_specialHudCount = $('.specialButton .hudCount');
-			_waitingSel = $('.waitingForSeed');
-			_gameboardSel = $('.gameboard');
-			_inventoryBtnSel = $('.inventoryButton > .hudCount');
-			_inventorySel = $('.inventory > .pieces');
-
-			//$game.changeStatus();
-
-			//render the correct level's tilesheet to the offscreen canvas
-			$game.$renderer.changeTilesheet($game.$player.game.currentLevel, false);
+			//setup DOM selectors
+			_setDomSelectors();
 
 			//the player's color
-			_rgb = 'rgb(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ')';
-
+			_rgb = 'rgb(' + playerInfo.game.colorInfo.rgb.r + ',' + playerInfo.game.colorInfo.rgb.g + ',' + playerInfo.game.colorInfo.rgb.b + ')';
+			//seed color (slightly lighter)
+			_rgbString = 'rgba(' + (playerInfo.game.colorInfo.rgb.r + 10) + ',' + (playerInfo.game.colorInfo.rgb.g + 10) + ',' + (playerInfo.game.colorInfo.rgb.b + 10) + ',';
 			//set the color of the hud to personalize it
-			var rgba = 'rgba(' + newInfo.game.colorInfo.rgb.r + ',' + newInfo.game.colorInfo.rgb.g + ',' + newInfo.game.colorInfo.rgb.b + ', .6)';
+			var rgba = 'rgba(' + playerInfo.game.colorInfo.rgb.r + ',' + playerInfo.game.colorInfo.rgb.g + ',' + playerInfo.game.colorInfo.rgb.b + ', .6)';
 			$('.hudCount').css('background', rgba);
-
-			//init everything else that depends on the player info
-			$game.$others.init();
-			$game.$thing.init();
-			var playerPos = $game.$player.getPosition();
-			$game.$audio.init(playerPos);
 
 			//set HUD values
 			var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
-
 			_seedHudCount.text(numSeeds);
 			_normalHudCount.text($game.$player.game.seeds.normal);
 			_riddleHudCount.text($game.$player.game.seeds.riddle);
 			_specialHudCount.text($game.$player.game.seeds.special);
 
-			_rgbString = 'rgba(' + (newInfo.game.colorInfo.rgb.r + 10) + ',' + (newInfo.game.colorInfo.rgb.g + 10) + ',' + (newInfo.game.colorInfo.rgb.b + 10) + ',';
-
-			//selectors for chat stuff
-			_chatId = 'player'+ newInfo.id,
-			_chatIdSelector = '#' + _chatId;
-
-			//tell the game to load all its necessary info
-			$game.firstLoad(_info.x, _info.y);
-
 			$game.$player.updateRenderInfo();
-
-			//put the player on the minimap
-			$game.$map.addPlayer(newInfo.id, _info.x, _info.y, _rgb);
-
-			//if their was a color map, then render it now
-			var src = $game.$player.game.colorMap;
-			if(src !== undefined) {
-				$game.$renderer.imageToCanvas(src);
-			}
-
-			//create the collective color map
-			$game.$map.createCollectiveImage();
-
-			$game.$renderer.playerToCanvas($game.$player.game.currentLevel, _renderInfo.colorNum, true);
 
 			//we are ready, let everyone know dat
 			$game.$player.ready = true;
+			callback();
 		});
-
 	},
 
 	update: function(){
@@ -174,13 +139,13 @@ $game.$player = {
 
 	updateRenderInfo: function() {
 		//get local render information. update if appropriate.
-		var loc = $game.masterToLocal(_info.x, _info.y);
+		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc) {
 			var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
 			prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
 			curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
 			curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
-			
+
 			_renderInfo.prevX = prevX,
 			_renderInfo.prevY = prevY,
 
@@ -223,7 +188,7 @@ $game.$player = {
 		}
 		//if we no done, then step through it yo.
 		else {
-			
+
 			//increment the current step
 			$game.$player.currentStep += 1;
 
@@ -348,8 +313,7 @@ $game.$player = {
 		$game.$player.isMoving = false;
 		if(_willTravel) {
 			var beginTravel = function(){
-				if($game.dataLoaded){
-					$game.dataLoaded = false;
+				if($game.$map.dataLoaded){
 					$game.beginTransition();
 				}
 				else{
@@ -373,32 +337,24 @@ $game.$player = {
 		_info.offX = 0,
 		_info.offY = 0;
 		//check if it is an edge of the world
-		$game.isMapEdge(x, y, function(anEdge) {
+		$game.$map.isMapEdge(x, y, function(anEdge) {
 			_willTravel = false;
 			//if a transition is necessary, load new data
 			if(!anEdge) {
 				if(x === 0 || x === 29 || y === 0 || y === 14) {
 					_willTravel = true;
-					$game.calculateNext(x, y, function() {
-					//	//data is loaded!
-					//	// $game.$player.getPath();
-					});
+					$game.$map.calculateNext(x, y);
 				}
 			}
-			//calc local for start point for pathfinding
-			var loc = $game.masterToLocal(_info.x, _info.y);
-
-			var masterEndX = $game.currentTiles[x][y].x,
-				masterEndY = $game.currentTiles[x][y].y;
-
-			var start = $game.graph.nodes[loc.y][loc.x],
-				end = $game.graph.nodes[y][x];
-
-			$game.$astar.search($game.graph.nodes, start, end, function(result) {
+			var loc = $game.$map.masterToLocal(_info.x, _info.y),
+				master = {x: x, y: y};
+			$game.$map.findPath(loc, master, function(result) {
 				$game.$player.pathfinding = false;
 				if(result.length > 0) {
 					$game.$player.sendMoveInfo(result);
 					ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
+						var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
+							masterEndY = $game.$map.currentTiles[master.x][master.y].y;
 						$game.$audio.update(masterEndX, masterEndY);
 					});
 				} else {
@@ -408,40 +364,37 @@ $game.$player = {
 		});
 	},
 
-	beginKeyWalk: function(dirX, dirY) {
-		$game.$player.keyWalking = true;
-		$game.$player.keyX = dirX;
-		$game.$player.keyY = dirY;
-		$game.$player.getKeyMove();
-		$game.$player.isMoving = true;
+	// beginKeyWalk: function(dirX, dirY) {
+	// 	$game.$player.keyWalking = true;
+	// 	$game.$player.keyX = dirX;
+	// 	$game.$player.keyY = dirY;
+	// 	$game.$player.getKeyMove();
+	// 	$game.$player.isMoving = true;
 
-	},
+	// },
 
-	getKeyMove: function() {
-		
-		var locStart = $game.masterToLocal(_info.x, _info.y),
-			newX = $game.$player.keyX + _info.x,
-			newY = $game.$player.keyY + _info.y,
-			locEnd = $game.masterToLocal(newX, newY),
-			start = $game.graph.nodes[locStart.y][locStart.x],
-			end = $game.graph.nodes[locEnd.y][locEnd.x],
-			result = $game.$astar.search($game.graph.nodes, start, end);
+	// getKeyMove: function() {
+	// 	var locStart = $game.$map.masterToLocal(_info.x, _info.y),
+	// 		newX = $game.$player.keyX + _info.x,
+	// 		newY = $game.$player.keyY + _info.y,
+	// 		locEnd = $game.$map.masterToLocal(newX, newY),
+	// 		start = $game.graph.nodes[locStart.y][locStart.x],
+	// 		end = $game.graph.nodes[locEnd.y][locEnd.x],
+	// 		result = $game.$astar.search($game.graph.nodes, start, end);
 
-		$game.$player.keyMoving = true;
-		
-		$game.isMapEdge(locEnd.x, locEnd.y, function(anEdge) {
-			_willTravel = false;
-			//if a transition is necessary, load new data
-			if(!anEdge) {
-				if(locEnd.x === 0 || locEnd.x === 29 || locEnd.y === 0 || locEnd.y === 14) {
-					_willTravel = true;
-					$game.calculateNext(locEnd.x, locEnd.y,function(){});
-				}
-				$game.$player.sendMoveInfo(result);
-			}
-			
-		});
-	},
+	// 	$game.$player.keyMoving = true;
+	// 	$game.$map.isMapEdge(locEnd.x, locEnd.y, function(anEdge) {
+	// 		_willTravel = false;
+	// 		//if a transition is necessary, load new data
+	// 		if(!anEdge) {
+	// 			if(locEnd.x === 0 || locEnd.x === 29 || locEnd.y === 0 || locEnd.y === 14) {
+	// 				_willTravel = true;
+	// 				$game.calculateNext(locEnd.x, locEnd.y,function(){});
+	// 			}
+	// 			$game.$player.sendMoveInfo(result);
+	// 		}
+	// 	});
+	// },
 
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
@@ -490,8 +443,8 @@ $game.$player = {
 
 	dropSeed: function(options) {
 		//if there are no seeds, send message can't plant
-		options.mX = $game.currentTiles[options.x][options.y].x,
-		options.mY = $game.currentTiles[options.x][options.y].y;
+		options.mX = $game.$map.currentTiles[options.x][options.y].x,
+		options.mY = $game.$map.currentTiles[options.x][options.y].y;
 
 		var mode = options.mode;
 
@@ -540,8 +493,8 @@ $game.$player = {
 			bombed = [],
 			mode = options.mode,
 			square = null;
-		if($game.currentTiles[options.x][options.y].color) {
-			if($game.currentTiles[options.x][options.y].color.owner !== 'nobody') {
+		if($game.$map.currentTiles[options.x][options.y].color) {
+			if($game.$map.currentTiles[options.x][options.y].color.owner !== 'nobody') {
 				$game.temporaryStatus('that tile has been planted on');
 				return false;
 			}
@@ -636,7 +589,7 @@ $game.$player = {
 				tilesColored: $game.$player.game.tilesColored
 			};
 
-			var loc = $game.masterToLocal(options.mX,options.mY);
+			var loc = $game.$map.masterToLocal(options.mX,options.mY);
 
 			_waitingSel
 				.css({
@@ -839,10 +792,10 @@ $game.$player = {
 				$game.$player.addToInventory(id);
 				$game.$player.checkGnomeState();
 			}
-			saveResourceToDB(realResource);
+			_saveResourceToDB(realResource);
 			return numToAdd;
 		} else {
-			saveResourceToDB(realResource);
+			_saveResourceToDB(realResource);
 		}
 	},
 
@@ -981,7 +934,7 @@ $game.$player = {
 		$game.$player.game.gnomeState = 0;
 		$game.$player.game.seenThing = false;
 		$game.$player.game.pledges = 5;
-		$game.$renderer.changeTilesheet($game.$player.game.currentLevel, true);
+		$game.$renderer.loadTilesheet($game.$player.game.currentLevel, true);
 		$game.$thing.setPosition();
 
 		if($game.$player.game.currentLevel === 4) {
@@ -1125,6 +1078,14 @@ $game.$player = {
 			}
 		}
 		return false;
+	},
+
+	getColor: function() {
+		return _rgb;
+	},
+
+	getColorNum: function() {
+		return _renderInfo.colorNum;
 	}
 };
 
@@ -1133,8 +1094,7 @@ function privateFunction() {
 	console.log('I am private');
 }
 
-function saveResourceToDB(resource) {
-	console.log('hoolla');
+function _saveResourceToDB(resource) {
 	var info = {
 		id: $game.$player.id,
 		resource: resource
@@ -1142,4 +1102,19 @@ function saveResourceToDB(resource) {
 	ss.rpc('game.player.saveResource', info, function() {
 		console.log('resource saved');
 	});
+}
+
+function _setDomSelectors() {
+	//set variables for dom selectors
+	_seedHudCount = $('.seedButton .hudCount');
+	_normalHudCount = $('.normalButton .hudCount');
+	_riddleHudCount = $('.riddleButton .hudCount');
+	_specialHudCount = $('.specialButton .hudCount');
+	_waitingSel = $('.waitingForSeed');
+	_gameboardSel = $('.gameboard');
+	_inventoryBtnSel = $('.inventoryButton > .hudCount');
+	_inventorySel = $('.inventory > .pieces');
+	//selectors for chat stuff
+	_chatId = 'player'+ $game.$player.id,
+	_chatIdSelector = '#' + _chatId;
 }

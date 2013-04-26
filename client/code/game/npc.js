@@ -13,7 +13,7 @@ $game.$npc = {
 	isResource: false,
 	isChat: false,
 
-	init: function() {
+	init: function(callback) {
 		//load all the npc info from the DB store it in an array
 		//where the index is the id of the npc / mapIndex
 		ss.rpc('game.npc.getNpcs', function(response) {
@@ -25,7 +25,7 @@ $game.$npc = {
 			});
 			_loaded = true;
 			$game.$npc.ready = true;
-			$game.$resources.init();
+			callback();
 		});
 	},
 
@@ -112,13 +112,13 @@ $game.$npc = {
 			},
 
 			getMaster: function() {
-				var loc = $game.masterToLocal(npcObject.info.x, npcObject.info.y);
+				var loc = $game.$map.masterToLocal(npcObject.info.x, npcObject.info.y);
 				if(loc) {
 					var prevX = loc.x * $game.TILE_SIZE,
 						prevY = loc.y * $game.TILE_SIZE,
 						curX = loc.x * $game.TILE_SIZE,
 						curY = loc.y * $game.TILE_SIZE;
-					
+
 					npcObject.renderInfo.prevX = prevX,
 					npcObject.renderInfo.prevY = prevY;
 
@@ -133,7 +133,7 @@ $game.$npc = {
 
 			idle: function() {
 				npcObject.counter += 1;
-				
+
 				if(npcObject.counter >= 56) {
 					npcObject.counter = 0,
 					npcObject.renderInfo.srcX = 0,
