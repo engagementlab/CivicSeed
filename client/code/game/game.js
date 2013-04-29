@@ -17,8 +17,7 @@ var _stepNumber = 0,
 	_badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
 	_displayTimeout = null,
-	_prevMessage = 'Civic Seed',
-	_playerRanks = ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'];
+	_prevMessage = 'Civic Seed';
 
 //public functions
 exports.$game = {
@@ -41,6 +40,7 @@ exports.$game = {
 	graph: null,
 	masterX: null,
 	masterY: null,
+	playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
 
 	init: function() {
 		//all the init calls will trigger others, a waterfall approach to assure
@@ -66,7 +66,7 @@ exports.$game = {
 	beginTransition: function() {
 		$game.inTransit = true;
 		_stepNumber = 0;
-		$game.$player.hideChat();
+		$game.$chat.hideChat();
 		$game.$others.hideAllChats();
 		$game.stepTransition();
 	},
@@ -110,9 +110,12 @@ exports.$game = {
 		var myImageSrc = $game.$map.saveImage();
 		$game.$map.createCollectiveImage();
 
+		var tilesColored = $game.$player.getTilesColored(),
+			resourcesDiscovered = $game.$player.getResourcesDiscovered();
+
 		$('.levelImages img').removeClass('currentLevelImage');
-		$('.levelImages img:nth-child(' + ($game.$player.game.currentLevel + 1) + ')').addClass('currentLevelImage');
-		$('.personalInfo .currentLevel').text(_playerRanks[$game.$player.game.currentLevel]);
+		$('.levelImages img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('currentLevelImage');
+		$('.personalInfo .currentLevel').text(_playerRanks[$game.$player.currentLevel]);
 		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
@@ -124,22 +127,22 @@ exports.$game = {
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
 
-		var contribution = Math.floor(($game.$player.game.tilesColored / $game.tilesColored) * 100) + '%',
-			displayLevel = $game.$player.game.currentLevel + 1,
+		var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
+			displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
 
 		for(var i = 0; i < $game.leaderboard.length; i++) {
 			topPlayers += '<li>' + $game.leaderboard[i].name + ' (' + $game.leaderboard[i].count + ' tiles)</li>';
 		}
 		topPlayers += '</ol>';
-		topPlayers += '<p class="yourSeeds">You (' + $game.$player.game.tilesColored + ' tiles)</p>';
+		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ' tiles)</p>';
 		//show player's seed droppings
 		var allAnswers = $game.$player.compileAnswers();
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		$('.displayPercent').text($game.percentString);
 		$('.topSeeders').empty().append(topPlayers);
-		$('.numCollected').text($game.$player.game.resourcesDiscovered + ' / 42');
+		$('.numCollected').text(resourcesDiscovered + ' / 42');
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});
@@ -166,7 +169,7 @@ exports.$game = {
 				$('.displayBoxText').text('click a tile to drop a seed');
 			}
 			else {
-				$('.displayBoxText').text(_levelNames[$game.$player.game.currentLevel]);
+				$('.displayBoxText').text(_levelNames[$game.$player.currentLevel]);
 			}
 		}
 		_prevMessage = $('.displayBoxText').text();
@@ -246,6 +249,12 @@ function _loadThing() {
 function _loadAudio() {
 	//depends on player position
 	$game.$audio.init(function() {
+		_loadChat();
+	});
+}
+
+function _loadChat() {
+	$game.$chat.init(function() {
 		_loadGameInfo();
 	});
 }
@@ -275,7 +284,7 @@ function _loadExtra() {
 	$game.$player.createInventoryOutlines();
 
 	//make players color map
-	var src = $game.$player.game.colorMap;
+	var src = $game.$player.getColorMap();
 	if(src !== undefined) {
 		$game.$renderer.imageToCanvas(src);
 	}
@@ -284,7 +293,7 @@ function _loadExtra() {
 
 	//update text in HUD
 	$('.progressButton .hudCount').text($game.percentString);
-	_prevMessage = _levelNames[$game.$player.game.currentLevel];
+	_prevMessage = _levelNames[$game.$player.currentLevel];
 
 	//update status
 	$game.changeStatus();

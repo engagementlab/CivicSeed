@@ -20,8 +20,7 @@ module.exports.global = [{
 		rank: 'novice gardener',
 		position: {
 			x: 64,
-			y: 77,
-			inTransit: false
+			y: 77
 		},
 		colorInfo: {
 			rgb: {
@@ -67,8 +66,7 @@ module.exports.global = [{
 		rank: 'novice gardener',
 		position: {
 			x: 64,
-			y: 77,
-			inTransit: false
+			y: 77
 		},
 		colorInfo: {
 			rgb: {
@@ -114,8 +112,7 @@ module.exports.global = [{
 		rank: 'novice gardener',
 		position: {
 			x: 64,
-			y: 77,
-			inTransit: false
+			y: 77
 		},
 		colorInfo: {
 			rgb: {
@@ -158,8 +155,7 @@ module.exports.global = [{
 		rank: 'novice gardener',
 		position: {
 			x: 64,
-			y: 77,
-			inTransit: false
+			y: 77
 		},
 		colorInfo: {
 			rgb: {
@@ -202,8 +198,7 @@ module.exports.global = [{
 		rank: 'novice gardener',
 		position: {
 			x: 64,
-			y: 77,
-			inTransit: false
+			y: 77
 		},
 		colorInfo: {
 			rgb: {

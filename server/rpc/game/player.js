@@ -27,9 +27,12 @@ exports.actions = function(req, res, ss) {
 			gameModel = service.useModel('game', 'ss');
 
 			//should we pull the game info from the db instead of it being passed in a session?
+			var lastInitial = req.session.lastName.substring(0,1).toUpperCase(),
+				firstName = req.session.firstName.substring(0,1).toUpperCase() + req.session.firstName.substring(1,req.session.firstName.length),
+				name = firstName + ' ' + lastInitial;
 			var playerInfo = {
 				id: req.session.userId,
-				name: req.session.firstName,
+				name: name,
 				game: req.session.game
 			};
 

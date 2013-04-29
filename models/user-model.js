@@ -19,8 +19,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			rank: String,
 			position: {
 				x: Number,
-				y: Number,
-				inTransit: Boolean
+				y: Number
 			},
 			colorInfo: {
 				rgb: {

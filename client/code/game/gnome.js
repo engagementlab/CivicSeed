@@ -56,7 +56,7 @@ $game.$gnome = {
 
 			$game.$gnome.setupTangram();
 			$game.$gnome.getMaster();
-			$game.$gnome.setGnomeState($game.$player.game.gnomeState);
+			$game.$gnome.setGnomeState($game.$player.gnomeState);
 			$game.$gnome.ready = true;
 			callback();
 		});
@@ -157,17 +157,18 @@ $game.$gnome = {
 	show: function() {
 		//decide what to show based on the player's current status
 		//if they are in a level 0-4
-		if($game.$player.game.currentLevel < 5) {
+		if($game.$player.currentLevel < 5) {
 			//show instructions first
-			if($game.$player.game.gnomeState === 0) {
-				_messages = $game.$gnome.dialog[$game.$player.game.currentLevel].instructions;
+			if($game.$player.gnomeState === 0) {
+				_messages = $game.$gnome.dialog[$game.$player.currentLevel].instructions;
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 			}
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
-			else if($game.$player.game.gnomeState === 1) {
-				if($game.$player.game.currentLevel === 0 && $game.$player.game.seeds.dropped < 1) {
+			else if($game.$player.gnomeState === 1) {
+				var dropped = $game.$player.getSeedsDropped();
+				if($game.$player.currentLevel === 0 && dropped < 1) {
 					//make them plant first seed
 					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
 
@@ -184,24 +185,25 @@ $game.$gnome = {
 				}
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
-			else if($game.$player.game.gnomeState === 2) {
-				var curHint = 0;
-				if($game.$player.game.inventory.length > 0) {
+			else if($game.$player.gnomeState === 2) {
+				var curHint = 0,
+					numItems = $game.$player.getInventoryLength();
+				if(numItems > 0) {
 					curHint = 1;
 				}
 				//else hint 1
 				_messages = [];
-				_messages.push($game.$gnome.dialog[$game.$player.game.currentLevel].hint[curHint]);
+				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
 				_currentMessage = 0;
 				$game.$gnome.showChat();
 
 			}
 			//if they have gathered the right resources, prompt to answer 
-			else if($game.$player.game.gnomeState === 3) {
+			else if($game.$player.gnomeState === 3) {
 				$game.$gnome.showPrompt(1);
 			}
 			//they have solved the tangram but not answered the portfolio question
-			else if($game.$player.game.gnomeState === 4) {
+			else if($game.$player.gnomeState === 4) {
 				$game.$gnome.showRiddle(2);
 			}
 		}
@@ -217,7 +219,7 @@ $game.$gnome = {
 	},
 
 	showTangram: function() {
-		var file = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.game.currentLevel + '.png';	
+		var file = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png';
 	},
 
 	showChat: function() {
@@ -233,11 +235,10 @@ $game.$gnome = {
 			$('.speechBubble .closeChatButton').unbind('click');
 			$game.$gnome.isChat = false;
 			//save that the player has looked at the instructions
-			if($game.$player.game.gnomeState === 0) {
-				$game.$player.game.gnomeState = 1;
-				if($game.$player.game.currentLevel === 0) {
-					$game.$player.game.seeds.normal += 1;
-					$('.seedButton > .hudCount').text($game.$player.game.seeds.normal);
+			if($game.$player.gnomeState === 0) {
+				$game.$player.gnomeState = 1;
+				if($game.$player.currentLevel === 0) {
+					$game.$player.updateSeeds('normal', 1);
 				}
 			}
 		});
@@ -278,7 +279,7 @@ $game.$gnome = {
 		$('.speechBubble p').removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$gnome.isChat = true;
-		_speak =  $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.prompts[p];
+		_speak =  $game.$gnome.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
 		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
 		$('.speechBubble .message').text(_speak);
@@ -323,8 +324,7 @@ $game.$gnome = {
 		}
 		$game.$gnome.addContent();
 		$game.$gnome.addButtons();
-		
-		
+
 		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
@@ -334,11 +334,11 @@ $game.$gnome = {
 				.addClass('patternBg3')
 				.fadeIn(function() {
 					$game.$gnome.isShowing = true;
-					if(_currentSlide === 0 && !$game.$player.game.firstTime) {
+					if(_currentSlide === 0 && !$game.$player.firstTime) {
 						$('.tangramArea').show();
 					}
 			});
-		});		
+		});
 	},
 
 	addButtons: function() {
@@ -350,7 +350,7 @@ $game.$gnome = {
 			}
 			else if(_currentSlide === 1) {
 				$('.gnomeArea .backButton').removeClass('hideButton');
-				if($game.$player.game.firstTime) {
+				if($game.$player.firstTime) {
 					$('.gnomeArea .nextButton').removeClass('hideButton');
 				} else {
 					$('.gnomeArea .closeButton').removeClass('hideButton');
@@ -394,16 +394,16 @@ $game.$gnome = {
 		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
-				if($game.$player.game.firstTime) {
+				if($game.$player.firstTime) {
 					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
 					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
 					$('.gnomeArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
-					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 				}
 			}
 			else if(_currentSlide === 1) {
-				if($game.$player.game.gnomeState > 1) {
+				if($game.$player.gnomeState > 1) {
 					$('.gnomeArea .message').text('Here is the Enigma to view again.');
 				}
 				else {
@@ -413,21 +413,21 @@ $game.$gnome = {
 					$game.$player.tangramToInventory();
 
 					//update gnomeState
-					if($game.$player.game.currentLevel > 0) {
-						$game.$player.game.gnomeState = 2;
+					if($game.$player.currentLevel > 0) {
+						$game.$player.gnomeState = 2;
 						$game.$player.checkGnomeState();
 						$game.$gnome.setGnomeState(2);
 					}
 				}
 				
-				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.game.currentLevel+ '.png';
+				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
 				$('.gnomeContent').html('<img src="' + imgPath + '" class="tangramOutline">');
 				
 			}
 			else {
-				if($game.$player.game.currentLevel === 0) {
-					$game.$player.game.firstTime = false;
-					$game.$player.game.gnomeState = 2;
+				if($game.$player.currentLevel === 0) {
+					$game.$player.firstTime = false;
+					$game.$player.gnomeState = 2;
 					$game.$player.checkGnomeState();
 					$game.$gnome.setGnomeState(2);
 					$('.gnomeArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
@@ -439,7 +439,7 @@ $game.$gnome = {
 		else {
 			// if(_currentSlide === 0) {
 			// 	$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-			// 	$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet+'</p>');
+			// 	$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			if(_currentSlide === 0) {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
@@ -447,11 +447,11 @@ $game.$gnome = {
 					//set the inventory items to draggable in case they were off
 					$('.inventoryItem').attr('draggable','true');
 				});
-				//$game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet
+				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
 				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
-				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.game.currentLevel+'.png';
+				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png';
 					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
+				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
 				$('.gnomeContent').html(newHTML);
 
 				//replace the tangram image in the inventory with tip
@@ -469,15 +469,15 @@ $game.$gnome = {
 					$('.inventoryItem').remove();
 				});
 
-				var postTangramTalk = $game.$gnome.dialog[$game.$player.game.currentLevel].riddle.response;
+				var postTangramTalk = $game.$gnome.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
 				$('.gnomeArea .message').text(postTangramTalk);
-				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.game.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
+				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
 					newHTML2 += '<p style="text-align:center;"><img src="/img/game/megaseed.png"></p>';
 				$('.gnomeContent').html(newHTML2);
 			}
 			else {
-				var endQuestion = _levelQuestion[$game.$player.game.currentLevel];
+				var endQuestion = _levelQuestion[$game.$player.currentLevel];
 				$('.gnomeArea .message').text(endQuestion);
 				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
 				$('.gnomeContent').html(inputBox);
@@ -503,7 +503,7 @@ $game.$gnome = {
 			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
-			if($game.$player.game.gnomeState === 0) {
+			if($game.$player.gnomeState === 0) {
 				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
@@ -534,7 +534,7 @@ $game.$gnome = {
 			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
 			numRight = 0,
-			aLength = $game.$gnome.tangram[$game.$player.game.currentLevel].answer.length,
+			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length,
 			message = '',
 			wrongOne = false,
 			nudge = false;
@@ -554,7 +554,7 @@ $game.$gnome = {
 					//in the right place
 
 				while(--t > -1) {
-					var answer = $game.$gnome.tangram[$game.$player.game.currentLevel].answer[t];
+					var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
 					if(answer.id === tanId) {
 						found = true;
 						//this is a hard check for snapping
@@ -619,12 +619,8 @@ $game.$gnome = {
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
-					$game.$player.game.seeds.riddle += _numMegaSeeds;
-					$('.riddleButton .hudCount').text($game.$player.game.seeds.riddle);
-					var numSeeds = $game.$player.game.seeds.normal + $game.$player.game.seeds.riddle + $game.$player.game.seeds.special;
-					//update HUD
-					$('.seedButton .hudCount').text(numSeeds);
-					$game.$player.game.gnomeState = 4;
+					$game.$player.updateSeeds('riddle', _numMegaSeeds);
+					$game.$player.gnomeState = 4;
 
 					$game.changeStatus('congrats!');
 				}
@@ -637,12 +633,12 @@ $game.$gnome = {
 		}
 		else {
 			_numMegaSeeds = 5;
+			var portAnswer = $('.gnomeContent textarea').val();
+			$game.$player.resumeAnswer(portAnswer);
+			$game.changeStatus('talk to the gnome');
 			$game.$player.nextLevel();
 			$game.$gnome.hideResource();
 			//upload the user's answer to the DB
-			var portAnswer = $('.gnomeContent textarea').val();
-			$game.$player.game.resume.push(portAnswer);
-			$game.changeStatus('talk to the gnome');
 		}
 	},
 

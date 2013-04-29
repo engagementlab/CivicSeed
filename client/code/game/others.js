@@ -6,7 +6,6 @@ $game.$others = {
 
 	init: function(callback) {
 		ss.rpc('game.player.getOthers', function(response) {
-			// console.log('rpc others: ', response);
 			_onScreenPlayers = {};
 
 			$.each(response, function(key, player) {
@@ -20,7 +19,6 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
-
 		if(player.id != $game.$player.id) {
 			// console.log('new player added!');
 			//set inview if nearby
@@ -181,7 +179,7 @@ $game.$others = {
 						prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS,
 						curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS,
 						curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
-					
+
 					otherPlayer.renderInfo.prevX = prevX,
 					otherPlayer.renderInfo.prevY = prevY;
 
@@ -199,7 +197,7 @@ $game.$others = {
 				//add accessories to player
 				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
 			},
-			
+
 			idle: function() {
 
 				otherPlayer.idleCounter += 1;
@@ -220,7 +218,7 @@ $game.$others = {
 					otherPlayer.getMaster = false;
 				}
 			},
-			
+
 			clear: function() {
 				$game.$renderer.clearCharacter(otherPlayer.renderInfo);
 			},
@@ -293,7 +291,7 @@ $game.$others = {
 
 				//if not, step through it
 				else {
-					
+
 					//increment the current step
 					otherPlayer.currentStep += 1;
 
@@ -329,7 +327,7 @@ $game.$others = {
 						otherPlayer.info.prevOffX = otherPlayer.info.offX;
 						otherPlayer.info.prevOffY = otherPlayer.info.offY;
 					}
-					
+
 					otherPlayer.info.offX = otherPlayer.currentStep * otherPlayer.currentStepIncX;
 					otherPlayer.info.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
 
@@ -348,48 +346,19 @@ $game.$others = {
 
 			message: function(message) {
 				if(!otherPlayer.offScreen) {
-					var len = message.length + otherPlayer.name.length + 2,
-						fadeTime = len * 80 + 1000,
-						sz = Math.floor(len * 8) + 10;
-					fadeTime = (fadeTime > 9000) ? 9000 : fadeTime;
-					if(otherPlayer.isChatting) {
-						clearTimeout(otherPlayer.hideTimer);
-						$(otherPlayer.chatIdSelector).text(otherPlayer.name+': '+message);
-					}
-					else {
-						$('.gameboard').append('<p class=\'playerChat\' id=' + otherPlayer.chatId + '>' + otherPlayer.name +': '+ message + '</p>');
-					}
-					var half = sz / 2,
-						placeX;
-
-					if(otherPlayer.renderInfo.curX > 470 ) {
-						var rem = 940 - otherPlayer.renderInfo.curX;
-						if(half > rem) {
-							placeX = otherPlayer.renderInfo.curX - half - (half - rem);
-						}
-						else {
-							placeX = otherPlayer.renderInfo.curX - half + 16;
-						}
-					}
-					else {
-
-						if(half > otherPlayer.renderInfo.curX) {
-							placeX = otherPlayer.renderInfo.curX - half + (half - otherPlayer.renderInfo.curX) + 10;
-						}
-						else {
-							placeX = otherPlayer.renderInfo.curX - half + 16;
-						}
-					}
-
-					$(otherPlayer.chatIdSelector).css({
-						'top': otherPlayer.renderInfo.curY - 72,
-						'left': placeX,
-						'width': sz
-					});
-					$game.$audio.playTriggerFx('chatReceive');
+					var position = {x: otherPlayer.renderInfo.curX, y: otherPlayer.renderInfo.curY};
+					var info = {
+						name: otherPlayer.name,
+						isChatting: otherPlayer.isChatting,
+						chatId: otherPlayer.chatId,
+						chatIdSelector: otherPlayer.chatIdSelector,
+						position: position
+					};
+					console.log(info);
+					clearTimeout(otherPlayer.hideTimer);
 					otherPlayer.isChatting = true;
-					//make it remove after 5 seconds...
-					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat,fadeTime);
+					var fadeTime = $game.$chat.message(message, info);
+					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat, fadeTime);
 				}
 			},
 

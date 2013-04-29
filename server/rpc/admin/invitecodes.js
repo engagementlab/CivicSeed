@@ -53,8 +53,7 @@ exports.actions = function(req, res, ss) {
 						rank: 'nothing',
 						position: {
 							x: 64,
-							y: 77,
-							inTransit: false
+							y: 77
 						},
 						colorInfo: {
 							rgb: newColor,

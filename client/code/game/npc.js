@@ -190,7 +190,7 @@ $game.$npc = {
 
 	show: function() {
 		//if there is no other stuff on screen, then show dialog
-		if($game.$player.game.firstTime) {
+		if($game.$player.firstTime) {
 			$game.$npc.isChat = true;
 			$game.$npc.showSmalltalk(true);
 		}
@@ -267,11 +267,11 @@ $game.$npc = {
 		} else {
 			if(_curNpc.isHolding) {
 				var levelPlace = '';
-				if($game.$player.game.currentLevel === 0) {
+				if($game.$player.currentLevel === 0) {
 					levelPlace = 'northwest';
-				} else if($game.$player.game.currentLevel === 1) {
+				} else if($game.$player.currentLevel === 1) {
 					levelPlace = 'northeast';
-				} else if($game.$player.game.currentLevel === 2) {
+				} else if($game.$player.currentLevel === 2) {
 					levelPlace = 'southwest';
 				} else {
 					levelPlace = 'southeast';
@@ -280,10 +280,10 @@ $game.$npc = {
 			}
 			//they have a response for past, present, future
 			else {
-				if($game.$player.game.currentLevel === _curNpc.level) {
+				if($game.$player.currentLevel === _curNpc.level) {
 					_speak = _curNpc.dialog.smalltalk[1];
 				}
-				else if($game.$player.game.currentLevel < _curNpc.level) {
+				else if($game.$player.currentLevel < _curNpc.level) {
 					_speak = _curNpc.dialog.smalltalk[2];
 				}
 				else {
@@ -318,7 +318,7 @@ $game.$npc = {
 			_resourceOnDeck = false;
 		}
 		//if it is in player's level or previous
-		else if($game.$player.game.currentLevel >= _curNpc.level) {
+		else if($game.$player.currentLevel >= _curNpc.level) {
 			_resourceOnDeck = true;
 		}
 		else {

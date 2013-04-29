@@ -36,6 +36,8 @@ ss.server.on('ready', function() {
 					var $audio = require('/audio');
 					var $pathfinder = require('/pathfinder');
 					var $events = require('/events');
+					var $input = require('/input');
+					var $chat = require('/chat');
 
 					$game.init();
 

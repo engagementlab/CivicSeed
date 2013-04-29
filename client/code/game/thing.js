@@ -46,19 +46,19 @@ $game.$thing = {
 			srcX: 0,
 			srcY: 0
 		};
-		if(!$game.$player.game.seenThing) {
+		if(!$game.$player.seenThing) {
 			$game.$thing.setPosition();
 		}
 		callback();
 	},
 
 	setPosition: function() {
-		_info = _positions[$game.$player.game.currentLevel];
+		_info = _positions[$game.$player.currentLevel];
 		_info.offX = 0;
 		_info.offY = 0;
 		_info.prevOffX = 0;
 		_info.prevOffY = 0;
-		_renderInfo.dir = _positions[$game.$player.game.currentLevel].d;
+		_renderInfo.dir = _positions[$game.$player.currentLevel].d;
 		$game.$thing.isMoving = false;
 		$game.$thing.counter = Math.floor(Math.random() * 64);
 		$game.$thing.curFrame = 0;
@@ -152,7 +152,7 @@ $game.$thing = {
 		//if close enough, trigger thing to run!
 		if(dX + dY < 6) {
 			_triggered = true;
-			$game.$player.game.seenThing = true;
+			$game.$player.seenThing = true;
 			$game.$thing.isMoving = true;
 			$game.$thing.currentStep = 0;
 			$game.$thing.counter = 0;
@@ -235,7 +235,7 @@ $game.$thing = {
 	},
 
 	getLoc: function() {
-		return _coords[$game.$player.game.currentLevel];
+		return _coords[$game.$player.currentLevel];
 	}
 
 };

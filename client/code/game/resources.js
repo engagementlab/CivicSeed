@@ -35,7 +35,7 @@ $game.$resources = {
 		var response = $game.$npc.getNpcData();
 			//iterate through repsonses, create a key
 			//with the id and value is the object
-		ss.rpc('game.npc.getResponses', $game.$player.game.instanceName, function(all) {
+		ss.rpc('game.npc.getResponses', $game.$player.instanceName, function(all) {
 
 			$.each(response, function(key, npc) {
 				if(npc.isHolding) {
@@ -85,7 +85,7 @@ $game.$resources = {
 		//console.log('load resource (who,index,now): ', who,index, revisit);
 		//console.log('current resource:', _curResource);
 		var npcLevel = $game.$npc.getNpcLevel(index);
-		if(npcLevel <= $game.$player.game.currentLevel) {
+		if(npcLevel <= $game.$player.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
 			_resourceStageSel.empty().load(url,function() {
 				//console.log('ready: ', url);
@@ -202,7 +202,7 @@ $game.$resources = {
 				//first, congrats and show them the tangram piece
 				if(_currentSlide === _numSlides + 1) {
 					var npcLevel = $game.$npc.getNpcLevel();
-					if(npcLevel < $game.$player.game.currentLevel) {
+					if(npcLevel < $game.$player.currentLevel) {
 						_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
 						_resourceContentSel.empty().css('overflow','auto');
 					}
@@ -391,7 +391,13 @@ $game.$resources = {
 		//if correct, get seeds, push answer to db
 		if(_correctAnswer) {
 			//update player stuff
-			_numSeedsToAdd = $game.$player.answerResource(true,_curResource.id, response, npcLevel);
+			var rightInfo = {
+				correct : true,
+				id: _curResource.id,
+				answer: response,
+				npcLevel: npcLevel
+			};
+			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
 
 			//if they took more than 1 try to get a binary, drop down more
 			if(_questionType === 'truefalse' || _questionType === 'yesno') {
@@ -406,15 +412,21 @@ $game.$resources = {
 				name: $game.$player.name,
 				answer: response,
 				madePublic: false,
-				instanceName: $game.$player.game.instanceName
+				instanceName: $game.$player.instanceName
 			};
 			//hack to not include demo users
-			if($game.$player.game.name !== 'Demo') {
+			if($game.$player.name !== 'Demo') {
 				ss.rpc('game.npc.saveResponse', newAnswer);
 			}
 		}
 		else {
-			_numSeedsToAdd = $game.$player.answerResource(false,_curResource.id, response, npcLevel);
+			var wrongInfo = {
+				correct : false,
+				id: _curResource.id,
+				answer: response,
+				npcLevel: npcLevel
+			};
+			_numSeedsToAdd = $game.$player.answerResource(wrongInfo);
 		}
 		_answered = true;
 		$game.$resources.nextSlide();

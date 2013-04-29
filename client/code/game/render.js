@@ -55,7 +55,7 @@ $game.$renderer = {
 		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png'];
 
 		_playerColorNum = $game.$player.getColorNum();
-		_playerLevelNum = $game.$player.game.currentLevel;
+		_playerLevelNum = $game.$player.currentLevel;
 		$game.$renderer.loadTilesheet(_playerLevelNum, false);
 
 		//hack to check if all stuff is loaded so we can callback
@@ -287,7 +287,7 @@ $game.$renderer = {
 				$game.TILE_SIZE
 				);
 		}
-		
+
 		if(tileData.b2 > -1) {
 			srcX = tileData.b2 % _tilesheetWidth,
 			srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
@@ -354,9 +354,9 @@ $game.$renderer = {
 				$game.TILE_SIZE
 				);
 		}
-		
+
 	},
-	
+
 	drawAccessories: function(srcX,destX,destY, level, color, client) {
 		if(client) {
 			//this will add your stuff to the gray player (for seed mode) as well
@@ -572,11 +572,9 @@ $game.$renderer = {
 
 			$game.$renderer.drawForegroundTile(foreData);
 
-			
-			var col;
+			var col = $game.$player.getRGBA();
 
 			if($game.$player.seedMode > 0) {
-				col = 'rgba('+$game.$player.game.colorInfo.rgb.r+','+$game.$player.game.colorInfo.rgb.g+','+$game.$player.game.colorInfo.rgb.b+','+ 0.5 + ')';
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
 					mX,
