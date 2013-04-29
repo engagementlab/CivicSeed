@@ -7,7 +7,7 @@ var self = exports.actions = function(req, res, ss) {
 	var service = ss.service;
 	var UserModel = service.useModel('user', 'ss');
 	var NpcModel = service.useModel('npc', 'ss');
-	var GnomeModel = service.useModel('gnome', 'ss');
+	var BotanistModel = service.useModel('botanist', 'ss');
 	//var ResourceModel = service.useModel('resource', 'ss');
 	var GameModel = service.useModel('game', 'ss');
 
@@ -150,9 +150,9 @@ var self = exports.actions = function(req, res, ss) {
 			});
 		},
 
-		loadGnome: function() {
-			GnomeModel.findOne(function(err, gnome) {
-				res(gnome);
+		loadBotanist: function() {
+			BotanistModel.findOne(function(err, botanist) {
+				res(botanist);
 			});
 		}
 

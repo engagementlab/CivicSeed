@@ -17,7 +17,7 @@ var _info = null,
 	_numMegaSeeds = 5,
 	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'];
 
-$game.$gnome = {
+$game.$botanist = {
 
 	index: 0,
 	numSteps: 64,
@@ -33,41 +33,41 @@ $game.$gnome = {
 	ready: false,
 
 	init: function(callback) {
-		ss.rpc('game.npc.loadGnome', function(gnome) {
-			$game.$gnome.index = gnome.id,
-			$game.$gnome.dialog = gnome.dialog,
-			$game.$gnome.name = gnome.name,
-			$game.$gnome.tangram = gnome.tangram;
+		ss.rpc('game.npc.loadBotanist', function(botanist) {
+			$game.$botanist.index = botanist.id,
+			$game.$botanist.dialog = botanist.dialog,
+			$game.$botanist.name = botanist.name,
+			$game.$botanist.tangram = botanist.tangram;
 
 			_info = {
-				x: gnome.x,
-				y: gnome.y
+				x: botanist.x,
+				y: botanist.y
 			};
 
 			_renderInfo = {
-				kind: 'gnome',
+				kind: 'botanist',
 				srcX: 0,
 				srcY: 0,
-				curX: gnome.x,
-				curY: gnome.y,
-				prevX: gnome.x,
-				prevY: gnome.y
+				curX: botanist.x,
+				curY: botanist.y,
+				prevX: botanist.x,
+				prevY: botanist.y
 			};
 
-			$game.$gnome.setupTangram();
-			$game.$gnome.getMaster();
-			$game.$gnome.setGnomeState($game.$player.gnomeState);
-			$game.$gnome.ready = true;
+			$game.$botanist.setupTangram();
+			$game.$botanist.getMaster();
+			$game.$botanist.setBotanistState($game.$player.botanistState);
+			$game.$botanist.ready = true;
 			callback();
 		});
 	},
 
 	clear: function() {
-		$game.$renderer.clearGnome(_renderInfo);
+		$game.$renderer.clearBotanist(_renderInfo);
 	},
 
 	getRenderInfo: function() {
-		//since the gnome is stationary, we can hard code his location
+		//since the botanist is stationary, we can hard code his location
 
 		if(_onScreen) {
 			return _renderInfo;
@@ -80,15 +80,15 @@ $game.$gnome = {
 	update: function() {
 		if(!$game.inTransit) {
 			if(_onScreen) {
-				$game.$gnome.idle();
+				$game.$botanist.idle();
 			}
 		}
 		else if($game.inTransit) {
-			$game.$gnome.getMaster();
+			$game.$botanist.getMaster();
 		}
 	},
 
-	setGnomeState: function(state) {
+	setBotanistState: function(state) {
 		if(state === 2) {
 			_renderInfo.srcY = 160;
 		} else {
@@ -159,33 +159,33 @@ $game.$gnome = {
 		//if they are in a level 0-4
 		if($game.$player.currentLevel < 5) {
 			//show instructions first
-			if($game.$player.gnomeState === 0) {
-				_messages = $game.$gnome.dialog[$game.$player.currentLevel].instructions;
+			if($game.$player.botanistState === 0) {
+				_messages = $game.$botanist.dialog[$game.$player.currentLevel].instructions;
 				_currentMessage = 0;
-				$game.$gnome.showChat();
+				$game.$botanist.showChat();
 			}
 			//if they have gotten the instructions / intro dialog, show them the riddle
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
-			else if($game.$player.gnomeState === 1) {
+			else if($game.$player.botanistState === 1) {
 				var dropped = $game.$player.getSeedsDropped();
 				if($game.$player.currentLevel === 0 && dropped < 1) {
 					//make them plant first seed
 					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
 
-					$('.speechBubble .speakerName').text($game.$gnome.name+': ');
+					$('.speechBubble .speakerName').text($game.$botanist.name+': ');
 					$('.speechBubble .message').text(_speak);
 					$('.speechBubble').fadeIn(function() {
 						setTimeout(function() {
-							$game.$gnome.hideChat();
+							$game.$botanist.hideChat();
 						}, 3000);
 					});
 				}
 				else {
-					$game.$gnome.showPrompt(0);
+					$game.$botanist.showPrompt(0);
 				}
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
-			else if($game.$player.gnomeState === 2) {
+			else if($game.$player.botanistState === 2) {
 				var curHint = 0,
 					numItems = $game.$player.getInventoryLength();
 				if(numItems > 0) {
@@ -193,18 +193,18 @@ $game.$gnome = {
 				}
 				//else hint 1
 				_messages = [];
-				_messages.push($game.$gnome.dialog[$game.$player.currentLevel].hint[curHint]);
+				_messages.push($game.$botanist.dialog[$game.$player.currentLevel].hint[curHint]);
 				_currentMessage = 0;
-				$game.$gnome.showChat();
+				$game.$botanist.showChat();
 
 			}
 			//if they have gathered the right resources, prompt to answer 
-			else if($game.$player.gnomeState === 3) {
-				$game.$gnome.showPrompt(1);
+			else if($game.$player.botanistState === 3) {
+				$game.$botanist.showPrompt(1);
 			}
 			//they have solved the tangram but not answered the portfolio question
-			else if($game.$player.gnomeState === 4) {
-				$game.$gnome.showRiddle(2);
+			else if($game.$player.botanistState === 4) {
+				$game.$botanist.showRiddle(2);
 			}
 		}
 		//they have beaten the INDIVIDUAL part of the game
@@ -225,18 +225,18 @@ $game.$gnome = {
 	showChat: function() {
 		$('.speechBubble p').removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
-		$game.$gnome.isChat = true;
-		$game.$gnome.nextChatContent();
+		$game.$botanist.isChat = true;
+		$game.$botanist.nextChatContent();
 	},
 
 	hideChat: function() {
 		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .closeChatButton').unbind('click');
-			$game.$gnome.isChat = false;
+			$game.$botanist.isChat = false;
 			//save that the player has looked at the instructions
-			if($game.$player.gnomeState === 0) {
-				$game.$player.gnomeState = 1;
+			if($game.$player.botanistState === 0) {
+				$game.$player.botanistState = 1;
 				if($game.$player.currentLevel === 0) {
 					$game.$player.updateSeeds('normal', 1);
 				}
@@ -247,14 +247,14 @@ $game.$gnome = {
 	addChatContent: function() {
 		$('.speechBubble button').addClass('hideButton');
 		$('.speechBubble .nextChatButton').removeClass('hideButton');
-		$('.speechBubble .speakerName').text($game.$gnome.name+": ");
+		$('.speechBubble .speakerName').text($game.$botanist.name+": ");
 		$('.speechBubble .message').text(_messages[_currentMessage]);
 
 		//first item, then drop
 		if(_currentMessage === 0) {
 			$('.speechBubble').fadeIn(function() {
 				$(".speechBubble .nextChatButton").bind('click', (function () {
-					$game.$gnome.nextChatContent();
+					$game.$botanist.nextChatContent();
 				}));
 			});
 		}
@@ -262,7 +262,7 @@ $game.$gnome = {
 			$(".speechBubble .nextChatButton").unbind('click').addClass('hideButton');
 
 			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
-				$game.$gnome.hideChat();
+				$game.$botanist.hideChat();
 			}));
 		}
 	},
@@ -270,7 +270,7 @@ $game.$gnome = {
 	nextChatContent: function() {
 		//show the next message if there are more in the bag
 		if(_currentMessage < _messages.length) {
-			$game.$gnome.addChatContent();
+			$game.$botanist.addChatContent();
 			_currentMessage += 1;
 		}
 	},
@@ -278,24 +278,24 @@ $game.$gnome = {
 	showPrompt: function(p) {
 		$('.speechBubble p').removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
-		$game.$gnome.isChat = true;
-		_speak =  $game.$gnome.dialog[$game.$player.currentLevel].riddle.prompts[p];
+		$game.$botanist.isChat = true;
+		_speak =  $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
-		$('.speechBubble .speakerName').text($game.$gnome.name+': ');
+		$('.speechBubble .speakerName').text($game.$botanist.name+': ');
 		$('.speechBubble .message').text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
 		$('.speechBubble').fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				if(p === 1) {
-					$game.$gnome.isSolving = true;
+					$game.$botanist.isSolving = true;
 					$('.displayBoxText').text('drag a piece to the board to use it');
-					$('.gnomeArea').css('height','380px');
+					$('.botanistArea').css('height','380px');
 				}
 
-				$game.$gnome.showRiddle(p);
+				$game.$botanist.showRiddle(p);
 			}));
 			$(".speechBubble .noButton").bind("click", (function () {
-				$game.$gnome.hideChat();
+				$game.$botanist.hideChat();
 			}));
 		});
 	},
@@ -304,10 +304,10 @@ $game.$gnome = {
 		
 		//hide the inventory if the resource is not already visible
 		//when clicked on from inventory (this means it isn't in puzzle mode)
-		if(!$game.$gnome.isShowing) {
+		if(!$game.$botanist.isShowing) {
 			$('.inventory').slideUp();
-			$game.$gnome.isChat = true;
-			$game.$gnome.showRiddle(0);
+			$game.$botanist.isChat = true;
+			$game.$botanist.showRiddle(0);
 		}
 	},
 
@@ -316,24 +316,24 @@ $game.$gnome = {
 		if(num === 2) {
 			_promptNum = 1;
 			_currentSlide = 2;
-			$game.$gnome.isChat = true;
+			$game.$botanist.isChat = true;
 		}
 		else {
 			_promptNum = num;
 			_currentSlide = 0;
 		}
-		$game.$gnome.addContent();
-		$game.$gnome.addButtons();
+		$game.$botanist.addContent();
+		$game.$botanist.addButtons();
 
 		$('.speechBubble').fadeOut(function() {
 			$('.speechBubble button').addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
 
-			$('.gnomeArea')
+			$('.botanistArea')
 				.addClass('patternBg3')
 				.fadeIn(function() {
-					$game.$gnome.isShowing = true;
+					$game.$botanist.isShowing = true;
 					if(_currentSlide === 0 && !$game.$player.firstTime) {
 						$('.tangramArea').show();
 					}
@@ -342,104 +342,102 @@ $game.$gnome = {
 	},
 
 	addButtons: function() {
-		$('.gnomeArea button').addClass('hideButton');
+		$('.botanistArea button').addClass('hideButton');
 
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
-				$('.gnomeArea .nextButton').removeClass('hideButton');
+				$('.botanistArea .nextButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-				$('.gnomeArea .backButton').removeClass('hideButton');
+				$('.botanistArea .backButton').removeClass('hideButton');
 				if($game.$player.firstTime) {
-					$('.gnomeArea .nextButton').removeClass('hideButton');
+					$('.botanistArea .nextButton').removeClass('hideButton');
 				} else {
-					$('.gnomeArea .closeButton').removeClass('hideButton');
+					$('.botanistArea .closeButton').removeClass('hideButton');
 				}
 			}
 			else {
-				$('.gnomeArea .closeButton').removeClass('hideButton');
+				$('.botanistArea .closeButton').removeClass('hideButton');
 			}
 		}
 		else {
 			if(_currentSlide === 0) {
-				$('.gnomeArea .answerButton').removeClass('hideButton');
-				$('.gnomeArea .clearBoardButton').removeClass('hideButton');
+				$('.botanistArea .answerButton').removeClass('hideButton');
+				$('.botanistArea .clearBoardButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-				$('.gnomeArea .answerButton').addClass('hideButton');
-				$('.gnomeArea .nextButton').removeClass('hideButton');
+				$('.botanistArea .answerButton').addClass('hideButton');
+				$('.botanistArea .nextButton').removeClass('hideButton');
 			}
 			else {
-				$('.gnomeArea .nextButton').addClass('hideButton');
-				$('.gnomeArea .answerButton').removeClass('hideButton');
-				$('.gnomeArea .clearBoardButton').removeClass('hideButton');
+				$('.botanistArea .nextButton').addClass('hideButton');
+				$('.botanistArea .answerButton').removeClass('hideButton');
+				$('.botanistArea .clearBoardButton').removeClass('hideButton');
 			}
 		}
 	},
 
 	nextSlide: function() {
 		_currentSlide += 1;
-		$game.$gnome.addContent();
-		$game.$gnome.addButtons();
+		$game.$botanist.addContent();
+		$game.$botanist.addButtons();
 	},
 
 	previousSlide: function() {
 		_currentSlide -= 1;
-		$game.$gnome.addContent();
-		$game.$gnome.addButtons();
+		$game.$botanist.addContent();
+		$game.$botanist.addButtons();
 	},
 
 	addContent: function() {
-		$('.gnomeArea .speakerName').text($game.$gnome.name+': ');
+		$('.botanistArea .speakerName').text($game.$botanist.name+': ');
 		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				if($game.$player.firstTime) {
-					$('.gnomeArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
-					$('.gnomeContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
+					$('.botanistArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
+					$('.botanistContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
-					$('.gnomeArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
-					$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+					$('.botanistArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
+					$('.botanistContent').html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 				}
 			}
 			else if(_currentSlide === 1) {
-				if($game.$player.gnomeState > 1) {
-					$('.gnomeArea .message').text('Here is the Enigma to view again.');
+				if($game.$player.botanistState > 1) {
+					$('.botanistArea .message').text('Here is the Enigma to view again.');
 				}
 				else {
-					$('.gnomeArea .message').text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
+					$('.botanistArea .message').text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
 
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
 
-					//update gnomeState
+					//update botanistState
 					if($game.$player.currentLevel > 0) {
-						$game.$player.gnomeState = 2;
-						$game.$player.checkGnomeState();
-						$game.$gnome.setGnomeState(2);
+						$game.$player.botanistState = 2;
+						$game.$player.checkBotanistState();
+						$game.$botanist.setBotanistState(2);
 					}
 				}
-				
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
-				$('.gnomeContent').html('<img src="' + imgPath + '" class="tangramOutline">');
-				
+				$('.botanistContent').html('<img src="' + imgPath + '" class="tangramOutline">');
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
 					$game.$player.firstTime = false;
-					$game.$player.gnomeState = 2;
-					$game.$player.checkGnomeState();
-					$game.$gnome.setGnomeState(2);
-					$('.gnomeArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$('.gnomeContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
+					$game.$player.botanistState = 2;
+					$game.$player.checkBotanistState();
+					$game.$botanist.setBotanistState(2);
+					$('.botanistArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
+					$('.botanistContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
 				}
 			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
 			// if(_currentSlide === 0) {
-			// 	$('.gnomeArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-			// 	$('.gnomeContent').html('<p class="firstRiddle">'+$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+			// 	$('.botanistArea .message').text('here is your next riddle ' + $game.$player.name + '.');
+			// 	$('.botanistContent').html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			if(_currentSlide === 0) {
 				$('.inventory button').addClass('hideButton');
 				$('.inventory').slideDown(function() {
@@ -447,12 +445,12 @@ $game.$gnome = {
 					//set the inventory items to draggable in case they were off
 					$('.inventoryItem').attr('draggable','true');
 				});
-				//$game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet
-				$('.gnomeArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
+				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
+				$('.botanistArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png';
 					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$gnome.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
-				$('.gnomeContent').html(newHTML);
+				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
+				$('.botanistContent').html(newHTML);
 
 				//replace the tangram image in the inventory with tip
 				$('.inventoryPuzzle').hide();
@@ -460,7 +458,7 @@ $game.$gnome = {
 			}
 			//right/wrong screen
 			else if(_currentSlide === 1) {
-				$('.gnomeArea').animate({
+				$('.botanistArea').animate({
 						'height':'450px'
 				});
 				$('.inventory').slideUp(function() {
@@ -469,41 +467,41 @@ $game.$gnome = {
 					$('.inventoryItem').remove();
 				});
 
-				var postTangramTalk = $game.$gnome.dialog[$game.$player.currentLevel].riddle.response;
+				var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
-				$('.gnomeArea .message').text(postTangramTalk);
+				$('.botanistArea .message').text(postTangramTalk);
 				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
 					newHTML2 += '<p style="text-align:center;"><img src="/img/game/megaseed.png"></p>';
-				$('.gnomeContent').html(newHTML2);
+				$('.botanistContent').html(newHTML2);
 			}
 			else {
 				var endQuestion = _levelQuestion[$game.$player.currentLevel];
-				$('.gnomeArea .message').text(endQuestion);
+				$('.botanistArea .message').text(endQuestion);
 				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
-				$('.gnomeContent').html(inputBox);
+				$('.botanistContent').html(inputBox);
 				$game.changeStatus('this will go in your profile');
 			}
 		}
 	},
 
 	hideResource: function() {
-		//slide up the gnome area that contains big content
+		//slide up the botanist area that contains big content
 		//re-enable clicking by setting bools to false
 		$('.tangramArea').hide();
-		$('.gnomeArea').fadeOut(function() {
-			$game.$gnome.isShowing = false;
-			$('.gnome button').addClass('hideButton');
+		$('.botanistArea').fadeOut(function() {
+			$game.$botanist.isShowing = false;
+			$('.botanist button').addClass('hideButton');
 			$(this)
 				.removeClass('patternBg3')
 				.css('height','450px');
-			$game.$gnome.isChat = false;
-			$game.$gnome.isSolving = false;
+			$game.$botanist.isChat = false;
+			$game.$botanist.isSolving = false;
 			$game.changeStatus();
 			$('.puzzleSvg').empty();
 			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
-			if($game.$player.gnomeState === 0) {
+			if($game.$player.botanistState === 0) {
 				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
 				$game.changeStatus('game progress and leaderboard');
@@ -534,7 +532,7 @@ $game.$gnome = {
 			var allTangrams = $('.puzzleSvg > path'),
 			correct = true,
 			numRight = 0,
-			aLength = $game.$gnome.tangram[$game.$player.currentLevel].answer.length,
+			aLength = $game.$botanist.tangram[$game.$player.currentLevel].answer.length,
 			message = '',
 			wrongOne = false,
 			nudge = false;
@@ -554,7 +552,7 @@ $game.$gnome = {
 					//in the right place
 
 				while(--t > -1) {
-					var answer = $game.$gnome.tangram[$game.$player.currentLevel].answer[t];
+					var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t];
 					if(answer.id === tanId) {
 						found = true;
 						//this is a hard check for snapping
@@ -581,25 +579,25 @@ $game.$gnome = {
 				correct = false;
 				_numMegaSeeds -= 1;
 				message = 'at least TRY to solve it...';
-				$game.$gnome.clearBoard();
+				$game.$botanist.clearBoard();
 			}
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'Oh! That’s not quite right. Think more about how the pieces of the Enigma relate to one another, and try again.';
-				$game.$gnome.clearBoard();
+				$game.$botanist.clearBoard();
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'You are missing some pieces. Be sure to read the Enigma carefully to help pick out the right pieces.';
-				$game.$gnome.clearBoard();
+				$game.$botanist.clearBoard();
 			}
 			else if(nudge) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'So close! You have the right pieces, just fix the placement.';
-				//$game.$gnome.clearBoard();
+				//$game.$botanist.clearBoard();
 			}
 
 			if(correct) {
@@ -607,8 +605,8 @@ $game.$gnome = {
 				//make sure ALL were on the board
 				if(numRight === aLength) {
 					_currentSlide = 1;
-					$game.$gnome.addContent();
-					$game.$gnome.addButtons();
+					$game.$botanist.addContent();
+					$game.$botanist.addButtons();
 					//display item and congrats.
 					//-> next slide is the prompt to answer question
 
@@ -620,24 +618,24 @@ $game.$gnome = {
 					$game.$player.emptyInventory();
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
 					$game.$player.updateSeeds('riddle', _numMegaSeeds);
-					$game.$player.gnomeState = 4;
+					$game.$player.botanistState = 4;
 
 					$game.changeStatus('congrats!');
 				}
 			}
 			else {
 				//display modal on current screen with feedback
-				$game.$gnome.feedback(message);
+				$game.$botanist.feedback(message);
 			}
 
 		}
 		else {
 			_numMegaSeeds = 5;
-			var portAnswer = $('.gnomeContent textarea').val();
+			var portAnswer = $('.botanistContent textarea').val();
 			$game.$player.resumeAnswer(portAnswer);
-			$game.changeStatus('talk to the gnome');
+			$game.changeStatus('talk to the botanist');
 			$game.$player.nextLevel();
-			$game.$gnome.hideResource();
+			$game.$botanist.hideResource();
 			//upload the user's answer to the DB
 		}
 	},
@@ -650,13 +648,13 @@ $game.$gnome = {
 
 		_drag = d3.behavior.drag()
 			.origin(Object)
-			.on('drag', $game.$gnome.dragMove)
-			.on('dragstart', $game.$gnome.dragMoveStart)
-			.on('dragend', $game.$gnome.dropMove);
+			.on('drag', $game.$botanist.dragMove)
+			.on('dragstart', $game.$botanist.dragMoveStart)
+			.on('dragend', $game.$botanist.dropMove);
 	},
 
 	dragStart: function(e) {
-		if($game.$gnome.isSolving) {
+		if($game.$botanist.isSolving) {
 
 			$('.tangramArea')
 				.unbind('dragover')
@@ -670,8 +668,8 @@ $game.$gnome = {
 
 			//set drag over shit
 			$('.tangramArea')
-				.bind('dragover',$game.$gnome.dragOver)
-				.bind('drop', $game.$gnome.drop);
+				.bind('dragover',$game.$botanist.dragOver)
+				.bind('drop', $game.$botanist.drop);
 		}
 	},
 
@@ -738,8 +736,8 @@ $game.$gnome = {
 	dragMove: function(d) {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
-			// mX = $game.$gnome.snapTo(x - _dragOffX),
-			// mY = $game.$gnome.snapTo(y - _dragOffY);
+			// mX = $game.$botanist.snapTo(x - _dragOffX),
+			// mY = $game.$botanist.snapTo(y - _dragOffY);
 			mX = x - _dragOffX,
 			mY = y - _dragOffY,
 			trashing = false;
@@ -765,8 +763,8 @@ $game.$gnome = {
 	dropMove: function(d) {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
-			mX = $game.$gnome.snapTo(x - _dragOffX),
-			mY = $game.$gnome.snapTo(y - _dragOffY),
+			mX = $game.$botanist.snapTo(x - _dragOffX),
+			mY = $game.$botanist.snapTo(y - _dragOffY),
 			trans = 'translate(' + mX  + ', ' + mY + ')';
 
 		d3.select('.br' + d.id)

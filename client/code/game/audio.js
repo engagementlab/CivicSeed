@@ -351,7 +351,7 @@ $game.$audio = {
 			absX = Math.abs(diffX),
 			absY = Math.abs(diffY);
 
-		//check for gnome/s place first
+		//check for botanist's place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 5;
 			_newPlace = 'entering the botanist\'s garden';

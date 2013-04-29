@@ -2,15 +2,12 @@
 $(function() {
 	var _w = $(window),
 		$BODY = $('body');
-		_activePlayers = $('.activePlayers span'),
-		_progressHudCount = $('.progressButton .hudCount'),
-		_gameboard = $('.gameboard'),
-		_chatText = $('#chatText'),
-		_chatBox = $('.chatBox'),
-		_displayBox = $('.displayBox'),
-		_inventory = $('.inventory'),
-		_displayBoxText = $('.displayBoxText'),
-		_progressArea = $('.progressArea'),
+		$chatText = $('#chatText'),
+		$chatBox = $('.chatBox'),
+		$displayBox = $('.displayBox'),
+		$inventory = $('.inventory'),
+		$displayBoxText = $('.displayBoxText'),
+		$progressArea = $('.progressArea'),
 		_helpShowing = false,
 		_pledgeFeedbackTimeout = null;
 
@@ -30,7 +27,7 @@ $(function() {
 			if($game.$player.seedMode > 0) {
 				$game.$player.seedMode = 0;
 				$game.$player.seedPlanting = false;
-				_renderInfo.colorNum = _playerColorNum;
+				$game.$player.resetRenderColor();
 				$game.changeStatus();
 				$(this).removeClass('currentButton');
 				$game.$player.saveMapImage();
@@ -102,7 +99,7 @@ $(function() {
 	$BODY.on('click', '#chatButton', function (e) {
 		e.preventDefault();
 		if(!$game.$npc.isResource && !$game.inTransit && !$game.$player.isMoving) {
-			var sentence = _chatText.val();
+			var sentence = $chatText.val();
 			var data = {
 				msg: $game.checkPotty(sentence),
 				name: $game.$player.name,
@@ -114,46 +111,46 @@ $(function() {
 			ss.rpc('game.chat.sendMessage', data, function(r) {
 				//nothing here...
 			});
-			_chatText.val('');
+			$chatText.val('');
 		}
 		return false;
 	});
 
 	$BODY.on('click', '.chatButton', function () {
 		$('.chatButton').toggleClass('currentButton');
-		_chatBox.toggleClass('hide');
-		_displayBox.toggleClass('hide');
+		$chatBox.toggleClass('hide');
+		$displayBox.toggleClass('hide');
 		return false;
 	});
 
 	$BODY.on('keypress', '.resourceArea', function (e) {
-	    if (e.keyCode == 10 || e.keyCode == 13) {
-	        e.preventDefault();
-	        return false;
-	    }
+		if (e.keyCode == 10 || e.keyCode == 13) {
+			e.preventDefault();
+			return false;
+		}
 	});
 
-	$BODY.on('click', '.inventoryButton .inventory button', function () {
-		if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$gnome.isShowing) {
+	$BODY.on('click', '.inventoryButton, .inventory button', function () {
+		if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$botanist.isShowing) {
 			if($game.$player.inventoryShowing) {
-				_inventory.slideUp(function() {
+				$inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
 					$game.changeStatus();
 					$('.inventoryButton').removeClass('currentButton');
-				});	
+				});
 			}
 			else {
-				_inventory.slideDown(function() {
+				$inventory.slideDown(function() {
 					$game.$player.inventoryShowing = true;
-					_displayBoxText.text('click items to view again');
+					$displayBoxText.text('click items to view again');
 					$('.inventoryButton').addClass('currentButton');
-				});	
-			}	
+				});
+			}
 		}
 		return false;
 	});
-	
-	$BODY.on('click', '.resourceArea a i, .resourceArea .closeButton', function () {
+
+	$BODY.on('click', '.resourceArea a i, .resourceArea .closeButton', function (e) {
 		e.preventDefault();
 		$('.check').hide();
 		$game.$resources.hideResource();
@@ -190,36 +187,36 @@ $(function() {
 		return false;
 	});
 
-	$BODY.on('click', '.gnomeArea a i, .gnomeArea .closeButton', function (e) {
+	$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
 		e.preventDefault();
-		$game.$gnome.hideResource();
+		$game.$botanist.hideResource();
 		return false;
 	});
 
-	$BODY.on('click', '.gnomeArea .nextButton', function (e) {
-		$game.$gnome.nextSlide();
+	$BODY.on('click', '.botanistArea .nextButton', function (e) {
+		$game.$botanist.nextSlide();
 	});
 
-	$BODY.on('click', '.gnomeArea .backButton', function (e) {
-		$game.$gnome.previousSlide();
+	$BODY.on('click', '.botanistArea .backButton', function (e) {
+		$game.$botanist.previousSlide();
 	});
 
-	$BODY.on('click', '.gnomeArea .answerButton', function (e) {
+	$BODY.on('click', '.botanistArea .answerButton', function (e) {
 		e.preventDefault();
-		$game.$gnome.submitAnswer();
+		$game.$botanist.submitAnswer();
 		return false;
 	});
 
-	$BODY.on('click', '.gnomeArea .clearBoardButton', function (e) {
+	$BODY.on('click', '.botanistArea .clearBoardButton', function (e) {
 		e.preventDefault();
-		$game.$gnome.clearBoard();
+		$game.$botanist.clearBoard();
 		return false;
 	});
 
 	$BODY.on('click', '.progressArea a i', function (e) {
 		e.preventDefault();
 		$('.progressButton').removeClass('currentButton');
-		_progressArea.fadeOut(function() {
+		$progressArea.fadeOut(function() {
 			$game.showingProgress = false;
 			$game.changeStatus();
 		});
@@ -233,7 +230,7 @@ $(function() {
 	$BODY.on('click', '.progressButton', function () {
 		if($game.showingProgress) {
 			$(this).toggleClass('currentButton');
-			_progressArea.fadeOut(function() {
+			$progressArea.fadeOut(function() {
 				$game.showingProgress = false;
 				$game.changeStatus();
 			});
@@ -330,7 +327,7 @@ $(function() {
 
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
-		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$gnome.isChat && !_helpShowing){
+		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing){
 			return true;
 		}
 		return false;

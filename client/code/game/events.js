@@ -1,8 +1,8 @@
 //events recevied by RPC
 $(function() {
 	var _w = $(window),
-		_activePlayers = $('.activePlayers span'),
-		_progressHudCount = $('.progressButton .hudCount');
+		$activePlayers = $('.activePlayers span'),
+		$progressHudCount = $('.progressButton .hudCount');
 
 	/******* RPC EVENTS *********/
 
@@ -11,7 +11,7 @@ $(function() {
 		console.log(data, chan);
 		$game.numPlayers = data.num;
 		$game.$others.add(data.info);
-		_activePlayers.text(data.num);
+		$activePlayers.text(data.num);
 		if(data.info.id !== $game.$player.id) {
 			$game.temporaryStatus(data.info.name + ' has joined!');
 		}
@@ -23,7 +23,7 @@ $(function() {
 		if(data.id != $game.$player.id) {
 			$game.$others.remove(data.id);
 		}
-		_activePlayers.text(data.num);
+		$activePlayers.text(data.num);
 	});
 
 	//player moves
@@ -61,7 +61,7 @@ $(function() {
 
 		$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
 		$game.percentString = $game.percent + '%';
-		_progressHudCount.text($game.percentString);
+		$progressHudCount.text($game.percentString);
 
 		//if we have gone up a milestone, feedback it
 		if($game.percent > 99) {
@@ -77,16 +77,7 @@ $(function() {
 	});
 
 	ss.event.on('ss-leaderChange', function(data, chan) {
-		// console.log(data);
-		var leaderChange = true;
-		if($game.leaderboard.length > 0) {
-			leaderChange = ($game.leaderboard[0].name === data.board[0].name) ? false : true;
-			// console.log($game.leaderboard[0], data.board[0], leaderChange);
-		}
-		if(leaderChange) {
-			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
-		}
-		$game.leaderboard = data.board;
+		$game.updateLeaderboard(data);
 	});
 
 	ss.event.on('ss-addAnswer', function(data, chan) {

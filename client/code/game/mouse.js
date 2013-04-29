@@ -84,8 +84,8 @@ $game.$mouse = {
 						if($game.$npc.isChat) {
 							$game.$npc.hideChat();
 						}
-						else if($game.$gnome.isChat) {
-							$game.$gnome.hideChat();
+						else if($game.$botanist.isChat) {
+							$game.$botanist.hideChat();
 						}
 					}
 					//npc
@@ -94,7 +94,7 @@ $game.$mouse = {
 
 						//if you click on a different square then the previously
 						//selected npc, then hide the npc info if it is showing
-						if(state !== $game.$gnome.index && !$game.$player.pathfinding) {
+						if(state !== $game.$botanist.index && !$game.$player.pathfinding) {
 							$game.$npc.selectNpc(state);
 							//move them to the spot to the
 							//BOTTOM LEFT corner of the npc
@@ -105,7 +105,7 @@ $game.$mouse = {
 
 						else {
 							$('.speechBubble button').addClass('hideButton');
-							$game.$gnome.show();
+							$game.$botanist.show();
 						}
 					}
 				}
@@ -152,8 +152,8 @@ $game.$mouse = {
 			if($game.$npc.isChat) {
 				$game.$npc.hideChat();
 			}
-			else if($game.$gnome.isChat) {
-				$game.$gnome.hideChat();
+			else if($game.$botanist.isChat) {
+				$game.$botanist.hideChat();
 			}
 		}
 		

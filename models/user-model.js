@@ -44,11 +44,11 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				special: Number,
 				dropped: Number
 			},
-			gnomeState: Number,
+			botanistState: Number,
 			firstTime: Boolean,
 			colorMap: String,
 			resume: [String],
-			seenThing: Boolean,
+			seenRobot: Boolean,
 			resourcesDiscovered: Number,
 			playingTime: Number,
 			tilesColored: Number,

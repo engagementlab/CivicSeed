@@ -148,8 +148,8 @@ $game.$renderer = {
 		// $game.$others.clear();
 		// $game.$player.clear();
 		// $game.$npc.clear();
-		// $game.$gnome.clear();
-		// $game.$thing.clear();
+		// $game.$botanist.clear();
+		// $game.$robot.clear();
 		$game.$renderer.clearAll();
 
 		//only re-render all the tiles if the viewport is tranisitioning
@@ -163,11 +163,11 @@ $game.$renderer = {
 				if(all[a].kind === 'npc') {
 					$game.$renderer.renderNpc(all[a]);
 				}
-				else if(all[a].kind === 'gnome') {
-					$game.$renderer.renderGnome(all[a]);
+				else if(all[a].kind === 'botanist') {
+					$game.$renderer.renderBotanist(all[a]);
 				}
-				else if(all[a].kind === 'thing') {
-					$game.$renderer.renderThing(all[a]);
+				else if(all[a].kind === 'robot') {
+					$game.$renderer.renderRobot(all[a]);
 				}
 				else {
 					$game.$renderer.renderPlayer(all[a]);
@@ -180,16 +180,16 @@ $game.$renderer = {
 			order = [playerInfo],
 			order2 = $game.$others.getRenderInfo(),
 			order3 = $game.$npc.getRenderInfo(),
-			gnomeInfo = $game.$gnome.getRenderInfo(),
-			thingInfo = $game.$thing.getRenderInfo();
+			botanistInfo = $game.$botanist.getRenderInfo(),
+			robotInfo = $game.$robot.getRenderInfo();
 
 		var finalOrder = order.concat(order2, order3);
 
-		if(gnomeInfo) {
-			finalOrder.push(gnomeInfo);
+		if(botanistInfo) {
+			finalOrder.push(botanistInfo);
 		}
-		if(thingInfo) {
-			finalOrder.push(thingInfo);
+		if(robotInfo) {
+			finalOrder.push(robotInfo);
 		}
 
 		finalOrder.sort(function(a, b){
@@ -671,7 +671,7 @@ $game.$renderer = {
 		
 	},
 
-	clearGnome: function(info) {
+	clearBotanist: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
 			info.prevY - $game.TILE_SIZE * 4,
@@ -680,7 +680,7 @@ $game.$renderer = {
 		);
 	},
 
-	clearThing: function(info) {
+	clearRobot: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
 			info.prevY - $game.TILE_SIZE * 4,
@@ -689,7 +689,7 @@ $game.$renderer = {
 		);
 	},
 
-	renderGnome: function(info) {
+	renderBotanist: function(info) {
 		_charactersContext.drawImage(
 			_tilesheets[6],
 			info.srcX,
@@ -703,7 +703,7 @@ $game.$renderer = {
 		);
 	},
 
-	renderThing: function(info) {
+	renderRobot: function(info) {
 		// console.log(info.srcX, info.srcY);
 		_charactersContext.drawImage(
 			_tilesheets[10],

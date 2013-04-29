@@ -1,6 +1,6 @@
 module.exports = function(mongoose, db, Schema, ObjectId) {
 
-	var gnomeSchema = new Schema({
+	var botanistSchema = new Schema({
 		id: Number,
 		x: Number,
 		y: Number,
@@ -38,8 +38,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	});
 
-	var GnomeModel = db.model('gnome', gnomeSchema, 'gnomes');
+	var BotanistModel = db.model('botanist', botanistSchema, 'botanists');
 
-	return GnomeModel;
+	return BotanistModel;
 
 };

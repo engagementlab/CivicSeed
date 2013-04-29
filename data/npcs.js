@@ -202,7 +202,7 @@ module.exports.global = [{
 		question: 'Sourney Cruz (the third student in the video) says her passions are derived from her social identity. What are three of the aspects of identity that she mentioned?',
 		questionType: 'multiple',
 		possibleAnswers: ['A) Latina, upper-class/privileged upbringing, Roman Catholic', 'B) Working class upbringing, daughter of immigrants, latina female', 'C) Roman Catholic, latina female, middle-class/working class upbringing', 'D) A daughter of immigrants, bilingual upbringing, latina female'],
-]		answer: 'D) A daughter of immigrants, bilingual upbringing, latina female',
+		answer: 'D) A daughter of immigrants, bilingual upbringing, latina female',
 		shape: {
 			path: 'm0,0l80,0l0,90l-80,0l0,-90z',
 			fill: 'lightGreen'

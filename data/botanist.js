@@ -40,7 +40,7 @@ module.exports.global = {
 		},
 		hint: ['You must go to the southwest and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have the right pieces to solve the enigma! Go back to the Port District, in the southwest section of the world, and talk to some more people.']
 	}, {
-		instructions: ['Welcome to the game. I am your humble gnome.', 'We are a simple land, with creatures like you and me.', 'However, we have a constant problem where our world becomes colorless. We love color....', 'Solve my riddles and I will give you seeds to plant color.', 'LEAVE ME ALONE, ROARRRRRRR!!!!'],
+		instructions: ['Welcome to the game. I am your humble botanist.', 'We are a simple land, with creatures like you and me.', 'However, we have a constant problem where our world becomes colorless. We love color....', 'Solve my riddles and I will give you seeds to plant color.', 'LEAVE ME ALONE, ROARRRRRRR!!!!'],
 		riddle: {
 			sonnet: 'Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.',
 			prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],

@@ -9,7 +9,7 @@ var tileModel = service.useModel('tile', 'preload');
 var colorModel = service.useModel('color', 'preload');
 var npcModel = service.useModel('npc', 'preload');
 var resourceModel = service.useModel('resource','preload');
-var gnomeModel = service.useModel('gnome', 'preload');
+var botanistModel = service.useModel('botanist', 'preload');
 var gameModel = service.useModel('game', 'preload');
 
 // var nodeEnv;
@@ -24,7 +24,7 @@ exports.actions = function(req, res, ss) {
 
 		loadData: function(dataType) {
 
-			var userData, tileData, npcData, gnomeData, resourceData, gameData;
+			var userData, tileData, npcData, botanistData, resourceData, gameData;
 
 			if(req.session.role && req.session.role === 'superadmin') {
 
@@ -69,10 +69,10 @@ exports.actions = function(req, res, ss) {
 											special: 0,
 											dropped: 0
 										},
-										gnomeState: 0,
+										botanistState: 0,
 										firstTime: true,
 										resume: [],
-										seenThing: false,
+										seenRobot: false,
 										resourcesDiscovered: 0,
 										playingTime: 0,
 										tilesColored: 0,
@@ -127,7 +127,7 @@ exports.actions = function(req, res, ss) {
 							else if(tileStateArray[i] === 2	) {
 								tileStateVal = i;
 							}
-							//3: this is the pink? tile, it is the gnome
+							//3: this is the pink? tile, it is the botanist
 							else if(tileStateArray[i] === 3) {
 								tileStateVal = 99999;
 							}
@@ -174,13 +174,13 @@ exports.actions = function(req, res, ss) {
 						});
 					});
 				} else if(dataType === 'npcs') {
-					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Gnome   * * * * * * * * * * * *   \n\n'.yellow);
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Botanist   * * * * * * * * * * * *   \n\n'.yellow);
 					npcData = require(rootDir + '/data/npcs');
-					gnomeData = require(rootDir + '/data/gnome');
+					botanistData = require(rootDir + '/data/botanist');
 					dbActions.dropCollection('npcs', function() {
 						dbActions.saveDocuments(npcModel, npcData.global, function() {
-							dbActions.dropCollection('gnomes', function() {
-								dbActions.saveDocuments(gnomeModel, gnomeData.global, function() {
+							dbActions.dropCollection('botanists', function() {
+								dbActions.saveDocuments(botanistModel, botanistData.global, function() {
 									res('Data loaded: ' + dataType);
 								});
 							});

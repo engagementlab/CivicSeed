@@ -97,8 +97,8 @@ exports.$game = {
 			$game.$others.update();
 			$game.$player.update();
 			$game.$npc.update();
-			$game.$gnome.update();
-			$game.$thing.update();
+			$game.$botanist.update();
+			$game.$robot.update();
 			$game.$renderer.renderFrame();
 			requestAnimFrame($game.tick);
 		}
@@ -115,7 +115,7 @@ exports.$game = {
 
 		$('.levelImages img').removeClass('currentLevelImage');
 		$('.levelImages img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('currentLevelImage');
-		$('.personalInfo .currentLevel').text(_playerRanks[$game.$player.currentLevel]);
+		$('.personalInfo .currentLevel').text($game.playerRanks[$game.$player.currentLevel]);
 		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
@@ -131,8 +131,8 @@ exports.$game = {
 			displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
 
-		for(var i = 0; i < $game.leaderboard.length; i++) {
-			topPlayers += '<li>' + $game.leaderboard[i].name + ' (' + $game.leaderboard[i].count + ' tiles)</li>';
+		for(var i = 0; i < _stats.leaderboard.length; i++) {
+			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ' tiles)</li>';
 		}
 		topPlayers += '</ol>';
 		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ' tiles)</p>';
@@ -140,9 +140,11 @@ exports.$game = {
 		var allAnswers = $game.$player.compileAnswers();
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
-		$('.displayPercent').text($game.percentString);
+		var percentString = _stats.percent + '%';
+		var numItems = $game.$player.getResourcesDiscovered();
+		$('.displayPercent').text(percentString);
 		$('.topSeeders').empty().append(topPlayers);
-		$('.numCollected').text(resourcesDiscovered + ' / 42');
+		$('.numCollected').text(numItems + ' / 42');
 		$('.progressArea').fadeIn(function() {
 			$game.showingProgress = true;
 		});
@@ -184,6 +186,17 @@ exports.$game = {
 			}
 		}
 		return msg;
+	},
+
+	updateLeaderboard: function(data) {
+		var leaderChange = true;
+		if(_stats.leaderboard.length > 0) {
+			leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true;
+		}
+		if(leaderChange) {
+			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
+		}
+		_stats.leaderboard = data.board;
 	}
 };
 
@@ -229,19 +242,19 @@ function _loadNpc() {
 function _loadResources() {
 	//depends on npc
 	$game.$resources.init(function() {
-		_loadGnome();
+		_loadBotanist();
 	});
 }
 
-function _loadGnome() {
+function _loadBotanist() {
 	//depends on player/game
-	$game.$gnome.init(function() {
-		_loadThing();
+	$game.$botanist.init(function() {
+		_loadRobot();
 	});
 }
 
-function _loadThing() {
-	$game.$thing.init(function() {
+function _loadRobot() {
+	$game.$robot.init(function() {
 		_loadAudio();
 	});
 }
@@ -269,8 +282,8 @@ function _loadGameInfo() {
 			seedsDroppedGoal: response.seedsDroppedGoal,
 			tilesColored: response.tilesColored,
 			leaderboard: response.leaderboard,
-			percent: Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100),
-			prevPercent: Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100)
+			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
+			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
 		};
 		_loadExtra();
 	});
@@ -292,7 +305,8 @@ function _loadExtra() {
 	$game.$map.createCollectiveImage();
 
 	//update text in HUD
-	$('.progressButton .hudCount').text($game.percentString);
+	var percentString = _stats.percent + '%';
+	$('.progressButton .hudCount').text(percentString);
 	_prevMessage = _levelNames[$game.$player.currentLevel];
 
 	//update status

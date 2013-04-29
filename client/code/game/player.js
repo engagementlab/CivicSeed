@@ -38,6 +38,7 @@ var _curFrame = 0,
 	_playingTime = null,
 	_tilesColored = null,
 	_pledges = null,
+	_resourcesDiscovered = null,
 
 	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]];
 
@@ -48,9 +49,9 @@ $game.$player = {
 	game: null,
 	instanceName: null,
 	currentLevel: null,
-	gnomeState: null,
+	botanistState: null,
 	firstTime: null,
-	seenThing: null,
+	seenRobot: null,
 	seriesOfMoves: null,
 	currentMove: 0,
 	currentStep: 0,
@@ -406,6 +407,7 @@ $game.$player = {
 		_position.x = _info.x,
 		_position.y = _info.y;
 		_colorMap = $game.$map.saveImage();
+		_savePlayerData();
 		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id, function(res) {
 			callback();
 		});
@@ -469,7 +471,7 @@ $game.$player = {
 			if($game.$player.currentLevel === info.npcLevel) {
 				_inventory.push(id);
 				$game.$player.addToInventory(id);
-				$game.$player.checkGnomeState();
+				$game.$player.checkBotanistState();
 			}
 			_saveResourceToDB(realResource);
 			return numToAdd;
@@ -488,12 +490,12 @@ $game.$player = {
 		}
 	},
 
-	checkGnomeState: function() {
+	checkBotanistState: function() {
 		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
-		if($game.$player.gnomeState > 1) {
+		if($game.$player.botanistState > 1) {
 			//compare each player's resource to the correct answer
-			var answers = $game.$gnome.tangram[$game.$player.currentLevel].answer,
+			var answers = $game.$botanist.tangram[$game.$player.currentLevel].answer,
 				a = answers.length;
 			//go through the answer sheet to see if the current tangram is there &&
 			//in the right place
@@ -517,8 +519,8 @@ $game.$player = {
 				}
 			}
 			//if we made it here, that means you have all pieces
-			$game.$player.gnomeState = 3;
-			$game.$gnome.setGnomeState(3);
+			$game.$player.botanistState = 3;
+			$game.$botanist.setBotanistState(3);
 		}
 	},
 
@@ -547,7 +549,7 @@ $game.$player = {
 		}
 
 		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
-		if($game.$player.gnomeState > 1) {
+		if($game.$player.botanistState > 1) {
 			$game.$player.tangramToInventory();
 		}
 	},
@@ -570,7 +572,7 @@ $game.$player = {
 		//bind click and drag functions, pass npc #
 		$('img.inventoryItem.'+ className)
 			.bind('click',{npc: id}, $game.$resources.beginResource)
-			.bind('dragstart',{npc: id}, $game.$gnome.dragStart);
+			.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
 	},
 
 	tangramToInventory: function() {
@@ -578,7 +580,7 @@ $game.$player = {
 			imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/tangram/'+gFile+'small.png';
 
 		$inventory.append('<div class="inventoryItem inventoryPuzzle '+gFile+'"><img src="' + imgPath2 + '" draggable = "false"></div>');
-		$('.'+ gFile).bind('click', $game.$gnome.inventoryShowRiddle);
+		$('.'+ gFile).bind('click', $game.$botanist.inventoryShowRiddle);
 	},
 
 	emptyInventory: function() {
@@ -610,11 +612,11 @@ $game.$player = {
 			_tilesColored = 0,
 			_resume = [];
 		}
-		$game.$player.gnomeState = 0;
-		$game.$player.seenThing = false;
+		$game.$player.botanistState = 0;
+		$game.$player.seenRobot = false;
 		_pledges = 5;
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
-		$game.$thing.setPosition();
+		$game.$robot.setPosition();
 
 		if($game.$player.currentLevel === 4) {
 			//they have beat the game!
@@ -774,6 +776,10 @@ $game.$player = {
 		_pledges += quantity;
 	},
 
+	resetRenderColor: function() {
+		_renderInfo.colorNum = _playerColorNum;
+	},
+
 	//get functions for other files to access player info
 	getColor: function() {
 		return _rgb;
@@ -866,15 +872,16 @@ function _setPlayerInformation(info) {
 	_playingTime = info.game.playingTime;
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
+	_resourcesDiscovered = info.game.resourcesDiscovered;
 
 	//public
 	$game.$player.id = info.id;
 	$game.$player.name = info.name;
 	$game.$player.currentLevel = info.game.currentLevel;
-	$game.$player.gnomeState = info.game.gnomeState;
+	$game.$player.botanistState = info.game.botanistState;
 	$game.$player.firstTime = info.game.firstTime;
 	$game.$player.instanceName = info.game.instanceName;
-	$game.$player.seenThing = info.game.seenThing;
+	$game.$player.seenRobot = info.game.seenRobot;
 }
 
 function _calculateSeeds(options) {
@@ -916,9 +923,9 @@ function _calculateSeeds(options) {
 							mapIndex: tempIndex,
 							color:
 							{
-								r: _colorInfo.rgb.r + 10,
-								g: _colorInfo.rgb.g + 10,
-								b: _colorInfo.rgb.b + 10,
+								r: _colorInfo.r + 10,
+								g: _colorInfo.g + 10,
+								b: _colorInfo.b + 10,
 								a: tempA,
 								owner: 'nobody'
 							},
@@ -950,9 +957,9 @@ function _calculateSeeds(options) {
 							mapIndex: tempIndex,
 							color:
 							{
-								r: _colorInfo.rgb.r + 10,
-								g: _colorInfo.rgb.g + 10,
-								b: _colorInfo.rgb.b + 10,
+								r: _colorInfo.r + 10,
+								g: _colorInfo.g + 10,
+								b: _colorInfo.b + 10,
 								a: 0.3,
 								owner: 'nobody'
 							},
@@ -969,11 +976,11 @@ function _calculateSeeds(options) {
 	}
 
 	if(bombed.length > 0) {
-		_sendSeedBomb(bombed);
+		_sendSeedBomb(bombed, options, origX, origY);
 	}
 }
 
-function _sendSeedBomb(bombed) {
+function _sendSeedBomb(bombed, options, origX, origY) {
 	//set a waiting boolean so we don't plant more until receive data back from rpc
 	$game.$player.awaitingBomb = true;
 
@@ -1006,9 +1013,9 @@ function _sendSeedBomb(bombed) {
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
 						//update seed count in HUD
-			if(mode === 1) {
-				_seeds.normal -= 1;
-				//bounce outta seed mode
+			if(options.mode === 1) {
+				$game.$player.updateSeeds('normal', -1);
+				//bounce outta seed options.mode
 				if(_seeds.normal === 0) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
@@ -1018,10 +1025,9 @@ function _sendSeedBomb(bombed) {
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
-				$normalHudCount.text(_seeds.normal);
 			}
-			else if(mode === 2) {
-				_seeds.riddle -= 1;
+			else if(options.mode === 2) {
+				$game.$player.updateSeeds('riddle', -1);
 				if(_seeds.riddle === 0) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
@@ -1031,10 +1037,9 @@ function _sendSeedBomb(bombed) {
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
-				$riddleHudCount.text(_seeds.riddle);
 			}
-			else if(mode === 3) {
-				_seeds.special -= 1;
+			else if(options.mode === 3) {
+				$game.$player.updateSeeds('special', -1);
 				if(_seeds.special === 0) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
@@ -1044,10 +1049,7 @@ function _sendSeedBomb(bombed) {
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
-				_specialHudCount.text(_seeds.special);
 			}
-			var numSeeds = _seeds.normal + _seeds.riddle + _seeds.special;
-			$seedHudCount.text(numSeeds);
 		}
 		else {
 			$game.changeStatus('sorry, someone beat you to that tile');
@@ -1061,4 +1063,21 @@ function _updateTotalSeeds() {
 	$riddleHudCount.text(_seeds.riddle);
 	$normalHudCount.text(_seeds.normal);
 	$specialHudCount.text(_seeds.special);
+}
+
+function _savePlayerData() {
+	$game.$player.game.seeds = _seeds;
+	$game.$player.game.resources = _resources;
+	$game.$player.game.position = _position;
+	$game.$player.game.inventory = _inventory;
+	$game.$player.game.colorMap = _colorMap;
+	$game.$player.game.resume = _resume;
+	$game.$player.game.playingTime = _playingTime;
+	$game.$player.game.tilesColored = _tilesColored;
+	$game.$player.game.pledges = _pledges;
+	$game.$player.game.resourcesDiscovered = _resourcesDiscovered;
+	$game.$player.game.currentLevel = $game.$player.currentLevel;
+	$game.$player.game.botanistState = $game.$player.botanistState;
+	$game.$player.game.firstTime = $game.$player.firstTime;
+	$game.$player.game.seenRobot = $game.$player.seenRobot;
 }

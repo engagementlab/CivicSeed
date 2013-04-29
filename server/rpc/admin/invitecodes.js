@@ -67,10 +67,10 @@ exports.actions = function(req, res, ss) {
 							special: 0,
 							dropped: 0
 						},
-						gnomeState: 0,
+						botanistState: 0,
 						firstTime: true,
 						resume: [],
-						seenThing: false,
+						seenRobot: false,
 						resourcesDiscovered: 0,
 						playingTime: 0,
 						tilesColored: 0,
