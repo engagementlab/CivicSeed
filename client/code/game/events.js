@@ -58,22 +58,7 @@ $(function() {
 	ss.event.on('ss-progressChange', function(data, chan) {
 		$game.seedsDropped = data.dropped;
 		$game.tilesColored = data.colored;
-
-		$game.percent = Math.floor(($game.seedsDropped / $game.seedsDroppedGoal) * 100);
-		$game.percentString = $game.percent + '%';
-		$progressHudCount.text($game.percentString);
-
-		//if we have gone up a milestone, feedback it
-		if($game.percent > 99) {
-			//do something for game over?
-			$game.temporaryStatus('the color has been restored!');
-		}
-		if($game.prevPercent != $game.percent) {
-			$game.prevPercent = $game.percent;
-			if($game.percent % 5 === 0) {
-				$game.temporaryStatus('the world is now ' + $game.percentString + ' colored!');
-			}
-		}
+		$game.updatePercent();
 	});
 
 	ss.event.on('ss-leaderChange', function(data, chan) {

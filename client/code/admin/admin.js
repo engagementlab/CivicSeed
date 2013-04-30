@@ -15,7 +15,6 @@ var self = module.exports = {
 		self.setupLoaders();
 		self.setupInviteCodes();
 		self.setupMonitor();
-
 	},
 
 	setupLoaders: function() {
@@ -128,7 +127,7 @@ var self = module.exports = {
 			html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>';
 			html += '<p>Is playing now: ' + self.players[i].isPlaying + '</p>';
 			html += '<p>Time played: ' + Math.floor(self.players[i].game.playingTime/60) + ' min.</p>';
-			html += '<p>Resources collected: ' + self.players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
+			html += '<p>Resources collected: ' + self.players[i].game.resources.length + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
 			html += '<p>Enter "delete" to remove user permanently: <input></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger" type="button">Delete User</button></p>';
 		}
 		$('.output').empty().append(html);
@@ -166,11 +165,13 @@ var self = module.exports = {
 		for(var i = 0; i < resources.length; i++) {
 			var npc = resources[i].npc;
 			var n = 0,
-				found = false;
+				found = false,
+				open = false;
 			while(!found) {
 				if(self.allQuestions[n].id === npc) {
 					found = true;
 					if(self.allQuestions[n].resource.questionType === 'open') {
+						open = true;
 						html += '<p class="question level' + self.allQuestions[n].level + '">Q: ' + self.allQuestions[n].resource.question + '</p>';
 					}
 				}
@@ -179,8 +180,19 @@ var self = module.exports = {
 					found = true;
 				}
 			}
-			//answer
-			html += '<p class="answer">A: ' + resources[i].answers[0] + '</p>';
+			//answer only if open ended
+			if(open) {
+				html += '<div class="answer"><p>A: ' + resources[i].answers[0] + '</p><div class="extras">';
+				if(resources[i].madePublic) {
+					//put unlocked icon
+					html += '<i class="icon-unlock icon-large"></i>';
+				}
+				if(resources[i].seeded) {
+					//thumbs up icon with number
+					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded;
+				}
+				html += '</div></div>';
+			}
 		}
 		$('.output').empty().append(html);
 	},

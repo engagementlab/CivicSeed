@@ -108,7 +108,7 @@ $game.$player = {
 			$('.hudCount').css('background', rgba);
 
 			_updateTotalSeeds();
-			$game.$player.updateRenderInfo();
+			_updateRenderInfo();
 
 			//we are ready, let everyone know dat
 			$game.$player.ready = true;
@@ -118,170 +118,23 @@ $game.$player = {
 
 	update: function(){
 		if($game.$player.isMoving) {
-			$game.$player.move();
+			_move();
 			_getMaster = true;
 		}
 		else if(!$game.inTransit) {
-			$game.$player.idle();
+			_idle();
 		}
 		else if($game.inTransit) {
 			_getMaster = true;
 		}
 		//this keeps us from doing this query every frame
 		if(_getMaster) {
-			$game.$player.updateRenderInfo();
-		}
-	},
-
-	updateRenderInfo: function() {
-		//get local render information. update if appropriate.
-		var loc = $game.$map.masterToLocal(_info.x, _info.y);
-		if(loc) {
-			var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
-			prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
-			curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
-			curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
-
-			_renderInfo.prevX = prevX,
-			_renderInfo.prevY = prevY,
-
-			_renderInfo.srcX = _info.srcX,
-			_renderInfo.srcY = _info.srcY,
-			_renderInfo.curX = curX,
-			_renderInfo.curY = curY;
+			_updateRenderInfo();
 		}
 	},
 
 	clear: function() {
 		$game.$renderer.clearCharacter(_renderInfo);
-	},
-
-	move: function () {
-		/** IMPORTANT note: x and y are really flipped!!! **/
-		//update the step
-		$game.$player.isMoving = true;
-
-		//if the steps between the tiles has finished,
-		//update the master location, and reset steps to go on to next move
-		if($game.$player.currentStep >= _numSteps) {
-			$game.$player.currentStep = 0;
-			_info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
-			_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
-
-			$game.$player.currentMove += 1;
-			//render mini map every spot player moves
-			$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
-		}
-
-		//if we done, finish
-		if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
-			if($game.$player.keyMoving) {
-				$game.$player.endKeyMove();
-			}
-			else {
-				$game.$player.endMove();
-			}
-		}
-		//if we no done, then step through it yo.
-		else {
-
-			//increment the current step
-			$game.$player.currentStep += 1;
-
-			//if it the first one, then figure out the direction to face
-			if($game.$player.currentStep === 1) {
-				_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
-				_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
-				//set the previous offsets to 0 because the last visit
-				//was the actual rounded master
-				_info.prevOffX = 0;
-				_info.prevOffY = 0;
-
-				//set direction for sprite sheets
-				//direction refers to the y location on the sprite sheet
-				//since the character will be in different rows
-				//will be 0,1,2,3
-				if(_currentStepIncX === 1) {
-					_direction = 2;
-				}
-				else if(_currentStepIncX === -1) {
-					_direction = 1;
-				}
-				else if(_currentStepIncY === -1) {
-					_direction = 4;
-				}
-				else {
-					_direction = 3;
-				}
-			}
-
-			else {
-				_info.prevOffX = _info.offX;
-				_info.prevOffY = _info.offY;
-			}
-
-			_info.offX = $game.$player.currentStep * _currentStepIncX;
-			_info.offY = $game.$player.currentStep * _currentStepIncY;
-
-			//try only changing the src (frame) every X frames
-			if(($game.$player.currentStep-1) % 8 === 0) {
-				_curFrame += 1;
-				if(_curFrame >= _numFrames) {
-					_curFrame = 0;
-				}
-			}
-			_info.srcX = _curFrame * $game.TILE_SIZE,
-			_info.srcY = _direction * $game.TILE_SIZE*2;
-		}
-	},
-
-	sendMoveInfo: function(moves) {
-		$game.$player.seriesOfMoves = new Array(moves.length);
-		$game.$player.seriesOfMoves = moves;
-		$game.$player.currentMove = 1;
-		$game.$player.currentStep = 0;
-		$game.$player.isMoving = true;
-		$game.$chat.hideChat();
-	},
-
-	endMove: function () {
-		var posInfo = {
-			id: $game.$player.id,
-			x: _info.x,
-			y: _info.y
-		};
-		ss.rpc('game.player.savePosition', posInfo);
-
-		$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
-
-		//put the character back to normal position
-		_info.offX = 0,
-		_info.offY = 0;
-		_info.srcX = 0,
-		_info.srcY =  0;
-		_info.prevOffX= 0;
-		_info.prevOffY= 0;
-
-		$game.$player.isMoving = false;
-		if(_willTravel) {
-			var beginTravel = function(){
-				if($game.$map.dataLoaded){
-					$game.beginTransition();
-				}
-				else{
-					//keep tryin!
-					setTimeout(beginTravel,50);
-				}
-			};
-			beginTravel();
-		}
-		else {
-			//trigger npc to popup _info and stuff
-			if($game.$player.npcOnDeck) {
-				$game.$player.npcOnDeck = false;
-				$game.$npc.show();
-			}
-		}
 	},
 
 	beginMove: function(x, y) {
@@ -303,7 +156,7 @@ $game.$player = {
 			$game.$map.findPath(loc, master, function(result) {
 				$game.$player.pathfinding = false;
 				if(result.length > 0) {
-					$game.$player.sendMoveInfo(result);
+					_sendMoveInfo(result);
 					ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
 						var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
 							masterEndY = $game.$map.currentTiles[master.x][master.y].y;
@@ -324,37 +177,6 @@ $game.$player = {
 	resetRenderValues: function() {
 		_info.prevOffX = 0,
 		_info.prevOffY = 0;
-	},
-
-	idle: function () {
-		_idleCounter += 1;
-		if($game.$player.seedMode > 0) {
-			if(_idleCounter % 32 < 16) {
-				_renderInfo.colorNum = 0;
-			}
-			else {
-				_renderInfo.colorNum = _playerColorNum;
-			}
-		}
-
-		if(_idleCounter >= 64) {
-			_idleCounter = 0;
-			_info.srcX = 0;
-			_info.srcY = 0;
-			_getMaster = true;
-			_renderInfo.squat = false;
-		}
-
-		else if(_idleCounter === 48) {
-			_info.srcX = 32;
-			_info.srcY = 0;
-			_getMaster = true;
-			_renderInfo.squat = true;
-		}
-
-		else {
-			_getMaster = false;
-		}
 	},
 
 	dropSeed: function(options) {
@@ -399,7 +221,7 @@ $game.$player = {
 		}
 	},
 
-	//TODO: save locals to game object before pushing up
+	//TODO: test this
 	exitAndSave: function(callback) {
 		var endTime = new Date().getTime() / 1000,
 			totalTime = endTime - _startTime;
@@ -413,12 +235,11 @@ $game.$player = {
 		});
 	},
 
+	//determine which returning to npc prompt to show based on if player answered it or not
 	getPrompt: function(id) {
 		var	l = _resources.length;
-
 		while(--l > -1) {
 			if(id === _resources[l].npc) {
-				//if the player already got it right, it should be prompt 2
 				if(_resources[l].result) {
 					return 2;
 				}
@@ -431,6 +252,7 @@ $game.$player = {
 		return 0;
 	},
 
+	//saves the user's answer and pushes up to DB
 	answerResource: function(info) {
 		var newInfo = {
 			npc: info.id,
@@ -460,17 +282,16 @@ $game.$player = {
 			realResource.attempts += 1;
 			realResource.result = newInfo.result;
 		}
-
+		_resourcesDiscovered += 1;
 		//the answer was correct, add item to inventory
-		if(correct) {
-			_resourcesDiscovered += 1;
+		if(info.correct) {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.updateSeeds('normal', numToAdd);
 
 			if($game.$player.currentLevel === info.npcLevel) {
-				_inventory.push(id);
-				$game.$player.addToInventory(id);
+				_inventory.push(info.id);
+				_addToInventory(info.id);
 				$game.$player.checkBotanistState();
 			}
 			_saveResourceToDB(realResource);
@@ -480,9 +301,9 @@ $game.$player = {
 		}
 	},
 
+	//checks if we should save out a new image of player's color map
 	saveMapImage: function() {
-		//only do this if we have dropped X more seeds?
-		//console.log('saving image');
+		//only do this if we have dropped 5 new seeds
 		if(_seeds.dropped - _previousSeedsDropped > 4) {
 			_colorMap = $game.$map.saveImage();
 			ss.rpc('game.player.saveImage', _colorMap);
@@ -490,6 +311,7 @@ $game.$player = {
 		}
 	},
 
+	//determines what the botanist state should be based if the player has the right resources 
 	checkBotanistState: function() {
 		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
@@ -524,6 +346,7 @@ $game.$player = {
 		}
 	},
 
+	//gets player answer for specific resource
 	getAnswer: function(id) {
 		var l = _resources.length;
 		while(--l > -1) {
@@ -533,48 +356,27 @@ $game.$player = {
 		}
 	},
 
-	clearInventory: function() {
-		$('.inventoryItem').remove();
-	},
-
+	//this happens on load to put all items from DB -> inventory
 	fillInventory: function() {
-		//on first load, fill inventory from DB
 		var l = _inventory.length,
 			cur = 0;
 		$inventoryBtn.text(l);
 
 		while(cur < l) {
-			$game.$player.addToInventory(_inventory[cur]);
+			_addToInventory(_inventory[cur]);
 			cur++;
 		}
-
 		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
 		if($game.$player.botanistState > 1) {
 			$game.$player.tangramToInventory();
 		}
 	},
-
-	addToInventory: function(id) {
-		//create the class / ref to the image
-		var className = 'r' + id,
-			levelFolder = 'level' + ($game.$player.currentLevel + 1),
-			imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  id +'.png',
-			tagline = $game.$resources.getTagline(id);
-		//put image on page in inventory
-		$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
-
-		$('.' + className).bind('mouseenter',function() {
-			//var info = $(this).attr('title');
-			$(this).tooltip('show');
-		});
-		$inventoryBtn.text(_inventory.length);
-
-		//bind click and drag functions, pass npc #
-		$('img.inventoryItem.'+ className)
-			.bind('click',{npc: id}, $game.$resources.beginResource)
-			.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
+	//clear all items from the inventory
+	clearInventory: function() {
+		$('.inventoryItem').remove();
 	},
 
+	//put the tangram image in the inventory
 	tangramToInventory: function() {
 		var gFile = 'puzzle' + $game.$player.currentLevel,
 			imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/tangram/'+gFile+'small.png';
@@ -583,21 +385,19 @@ $game.$player = {
 		$('.'+ gFile).bind('click', $game.$botanist.inventoryShowRiddle);
 	},
 
+	//empty everything  from inventory
 	emptyInventory: function() {
 		_inventory = [];
 		$inventoryBtn.text('0');
 	},
 
+	//make the bounding box for each possible resource
 	createInventoryOutlines: function() {
 		var io = $('.inventory > .outlines');
 		io.empty();
 		for(var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i +=1) {
 			io.append('<div class="inventoryOutline"></div>');
 		}
-	},
-
-	getPosition: function() {
-		return _info;
 	},
 
 	nextLevel: function() {
@@ -621,7 +421,7 @@ $game.$player = {
 		if($game.$player.currentLevel === 4) {
 			//they have beat the game!
 			//say there profile is available and send em there.
-			$game.$player.gameOver();
+			_gameOver();
 		}
 		else {
 			_renderInfo.level = $game.$player.currentLevel;
@@ -681,22 +481,6 @@ $game.$player = {
 			$game.$player.seedPlanting = true;
 		});
 		$game.changeStatus();
-	},
-
-	gameOver: function() {
-		var endTime = new Date().getTime() / 1000,
-			totalTime = endTime - _startTime;
-		_playingTime += totalTime;
-		_position.x = _info.x,
-		_position.y = _info.y;
-		_colorMap = $game.$map.saveImage();
-		sessionStorage.setItem('isPlaying', false);
-		ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
-			if(res) {
-				var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
-				$('.gameboard').append(hooray);
-			}
-		});
 	},
 
 	makePublic: function(npcId) {
@@ -780,6 +564,10 @@ $game.$player = {
 		_renderInfo.colorNum = _playerColorNum;
 	},
 
+	getPosition: function() {
+		return _info;
+	},
+
 	//get functions for other files to access player info
 	getColor: function() {
 		return _rgb;
@@ -829,10 +617,6 @@ $game.$player = {
 };
 
 //private functions
-function privateFunction() {
-	console.log('I am private');
-}
-
 function _saveResourceToDB(resource) {
 	var info = {
 		id: $game.$player.id,
@@ -872,7 +656,7 @@ function _setPlayerInformation(info) {
 	_playingTime = info.game.playingTime;
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
-	_resourcesDiscovered = info.game.resourcesDiscovered;
+	_resourcesDiscovered = _resources.length;
 
 	//public
 	$game.$player.id = info.id;
@@ -1075,9 +859,223 @@ function _savePlayerData() {
 	$game.$player.game.playingTime = _playingTime;
 	$game.$player.game.tilesColored = _tilesColored;
 	$game.$player.game.pledges = _pledges;
-	$game.$player.game.resourcesDiscovered = _resourcesDiscovered;
 	$game.$player.game.currentLevel = $game.$player.currentLevel;
 	$game.$player.game.botanistState = $game.$player.botanistState;
 	$game.$player.game.firstTime = $game.$player.firstTime;
 	$game.$player.game.seenRobot = $game.$player.seenRobot;
+}
+
+function _updateRenderInfo() {
+	//get local render information. update if appropriate.
+	var loc = $game.$map.masterToLocal(_info.x, _info.y);
+	if(loc) {
+		var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
+		prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
+		curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
+		curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
+
+		_renderInfo.prevX = prevX,
+		_renderInfo.prevY = prevY,
+
+		_renderInfo.srcX = _info.srcX,
+		_renderInfo.srcY = _info.srcY,
+		_renderInfo.curX = curX,
+		_renderInfo.curY = curY;
+	}
+}
+
+function _move() {
+	/** IMPORTANT note: x and y are really flipped!!! **/
+	//update the step
+	$game.$player.isMoving = true;
+
+	//if the steps between the tiles has finished,
+	//update the master location, and reset steps to go on to next move
+	if($game.$player.currentStep >= _numSteps) {
+		$game.$player.currentStep = 0;
+		_info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
+		_info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+
+		$game.$player.currentMove += 1;
+		//render mini map every spot player moves
+		$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+	}
+
+	//if we done, finish
+	if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
+		if($game.$player.keyMoving) {
+			$game.$player.endKeyMove();
+		}
+		else {
+			_endMove();
+		}
+	}
+	//if we no done, then step through it yo.
+	else {
+
+		//increment the current step
+		$game.$player.currentStep += 1;
+
+		//if it the first one, then figure out the direction to face
+		if($game.$player.currentStep === 1) {
+			_currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
+			_currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
+			//set the previous offsets to 0 because the last visit
+			//was the actual rounded master
+			_info.prevOffX = 0;
+			_info.prevOffY = 0;
+
+			//set direction for sprite sheets
+			//direction refers to the y location on the sprite sheet
+			//since the character will be in different rows
+			//will be 0,1,2,3
+			if(_currentStepIncX === 1) {
+				_direction = 2;
+			}
+			else if(_currentStepIncX === -1) {
+				_direction = 1;
+			}
+			else if(_currentStepIncY === -1) {
+				_direction = 4;
+			}
+			else {
+				_direction = 3;
+			}
+		}
+
+		else {
+			_info.prevOffX = _info.offX;
+			_info.prevOffY = _info.offY;
+		}
+
+		_info.offX = $game.$player.currentStep * _currentStepIncX;
+		_info.offY = $game.$player.currentStep * _currentStepIncY;
+
+		//try only changing the src (frame) every X frames
+		if(($game.$player.currentStep-1) % 8 === 0) {
+			_curFrame += 1;
+			if(_curFrame >= _numFrames) {
+				_curFrame = 0;
+			}
+		}
+		_info.srcX = _curFrame * $game.TILE_SIZE,
+		_info.srcY = _direction * $game.TILE_SIZE*2;
+	}
+}
+
+function _sendMoveInfo(moves) {
+	$game.$player.seriesOfMoves = new Array(moves.length);
+	$game.$player.seriesOfMoves = moves;
+	$game.$player.currentMove = 1;
+	$game.$player.currentStep = 0;
+	$game.$player.isMoving = true;
+	$game.$chat.hideChat();
+}
+
+function _endMove() {
+	var posInfo = {
+		id: $game.$player.id,
+		x: _info.x,
+		y: _info.y
+	};
+	ss.rpc('game.player.savePosition', posInfo);
+
+	$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+
+	//put the character back to normal position
+	_info.offX = 0,
+	_info.offY = 0;
+	_info.srcX = 0,
+	_info.srcY =  0;
+	_info.prevOffX= 0;
+	_info.prevOffY= 0;
+
+	$game.$player.isMoving = false;
+	if(_willTravel) {
+		var beginTravel = function(){
+			if($game.$map.dataLoaded){
+				$game.beginTransition();
+			}
+			else{
+				//keep tryin!
+				setTimeout(beginTravel,50);
+			}
+		};
+		beginTravel();
+	}
+	else {
+		//trigger npc to popup _info and stuff
+		if($game.$player.npcOnDeck) {
+			$game.$player.npcOnDeck = false;
+			$game.$npc.show();
+		}
+	}
+}
+
+function _idle() {
+	_idleCounter += 1;
+	if($game.$player.seedMode > 0) {
+		if(_idleCounter % 32 < 16) {
+			_renderInfo.colorNum = 0;
+		}
+		else {
+			_renderInfo.colorNum = _playerColorNum;
+		}
+	}
+
+	if(_idleCounter >= 64) {
+		_idleCounter = 0;
+		_info.srcX = 0;
+		_info.srcY = 0;
+		_getMaster = true;
+		_renderInfo.squat = false;
+	}
+
+	else if(_idleCounter === 48) {
+		_info.srcX = 32;
+		_info.srcY = 0;
+		_getMaster = true;
+		_renderInfo.squat = true;
+	}
+
+	else {
+		_getMaster = false;
+	}
+}
+
+function _addToInventory(id) {
+	//create the class / ref to the image
+	var className = 'r' + id,
+		levelFolder = 'level' + ($game.$player.currentLevel + 1),
+		imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  id +'.png',
+		tagline = $game.$resources.getTagline(id);
+	//put image on page in inventory
+	$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
+
+	$('.' + className).bind('mouseenter',function() {
+		//var info = $(this).attr('title');
+		$(this).tooltip('show');
+	});
+	$inventoryBtn.text(_inventory.length);
+
+	//bind click and drag functions, pass npc #
+	$('img.inventoryItem.'+ className)
+		.bind('click',{npc: id}, $game.$resources.beginResource)
+		.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
+}
+
+function _gameOver() {
+	var endTime = new Date().getTime() / 1000,
+		totalTime = endTime - _startTime;
+	_playingTime += totalTime;
+	_position.x = _info.x,
+	_position.y = _info.y;
+	_colorMap = $game.$map.saveImage();
+	sessionStorage.setItem('isPlaying', false);
+	ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
+		if(res) {
+			var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+			$('.gameboard').append(hooray);
+		}
+	});
 }

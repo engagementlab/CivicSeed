@@ -197,6 +197,25 @@ exports.$game = {
 			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
 		}
 		_stats.leaderboard = data.board;
+	},
+
+	updatePercent: function(dropped) {
+		_stats.prevPercent = _stats.percent;
+		_stats.seedsDropped = dropped;
+		_stats.percent = Math.floor(( _stats.seedsDropped / _stats.seedsDroppedGoal) * 100);
+		var percentString = _stats.percent + '%';
+
+		//if we have gone up a milestone, feedback it
+		if(_stats.percent > 99) {
+			//do something for game over?
+			$game.temporaryStatus('the color has been restored!');
+		}
+		if(_stats.prevPercent != _stats.percent) {
+			_stats.prevPercent = _stats.percent;
+			if(_stats.percent % 5 === 0) {
+				$game.temporaryStatus('the world is now ' + percentString + ' colored!');
+			}
+		}
 	}
 };
 

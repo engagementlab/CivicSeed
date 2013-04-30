@@ -8,7 +8,6 @@ var userModel = service.useModel('user', 'preload');
 var tileModel = service.useModel('tile', 'preload');
 var colorModel = service.useModel('color', 'preload');
 var npcModel = service.useModel('npc', 'preload');
-var resourceModel = service.useModel('resource','preload');
 var botanistModel = service.useModel('botanist', 'preload');
 var gameModel = service.useModel('game', 'preload');
 

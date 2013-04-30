@@ -114,7 +114,6 @@ $game.$resources = {
 			$(".speechBubble .noButton").unbind("click");
 
 			//ready to show the resource now
-			_speak = _curResource.dialog.questions[0];
 			$('.resourceArea .dialog > span, .resourceArea .resourceContent').empty();
 			$game.$resources.addContent();
 			$game.$resources.addButtons();
@@ -234,8 +233,8 @@ $game.$resources = {
 				}
 				else {
 					// _speak = _curResource.prompt;
-					$speakerName.text(_who + ': ');
-					$resourceMessage.text(_speak);
+					// $speakerName.text(_who + ': ');
+					// $resourceMessage.text(_speak);
 					var inputBox = null;
 					if(_questionType === 'multiple') {
 						var numOptions = _curResource.possibleAnswers.length;
