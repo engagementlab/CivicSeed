@@ -40,7 +40,7 @@ $game.$mouse = {
 			console.log($game.$map.currentTiles[_curX][_curY]);
 		}
 
-		//if the grid is different update boolean
+		//if the grid is different update render
 		if(_curX !== _prevX || _curY !== _prevY){
 			//render new
 			var mouseStuff = {
@@ -53,9 +53,7 @@ $game.$mouse = {
 		}
 
 		if(clicked) {
-			//check if it is a nogo or npc
-			//if the tile BELOW the tile clicked is npc,
-			//then user clicked the head, so act like npc
+			//if the player is in seed mode, determine if drop seed or exit mode
 			if($game.$player.seedMode > 0) {
 				if(!$game.$player.awaitingBomb) {
 					var m = {
@@ -72,38 +70,36 @@ $game.$mouse = {
 				}
 			}
 			else {
-				//if clicking on a player, show their info
+				//if clicking on other player, show their info
 				var mX = $game.$map.currentTiles[_curX][_curY].x,
 					mY = $game.$map.currentTiles[_curX][_curY].y;
 				var user = $game.$others.playerCard(mX, mY);
+
 				if(!user) {
+					//determine if the player can go to new tile
 					var state = $game.$map.getTileState(_curX, _curY);
-					//go
+					//if the player isn't "searching" for a path it is a green tile, move
 					if(state === -1 && !$game.$player.pathfinding) {
 						$game.$player.beginMove(_curX,_curY);
 						if($game.$npc.isChat) {
 							$game.$npc.hideChat();
 						}
-						else if($game.$botanist.isChat) {
+						if($game.$botanist.isChat) {
 							$game.$botanist.hideChat();
 						}
 					}
-					//npc
+					//they clicked on an NPC
 					else if(state >= 0 ) {
-						//set index val so reousrce can show right one
-
-						//if you click on a different square then the previously
-						//selected npc, then hide the npc info if it is showing
 						if(state !== $game.$botanist.index && !$game.$player.pathfinding) {
+							if($game.$npc.isChat) {
+								$game.$npc.hideChat();
+							}
 							$game.$npc.selectNpc(state);
-							//move them to the spot to the
-							//BOTTOM LEFT corner of the npc
-							//(consistent so we leave that open in tilemap)
-							//also make sure it is not a transition tile
+							//move top bottom left of NPC
 							$game.$player.beginMove(_curX-2,_curY+1);
 						}
-
 						else {
+							//show botanist stuff cuz you clicked him!
 							$('.speechBubble button').addClass('hideButton');
 							$game.$botanist.show();
 						}

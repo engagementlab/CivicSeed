@@ -123,13 +123,6 @@ $(function() {
 		return false;
 	});
 
-	$BODY.on('keypress', '.resourceArea', function (e) {
-		if (e.keyCode == 10 || e.keyCode == 13) {
-			e.preventDefault();
-			return false;
-		}
-	});
-
 	$BODY.on('click', '.inventoryButton, .inventory button', function () {
 		if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$botanist.isShowing) {
 			if($game.$player.inventoryShowing) {

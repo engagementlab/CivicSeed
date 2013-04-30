@@ -477,7 +477,7 @@ $game.$botanist = {
 			else {
 				var endQuestion = _levelQuestion[$game.$player.currentLevel];
 				$('.botanistArea .message').text(endQuestion);
-				var inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form>';
+				var inputBox = '<textarea placeholder="type your answer here..."></textarea>';
 				$('.botanistContent').html(inputBox);
 				$game.changeStatus('this will go in your profile');
 			}

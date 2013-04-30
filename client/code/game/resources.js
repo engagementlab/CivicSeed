@@ -19,6 +19,10 @@ var _resources = [],
 	$resourceMessage = null,
 	$resourceContent = null,
 	$resourceContentBody = null,
+	$nextButton = null,
+	$closeButton = null,
+	$backButton = null,
+	$answerButton = null,
 
 	_numSeedsToAdd = 0,
 	_questionType = null,
@@ -34,10 +38,8 @@ $game.$resources = {
 
 	init: function(callback) {
 		var response = $game.$npc.getNpcData();
-			//iterate through repsonses, create a key
-			//with the id and value is the object
+		//create array of ALL player responses and resource information
 		ss.rpc('game.npc.getResponses', $game.$player.instanceName, function(all) {
-
 			$.each(response, function(key, npc) {
 				if(npc.isHolding) {
 					var stringId = String(npc.id);
@@ -63,8 +65,8 @@ $game.$resources = {
 		});
 	},
 
+	//called when player clicks on resource from inventory to simulate clicking the NPC
 	beginResource: function(e) {
-		//console.log(e);
 		var nombre = $game.$npc.getName(e.data.npc);
 		$game.$resources.loadResource(nombre, e.data.npc, true);
 		_inventory = true;
@@ -72,7 +74,6 @@ $game.$resources = {
 	},
 
 	loadResource: function(who, index, revisit) {
-
 		_who = who,
 		_answered = false,
 		_currentSlide = 0;
@@ -83,13 +84,10 @@ $game.$resources = {
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
 
-		//console.log('load resource (who,index,now): ', who,index, revisit);
-		//console.log('current resource:', _curResource);
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.currentLevel) {
 			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
 			$resourceStage.empty().load(url,function() {
-				//console.log('ready: ', url);
 				_numSlides = $('.resourceStage .pages > section').length;
 				$game.$resources.showResource(revisit);
 			});
@@ -97,8 +95,8 @@ $game.$resources = {
 	},
 
 	showResource: function(revisit) {
+		//revising means the already answered it and just see resource not question form
 		_revisiting = revisit;
-		//if they already got it right, then don't have answer form, but show answer
 		if(_revisiting) {
 			_correctAnswer = false;
 		} else {
@@ -134,14 +132,14 @@ $game.$resources = {
 			//this is the medal page
 			if(_currentSlide === _numSlides + 1 &&  _questionType === 'open') {
 				if(_correctAnswer) {
-					$('.resourceArea .nextButton').removeClass('hideButton');
+					$nextButton.removeClass('hideButton');
 				}
 				else {
-					$('.resourceArea .closeButton').removeClass('hideButton');
+					$closeButton.removeClass('hideButton');
 				}
 			}
 			else {
-				$('.resourceArea .closeButton').removeClass('hideButton');
+				$closeButton.removeClass('hideButton');
 			}
 		}
 		else {
@@ -150,41 +148,43 @@ $game.$resources = {
 				if(_currentSlide === _numSlides - 1) {
 					//not open ended
 					if( _questionType !== 'open') {
-						$('.resourceArea .closeButton').removeClass('hideButton');
+						$closeButton.removeClass('hideButton');
 					}
 					//answers to show
 					else {
 						if(_currentSlide > 0) {
-							$('.resourceArea  .backButton').removeClass('hideButton');
+							$backButton.removeClass('hideButton');
 						}
-						$('.resourceArea  .nextButton').removeClass('hideButton');
+						$nextButton.removeClass('hideButton');
 					}
 				}
 				else if(_currentSlide === _numSlides) {
-					$('.resourceArea  .closeButton, .resourceArea .backButton').removeClass('hideButton');
+					$closeButton.removeClass('hideButton');
+					$backButton.removeClass('hideButton');
 				}
 				else {
-					$('.resourceArea  .nextButton').removeClass('hideButton');
+					$nextButton.removeClass('hideButton');
 					if(_currentSlide > 0) {
-						$('.resourceArea  .backButton').removeClass('hideButton');
+						$backButton.removeClass('hideButton');
 					}
 				}
 			}
 			else {
 				//if its the first page, we DEF. have a next and no back
 				if(_currentSlide === 0) {
-					$('.resourceArea .nextButton').removeClass('hideButton');
+					$nextButton.removeClass('hideButton');
 				}
-				
+
 				//if its not the first page or the last page, we have both
 				else if(_currentSlide > 0 && _currentSlide < _numSlides) {
-					$('.resourceArea .nextButton,.resourceArea  .backButton').removeClass('hideButton');
+					$nextButton.removeClass('hideButton');
+					$backButton.removeClass('hideButton');
 				}
 
 				//if its the last page, we have an answer button and a back
 				else if(_currentSlide === _numSlides) {
-					$('.resourceArea .answerButton').removeClass('hideButton');
-					$('.resourceArea .backButton').removeClass('hideButton');
+					$answerButton.removeClass('hideButton');
+					$backButton.removeClass('hideButton');
 				}
 			}
 		}
@@ -197,73 +197,10 @@ $game.$resources = {
 		$resourceContent.empty();
 		//if they answered the question...
 		if(_answered) {
-			//if they got it right, give them a tangram
-			if(_correctAnswer) {
-				//first, congrats and show them the tangram piece
-				if(_currentSlide === _numSlides + 1) {
-					var npcLevel = $game.$npc.getNpcLevel();
-					if(npcLevel < $game.$player.currentLevel) {
-						_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
-						$resourceContent.empty().css('overflow','auto');
-					}
-					else {
-						_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
-						//show image on screen
-						//get path from db, make svg with that
-						$game.$audio.playTriggerFx('resourceRight');
-						$resourceContent.html(_preloadedPieceImage).css('overflow', 'hidden');
-					}
-					$speakerName.text(_who + ': ');
-					$resourceMessage.text(_speak);
-				}
-				//the next slide will show them recent answers
-				else {
-					$resourceContent.empty().css('overflow','auto');
-					$game.$resources.showRecentAnswers();
-				}
-			}
+			_addAnsweredContent();
 		}
 		else {
-			$resourceContent.css('overflow', 'auto');
-			if(_currentSlide === _numSlides) {
-				var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
-				//show their answer and the question, not the form
-				if(_revisiting) {
-					$game.$resources.showRecentAnswers();
-				}
-				else {
-					// _speak = _curResource.prompt;
-					// $speakerName.text(_who + ': ');
-					// $resourceMessage.text(_speak);
-					var inputBox = null;
-					if(_questionType === 'multiple') {
-						var numOptions = _curResource.possibleAnswers.length;
-						inputBox = '<form>';
-						for(var i =0; i<numOptions; i++) {
-							inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
-						}
-						inputBox += '</form>';
-					}
-					else if(_questionType === 'open') {
-						inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
-					}
-					else if(_questionType === 'truefalse') {
-						//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
-						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="true">true</input>' +
-									'<br><input name="resourceMultipleChoice" type ="radio" value="false">false</input>';
-					}
-					else if(_questionType === 'yesno') {
-						inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="yes">yes</input>' +
-									'<br><input name="resourceMultipleChoice" type ="radio" value="no">no</input>';
-					}
-					$resourceContent.html(finalQuestion + inputBox);
-				}
-			}
-			else{
-				var content = $('.resourceStage .pages > section').get(_currentSlide).innerHTML;
-				$resourceContent.empty();
-				$resourceContentBody.html(content).show();
-			}
+			_addRealContent();
 		}
 	},
 
@@ -486,4 +423,79 @@ function _setDomSelectors() {
 	$resourceMessage = $('.resourceArea .message');
 	$resourceContent = $('.resourceContent');
 	$resourceContentBody = $('.resourceContentBody');
+	$nextButton = $('.resourceArea .nextButton');
+	$closeButton = $('.resourceArea .closeButton');
+	$backButton = $('.resourceArea  .backButton');
+	$answerButton = $('.resourceArea  .answerButton');
+}
+
+function addAnsweredContent() {
+	//if they got it right, give them a tangram
+	if(_correctAnswer) {
+		//first, congrats and show them the tangram piece
+		if(_currentSlide === _numSlides + 1) {
+			var npcLevel = $game.$npc.getNpcLevel();
+			if(npcLevel < $game.$player.currentLevel) {
+				_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
+				$resourceContent.empty().css('overflow','auto');
+			}
+			else {
+				_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
+				//show image on screen
+				//get path from db, make svg with that
+				$game.$audio.playTriggerFx('resourceRight');
+				$resourceContent.html(_preloadedPieceImage).css('overflow', 'hidden');
+			}
+			$speakerName.text(_who + ': ');
+			$resourceMessage.text(_speak);
+		}
+		//the next slide will show them recent answers
+		else {
+			$resourceContent.empty().css('overflow','auto');
+			$game.$resources.showRecentAnswers();
+		}
+	}
+}
+
+function _addRealContent() {
+	$resourceContent.css('overflow', 'auto');
+	if(_currentSlide === _numSlides) {
+		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
+		//show their answer and the question, not the form
+		if(_revisiting) {
+			$game.$resources.showRecentAnswers();
+		}
+		else {
+			// _speak = _curResource.prompt;
+			// $speakerName.text(_who + ': ');
+			// $resourceMessage.text(_speak);
+			var inputBox = null;
+			if(_questionType === 'multiple') {
+				var numOptions = _curResource.possibleAnswers.length;
+				inputBox = '<form>';
+				for(var i =0; i<numOptions; i++) {
+					inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
+				}
+				inputBox += '</form>';
+			}
+			else if(_questionType === 'open') {
+				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
+			}
+			else if(_questionType === 'truefalse') {
+				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
+				inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="true">true</input>' +
+							'<br><input name="resourceMultipleChoice" type ="radio" value="false">false</input>';
+			}
+			else if(_questionType === 'yesno') {
+				inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="yes">yes</input>' +
+							'<br><input name="resourceMultipleChoice" type ="radio" value="no">no</input>';
+			}
+			$resourceContent.html(finalQuestion + inputBox);
+		}
+	}
+	else{
+		var content = $('.resourceStage .pages > section').get(_currentSlide).innerHTML;
+		$resourceContent.empty();
+		$resourceContentBody.html(content).show();
+	}
 }
