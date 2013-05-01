@@ -60,6 +60,7 @@ $game.$robot = {
 		_info.prevOffY = 0;
 		_renderInfo.dir = _positions[$game.$player.currentLevel].d;
 		$game.$robot.isMoving = false;
+		$game.$robot.active = true;
 		$game.$robot.counter = Math.floor(Math.random() * 64);
 		$game.$robot.curFrame = 0;
 		$game.$robot.currentStep = 0;
@@ -89,13 +90,6 @@ $game.$robot = {
 				}
 			}
 		}
-	},
-
-	makeActive: function() {
-		$game.$robot.currentStep = 0;
-		$game.$robot.active = true;
-		_onScreen = false;
-		_triggered = false;
 	},
 
 	updateRenderInfo: function() {
@@ -158,7 +152,6 @@ $game.$robot = {
 			$game.$robot.counter = 0;
 			$game.$robot.curFrame = 0;
 		}
-
 	},
 
 	move: function() {

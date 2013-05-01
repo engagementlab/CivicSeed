@@ -104,7 +104,7 @@ $game.$botanist = {
 				prevY = loc.y * $game.TILE_SIZE,
 				curX = loc.x * $game.TILE_SIZE,
 				curY = loc.y * $game.TILE_SIZE;
-			
+
 			_renderInfo.prevX = prevX,
 			_renderInfo.prevY = prevY;
 

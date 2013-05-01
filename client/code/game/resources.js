@@ -429,7 +429,7 @@ function _setDomSelectors() {
 	$answerButton = $('.resourceArea  .answerButton');
 }
 
-function addAnsweredContent() {
+function _addAnsweredContent() {
 	//if they got it right, give them a tangram
 	if(_correctAnswer) {
 		//first, congrats and show them the tangram piece

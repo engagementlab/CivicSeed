@@ -313,7 +313,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		saveResource: function(info) {
-			//update in req.session
+			console.log(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
@@ -323,9 +323,12 @@ exports.actions = function(req, res, ss) {
 						var found = false,
 							cur = 0;
 						while(cur < user.game.resources.length) {
+							console.log(user.game.resources[cur].npc, info.resource.npc);
 							if(user.game.resources[cur].npc === info.resource.npc) {
 								found = true;
-								user.game.resources[cur] = info.resource;
+								user.game.resources[cur].answers = info.resource.answers;
+								user.game.resources[cur].attempts = info.resource.attempts;
+								user.game.resources[cur].result = info.resource.result;
 								cur = user.game.resources.length;
 							}
 							cur++;
@@ -333,6 +336,7 @@ exports.actions = function(req, res, ss) {
 						if(!found) {
 							user.game.resources.push(info.resource);
 						}
+						console.log(user);
 						user.save(function (y) {
 							res('good');
 						});
