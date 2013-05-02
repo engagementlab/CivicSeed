@@ -3,6 +3,7 @@ var self = module.exports = {
 	loadRoutes: function(ss, $app, $html, $body, $container) {
 
 		require('/admin').init();
+		require('/npcs').init();
 
 		$app.get('/admin', function(req) {
 			$container.append(JT['admin-panel']({
@@ -30,6 +31,19 @@ var self = module.exports = {
 				$container.append(JT['admin-monitor']({instances: info}));
 				$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
 				$body.attr('class', 'adminPage');
+			});
+		});
+
+		$app.get('/admin/npcs', function(req) {
+			ss.rpc('admin.npcs.init', sessionStorage.userId, function(result) {
+				if(result) {
+					console.log(result);
+					$container.append(JT['admin-npcs']({npcs: result}));
+					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
+					$body.attr('class', 'npcsPage');
+				} else {
+					console.log('error');
+				}
 			});
 		});
 

@@ -1,0 +1,33 @@
+
+.npcs
+	.row
+		.span12
+			h1 NPC Panel
+	each npc, n in npcs
+		.npc(class='level' + npc.level +' npc' + npc.id)
+			.row
+				.span12
+					.information
+						p.npcName(class='level' + npc.level+'name') #{npc.name} <span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id}>Save Changes</span>
+					if (npc.isHolding)
+						.question
+							p.category --- Question ---
+							textarea #{npc.resource.question}
+						.prompts
+							p.category --- Prompts ---
+							p First Time
+							textarea #{npc.dialog.prompts[0]}
+							p Returning After Incorrect
+							textarea #{npc.dialog.prompts[1]}
+							p Returning After Completed
+							textarea #{npc.dialog.prompts[2]}
+					else
+						.dialog
+							p.category --- Dialog ---
+							p Past
+							textarea #{npc.dialog.smalltalk[0]}
+							p Present
+							textarea #{npc.dialog.smalltalk[1]}
+							p Future
+							textarea #{npc.dialog.smalltalk[2]}
+

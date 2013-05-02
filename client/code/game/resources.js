@@ -73,6 +73,7 @@ $game.$resources = {
 		$game.$resources.isShowing = true;
 	},
 
+	//preloads the resource into the staging area (not visible) and sets question and stuff
 	loadResource: function(who, index, revisit) {
 		_who = who,
 		_answered = false,
@@ -94,6 +95,7 @@ $game.$resources = {
 		}
 	},
 
+	//decide how to display resource on screen depending on state of player (if returning)
 	showResource: function(revisit) {
 		//revising means the already answered it and just see resource not question form
 		_revisiting = revisit;
@@ -127,9 +129,11 @@ $game.$resources = {
 	},
 
 	addButtons: function() {
+		//hide all buttons by default
 		$resourceButton.addClass('hideButton');
+		//they answered the question
 		if(_answered) {
-			//this is the medal page
+			//other player answers page
 			if(_currentSlide === _numSlides + 1 &&  _questionType === 'open') {
 				if(_correctAnswer) {
 					$nextButton.removeClass('hideButton');
@@ -138,11 +142,14 @@ $game.$resources = {
 					$closeButton.removeClass('hideButton');
 				}
 			}
+			//other answer types without responses
 			else {
 				$closeButton.removeClass('hideButton');
 			}
 		}
+		//they haven't answered it yet
 		else {
+			//they are returning to the resource
 			if(_revisiting) {
 				//if its the last slide
 				if(_currentSlide === _numSlides - 1) {

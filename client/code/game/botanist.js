@@ -15,7 +15,25 @@ var _info = null,
 	_feedbackTimeout = null,
 	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
 	_numMegaSeeds = 5,
-	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'];
+	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
+
+	$speakerName = null,
+	$message = null,
+	$speechBubble = null,
+	$speechBubbleP = null,
+	$speechBubbleBtn = null,
+	$speechBubbleNextBtn = null,
+	$puzzleSvg = null,
+	$botanistArea = null,
+	$feedback = null,
+	$inventoryItem = null,
+	$tangramArea = null,
+	$botanistTextArea = null,
+	$inventory = null,
+	$inventoryBtn = null,
+	$inventoryPuzzle = null,
+	$botanistContent = null,
+	$botanistAreaMessage = null,
 
 $game.$botanist = {
 
@@ -54,6 +72,7 @@ $game.$botanist = {
 				prevY: botanist.y
 			};
 
+			_setDomSelectors();
 			$game.$botanist.setupTangram();
 			$game.$botanist.getMaster();
 			$game.$botanist.setBotanistState($game.$player.botanistState);
@@ -140,18 +159,6 @@ $game.$botanist = {
 		} else {
 			_renderInfo.srcX = 0;
 		}
-		
-		// } else {
-		// 	if(_counter >= 36) {
-		// 		_counter = 0,
-		// 		_renderInfo.srcX = 0;
-		// 	} else {
-		// 		if(_counter % 4 === 0) {
-		// 			var frame = Math.floor(_counter / 4);
-		// 			_renderInfo.srcX = 32 * 6 * frame;
-		// 		}
-		// 	}
-		// }
 	},
 
 	show: function() {
@@ -172,9 +179,9 @@ $game.$botanist = {
 					//make them plant first seed
 					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
 
-					$('.speechBubble .speakerName').text($game.$botanist.name+': ');
-					$('.speechBubble .message').text(_speak);
-					$('.speechBubble').fadeIn(function() {
+					$speakerName.text($game.$botanist.name+': ');
+					$message.text(_speak);
+					$speechBubble.fadeIn(function() {
 						setTimeout(function() {
 							$game.$botanist.hideChat();
 						}, 3000);
@@ -223,15 +230,15 @@ $game.$botanist = {
 	},
 
 	showChat: function() {
-		$('.speechBubble p').removeClass('fitBubble');
+		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
 		$game.$botanist.nextChatContent();
 	},
 
 	hideChat: function() {
-		$('.speechBubble').fadeOut(function() {
-			$('.speechBubble button').addClass('hideButton');
+		$speechBubble.fadeOut(function() {
+			$speechBubbleBtn.addClass('hideButton');
 			$('.speechBubble .closeChatButton').unbind('click');
 			$game.$botanist.isChat = false;
 			//save that the player has looked at the instructions
@@ -245,21 +252,21 @@ $game.$botanist = {
 	},
 
 	addChatContent: function() {
-		$('.speechBubble button').addClass('hideButton');
-		$('.speechBubble .nextChatButton').removeClass('hideButton');
-		$('.speechBubble .speakerName').text($game.$botanist.name+": ");
-		$('.speechBubble .message').text(_messages[_currentMessage]);
+		$speechBubbleBtn.addClass('hideButton');
+		$speechBubbleNextBtn.removeClass('hideButton');
+		$speakerName.text($game.$botanist.name+": ");
+		$message.text(_messages[_currentMessage]);
 
 		//first item, then drop
 		if(_currentMessage === 0) {
-			$('.speechBubble').fadeIn(function() {
-				$(".speechBubble .nextChatButton").bind('click', (function () {
+			$speechBubble.fadeIn(function() {
+				$speechBubbleNextBtn.bind('click', (function () {
 					$game.$botanist.nextChatContent();
 				}));
 			});
 		}
 		if(_currentMessage === _messages.length - 1) {
-			$(".speechBubble .nextChatButton").unbind('click').addClass('hideButton');
+			$speechBubbleNextBtn.unbind('click').addClass('hideButton');
 
 			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
 				$game.$botanist.hideChat();
@@ -276,20 +283,20 @@ $game.$botanist = {
 	},
 
 	showPrompt: function(p) {
-		$('.speechBubble p').removeClass('fitBubble');
+		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
 		_speak =  $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
-		$('.speechBubble .speakerName').text($game.$botanist.name+': ');
-		$('.speechBubble .message').text(_speak);
+		$speakerName.text($game.$botanist.name+': ');
+		$message.text(_speak);
 		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
-		$('.speechBubble').fadeIn(function() {
+		$speechBubble.fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				if(p === 1) {
 					$game.$botanist.isSolving = true;
 					$('.displayBoxText').text('drag a piece to the board to use it');
-					$('.botanistArea').css('height','380px');
+					$botanistArea.css('height','380px');
 				}
 
 				$game.$botanist.showRiddle(p);
@@ -305,7 +312,7 @@ $game.$botanist = {
 		//hide the inventory if the resource is not already visible
 		//when clicked on from inventory (this means it isn't in puzzle mode)
 		if(!$game.$botanist.isShowing) {
-			$('.inventory').slideUp();
+			$inventory.slideUp();
 			$game.$botanist.isChat = true;
 			$game.$botanist.showRiddle(0);
 		}
@@ -325,17 +332,17 @@ $game.$botanist = {
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
 
-		$('.speechBubble').fadeOut(function() {
-			$('.speechBubble button').addClass('hideButton');
+		$speechBubble.fadeOut(function() {
+			$speechBubbleBtn.addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
 
-			$('.botanistArea')
+			$botanistArea
 				.addClass('patternBg3')
 				.fadeIn(function() {
 					$game.$botanist.isShowing = true;
 					if(_currentSlide === 0 && !$game.$player.firstTime) {
-						$('.tangramArea').show();
+						$tangramArea.show();
 					}
 			});
 		});
@@ -395,19 +402,19 @@ $game.$botanist = {
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				if($game.$player.firstTime) {
-					$('.botanistArea .message').text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
-					$('.botanistContent').html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
+					$botanistAreaMessage.text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
+					$botanistContent.html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
 				} else {
-					$('.botanistArea .message').text('Here is your next enigma ' + $game.$player.name + '.');
-					$('.botanistContent').html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+					$botanistAreaMessage.text('Here is your next enigma ' + $game.$player.name + '.');
+					$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 				}
 			}
 			else if(_currentSlide === 1) {
 				if($game.$player.botanistState > 1) {
-					$('.botanistArea .message').text('Here is the Enigma to view again.');
+					$botanistAreaMessage.text('Here is the Enigma to view again.');
 				}
 				else {
-					$('.botanistArea .message').text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
+					$botanistAreaMessage.text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
 
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
@@ -420,7 +427,7 @@ $game.$botanist = {
 					}
 				}
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
-				$('.botanistContent').html('<img src="' + imgPath + '" class="tangramOutline">');
+				$botanistContent.html('<img src="' + imgPath + '" class="tangramOutline">');
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
@@ -428,57 +435,57 @@ $game.$botanist = {
 					$game.$player.botanistState = 2;
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
-					$('.botanistArea .message').text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$('.botanistContent').html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
+					$botanistAreaMessage.text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
+					$botanistContent.html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
 				}
 			}
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
 			// if(_currentSlide === 0) {
-			// 	$('.botanistArea .message').text('here is your next riddle ' + $game.$player.name + '.');
-			// 	$('.botanistContent').html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+			// 	$botanistAreaMessage.text('here is your next riddle ' + $game.$player.name + '.');
+			// 	$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			if(_currentSlide === 0) {
-				$('.inventory button').addClass('hideButton');
-				$('.inventory').slideDown(function() {
+				$inventoryBtn.addClass('hideButton');
+				$inventory.slideDown(function() {
 					$game.$player.inventoryShowing = false;
 					//set the inventory items to draggable in case they were off
-					$('.inventoryItem').attr('draggable','true');
+					$inventoryItem.attr('draggable','true');
 				});
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
-				$('.botanistArea .message').text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
+				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png';
 					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
-				$('.botanistContent').html(newHTML);
+				$botanistContent.html(newHTML);
 
 				//replace the tangram image in the inventory with tip
-				$('.inventoryPuzzle').hide();
+				$inventoryPuzzle.hide();
 				$('.inventoryHelp').show();
 			}
 			//right/wrong screen
 			else if(_currentSlide === 1) {
-				$('.botanistArea').animate({
+				$botanistArea.animate({
 						'height':'450px'
 				});
-				$('.inventory').slideUp(function() {
+				$inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
-					$('.inventory button').removeClass('hideButton');
-					$('.inventoryItem').remove();
+					$inventoryBtn.removeClass('hideButton');
+					$inventoryItem.remove();
 				});
 
 				var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
-				$('.botanistArea .message').text(postTangramTalk);
+				$botanistAreaMessage.text(postTangramTalk);
 				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
 					newHTML2 += '<p style="text-align:center;"><img src="/img/game/megaseed.png"></p>';
-				$('.botanistContent').html(newHTML2);
+				$botanistContent.html(newHTML2);
 			}
 			else {
 				var endQuestion = _levelQuestion[$game.$player.currentLevel];
-				$('.botanistArea .message').text(endQuestion);
+				$botanistAreaMessage.text(endQuestion);
 				var inputBox = '<textarea placeholder="type your answer here..."></textarea>';
-				$('.botanistContent').html(inputBox);
+				$botanistContent.html(inputBox);
 				$game.changeStatus('this will go in your profile');
 			}
 		}
@@ -487,8 +494,8 @@ $game.$botanist = {
 	hideResource: function() {
 		//slide up the botanist area that contains big content
 		//re-enable clicking by setting bools to false
-		$('.tangramArea').hide();
-		$('.botanistArea').fadeOut(function() {
+		$tangramArea.hide();
+		$botanistArea.fadeOut(function() {
 			$game.$botanist.isShowing = false;
 			$('.botanist button').addClass('hideButton');
 			$(this)
@@ -497,8 +504,8 @@ $game.$botanist = {
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
 			$game.changeStatus();
-			$('.puzzleSvg').empty();
-			$('.inventoryItem').css('opacity',1);
+			$puzzleSvg.empty();
+			$inventoryItem.css('opacity',1);
 
 			//if they just beat a level, then show progreess
 			if($game.$player.botanistState === 0) {
@@ -510,17 +517,17 @@ $game.$botanist = {
 
 		//if we left inventory on, that means we want to show it again
 		if($game.$player.inventoryShowing) {
-			$('.inventory').slideDown(function() {
+			$inventory.slideDown(function() {
 				$game.$player.inventoryShowing = true;
 			});
 		}
 		//otherwise, make sure it is hidden
 		else {
-			$('.inventory').slideUp(function() {
+			$inventory.slideUp(function() {
 				$game.$player.inventoryShowing = false;
-				$('.inventory button').removeClass('hideButton');
+				$inventoryBtn.removeClass('hideButton');
 				$('.inventoryHelp').hide();
-				$('.inventoryPuzzle').show();
+				$inventoryPuzzle.show();
 			});
 		}
 	},
@@ -612,8 +619,8 @@ $game.$botanist = {
 
 					//remove all items from inventory on slide up
 					//remove them from puzzle surface
-					$('.puzzleSvg').empty();
-					$('.tangramArea').hide();
+					$puzzleSvg.empty();
+					$tangramArea.hide();
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
@@ -631,7 +638,7 @@ $game.$botanist = {
 		}
 		else {
 			_numMegaSeeds = 5;
-			var portAnswer = $('.botanistContent textarea').val();
+			var portAnswer = $botanistTextArea.val();
 			$game.$player.resumeAnswer(portAnswer);
 			$game.changeStatus('talk to the botanist');
 			$game.$player.nextLevel();
@@ -656,7 +663,7 @@ $game.$botanist = {
 	dragStart: function(e) {
 		if($game.$botanist.isSolving) {
 
-			$('.tangramArea')
+			$tangramArea
 				.unbind('dragover')
 				.unbind('drop');
 
@@ -667,7 +674,7 @@ $game.$botanist = {
 			dt.setData('text/plain', id);
 
 			//set drag over shit
-			$('.tangramArea')
+			$tangramArea
 				.bind('dragover',$game.$botanist.dragOver)
 				.bind('drop', $game.$botanist.drop);
 		}
@@ -713,7 +720,7 @@ $game.$botanist = {
 			.attr('transform', 'translate('+x+','+y+')')
 			.call(_drag);
 
-		$('.tangramArea')
+		$tangramArea
 			.unbind('dragover')
 			.unbind('drop');
 
@@ -724,7 +731,7 @@ $game.$botanist = {
 
 	dragMoveStart: function(d) {
 		clearTimeout(_feedbackTimeout);
-		$('.feedback').fadeOut('fast');
+		$feedback.fadeOut('fast');
 
 		_dragOffX = d3.mouse(this)[0],
 		_dragOffY = d3.mouse(this)[1],
@@ -736,28 +743,13 @@ $game.$botanist = {
 	dragMove: function(d) {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
-			// mX = $game.$botanist.snapTo(x - _dragOffX),
-			// mY = $game.$botanist.snapTo(y - _dragOffY);
 			mX = x - _dragOffX,
-			mY = y - _dragOffY,
-			trashing = false;
-
-		if(x > 825 && x < 890 && y > 170 && y < 300) {
-			$('.trash').css('opacity',1);
-			trashing = true;
-		}
-		else {
-			$('.trash').css('opacity',0.5);
-			trashing = false;
-		}
+			mY = y - _dragOffY;
 
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
-		
+
 		d3.select('.br' + d.id)
-			.attr('transform',trans)
-			.attr('opacity', function() {
-				return trashing ? .5 : 1;
-			});
+			.attr('transform',trans);
 	},
 
 	dropMove: function(d) {
@@ -770,25 +762,11 @@ $game.$botanist = {
 		d3.select('.br' + d.id)
 			.attr('stroke-width',0)
 			.attr('transform',trans);
-			//shape = $game.$resources.getShape(npc);
-
-		//if(x > 825 && x < 890 && y > 170 && y < 300) {
-			// $('.br' + d.id).remove();
-			// $('.r' + d.id)
-			// 	.css('opacity', 1)
-			// 	.attr('draggable', 'true');
-			// $('.trash').css('opacity',0.5);
-		//}
-		// else {
-			// d3.select('.br' + d.id)
-			// .attr('stroke-width',0)
-			// .attr('transform',trans);
-		//}
 	},
 
 	clearBoard: function() {
-		$('.puzzleSvg').empty();
-		$('.inventoryItem').css('opacity', 1).attr('draggable', 'true');
+		$puzzleSvg.empty();
+		$inventoryItem.css('opacity', 1).attr('draggable', 'true');
 	},
 
 	snapTo: function(num) {
@@ -808,12 +786,32 @@ $game.$botanist = {
 	},
 
 	feedback: function(message) {
-		$('.feedback')
+		$feedback
 			.text(message)
 			.fadeIn();
 
 		_feedbackTimeout = setTimeout(function() {
-			$('.feedback').fadeOut();
+			$feedback.fadeOut();
 		},4500);
 	}
 };
+
+function _setDomSelectors() {
+	$speakerName = $('.speechBubble .speakerName');
+	$mesage = $('.speechBubble .message');
+	$speecBubble = $('.speechBubble');
+	$speehBubbleP = $('.speechBubble p');
+	$speechBubbleBtn = $('.speechBubble p');
+	$speechBubbleNextBtn = $('.speechBubble .nextButton');
+	$puzzleSvg = $('.puzzleSvg');
+	$botanistArea = $('.botanistArea');
+	$feedback = $('.feedback');
+	$inventoryItem = $('.inventoryItem');
+	$tangramArea = $('.inventoryItem');
+	$botanistTextArea = $('.botanistContent textarea');
+	$inventory = $('.inventory');
+	$inventoryBtn = $('.inventory button');
+	$inventoryPuzzle = $('.inventoryPuzzle');
+	$botanistContent = $('.botanistContent');
+	$botanistAreaMessage = $('.botanistArea .message');
+}
