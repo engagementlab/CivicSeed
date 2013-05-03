@@ -15,7 +15,10 @@ var self = module.exports = {
 			var id = $(this).attr('data-id'),
 				npc = $('.npc' + id + ' textarea');
 				holding = $(this).attr('data-holding'),
-				updates = {},
+				saveButton = $(this),
+				updates = {
+					id: id
+				},
 				updates.dialog = [];
 			if(holding) {
 				updates.question = null;
@@ -24,7 +27,7 @@ var self = module.exports = {
 					if(i === 0) {
 						updates.question = val;
 					} else {
-						updates.dialog.push(val);	
+						updates.dialog.push(val);
 					}
 				});
 			} else {
@@ -33,7 +36,18 @@ var self = module.exports = {
 					updates.dialog.push(val);
 				});
 			}
-			console.log(updates);
+			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+				if(err) {
+					console.log(err);
+				} else {
+					saveButton.addClass('justSaved');
+					saveButton.text('Saved!');
+					setTimeout(function(){
+						saveButton.removeClass('justSaved');
+						saveButton.text('Save Changes');
+					}, 1000);
+				}
+			});
 		});
 	}
 };

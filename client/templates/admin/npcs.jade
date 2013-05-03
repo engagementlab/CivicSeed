@@ -8,7 +8,7 @@
 			.row
 				.span12
 					.information
-						p.npcName(class='level' + npc.level+'name') #{npc.name} <span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id}>Save Changes</span>
+						p.npcName(class='level' + npc.level+'name') #{npc.name} <span class="levelNumber">level #{npc.level + 1}</span><span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id}>Save Changes</span>
 					if (npc.isHolding)
 						.question
 							p.category --- Question ---
@@ -22,7 +22,7 @@
 							p Returning After Completed
 							textarea #{npc.dialog.prompts[2]}
 					else
-						.dialog
+						.smalltalk
 							p.category --- Dialog ---
 							p Past
 							textarea #{npc.dialog.smalltalk[0]}
