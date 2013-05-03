@@ -33,7 +33,7 @@ var _info = null,
 	$inventoryBtn = null,
 	$inventoryPuzzle = null,
 	$botanistContent = null,
-	$botanistAreaMessage = null,
+	$botanistAreaMessage = null;
 
 $game.$botanist = {
 
