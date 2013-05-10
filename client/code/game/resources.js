@@ -87,7 +87,8 @@ $game.$resources = {
 
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.currentLevel) {
-			var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
+			// var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
+			var url = '/articles/' + _curResource.url + '.html';
 			$resourceStage.empty().load(url,function() {
 				_numSlides = $('.resourceStage .pages > section').length;
 				$game.$resources.showResource(revisit);

@@ -38,6 +38,13 @@ var self = module.exports = {
 		$app.get('/admin/npcs', function(req) {
 			ss.rpc('admin.npcs.init', sessionStorage.userId, function(result) {
 				if(result) {
+					//modify results for data output
+					for(var r = 0; r < result.length; r++) {
+						var x = result[r].id % 142;
+						var y = Math.floor(result[r].id / 142);
+						result[r].x = x;
+						result[r].y = y;
+					}
 					console.log(result);
 					$container.append(JT['admin-npcs']({npcs: result}));
 					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');

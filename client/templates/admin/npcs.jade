@@ -17,16 +17,21 @@
 							textarea.areaNumber(data-area='level') #{npc.level + 1}
 							<span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id} data-questionType=#{npc.resource.questionType}>Save</span>
 							<span class="regular">location:</span>
-							textarea.areaNumber(data-area='x') 32
-							textarea.areaNumber(data-area='y') 54
+							textarea.areaNumber(data-area='x') #{npc.x}
+							textarea.areaNumber(data-area='y') #{npc.y}
 							<span class="regular">holding: </span>
-							input(name='isHolding', value='true', type='checkbox')
+							if (npc.isHolding)
+								input(name='isHolding', value=#{npc.isHolding}, type='checkbox',checked)
+							else 
+								input(name='isHolding', value=#{npc.isHolding}, type='checkbox')
 					if (npc.isHolding)
 						.resource
 							p.viewResource(data-url='/articles/level' + (npc.level + 1) + '/' + npc.id + '.html') view resource
 							p.category --- Resource ---
+							p URL <span class='smallerFont'> case and space sensitive</span>
+							textarea.url(data-area='url') #{npc.resource.url}
 							p Question
-							textarea(data-area='question').question #{npc.resource.question}
+							textarea.question(data-area='question') #{npc.resource.question}
 
 							if (npc.resource.questionType === 'open')
 								p Required Length

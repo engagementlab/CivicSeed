@@ -27,7 +27,9 @@ var self = module.exports = {
 			npc.each(function(i) {
 				var area = $(this).attr('data-area'),
 					val = this.value;
-				if(area === 'question') {
+				if(area === 'url') {
+					updates.url = val;
+				} else if(area === 'question') {
 					updates.question = val;
 				} else if(area === 'prompt' || area === 'smalltalk') {
 					updates.dialog.push(val);
@@ -35,7 +37,7 @@ var self = module.exports = {
 					updates.possibleAnswers.push(val);
 				} else if(area === 'answer') {
 					updates.answer = val;
-				} else if(area === 'requiredlength') {
+				} else if(area === 'requiredLength') {
 					updates.requiredlength = parseInt(val, 10);
 				} else if(area === 'tagline') {
 					updates.tagline = val;
@@ -44,10 +46,24 @@ var self = module.exports = {
 
 			var parents = saveButton.parentsUntil('.npcs'),
 				npcParent = $(parents[parents.length-1]),
-				brother = saveButton.siblings('textarea');
+				generalInfo = saveButton.siblings('textarea');
+
+			npc.each(function(i) {
+				var area = $(this).attr('data-area'),
+					val = this.value;
+				if(area === 'name') {
+					updates.name = val;
+				} else if(area === 'level') {
+					updates.level = parseInt(val,10) - 1;
+				} else if(area === 'x') {
+					updates.x = parseInt(val, 10);
+				} else if(area === 'y') {
+					updates.y = parseInt(val, 10);
+				}
+			});
 
 			updates.sprite = parseInt(npcParent.attr('data-sprite'),10);
-			updates.name = $(brother).val();
+			
 			console.log(updates);
 			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
 				if(err) {
@@ -57,7 +73,7 @@ var self = module.exports = {
 					saveButton.text('Saved!');
 					setTimeout(function(){
 						saveButton.removeClass('justSaved');
-						saveButton.text('Save Changes');
+						saveButton.text('Save');
 					}, 1000);
 				}
 			});
