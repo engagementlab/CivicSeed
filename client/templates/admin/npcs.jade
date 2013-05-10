@@ -1,33 +1,60 @@
-
 .npcs
 	.row
 		.span12
 			h1 NPC Panel
 	each npc, n in npcs
-		.npc(class='level' + npc.level +' npc' + npc.id)
+		.npc(class='level' + npc.level +' npc' + npc.id, data-sprite=npc.sprite)
 			.row
 				.span12
 					.information
-						p.npcName(class='level' + npc.level+'name') #{npc.name} <span class="levelNumber">level #{npc.level + 1}</span><span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id}>Save Changes</span>
+						.bg
+							p
+								i.icon-circle-arrow-up.spriteUp
+								i.icon-circle-arrow-down.spriteDown
+						p.npcName(class='level' + npc.level+'name') 
+							textarea(data-area='name') #{npc.name}
+							<span class="regular">level:</span>
+							textarea.areaNumber(data-area='level') #{npc.level + 1}
+							<span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id} data-questionType=#{npc.resource.questionType}>Save</span>
+							<span class="regular">location:</span>
+							textarea.areaNumber(data-area='x') 32
+							textarea.areaNumber(data-area='y') 54
+							<span class="regular">holding: </span>
+							input(name='isHolding', value='true', type='checkbox')
 					if (npc.isHolding)
-						.question
-							p.category --- Question ---
-							textarea #{npc.resource.question}
+						.resource
+							p.viewResource(data-url='/articles/level' + (npc.level + 1) + '/' + npc.id + '.html') view resource
+							p.category --- Resource ---
+							p Question
+							textarea(data-area='question').question #{npc.resource.question}
+
+							if (npc.resource.questionType === 'open')
+								p Required Length
+								textarea.required(data-area='requiredLength', maxlength='3') #{npc.resource.requiredLength}
+							else 
+								p Possible Answers
+								each possible, p in npc.resource.possibleAnswers
+									textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[p]}
+								p Answer
+								textarea.answer(data-area='answer') #{npc.resource.answer}
+							p Tagline
+							textarea(data-area='tagline', maxlength='24') #{npc.resource.tagline}
 						.prompts
 							p.category --- Prompts ---
 							p First Time
-							textarea #{npc.dialog.prompts[0]}
+							textarea(data-area='prompt', data-index='0') #{npc.dialog.prompts[0]}
 							p Returning After Incorrect
-							textarea #{npc.dialog.prompts[1]}
+							textarea(data-area='prompt', data-index='1') #{npc.dialog.prompts[1]}
 							p Returning After Completed
-							textarea #{npc.dialog.prompts[2]}
+							textarea(data-area='prompt', data-index='2') #{npc.dialog.prompts[2]}
 					else
 						.smalltalk
 							p.category --- Dialog ---
 							p Past
-							textarea #{npc.dialog.smalltalk[0]}
+							textarea(data-area='smalltalk', data-index='0') #{npc.dialog.smalltalk[0]}
 							p Present
-							textarea #{npc.dialog.smalltalk[1]}
+							textarea(data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
 							p Future
-							textarea #{npc.dialog.smalltalk[2]}
-
+							textarea(data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
+.buffer
+.article
