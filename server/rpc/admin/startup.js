@@ -154,7 +154,7 @@ exports.actions = function(req, res, ss) {
 					});
 				} else if(dataType === 'colors') {
 					var colors = [{
-						instanceName: 'test',
+						instanceName: 'awesome',
 						x: 0,
 						y: 0,
 						mapIndex: 0,

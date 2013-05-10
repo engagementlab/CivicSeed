@@ -444,7 +444,7 @@ $game.$renderer = {
 			}
 		}
 	},
-	
+
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
 			_offscreenCharacterCanvas[info.colorNum],

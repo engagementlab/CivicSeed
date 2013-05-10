@@ -36,6 +36,16 @@ exports.actions = function(req, res, ss) {
 						if(npc.isHolding) {
 							npc.dialog.prompts = info.dialog;
 							npc.resource.question = info.question;
+							npc.resource.tagline = info.tagline;
+							npc.name = info.name;
+							npc.sprite = info.sprite;
+							//not open
+							if(npc.answer) {
+								npc.resource.answer = info.answer;
+								npc.resource.possibleAnswers = info.possibleAnswers;
+							} else {
+								npc.resource.requiredLength = info.requiredLength;
+							}
 						} else {
 							npc.dialog.smalltalk = info.dialog;
 						}

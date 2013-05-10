@@ -19,16 +19,16 @@ $game.$mouse = {
 			tempY = Math.floor(y/32);
 
 		//extremes(if at edge it will be just over)
-		if(tempX > 29) {
-			_curX = 29;
+		if(tempX > $game.VIEWPORT_WIDTH-1) {
+			_curX = $game.VIEWPORT_WIDTH-1;
 		} else if(tempX < 0) {
 			_curX = 0;
 		} else {
 			_curX = tempX;
 		}
 
-		if(tempY > 14) {
-			_curY = 14;
+		if(tempY > $game.VIEWPORT_HEIGHT - 1) {
+			_curY = $game.VIEWPORT_HEIGHT - 1;
 		}
 		else if(tempY < 0) {
 			_curY = 0;

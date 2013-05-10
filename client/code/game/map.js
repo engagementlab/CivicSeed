@@ -335,7 +335,7 @@ $game.$map = {
 		_topEdge = $game.masterY,
 		_bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1;
 
-		requestAnimFrame($game.stepTransition);
+		requestAnimationFrame($game.stepTransition);
 	},
 
 	masterToLocal: function(x, y, offscreen) {
@@ -423,11 +423,12 @@ function _getTiles(data, callback) {
 }
 
 function _copyTileArray(callback) {
-	$game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
+	// $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
+	$game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
 
 	var i = $game.VIEWPORT_WIDTH;
 	while(--i >= 0) {
-		$game.$map.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT);
+		$game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
 		var j = $game.VIEWPORT_HEIGHT;
 		while(--j >= 0) {
 			$game.$map.currentTiles[i][j] = _nextTiles[i][j];

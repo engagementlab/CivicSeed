@@ -1,15 +1,18 @@
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-	return  window.requestAnimationFrame   ||
+window.requestAnimationFrame = (function() {
+	return window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame    ||
-		window.oRequestAnimationFrame      ||
-		window.msRequestAnimationFrame     ||
-
-		function( callback ){
-			window.setTimeout(callback, 1000 / 60);
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function(callback, element) {
+			// window.setTimeout(callback, _tickSpeed); // <-- OLD VERSION
+			var currTime = new Date().getTime();
+			var timeToCall = Math.max(0, 16 - (currTime - _lastTime));
+			var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
+			_lastTime = currTime + timeToCall;
+			return id;
 		};
-})();
+}());
 
 //PRIVATE GAME VARS
 var _stepNumber = 0,
@@ -100,7 +103,7 @@ exports.$game = {
 			$game.$botanist.update();
 			$game.$robot.update();
 			$game.$renderer.renderFrame();
-			requestAnimFrame($game.tick);
+			requestAnimationFrame($game.tick);
 		}
 	},
 
@@ -353,12 +356,12 @@ function _setBoundaries() {
 
 function _startGame() {
 	$game.$map.firstStart(function() {
-		$game.ready = true;
-		$game.running = true;
-		$game.$renderer.renderAllTiles();
-		$game.tick();
 		$('.loading').fadeOut(function() {
 			$(this).remove();
+			$game.ready = true;
+			$game.running = true;
+			$game.$renderer.renderAllTiles();
+			$game.tick();
 		});
 	});
 }

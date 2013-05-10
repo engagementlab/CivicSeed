@@ -108,9 +108,13 @@ $(function() {
 				instanceName: $game.$player.instanceName
 			};
 			$game.$audio.playTriggerFx('chatSend');
-			ss.rpc('game.chat.sendMessage', data, function(r) {
-				//nothing here...
-			});
+			if(data.msg.indexOf('beam me up, Scotty!') > -1) {
+				$game.$player.beamMeUpScotty();
+			} else {
+				ss.rpc('game.chat.sendMessage', data, function(r) {
+					//nothing here...
+				});
+			}
 			$chatText.val('');
 		}
 		return false;

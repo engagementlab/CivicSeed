@@ -146,7 +146,7 @@ $game.$player = {
 			_willTravel = false;
 			//if a transition is necessary, load new data
 			if(!anEdge) {
-				if(x === 0 || x === 29 || y === 0 || y === 14) {
+				if(x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
 					_willTravel = true;
 					$game.$map.calculateNext(x, y);
 				}
@@ -611,6 +611,38 @@ $game.$player = {
 
 	getRenderPosition: function () {
 		return {x: _renderInfo.curX, y: _renderInfo.curY};
+	},
+
+	beamMeUpScotty: function(place) {
+		//x any y are viewport coords
+		$('.beamMeUp').show();
+		_info.x = 70;
+		_info.y = 74;
+		_renderInfo.curX = _info.x * $game.TILE_SIZE;
+		_renderInfo.curY = _info.y * $game.TILE_SIZE;
+		_renderInfo.prevX = _info.x * $game.TILE_SIZE;
+		_renderInfo.prevY = _info.y * $game.TILE_SIZE;
+		//$game.running = false;
+		var tx = (_info.x === 0) ? 0 : _info.x - 1,
+			ty = (_info.y === 0) ? 0 : _info.y - 1,
+			divX = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2 )),
+			divY = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2 )),
+			startX  = divX * ($game.VIEWPORT_WIDTH - 2),
+			startY = divY * ($game.VIEWPORT_HEIGHT - 2);
+
+		$game.masterX = startX;
+		$game.masterY = startY;
+
+		//update npcs, other players?
+		$game.inTransit = true;
+		$game.$map.setBoundaries();
+		$game.$map.firstStart(function() {
+			$game.$renderer.renderAllTiles();
+			$game.inTransit = false;
+			setTimeout(function() {
+				$('.beamMeUp').fadeOut();
+			}, 1000);
+		});
 	}
 
 

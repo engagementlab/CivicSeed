@@ -5,7 +5,10 @@
 	canvas#foreground(width='960px', height='480px')
 	canvas#minimapTile(width='142px', height='132px')
 	canvas#minimapPlayer(width='142px', height='132px')
-	p.loading Loading...
+	.loading
+		p
+			img(src='/img/game/loader.gif')
+		p loading
 	.resourceArea
 		a(href='#', style='font-size: 24px;')
 			i.icon-remove-sign.icon-large
@@ -175,3 +178,4 @@
 			button.unPause.btn.btn-success(type='button') Resume Game
 	div.waitingForSeed
 		img(src='/img/game/spinloader.gif')
+	.beamMeUp

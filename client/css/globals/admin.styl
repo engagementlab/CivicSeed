@@ -104,33 +104,92 @@ p.level3
 		position relative
 		p
 			margin 0
-			padding 10px
-		.npcName
-			font-size 1.5em
-			.levelNumber
-				font-size .8em
-				color $csLightGreen
-				margin-left 20px
+			padding 10px 0 5px 10px
+			-webkit-user-select: none;  
+			-moz-user-select: none;    
+			-ms-user-select: none;      
+			user-select: none;
 		textarea
 			resize none
 			height 80px
-			margin 10px
+			margin 0 0 10px 10px
 		.information
-			background $csGreen
-			padding 10px
-		.question
+			background $csGray
+			padding 20px 10px
+			.bg 
+				width 64px
+				height 64px
+				position absolute
+				top 10px
+				left 20px
+				p
+					color #eee
+					font-size 1.5em
+					margin-left 40px
+					i 
+						cursor pointer
+			.npcName
+				margin-left 78px
+				padding 10px
+				span.regular
+					margin 0 0 0 10px
+					line-height 1.6
+					font-size 1.3em
+					font-family $bodyFont
+				textarea
+					width 200px
+					height 26px
+					background #ccc
+					font-size 1.8em
+				input
+					margin-top -2px
+				.areaNumber
+					width 48px
+					text-align center
+				.levelNumber
+					font-size 1.2em
+					line-height 2
+					color $csLightGreen
+					margin-left 20px
+		.resource
+			textarea 
+				height 24px
+				width 240px
+			textarea.required
+				width 40px
+			textarea.question
+				width 800px
+				height 80px
+			textarea.possible, textarea.answer
+				width 390px
+
+		.smalltalk
 			background $csOrange
 			padding 10px
-		.prompts, .smalltalk
+		.resource
+			background $csGreen
+			padding 10px
+			.viewResource
+				color white
+				background $csPurple
+				width 100px
+				font-family $buttonFont
+				padding 5px
+				$borderRadius(5px)
+				text-align center
+				position absolute
+				right 10px
+				cursor pointer
+		.prompts 
 			background $csBlue
 			padding 10px
 		.category
 			font-size 1.4em
 		.saveChanges
-			background $csPurple
+			background $csOrange
 			color white
-			font-family 1em
-			width 160px
+			font-size 1.4em
+			width 80px
 			text-align center
 			$borderRadius(5px)
 			padding 10px
@@ -140,4 +199,27 @@ p.level3
 			top 10px
 			right 10px
 		span.justSaved
-			background $csLightGreen
+			background $csLightGree
+	
+.article
+	display none
+	top 20%
+	margin 0 auto
+	width 900px
+	height 360px
+	overflow auto
+	background url($cloudPath + 'img/bg/grey.png') #efefef
+	position fixed
+	$borderRadius(5px)
+	padding 20px
+	cursor pointer
+
+.buffer
+	position fixed
+	display none
+	top 0
+	left 0
+	background #222
+	background rgba(0,0,0,.7)
+	width 100%
+	height 100%

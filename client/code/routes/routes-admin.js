@@ -3,7 +3,8 @@ var self = module.exports = {
 	loadRoutes: function(ss, $app, $html, $body, $container) {
 
 		require('/admin').init();
-		require('/npcs').init();
+		var npcs = require('/npcs');
+		npcs.init();
 
 		$app.get('/admin', function(req) {
 			$container.append(JT['admin-panel']({
@@ -41,6 +42,7 @@ var self = module.exports = {
 					$container.append(JT['admin-npcs']({npcs: result}));
 					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
 					$body.attr('class', 'npcsPage');
+					npcs.addSprites();
 				} else {
 					console.log('error');
 				}

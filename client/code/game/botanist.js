@@ -23,6 +23,7 @@ var _info = null,
 	$speechBubbleP = null,
 	$speechBubbleBtn = null,
 	$speechBubbleNextBtn = null,
+	$speechBubbleCloseBtn = null,
 	$puzzleSvg = null,
 	$botanistArea = null,
 	$feedback = null,
@@ -239,7 +240,7 @@ $game.$botanist = {
 	hideChat: function() {
 		$speechBubble.fadeOut(function() {
 			$speechBubbleBtn.addClass('hideButton');
-			$('.speechBubble .closeChatButton').unbind('click');
+			$speechBubbleCloseBtn.unbind('click');
 			$game.$botanist.isChat = false;
 			//save that the player has looked at the instructions
 			if($game.$player.botanistState === 0) {
@@ -254,7 +255,7 @@ $game.$botanist = {
 	addChatContent: function() {
 		$speechBubbleBtn.addClass('hideButton');
 		$speechBubbleNextBtn.removeClass('hideButton');
-		$speakerName.text($game.$botanist.name+": ");
+		$speakerName.text($game.$botanist.name+': ');
 		$message.text(_messages[_currentMessage]);
 
 		//first item, then drop
@@ -268,7 +269,7 @@ $game.$botanist = {
 		if(_currentMessage === _messages.length - 1) {
 			$speechBubbleNextBtn.unbind('click').addClass('hideButton');
 
-			$(".speechBubble .closeChatButton").removeClass('hideButton').bind("click", (function () {
+			$speechBubbleCloseBtn.removeClass('hideButton').bind('click', (function () {
 				$game.$botanist.hideChat();
 			}));
 		}
@@ -290,9 +291,10 @@ $game.$botanist = {
 
 		$speakerName.text($game.$botanist.name+': ');
 		$message.text(_speak);
-		$('.speechBubble .yesButton, .speechBubble .noButton').removeClass('hideButton');
+		$('.speechBubble .buttonCorner .yesButton').removeClass('hideButton');
+		$('.speechBubble .buttonCorner .noButton').removeClass('hideButton');
 		$speechBubble.fadeIn(function() {
-			$(".speechBubble .yesButton").bind("click", (function () {
+			$('.speechBubble .yesButton').bind('click', (function () {
 				if(p === 1) {
 					$game.$botanist.isSolving = true;
 					$('.displayBoxText').text('drag a piece to the board to use it');
@@ -301,7 +303,7 @@ $game.$botanist = {
 
 				$game.$botanist.showRiddle(p);
 			}));
-			$(".speechBubble .noButton").bind("click", (function () {
+			$('.speechBubble .noButton').bind('click', (function () {
 				$game.$botanist.hideChat();
 			}));
 		});
@@ -798,11 +800,12 @@ $game.$botanist = {
 
 function _setDomSelectors() {
 	$speakerName = $('.speechBubble .speakerName');
-	$mesage = $('.speechBubble .message');
-	$speecBubble = $('.speechBubble');
-	$speehBubbleP = $('.speechBubble p');
-	$speechBubbleBtn = $('.speechBubble p');
-	$speechBubbleNextBtn = $('.speechBubble .nextButton');
+	$message = $('.speechBubble .message');
+	$speechBubble = $('.speechBubble');
+	$speechBubbleP = $('.speechBubble p');
+	$speechBubbleBtn = $('.speechBubble button');
+	$speechBubbleNextBtn = $('.buttonCorner .nextChatButton');
+	$speechBubbleCloseBtn = $('.buttonCorner .closeChatButton');
 	$puzzleSvg = $('.puzzleSvg');
 	$botanistArea = $('.botanistArea');
 	$feedback = $('.feedback');
