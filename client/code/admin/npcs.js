@@ -10,73 +10,26 @@ var self = module.exports = {
 	},
 
 	setup: function() {
-		$body.on('click', '.saveChanges', function() {
-			var id = parseInt($(this).attr('data-id'),10),
-				npc = $('.npc' + id + ' textarea');
-				holding = $(this).attr('data-holding'),
-				questionType = $(this).attr('data-questionType'),
-				saveButton = $(this),
-				updates = {
-					id: id
-				};
-			updates.dialog = [];
-			updates.isHolding = holding;
-			if(questionType !== 'open') {
-				updates.possibleAnswers = [];
+		$body.on('click', '.levelFilter p', function() {
+			var level = parseInt($(this).text(),10);
+			$(this).toggleClass('current');
+			var show = $(this).hasClass('current'),
+				npcSel = '.level' + (level - 1);
+			if(show) {
+				$(npcSel).show();
+			} else {
+				$(npcSel).hide();
 			}
-			npc.each(function(i) {
-				var area = $(this).attr('data-area'),
-					val = this.value;
-				if(area === 'url') {
-					updates.url = val;
-				} else if(area === 'question') {
-					updates.question = val;
-				} else if(area === 'prompt' || area === 'smalltalk') {
-					updates.dialog.push(val);
-				} else if(area === 'possibleAnswers') {
-					updates.possibleAnswers.push(val);
-				} else if(area === 'answer') {
-					updates.answer = val;
-				} else if(area === 'requiredLength') {
-					updates.requiredlength = parseInt(val, 10);
-				} else if(area === 'tagline') {
-					updates.tagline = val;
-				}
-			});
+		});
 
-			var parents = saveButton.parentsUntil('.npcs'),
-				npcParent = $(parents[parents.length-1]),
-				generalInfo = saveButton.siblings('textarea');
+		$body.on('click', '.saveChanges', function() {
+			var id = parseInt($(this).attr('data-id'),10);
+			self.saveChanges(id);
+		});
 
-			npc.each(function(i) {
-				var area = $(this).attr('data-area'),
-					val = this.value;
-				if(area === 'name') {
-					updates.name = val;
-				} else if(area === 'level') {
-					updates.level = parseInt(val,10) - 1;
-				} else if(area === 'x') {
-					updates.x = parseInt(val, 10);
-				} else if(area === 'y') {
-					updates.y = parseInt(val, 10);
-				}
-			});
-
-			updates.sprite = parseInt(npcParent.attr('data-sprite'),10);
-			
-			console.log(updates);
-			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
-				if(err) {
-					console.log(err);
-				} else {
-					saveButton.addClass('justSaved');
-					saveButton.text('Saved!');
-					setTimeout(function(){
-						saveButton.removeClass('justSaved');
-						saveButton.text('Save');
-					}, 1000);
-				}
-			});
+		$body.on('click', '.deleteNpc', function() {
+			var id = parseInt($(this).attr('data-id'),10);
+			self.deleteNpc(id);
 		});
 
 		$body.on('click', '.spriteUp', function() {
@@ -119,8 +72,47 @@ var self = module.exports = {
 			});
 		});
 
+		$body.on('click', '.addNpc', function() {
+			//TODO: figure out id (inc +1 on prev highest)
+			var clone = $('.npcTemplate .npc').clone();
+			$(clone).insertBefore(this);
+		});
+
 		$body.on('click', '.article, .buffer', function() {
 			$('.article, .buffer').hide();
+		});
+
+		$body.on('change', 'input[type="checkbox"]', function () {
+			//toggle the display for the input boxes
+			var holding = this.checked ? true : false;
+				parents = $(this).parentsUntil('.npcs'),
+				npcParent = $(parents[parents.length-1]);
+
+			if(holding) {
+				$(npcParent).find('.resource').show();
+				$(npcParent).find('.prompts').show();
+				$(npcParent).find('.smalltalk').hide();
+			} else {
+				$(npcParent).find('.resource').hide();
+				$(npcParent).find('.prompts').hide();
+				$(npcParent).find('.smalltalk').show();
+			}
+		});
+
+		$body.on('change', 'input[type="radio"]', function () {
+			var questionType = $(this).val(),
+				parents = $(this).parentsUntil('.npcs'),
+				npcParent = $(parents[parents.length-1]);
+			$(npcParent).find('.questionOptions').hide();
+			
+			if(questionType === 'open') {
+				$(npcParent).find('.requiredDiv').show();
+			} else {
+				if(questionType === 'multiple') {
+					$(npcParent).find('.possibleDiv').show();
+				}
+				$(npcParent).find('.answerDiv').show();
+			}
 		});
 	},
 
@@ -151,5 +143,139 @@ var self = module.exports = {
 				'background-position': pos
 			});
 		});
+	},
+
+	saveChanges: function(id) {
+		var npc = $('.npc' + id);
+			informationAreas = npc.find('.information textarea'),
+			resourceAreas = npc.find('.resource textarea'),
+			promptAreas = npc.find('.prompts textarea'),
+			smalltalkAreas = npc.find('.smalltalk textarea'),
+			holding = npc.find('.information input')[0].checked,
+			questionType = npc.find('.resource input:checked').val(),
+			sprite = parseInt(npc.attr('data-sprite'),10),
+			updates = {
+				id: id,
+				isHolding: holding,
+				resource: {
+					url: null,
+					questionType: questionType,
+					answer: null,
+					question: null,
+					possibleAnswers: [],
+					tagline: null,
+					feedbackRight: null,
+					feedbackWrong: null,
+					dependsOn: []
+				},
+				dialog: {
+					prompts: [],
+					smalltalk: []
+				},
+				level: null,
+				sprite: sprite,
+				x: null,
+				y: null,
+				name: null
+			};
+
+		//update information
+		informationAreas.each(function(i) {
+			var area = $(this).attr('data-area'),
+				val = this.value;
+
+			if(area === 'name') {
+				updates.name = val;
+			} else if(area === 'level') {
+				updates.level = parseInt(val, 10) - 1;
+			} else if(area === 'x') {
+				updates.x = parseInt(val, 10);
+			} else if(area === 'y') {
+				updates.y = parseInt(val, 10);
+			}
+		});
+
+		resourceAreas.each(function(i) {
+			var area = $(this).attr('data-area'),
+				val = this.value;
+
+			if(area === 'url') {
+				updates.resource.url = val;
+			} else if(area === 'question') {
+				updates.resource.question = val;
+			} else if(area === 'possibleAnswers') {
+				updates.resource.possibleAnswers.push(val);
+			} else if(area === 'answer') {
+				updates.resource.answer = val;
+			} else if(area === 'requiredLength') {
+				updates.resource.requiredlength = parseInt(val, 10);
+			} else if(area === 'tagline') {
+				updates.resource.tagline = val;
+			} else if(area === 'dependsOn') {
+				updates.resource.dependsOn.push(parseInt(val, 10));
+			} else if(area === 'feedbackRight') {
+				updates.resource.feedbackRight = val;
+			} else if(area === 'feedbackWrong') {
+				updates.resource.feedbackWrong = val;
+			}
+		});
+
+		promptAreas.each(function(i) {
+			var area = $(this).attr('data-area'),
+				val = this.value;
+
+			if(area === 'prompt') {
+				updates.dialog.prompts.push(val);
+			}
+		});
+
+		smalltalkAreas.each(function(i) {
+			var area = $(this).attr('data-area'),
+				val = this.value;
+
+			if(area === 'smalltalk') {
+				updates.dialog.smalltalk.push(val);
+			}
+		});
+
+		//this means it is a new one, do not save, but add new in db
+		if(id < 0)
+
+		ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				var saveButton = npc.find('.saveChanges');
+				saveButton.addClass('justSaved');
+				setTimeout(function(){
+					saveButton.removeClass('justSaved');
+				}, 1000);
+			}
+		});
+	},
+
+	deleteNpc: function(id) {
+		var confirm = prompt('please type "delete" to permanently remove the npc.');
+		if(confirm === 'delete') {
+			var npc = $('.npc' + id);
+			console.log(npc);
+			//this means it has never been saved, delete it from client
+			if(id < 0) {
+				npc.fadeOut(function() {
+					this.remove();
+				});
+			} else {
+				ss.rpc('admin.npcs.deleteNpc',id, function(err,res) {
+					if(err) {
+						console.log(err);
+					} else {
+						npc.fadeOut(function() {
+							this.remove();
+						});
+					}
+				});
+			}
+		}
 	}
+
 };

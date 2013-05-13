@@ -1,7 +1,8 @@
 module.exports.global = [{
-	id: '2569',
+	index: '2569',
 	name: 'HoneyBooBoo',
 	level: 0,
+	id: 0,
 	sprite: 0,
 	isHolding: true,
 	dialog: {
@@ -17,9 +18,10 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '4284',
+	index: '4284',
 	name: 'Hoots',
 	level: 0,
+	id: 1,
 	sprite: 1,
 	isHolding: true,
 	dialog: {
@@ -36,9 +38,10 @@ module.exports.global = [{
 		answer: 'B) downstream-oriented service'
 	}
 }, {
-	id: '4693',
+	index: '4693',
 	name: 'Squirls',
 	level: 0,
+	id: 2,
 	sprite: 2,
 	isHolding: true,
 	dialog: {
@@ -54,9 +57,10 @@ module.exports.global = [{
 		requiredLength: 20
 	}
 }, {
-	id: '6265',
+	index: '6265',
 	name: 'Rabby',
 	level: 0,
+	id: 3,
 	sprite: 3,
 	isHolding: true,
 	dialog: {
@@ -72,9 +76,10 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '8542',
+	index: '8542',
 	name: 'Foxy',
 	level: 0,
+	id: 4,
 	sprite: 4,
 	isHolding: true,
 	dialog: {
@@ -90,18 +95,20 @@ module.exports.global = [{
 		answer: 'yes'
 	}
 }, {
-	id: '8956',
+	index: '8956',
 	name: 'Turp',
 	level: 0,
+	id: 5,
 	sprite: 5,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['My Great Grandturpy used to always say "Unless you try to do somethingbeyond what you have already mastered, you will never grow."  I\'m not sure if he meant that literally or figuratively. It also sounds like something Emerson once said, but what do I know; I\'m just a turnip.','Did you know you can chat with other players? Click the speech bubble icon in the display to enter chat mode!', 'future']
 	}
 }, {
-	id: '2176',
+	index: '2176',
 	name: 'RoggaBogga',
 	level: 0,
+	id: 6,
 	sprite: 6,
 	isHolding: true,
 	dialog: {
@@ -117,9 +124,10 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '1608',
+	index: '1608',
 	name: 'Goku',
 	level: 0,
+	id: 7,
 	sprite: 7,
 	isHolding: true,
 	dialog: {
@@ -135,12 +143,13 @@ module.exports.global = [{
 		requiredLength: 150
 	}
 }, {
-	id: '4876',
+	index: '4876',
 	name: 'Quix',
 	level: 0,
+	id: 8,
 	sprite: 8,
 	isHolding: true,
-	dependsOn: [6265],
+	dependsOn: [3],
 	dialog: {
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
 	},
@@ -154,18 +163,20 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '6707',
+	index: '6707',
 	name: 'Bunzo',
 	level: 0,
+	id: 9,
 	sprite: 9,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Is there potential for any aspect of your community work to connect to your academic coursework? Is there a political issue you are unsure about and would like to learn more?', 'How many seeds do you have? Where are you going to plant them? The world is your canvas!', 'future']
 	}
 }, {
-	id: '9536',
+	index: '9536',
 	name: 'Malo',
 	level: 0,
+	id: 10,
 	sprite: 10,
 	isHolding: true,
 	dialog: {
@@ -182,9 +193,10 @@ module.exports.global = [{
 		answer: 'D) A daughter of immigrants, bilingual upbringing, latina female'
 	}
 }, {
-	id: '8986',
+	index: '8986',
 	name: 'Jawa',
 	level: 0,
+	id: 11,
 	sprite: 11,
 	isHolding: true,
 	dialog: {
@@ -200,27 +212,30 @@ module.exports.global = [{
 		requiredLength: 40
 	}
 }, {
-	id: '8427',
+	index: '8427',
 	name: 'Fork',
 	level: 0,
+	id: 12,
 	sprite: 12,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Would you like to volunteer in the community as a means of deciding if a certain career is right for you? Are you hoping to find your passion?','You don\'t need to make your answers public, but if you do, other players can give you extra seeds.','It\'s so sad the color was taken away, but I can’t shake the feeling that this has all happened before. It\'s almost like something is stealing it...?','future']
 	}
 }, {
-	id: '1547',
+	index: '1547',
 	name: 'Awaa',
 	level: 1,
+	id: 13,
 	sprite: 13,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Did you learn something you didn\'t already know from someone in our community? Everyone has unique knowledge to offer! Maybe not Roga...but most!', 'Have you seen any rainbows? I wish we still had rainbows. I remember when the rainbows went away before. I miss them.', 'I think you would be better off talking to someone from the Forest first.']
 	}
 }, {
-	id: '1517',
+	index: '1517',
 	name: 'Hampton',
 	level: 1,
+	id: 14,
 	sprite: 14,
 	isHolding: true,
 	dialog: {
@@ -236,9 +251,10 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '352',
+	index: '352',
 	name: 'Frampton',
 	level: 1,
+	id: 15,
 	sprite: 15,
 	isHolding: true,
 	dialog: {
@@ -254,9 +270,10 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '3335',
+	index: '3335',
 	name: 'Nosezo',
 	level: 1,
+	id: 16,
 	sprite: 16,
 	isHolding: true,
 	dialog: {
@@ -272,18 +289,20 @@ module.exports.global = [{
 		answer: 'true'
 	}
 }, {
-	id: '4338',
+	index: '4338',
 	name: 'Siri',
 	level: 1,
+	id: 17,
 	sprite: 17,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Remember, our community has so many assets  that will be beneficial to making it a better place. We might need help, but let us be involved!', 'People keep confusing me with another Siri. Apparently she is pretty and is super smart! Maybe she is related to that other weird robot I\'ve seen lurking around?','If I were you, I\'d talk to the Botanist. But don\'t ask him about the robot. He gets touchy for some reason.']
 	}
 }, {
-	id: '6177',
+	index: '6177',
 	name: 'Chiklet',
 	level: 1,
+	id: 18,
 	sprite: 18,
 	isHolding: true,
 	dialog: {
@@ -299,18 +318,20 @@ module.exports.global = [{
 		answer: 'false'
 	}
 }, {
-	id: '7082',
+	index: '7082',
 	name: 'Hummer',
 	level: 1,
+	id: 19,
 	sprite: 19,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['I wonder why the color keeps disappearing? It happens again and again!', 'Aunty Hums used to tell me stories about the great color thief. How it stole all of the life from our community.Then a hero helped rally the community together to get it back. A real hero is someone who inspires others. Thats what my Hums used to say at least!', 'Did you help everyone in the forest already? I know they got hit pretty hard by the grayness.']
 	}
 }, {
-	id: '7052',
+	index: '7052',
 	name: 'Dewdrop',
 	level: 1,
+	id: 20,
 	sprite: 20,
 	isHolding: true,
 	dialog: {
@@ -326,9 +347,10 @@ module.exports.global = [{
 		answer: 'true'
 	}
 }, {
-	id: '9069',
+	index: '9069',
 	name: 'Zeebo',
 	level: 1,
+	id: 21,
 	sprite: 21,
 	isHolding: true,
 	dialog: {
@@ -344,9 +366,10 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '6773',
+	index: '6773',
 	name: 'BeepBoop',
 	level: 1,
+	id: 22,
 	sprite: 22,
 	isHolding: true,
 	dialog: {
@@ -362,18 +385,20 @@ module.exports.global = [{
 		answer: 'true'
 	}
 }, {
-	id: '8898',
+	index: '8898',
 	name: 'Beholder',
 	level: 1,
+	id: 23,
 	sprite: 23,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Got any seeds? You should plant them! We miss the magic of color.', 'Wanna see a magic trick? BEHOLD! I WILL PULL A RABBIT OUT OF MY FACE...err..that doesn\'t sound right...', 'How will I ever put on my magicshow if no one will be able to see all the pretty colors?']
 	}
 }, {
-	id: '9170',
+	index: '9170',
 	name: 'Blooper',
 	level: 1,
+	id: 24,
 	sprite: 24,
 	isHolding: true,
 	dialog: {
@@ -390,9 +415,10 @@ module.exports.global = [{
 		answer: 'B) Needs should be identified by assets within the community'
 	}
 }, {
-	id: '2649',
+	index: '2649',
 	name: 'Dunks',
 	level: 1,
+	id: 25,
 	sprite: 13,
 	isHolding: true,
 	dialog: {
@@ -408,9 +434,10 @@ module.exports.global = [{
 		requiredLength: 30
 	}
 }, {
-	id: '3075',
+	index: '3075',
 	name: 'Isosceles',
 	level: 1,
+	id: 26,
 	sprite: 25,
 	isHolding: true,
 	dialog: {
@@ -426,18 +453,20 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '5063',
+	index: '5063',
 	name: 'Zork',
 	level: 1,
+	id: 27,
 	sprite: 25,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['This big open field is boring without all the colors. I guess I should be thankful I still have my mailbox and big house!','I love caves. I heard someone once say "It is by going down into the abyss that we recover the treasures of life. Where you stumble, there lies your treasure." Maybe this means treasure is always found in caves? Or maybe it just means to try new things outside of your comfort zone.', 'Did you know you can give out seeds to other players? Click "Seed It!" if you like their public answers.  Make your answers public and others can give you seeds, too.']
 	}
 }, {
-	id: '2803',
+	index: '2803',
 	name: 'Krampy',
 	level: 1,
+	id: 28,
 	sprite: 42,
 	isHolding: true,
 	dialog: {
@@ -454,9 +483,10 @@ module.exports.global = [{
 		answer: 'A) Somerville, Chinatown, and Medford'
 	}
 }, {
-	id: '3229',
+	index: '3229',
 	name: 'Goose',
 	level: 1,
+	id: 29,
 	sprite: 10,
 	isHolding: true,
 	dialog: {
@@ -472,27 +502,30 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '3373',
+	index: '3373',
 	name: 'Starbuck',
 	level: 1,
+	id: 30,
 	sprite: 34,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['I always think its neat when new residents come to live in Calliope. Because we are from all over the universe, Calliope has so many different langauges and cultures. Diversity keeps things interesting.','The town just isn\'t the sa me without all the vibrant color flowing from the storefronts. Worse, we still don\'t know WHY the color went away.','You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
 	}
 }, {
-	id: '4655',
+	index: '4655',
 	name: 'Apollo',
 	level: 1,
+	id: 31,
 	sprite: 4,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Remember to talk to everyone you see. You never know who will have some useful asset that could help!','I think a real hero is someone who helps people help themselves. As much as I like videogames, I wish the heroes in them weren\'t so full of themselves!','You can give seeds to other players by clicking their public responses after you answer a question. But you only have five seeds to give out each level, so use them wisely.']
 	}
 }, {
-	id: '5219',
+	index: '5219',
 	name: 'Toaster',
 	level: 1,
+	id: 32,
 	sprite: 10,
 	isHolding: true,
 	dialog: {
@@ -508,9 +541,10 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '5206',
+	index: '5206',
 	name: 'Blobby',
 	level: 1,
+	id: 33,
 	sprite: 46,
 	isHolding: true,
 	dialog: {
@@ -526,9 +560,10 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '17599',
+	index: '17599',
 	name: 'FryGuy',
 	level: 2,
+	id: 34,
 	sprite: 25,
 	isHolding: true,
 	dialog: {
@@ -544,9 +579,10 @@ module.exports.global = [{
 		requiredLength: 100
 	}
 }, {
-	id: '16297',
+	index: '16297',
 	name: 'ChickenBob',
 	level: 2,
+	id: 35,
 	sprite: 26,
 	isHolding: true,
 	dialog: {
@@ -562,18 +598,20 @@ module.exports.global = [{
 		requiredLength: 40
 	}
 }, {
-	id: '18552',
+	index: '18552',
 	name: 'Scallop',
 	level: 2,
+	id: 36,
 	sprite: 27,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Did you know there are wacky secrets hidden around town? You need to talk to us to find them!','One day I washed up on the shore and ChickenBob gave me a home on the ranch. There are some great folks living in this place! It\'s good to get to know them. I think thats good advice for all places!','A wise Lorax once said: "Unless someone like you cares a whole awful lot,Nothing is going to get better. It\'s not."']
 	}
 }, {
-	id: '14588',
+	index: '14588',
 	name: 'PenPen',
 	level: 2,
+	id: 37,
 	sprite: 28,
 	isHolding: true,
 	dialog: {
@@ -590,9 +628,10 @@ module.exports.global = [{
 		answer: 'E) All of These'
 	}
 }, {
-	id: '14464',
+	index: '14464',
 	name: 'Combover',
 	level: 2,
+	id: 38,
 	sprite: 29,
 	isHolding: true,
 	dialog: {
@@ -608,18 +647,20 @@ module.exports.global = [{
 		requiredLength: 2
 	}
 }, {
-	id: '15472',
+	index: '15472',
 	name: 'Funguy',
 	level: 2,
+	id: 39,
 	sprite: 30,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['I think I saw the robot headed over to the port! Did you see him there??','Its great that you came to Calliope to help us. Its a great responsibility. You know, like Spiderman! Great power is responsibility and its important. Something like that.','It would be better for you to visit the Forest or maybe the Town first.']
 	}
 }, {
-	id: '12760',
+	index: '12760',
 	name: 'Rapscallion',
 	level: 2,
+	id: 40,
 	sprite: 31,
 	isHolding: true,
 	dialog: {
@@ -635,9 +676,10 @@ module.exports.global = [{
 		requiredLength: 40
 	}
 }, {
-	id: '11752',
+	index: '11752',
 	name: 'Oriole',
 	level: 2,
+	id: 41,
 	sprite: 32,
 	isHolding: true,
 	dialog: {
@@ -653,9 +695,10 @@ module.exports.global = [{
 		answer: 'yes'
 	}
 }, {
-	id: '14706',
+	index: '14706',
 	name: 'Toad',
 	level: 2,
+	id: 42,
 	sprite: 33,
 	isHolding: true,
 	dialog: {
@@ -671,9 +714,10 @@ module.exports.global = [{
 		answer: 'true'
 	}
 }, {
-	id: '16547',
+	index: '16547',
 	name: 'Threepee',
 	level: 2,
+	id: 43,
 	sprite: 34,
 	isHolding: true,
 	dialog: {
@@ -689,18 +733,20 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '10891',
+	index: '10891',
 	name: 'Beanie',
 	level: 2,
+	id: 44,
 	sprite: 35,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['Don\'t forget the true defintion of humility: the state or quality of being humble. Its important!','Welcome to the Ranch! If you see the robot, shoo him away. We found him sucking up some color yesterday!','I just saw that robot fly into the Forest! Or maybe he went into the town?']
 	}
 }, {
-	id: '10780',
+	index: '10780',
 	name: 'Vogon',
 	level: 2,
+	id: 45,
 	sprite: 36,
 	isHolding: true,
 	dialog: {
@@ -716,18 +762,20 @@ module.exports.global = [{
 		requiredLength: 50
 	}
 }, {
-	id: '17959',
+	index: '17959',
 	name: 'Quinto',
 	level: 3,
+	id: 46,
 	sprite: 37,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['1','I see you\'ve come! The time is here to reflect on what you\'ve done..','You still have a long way to go. Come back later and I will teach the ways of social SCIENCE!']
 	}
 }, {
-	id: '17525',
+	index: '17525',
 	name: 'Archibald',
 	level: 3,
+	id: 47,
 	sprite: 38,
 	isHolding: true,
 	dialog: {
@@ -744,18 +792,20 @@ module.exports.global = [{
 		answer: 'D) Before you even begin'
 	}
 }, {
-	id: '12708',
+	index: '12708',
 	name: 'Esther',
 	level: 3,
+	id: 48,
 	sprite: 39,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['1','Everyone always asks why I wear my coat in warm weather. I have to tell them it\'s my fur and I can\'t take it off! No one understands me...','You can view the puzzle you\'re trying to solve at any time by clicking the toolbox to launch your inventory... but you knew that.']
 	}
 }, {
-	id: '13696',
+	index: '13696',
 	name: 'Brumble',
 	level: 3,
+	id: 49,
 	sprite: 40,
 	isHolding: true,
 	dialog: {
@@ -771,18 +821,20 @@ module.exports.global = [{
 		requiredLength: 25
 	}
 }, {
-	id: '15668',
+	index: '15668',
 	name: 'Mageline',
 	level: 3,
+	id: 50,
 	sprite: 41,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['1','I wonder who could have built that robot? You know, the Botanist builds things sometimes. He made those special seeds!','I wonder who could have built that robot?']
 	}
 }, {
-	id: '12249',
+	index: '12249',
 	name: 'Banksi',
 	level: 3,
+	id: 51,
 	sprite: 42,
 	isHolding: true,
 	dialog: {
@@ -798,9 +850,10 @@ module.exports.global = [{
 		requiredLength: 30
 	}
 }, {
-	id: '13246',
+	index: '13246',
 	name: 'Grebulon',
 	level: 3,
+	id: 52,
 	sprite: 43,
 	isHolding: true,
 	dialog: {
@@ -816,9 +869,10 @@ module.exports.global = [{
 		requiredLength: 30
 	}
 }, {
-	id: '14380',
+	index: '14380',
 	name: 'Prefect',
 	level: 3,
+	id: 53,
 	sprite: 44,
 	isHolding: true,
 	dialog: {
@@ -834,27 +888,30 @@ module.exports.global = [{
 		requiredLength: 5
 	}
 }, {
-	id: '15656',
+	index: '15656',
 	name: 'Ford',
 	level: 3,
+	id: 54,
 	sprite: 45,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['1','I saw the robot a little while ago. It had this funny look... like it\'s planning something BIG.','Do you make your answers public? You know you can get way moe seeds that way!']
 	}
 }, {
-	id: '16929',
+	index: '16929',
 	name: 'Tali',
 	level: 3,
+	id: 55,
 	sprite: 46,
 	isHolding: false,
 	dialog: {
 		smalltalk: ['1','The Botanist is great and everything, but he\'s been acting kind of nervous ever since that robot showed up!','You\'re new here! We\'ll help you out later, but first you need to solve more of the enigma!']
 	}
 }, {
-	id: '16920',
+	index: '16920',
 	name: 'Boomer',
 	level: 3,
+	id: 56,
 	sprite: 47,
 	isHolding: true,
 	dialog: {
@@ -870,12 +927,13 @@ module.exports.global = [{
 		requiredLength: 15
 	}
 }, {
-	id: '15638',
+	index: '15638',
 	name: 'Goober',
 	level: 3,
+	id: 57,
 	sprite: 48,
 	isHolding: true,
-	dependsOn: [13696],
+	dependsOn: [49],
 	dialog: {
 		prompts: ['I thought these things were Raisinets, but they\'re really seeds! Want some? Then answer my question.', '2', 'It\'s peanutbutter jelly time!']
 	},
@@ -889,9 +947,10 @@ module.exports.global = [{
 		requiredLength: 20
 	}
 }, {
-	id: '16912',
+	index: '16912',
 	name: 'Crumb',
 	level: 3,
+	id: 58,
 	sprite: 49,
 	isHolding: true,
 	dialog: {
@@ -907,9 +966,10 @@ module.exports.global = [{
 		requiredLength: 10
 	}
 }, {
-	id: '15626',
+	index: '15626',
 	name: 'Derp',
 	level: 3,
+	id: 59,
 	sprite: 50,
 	isHolding: true,
 	dialog: {
@@ -925,9 +985,10 @@ module.exports.global = [{
 		answer: 'true'
 	}
 }, {
-	id: '13360',
+	index: '13360',
 	name: 'Overcoat',
 	level: 3,
+	id: 60,
 	sprite: 51,
 	isHolding: true,
 	dialog: {
@@ -944,9 +1005,10 @@ module.exports.global = [{
 		answer: 'D) All of these'
 	}
 }, {
-	id: '10797',
+	index: '10797',
 	name: 'Smalls',
 	level: 3,
+	id: 61,
 	sprite: 52,
 	isHolding: false,
 	dialog: {

@@ -40,8 +40,8 @@ var self = module.exports = {
 				if(result) {
 					//modify results for data output
 					for(var r = 0; r < result.length; r++) {
-						var x = result[r].id % 142;
-						var y = Math.floor(result[r].id / 142);
+						var x = result[r].index % 142;
+						var y = Math.floor(result[r].index / 142);
 						result[r].x = x;
 						result[r].y = y;
 					}

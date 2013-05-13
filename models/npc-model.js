@@ -2,6 +2,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var npcSchema = new Schema({
 		id: Number,
+		index: Number,
 		name: String,
 		level: Number,
 		sprite: Number,

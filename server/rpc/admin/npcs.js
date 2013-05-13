@@ -33,22 +33,34 @@ exports.actions = function(req, res, ss) {
 						res('error');
 					} else if(result) {
 						var npc = result[0];
-						if(npc.isHolding) {
-							npc.dialog.prompts = info.dialog;
-							npc.resource.question = info.question;
-							npc.resource.tagline = info.tagline;
-							npc.name = info.name;
-							npc.sprite = info.sprite;
+						//general
+						npc.name = info.name;
+						npc.sprite = info.sprite;
+						npc.isHolding = info.isHolding;
+						npc.level = info.level;
+						npc.index = info.y * 142 + info.x;
+						//resource
+						if(info.isHolding) {
+							npc.resource.url = info.resource.url;
+							npc.resource.questionType = info.resource.questionType;
+							npc.resource.question = info.resource.question;
+							npc.resource.tagline = info.resource.tagline;
+							npc.dialog.prompts = info.dialog.prompts;
+
 							//not open
-							if(npc.answer) {
-								npc.resource.answer = info.answer;
-								npc.resource.possibleAnswers = info.possibleAnswers;
+							if(info.questionType === 'open') {
+								npc.resource.requiredLength = info.resource.requiredLength;
 							} else {
-								npc.resource.requiredLength = info.requiredLength;
+								npc.resource.answer = info.resource.answer;
+								if(info.questionType === 'multiple') {
+									npc.resource.possibleAnswers = info.possibleAnswers;
+								}
 							}
 						} else {
-							npc.dialog.smalltalk = info.dialog;
+							//smalltalk
+							npc.dialog.smalltalk = info.dialog.smalltalk;
 						}
+
 						npc.save(function(err,okay) {
 							if(err) {
 								res('error');
@@ -58,6 +70,14 @@ exports.actions = function(req, res, ss) {
 						});
 					}
 			});
+		},
+
+		deleteNpc: function(id) {
+			npcModel
+				.where('id').equals(id)
+				.remove(function(err,result) {
+					res(err,result);
+				});
 		}
 	};
 };

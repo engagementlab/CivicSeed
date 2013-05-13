@@ -71,6 +71,7 @@ $game.$npc = {
 
 			name: npc.name,
 			id: npc.id,
+			index: npc.index,
 			dialog: npc.dialog,
 			dependsOn: npc.dependsOn,
 			level: npc.level,
@@ -84,16 +85,16 @@ $game.$npc = {
 
 
 			info: {
-				x: npc.id % $game.TOTAL_WIDTH,
-				y: Math.floor(npc.id / $game.TOTAL_WIDTH),
+				x: npc.index % $game.TOTAL_WIDTH,
+				y: Math.floor(npc.index / $game.TOTAL_WIDTH),
 				spriteY: npc.sprite * 64
 			},
 
 			renderInfo: {
-				prevX: (npc.id % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-				prevY: (Math.floor(npc.id / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
-				curX: (npc.id % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-				curY: (Math.floor(npc.id / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+				prevX: (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+				prevY: (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+				curX: (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+				curY: (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
 				srcX: 0,
 				srcY: 0,
 				kind: 'npc'

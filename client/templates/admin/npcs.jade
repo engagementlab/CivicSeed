@@ -15,35 +15,82 @@
 							textarea(data-area='name') #{npc.name}
 							<span class="regular">level:</span>
 							textarea.areaNumber(data-area='level') #{npc.level + 1}
-							<span class='saveChanges' data-holding=#{npc.isHolding} data-id=#{npc.id} data-questionType=#{npc.resource.questionType}>Save</span>
 							<span class="regular">location:</span>
 							textarea.areaNumber(data-area='x') #{npc.x}
 							textarea.areaNumber(data-area='y') #{npc.y}
 							<span class="regular">holding: </span>
 							if (npc.isHolding)
-								input(name='isHolding', value=#{npc.isHolding}, type='checkbox',checked)
+								input(name='isHolding', value='isHolding', type='checkbox',checked)
 							else 
-								input(name='isHolding', value=#{npc.isHolding}, type='checkbox')
+								input(name='isHolding', value='isHolding', type='checkbox')
 					if (npc.isHolding)
 						.resource
-							p.viewResource(data-url='/articles/level' + (npc.level + 1) + '/' + npc.id + '.html') view resource
+							p.viewResource(data-url='/articles/' + npc.resource.url) view resource
 							p.category --- Resource ---
 							p URL <span class='smallerFont'> case and space sensitive</span>
 							textarea.url(data-area='url') #{npc.resource.url}
-							p Question
+							p.questionType
+								|Question
+								if (npc.resource.questionType === 'open')
+									input(name=('radio' + npc.id) , value='open', type='radio', checked)
+								else
+									input(name=('radio' + npc.id) , value='open', type='radio')
+								<span> open</span>
+								if (npc.resource.questionType === 'truefalse')
+									input(name=('radio' + npc.id) , value='truefalse', type='radio', checked)
+								else
+									input(name=('radio' + npc.id) , value='truefalse', type='radio')
+								<span> true/false</span>
+								if (npc.resource.questionType === 'yesno')
+									input(name=('radio' + npc.id) , value='yesno', type='radio', checked)
+								else
+									input(name=('radio' + npc.id) , value='yesno', type='radio')
+								<span> yes/no</span>
+								if (npc.resource.questionType === 'multiple')
+									input(name=('radio' + npc.id) , value='multiple', type='radio', checked)
+								else
+									input(name=('radio' + npc.id) , value='multiple', type='radio')
+								<span> multiple choice</span>
 							textarea.question(data-area='question') #{npc.resource.question}
-
 							if (npc.resource.questionType === 'open')
-								p Required Length
-								textarea.required(data-area='requiredLength', maxlength='3') #{npc.resource.requiredLength}
+								.requiredDiv.questionOptions
+									p Suggested Length
+									textarea.required(data-area='requiredLength', maxlength='3') #{npc.resource.requiredLength}
 							else 
-								p Possible Answers
-								each possible, p in npc.resource.possibleAnswers
-									textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[p]}
-								p Answer
-								textarea.answer(data-area='answer') #{npc.resource.answer}
+								.requiredDiv.questionOptions(style="display: none;")
+									p Suggested Length
+									textarea.required(data-area='requiredLength', maxlength='3') #{npc.resource.requiredLength}
+							if (npc.resource.questionType === 'multiple')
+								.possibleDiv.questionOptions
+									p Choices
+									each choice, c in npc.resource.possibleAnswers
+										textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[c]}
+							else 
+								.possibleDiv.questionOptions(style="display:none;")
+									p Choices
+									textarea.possible(data-area='possibleAnswers')
+									textarea.possible(data-area='possibleAnswers')
+									textarea.possible(data-area='possibleAnswers')	
+									textarea.possible(data-area='possibleAnswers')
+							if (npc.resource.questionType !== 'open')
+								.answerDiv.questionOptions
+									p Answer
+									textarea.answer(data-area='answer') #{npc.resource.answer}
+							else
+								.answerDiv.questionOptions(style="display:none;")
+									p Answer
+									textarea.answer(data-area='answer')
 							p Tagline
 							textarea(data-area='tagline', maxlength='24') #{npc.resource.tagline}
+							p Depends on NPC
+							if (npc.resource.dependsOn)
+								textarea.required(data-area='dependsOn', maxlength='4') #{npc.resource.dependsOn[0]}
+							else 
+								textarea.required(data-area='dependsOn', maxlength='4')
+							p Feedback Correct
+							textarea.question(data-area='feedbackRight') #{npc.resource.feedbackRight}
+							p Feedback Wrong
+							textarea.question(data-area='feedbackWrong') #{npc.resource.feedbackWrong}
 						.prompts
 							p.category --- Prompts ---
 							p First Time
@@ -52,7 +99,53 @@
 							textarea(data-area='prompt', data-index='1') #{npc.dialog.prompts[1]}
 							p Returning After Completed
 							textarea(data-area='prompt', data-index='2') #{npc.dialog.prompts[2]}
+						.smalltalk(style="display:none;")
+							p.category --- Dialog ---
+							p Past
+							textarea(data-area='smalltalk', data-index='0')
+							p Present
+							textarea(data-area='smalltalk', data-index='1')
+							p Future
+							textarea(data-area='smalltalk', data-index='2')
 					else
+						.resource(style="display:none;")
+							p.viewResource(data-url='/articles/test.html') view resource
+							p.category --- Resource ---
+							p URL <span class='smallerFont'> case and space sensitive</span>
+							textarea.url(data-area='url')
+							p.questionType
+								|Question
+								input(name=('radio' + npc.id) , value='open', type='radio', checked)
+								<span> open</span>
+								input(name=('radio' + npc.id) , value='truefalse', type='radio')
+								<span> true/false</span>
+								input(name=('radio' + npc.id) , value='yesno', type='radio')
+								<span> yes/no</span>
+								input(name=('radio' + npc.id) , value='multiple', type='radio')
+								<span> multiple choice</span>
+							textarea.question(data-area='question')
+							.requiredDiv.questionOptions
+								p Suggested Length
+								textarea.required(data-area='requiredLength', maxlength='3') #{npc.resource.requiredLength}
+							.possibleDiv.questionOptions(style="display:none;")
+								p Choices
+								textarea.possible(data-area='possibleAnswers')
+								textarea.possible(data-area='possibleAnswers')
+								textarea.possible(data-area='possibleAnswers')	
+								textarea.possible(data-area='possibleAnswers')
+							.answerDiv.questionOptions(style="display:none;")
+								p Answer
+								textarea.answer(data-area='answer')
+							p Tagline
+							textarea(data-area='tagline', maxlength='24')
+						.prompts(style="display:none;")
+							p.category --- Prompts ---
+							p First Time
+							textarea(data-area='prompt', data-index='0')
+							p Returning After Incorrect
+							textarea(data-area='prompt', data-index='1')
+							p Returning After Completed
+							textarea(data-area='prompt', data-index='2')
 						.smalltalk
 							p.category --- Dialog ---
 							p Past
@@ -61,5 +154,91 @@
 							textarea(data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
 							p Future
 							textarea(data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
+					.options
+						p
+							<span class='saveChanges' data-id=#{npc.id}>save</span>
+							<span class='deleteNpc' data-id=#{npc.id}>delete</span>						 
+	.row 
+		.span12
+			p.addNpc Add NPC
 .buffer
 .article
+.npcTemplate(style="display:none;")
+	.npc(class='level0 npc-1', data-sprite='0')
+		.row
+			.span12
+				.information
+					.bg
+						p
+							i.icon-circle-arrow-up.spriteUp
+							i.icon-circle-arrow-down.spriteDown
+					p.npcName(class='level0name') 
+						textarea(data-area='name') Nombre
+						<span class="regular">level:</span>
+						textarea.areaNumber(data-area='level') 1
+						<span class="regular">location:</span>
+						textarea.areaNumber(data-area='x') 23
+						textarea.areaNumber(data-area='y') 23
+						<span class="regular">holding: </span>
+						input(name='isHolding', value='isHolding', type='checkbox',checked)
+				.resource
+					p.viewResource(data-url='/articles/test.html') view resource
+					p.category --- Resource ---
+					p URL <span class='smallerFont'> case and space sensitive</span>
+					textarea.url(data-area='url') test.html
+					p.questionType
+						|Question
+						input(name=('radioX') , value='open', type='radio', checked)
+						<span> open</span>
+						input(name=('radioX') , value='truefalse', type='radio')
+						<span> true/false</span>
+						input(name=('radioX') , value='yesno', type='radio')
+						<span> yes/no</span>
+						input(name=('radioX') , value='multiple', type='radio')
+						<span> multiple choice</span>
+					textarea.question(data-area='question') What is the answer?
+					.requiredDiv.questionOptions
+						p Suggested Length
+						textarea.required(data-area='requiredLength', maxlength='3') 50
+					.possibleDiv.questionOptions(style="display:none;")
+						p Choices
+						textarea.possible(data-area='possibleAnswers')
+						textarea.possible(data-area='possibleAnswers')
+						textarea.possible(data-area='possibleAnswers')	
+						textarea.possible(data-area='possibleAnswers')
+					.answerDiv.questionOptions(style="display:none;")
+						p Answer
+						textarea.answer(data-area='answer')
+					p Tagline
+					textarea(data-area='tagline', maxlength='24') I am a tagline
+					p Depends on NPC
+					textarea.required(data-area='dependsOn', maxlength='4')
+					p Feedback Correct
+					textarea.question(data-area='feedbackRight') Nice job.
+					p Feedback Wrong
+					textarea.question(data-area='feedbackWrong') Not quite.
+				.prompts
+					p.category --- Prompts ---
+					p First Time
+					textarea(data-area='prompt', data-index='0') Answer my question?
+					p Returning After Incorrect
+					textarea(data-area='prompt', data-index='1') Try again.
+					p Returning After Completed
+					textarea(data-area='prompt', data-index='2') Welcome back.
+				.smalltalk(style="display:none;")
+					p.category --- Dialog ---
+					p Past
+					textarea(data-area='smalltalk', data-index='0')
+					p Present
+					textarea(data-area='smalltalk', data-index='1')
+					p Future
+					textarea(data-area='smalltalk', data-index='2')
+				.options
+					p
+						<span class='saveChanges' data-id='-1'>save</span>
+						<span class='deleteNpc' data-id='-1'>delete</span>						 
+.levelFilter
+	p.current 1
+	p.current 2
+	p.current 3
+	p.current 4
