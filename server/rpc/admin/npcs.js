@@ -72,6 +72,13 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
+		addNpc: function(info) {
+			npcModel
+				.create(info, function(err,result) {
+					res(err,result);
+				});
+		},
+
 		deleteNpc: function(id) {
 			npcModel
 				.where('id').equals(id)

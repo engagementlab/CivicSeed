@@ -146,7 +146,7 @@ var self = module.exports = {
 	},
 
 	saveChanges: function(id) {
-		var npc = $('.npc' + id);
+		var npc = $('.npcs').find('.npc' + id);
 			informationAreas = npc.find('.information textarea'),
 			resourceAreas = npc.find('.resource textarea'),
 			promptAreas = npc.find('.prompts textarea'),
@@ -174,12 +174,12 @@ var self = module.exports = {
 				},
 				level: null,
 				sprite: sprite,
-				x: null,
-				y: null,
+				index: null,
 				name: null
 			};
 
 		//update information
+		var x,y;
 		informationAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
 				val = this.value;
@@ -189,11 +189,13 @@ var self = module.exports = {
 			} else if(area === 'level') {
 				updates.level = parseInt(val, 10) - 1;
 			} else if(area === 'x') {
-				updates.x = parseInt(val, 10);
+				x = parseInt(val, 10);
 			} else if(area === 'y') {
-				updates.y = parseInt(val, 10);
+				y = parseInt(val, 10);
 			}
 		});
+
+		updates.index = y * 142 + x;
 
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
@@ -230,6 +232,7 @@ var self = module.exports = {
 		});
 
 		smalltalkAreas.each(function(i) {
+
 			var area = $(this).attr('data-area'),
 				val = this.value;
 
@@ -239,26 +242,42 @@ var self = module.exports = {
 		});
 
 		//this means it is a new one, do not save, but add new in db
-		if(id < 0)
-
-		ss.rpc('admin.npcs.updateInformation', updates, function(err) {
-			if(err) {
-				console.log(err);
-			} else {
-				var saveButton = npc.find('.saveChanges');
-				saveButton.addClass('justSaved');
-				setTimeout(function(){
-					saveButton.removeClass('justSaved');
-				}, 1000);
-			}
-		});
+		// if(id < 0) {
+		// 	//update information on client
+		// 	//figure out id
+		// 	//TODO: this should be dynamic
+		// 	updates.id = 99;
+		// 	ss.rpc('admin.npcs.addNpc', updates, function(err) {
+		// 		if(err) {
+		// 			console.log(err);
+		// 		} else {
+		// 			var saveButton = npc.find('.saveChanges');
+		// 			saveButton.addClass('justSaved');
+		// 			setTimeout(function(){
+		// 				saveButton.removeClass('justSaved');
+		// 			}, 1000);
+		// 		}
+		// 	});
+		// } else {
+		// 	ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+		// 		if(err) {
+		// 			console.log(err);
+		// 		} else {
+		// 			var saveButton = npc.find('.saveChanges');
+		// 			saveButton.addClass('justSaved');
+		// 			setTimeout(function(){
+		// 				saveButton.removeClass('justSaved');
+		// 			}, 1000);
+		// 		}
+		// 	});
+		// }
 	},
 
 	deleteNpc: function(id) {
 		var confirm = prompt('please type "delete" to permanently remove the npc.');
 		if(confirm === 'delete') {
 			var npc = $('.npc' + id);
-			console.log(npc);
+
 			//this means it has never been saved, delete it from client
 			if(id < 0) {
 				npc.fadeOut(function() {
