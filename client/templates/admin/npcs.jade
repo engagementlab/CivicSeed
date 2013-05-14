@@ -11,7 +11,7 @@
 							p
 								i.icon-circle-arrow-up.spriteUp
 								i.icon-circle-arrow-down.spriteDown
-						p.npcName(class='level' + npc.level+'name') 
+						p.npcName
 							textarea(data-area='name') #{npc.name}
 							<span class="regular">level:</span>
 							textarea.areaNumber(data-area='level') #{npc.level + 1}
@@ -25,7 +25,7 @@
 								input(name='isHolding', value='isHolding', type='checkbox')
 					if (npc.isHolding)
 						.resource
-							p.viewResource(data-url='/articles/' + npc.resource.url) view resource
+							p.viewResource view resource
 							p.category --- Resource ---
 							p URL <span class='smallerFont'> case and space sensitive</span>
 							textarea.url(data-area='url') #{npc.resource.url}
@@ -94,19 +94,19 @@
 						.prompts
 							p.category --- Prompts ---
 							p First Time
-							textarea(data-area='prompt', data-index='0') #{npc.dialog.prompts[0]}
+							textarea(data-area='prompt') #{npc.dialog.prompts[0]}
 							p Returning After Incorrect
-							textarea(data-area='prompt', data-index='1') #{npc.dialog.prompts[1]}
+							textarea(data-area='prompt') #{npc.dialog.prompts[1]}
 							p Returning After Completed
-							textarea(data-area='prompt', data-index='2') #{npc.dialog.prompts[2]}
+							textarea(data-area='prompt') #{npc.dialog.prompts[2]}
 						.smalltalk(style="display:none;")
 							p.category --- Dialog ---
 							p Past
-							textarea(data-area='smalltalk', data-index='0')
+							textarea(data-area='smalltalk')
 							p Present
-							textarea(data-area='smalltalk', data-index='1')
+							textarea(data-area='smalltalk')
 							p Future
-							textarea(data-area='smalltalk', data-index='2')
+							textarea(data-area='smalltalk')
 					else
 						.resource(style="display:none;")
 							p.viewResource(data-url='/articles/test.html') view resource
@@ -158,7 +158,7 @@
 						p
 							<span class='saveChanges' data-id=#{npc.id}>save</span>
 							<span class='deleteNpc' data-id=#{npc.id}>delete</span>						 
-	.row 
+	.row.addDiv
 		.span12
 			p.addNpc Add NPC
 .buffer
@@ -172,7 +172,7 @@
 						p
 							i.icon-circle-arrow-up.spriteUp
 							i.icon-circle-arrow-down.spriteDown
-					p.npcName(class='level0name') 
+					p.npcName 
 						textarea(data-area='name') Nombre
 						<span class="regular">level:</span>
 						textarea.areaNumber(data-area='level') 1
@@ -185,7 +185,7 @@
 					p.viewResource(data-url='/articles/test.html') view resource
 					p.category --- Resource ---
 					p URL <span class='smallerFont'> case and space sensitive</span>
-					textarea.url(data-area='url') test.html
+					textarea.url(data-area='url') test
 					p.questionType
 						|Question
 						input(name=('radioX') , value='open', type='radio', checked)
@@ -220,19 +220,19 @@
 				.prompts
 					p.category --- Prompts ---
 					p First Time
-					textarea(data-area='prompt', data-index='0') Answer my question?
+					textarea(data-area='prompt') Answer my question?
 					p Returning After Incorrect
-					textarea(data-area='prompt', data-index='1') Try again.
+					textarea(data-area='prompt') Try again.
 					p Returning After Completed
-					textarea(data-area='prompt', data-index='2') Welcome back.
+					textarea(data-area='prompt') Welcome back.
 				.smalltalk(style="display:none;")
 					p.category --- Dialog ---
 					p Past
-					textarea(data-area='smalltalk', data-index='0')
+					textarea(data-area='smalltalk')
 					p Present
-					textarea(data-area='smalltalk', data-index='1')
+					textarea(data-area='smalltalk')
 					p Future
-					textarea(data-area='smalltalk', data-index='2')
+					textarea(data-area='smalltalk')
 				.options
 					p
 						<span class='saveChanges' data-id='-1'>save</span>

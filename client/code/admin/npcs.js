@@ -65,7 +65,11 @@ var self = module.exports = {
 		});
 
 		$body.on('click', '.viewResource', function() {
-			var url = $(this).attr('data-url');
+			//get the text from the url textarea
+			var parent = $(this).parentsUntil('.npc'),
+				urlArea = parent.find('.url'),
+				url = '/articles/' + $(urlArea).val() + '.html';
+
 			$('.article').empty().load(url,function() {
 				$('.buffer').show();
 				$(this).show();
@@ -75,7 +79,7 @@ var self = module.exports = {
 		$body.on('click', '.addNpc', function() {
 			//TODO: figure out id (inc +1 on prev highest)
 			var clone = $('.npcTemplate .npc').clone();
-			$(clone).insertBefore(this);
+			$(clone).insertBefore('.addDiv');
 		});
 
 		$body.on('click', '.article, .buffer', function() {
@@ -104,7 +108,7 @@ var self = module.exports = {
 				parents = $(this).parentsUntil('.npcs'),
 				npcParent = $(parents[parents.length-1]);
 			$(npcParent).find('.questionOptions').hide();
-			
+
 			if(questionType === 'open') {
 				$(npcParent).find('.requiredDiv').show();
 			} else {
@@ -242,35 +246,54 @@ var self = module.exports = {
 		});
 
 		//this means it is a new one, do not save, but add new in db
-		// if(id < 0) {
-		// 	//update information on client
-		// 	//figure out id
-		// 	//TODO: this should be dynamic
-		// 	updates.id = 99;
-		// 	ss.rpc('admin.npcs.addNpc', updates, function(err) {
-		// 		if(err) {
-		// 			console.log(err);
-		// 		} else {
-		// 			var saveButton = npc.find('.saveChanges');
-		// 			saveButton.addClass('justSaved');
-		// 			setTimeout(function(){
-		// 				saveButton.removeClass('justSaved');
-		// 			}, 1000);
-		// 		}
-		// 	});
-		// } else {
-		// 	ss.rpc('admin.npcs.updateInformation', updates, function(err) {
-		// 		if(err) {
-		// 			console.log(err);
-		// 		} else {
-		// 			var saveButton = npc.find('.saveChanges');
-		// 			saveButton.addClass('justSaved');
-		// 			setTimeout(function(){
-		// 				saveButton.removeClass('justSaved');
-		// 			}, 1000);
-		// 		}
-		// 	});
-		// }
+		if(id < 0) {
+			//figure out id
+			var max = 0;
+			$('.saveChanges').each(function(i){
+				var id = parseInt($(this).data('id'),10);
+				if(id > max) {
+					max = id;
+				}
+			}); 
+			max++;
+			updates.id = max;
+			//TODO: update information on client
+			//.npc: level, npc
+			var levelClass = 'level' + updates.level,
+				npcClass = 'npc' + updates.id;
+			npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+			//options buttons
+			var saveButton = npc.find('.saveChanges'),
+				deleteButton = npc.find('.deleteNpc');
+			$(saveButton).attr('data-id', updates.id);
+			$(deleteButton).attr('data-id', updates.id);
+			ss.rpc('admin.npcs.addNpc', updates, function(err) {
+				if(err) {
+					console.log(err);
+				} else {
+					var saveButton = npc.find('.saveChanges');
+					$(saveButton).addClass('justSaved');
+					setTimeout(function(){
+						$(saveButton).removeClass('justSaved');
+					}, 1000);
+				}
+			});
+		} else {
+			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+				if(err) {
+					console.log(err);
+				} else {
+					var saveButton = npc.find('.saveChanges');
+					var levelClass = 'level' + updates.level,
+						npcClass = 'npc' + updates.id;
+						npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+					$(saveButton).addClass('justSaved');
+					setTimeout(function(){
+						$(saveButton).removeClass('justSaved');
+					}, 1000);
+				}
+			});
+		}
 	},
 
 	deleteNpc: function(id) {
