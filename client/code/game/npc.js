@@ -13,6 +13,7 @@ $game.$npc = {
 	isResource: false,
 	isChat: false,
 
+	//pull all npc info from the DB
 	init: function(callback) {
 		//load all the npc info from the DB store it in an array
 		//where the index is the id of the npc / mapIndex
@@ -29,12 +30,14 @@ $game.$npc = {
 		});
 	},
 
+	//add an npc to the list
 	addNpc: function(npc) {
 		var newbie = $game.$npc.createNpc(npc);
 		newbie.getMaster();
 		_allNpcs[npc.id] = newbie;
 	},
 
+	//update all npcs (for movement and rendering)
 	update: function() {
 		//if is moving, move
 		$.each(_allNpcs, function(key, npc) {
@@ -42,6 +45,7 @@ $game.$npc = {
 		});
 	},
 
+	//clear all npcs to draw fresh
 	clear: function() {
 		//if is moving, move
 		$.each(_allNpcs, function(key, npc) {
@@ -49,6 +53,7 @@ $game.$npc = {
 		});
 	},
 
+	//get render info for all npcs to draw them
 	getRenderInfo: function() {
 		var all = [];
 		$.each(_allNpcs, function(key, npc) {
@@ -60,11 +65,13 @@ $game.$npc = {
 		return all;
 	},
 
+	//get a specific name of npc
 	getName: function(id) {
 		var stringId = String(id);
 		return _allNpcs[stringId].name;
 	},
 
+	//create an npc with all its data bound to it
 	createNpc: function(npc) {
 
 		var npcObject = {
@@ -100,7 +107,7 @@ $game.$npc = {
 				kind: 'npc'
 			},
 
-
+			//update the npc's rendering
 			update: function() {
 
 				if(!$game.inTransit) {
@@ -109,9 +116,9 @@ $game.$npc = {
 				else if($game.inTransit) {
 					npcObject.getMaster();
 				}
-
 			},
 
+			//figure out if it is on screen or not
 			getMaster: function() {
 				var loc = $game.$map.masterToLocal(npcObject.info.x, npcObject.info.y);
 				if(loc) {
@@ -132,6 +139,7 @@ $game.$npc = {
 				}
 			},
 
+			//advance the idle cycle for animation
 			idle: function() {
 				npcObject.counter += 1;
 
@@ -155,14 +163,14 @@ $game.$npc = {
 					npcObject.renderInfo.srcX = 96;
 					npcObject.renderInfo.srcY = npcObject.info.spriteY;
 				}
-
 			},
 
-
+			//clear from the screen
 			clear: function() {
 				$game.$renderer.clearCharacter(npcObject.renderInfo);
 			},
 
+			//get the render information to draw it
 			getRenderInfo: function() {
 				if(npcObject.onScreen) {
 					return npcObject.renderInfo;
@@ -171,14 +179,13 @@ $game.$npc = {
 					return false;
 				}
 			}
-
 		};
 
 		return npcObject;
 	},
 
+	//hide an npcs chat bubble
 	hideChat: function() {
-		
 		clearTimeout($game.$npc.hideTimer);
 		$('.speechBubble').fadeOut(function() {
 			$game.$npc.isChat = false;
@@ -189,6 +196,7 @@ $game.$npc = {
 		});
 	},
 
+	//show npc info, decide to show chat bubble or resource
 	show: function() {
 		//if there is no other stuff on screen, then show dialog
 		if($game.$player.firstTime) {
@@ -220,6 +228,7 @@ $game.$npc = {
 		}
 	},
 
+	//find out if an npc is available or not
 	npcLocked: function() {
 		if(_curNpc.dependsOn.length > 0) {
 			for(var d = 0; d < _curNpc.dependsOn.length; d++) {
@@ -235,6 +244,7 @@ $game.$npc = {
 			return false;
 		}
 	},
+
 	//choose prompt based on PLAYERs memory of interaction
 	//there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
 	showPrompt: function() {
@@ -261,6 +271,7 @@ $game.$npc = {
 		});
 	},
 
+	//show dialog from npc in chat bubble
 	showSmalltalk: function(firstTime) {
 		//they have a resource with just one random response
 		if(firstTime) {
@@ -292,7 +303,7 @@ $game.$npc = {
 				}
 			}
 		}
-		
+
 		$('.speechBubble p').addClass('fitBubble');
 		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
@@ -302,6 +313,7 @@ $game.$npc = {
 		});
 	},
 
+	//set the current npc to specific one so we can operate on it in the near future
 	selectNpc: function(i) {
 		_index = i;
 		var stringId = String(_index);
@@ -328,6 +340,7 @@ $game.$npc = {
 		$game.$player.npcOnDeck = true;
 	},
 
+	//figure out what level specific npc is in
 	getNpcLevel: function(id) {
 		if(id) {
 			var stringId = String(id),
@@ -338,6 +351,7 @@ $game.$npc = {
 		}
 	},
 
+	//get all npc data
 	getNpcData: function () {
 		return _allNpcs;
 	}

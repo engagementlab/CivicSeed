@@ -40,8 +40,6 @@ var _curFrame = 0,
 	_pledges = null,
 	_resourcesDiscovered = null,
 
-	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]];
-
 $game.$player = {
 
 	name: null,
@@ -82,8 +80,7 @@ $game.$player = {
 				prevOffY: 0
 			};
 
-			//TODO: REMOVE THIS AND CREATE VARS FOR EACH PROPERTY DIRECTLY UNDER PLAYER
-			//so we don't have to do _property everytime
+			//keeping this around because we then save to it on exit
 			$game.$player.game = playerInfo.game;
 			_setPlayerInformation(playerInfo);
 
@@ -116,6 +113,7 @@ $game.$player = {
 		});
 	},
 
+	//calculate movements and what to render for every game tick
 	update: function(){
 		if($game.$player.isMoving) {
 			_move();
@@ -133,10 +131,12 @@ $game.$player = {
 		}
 	},
 
+	//clear the character canvas to ready for redraw
 	clear: function() {
 		$game.$renderer.clearCharacter(_renderInfo);
 	},
 
+	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
 		$game.$player.pathfinding = true;
 		_info.offX = 0,
@@ -169,16 +169,19 @@ $game.$player = {
 		});
 	},
 
+	//moves the player as the viewport transitions
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
 		_info.prevOffY = slideY * _numSteps;
 	},
 
+	//when the player finishes moving or we just need a hard reset for rendering
 	resetRenderValues: function() {
 		_info.prevOffX = 0,
 		_info.prevOffY = 0;
 	},
 
+	//decide what type of seed drop mechanic to do and check if they have seeds
 	dropSeed: function(options) {
 		options.mX = $game.$map.currentTiles[options.x][options.y].x,
 		options.mY = $game.$map.currentTiles[options.x][options.y].y;
@@ -221,7 +224,7 @@ $game.$player = {
 		}
 	},
 
-	//TODO: test this
+	//save out all current status of player to db on exit
 	exitAndSave: function(callback) {
 		var endTime = new Date().getTime() / 1000,
 			totalTime = endTime - _startTime;
@@ -311,7 +314,7 @@ $game.$player = {
 		}
 	},
 
-	//determines what the botanist state should be based if the player has the right resources 
+	//determines what the botanist state should be based on if the player has the right resources 
 	checkBotanistState: function() {
 		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
@@ -371,6 +374,7 @@ $game.$player = {
 			$game.$player.tangramToInventory();
 		}
 	},
+
 	//clear all items from the inventory
 	clearInventory: function() {
 		$('.inventoryItem').remove();
@@ -391,7 +395,7 @@ $game.$player = {
 		$inventoryBtn.text('0');
 	},
 
-	//make the bounding box for each possible resource
+	//make the bounding box for each possible resource in inventory
 	createInventoryOutlines: function() {
 		var io = $('.inventory > .outlines');
 		io.empty();
@@ -400,6 +404,7 @@ $game.$player = {
 		}
 	},
 
+	//reset items and prepare other entities for fresh level
 	nextLevel: function() {
 		$game.$player.currentLevel += 1;
 
@@ -436,12 +441,14 @@ $game.$player = {
 		}
 	},
 
+	//return the calculation of how long they have been playing for (total)
 	getPlayingTime: function() {
 		var currentTime = new Date().getTime() / 1000,
 			totalTime = Math.round((currentTime - _startTime) + _playingTime);
 		return totalTime;
 	},
 
+	//reveals the seed menu to choose which seed they want to use
 	openSeedventory: function() {
 		//open up the inventory
 		if(_seeds.riddle > 0 || _seeds.special > 0) {
@@ -474,6 +481,7 @@ $game.$player = {
 		}
 	},
 
+	//remove the menu once they have selected a seed flash player and disable other actions
 	startSeeding: function(choice) {
 		$game.$player.seedMode = choice;
 		$('.seedventory').slideUp(function() {
@@ -483,6 +491,7 @@ $game.$player = {
 		$game.changeStatus();
 	},
 
+	//make a response public to all other users
 	makePublic: function(npcId) {
 		var l = _resources.length;
 		while(--l > -1) {
@@ -504,6 +513,7 @@ $game.$player = {
 		}
 	},
 
+	//make a previously public response private to all other users
 	makePrivate: function(npcId) {
 		var l = _resources.length;
 		while(--l > -1) {
@@ -525,6 +535,7 @@ $game.$player = {
 		}
 	},
 
+	//get ALL answers for all open questions for this player
 	compileAnswers: function() {
 		var html = '';
 		for (var a = 0; a < _resources.length; a++) {
@@ -537,6 +548,7 @@ $game.$player = {
 		return html;
 	},
 
+	//see if the player has the specific resource already
 	checkForResource: function(id) {
 		for(var r = 0; r < _resources.length; r++) {
 			if(_resources[r].npc === id) {
@@ -546,73 +558,89 @@ $game.$player = {
 		return false;
 	},
 
+	//change seed count for specific seed
 	updateSeeds: function(kind, quantity) {
 		_seeds[kind] += quantity;
 		//update hud
 		_updateTotalSeeds();
 	},
 
+	//put new answer into the resume
 	resumeAnswer: function(answer) {
 		_resume.push(answer);
 	},
 
+	//keep track of how many seedITs the player has done
 	updatePledges: function(quantity) {
 		_pledges += quantity;
 	},
 
+	//disable blinking seed planting mode
 	resetRenderColor: function() {
 		_renderInfo.colorNum = _playerColorNum;
 	},
 
+	//return the player's current position (x,y)
 	getPosition: function() {
 		return _info;
 	},
 
-	//get functions for other files to access player info
+	//get the players rgb colors
 	getColor: function() {
 		return _rgb;
 	},
 
+	//get the players image number (corresponds to 2.png for example)
 	getColorNum: function() {
 		return _renderInfo.colorNum;
 	},
 
+	//get all the render info to draw player
 	getRenderInfo: function() {
 		return _renderInfo;
 	},
 
+	//get the current color map
 	getColorMap: function() {
 		return _colorMap;
 	},
 
+	//get the number of tiles colored
 	getTilesColored: function() {
 		return _tilesColored;
 	},
 
+	//get the number of resources collected
 	getResourcesDiscovered: function() {
 		return _resourcesDiscovered;
 	},
 
+	//get the number of seeds dropped
 	getSeedsDropped: function() {
 		return _seeds.dropped;
 	},
 
+	//get the quantity of items in the player's inventory
 	getInventoryLength: function() {
 		return _inventory.length;
 	},
 
+	//get the quantity of seedITs made
 	getPledges: function() {
 		return _pledges;
 	},
 
+	//get the player's color as a string
 	getRGBA: function() {
 		return 'rgba('+_colorInfo.r+','+_colorInfo.g+','+_colorInfo.b+','+ 0.5 + ')';
 	},
 
+	//get the current viewport position
 	getRenderPosition: function () {
 		return {x: _renderInfo.curX, y: _renderInfo.curY};
 	},
 
+	//transport player back to botanist's garden, magically
 	beamMeUpScotty: function(place) {
 		//x any y are viewport coords
 		$('.beamMeUp').show();
@@ -644,11 +672,11 @@ $game.$player = {
 			}, 1000);
 		});
 	}
-
-
 };
 
-//private functions
+/***** PRIVATE FUNCTIONS ******/
+
+//save a new resource to the database
 function _saveResourceToDB(resource) {
 	var info = {
 		id: $game.$player.id,
@@ -659,6 +687,7 @@ function _saveResourceToDB(resource) {
 	});
 }
 
+//setup all the dom elements for reuse
 function _setDomSelectors() {
 	//set variables for dom selectors
 	$seedHudCount = $('.seedButton .hudCount');
@@ -669,9 +698,9 @@ function _setDomSelectors() {
 	$gameboard = $('.gameboard');
 	$inventoryBtn = $('.inventoryButton > .hudCount');
 	$inventory = $('.inventory > .pieces');
-	//selectors for chat stuff
 }
 
+//on init, set local and global variables for all player info
 function _setPlayerInformation(info) {
 	//private
 	_seeds = info.game.seeds;
@@ -700,6 +729,7 @@ function _setPlayerInformation(info) {
 	$game.$player.seenRobot = info.game.seenRobot;
 }
 
+//figure out what color to make which tiles when a seed is dropped
 function _calculateSeeds(options) {
 	//start at the top left corner and loop through (vertical first)
 	var mid = Math.floor(options.sz / 2),
@@ -796,6 +826,7 @@ function _calculateSeeds(options) {
 	}
 }
 
+//plant the seed on the server and wait for response and update hud and map
 function _sendSeedBomb(bombed, options, origX, origY) {
 	//set a waiting boolean so we don't plant more until receive data back from rpc
 	$game.$player.awaitingBomb = true;
@@ -873,6 +904,7 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 	});
 }
 
+//update seed counts
 function _updateTotalSeeds() {
 	_totalSeeds = _seeds.normal + _seeds.riddle + _seeds.special;
 	$seedHudCount.text(_totalSeeds);
@@ -881,6 +913,7 @@ function _updateTotalSeeds() {
 	$specialHudCount.text(_seeds.special);
 }
 
+//save out the current player info to the master info
 function _savePlayerData() {
 	$game.$player.game.seeds = _seeds;
 	$game.$player.game.resources = _resources;
@@ -897,6 +930,7 @@ function _savePlayerData() {
 	$game.$player.game.seenRobot = $game.$player.seenRobot;
 }
 
+//calculate new render information based on the player's position
 function _updateRenderInfo() {
 	//get local render information. update if appropriate.
 	var loc = $game.$map.masterToLocal(_info.x, _info.y);
@@ -916,6 +950,7 @@ function _updateRenderInfo() {
 	}
 }
 
+//figure out how much to move the player during a walk and wait frame to show
 function _move() {
 	/** IMPORTANT note: x and y are really flipped!!! **/
 	//update the step
@@ -995,6 +1030,7 @@ function _move() {
 	}
 }
 
+//once the move is sent out to all players, update the players next moves
 function _sendMoveInfo(moves) {
 	$game.$player.seriesOfMoves = new Array(moves.length);
 	$game.$player.seriesOfMoves = moves;
@@ -1004,6 +1040,7 @@ function _sendMoveInfo(moves) {
 	$game.$chat.hideChat();
 }
 
+//when a move is done, decide waht to do next (if it is a transition) and save position to DB
 function _endMove() {
 	var posInfo = {
 		id: $game.$player.id,
@@ -1044,6 +1081,7 @@ function _endMove() {
 	}
 }
 
+//determine what frame to render while standing
 function _idle() {
 	_idleCounter += 1;
 	if($game.$player.seedMode > 0) {
@@ -1075,6 +1113,7 @@ function _idle() {
 	}
 }
 
+//add an item to the inventory in the hud and bind actions to it
 function _addToInventory(id) {
 	//create the class / ref to the image
 	var className = 'r' + id,
@@ -1096,6 +1135,7 @@ function _addToInventory(id) {
 		.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
 }
 
+//game over!
 function _gameOver() {
 	var endTime = new Date().getTime() / 1000,
 		totalTime = endTime - _startTime;

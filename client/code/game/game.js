@@ -48,24 +48,25 @@ exports.$game = {
 	init: function() {
 		//all the init calls will trigger others, a waterfall approach to assure
 		//the right data is loaded before we start
-		//private so not client accesible...
 		_loadPlayer();
 	},
 
+	//pause menu on browser tab unfocus (currently disabled)
 	pause: function() {
-		$('.pauseMenu').slideDown();
+		$('.pauseMenu').fadeIn();
 		$game.running = false;
-		// $game.$audio.pauseTheme();
+		//TODO: play pause music?
 	},
 
+	//resume from the pause menu, start up game loop
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
-			// $game.$audio.playTheme();
 			$game.tick();
 		});
 	},
 
+	//starts a transition from one viewport to another
 	beginTransition: function() {
 		$game.inTransit = true;
 		_stepNumber = 0;
@@ -74,6 +75,7 @@ exports.$game = {
 		$game.stepTransition();
 	},
 
+	//decides if we continue tweening the viewports or to end transition
 	stepTransition: function() {
 		if(_stepNumber !== $game.$map.numberOfSteps) {
 			_stepNumber += 1;
@@ -84,6 +86,7 @@ exports.$game = {
 		}
 	},
 
+	//resumes normal state of being able to walk and enables chat etc.
 	endTransition: function() {
 		$game.inTransit = false;
 		$game.$player.isMoving = false;
@@ -95,6 +98,7 @@ exports.$game = {
 		});
 	},
 
+	//the game loop, if it is running, call all the updates and render
 	tick: function() {
 		if($game.running) {
 			$game.$others.update();
@@ -107,21 +111,26 @@ exports.$game = {
 		}
 	},
 
+	//displays the progress area section, pulling the latest pertient data
 	showProgress: function() {
 
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
 		$game.$map.createCollectiveImage();
 
+		//get stats
 		var tilesColored = $game.$player.getTilesColored(),
 			resourcesDiscovered = $game.$player.getResourcesDiscovered();
 
+		//show proper level image and color map
 		$('.levelImages img').removeClass('currentLevelImage');
 		$('.levelImages img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('currentLevelImage');
 		$('.personalInfo .currentLevel').text($game.playerRanks[$game.$player.currentLevel]);
 		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
+
+		//calculate the playing time
 		var playingTime = $game.$player.getPlayingTime(),
 			hours = Math.floor(playingTime / 3600),
 			hoursRemainder = playingTime % 3600,
@@ -129,22 +138,24 @@ exports.$game = {
 			seconds = playingTime % 60,
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
-
+		//other game stats and leaderboard
 		var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
 			displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
-
 		for(var i = 0; i < _stats.leaderboard.length; i++) {
 			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ' tiles)</li>';
 		}
 		topPlayers += '</ol>';
 		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ' tiles)</p>';
-		//show player's seed droppings
+
+		//player's answers for all the open-ended questions, some others stats
 		var allAnswers = $game.$player.compileAnswers();
-		$('.displayMyAnswers').empty().append(allAnswers);
-		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		var percentString = _stats.percent + '%';
 		var numItems = $game.$player.getResourcesDiscovered();
+
+		//display everthing
+		$('.displayMyAnswers').empty().append(allAnswers);
+		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		$('.displayPercent').text(percentString);
 		$('.topSeeders').empty().append(topPlayers);
 		$('.numCollected').text(numItems + ' / 42');
@@ -153,6 +164,7 @@ exports.$game = {
 		});
 	},
 
+	//shows message in the display box that only lasts specific time
 	temporaryStatus: function(msg) {
 		$('.displayBoxText').text(msg);
 		$('.displayBox').css('background','#a2f0e9');
@@ -163,6 +175,7 @@ exports.$game = {
 		}, 3000);
 	},
 
+	//change the display box text
 	changeStatus: function(custom) {
 		clearTimeout(_displayTimeout);
 		$('.displayBox').css('background','white');
@@ -180,6 +193,7 @@ exports.$game = {
 		_prevMessage = $('.displayBoxText').text();
 	},
 
+	//check for bad language to censor it in chat
 	checkPotty: function(msg) {
 		var temp = msg.toLowerCase();
 
@@ -191,6 +205,7 @@ exports.$game = {
 		return msg;
 	},
 
+	//triggered by a change server-side in the leaderboard
 	updateLeaderboard: function(data) {
 		var leaderChange = true;
 		if(_stats.leaderboard.length > 0) {
@@ -202,6 +217,7 @@ exports.$game = {
 		_stats.leaderboard = data.board;
 	},
 
+	//triggered by a change server-side in the color map percent
 	updatePercent: function(dropped) {
 		_stats.prevPercent = _stats.percent;
 		_stats.seedsDropped = dropped;
@@ -228,7 +244,8 @@ exports.gameModuleReady = function(callback) {
 
 };
 
-//private functions
+/********* PRIVATE FUNCTIONS **********/
+
 function _loadPlayer() {
 	$game.$player.init(function() {
 		_loadRenderer();
@@ -311,9 +328,8 @@ function _loadGameInfo() {
 	});
 }
 
+//this is all the other stuff that needs to happen once everything is loaded
 function _loadExtra() {
-	//this is all the other stuff that needs to happen once everything is loaded
-
 	//fill player inventory and creat outlines
 	$game.$player.fillInventory();
 	$game.$player.createInventoryOutlines();
@@ -338,6 +354,7 @@ function _loadExtra() {
 	_startGame();
 }
 
+//calculates the bounding box for the current viewport to get the right tiles
 function _setBoundaries() {
 	//calculate the top left corner of the viewport based on where the player is
 	var position = $game.$player.getPosition(),
@@ -353,6 +370,7 @@ function _setBoundaries() {
 
 	$game.$map.setBoundaries();
 }
+
 
 function _startGame() {
 	$game.$map.firstStart(function() {

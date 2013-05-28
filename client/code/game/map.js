@@ -26,6 +26,7 @@ $game.$map = {
 	numberOfSteps: 0,
 	stepDirection: null,
 
+	//place player on map
 	init: function(callback) {
 		var id = $game.$player.id,
 			position = $game.$player.getPosition(),
@@ -37,6 +38,7 @@ $game.$map = {
 		});
 	},
 
+	//pull down current viewport tiles, create the pathfinding grid
 	firstStart: function(callback) {
 		var info = {
 			x: $game.masterX,
@@ -53,6 +55,7 @@ $game.$map = {
 		});
 	},
 
+	//create the go/nogo tiles based on tile data
 	createPathGrid: function(callback) {
 		_gridTiles = null;
 		_graph = null;
@@ -82,6 +85,7 @@ $game.$map = {
 		callback();
 	},
 
+	//return if a tile is go or nogo (with special exception for NPCs)
 	getTileState: function(x, y) {
 		//must first do a check to see if the tile BOTTOM is the npc
 		//if so, then return npc val (THIS IS A HACK SORT OF)
@@ -96,11 +100,13 @@ $game.$map = {
 		return tileStateVal;
 	},
 
+	//return if player is on the edge of the world
 	isMapEdge: function(x, y, callback) {
 		var edge = $game.$map.currentTiles[x][y].isMapEdge;
 		callback(edge);
 	},
 
+	//add a player to the minimap
 	addPlayer: function(id, x, y, col) {
 		$game.$map.miniMap[id] = {};
 		$game.$map.miniMap[id].x = x,
@@ -109,6 +115,7 @@ $game.$map = {
 		$game.$map.render();
 	},
 
+	//update a player on the minimap
 	updatePlayer: function(id, x, y) {
 		$game.$renderer.clearMiniMap();
 		$game.$map.miniMap[id].x = x;
@@ -116,12 +123,14 @@ $game.$map = {
 		$game.$map.render();
 	},
 
+	//remove a player from the minimap
 	removePlayer: function(id) {
 		$game.$renderer.clearMiniMap();
 		delete $game.$map.miniMap[id];
 		$game.$map.render();
 	},
 
+	//render all the players on the minimap
 	render: function() {
 		$game.$renderer.renderMiniMapConstants();
 		$.each($game.$map.miniMap, function(key, player) {
@@ -129,6 +138,7 @@ $game.$map = {
 		});
 	},
 
+	//put new color on the map
 	newBomb: function(bombed, id) {
 		for(var b = 0; b < bombed.length; b += 1) {
 			//only add it to render list if it is on current screen
@@ -149,12 +159,14 @@ $game.$map = {
 		}
 	},
 
+	//save an image from the color minimap for the player
 	saveImage: function() {
 		var myDrawing = document.getElementById('minimapTile');
 		var drawingURL = myDrawing.toDataURL('img/png');
 		return drawingURL;
 	},
 
+	//get all the images from all players and make composite
 	createCollectiveImage: function() {
 		ss.rpc('game.player.getAllImages', function(data) {
 			//console.log(data.length);
@@ -166,6 +178,7 @@ $game.$map = {
 		});
 	},
 
+	//calculate a path using pathfinding
 	findPath: function(local, master, callback) {
 		//calc local for start point for pathfinding
 		var start = _graph.nodes[local.y][local.x],
@@ -176,6 +189,7 @@ $game.$map = {
 		});
 	},
 
+	//figure out how to shift the viewport during a transition
 	calculateNext: function(x, y){
 		var getThisManyX,
 			getThisManyY,
@@ -236,6 +250,7 @@ $game.$map = {
 		});
 	},
 
+	//go thru and copy new tiles to current tiles to shift the map over
 	transitionMap: function(stepNumber) {
 		//--------RIGHT------------
 		//go thru current array and shift everthing
@@ -338,6 +353,7 @@ $game.$map = {
 		requestAnimationFrame($game.stepTransition);
 	},
 
+	//convert master map coords to local coords
 	masterToLocal: function(x, y, offscreen) {
 		//if this works I am a dolt for not doing it earlier (I am a dolt)
 		var local = {
@@ -356,6 +372,7 @@ $game.$map = {
 		}
 	},
 
+	//set the boundaries of current viewport
 	setBoundaries: function() {
 		_leftEdge = $game.masterX,
 		_rightEdge = $game.masterX + $game.VIEWPORT_WIDTH,
@@ -364,7 +381,9 @@ $game.$map = {
 	}
 };
 
-//private map functions 
+/****** PRIVATE FUNCTIONS ******/
+
+//get new tiles from DB for new viewport
 function _getTiles(data, callback) {
 	$game.$map.dataLoaded = false;
 	var x1 = data.x,
@@ -422,6 +441,7 @@ function _getTiles(data, callback) {
 	});
 }
 
+//copy over new tiles to current tiles
 function _copyTileArray(callback) {
 	// $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
 	$game.$map.currentTiles = [$game.VIEWPORT_WIDTH];

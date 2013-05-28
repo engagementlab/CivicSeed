@@ -36,6 +36,7 @@ $game.$resources = {
 	isShowing: false,
 	ready: false,
 
+	//load in all the resources and the corresponding answers
 	init: function(callback) {
 		var response = $game.$npc.getNpcData();
 		//create array of ALL player responses and resource information
@@ -129,6 +130,7 @@ $game.$resources = {
 		$game.$audio.fadeLow();
 	},
 
+	//figure out which buttons to show based on what they are looking at
 	addButtons: function() {
 		//hide all buttons by default
 		$resourceButton.addClass('hideButton');
@@ -198,6 +200,7 @@ $game.$resources = {
 		}
 	},
 
+	//clear the display and decide what to show on screen
 	addContent: function() {
 		$speakerName.empty();
 		$resourceMessage.empty();
@@ -212,6 +215,8 @@ $game.$resources = {
 		}
 	},
 
+	//show all other players recent answers and your own answer
+	//include options to make public or not
 	showRecentAnswers: function() {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
@@ -249,6 +254,7 @@ $game.$resources = {
 			$resourceContent.html(finalQuestion + displayAnswers);
 	},
 
+	//hide the resource area and decide if we need to show inventory again or not
 	hideResource: function() {
 		$resourceArea.fadeOut(function() {
 			$game.$resources.isShowing = false;
@@ -271,14 +277,14 @@ $game.$resources = {
 		$game.$audio.fadeHi();
 	},
 
-	//super ghetto hack to go back a page
+	//go back a slide in the resource (hack to go back 2 since next slide advances one)
 	previousSlide: function() {
 		_currentSlide -= 2;
 		$game.$resources.nextSlide();
 	},
 
+	//advance to the next slide in a resource
 	nextSlide: function() {
-
 		_currentSlide += 1;
 		//if its answered, determine if we need to show npc chat style instead
 		if(_answered) {
@@ -305,7 +311,7 @@ $game.$resources = {
 			$game.$resources.addButtons();
 		}
 	},
-
+	//figure out if the player made the correct response or not, if we bypass it means they clicked okay on the prompt for it being too short
 	submitAnswer: function(bypass) {
 		var response = null;
 		_correctAnswer = false;
@@ -377,21 +383,25 @@ $game.$resources = {
 		$game.$resources.nextSlide();
 	},
 
+	//get the shape svg info for a specific resource
 	getShape: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].shape;
 	},
 
+	//get the tagline for the resource
 	getTagline: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].tagline;
 	},
 
+	//add an answer to the player answers for the specific resource
 	addAnswer: function(data) {
 		var stringId = String(data.npc);
 		_resources[stringId].playerAnswers.push(data);
 	},
 
+	//moreve an answer (this means they made it private and it was previously public)
 	removeAnswer: function(data) {
 		var stringId = String(data.npc);
 		var found = false,
@@ -409,17 +419,22 @@ $game.$resources = {
 		}
 	},
 
+	//a popup triggered if answer was too short
 	popupCheck: function() {
 		$('.check button').removeClass('hideButton');
 		$('.check').show();
 	},
 
+	//get the question for a resource
 	getQuestion: function(id) {
 		var stringId = String(id);
 		return _resources[stringId].question;
 	}
 };
 
+/***** PRIVATE FUNCTIONS ******/
+
+//reuse for doms
 function _setDomSelectors() {
 	$resourceStage = $('.resourceStage');
 	$speechBubble = $('.speechBubble');
@@ -437,6 +452,7 @@ function _setDomSelectors() {
 	$answerButton = $('.resourceArea  .answerButton');
 }
 
+//adding content if they answered the resource to show
 function _addAnsweredContent() {
 	//if they got it right, give them a tangram
 	if(_correctAnswer) {
@@ -465,6 +481,7 @@ function _addAnsweredContent() {
 	}
 }
 
+//adds question content or shows answers or show resource content
 function _addRealContent() {
 	$resourceContent.css('overflow', 'auto');
 	if(_currentSlide === _numSlides) {

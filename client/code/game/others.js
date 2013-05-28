@@ -1,9 +1,9 @@
-
 _onScreenPlayers = {};
 
 $game.$others = {
 	ready: false,
 
+	//load in other players
 	init: function(callback) {
 		ss.rpc('game.player.getOthers', function(response) {
 			_onScreenPlayers = {};
@@ -16,6 +16,7 @@ $game.$others = {
 		});
 	},
 
+	
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
