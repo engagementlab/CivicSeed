@@ -38,7 +38,7 @@ var _curFrame = 0,
 	_playingTime = null,
 	_tilesColored = null,
 	_pledges = null,
-	_resourcesDiscovered = null,
+	_resourcesDiscovered = null;
 
 $game.$player = {
 
@@ -239,10 +239,10 @@ $game.$player = {
 	},
 
 	//determine which returning to npc prompt to show based on if player answered it or not
-	getPrompt: function(id) {
+	getPrompt: function(index) {
 		var	l = _resources.length;
 		while(--l > -1) {
-			if(id === _resources[l].npc) {
+			if(index === _resources[l].npc) {
 				if(_resources[l].result) {
 					return 2;
 				}
@@ -258,18 +258,19 @@ $game.$player = {
 	//saves the user's answer and pushes up to DB
 	answerResource: function(info) {
 		var newInfo = {
-			npc: info.id,
+			npc: info.index,
 			answers: [info.answer],
 			attempts: 1,
 			result: info.correct,
-			seeded: 0
+			seeded: 0,
+			shape: info.shape
 		};
 		var realResource = null,
 			l = _resources.length;
 
 		//see if the resource is already in the list
 		while(--l > -1) {
-			if(info.id === _resources[l].npc) {
+			if(newInfo.npc === _resources[l].npc) {
 				realResource = _resources[l];
 				continue;
 			}
@@ -293,8 +294,8 @@ $game.$player = {
 			$game.$player.updateSeeds('normal', numToAdd);
 
 			if($game.$player.currentLevel === info.npcLevel) {
-				_inventory.push(info.id);
-				_addToInventory(info.id);
+				_inventory.push(newInfo.shape);
+				_addToInventory(newInfo.shape);
 				$game.$player.checkBotanistState();
 			}
 			_saveResourceToDB(realResource);
@@ -1114,14 +1115,14 @@ function _idle() {
 }
 
 //add an item to the inventory in the hud and bind actions to it
-function _addToInventory(id) {
+function _addToInventory(index) {
 	//create the class / ref to the image
-	var className = 'r' + id,
+	var className = 'r' + index,
 		levelFolder = 'level' + ($game.$player.currentLevel + 1),
-		imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  id +'.png',
-		tagline = $game.$resources.getTagline(id);
+		imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  index +'.png';
+		//tagline = $game.$resources.getTagline(index);
 	//put image on page in inventory
-	$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
+	$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + 'replace' + '">');
 
 	$('.' + className).bind('mouseenter',function() {
 		//var info = $(this).attr('title');
@@ -1131,8 +1132,8 @@ function _addToInventory(id) {
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)
-		.bind('click',{npc: id}, $game.$resources.beginResource)
-		.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
+		.bind('click',{npc: index}, $game.$resources.beginResource)
+		.bind('dragstart',{npc: index}, $game.$botanist.dragStart);
 }
 
 //game over!

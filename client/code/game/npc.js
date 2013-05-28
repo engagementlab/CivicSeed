@@ -34,7 +34,7 @@ $game.$npc = {
 	addNpc: function(npc) {
 		var newbie = $game.$npc.createNpc(npc);
 		newbie.getMaster();
-		_allNpcs[npc.id] = newbie;
+		_allNpcs[npc.index] = newbie;
 	},
 
 	//update all npcs (for movement and rendering)
@@ -66,8 +66,8 @@ $game.$npc = {
 	},
 
 	//get a specific name of npc
-	getName: function(id) {
-		var stringId = String(id);
+	getName: function(index) {
+		var stringId = String(index);
 		return _allNpcs[stringId].name;
 	},
 
@@ -251,7 +251,7 @@ $game.$npc = {
 		$('.speechBubble p').removeClass('fitBubble');
 		clearTimeout($game.$npc.hideTimer);
 		$('.speechBubble button').addClass('hideButton');
-		var promptNum = $game.$player.getPrompt(_curNpc.id);
+		var promptNum = $game.$player.getPrompt(_curNpc.index);
 		_speak = _curNpc.dialog.prompts[promptNum];
 		if(promptNum === 2) {
 			_speak += ' Want to view again?';
@@ -262,7 +262,7 @@ $game.$npc = {
 		$('.speechBubble').fadeIn(function() {
 			$(".speechBubble .yesButton").bind("click", (function () {
 				var revisit = promptNum < 2 ? false : true;
-				$game.$resources.loadResource(_who, _curNpc.id, revisit);
+				$game.$resources.loadResource(_who, _curNpc.index, revisit);
 				//$game.$resources.showResource(promptNum);
 			}));
 			$(".speechBubble .noButton").bind("click", (function () {
@@ -341,9 +341,9 @@ $game.$npc = {
 	},
 
 	//figure out what level specific npc is in
-	getNpcLevel: function(id) {
-		if(id) {
-			var stringId = String(id),
+	getNpcLevel: function(index) {
+		if(index) {
+			var stringId = String(index),
 				level = _allNpcs[stringId].level;
 				return level;
 		} else {

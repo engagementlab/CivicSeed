@@ -462,7 +462,7 @@ $game.$botanist = {
 				$botanistContent.html(newHTML);
 
 				//replace the tangram image in the inventory with tip
-				$inventoryPuzzle.hide();
+				$('.inventoryPuzzle').hide();
 				$('.inventoryHelp').show();
 			}
 			//right/wrong screen
@@ -767,8 +767,8 @@ $game.$botanist = {
 	},
 
 	clearBoard: function() {
-		$puzzleSvg.empty();
-		$inventoryItem.css('opacity', 1).attr('draggable', 'true');
+		$('.puzzleSvg').empty();
+		$('.inventoryItem').css('opacity', 1).attr('draggable', 'true');
 	},
 
 	snapTo: function(num) {
@@ -810,7 +810,7 @@ function _setDomSelectors() {
 	$botanistArea = $('.botanistArea');
 	$feedback = $('.feedback');
 	$inventoryItem = $('.inventoryItem');
-	$tangramArea = $('.inventoryItem');
+	$tangramArea = $('.tangramArea');
 	$botanistTextArea = $('.botanistContent textarea');
 	$inventory = $('.inventory');
 	$inventoryBtn = $('.inventory button');

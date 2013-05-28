@@ -8,7 +8,7 @@ $(function() {
 
 	//new player joining to keep track of
 	ss.event.on('ss-addPlayer', function(data, chan) {
-		console.log(data, chan);
+		// console.log(data, chan);
 		$game.numPlayers = data.num;
 		$game.$others.add(data.info);
 		$activePlayers.text(data.num);

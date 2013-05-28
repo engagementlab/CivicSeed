@@ -43,9 +43,9 @@ $game.$resources = {
 		ss.rpc('game.npc.getResponses', $game.$player.instanceName, function(all) {
 			$.each(response, function(key, npc) {
 				if(npc.isHolding) {
-					var stringId = String(npc.id);
+					var stringId = String(npc.index);
 					_resources[stringId] = npc.resource;
-					_resources[stringId].id = npc.id;
+					_resources[stringId].index = npc.index;
 					_resources[stringId].playerAnswers = [];
 				}
 			});
@@ -88,7 +88,6 @@ $game.$resources = {
 
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.currentLevel) {
-			// var url = '/articles/level' + (npcLevel + 1) + '/' + _curResource.id + '.html';
 			var url = '/articles/' + _curResource.url + '.html';
 			$resourceStage.empty().load(url,function() {
 				_numSlides = $('.resourceStage .pages > section').length;
@@ -104,10 +103,10 @@ $game.$resources = {
 		if(_revisiting) {
 			_correctAnswer = false;
 		} else {
-			var npcLevel = $game.$npc.getNpcLevel(),
+			var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
 				levelFolder = 'level' + (npcLevel + 1),
-				imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.id + '.png';
-			_preloadedPieceImage = '<img src="' + imgPath + '" class="centerImage">';
+				imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.shape + '.png';
+			_preloadedPieceImage = '<p class="tangramPieceP"><img src="' + imgPath + '" class="centerImage"></p>';
 		}
 
 		$speechBubble.fadeOut(function() {
@@ -222,15 +221,15 @@ $game.$resources = {
 		//if it is public, just show eye icon
 		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>',
 			displayAnswers = '<ul>',
-			yourAnswer = $game.$player.getAnswer(_curResource.id),
+			yourAnswer = $game.$player.getAnswer(_curResource.index),
 			rightOne = yourAnswer.answers.length - 1;
 
 		displayAnswers += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
 		if(!yourAnswer.madePublic) {
 			// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
-			displayAnswers += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.id +'">Make Public</button>';
+			displayAnswers += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public</button>';
 		} else {
-			displayAnswers += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.id +'"></i>';
+			displayAnswers += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.index +'"></i>';
 		}
 		displayAnswers += '</li>';
 		if(_curResource.playerAnswers) {
@@ -240,7 +239,7 @@ $game.$resources = {
 			while(--spot > -1) {
 				//double check
 				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
-					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-npc="' + _curResource.id + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
+					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-npc="' + _curResource.index + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
 				}
 			}
 			displayAnswers += '</ul></div>';
@@ -338,15 +337,17 @@ $game.$resources = {
 			}
 		}
 
-		var npcLevel = $game.$npc.getNpcLevel();
+		var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
+			npcShape = _curResource.shape;
 		//if correct, get seeds, push answer to db
 		if(_correctAnswer) {
 			//update player stuff
 			var rightInfo = {
 				correct : true,
-				id: _curResource.id,
+				index: _curResource.index,
 				answer: response,
-				npcLevel: npcLevel
+				npcLevel: npcLevel,
+				shape: npcShape
 			};
 			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
 
@@ -358,7 +359,7 @@ $game.$resources = {
 			}
 			//add this to the DB of resources for all player answers
 			var newAnswer = {
-				npc: _curResource.id,
+				npc: _curResource.index,
 				id: $game.$player.id,
 				name: $game.$player.name,
 				answer: response,
@@ -373,7 +374,7 @@ $game.$resources = {
 		else {
 			var wrongInfo = {
 				correct : false,
-				id: _curResource.id,
+				index: _curResource.index,
 				answer: response,
 				npcLevel: npcLevel
 			};
@@ -384,14 +385,15 @@ $game.$resources = {
 	},
 
 	//get the shape svg info for a specific resource
-	getShape: function(id) {
-		var stringId = String(id);
-		return _resources[stringId].shape;
+	getShape: function(index) {
+		var stringId = String(index),
+			shapeName = _resources[stringId].shape;
+		return _shapes[$game.$player.currentLevel][shapeName];
 	},
 
 	//get the tagline for the resource
-	getTagline: function(id) {
-		var stringId = String(id);
+	getTagline: function(index) {
+		var stringId = String(index);
 		return _resources[stringId].tagline;
 	},
 
@@ -406,7 +408,7 @@ $game.$resources = {
 		var stringId = String(data.npc);
 		var found = false,
 			i = 0;
-		console.log(_resources[stringId].playerAnswers);
+		// console.log(_resources[stringId].playerAnswers);
 		while(!found) {
 			if(_resources[stringId].playerAnswers[i].id === data.id) {
 				_resources[stringId].playerAnswers.splice(i, 1);
@@ -426,8 +428,8 @@ $game.$resources = {
 	},
 
 	//get the question for a resource
-	getQuestion: function(id) {
-		var stringId = String(id);
+	getQuestion: function(index) {
+		var stringId = String(index);
 		return _resources[stringId].question;
 	}
 };
@@ -458,20 +460,26 @@ function _addAnsweredContent() {
 	if(_correctAnswer) {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
-			var npcLevel = $game.$npc.getNpcLevel();
+			var inputBox = '<p class="centerText taglineInput"><input name="tagline" type ="text" value="Type here..." maxLength = "60"></input></p>',
+				npcLevel = $game.$npc.getNpcLevel(),
+				html;
 			if(npcLevel < $game.$player.currentLevel) {
 				_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
-				$resourceContent.empty().css('overflow','auto');
+				html = inputBox;
+				$resourceContent.empty().html(html).css('overflow','auto');
 			}
 			else {
 				_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
 				//show image on screen
 				//get path from db, make svg with that
 				$game.$audio.playTriggerFx('resourceRight');
-				$resourceContent.html(_preloadedPieceImage).css('overflow', 'hidden');
+
+				html = _preloadedPieceImage + inputBox;
+				$resourceContent.empty().html(html).css('overflow', 'hidden');
 			}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);
+			//give them input box for custom tagline
 		}
 		//the next slide will show them recent answers
 		else {
@@ -524,3 +532,183 @@ function _addRealContent() {
 		$resourceContentBody.html(content).show();
 	}
 }
+
+
+/***shape data ***/
+var _shapes = [{
+	correct1: {
+		path: 'm0,0l0,70l80,0l0,-70l-80,0z',
+		fill: 'lightGreen'
+	},
+	wrong1: {
+		path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
+		fill: 'blue'
+	},
+	wrong2: {
+		path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
+		fill: 'lightBlue'
+	},
+	correct2: {
+		path: 'm0,0l-50,50l50,50l0,-100z',
+		fill: 'orange'
+	},
+	wrong3: {
+		path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
+		fill: 'orange'
+	},
+	correct3: {
+		path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
+		fill: 'green'
+	},
+	wrong4: {
+		path: 'm0,0l0,100l-50,-50l50,-50z',
+		fill: 'lightOrange'
+	},
+	wrong5: {
+		path: 'm0,0l0,-50l200,0l0,50l-200,0z',
+		fill: 'green'
+	},
+	wrong6: {
+		path: 'm0,0l80,0l0,90l-80,0l0,-90z',
+		fill: 'lightGreen'
+	},
+	correct4: {
+		path: 'm0,0l0,100l50,-50l-50,-50z',
+		fill: 'lightOrange'
+	}
+},{
+	correct1: {
+		path: 'm0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z',
+		fill: 'orange'
+	},
+	wrong1: {
+		path: 'm0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z',
+		fill: 'lightOrange'
+	},
+	wrong2: {
+		path: 'm0,0l100,-40l100,0l100,40l-300,0z',
+		fill: 'green'
+	},
+	wrong3: {
+		path: 'm0,0l100,0l0,-40l-50,-40l-50,40l0,40z',
+		fill: 'lightGreen'
+	},
+	wrong4: {
+		path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+		fill: 'green'
+	},
+	wrong5: {
+		path: 'm0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z',
+		fill: 'blue'
+	},
+	wrong6: {
+		path: 'm0,0c0,0 0,110 0,110c0,0 0,10 0,10c0,0 150,0 150,0c0,0 -100,-40 -100,-40c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40z',
+		fill: 'lightBlue'
+	},
+	correct2: {
+		path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
+		fill: 'lightOrange'
+	},
+	correct3: {
+		path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
+		fill: 'lightGreen'
+	},
+	wrong7: {
+		path: 'm0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z',
+		fill: 'orange'
+	},
+	correct4: {
+		path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+		fill: 'blue'
+	},
+	wrong8: {
+		path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+		fill: 'lightOrange'
+	},
+	correct5: {
+		path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
+		fill: 'orange'
+	},
+	wrong9: {
+		path: 'm0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z',
+		fill: 'blue'
+	}
+}, {
+	correct1: {
+		path: 'm0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z',
+		fill: 'orange'
+	},
+	correct2: {
+		path: 'm0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z',
+		fill: 'lightOrange'
+	},
+	correct3: {
+		path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
+		fill: 'green'
+	},
+	correct4: {
+		path: 'm0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z',
+		fill: 'lightGreen'
+	},
+	correct5: {
+		path: 'm0,0l0,-70l150,0l0,70l-150,0z',
+		fill: 'lightBlue'
+	},
+	wrong1: {
+		path: 'm0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z',
+		fill: 'blue'
+	},
+	wrong2: {
+		path: 'm0,0l0,60l260,0l-20,-40l-20,-20l-220,0z',
+		fill: 'lightOrange'
+	},
+	correct6: {
+		path: 'm0,0l0,40l300,0l-10,-20l-20,-20l-270,0z',
+		fill: 'blue'
+	},
+	wrong3: {
+		path: 'm0,0l90,0l0,-60l-50,0l-20,20l-20,40z',
+		fill: 'green'
+	}
+}, {
+	correct1: {
+		path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
+		fill: 'orange'
+	},
+	wrong1: {
+		path: 'm0,0l0,-40l240,0l0,40l-240,0z',
+		fill: 'blue'
+	},
+	wrong2: {
+		path: 'm0,0l80,0l0,-90l-100,0l20,90z',
+		fill: 'lightOrange'
+	},
+	correct2: {
+		path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
+		fill: 'lightGreen'
+	},
+	wrong3: {
+		path: 'm0,0l-100,0l0,90l80,0l20,-90z',
+		fill: 'green'
+	},
+	wrong4: {
+		path: 'm0,0l-20,-90l160,0l-20,90l-120,0z',
+		fill: 'lightGreen'
+	},
+	correct3: {
+		path: 'm0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z',
+		fill: 'blue'
+	},
+	correct4: {
+		path: 'm0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z',
+		fill: 'lightOrange'
+	},
+	wrong5: {
+		path: 'm0,0l120,0l0,220l-60,0l-40,-180l-20,0l0,-40z',
+		fill: 'orange'
+	},
+	correct5: {
+		path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
+		fill: 'green'
+	}
+}];
