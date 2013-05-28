@@ -9,7 +9,7 @@ module.exports.global = [{
 		prompts: ['What a weird robot that was! I wonder what it was doing? My head is full of fluff, but perhaps you could figure it out. But if it\'s not a bother, could you answer something for me first?  ', 'I\'m still waiting for your answer!', 'A wise bear once said "You can\'t stay in your corner of the Forest waiting for others to come to you. You have to go to them sometimes.” Which I think means you should go talk to my friends in order to help restore color to our world.']
 	},
 	resource: {
-		url: 'test',
+		url: '2569',
 		tagline: 'Guiding Values',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
@@ -28,7 +28,7 @@ module.exports.global = [{
 		prompts: ['Hoo hoot! Owls are known to be wise. Some even say they are sages who watch over adventurers. Which is why I chose to resemble one, hoot! I have something that could help you!', 'A famous owl once said "you will encounter many hardships ahead... that is your fate. Don\'t feel discouraged, even during the toughest times!" So, would you like to try again?', 'I knew you would prevail! You just needed a little wisdom. You should find the others in order to seek out the other pieces of the tri...I mean...puzzle.']
 	},
 	resource: {
-		url: 'test',
+		url: '4284',
 		tagline: 'Upstream or Downstream?',
 		feedbackRight: 'Exactly! Maybe you could also think about which approach appeals to you the most.',
 		feedbackWrong: 'Hoo...boy. That\'s not right.',
@@ -48,7 +48,7 @@ module.exports.global = [{
 		prompts: ['HI HI HI! I got a thing for you! You might want to see it! But first a question! But take your time! Think it through! Don\'t rush! Answer well! Use your brain! ', 'I\'m still waiting for your answer!', 'YAY! Woohoo! Color! I have nothing left for you! Go go go! Find the others! I can also show you the other answers!']
 	},
 	resource: {
-		url: 'test',
+		url: '4693',
 		tagline: 'What\'s Important',
 		feedbackRight: 'Very interesting!',
 		feedbackWrong: 'You might want to think about that a little more and try again.',
@@ -67,7 +67,7 @@ module.exports.global = [{
 		prompts: ['I found a shiny object while digging in my garden. Maybe it can help you? But I like it, so I\'ll only give it up if you really need it. So first a challenge!', 'I\'m still waiting for your answer!', 'After seeing your hard work, I see that its better to help others rather than hoard things. I don\'t have any more shinies.']
 	},
 	resource: {
-		url: 'test',
+		url: '6265',
 		tagline: 'What You Will Achieve',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
@@ -86,7 +86,7 @@ module.exports.global = [{
 		prompts: ['Ah! Bonjour, my friend! Welcome to my French corner of ze forest! You\'re on a some sort of quest, no?  Perhaps you find the color, oui?  Help me and I will help you!', 'Oh no! Maybe you need another attempt. Try again, oui?', 'Q: How many seeds does it take to fully recolor our world? A: We\'ll never know unless you dare to find out!']
 	},
 	resource: {
-		url: 'test',
+		url: '8542',
 		tagline: 'Power and Privilege',
 		feedbackRight: 'You are SO right.',
 		feedbackWrong: 'Are you sure about that? Maybe take another look.',
@@ -115,7 +115,7 @@ module.exports.global = [{
 		prompts: ['Rogga has a thing that maybe help you grab and carry pretty colors back to world.  Sad with no color. Everything so gray. Maybe help with my survey and I give you thing?', 'I\'m still waiting for your answer!', 'Roga thinks you will be the best and bring back all the colors. Use all of the things! Want to see all of the things others say?']
 	},
 	resource: {
-		url: 'test',
+		url: '2176',
 		tagline: 'What Motivates You',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
@@ -134,7 +134,7 @@ module.exports.global = [{
 		prompts: ['O-o-oh... h-h-hi. I\'m h-holding something important for you.', 'This is tough, but important to think about!', 'I wish I was b-b-brave like you!']
 	},
 	resource: {
-		url: 'test',
+		url: '1608',
 		tagline: 'Struggles with Identiy',
 		feedbackRight: 'Thanks for sharing that.',
 		feedbackWrong: '',
@@ -154,7 +154,7 @@ module.exports.global = [{
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
 	},
 	resource: {
-		url: 'test',
+		url: '4876',
 		tagline: 'Thinking About Goals',
 		feedbackRight: 'I can think of 42 reasons why that\'s a great answer.',
 		feedbackWrong: '',
@@ -183,7 +183,7 @@ module.exports.global = [{
 		prompts: ['CHEWY CHOMP! I hear you\'re trying to spread some color. That\'s great. But first, chew on this!', 'I\'m not bad, I\'m just rendered that way. Give it another shot, why don\'t ya?', 'GOT ANY GUM? No? Oh well. I can show you the resource again, if you want.']
 	},
 	resource: {
-		url: 'test',
+		url: '9536',
 		tagline: 'Social Identities At Work',
 		feedbackRight: 'Nailed it! We should totally hang out after this.',
 		feedbackWrong: 'Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.',
@@ -203,7 +203,7 @@ module.exports.global = [{
 		prompts: ['This haircut is new. Tell me I look good, and I\'ll give you the chance to get some really cool stuff. Oh, you flatterer, you. Here\'s something that might help you...', 'This time, for sure. Presto!', 'I\'m tired of this haircut. Or maybe I\'m just bored with life. Either way, something\'s gotta change! You need to get out there and take life by the horns.']
 	},
 	resource: {
-		url: 'test',
+		url: '8986',
 		tagline: 'How Your Experiences Shape You',
 		feedbackRight: 'Very revealing, but of course there\'s more to you than that.',
 		feedbackWrong: 'Are you sure you understood the question? Try again!',
@@ -242,7 +242,7 @@ module.exports.global = [{
 		prompts: ['Sup. You seen my bro, Framp? Hamp loves Framp. We OWN this part of town! This is our turf! If you are gonna help our community you gotta let us help too!  Let me drop some knowledge on you.', 'Yo you gotta get this right before I will do anything for you.', 'Yeah I guess you aren\'t so bad after all. My bro Framp said you were alright. I\'m glad we got someone who wants to work with us to fix our town.']
 	},
 	resource: {
-		url: 'test',
+		url: '1517',
 		tagline: 'Working With Chinatown',
 		feedbackRight: 'Interesting. Very interesting!',
 		feedbackWrong: '',
@@ -261,7 +261,7 @@ module.exports.global = [{
 		prompts: ['YO! Framp is stoked you came to visit! You meet my bro Hamp yet? He is a little intense, but he just wants to make sure we are partners working together to help our community.','2','See? I told you Hamp isn\'t such a bad dude! He just loves his town and wants to be a part of helping restore the color. We all want to help make our home a better place.']
 	},
 	resource: {
-		url: 'test',
+		url: '352',
 		tagline: 'Digital Chinatown',
 		feedbackRight: 'That\'s great! Thanks for sharing!',
 		feedbackWrong: '',
@@ -280,7 +280,7 @@ module.exports.global = [{
 		prompts: ['You know the worst thing about having a giant nose? The jokes people tell you. I got this one recently: "He who put face in fruit drink get punch in the nose." Anyway, enough about me. You need help finding the color right? I can help!', 'Ah. I think you need to try again.', 'I think my nose is beautiful. Thanks for not making any dumb jokes about it!']
 	},
 	resource: {
-		url: 'test',
+		url: '3335',
 		tagline: 'All About Somerville',
 		feedbackRight: 'Great work!',
 		feedbackWrong: 'Maybe you should review the resource and try again...',
@@ -309,7 +309,7 @@ module.exports.global = [{
 		prompts: ['Listen. I\'m taking precious time out of my scientific research to talk to you. If you need some material from me, the least you can do is help me with my research.', 'Theres no way I\'m helping you without you helping me first.', 'Thanks for the help. Maybe there is some hope in the human race after all.']
 	},
 	resource: {
-		url: 'test',
+		url: '6177',
 		tagline: 'All About Medford',
 		feedbackRight: 'That\'s right!  Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.',
 		feedbackWrong: 'Maybe you should review the resource and try again...',
@@ -338,7 +338,7 @@ module.exports.global = [{
 		prompts: ['Hullo. My name is Dewdrop. I have a cold *sniff*. I found this thing. It probably has germs on it, but I\'ll give it to you if you think it will help. You need to answer something for me first though.','I don\'t know why you would want this germ infested thing, but I can\'t give it to you until you answer my question.','Remember to always wash your hands, its the best way to prevent getting a cold! I don\'t have hands that I can wash, so thats probably why I\'m always sick.']
 	},
 	resource: {
-		url: 'test',
+		url: '7052',
 		tagline: 'What Host Communities Give Back',
 		feedbackRight: 'Exactly right!',
 		feedbackWrong: 'Oh, I don\'t think so. Maybe you should take another look?',
@@ -357,7 +357,7 @@ module.exports.global = [{
 		prompts: ['Hello there! Have you ever thought about how the alphabet would sound if it was one big word? Something like "ab-keddef-gajihkel-monop-quristuv-wixyz." My head hurts just saying that! Anyway, I found this weird looking thing. I will give it to you, but first I have make sure you will use it properly.', 'You\'re silly. Maybe you should say that alphabet-word outloud. Or at least answer that question for me.', 'You are the best! Make good use of that shape.']
 	},
 	resource: {
-		url: 'test',
+		url: '9069',
 		tagline: 'Working With Somerville',
 		feedbackRight: 'I think that\'s probably true.',
 		feedbackWrong: '',
@@ -376,7 +376,7 @@ module.exports.global = [{
 		prompts: ['We need our color back. This is a community based need. You helping us solve a problem that we need help with is important to us, but its also important to learn about our community so you understand us! Heres a question for you.', 'Still waiting for that answer bub!', 'I\'m glad you are taking the time to learn about our world! By working with us and learning about our history your help will be so much more appreciated!']
 	},
 	resource: {
-		url: 'test',
+		url: '6773',
 		tagline: 'All About Chinatown',
 		feedbackRight: 'Bingo! Now that\'s what I\'m talkin\' about!',
 		feedbackWrong: 'That\'s not right! Check the resource and give it another shot.',
@@ -405,7 +405,7 @@ module.exports.global = [{
 		prompts: ['Bloop dee doop bloop! Beep boop? Oh. Sorry. You don\'t speak bloopian. What I said was: Are you here to help us? If so, I think we can help you help us!', 'This bloopin thing won\'t answer itself! ', 'If you haven\'t already talked to Zeebo, I bet he has some junk you could use to fix this mess!']
 	},
 	resource: {
-		url: 'test',
+		url: '9170',
 		tagline: 'An Assets-Based Approach',
 		feedbackRight: 'Yes. Our philosophical approach for civic engagement work with community partners is from the asset-based model. This explains why all community-based projects and opportunities should be based on community-identified needs. This does not mean that you cannot be creative and have ideas for addressing challenging issues, but unless the idea is based on a community-identified need and agreed upon with a community partner, there is little chance of success.',
 		feedbackWrong: 'That\'s not what we think. Try again, please!',
@@ -425,7 +425,7 @@ module.exports.global = [{
 		prompts: ['The best part about basketball is when you breakaway, rush the basket, and slam it through the hoop! Teamwork and collaboration is cool too I guess. I wish we had more basketball courts around here. But I guess getting color back is a priority. On my way home yesterday I found this. Maybe it can help?', 'Maybe you could try again. I take this stuff seriously you know! I won\'t just give this thing to anyone.', 'Hope that thing helps. Remember: basketball courts. Get on that.']
 	},
 	resource: {
-		url: 'test',
+		url: '2649',
 		tagline: 'Give And Take',
 		feedbackRight: 'Insightful response, thanks!',
 		feedbackWrong: '',
@@ -444,7 +444,7 @@ module.exports.global = [{
 		prompts: ['You humans crack me up. You all look the same! Calliope is filled with diversity. Zork and Frampton are so different, but they care about their home equally. Do you care about our community? Here is a question for you!', 'You have to do better than that!', 'Thanks for working with us. We gotta catch that darn robot! Without you it would be hard to organize all of these resources.']
 	},
 	resource: {
-		url: 'test',
+		url: '3075',
 		tagline: 'Digital Medford',
 		feedbackRight: 'Neat!',
 		feedbackWrong: '',
@@ -473,7 +473,7 @@ module.exports.global = [{
 		prompts: ['You\'re the one organizing the resources right? I have seen types like you before. Coming in and trying to help our community without knowing anything about us. Maybe if you prove you aren\'t just here for glory and fame, and that you do want to help make Calliope a colorful world again, I will give you something that can help.', 'Try again, kid. ', 'My intial judgements about you might have been wrong. Still, I am keeping my eye on you! Don\'t try anything funny!']
 	},
 	resource: {
-		url: 'test',
+		url: '2803',
 		tagline: 'Who You\'ll Work With',
 		feedbackRight: 'Yup, that\'s right!',
 		feedbackWrong: 'Confused? Check out the resource one more time and try again.',
@@ -493,7 +493,7 @@ module.exports.global = [{
 		prompts: ['I heard that this far off place called Medford  is one of the oldest Afro-American communities in the United States.Thats pretty far out man! Could you tell me more about this world?','Aw cmon man! I want to know!','Thats groovy, man. I DIG. The gnarliest thing is learning about cool places! Makes you feel, you know, all like connected.']
 	},
 	resource: {
-		url: 'test',
+		url: '3229',
 		tagline: 'Working With Medford',
 		feedbackRight: 'That\'s an idea!',
 		feedbackWrong: '',
@@ -532,7 +532,7 @@ module.exports.global = [{
 		prompts: ['FACT: French Toast, while delicious, is not true toast because it’s the eggy coating that is browned, not the bread itself.  Moreover it is typically prepared in a pan and therefore fried, not toasted. It should be called French Fried Egg. If you answer my question right I will give you another fact about toast. I guess I could also give you this other thing, but it isn\'t as interesting.', 'False. Try again.', 'Sorry my question wasn\'t about toast. I know how disappointing that must have been.']
 	},
 	resource: {
-		url: 'test',
+		url: '5219',
 		tagline: 'A Change of Perspective',
 		feedbackRight: 'Hm, interesting. Thanks for sharing!',
 		feedbackWrong: '',
@@ -551,7 +551,7 @@ module.exports.global = [{
 		prompts: ['I heard in this wacky place called..Somerville?...its always summer! Is that true? No? What a misleading name. What\'s unique about this place then if you can\'t just swim all the time!?', 'That doesn\'t make much sense.', 'In Calliope, there is no real weather, we just tell time by asking someone what time it is. That way, whatever time you want it to be is what time it is. Its complicated.']
 	},
 	resource: {
-		url: 'test',
+		url: '5206',
 		tagline: 'Digital Somerville',
 		feedbackRight: 'Thanks for sharing that!',
 		feedbackWrong: '',
@@ -570,7 +570,7 @@ module.exports.global = [{
 		prompts: ['Welcome to our Ranch! Its pretty cool right? Like, a cool ranch? That reminds me of my favorite snack...wait, what were we doing again? Oh yeah! Bustin that color suckin robot! You might need this thing I think.','Get your head out of the dirt and get on this!','Glad I could help. Make sure you talk to everyone else around the ranch. If you find some Doritos, hit me up.']
 	},
 	resource: {
-		url: 'test',
+		url: '17599',
 		tagline: 'Power and Privilege: Race',
 		feedbackRight: 'You got your helping hat on. I dig it.',
 		feedbackWrong: '',
@@ -589,7 +589,7 @@ module.exports.global = [{
 		prompts: ['Howdy youngin. My name is ChickenBob, the chickenest bob in all of Calliope. I got this there thangy that might help stop that darn robot from doin all that suckin.  Help me with somethin and I\'ll give it to ya.','Who do you think I am, youngin? You gotta put two turnips into the farm before you harvest the crops, you know? Try again.','Hey Allright! You take care now, ya hear? You see that machine,  you call up chickenBob and he\'ll sock it right in the nose!']
 	},
 	resource: {
-		url: 'test',
+		url: '16297',
 		tagline: 'Bridging The Gap',
 		feedbackRight: 'I believe I can fly. I believe if you try you can fill the sky with color.',
 		feedbackWrong: '',
@@ -618,7 +618,7 @@ module.exports.global = [{
 		prompts: ['Hey! Hey! You! That weird robot stole all the color! Whats the point of this awesome flag if the color is empty? Argh! Robots! Is this hinge going to help you?', 'ah you gotta show me that this thing will help so I can use my flag!', 'Did you know that flags are so fun? You can wave them, you can show your support for something, and you can wave them! So fun!']
 	},
 	resource: {
-		url: 'test',
+		url: '14588',
 		tagline: 'Reciprocity-Merging Your Objectives',
 		feedbackRight: 'By George, I think you\'ve got it!',
 		feedbackWrong: 'Perhaps you should re-read the resource and try again!',
@@ -638,7 +638,7 @@ module.exports.global = [{
 		prompts: ['My friend! Do come yonder and fill my space with all of your colors. Color, my friend, is one of the most precious gifts bestowed upon our community. A challenge for you then! The reward will prove your worth as a true adventurer!', 'You still must prove to me your worth, friend!', 'I used to be an adventurer like you, until my world got sapped of all its color. Go forth and restore!']
 	},
 	resource: {
-		url: 'test',
+		url: '14464',
 		tagline: 'Shared Goals and Objecitves',
 		feedbackRight: 'Thanks for that! Keep fighting the good fight.',
 		feedbackWrong: '',
@@ -667,7 +667,7 @@ module.exports.global = [{
 		prompts: ['My name always gets me in trouble. People kept blaming me for the lack of color! Like, just because my name means "rascal" doesn\'t mean I\'m a bad guy! You don\'t think I\'m a bad guy do you? Here! I got something that will help you! That will show em!', 'Well...I think you could do better. I just don\'t want to give up this piece if it isn\'t going to someone who will help us.', 'See! I told you I was a good guy! That should go to show that judging someone based on a first impression isn\'t a good idea!']
 	},
 	resource: {
-		url: 'test',
+		url: '12760',
 		tagline: 'Responsibility and Commitment',
 		feedbackRight: 'That sounds like a great start. Now keep your commitment to us and bring back all the color!',
 		feedbackWrong: '',
@@ -686,7 +686,7 @@ module.exports.global = [{
 		prompts: ['Oh, don\'t you just love Calliope? I swear to you its much more beautiful with the colors. That evil, evil, robot! Maybe I can help you put a stop to this gray madness? Then again, I wouldn\'t want to put you in any danger. Can I trust that you know how to be safe?', 'I\'m still waiting for that answer!', 'You don\'t need to make your answers public, but if you do, other players can give you extra seeds.']
 	},
 	resource: {
-		url: 'test',
+		url: '11752',
 		tagline: 'Safety First',
 		feedbackRight: 'Glad to hear it!',
 		feedbackWrong: 'This is important! Please go back and take another look.',
@@ -705,7 +705,7 @@ module.exports.global = [{
 		prompts: ['Before I came to Calliope, I used to live in this place with other mushrooms. It was cool, until this huge spiky turtle dragon thing started wrecking everything! That\'s when I found this place. I loved it here, that is until a dumb robot stole all the color. Can\'t a mushshroom get a break? I\'m sick of moving, so I\'ll help you stop this thing if you do something for me first.', 'Be a star. Answer the question!', 'Sorry, but your other resources are probably in another castle...er...area.']
 	},
 	resource: {
-		url: 'test',
+		url: '14706',
 		tagline: 'Power and Privilege: Poverty',
 		feedbackRight: 'That\'s true. The poverty threshold for a single individual under the age of 65 is $11,334. Seems low, huh?',
 		feedbackWrong: 'Nope! Try again, please.',
@@ -724,7 +724,7 @@ module.exports.global = [{
 		prompts: ['Lucky for you, I can speak over six million langauges. If you want to communicate in Gleeboz or Krillin, just let me know and I can switch. In the mean time, maybe you can help show me how to be a professional. I will give you something neat if you do!', 'I\'m not so sure, but that seems a bit strange.', 'According to my calculations, the color has vanished many times before! I also learned that there is something called a mega seed. Sounds fascinating!']
 	},
 	resource: {
-		url: 'test',
+		url: '16547',
 		tagline: 'Keeping Professional Relationships',
 		feedbackRight: 'Thanks for your answer!',
 		feedbackWrong: '',
@@ -753,7 +753,7 @@ module.exports.global = [{
 		prompts: ['Vogon knows you have the strength to find this robot and get our color back. Vogon sees all the things. Vogon knows all things. Vogon wants to help you. But first, Vogon wants you to prove yourself. Ready?', 'Vogon is disappointed in you.', 'Why don\'t you talk to Oriole or PenPen? Vogon is done with you.']
 	},
 	resource: {
-		url: 'test',
+		url: '10780',
 		tagline: 'Power and Privilege: Classism',
 		feedbackRight: 'Way to take action',
 		feedbackWrong: '',
@@ -782,7 +782,7 @@ module.exports.global = [{
 		prompts: ['Do you ever wonder what the world will be like when you\'re gone? I think the best we can hope for is to leave the world a better place! Hopefuly this bit will help you. Ready?', 'Focus! Try again!', 'Was that resource helpful? I\'m worried about my legacy!']
 	},
 	resource: {
-		url: 'test',
+		url: '17525',
 		tagline: 'Sustainability',
 		feedbackRight: 'Right on!',
 		feedbackWrong: 'Not quite. Remember, "An Ounce of Prevetion" and all that.',
@@ -812,7 +812,7 @@ module.exports.global = [{
 		prompts: ['I love the water! When you bring all the color back, my water view will be incredible! I want to help. Here\'s a question.', '2', 'Water... pools... reflection pools... reflection... it all makes sense now!']
 	},
 	resource: {
-		url: 'test',
+		url: '13696',
 		tagline: 'Understanding Reflection',
 		feedbackRight: 'Great! Now go find my friend Goober to talk more about how you\'ll reflect on things.',
 		feedbackWrong: '',
@@ -841,7 +841,7 @@ module.exports.global = [{
 		prompts: ['What was that? You\'ll have to speak into my good ear. If I hear a right answer from you, I\'ll give you something that will help!', '2', 'I hear you\'ve been reflecting on things. That\'s awesome!']
 	},
 	resource: {
-		url: 'test',
+		url: '12249',
 		tagline: 'Tips For the Future',
 		feedbackRight: 'That\'s important to think about.',
 		feedbackWrong: '',
@@ -860,7 +860,7 @@ module.exports.global = [{
 		prompts: ['Are you hear to take my order? Finally! I\'ll have three large black coffees. Oh, it\'s you! I have something for you that might help...', 'I\'ll give you a hint if you give me some COFFEE! Eh, just try again.', 'I know you\'re doing a good job, because most of the color has come back!']
 	},
 	resource: {
-		url: 'test',
+		url: '13246',
 		tagline: 'Leading the Way',
 		feedbackRight: 'That\'s something I can get behind.',
 		feedbackWrong: '',
@@ -879,7 +879,7 @@ module.exports.global = [{
 		prompts: ['Hm. You\'re the one who\'s bringing back all the color? I thought you\'d be taller... Oh well. I\'ll still help you.', '2', 'I\'ll give you the same advice I give everyone: Get educated, and watch out for robots!']
 	},
 	resource: {
-		url: 'test',
+		url: '14380',
 		tagline: 'Connected Learning',
 		feedbackRight: 'Awesome! I want to take a class on towels, and their relevance to galactic travel.',
 		feedbackWrong: '',
@@ -918,7 +918,7 @@ module.exports.global = [{
 		prompts: ['Have you ever thought about where the future might take you? Wherever you go, this resource might help!', '2', 'You\'re like some color prodigy! I feel smarter and more artistic just by knowing you.']
 	},
 	resource: {
-		url: 'test',
+		url: '16920',
 		tagline: 'Future Connections',
 		feedbackRight: 'That sounds great. I know you can do it!',
 		feedbackWrong: '',
@@ -938,7 +938,7 @@ module.exports.global = [{
 		prompts: ['I thought these things were Raisinets, but they\'re really seeds! Want some? Then answer my question.', '2', 'It\'s peanutbutter jelly time!']
 	},
 	resource: {
-		url: 'test',
+		url: '15638',
 		tagline: 'How You Will Reflect',
 		feedbackRight: 'That\'s really great. Thank you!',
 		feedbackWrong: '',
@@ -957,7 +957,7 @@ module.exports.global = [{
 		prompts: ['I may be little, but I\'m packing some mighty big thoughts. Let\'s see if we\'re on the same wavelength. If we are, I\'ll give you something that just might help you out!', '2', 'Remember, size matters not! Only knowledge. Reflect on that.']
 	},
 	resource: {
-		url: 'test',
+		url: '16912',
 		tagline: 'Where Will You Go From Here?',
 		feedbackRight: 'I like it!',
 		feedbackWrong: '',
@@ -976,7 +976,7 @@ module.exports.global = [{
 		prompts: ['I\'ve still got plenty of seeds left. I\'m supposed to give them to whoever can answer this. Is that you?', 'I can still give you a seed or two if you try again!', 'I\'m raising my hand because I have a question... and you already answered it.']
 	},
 	resource: {
-		url: 'test',
+		url: '15626',
 		tagline: 'The Power of Civic Engagement',
 		feedbackRight: 'Yup! Amazing, huh?',
 		feedbackWrong: 'Did we read the same resource? Try again.',
@@ -995,7 +995,7 @@ module.exports.global = [{
 		prompts: ['I know someone who looks like me, except their coat is really just fur. Can you believe that? Here\'s something else interesting: a question for you to answer.', 'I\'ll give you another shot, but only because I like you.', 'I think we all learned something important, today. When you figure out what it is, tell me! Or better yet, tell the Botanist!']
 	},
 	resource: {
-		url: 'test',
+		url: '13360',
 		tagline: 'What You Leave Behind...',
 		feedbackRight: 'Perfect',
 		feedbackWrong: 'Close, but think bigger!',
