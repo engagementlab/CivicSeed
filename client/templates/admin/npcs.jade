@@ -29,6 +29,8 @@
 							p.category --- Resource ---
 							p URL <span class='smallerFont'> case and space sensitive</span>
 							textarea.url(data-area='url') #{npc.resource.url}
+							p Tangram Piece
+							textarea.url(data-area='shape') #{npc.resource.shape}
 							p.questionType
 								|Question
 								if (npc.resource.questionType === 'open')
@@ -113,6 +115,8 @@
 							p.category --- Resource ---
 							p URL <span class='smallerFont'> case and space sensitive</span>
 							textarea.url(data-area='url')
+							p Tangram Piece
+							textarea.url(data-area='shape')
 							p.questionType
 								|Question
 								input(name=('radio' + npc.id) , value='open', type='radio', checked)

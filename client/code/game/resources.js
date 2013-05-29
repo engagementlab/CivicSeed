@@ -347,7 +347,8 @@ $game.$resources = {
 				index: _curResource.index,
 				answer: response,
 				npcLevel: npcLevel,
-				shape: npcShape
+				shape: npcShape,
+				questionType: _curResource.questionType
 			};
 			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
 
@@ -364,7 +365,8 @@ $game.$resources = {
 				name: $game.$player.name,
 				answer: response,
 				madePublic: false,
-				instanceName: $game.$player.instanceName
+				instanceName: $game.$player.instanceName,
+				questionType: _curResource.questionType
 			};
 			//hack to not include demo users
 			if($game.$player.name !== 'Demo') {
@@ -460,7 +462,7 @@ function _addAnsweredContent() {
 	if(_correctAnswer) {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
-			var inputBox = '<p class="centerText taglineInput"><input name="tagline" type ="text" value="Type here..." maxLength = "60"></input></p>',
+			var inputBox = '<p class="centerText taglineInput"><input name="tagline" type ="text" value="Type here..." maxLength = "60"></input></p><p class="privacyMessage taglineInput">Write words. Remember things.</p>',
 				npcLevel = $game.$npc.getNpcLevel(),
 				html;
 			if(npcLevel < $game.$player.currentLevel) {

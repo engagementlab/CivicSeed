@@ -38,6 +38,7 @@ ss.server.on('ready', function() {
 					var $events = require('/events');
 					var $input = require('/input');
 					var $chat = require('/chat');
+					var $log = require('/log');
 
 					$game.init();
 

@@ -296,7 +296,7 @@ exports.actions = function(req, res, ss) {
 						npcId = parseInt(info.npc,10);
 					while(!found) {
 						if(user.game.resources[i].npc === npcId) {
-							user.game.resources[i].seeded += 1;
+							user.game.resources[i].seeded.push(info.pledger);
 							found = true;
 						}
 						i++;
@@ -306,7 +306,7 @@ exports.actions = function(req, res, ss) {
 					}
 					user.save(function (err,suc) {
 						res(suc);
-						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info.id);
+						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info);
 					});
 				}
 			});

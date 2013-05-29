@@ -13,7 +13,7 @@ $(function() {
 		$game.$others.add(data.info);
 		$activePlayers.text(data.num);
 		if(data.info.id !== $game.$player.id) {
-			$game.temporaryStatus(data.info.name + ' has joined!');
+			$game.statusUpdate({message:data.info.name + ' has joined!',input:'status',screen: true,log:false});
 		}
 	});
 
@@ -43,16 +43,14 @@ $(function() {
 
 	//new message from chat
 	ss.event.on('ss-newMessage', function(data, chan) {
-		if(data.id === $game.$player.id) {
-			$game.$chat.message(data.message);
-		}
-		else {
-			$game.$others.message(data.message, data.id);
-		}
+		//put in log for everyone
+		data.input = 'chat';
+		$game.$log.addMessage(data);
 	});
 
 	ss.event.on('ss-statusUpdate', function(data, chan) {
-		$game.temporaryStatus(data);
+		// $game.temporaryStatus(data);
+		console.log('TODO lol');
 	});
 
 	ss.event.on('ss-progressChange', function(data, chan) {
@@ -80,8 +78,8 @@ $(function() {
 
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(data, chan) {
-		if($game.$player.id === data) {
-			$game.temporaryStatus('a peer liked your answer, +1 seed');
+		if($game.$player.id === data.id) {
+			$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have a seed.',input:'status',screen: true,log:true});
 			$game.$player.updateSeeds('riddle', 1);
 		}
 	});

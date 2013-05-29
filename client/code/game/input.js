@@ -9,6 +9,7 @@ $(function() {
 		$displayBoxText = $('.displayBoxText'),
 		$progressArea = $('.progressArea'),
 		_helpShowing = false,
+		_logShowing = false,
 		_pledgeFeedbackTimeout = null;
 
 	_w.on('beforeunload', function() {
@@ -19,8 +20,8 @@ $(function() {
 
 	$BODY.on('click', '.seedButton', function () {
 		//$game.$player.seedMode = $game.$player.seedMode ? false : true;
-		var goAhead = startNewAction();
-		if(goAhead) {
+		//var goAhead = startNewAction();
+		if($game.startNewAction) {
 			//this mean seedventory is DOWN
 			//the user clicked meaning they want to open or end seed mode
 			//END seed mode
@@ -28,13 +29,14 @@ $(function() {
 				$game.$player.seedMode = 0;
 				$game.$player.seedPlanting = false;
 				$game.$player.resetRenderColor();
-				$game.changeStatus();
 				$(this).removeClass('currentButton');
 				$game.$player.saveMapImage();
+				$game.startNewAction = true;
 			}
 			else {
 				//open it up OR turn it on
 				$game.$player.openSeedventory();
+				$game.startNewAction = false;
 			}
 		}
 		else {
@@ -42,13 +44,12 @@ $(function() {
 			if($game.$player.seedventoryShowing) {
 				$('.seedventory').slideUp(function() {
 					$game.$player.seedventoryShowing = false;
-					$game.changeStatus();
 				});
 			}
 			else {
 				$game.$player.seedPlanting = false;
-				$game.temporaryStatus('seed mode ended, as you were');
 			}
+			$game.startNewAction = true;
 			$(this).removeClass('currentButton');
 			$game.$player.saveMapImage();
 		}
@@ -120,19 +121,30 @@ $(function() {
 		return false;
 	});
 
-	$BODY.on('click', '.chatButton', function () {
-		$('.chatButton').toggleClass('currentButton');
-		$chatBox.toggleClass('hide');
-		$displayBox.toggleClass('hide');
+	$BODY.on('click', '.logButton', function () {
+		if(_logShowing || $game.startNewAction) {
+			_logShowing = !_logShowing;
+			$game.startNewAction = !$game.startNewAction;
+			$('.logButton').toggleClass('currentButton');
+			$('.gameLog').fadeToggle();
+			$game.$log.clearUnread();
+		}
 		return false;
 	});
 
+	// $BODY.on('click', '.gameLog a i', function (e) {
+	// 	e.preventDefault();
+	// 	$('.logButton').toggleClass('currentButton');
+	// 	$('.gameLog').fadeToggle();
+	// 	return false;
+	// });
+
 	$BODY.on('click', '.inventoryButton, .inventory button', function () {
-		if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$botanist.isShowing) {
+		// if(!$game.$resources.isShowing && !$game.$player.seedventoryShowing && !$game.$botanist.isShowing) {
+		if($game.startNewAction) {
 			if($game.$player.inventoryShowing) {
 				$inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
-					$game.changeStatus();
 					$('.inventoryButton').removeClass('currentButton');
 				});
 			}
@@ -215,7 +227,7 @@ $(function() {
 		$('.progressButton').removeClass('currentButton');
 		$progressArea.fadeOut(function() {
 			$game.showingProgress = false;
-			$game.changeStatus();
+			$game.startNewAction = true;
 		});
 		return false;
 	});
@@ -229,15 +241,15 @@ $(function() {
 			$(this).toggleClass('currentButton');
 			$progressArea.fadeOut(function() {
 				$game.showingProgress = false;
-				$game.changeStatus();
+				$game.startNewAction = true;
 			});
 		}
 		else {
-			var goAhead = startNewAction();
-			if(goAhead) {
+			//var goAhead = startNewAction();
+			if($game.startNewAction) {
+				$game.startNewAction = false;
 				$(this).toggleClass('currentButton');
 				$game.showProgress();
-				$game.changeStatus('game progress and leaderboard');
 			}
 		}
 	});
@@ -253,15 +265,19 @@ $(function() {
 	});
 
 	$BODY.on('click', '.helpButton', function () {
-		_helpShowing = !_helpShowing;
-		$(this).toggleClass('currentButton');
-		$('.helpArea').fadeToggle();
+		if(_helpShowing || $game.startNewAction) {
+			_helpShowing = !_helpShowing;
+			$game.startNewAction = !$game.startNewAction;
+			$('.helpArea').fadeToggle();
+			$('.helpButton').toggleClass('currentButton');
+		}
 	});
 
 	$BODY.on('click', '.helpArea a i', function () {
 		$('.helpButton').toggleClass('currentButton');
 		$('.helpArea').fadeOut('fast', function() {
 			_helpShowing = false;
+			$game.startNewAction = !$game.startNewAction;
 		});
 	});
 
@@ -281,6 +297,7 @@ $(function() {
 	$BODY.on('click', '.pledgeButton', function() {
 		var info = {
 			id: $(this).attr('data-player'),
+			pledger: $game.$player.name,
 			npc: $(this).attr('data-npc')
 		};
 		var pledges = $game.$player.getPledges();

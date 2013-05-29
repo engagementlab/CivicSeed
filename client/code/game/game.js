@@ -19,8 +19,7 @@ var _stepNumber = 0,
 	_stats = null,
 	_badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
-	_displayTimeout = null,
-	_prevMessage = 'Civic Seed';
+	_displayTimeout = null;
 
 //public functions
 exports.$game = {
@@ -44,6 +43,8 @@ exports.$game = {
 	masterX: null,
 	masterY: null,
 	playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
+
+	startNewAction: true,
 
 	init: function() {
 		//all the init calls will trigger others, a waterfall approach to assure
@@ -165,32 +166,19 @@ exports.$game = {
 	},
 
 	//shows message in the display box that only lasts specific time
-	temporaryStatus: function(msg) {
-		$('.displayBoxText').text(msg);
-		$('.displayBox').css('background','#a2f0e9');
-		clearTimeout(_displayTimeout);
-		_displayTimeout = setTimeout(function() {
-			$('.displayBoxText').text(_prevMessage);
-			$('.displayBox').css('background','white');
-		}, 3000);
-	},
-
-	//change the display box text
-	changeStatus: function(custom) {
-		clearTimeout(_displayTimeout);
-		$('.displayBox').css('background','white');
-		if(custom) {
-			$('.displayBoxText').text(custom);
+	statusUpdate: function(data) {
+		if(data.screen) {
+			$('.statusUpdate').text(data.message).show();
+			clearTimeout(_displayTimeout);
+			var len = data.message.length,
+				fadeTime = len * 100 + 500;
+			_displayTimeout = setTimeout(function() {
+				$('.statusUpdate').fadeOut();
+			}, fadeTime);
 		}
-		else {
-			if($game.$player.seedMode > 0) {
-				$('.displayBoxText').text('click a tile to drop a seed');
-			}
-			else {
-				$('.displayBoxText').text(_levelNames[$game.$player.currentLevel]);
-			}
+		if(data.log) {
+			$game.$log.addMessage(data);
 		}
-		_prevMessage = $('.displayBoxText').text();
 	},
 
 	//check for bad language to censor it in chat
@@ -212,7 +200,7 @@ exports.$game = {
 			leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true;
 		}
 		if(leaderChange) {
-			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
+			$game.statusUpdate({message:data.board[0].name + ' is top seeder!',input:'status',screen: true,log:false});
 		}
 		_stats.leaderboard = data.board;
 	},
@@ -227,12 +215,13 @@ exports.$game = {
 		//if we have gone up a milestone, feedback it
 		if(_stats.percent > 99) {
 			//do something for game over?
-			$game.temporaryStatus('the color has been restored!');
+				$game.statusUpdate({message:'the meter is filled!',input:'status',screen: true,log:false});
 		}
 		if(_stats.prevPercent != _stats.percent) {
 			_stats.prevPercent = _stats.percent;
 			if(_stats.percent % 5 === 0) {
-				$game.temporaryStatus('the world is now ' + percentString + ' colored!');
+				// $game.temporaryStatus('the world is now ' + percentString + ' colored!');
+				console.log('TODO');
 			}
 		}
 	}
@@ -307,6 +296,12 @@ function _loadAudio() {
 
 function _loadChat() {
 	$game.$chat.init(function() {
+		_loadLog();
+	});
+}
+
+function _loadLog() {
+	$game.$log.init(function() {
 		_loadGameInfo();
 	});
 }
@@ -345,10 +340,7 @@ function _loadExtra() {
 	//update text in HUD
 	var percentString = _stats.percent + '%';
 	$('.progressButton .hudCount').text(percentString);
-	_prevMessage = _levelNames[$game.$player.currentLevel];
 
-	//update status
-	$game.changeStatus();
 	//init chat rpc
 	ss.rpc('game.chat.init');
 	_startGame();

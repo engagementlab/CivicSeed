@@ -12,35 +12,35 @@ $game.$chat = {
 	},
 
 	message: function(message, other) {
-		var len = message.length + 4,
-			fadeTime = len * 150 + 1000,
-			sz = Math.floor(len * 8) + 10;
-		fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
-		//this was the client's message
-		if(!other) {
-			if(_isChatting) {
-				clearTimeout(_hideTimer);
-				$(_chatIdSelector).text('me: '+ message);
-			}
-			else {
-				$gameboard.append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
-			}
-			_hideTimer = setTimeout($game.$chat.hideChat, fadeTime);
-			_placeChat(sz);
-			_isChatting = true;
-		} else {
-			len = message.length + other.name.length + 2;
-			sz = Math.floor(len * 8) + 10;
-			if(other.isChatting) {
-				$(other.chatIdSelector).text(other.name+': '+message);
-			}
-			else {
-				$('.gameboard').append('<p class=\'playerChat\' id=' + other.chatId + '>' + other.name +': '+ message + '</p>');
-			}
-			$game.$audio.playTriggerFx('chatReceive');
-			_placeChat(sz, other);
-			return fadeTime;
-		}
+		// var len = message.length + 4,
+		// 	fadeTime = len * 150 + 1000,
+		// 	sz = Math.floor(len * 8) + 10;
+		// fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
+		// //this was the client's message
+		// if(!other) {
+		// 	if(_isChatting) {
+		// 		clearTimeout(_hideTimer);
+		// 		$(_chatIdSelector).text('me: '+ message);
+		// 	}
+		// 	else {
+		// 		$gameboard.append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
+		// 	}
+		// 	_hideTimer = setTimeout($game.$chat.hideChat, fadeTime);
+		// 	_placeChat(sz);
+		// 	_isChatting = true;
+		// } else {
+		// 	len = message.length + other.name.length + 2;
+		// 	sz = Math.floor(len * 8) + 10;
+		// 	if(other.isChatting) {
+		// 		$(other.chatIdSelector).text(other.name+': '+message);
+		// 	}
+		// 	else {
+		// 		$('.gameboard').append('<p class=\'playerChat\' id=' + other.chatId + '>' + other.name +': '+ message + '</p>');
+		// 	}
+		// 	$game.$audio.playTriggerFx('chatReceive');
+		// 	_placeChat(sz, other);
+		// 	return fadeTime;
+		// }
 	},
 
 	hideChat: function(other) {

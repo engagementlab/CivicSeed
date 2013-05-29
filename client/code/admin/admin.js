@@ -189,7 +189,7 @@ var self = module.exports = {
 				}
 				if(resources[i].seeded) {
 					//thumbs up icon with number
-					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded;
+					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded.length;
 				}
 				html += '</div></div>';
 			}

@@ -248,7 +248,7 @@ $game.$audio = {
 		var trackNum = $game.$audio.whichTrack(posX, posY);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
 			$game.$audio.switchTrack(trackNum);
-			$game.temporaryStatus(_newPlace);
+			$game.statusUpdate({message:_newPlace,input:'status',screen: true,log:false});
 		}
 		if(!_currentLoop) {
 			$game.$audio.checkEnvironmentLoopFx(trackNum);

@@ -43,8 +43,13 @@ body, button, p, a
 	p.tangramPieceP
 		padding 0
 		margin 0
-	.taglineInput input
-		width 400px
+	.taglineInput
+		padding 0
+		margin 0
+		text-align center
+		input
+			width 400px
+			font-family $buttonFont
 
 .resourceArea
 	position absolute
@@ -330,12 +335,24 @@ body, button, p, a
 			.theQuestion
 				font-size 1.1em
 				padding 10px 10px 5px 10px
-			.theAnswer 	
+			.theAnswer
+				position relative
 				margin 0 10px 15px 10px
 				font-family $buttonFont
 				background $csLightGreen
 				padding 5px 10px
 				border-radius 5px
+				.seededCount
+					position absolute
+					top 5px
+					right 5px
+					background $csBlue
+					padding 3px
+					border-radius 4px
+					line-height 1
+					color #fff
+				.answerText
+					max-width 90%
 					
 			
 		// .playerAnswers
@@ -432,7 +449,8 @@ body, button, p, a
 .botanistArea a i,
 .progressArea a i,
 .collectedResources a i,
-.helpArea a i
+.helpArea a i,
+.gameLog a i
 	position absolute
 	top 10px
 	right 10px
@@ -551,22 +569,6 @@ body, button, p, a
 	font-size 22px
 	float left
 
-.playerChat
-	position absolute
-	font-size 16px
-	font-family $mono
-	width 200px
-	height 20px
-	background rgba(20,20,20,0.7)
-	border-radius 5px
-	padding 0 0 5px 10px
-	z-index 100
-	color #eee
-	$textOutline()
-
-#chatText
-	font-family $mono
-
 .pauseMenu
 	position absolute
 	top 15px
@@ -651,19 +653,6 @@ p.finalQuestion
 
 .hide
 	display none
-
-.displayBox
-	width 95%
-	height 24px
-	border 1px solid #ccc
-	border-radius 4px
-	font-size 16px
-	padding 4px
-	text-align center
-	overflow hidden, monospace
-	position relative
-	cursor default
-	font-family $mono
 
 .badge
 	position absolute
@@ -928,3 +917,49 @@ p.privacyMessage
 	height 100%
 	background url($cloudPath + 'img/game/teleport.gif') #eee no-repeat center center
 	background-size cover
+
+.gameLog
+	position absolute
+	bottom 15px
+	left 15px
+	width 910px
+	height 220px
+	background rgba(50,50,50,0.9)
+	padding 10px
+	border-radius 5px
+	z-index 9999
+	display none
+	overflow auto
+	p
+		padding 0
+		margin 2px
+		font-family $buttonFont
+		.date 
+			color $csLightBlue
+			font-family $mono
+			font-size .8em
+			margin-right 8px
+		.playerName
+			color $csLightGreen
+			margin-right 4px
+	p.globalChat
+		color #fff
+	p.status
+		color $csLightOrange
+
+.statusUpdate
+	display none
+	position absolute
+	top 10px
+	left 10px
+	font-size 16px
+	font-family $mono
+	width auto
+	height 20px
+	background rgba(20,20,20,0.7)
+	// background $csBlue
+	border-radius 5px
+	padding 5px 10px 10px 10px
+	margin 0
+	z-index 100
+	color #eee

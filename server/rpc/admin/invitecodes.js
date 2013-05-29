@@ -4,6 +4,7 @@ var rootDir = process.cwd(),
 	service = require(rootDir + '/service'),
 	userModel = service.useModel('user', 'preload'),
 	gameModel = service.useModel('game', 'preload'),
+	colorModel = service.useModel('color', 'preload'),
 	emailListLength,
 	emailIterator,
 	singleHtml;
@@ -150,7 +151,26 @@ exports.actions = function(req, res, ss) {
 							}
 							else {
 								console.log('game instance has been created');
-								res(false, false);
+								//put a single color in the world so we don't get an error when it searches
+								color = new colorModel();
+								color.instanceName = name;
+								color.x = 0;
+								color.y = 0;
+								color.mapIndex = 0;
+								color.color = {
+									r: 255,
+									g: 0,
+									b: 0,
+									a: 0.3
+								};
+								color.curColor = 'rgba(255,0,0,0.3)';
+								color.save(function(err, okay) {
+									if(err) {
+										console.log(err);
+									} else if(okay) {
+										res(false, false);
+									}
+								});
 							}
 						});
 					}

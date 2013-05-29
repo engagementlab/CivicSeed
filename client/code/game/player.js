@@ -262,8 +262,8 @@ $game.$player = {
 			answers: [info.answer],
 			attempts: 1,
 			result: info.correct,
-			seeded: 0,
-			shape: info.shape
+			seeded: [],
+			questionType: info.questionType
 		};
 		var realResource = null,
 			l = _resources.length;
@@ -294,8 +294,8 @@ $game.$player = {
 			$game.$player.updateSeeds('normal', numToAdd);
 
 			if($game.$player.currentLevel === info.npcLevel) {
-				_inventory.push(newInfo.shape);
-				_addToInventory(newInfo.shape);
+				_inventory.push(info.shape);
+				_addToInventory(info.shape);
 				$game.$player.checkBotanistState();
 			}
 			_saveResourceToDB(realResource);
@@ -463,7 +463,7 @@ $game.$player = {
 				$('.specialButton').css('color',col2);
 
 				$game.$player.seedventoryShowing = true;
-				$game.changeStatus('choose a seed to plant');
+				$game.statusUpdate({message:'choose a seed to plant',input:'status',screen: true,log:false});
 				$('.seedButton').addClass('currentButton');
 			});
 		}
@@ -473,11 +473,10 @@ $game.$player = {
 			if(_seeds.normal > 0) {
 				$game.$player.seedPlanting = true;
 				$game.$player.seedMode = 1;
-				$game.changeStatus();
 			}
 			else {
 				$('.seedButton').removeClass('currentButton');
-				$game.temporaryStatus('you have no seeds');
+				$game.statusUpdate({message:'you have no seeds',input:'status',screen: true,log:false});
 			}
 		}
 	},
@@ -489,7 +488,6 @@ $game.$player = {
 			$game.$player.seedventoryShowing = false;
 			$game.$player.seedPlanting = true;
 		});
-		$game.changeStatus();
 	},
 
 	//make a response public to all other users
@@ -540,13 +538,21 @@ $game.$player = {
 	compileAnswers: function() {
 		var html = '';
 		for (var a = 0; a < _resources.length; a++) {
-			var item = _resources[a],
-				npc = item.npc,
-				answer = item.answers[item.answers.length - 1],
-				question = $game.$resources.getQuestion(npc);
-				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span>' + answer + '</span></p>';
-		}
+			var item = _resources[a];
+			if(item.questionType === 'open') {
+				var	npc = item.npc,
+					answer = item.answers[item.answers.length - 1],
+					question = $game.$resources.getQuestion(npc),
+					seededCount = item.seeded.length;
+
+				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span class="answerText">' + answer + '</span>';
+				if(seededCount > 0) {
+					html += '<span class="seededCount">' + seededCount + ' likes</span>';
+				}
+				html += '</p>';
+			}
 		return html;
+		}
 	},
 
 	//see if the player has the specific resource already
@@ -743,7 +749,6 @@ function _calculateSeeds(options) {
 		square = null;
 	if($game.$map.currentTiles[options.x][options.y].color) {
 		if($game.$map.currentTiles[options.x][options.y].color.owner !== 'nobody') {
-			$game.temporaryStatus('that tile has been planted on');
 			return false;
 		}
 	}
@@ -868,8 +873,7 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.temporaryStatus('you are out seeds');
+					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
@@ -880,8 +884,7 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.changeStatus('no more seeds for you!');
+					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
@@ -892,15 +895,14 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.$player.seedMode = 0;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.changeStatus('no more seeds for you!');
+					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
 				}
 			}
 		}
 		else {
-			$game.changeStatus('sorry, someone beat you to that tile');
+			$game.statusUpdate({message:'sorry, someone beat you to that tile',input:'status',screen: true,log:false});
 		}
 	});
 }

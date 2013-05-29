@@ -234,6 +234,7 @@ $game.$botanist = {
 		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
+		$game.startNewAction = false;
 		$game.$botanist.nextChatContent();
 	},
 
@@ -242,6 +243,7 @@ $game.$botanist = {
 			$speechBubbleBtn.addClass('hideButton');
 			$speechBubbleCloseBtn.unbind('click');
 			$game.$botanist.isChat = false;
+			$game.startNewAction = true;
 			//save that the player has looked at the instructions
 			if($game.$player.botanistState === 0) {
 				$game.$player.botanistState = 1;
@@ -287,6 +289,7 @@ $game.$botanist = {
 		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
+		$game.startNewAction = false;
 		_speak =  $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
 		$speakerName.text($game.$botanist.name+': ');
@@ -316,6 +319,7 @@ $game.$botanist = {
 		if(!$game.$botanist.isShowing) {
 			$inventory.slideUp();
 			$game.$botanist.isChat = true;
+			$game.startNewAction = false;
 			$game.$botanist.showRiddle(0);
 		}
 	},
@@ -326,6 +330,7 @@ $game.$botanist = {
 			_promptNum = 1;
 			_currentSlide = 2;
 			$game.$botanist.isChat = true;
+			$game.startNewAction = false;
 		}
 		else {
 			_promptNum = num;
@@ -488,7 +493,6 @@ $game.$botanist = {
 				$botanistAreaMessage.text(endQuestion);
 				var inputBox = '<textarea placeholder="type your answer here..."></textarea>';
 				$botanistContent.html(inputBox);
-				$game.changeStatus('this will go in your profile');
 			}
 		}
 	},
@@ -504,8 +508,8 @@ $game.$botanist = {
 				.removeClass('patternBg3')
 				.css('height','450px');
 			$game.$botanist.isChat = false;
+			$game.startNewAction = true;
 			$game.$botanist.isSolving = false;
-			$game.changeStatus();
 			$puzzleSvg.empty();
 			$inventoryItem.css('opacity',1);
 
@@ -513,7 +517,6 @@ $game.$botanist = {
 			if($game.$player.botanistState === 0) {
 				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
-				$game.changeStatus('game progress and leaderboard');
 			}
 		});
 
@@ -628,8 +631,6 @@ $game.$botanist = {
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
 					$game.$player.updateSeeds('riddle', _numMegaSeeds);
 					$game.$player.botanistState = 4;
-
-					$game.changeStatus('congrats!');
 				}
 			}
 			else {
@@ -642,7 +643,7 @@ $game.$botanist = {
 			_numMegaSeeds = 5;
 			var portAnswer = $botanistTextArea.val();
 			$game.$player.resumeAnswer(portAnswer);
-			$game.changeStatus('talk to the botanist');
+			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});
 			$game.$player.nextLevel();
 			$game.$botanist.hideResource();
 			//upload the user's answer to the DB
