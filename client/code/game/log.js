@@ -19,7 +19,7 @@ $game.$log = {
 		_unread++;
 		_numItems++;
 		var hudText = _unread;
-		if(_numItems > 10) {
+		if(_unread > 10) {
 			hudText = '10+';
 		}
 		$hudCount.text(hudText).removeClass('hide');
@@ -34,9 +34,10 @@ $game.$log = {
 			html += data.message + '</p>';
 		}
 		if(_numItems > _maxItems) {
-			$('.gameLog p').last().remove();
+			$('.gameLog p').first().remove();
 		}
-		$gameLog.prepend(html);
+		$gameLog.append(html);
+		$gameLog.scrollTop($gameLog[0].scrollHeight);
 	},
 
 	clearUnread: function() {

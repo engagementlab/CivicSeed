@@ -8,6 +8,7 @@ $(function() {
 		$inventory = $('.inventory'),
 		$displayBoxText = $('.displayBoxText'),
 		$progressArea = $('.progressArea'),
+		$gameLog = $('.gameLog'),
 		_helpShowing = false,
 		_logShowing = false,
 		_pledgeFeedbackTimeout = null;
@@ -126,7 +127,8 @@ $(function() {
 			_logShowing = !_logShowing;
 			$game.startNewAction = !$game.startNewAction;
 			$('.logButton').toggleClass('currentButton');
-			$('.gameLog').fadeToggle();
+			$gameLog.fadeToggle();
+			$gameLog.scrollTop($gameLog[0].scrollHeight);
 			$game.$log.clearUnread();
 		}
 		return false;
