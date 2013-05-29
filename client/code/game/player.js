@@ -545,11 +545,11 @@ $game.$player = {
 					question = $game.$resources.getQuestion(npc),
 					seededCount = item.seeded.length;
 
-				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span class="answerText">' + answer + '</span>';
+				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
 				if(seededCount > 0) {
-					html += '<span class="seededCount">' + seededCount + ' likes</span>';
+					html += '<p class="seededCount">' + seededCount + ' likes</p>';
 				}
-				html += '</p>';
+				html += '</div>';
 			}
 		return html;
 		}

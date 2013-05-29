@@ -313,7 +313,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		saveResource: function(info) {
-			console.log(info);
+			//console.log(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
