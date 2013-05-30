@@ -456,9 +456,9 @@ $game.$botanist = {
 				});
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
 				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
-				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png';
-					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
+				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
+					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
 				$botanistContent.html(newHTML);
 
 				//replace the tangram image in the inventory with tip
@@ -505,7 +505,7 @@ $game.$botanist = {
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
 			$puzzleSvg.empty();
-			$inventoryItem.css('opacity',1);
+			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
 			if($game.$player.botanistState === 0) {
@@ -664,11 +664,11 @@ $game.$botanist = {
 				.unbind('dragover')
 				.unbind('drop');
 
-			var id = e.data.npc,
+			var npcData = e.data,
 				dt = e.originalEvent.dataTransfer,
-				select = '.r' + id;
+				select = '.r' + npcData.name;
 
-			dt.setData('text/plain', id);
+			dt.setData('text/plain', npcData.npc);
 
 			//set drag over shit
 			$tangramArea
@@ -695,21 +695,26 @@ $game.$botanist = {
 		}
 		//set class name for new shape and fetch shape data
 		//e.originalEvent.offsetX
-		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
-			selector = 'br' + npc,
+		var npcData = e.originalEvent.dataTransfer.getData('text/plain'),
+			splits = npcData.split(','),
+			npc = splits[0],
+			name = splits[1],
+			selector = 'br' + name,
 			x = e.originalEvent.layerX,
-			y =  e.originalEvent.layerY,
-			shape = $game.$resources.getShape(npc),
+			y =  e.originalEvent.layerY;
+
+		var	shape = $game.$resources.getShape(npc),
 			path = shape.path,
 			fill = _svgFills[shape.fill];
 
-		$('.r' + npc)
+
+		$('.r' + name)
 			.css('opacity','.4')
 			.attr('draggable', 'false');
 
 		_new = _svg.append('path')
 			.attr('class',selector)
-			.data([{x:x , y: y, id: npc, color: fill}])
+			.data([{x:x , y: y, id: name, color: fill}])
 			.attr('d', shape.path)
 			.attr('fill', fill)
 			.attr('stroke', 'rgb(255,255,255)')
@@ -741,12 +746,24 @@ $game.$botanist = {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
 			mX = x - _dragOffX,
-			mY = y - _dragOffY;
+			mY = y - _dragOffY,
+			trashing = false;
 
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.trash').css('opacity',1);
+			trashing = true;
+		}
+		else {
+			$('.trash').css('opacity',0.5);
+			trashing = false;
+		}
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 
 		d3.select('.br' + d.id)
-			.attr('transform',trans);
+			.attr('transform',trans)
+			.attr('opacity', function() {
+				return trashing ? 0.5 : 1;
+			});
 	},
 
 	dropMove: function(d) {
@@ -759,6 +776,19 @@ $game.$botanist = {
 		d3.select('.br' + d.id)
 			.attr('stroke-width',0)
 			.attr('transform',trans);
+
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.br' + d.id).remove();
+			$('.r' + d.id)
+				.css('opacity', 1)
+				.attr('draggable', 'true');
+			$('.trash').css('opacity',0.5);
+		}
+		else {
+			d3.select('.br' + d.id)
+			.attr('stroke-width',0)
+			.attr('transform',trans);
+		}
 	},
 
 	clearBoard: function() {

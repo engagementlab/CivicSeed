@@ -1157,14 +1157,14 @@ function _addToInventory(data) {
 
 	$('.' + className).bind('mouseenter',function() {
 		//var info = $(this).attr('title');
-		$(this).tooltip('shofw');
+		$(this).tooltip('show');
 	});
 	$inventoryBtn.text(_inventory.length);
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)
 		.bind('click',{npc: data.npc}, $game.$resources.beginResource)
-		.bind('dragstart',{npc: data.npc}, $game.$botanist.dragStart);
+		.bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
 }
 
 //game over!
