@@ -504,7 +504,7 @@ $game.$botanist = {
 				.css('height','450px');
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
-			$puzzleSvg.empty();
+			$game.$botanist.clearBoard();
 			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
