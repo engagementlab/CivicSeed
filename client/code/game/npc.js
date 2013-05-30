@@ -189,7 +189,6 @@ $game.$npc = {
 		clearTimeout($game.$npc.hideTimer);
 		$('.speechBubble').fadeOut(function() {
 			$game.$npc.isChat = false;
-			$game.startNewAction = false;
 			$game.$resources.isShowing = false;
 			$('.speechBubble button').addClass('hideButton');
 			$(".speechBubble .yesButton").unbind("click");
@@ -202,7 +201,6 @@ $game.$npc = {
 		//if there is no other stuff on screen, then show dialog
 		if($game.$player.firstTime) {
 			$game.$npc.isChat = true;
-			$game.startNewAction = true;
 			$game.$npc.showSmalltalk(true);
 		}
 		else if(!$game.$resources.isShowing && !$game.$npc.isChat) {
@@ -225,7 +223,6 @@ $game.$npc = {
 			}
 			else {
 				$game.$npc.isChat = true;
-				$game.startNewAction = false;
 				$game.$npc.showSmalltalk();
 			}
 		}

@@ -36,9 +36,14 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				result: Boolean,
 				madePublic: Boolean,
 				seeded: [String],
-				questionType: String
+				questionType: String,
+				tagline: String
 			}],
-			inventory: [Number],
+			inventory: [{
+				name: String,
+				tagline: String,
+				npc: Number
+			}],
 			seeds: {
 				normal: Number,
 				riddle: Number,

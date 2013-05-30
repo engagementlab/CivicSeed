@@ -35,6 +35,7 @@ $game.$resources = {
 
 	isShowing: false,
 	ready: false,
+	waitingForTagline: false,
 
 	//load in all the resources and the corresponding answers
 	init: function(callback) {
@@ -136,17 +137,13 @@ $game.$resources = {
 		//they answered the question
 		if(_answered) {
 			//other player answers page
-			if(_currentSlide === _numSlides + 1 &&  _questionType === 'open') {
+			if(_currentSlide === _numSlides + 1) {
 				if(_correctAnswer) {
-					$nextButton.removeClass('hideButton');
+					$saveButton.removeClass('hideButton');
 				}
 				else {
 					$closeButton.removeClass('hideButton');
 				}
-			}
-			//other answer types without responses
-			else {
-				$closeButton.removeClass('hideButton');
 			}
 		}
 		//they haven't answered it yet
@@ -310,6 +307,7 @@ $game.$resources = {
 			$game.$resources.addButtons();
 		}
 	},
+
 	//figure out if the player made the correct response or not, if we bypass it means they clicked okay on the prompt for it being too short
 	submitAnswer: function(bypass) {
 		var response = null;
@@ -337,8 +335,7 @@ $game.$resources = {
 			}
 		}
 
-		var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
-			npcShape = _curResource.shape;
+		var npcLevel = $game.$npc.getNpcLevel(_curResource.index);
 		//if correct, get seeds, push answer to db
 		if(_correctAnswer) {
 			//update player stuff
@@ -347,7 +344,6 @@ $game.$resources = {
 				index: _curResource.index,
 				answer: response,
 				npcLevel: npcLevel,
-				shape: npcShape,
 				questionType: _curResource.questionType
 			};
 			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
@@ -378,7 +374,8 @@ $game.$resources = {
 				correct : false,
 				index: _curResource.index,
 				answer: response,
-				npcLevel: npcLevel
+				npcLevel: npcLevel,
+				questionType: _curResource.questionType
 			};
 			_numSeedsToAdd = $game.$player.answerResource(wrongInfo);
 		}
@@ -433,6 +430,28 @@ $game.$resources = {
 	getQuestion: function(index) {
 		var stringId = String(index);
 		return _resources[stringId].question;
+	},
+
+	getCurResource: function() {
+		return _curResource;
+	},
+
+	//decide what to do if we save custom tagline
+	saveTagline: function(tagline) {
+		if(tagline.length > 0) {
+			$game.$player.setTagline(tagline);
+			$game.$resources.waitingForTagline = false;
+
+			//if open -> next slide
+			//else -> close resource
+			if(_curResource.questionType === 'open') {
+				$game.$resources.nextSlide();
+			} else {
+				$game.$resources.hideResource();
+			}
+		} else {
+			$('.checkTagline').show().delay(2000).fadeOut();
+		}
 	}
 };
 
@@ -454,6 +473,7 @@ function _setDomSelectors() {
 	$closeButton = $('.resourceArea .closeButton');
 	$backButton = $('.resourceArea  .backButton');
 	$answerButton = $('.resourceArea  .answerButton');
+	$saveButton = $('.resourceArea  .saveButton');
 }
 
 //adding content if they answered the resource to show
@@ -462,7 +482,8 @@ function _addAnsweredContent() {
 	if(_correctAnswer) {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
-			var inputBox = '<p class="centerText taglineInput"><input name="tagline" type ="text" value="Type here..." maxLength = "60"></input></p><p class="privacyMessage taglineInput">Write words. Remember things.</p>',
+			$game.$resources.waitingForTagline = true;
+			var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type ="text" value="" maxLength = "60"></input></p><p class="privacyMessage taglineInput">Write words. Remember things.</p>',
 				npcLevel = $game.$npc.getNpcLevel(),
 				html;
 			if(npcLevel < $game.$player.currentLevel) {
@@ -514,7 +535,7 @@ function _addRealContent() {
 				inputBox += '</form>';
 			}
 			else if(_questionType === 'open') {
-				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
+				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
 			}
 			else if(_questionType === 'truefalse') {
 				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';

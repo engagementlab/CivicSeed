@@ -81,6 +81,7 @@ $(function() {
 		if($game.$player.id === data.id) {
 			$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have a seed.',input:'status',screen: true,log:true});
 			$game.$player.updateSeeds('riddle', 1);
+			$game.$player.updateResource(data);
 		}
 	});
 });
