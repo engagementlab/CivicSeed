@@ -546,14 +546,15 @@ $game.$botanist = {
 			allTangrams.each(function(i, d) {
 				//pull the coordinates for each tangram
 				var tanIdD = $(this).attr('class'),
-					tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
+					tanId = tanIdD.substring(2,tanIdD.length),
 					trans = $(this).attr('transform'),
 					transD = trans.substring(10,trans.length-1),
 					transD2 = transD.split(','),
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
 					t = aLength,
-					found = false;
+					found = false,
+					correctPiece = false;
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
 
@@ -564,9 +565,10 @@ $game.$botanist = {
 						//this is a hard check for snapping
 						if(transX === answer.x && transY === answer.y) {
 							numRight += 1;
+							correctPiece = true;
 						}
 						else {
-							correct = false;
+							correctPiece = false;
 						}
 					}
 				}
@@ -574,10 +576,20 @@ $game.$botanist = {
 				if(!found) {
 					wrongOne = true;
 					correct = false;
+					//remove it from the board
+					$('.br' + tanId).remove();
+					$('.r' + tanId)
+						.css('opacity', 1)
+						.attr('draggable', 'true');
 				}
-				else if(found && !correct) {
+				else if(found && !correctPiece) {
 					nudge = true;
 					correct = false;
+					//remove it from the board
+					$('.br' + tanId).remove();
+					$('.r' + tanId)
+						.css('opacity', 1)
+						.attr('draggable', 'true');
 				}
 			});
 
@@ -585,25 +597,21 @@ $game.$botanist = {
 				correct = false;
 				_numMegaSeeds -= 1;
 				message = 'at least TRY to solve it...';
-				$game.$botanist.clearBoard();
 			}
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'Oh! That’s not quite right. Think more about how the pieces of the Enigma relate to one another, and try again.';
-				$game.$botanist.clearBoard();
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'You are missing some pieces. Be sure to read the Enigma carefully to help pick out the right pieces.';
-				$game.$botanist.clearBoard();
 			}
 			else if(nudge) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'So close! You have the right pieces, just fix the placement.';
-				//$game.$botanist.clearBoard();
 			}
 
 			if(correct) {

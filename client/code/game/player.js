@@ -754,7 +754,6 @@ function _setPlayerInformation(info) {
 	_pledges = info.game.pledges;
 	_resourcesDiscovered = _resources.length;
 
-	console.log(_resources, _inventory);
 	//public
 	$game.$player.id = info.id;
 	$game.$player.name = info.name;
