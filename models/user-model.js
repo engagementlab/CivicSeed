@@ -29,16 +29,17 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				},
 				tilesheet: Number
 			},
-			resources: [{
-				npc: Number,
-				answers: [String],
-				attempts: Number,
-				result: Boolean,
-				madePublic: Boolean,
-				seeded: [String],
-				questionType: String,
-				tagline: String
-			}],
+			resources: [
+				{
+					answers: [String],
+					attempts: Number,
+					result: Boolean,
+					madePublic: Boolean,
+					seeded: [String],
+					questionType: String,
+					tagline: String
+				}
+			],
 			inventory: [{
 				name: String,
 				tagline: String,

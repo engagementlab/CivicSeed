@@ -452,6 +452,11 @@ $game.$resources = {
 		} else {
 			$('.checkTagline').show().delay(2000).fadeOut();
 		}
+	},
+
+	getNumResponses: function(index) {
+		var stringId = String(index);
+		return _resources[stringId].playerAnswers.length;
 	}
 };
 

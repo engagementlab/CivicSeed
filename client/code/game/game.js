@@ -73,6 +73,7 @@ exports.$game = {
 		_stepNumber = 0;
 		$game.$chat.hideChat();
 		$game.$others.hideAllChats();
+		$('.npcBubble').remove();
 		$game.stepTransition();
 	},
 
@@ -97,6 +98,7 @@ exports.$game = {
 		$game.$map.createPathGrid(function() {
 			$game.$map.stepDirection = null;
 		});
+		$game.$player.displayNpcComments();
 	},
 
 	//the game loop, if it is running, call all the updates and render
@@ -372,6 +374,7 @@ function _startGame() {
 			$game.running = true;
 			$game.$renderer.renderAllTiles();
 			$game.tick();
+			$game.$player.displayNpcComments();
 		});
 	});
 }

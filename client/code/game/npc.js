@@ -354,5 +354,21 @@ $game.$npc = {
 	//get all npc data
 	getNpcData: function () {
 		return _allNpcs;
+	},
+
+	getOnScreenNpcs: function() {
+		var onScreen = [];
+		$.each(_allNpcs, function(key, npc) {
+			if(npc.onScreen) {
+				onScreen.push(npc.index);
+			}
+		});
+		return onScreen;
+	},
+
+	getNpcCoords: function(index) {
+		var stringId = String(index),
+			npc = _allNpcs[stringId];
+		return({x: npc.renderInfo.curX, y: npc.renderInfo.curY});
 	}
 };

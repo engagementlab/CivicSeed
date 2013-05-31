@@ -240,16 +240,12 @@ $game.$player = {
 
 	//determine which returning to npc prompt to show based on if player answered it or not
 	getPrompt: function(index) {
-		var	l = _resources.length;
-		while(--l > -1) {
-			if(index === _resources[l].npc) {
-				if(_resources[l].result) {
-					return 2;
-				}
-				else {
-					return 1;
-				}
-				continue;
+		if(_resources[index]) {
+			if(_resources[index].result) {
+				return 2;
+			}
+			else {
+				return 1;
 			}
 		}
 		return 0;
@@ -258,7 +254,6 @@ $game.$player = {
 	//saves the user's answer locally
 	answerResource: function(info) {
 		var newInfo = {
-			npc: info.index,
 			answers: [info.answer],
 			attempts: 1,
 			result: info.correct,
@@ -266,20 +261,17 @@ $game.$player = {
 			questionType: info.questionType
 		};
 		var realResource = null,
-			l = _resources.length;
+			numString = info.index.toString();
 
 		//see if the resource is already in the list
-		while(--l > -1) {
-			if(newInfo.npc === _resources[l].npc) {
-				realResource = _resources[l];
-				continue;
-			}
+		if(_resources[numString]) {
+			realResource = _resources[numString];
 		}
 
 		//if not, then add it to the list
 		if(!realResource) {
-			_resources.push(newInfo);
-			realResource = _resources[_resources.length - 1];
+			_resources[numString] = newInfo;
+			realResource = _resources[numString];
 		}
 		else {
 			realResource.answers.push(newInfo.answers[0]);
@@ -292,7 +284,6 @@ $game.$player = {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.updateSeeds('normal', numToAdd);
-
 			return numToAdd;
 		}
 	},
@@ -323,14 +314,8 @@ $game.$player = {
 				//look thru player's resources for this answer 
 				var p = 0,
 					found = false;
-				while(p < _resources.length) {
-					if(_resources[p].npc === curAnswerId) {
-						found = true;
-						//console.log('found');
-						//get out of the loop
-						p = _resources.length;
-					}
-					p++;
+				if(_resources[curAnswerId]) {
+					found = true;
 				}
 				if(!found) {
 					return false;
@@ -344,11 +329,8 @@ $game.$player = {
 
 	//gets player answer for specific resource
 	getAnswer: function(id) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(id === _resources[l].npc) {
-				return _resources[l];
-			}
+		if( _resources[id]) {
+			return _resources[id];
 		}
 	},
 
@@ -484,53 +466,46 @@ $game.$player = {
 
 	//make a response public to all other users
 	makePublic: function(npcId) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(npcId == _resources[l].npc) {
-				//update this resource
-				_resources[l].madePublic = true;
-				//update resource db
-				var info = {
-					playerId: $game.$player.id,
-					npcId: npcId,
-					instanceName: $game.$player.instanceName
-				};
-				ss.rpc('game.npc.makeResponsePublic', info, function(res) {
-					//take away the make public and replcae with eye?
-					$('.publicButton').remove();
-					$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
-				});
-			}
+		if(_resources[npcId]) {
+			//update this resource
+			_resources[npcId].madePublic = true;
+			//update resource db
+			var info = {
+				playerId: $game.$player.id,
+				npcId: npcId,
+				instanceName: $game.$player.instanceName
+			};
+			ss.rpc('game.npc.makeResponsePublic', info, function(res) {
+				//take away the make public and replcae with eye?
+				$('.publicButton').remove();
+				$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
+			});
 		}
 	},
 
 	//make a previously public response private to all other users
 	makePrivate: function(npcId) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(npcId == _resources[l].npc) {
-				//update this resource
-				_resources[l].madePublic = false;
-				//update resource db
-				var info = {
-					playerId: $game.$player.id,
-					npcId: npcId,
-					instanceName: $game.$player.instanceName
-				};
-				ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
-					//take away the make public and replcae with eye?
-					$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
-					$('.privateButton').remove();
-				});
-			}
+		if(_resources[npcId]) {
+			//update this resource
+			_resources[npcId].madePublic = false;
+			//update resource db
+			var info = {
+				playerId: $game.$player.id,
+				npcId: npcId,
+				instanceName: $game.$player.instanceName
+			};
+			ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
+				//take away the make public and replcae with eye?
+				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
+				$('.privateButton').remove();
+			});
 		}
 	},
 
 	//get ALL answers for all open questions for this player
 	compileAnswers: function() {
 		var html = '';
-		for (var a = 0; a < _resources.length; a++) {
-			var item = _resources[a];
+		for (var item in _resources) {
 			if(item.questionType === 'open') {
 				var	npc = item.npc,
 					answer = item.answers[item.answers.length - 1],
@@ -549,10 +524,8 @@ $game.$player = {
 
 	//see if the player has the specific resource already
 	checkForResource: function(id) {
-		for(var r = 0; r < _resources.length; r++) {
-			if(_resources[r].npc === id) {
-				return true;
-			}
+		if(_resources[id]) {
+			return true;
 		}
 		return false;
 	},
@@ -674,11 +647,8 @@ $game.$player = {
 
 	//when another player pledges a seed, make the update in your local resources
 	updateResource: function(data) {
-		for(var r = 0; r < _resources.length; r++) {
-			var resource = _resources[r];
-			if(resource.npc === data.npc) {
-				resource.seeded.push(data.pledger);
-			}
+		if(resources[data.npc]) {
+			resources[data.npc].seeded.push(data.pledger);
 		}
 	},
 
@@ -687,17 +657,13 @@ $game.$player = {
 		var resource = $game.$resources.getCurResource(),
 			npc = resource.index,
 			realResource = null,
-			l = _resources.length,
 			npcLevel = $game.$npc.getNpcLevel(),
 			shapeName = resource.shape;
 
 		//find the resource and add tagline
-		while(--l > -1) {
-			realResource = _resources[l];
-			if(realResource.npc === npc) {
-				realResource.tagline = tagline;
-				continue;
-			}
+		if(_resources[npc]) {
+			realResource = _resources[npc];
+			realResource.tagline = tagline;
 		}
 		//add piece to inventory
 		if($game.$player.currentLevel === npcLevel) {
@@ -706,6 +672,28 @@ $game.$player = {
 				$game.$player.checkBotanistState();
 		}
 		_saveResourceToDB(realResource);
+		//display npc bubble for comment num
+		$game.$player.displayNpcComments();
+	},
+
+	//show a bubble over visited npcs of how many comments there are
+	displayNpcComments: function() {
+		$('.npcBubble').remove();
+		var npcs = $game.$npc.getOnScreenNpcs();
+		//go thru each npc and see if they are in player resources
+		for (var n = 0; n < npcs.length; n++) {
+			if(_resources[npcs[n]]) {
+				var npcInfo = $game.$npc.getNpcCoords(npcs[n]),
+					npcId = 'npcBubble' + npcs[n],
+					num = $game.$resources.getNumResponses(npcs[n]),
+					bubble = $('<p class="npcBubble" id="' + npcId + '">' + num + '</p>');
+				$gameboard.append(bubble);
+				$('#' + npcId).css({
+					top: npcInfo.y - 64,
+					left: npcInfo.x
+				});
+			}
+		}
 	}
 };
 
