@@ -685,11 +685,16 @@ $game.$player = {
 			if(_resources[npcs[n]]) {
 				var npcInfo = $game.$npc.getNpcCoords(npcs[n]),
 					npcId = 'npcBubble' + npcs[n],
-					num = $game.$resources.getNumResponses(npcs[n]),
-					bubble = $('<p class="npcBubble" id="' + npcId + '">' + num + '</p>');
+					num;
+				if(_resources[npcs[n]].questionType === 'open') {
+					num = $game.$resources.getNumResponses(npcs[n]);
+				} else {
+					num = '*';
+				}
+				bubble = $('<p class="npcBubble" id="' + npcId + '">' + num + '</p>');
 				$gameboard.append(bubble);
 				$('#' + npcId).css({
-					top: npcInfo.y - 64,
+					top: npcInfo.y - 68,
 					left: npcInfo.x
 				});
 			}
