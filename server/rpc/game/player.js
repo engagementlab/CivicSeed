@@ -319,24 +319,13 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						//look thru resources and update if found
-						var found = false,
-							cur = 0;
-						while(cur < user.game.resources.length) {
-							console.log(user.game.resources[cur].npc, info.resource.npc);
-							if(user.game.resources[cur].npc === info.resource.npc) {
-								found = true;
-								user.game.resources[cur].answers = info.resource.answers;
-								user.game.resources[cur].attempts = info.resource.attempts;
-								user.game.resources[cur].result = info.resource.result;
-								cur = user.game.resources.length;
-							}
-							cur++;
-						}
-						if(!found) {
+						if(user.game.resources[info.resource.npc]) {
+							user.game.resources[cur].answers = info.resource.answers;
+							user.game.resources[cur].attempts = info.resource.attempts;
+							user.game.resources[cur].result = info.resource.result;
+						} else {
 							user.game.resources.push(info.resource);
 						}
-						console.log(user);
 						user.save(function (y) {
 							res('good');
 						});

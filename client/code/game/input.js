@@ -122,7 +122,7 @@ $(function() {
 	//open the game log
 	$BODY.on('click', '.logButton', function () {
 		var goAhead = startNewAction();
-		if(goAhead) {
+		if(goAhead || _logShowing) {
 			_logShowing = !_logShowing;
 			$('.logButton').toggleClass('currentButton');
 			$gameLog.fadeToggle();

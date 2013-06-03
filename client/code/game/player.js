@@ -324,6 +324,11 @@ $game.$player = {
 			//if we made it here, that means you have all pieces
 			$game.$player.botanistState = 3;
 			$game.$botanist.setBotanistState(3);
+
+			//check if they have ALL pieces, of so, beam me up scotty
+			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
+				$game.$player.beamMeUpScotty();
+			}
 		}
 	},
 

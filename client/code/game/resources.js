@@ -400,6 +400,14 @@ $game.$resources = {
 	addAnswer: function(data) {
 		var stringId = String(data.npc);
 		_resources[stringId].playerAnswers.push(data);
+		//update the npc bubbles on screen
+		var npcs = $game.$npc.getOnScreenNpcs();
+		for (var n = 0; n < npcs.length; n++) {
+			if(stringId === npcs[n]) {
+				$game.$player.displayNpcComments();
+				break;
+			}
+		}
 	},
 
 	//moreve an answer (this means they made it private and it was previously public)
