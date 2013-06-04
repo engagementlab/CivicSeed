@@ -277,6 +277,8 @@ $game.$resources = {
 					$game.$player.inventoryShowing = true;
 				}
 			});
+		} else {
+			$game.$player.checkBotanistState();
 		}
 		$game.$audio.fadeHi();
 	},
@@ -398,6 +400,12 @@ $game.$resources = {
 		return _shapes[$game.$player.currentLevel][shapeName];
 	},
 
+	getShapeName: function(index) {
+		var stringId = String(index),
+			shapeName = _resources[stringId].shape;
+		return shapeName;
+	},
+
 	//get the tagline for the resource
 	getTagline: function(index) {
 		var stringId = String(index);
@@ -411,7 +419,7 @@ $game.$resources = {
 		//update the npc bubbles on screen
 		var npcs = $game.$npc.getOnScreenNpcs();
 		for (var n = 0; n < npcs.length; n++) {
-			if(stringId === npcs[n]) {
+			if(stringId == npcs[n]) {
 				$game.$player.displayNpcComments();
 				break;
 			}

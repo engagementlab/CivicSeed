@@ -308,15 +308,19 @@ $game.$player = {
 				a = answers.length;
 			//go through the answer sheet to see if the current tangram is there &&
 			//in the right place
-			//console.log(answers[a], _resources);
 			while(--a > -1) {
-				var curAnswerId = answers[a].id;
-				//look thru player's resources for this answer 
-				var p = 0,
+				var curAnswer = answers[a].id,
 					found = false;
-				if(_resources[curAnswerId]) {
-					found = true;
-				}
+
+				//look thru player's resources for this answer (it is the shape)
+				$.each(_resources, function(index, resource) {
+					if(resource) {
+						var shape = $game.$resources.getShapeName(index);
+						if(shape === curAnswer) {
+							found = true;
+						}
+					}
+				});
 				if(!found) {
 					return false;
 				}
@@ -326,6 +330,7 @@ $game.$player = {
 			$game.$botanist.setBotanistState(3);
 
 			//check if they have ALL pieces, of so, beam me up scotty
+			console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
 			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
 				$game.$player.beamMeUpScotty();
 			}
@@ -646,6 +651,7 @@ $game.$player = {
 			$game.inTransit = false;
 			setTimeout(function() {
 				$('.beamMeUp').fadeOut();
+				$game.$player.displayNpcComments();
 			}, 1000);
 		});
 	},
@@ -674,7 +680,6 @@ $game.$player = {
 		if($game.$player.currentLevel === npcLevel) {
 				_inventory.push({name: shapeName, npc: npc, tagline: tagline});
 				_addToInventory({name: shapeName, npc: npc, tagline: tagline});
-				$game.$player.checkBotanistState();
 		}
 		_saveResourceToDB(realResource);
 		//display npc bubble for comment num
@@ -701,11 +706,14 @@ $game.$player = {
 				$('#' + npcId).css({
 					top: npcInfo.y - 68,
 					left: npcInfo.x
-				})
-				.bind('click', function() {
-					var npc = $(this).attr('data-npc');
-					$game.$resources.beginResource(npc, true);
 				});
+				//only bind function to show answers for open ended
+				if(_resources[npcs[n]].questionType === 'open') {
+					$('#' + npcId).bind('click', function() {
+						var npc = $(this).attr('data-npc');
+						$game.$resources.beginResource(npc, true);
+					});
+				}
 			}
 		}
 	}
