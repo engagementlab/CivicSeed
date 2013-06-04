@@ -68,17 +68,20 @@ $game.$resources = {
 	},
 
 	//called when player clicks on resource from inventory to simulate clicking the NPC
-	beginResource: function(e) {
-		var nombre = $game.$npc.getName(e.data.npc);
-		$game.$resources.loadResource(nombre, e.data.npc, true);
-		_inventory = true;
+	beginResource: function(npc, answers) {
+		var nombre = $game.$npc.getName(npc);
+		$game.$resources.loadResource(nombre, npc, true, answers);
+		if(!answers) {
+			_inventory = true;
+		}
 		$game.$resources.isShowing = true;
 	},
 
 	//preloads the resource into the staging area (not visible) and sets question and stuff
-	loadResource: function(who, index, revisit) {
-		_who = who,
-		_answered = false,
+	loadResource: function(who, index, revisit, answers) {
+		_who = who;
+		_answered = answers;
+		_correctAnswer = answers;
 		_currentSlide = 0;
 
 		$resourceStage.empty();
@@ -99,9 +102,12 @@ $game.$resources = {
 
 	//decide how to display resource on screen depending on state of player (if returning)
 	showResource: function(revisit) {
-		//revising means the already answered it and just see resource not question form
+		//revisiting means the already answered it and just see resource not question form
 		_revisiting = revisit;
-		if(_revisiting) {
+		if(_answered) {
+			_correctAnswer = true;
+			_currentSlide = _numSlides + 2;
+		} else if(_revisiting) {
 			_correctAnswer = false;
 		} else {
 			var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
@@ -144,6 +150,8 @@ $game.$resources = {
 				else {
 					$closeButton.removeClass('hideButton');
 				}
+			} else {
+				$closeButton.removeClass('hideButton');
 			}
 		}
 		//they haven't answered it yet

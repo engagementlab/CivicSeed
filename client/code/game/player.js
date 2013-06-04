@@ -696,11 +696,15 @@ $game.$player = {
 				} else {
 					num = '*';
 				}
-				bubble = $('<p class="npcBubble" id="' + npcId + '">' + num + '</p>');
+				bubble = $('<p class="npcBubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
 				$gameboard.append(bubble);
 				$('#' + npcId).css({
 					top: npcInfo.y - 68,
 					left: npcInfo.x
+				})
+				.bind('click', function() {
+					var npc = $(this).attr('data-npc');
+					$game.$resources.beginResource(npc, true);
 				});
 			}
 		}
@@ -1160,7 +1164,10 @@ function _addToInventory(data) {
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)
-		.bind('click',{npc: data.npc}, $game.$resources.beginResource)
+		.bind('click', function() {
+			//false means don't go straight to answers
+			$game.$resources.beginResource(data.npc, false);
+		})
 		.bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
 }
 
