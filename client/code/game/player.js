@@ -232,8 +232,11 @@ $game.$player = {
 		_position.x = _info.x,
 		_position.y = _info.y;
 		_colorMap = $game.$map.saveImage();
-		_savePlayerData();
-		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id, function(res) {
+		//_savePlayerData();
+		var info = {
+			id: $game.$player.id
+		};
+		ss.rpc('game.player.exitPlayer', info, function(res) {
 			callback();
 		});
 	},
@@ -293,7 +296,11 @@ $game.$player = {
 		//only do this if we have dropped 5 new seeds
 		if(_seeds.dropped - _previousSeedsDropped > 4) {
 			_colorMap = $game.$map.saveImage();
-			ss.rpc('game.player.saveImage', _colorMap);
+			var info = {
+				id: $game.$player.id,
+				colorMap: _colorMap
+			};
+			ss.rpc('game.player.updateGameInfo', info);
 			_previousSeedsDropped = _seeds.dropped;
 		}
 	},
@@ -414,13 +421,21 @@ $game.$player = {
 			_gameOver();
 		}
 		else {
+			//save new information to DB
+			var info = {
+				id: $game.$player.id,
+				botanistState: $game.$player.botanistState,
+				seenRobot: $game.$player.seenRobot,
+				pledges: _pledges,
+				inventory: []
+			};
+			ss.rpc('game.player.updateGameInfo', info);
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
 			//send status to message board
 			var newLevelMsg = $game.$player.currentLevel + 1;
 			// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
-			console.log('no way boss');
 			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
 			//load in other tree file
 		}
@@ -516,11 +531,12 @@ $game.$player = {
 	compileAnswers: function() {
 		var html = '';
 		for (var item in _resources) {
-			if(item.questionType === 'open') {
+			// console.log(item);
+			if(resources[item].questionType === 'open') {
 				var	npc = item.npc,
-					answer = item.answers[item.answers.length - 1],
+					answer = resources[item].answers[resources[item].answers.length - 1],
 					question = $game.$resources.getQuestion(npc),
-					seededCount = item.seeded.length;
+					seededCount = resources[item].seeded.length;
 
 				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
 				if(seededCount > 0) {
@@ -543,6 +559,12 @@ $game.$player = {
 	//change seed count for specific seed
 	updateSeeds: function(kind, quantity) {
 		_seeds[kind] += quantity;
+		//save to DB
+		var info = {
+			id: $game.$player.id,
+			seeds: _seeds
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 		//update hud
 		_updateTotalSeeds();
 	},
@@ -550,11 +572,21 @@ $game.$player = {
 	//put new answer into the resume
 	resumeAnswer: function(answer) {
 		_resume.push(answer);
+		var info = {
+			id: $game.$player.id,
+			resume: _resume
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 	},
 
 	//keep track of how many seedITs the player has done
 	updatePledges: function(quantity) {
 		_pledges += quantity;
+		var info = {
+			id: $game.$player.id,
+			pledges: _pledges
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 	},
 
 	//disable blinking seed planting mode
@@ -716,6 +748,16 @@ $game.$player = {
 				}
 			}
 		}
+	},
+
+	savePositionToDB: function() {
+		_position.x = _info.x;
+		_position.y = _info.y;
+		var info = {
+			id: $game.$player.id,
+			position: _position
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 	}
 };
 
@@ -725,10 +767,12 @@ $game.$player = {
 function _saveResourceToDB(resource) {
 	var info = {
 		id: $game.$player.id,
-		resource: resource
+		resource: resource,
+		inventory: _inventory,
+		resourcesDiscovered: _resourcesDiscovered
 	};
 	ss.rpc('game.player.saveResource', info, function() {
-		console.log('resource saved');
+		// console.log('resource saved');
 	});
 }
 
@@ -762,8 +806,12 @@ function _setPlayerInformation(info) {
 	_playingTime = info.game.playingTime;
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
-	_resourcesDiscovered = _resources.length;
+	_resourcesDiscovered = info.game.resourcesDiscovered;
 
+	//hack
+	if(!_resources) {
+		_resources = {};
+	}
 	//public
 	$game.$player.id = info.id;
 	$game.$player.name = info.name;
@@ -914,6 +962,8 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
+					//TODO: save seed values to DB
+					_saveSeedsToDB();
 				}
 			}
 			else if(options.mode === 2) {
@@ -925,6 +975,8 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
+					//TODO: save seed values to DB
+					_saveSeedsToDB();
 				}
 			}
 			else if(options.mode === 3) {
@@ -936,6 +988,8 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
+					//TODO: save seed values to DB
+					_saveSeedsToDB();
 				}
 			}
 		}
@@ -969,6 +1023,7 @@ function _savePlayerData() {
 	$game.$player.game.botanistState = $game.$player.botanistState;
 	$game.$player.game.firstTime = $game.$player.firstTime;
 	$game.$player.game.seenRobot = $game.$player.seenRobot;
+	$game.$player.game.resourcesDiscovered = _resourcesDiscovered;
 }
 
 //calculate new render information based on the player's position
@@ -1187,11 +1242,19 @@ function _gameOver() {
 	_position.x = _info.x,
 	_position.y = _info.y;
 	_colorMap = $game.$map.saveImage();
-	sessionStorage.setItem('isPlaying', false);
+	sessionStorage.setItem('isPlaying', 'false');
 	ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
 		if(res) {
 			var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
 			$('.gameboard').append(hooray);
 		}
 	});
+}
+
+function _saveSeedsToDB() {
+	var info = {
+		id: $game.$player.id,
+		seeds: _seeds
+	};
+	ss.rpc('game.player.updateGameInfo', info);
 }

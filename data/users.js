@@ -17,7 +17,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -30,7 +29,8 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
 			normal: 0,
@@ -42,7 +42,6 @@ module.exports.global = [{
 		firstTime: true,
 		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -63,7 +62,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -76,7 +74,8 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
 			normal: 0,
@@ -88,14 +87,13 @@ module.exports.global = [{
 		firstTime: true,
 		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
 	},
 	admin: {
 		instances: ['tufts-remote','tufts-local']
-	}	
+	}
 }, {
 	firstName: 'Michael',
 	lastName: 'Jordan',
@@ -109,7 +107,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -122,7 +119,8 @@ module.exports.global = [{
 			},
 			tilesheet: 11
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
 			normal: 0,
@@ -134,7 +132,6 @@ module.exports.global = [{
 		firstTime: true,
 		resume: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -152,7 +149,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -165,7 +161,8 @@ module.exports.global = [{
 			},
 			tilesheet: 3
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
 			normal: 5,
@@ -177,7 +174,6 @@ module.exports.global = [{
 		firstTime: false,
 		resume: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -195,7 +191,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -208,7 +203,8 @@ module.exports.global = [{
 			},
 			tilesheet: 4
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
 			normal: 0,
@@ -220,7 +216,6 @@ module.exports.global = [{
 		firstTime: true,
 		resume: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5

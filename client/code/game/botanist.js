@@ -245,6 +245,7 @@ $game.$botanist = {
 			//save that the player has looked at the instructions
 			if($game.$player.botanistState === 0) {
 				$game.$player.botanistState = 1;
+				_saveBotanistState();
 				if($game.$player.currentLevel === 0) {
 					$game.$player.updateSeeds('normal', 1);
 				}
@@ -424,6 +425,7 @@ $game.$botanist = {
 					//update botanistState
 					if($game.$player.currentLevel > 0) {
 						$game.$player.botanistState = 2;
+						_saveBotanistState();
 						$game.$player.checkBotanistState();
 						$game.$botanist.setBotanistState(2);
 					}
@@ -435,6 +437,12 @@ $game.$botanist = {
 				if($game.$player.currentLevel === 0) {
 					$game.$player.firstTime = false;
 					$game.$player.botanistState = 2;
+					var info = {
+						id: $game.$player.id,
+						firstTime: $game.$player.firstTime
+					};
+					ss.rpc('game.player.updateGameInfo', info);
+					_saveBotanistState();
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
 					$botanistAreaMessage.text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
@@ -633,6 +641,7 @@ $game.$botanist = {
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
 					$game.$player.updateSeeds('riddle', _numMegaSeeds);
 					$game.$player.botanistState = 4;
+					_saveBotanistState();
 				}
 			}
 			else {
@@ -850,4 +859,12 @@ function _setDomSelectors() {
 	$inventoryPuzzle = $('.inventoryPuzzle');
 	$botanistContent = $('.botanistContent');
 	$botanistAreaMessage = $('.botanistArea .message');
+}
+
+function _saveBotanistState() {
+	var info = {
+		id: $game.$player.id,
+		botanistState: $game.$player.botanistState
+	};
+	ss.rpc('game.player.updateGameInfo', info);
 }

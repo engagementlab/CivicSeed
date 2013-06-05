@@ -16,7 +16,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		game: {
 			instanceName: String,
 			currentLevel: Number,
-			rank: String,
 			position: {
 				x: Number,
 				y: Number
@@ -29,7 +28,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				},
 				tilesheet: Number
 			},
-			resources: {},
+			resources: Object,
+			resourcesDiscovered: Number,
 			inventory: [{
 				name: String,
 				tagline: String,
@@ -46,7 +46,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			colorMap: String,
 			resume: [String],
 			seenRobot: Boolean,
-			resourcesDiscovered: Number,
 			playingTime: Number,
 			tilesColored: Number,
 			pledges: Number

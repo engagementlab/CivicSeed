@@ -52,22 +52,22 @@ exports.actions = function(req, res, ss) {
 			res(playerInfo);
 		},
 
-		exitPlayer: function(info, id) {
+		exitPlayer: function(info) {
 			//update redis
-			req.session.game = info;
-			req.session.save();
+			//req.session.game = info;
+			//req.session.save();
 			//update mongo
 			userModel
-				.findById(id, function (err, user) {
+				.findById(info.id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						user.game = info;
+						// user.game = info;
 						user.isPlaying = false;
 						user.save(function (y) {
 							games[req.session.game.instanceName].numActivePlayers -= 1;
-							ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
-							delete games[req.session.game.instanceName].players[id];
+							ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: info.id});
+							delete games[req.session.game.instanceName].players[info.id];
 							res(true);
 						});
 					} else {
@@ -117,21 +117,6 @@ exports.actions = function(req, res, ss) {
 			games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
 			games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
 			// req.session.save();
-		},
-
-		saveImage: function(info) {
-			userModel
-				.findById(req.session.userId, function (err, user) {
-					if(err) {
-						console.log(err);
-						res(err);
-					} else if(user) {
-						user.game.colorMap = info;
-						user.save(function (y) {
-							res(true);
-						});
-					}
-				});
 		},
 
 		dropSeed: function(bombed, info) {
@@ -319,15 +304,42 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						if(user.game.resources[info.resource.npc]) {
-							user.game.resources[cur].answers = info.resource.answers;
-							user.game.resources[cur].attempts = info.resource.attempts;
-							user.game.resources[cur].result = info.resource.result;
-						} else {
-							user.game.resources.push(info.resource);
+						var npc = info.resource.npc;
+						//hack cuz game doesn't start with resource object...
+						if(!user.game.resources) {
+							user.game.resources = {};
 						}
+						//first we save the new resource
+						if(user.game.resources[npc]) {
+							user.game.resources[npc].answers = info.resource.answers;
+							user.game.resources[npc].attempts = info.resource.attempts;
+							user.game.resources[npc].result = info.resource.result;
+						} else {
+							user.game.resources[npc] = info.resource;
+						}
+						//now we update the inventory and resourcesDiscovered
+						user.game.inventory = info.inventory;
+						user.game.resourcesDiscovered = info.resourcesDiscovered;
 						user.save(function (y) {
-							res('good');
+							res('saved');
+						});
+					}
+				});
+		},
+
+		updateGameInfo: function(info) {
+			userModel
+				.findById(info.id, function (err, user) {
+					if(err) {
+						console.log(err);
+					} else if(user) {
+						for(var prop in info) {
+							if(prop !== 'id') {
+								user.game[prop] = info[prop];
+							}
+						}
+						user.save(function(y) {
+							res('saved');
 						});
 					}
 				});

@@ -99,6 +99,7 @@ exports.$game = {
 			$game.$map.stepDirection = null;
 		});
 		$game.$player.displayNpcComments();
+		$game.$player.savePositionToDB();
 	},
 
 	//the game loop, if it is running, call all the updates and render

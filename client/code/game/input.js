@@ -31,6 +31,11 @@ $(function() {
 				$game.$player.resetRenderColor();
 				$(this).removeClass('currentButton');
 				$game.$player.saveMapImage();
+				var info = {
+					id: $game.$player.id,
+					seeds: _seeds
+				};
+				ss.rpc('game.player.updateGameInfo', info);
 			}
 			else {
 				//open it up OR turn it on
@@ -373,6 +378,7 @@ $(function() {
 //save and exit
 function leaveThisJoint() {
 	if(sessionStorage.isPlaying === 'true') {
+		sessionStorage.setItem('isPlaying', 'false');
 		$game.$player.exitAndSave(function() {
 			console.log('exit');
 		});

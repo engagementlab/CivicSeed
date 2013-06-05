@@ -50,7 +50,6 @@ exports.actions = function(req, res, ss) {
 									game: {
 										instanceName: 'demo',
 										currentLevel: 0,
-										rank: 'novice gardener',
 										position: {
 											x: 64,
 											y: 77,
@@ -60,7 +59,8 @@ exports.actions = function(req, res, ss) {
 											rgb: newColor,
 											tilesheet: i
 										},
-										resources: [],
+										resources: {},
+										resourcesDiscovered: 0,
 										inventory: [],
 										seeds: {
 											normal: 0,
@@ -72,7 +72,6 @@ exports.actions = function(req, res, ss) {
 										firstTime: true,
 										resume: [],
 										seenRobot: false,
-										resourcesDiscovered: 0,
 										playingTime: 0,
 										tilesColored: 0,
 										pledges: 5

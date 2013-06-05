@@ -60,7 +60,8 @@ exports.actions = function(req, res, ss) {
 							rgb: newColor,
 							tilesheet: tilesheetNum
 						},
-						resources: [],
+						resources: {},
+						resourcesDiscovered: 0,
 						inventory: [],
 						seeds: {
 							normal: 0,
@@ -72,7 +73,6 @@ exports.actions = function(req, res, ss) {
 						firstTime: true,
 						resume: [],
 						seenRobot: false,
-						resourcesDiscovered: 0,
 						playingTime: 0,
 						tilesColored: 0,
 						pledges: 5
