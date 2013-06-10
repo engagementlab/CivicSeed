@@ -120,7 +120,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		dropSeed: function(bombed, info) {
-			console.log('info',info);
+			// console.log('info',info);
 			//welcome to the color server!
 			var num = bombed.length,
 				curOld = 0,
@@ -140,7 +140,7 @@ exports.actions = function(req, res, ss) {
 				.where('y').gte(minY).lte(maxY)
 				.sort('mapIndex')
 				.find(function (err, oldTiles) {
-					console.log(oldTiles);
+					// console.log(oldTiles);
 					if(err) {
 						res(false);
 					} else if(oldTiles) {
@@ -350,8 +350,6 @@ exports.actions = function(req, res, ss) {
 
 colorHelpers = {
 	modifyTiles: function(oldTiles, bombed) {
-		console.log('MOOOOOOOODIFY');
-		console.log('old: ',oldTiles, 'new: ', bombed);
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
 		var bIndex = bombed.length,
@@ -391,8 +389,8 @@ colorHelpers = {
 				var weightOld = 0.2,
 					weightNew = 0.8;
 				var newR = Math.floor(weightOld * prevR + weightNew * bomb.color.r);
-					newG = Math.floor(weightOld * prevG + weightNew * bomb.color.g);
-					newB = Math.floor(weightOld * prevB + weightNew * bomb.color.b);
+					newG = Math.floor(weightOld * prevG + weightNew * bomb.color.g),
+					newB = Math.floor(weightOld * prevB + weightNew * bomb.color.b),
 					newA = Math.round((tile.color.a + 0.1) * 100) / 100,
 					rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
 				tile.color.r = newR;
