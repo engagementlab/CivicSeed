@@ -64,9 +64,8 @@ exports.actions = function(req, res, ss) {
 						resourcesDiscovered: 0,
 						inventory: [],
 						seeds: {
-							normal: 0,
-							riddle: 0,
-							special: 0,
+							regular: 0,
+							draw: 0,
 							dropped: 0
 						},
 						botanistState: 0,

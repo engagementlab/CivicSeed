@@ -6,6 +6,7 @@ var _prevX = 0,
 	_index = 0;
 
 $game.$mouse = {
+	drawMode: false,
 	//returns local x,y grid data based on mouse location
 	updateMouse: function(mouseInfo, clicked) {
 
@@ -50,11 +51,14 @@ $game.$mouse = {
 				cY: _curY
 			};
 			$game.$renderer.renderMouse(mouseStuff);
+			if($game.$mouse.drawMode) {
+				$game.$player.drawSeed({x:_curX, y:_curY});
+			}
 		}
 
 		if(clicked) {
 			//if the player is in seed mode, determine if drop seed or exit mode
-			if($game.$player.seedMode > 0) {
+			if($game.$player.seedMode) {
 				if(!$game.$player.awaitingBomb) {
 					var m = {
 							mouse: true,
@@ -106,6 +110,10 @@ $game.$mouse = {
 				}
 			}
 		}
+	},
+
+	getCurrentPosition: function() {
+		return {x: _curX, y: _curY};
 	}
 
 };

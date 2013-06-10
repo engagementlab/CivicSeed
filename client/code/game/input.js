@@ -25,17 +25,16 @@ $(function() {
 			//this mean seedventory is DOWN
 			//the user clicked meaning they want to open or end seed mode
 			//END seed mode
-			if($game.$player.seedMode > 0) {
-				$game.$player.seedMode = 0;
+			if($game.$player.seedMode) {
+				$BODY.off('mousedown touchend', '.gameboard');
+				$BODY.off('mouseup touchend', '.gameboard');
+				$game.$mouse.drawMode = false;
+				$game.$player.seedMode = false;
 				$game.$player.seedPlanting = false;
 				$game.$player.resetRenderColor();
 				$(this).removeClass('currentButton');
 				$game.$player.saveMapImage();
-				var info = {
-					id: $game.$player.id,
-					seeds: _seeds
-				};
-				ss.rpc('game.player.updateGameInfo', info);
+				$game.$player.saveSeeds();
 			}
 			else {
 				//open it up OR turn it on
@@ -45,11 +44,17 @@ $(function() {
 		else {
 			//if it is UP, then we want to clsoe it and turn it off
 			if($game.$player.seedventoryShowing) {
+				$BODY.off('mousedown touchend', '.gameboard');
+				$BODY.off('mouseup touchend', '.gameboard');
+				$game.$mouse.drawMode = false;
 				$('.seedventory').slideUp(function() {
 					$game.$player.seedventoryShowing = false;
 				});
 			}
 			else {
+				$BODY.off('mousedown touchend', '.gameboard');
+				$BODY.off('mouseup touchend', '.gameboard');
+				$game.$mouse.drawMode = false;
 				$game.$player.seedPlanting = false;
 			}
 			$(this).removeClass('currentButton');
@@ -57,19 +62,21 @@ $(function() {
 		}
 	});
 
-	//normal seed select
-	$BODY.on('click', '.normalButton', function () {
-		$game.$player.startSeeding(1);
+	//regular seed select
+	$BODY.on('click', '.regularButton', function () {
+		$game.$player.startSeeding('regular');
 	});
 
-	//riddle seed select
-	$BODY.on('click', '.riddleButton', function () {
-		$game.$player.startSeeding(2);
-	});
-
-	//special seed select
-	$BODY.on('click', '.specialButton', function () {
-		$game.$player.startSeeding(3);
+	//draw seed select
+	$BODY.on('click', '.drawButton', function () {
+		$game.$player.startSeeding('draw');
+		$BODY.on('mousedown touchstart', '.gameboard', function() {
+			$game.$player.drawFirstSeed();
+			$game.$mouse.drawMode = true;
+		});
+		$BODY.on('mouseup touchend', '.gameboard', function() {
+			$game.$mouse.drawMode = false;
+		});
 	});
 
 	//change cursor on mouse move

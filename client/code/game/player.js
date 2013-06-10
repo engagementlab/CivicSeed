@@ -14,8 +14,8 @@ var _curFrame = 0,
 	_numRequired = [4,5,6,5],
 
 	$seedHudCount = null,
-	$normalHudCount = null,
-	$riddleHudCount = null,
+	$regularHudCount = null,
+	$drawHudCount = null,
 	$specialHudCount = null,
 	_previousSeedsDropped = null,
 
@@ -38,7 +38,9 @@ var _curFrame = 0,
 	_playingTime = null,
 	_tilesColored = null,
 	_pledges = null,
-	_resourcesDiscovered = null;
+	_resourcesDiscovered = null,
+
+	_drawSeeds = null;
 
 $game.$player = {
 
@@ -59,7 +61,7 @@ $game.$player = {
 	seedPlanting: false,
 	npcOnDeck: false,
 	ready: false,
-	seedMode: 0,
+	seedMode: false,
 	awaitingBomb: false,
 	pathfinding: false,
 
@@ -189,8 +191,8 @@ $game.$player = {
 		var mode = options.mode;
 
 		//regular seed mode
-		if(mode === 1) {
-			if(_seeds.normal < 1) {
+		if(mode === 'regular') {
+			if(_seeds.regular < 1) {
 				return false;
 			}
 			else {
@@ -199,27 +201,33 @@ $game.$player = {
 				return true;
 			}
 		}
-		//riddle seed mode
-		else if(mode === 2 ){
-			if(_seeds.riddle < 1) {
-				return false;
-			}
-			else {
-				options.sz = ($game.$player.currentLevel * 2) + 5;
-				_calculateSeeds(options);
-				return true;
-			}
-		}
-		//special seed mode
-		else if(mode === 3 ){
-			if(_seeds.special < 1) {
-				return false;
-			}
-			else {
-				options.sz = 11;
-				options.special = Math.floor(Math.random()*4);
-				_calculateSeeds(options);
-				return true;
+		//draw seed mode
+		else {
+			var seedArray = $.map(_drawSeeds, function(k, v) {
+				return [k];
+			});
+
+			if(seedArray.length > 0) {
+				//figure out the size covered
+				var xSize = _drawSeedArea.maxX - _drawSeedArea.minX,
+					ySize = _drawSeedArea.maxY - _drawSeedArea.minY,
+					sz = xSize > ySize ? xSize : ySize,
+					topLeftTile = $game.$map.currentTiles[_drawSeedArea.minX][_drawSeedArea.minY],
+					bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY];
+
+				var data = {
+					bombed: seedArray,
+					options: {
+						mX: topLeftTile.x + 15,
+						mY: topLeftTile.y + 7
+					},
+					x1: topLeftTile.x,
+					y1: topLeftTile.y,
+					x2: bottomRightTile.x,
+					y2: bottomRightTile.y
+				};
+				_sendSeedBomb(data);
+				return true;	
 			}
 		}
 	},
@@ -451,15 +459,13 @@ $game.$player = {
 	//reveals the seed menu to choose which seed they want to use
 	openSeedventory: function() {
 		//open up the inventory
-		if(_seeds.riddle > 0 || _seeds.special > 0) {
+		if(_seeds.draw > 0) {
 			$('.seedventory').slideDown(function() {
-				var col0 = _seeds.normal > 0 ? '#eee': '#333',
-				col1 = _seeds.riddle > 0 ? '#eee': '#333',
-				col2 = _seeds.special > 0 ? '#eee': '#333';
+				var col0 = _seeds.regular > 0 ? '#eee': '#333',
+				col1 = _seeds.draw > 0 ? '#eee': '#333';
 
-				$('.normalButton').css('color',col0);
-				$('.riddleButton').css('color',col1);
-				$('.specialButton').css('color',col2);
+				$('.regularButton').css('color',col0);
+				$('.drawButton').css('color',col1);
 
 				$game.$player.seedventoryShowing = true;
 				$game.statusUpdate({message:'choose a seed to plant',input:'status',screen: true,log:false});
@@ -469,9 +475,9 @@ $game.$player = {
 		//start seed mode on 0
 		else {
 			$('.seedButton').addClass('currentButton');
-			if(_seeds.normal > 0) {
+			if(_seeds.regular > 0) {
 				$game.$player.seedPlanting = true;
-				$game.$player.seedMode = 1;
+				$game.$player.seedMode = 'regular';
 			}
 			else {
 				$('.seedButton').removeClass('currentButton');
@@ -534,9 +540,9 @@ $game.$player = {
 			// console.log(item);
 			if(resources[item].questionType === 'open') {
 				var	npc = item.npc,
-					answer = resources[item].answers[resources[item].answers.length - 1],
+					answer = _resources[item].answers[_resources[item].answers.length - 1],
 					question = $game.$resources.getQuestion(npc),
-					seededCount = resources[item].seeded.length;
+					seededCount = _resources[item].seeded.length;
 
 				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
 				if(seededCount > 0) {
@@ -750,6 +756,7 @@ $game.$player = {
 		}
 	},
 
+	//save the player's current position to the DB
 	savePositionToDB: function() {
 		_position.x = _info.x;
 		_position.y = _info.y;
@@ -758,6 +765,70 @@ $game.$player = {
 			position: _position
 		};
 		ss.rpc('game.player.updateGameInfo', info);
+	},
+
+	//call the save seed function from outside player
+	saveSeeds: function() {
+		_saveSeedsToDB();
+	},
+
+	//update the running array for current tiles colored to push to DB on end of drawing
+	drawSeed: function(pos) {
+		if($game.$player.seedMode === 'draw') {
+			var currentTile = $game.$map.currentTiles[pos.x][pos.y],
+				index = currentTile.mapIndex,
+				stringIndex = String(index),
+				tempRGB = _rgbString + '0.3)';
+			if(!_drawSeeds[index]) {
+				_drawSeeds[index] = {
+					x: currentTile.x,
+					y: currentTile.y,
+					mapIndex: index,
+					color:
+					{
+						r: _colorInfo.r + 10,
+						g: _colorInfo.g + 10,
+						b: _colorInfo.b + 10,
+						a: 0.3
+					},
+					instanceName: $game.$player.instanceName,
+					curColor: tempRGB
+				};
+
+				//draw over the current tiles to show player they are drawing
+				$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
+				$game.$map.currentTiles[pos.x][pos.y].curColor = tempRGB;
+				$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
+				$game.$renderer.renderTile(pos.x,pos.y);
+
+				//keep track area positions
+				if(pos.x < _drawSeedArea.minX) {
+					_drawSeedArea.minX = pos.x;
+				}
+				if(pos.y < _drawSeedArea.minY) {
+					_drawSeedArea.minY = pos.y;
+				}
+				if(pos.x > _drawSeedArea.maxX) {
+					_drawSeedArea.maxX = pos.x;
+				}
+				if(pos.y > _drawSeedArea.maxY) {
+					_drawSeedArea.maxY = pos.y;
+				}
+			}
+		}
+	},
+
+	//put initial seed drawn in running array
+	drawFirstSeed: function() {
+		var pos = $game.$mouse.getCurrentPosition();
+		_drawSeeds = {};
+		_drawSeedArea = {
+			minX: 29,
+			maxX: 0,
+			minY: 14,
+			maxY: 0
+		};
+		$game.$player.drawSeed(pos);
 	}
 };
 
@@ -780,9 +851,8 @@ function _saveResourceToDB(resource) {
 function _setDomSelectors() {
 	//set variables for dom selectors
 	$seedHudCount = $('.seedButton .hudCount');
-	$normalHudCount = $('.normalButton .hudCount');
-	$riddleHudCount = $('.riddleButton .hudCount');
-	$specialHudCount = $('.specialButton .hudCount');
+	$regularHudCount = $('.regularButton .hudCount');
+	$drawHudCount = $('.drawButton .hudCount');
 	$waiting = $('.waitingForSeed');
 	$gameboard = $('.gameboard');
 	$inventoryBtn = $('.inventoryButton > .hudCount');
@@ -824,7 +894,6 @@ function _setPlayerInformation(info) {
 
 //figure out what color to make which tiles when a seed is dropped
 function _calculateSeeds(options) {
-	//start at the top left corner and loop through (vertical first)
 	var mid = Math.floor(options.sz / 2),
 		origX = options.mX - mid,
 		origY = options.mY - mid,
@@ -832,81 +901,36 @@ function _calculateSeeds(options) {
 		sY = options.y - mid,
 		bombed = [],
 		mode = options.mode,
-		square = null;
-	if($game.$map.currentTiles[options.x][options.y].color) {
-		if($game.$map.currentTiles[options.x][options.y].color.owner !== 'nobody') {
-			return false;
-		}
-	}
-	var tempRGB = null,
+		square = null,
+		tempRGB = null,
 		tempIndex = null,
 		b = 0;
+
+	//start at the top left corner and loop through (vertical first)
 	while(b < options.sz) {
 		var a = 0;
 		while(a < options.sz) {
 			//only add if it is in the map!
 			if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-				//only dynamically calculate seeds if riddle or normal mode
-				if(mode < 3) {
-					//this says: if you are part of the circle radius
-					//if you are basic, then do it regardless
-					if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
-						var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
-						//set x,y and color info for each square
-						tempRGB = _rgbString + tempA + ')';
-						tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
-						square = {
-							x: origX + a,
-							y: origY + b,
-							mapIndex: tempIndex,
-							color:
-							{
-								r: _colorInfo.r + 10,
-								g: _colorInfo.g + 10,
-								b: _colorInfo.b + 10,
-								a: tempA,
-								owner: 'nobody'
-							},
-							curColor: tempRGB,
-							instanceName: $game.$player.instanceName
-						};
-
-						//assign the middle one the owner
-						if( a === mid && b === mid) {
-							square.color.a = 0.6;
-							square.color.owner = $game.$player.name;
-						}
-						bombed.push(square);
-					}
-				}
-				//special seed, pull from data of
-				else {
-					//find the index based on the a,b values
-					var specialIndex = (b * options.sz) + a;
-
-					//only add a square if it exists in our special array
-					if(_specialSeedData[options.special][specialIndex] === 1) {
-						//set x,y and color info for each square
-						tempRGB = _rgbString + '0.3)';
-						tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
-						square = {
-							x: origX + a,
-							y: origY + b,
-							mapIndex: tempIndex,
-							color:
-							{
-								r: _colorInfo.r + 10,
-								g: _colorInfo.g + 10,
-								b: _colorInfo.b + 10,
-								a: 0.3,
-								owner: 'nobody'
-							},
-							curColor: tempRGB,
-							instanceName: $game.$player.instanceName
-						};
-						bombed.push(square);
-					}
-				}
+				var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
+				//set x,y and color info for each square
+				tempRGB = _rgbString + tempA + ')';
+				tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
+				square = {
+					x: origX + a,
+					y: origY + b,
+					mapIndex: tempIndex,
+					color:
+					{
+						r: _colorInfo.r + 10,
+						g: _colorInfo.g + 10,
+						b: _colorInfo.b + 10,
+						a: tempA
+					},
+					curColor: tempRGB,
+					instanceName: $game.$player.instanceName
+				};
+				bombed.push(square);	
 			}
 			a += 1;
 		}
@@ -914,12 +938,13 @@ function _calculateSeeds(options) {
 	}
 
 	if(bombed.length > 0) {
-		_sendSeedBomb(bombed, options, origX, origY);
+		var sendData = {bombed: bombed, options: options, x1: origX, y1: origY, x2: origX + options.sz, y2: origY + options.sz};
+		_sendSeedBomb(sendData);
 	}
 }
 
 //plant the seed on the server and wait for response and update hud and map
-function _sendSeedBomb(bombed, options, origX, origY) {
+function _sendSeedBomb(data) {
 	//set a waiting boolean so we don't plant more until receive data back from rpc
 	$game.$player.awaitingBomb = true;
 
@@ -927,13 +952,15 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 	var info = {
 		id: $game.$player.id,
 		name: $game.$player.name,
-		sz: options.sz,
-		x: origX,
-		y: origY,
-		tilesColored: _tilesColored
+		x1: data.x1,
+		y1: data.y1,
+		x2: data.x2,
+		y2: data.y2,
+		tilesColored: _tilesColored,
+		instanceName: $game.$player.instanceName
 	};
 
-	var loc = $game.$map.masterToLocal(options.mX,options.mY);
+	var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
 
 	$waiting
 		.css({
@@ -942,7 +969,7 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 		})
 		.show();
 
-	ss.rpc('game.player.dropSeed', bombed, info, function(result) {
+	ss.rpc('game.player.dropSeed', data.bombed, info, function(result) {
 		_seeds.dropped += 1;
 		//increase the drop count for the player
 		$game.$player.awaitingBomb = false;
@@ -952,11 +979,11 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
 						//update seed count in HUD
-			if(options.mode === 1) {
-				$game.$player.updateSeeds('normal', -1);
+			if(data.options.mode === 'regular') {
+				$game.$player.updateSeeds('regular', -1);
 				//bounce outta seed options.mode
-				if(_seeds.normal === 0) {
-					$game.$player.seedMode = 0;
+				if(_seeds.regular === 0) {
+					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
@@ -966,23 +993,11 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 					_saveSeedsToDB();
 				}
 			}
-			else if(options.mode === 2) {
-				$game.$player.updateSeeds('riddle', -1);
-				if(_seeds.riddle === 0) {
-					$game.$player.seedMode = 0;
-					_renderInfo.colorNum = _playerColorNum;
-					$game.$player.seedPlanting = false;
-					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
-					$('.seedButton').removeClass('currentButton');
-					$game.$player.saveMapImage();
-					//TODO: save seed values to DB
-					_saveSeedsToDB();
-				}
-			}
-			else if(options.mode === 3) {
-				$game.$player.updateSeeds('special', -1);
-				if(_seeds.special === 0) {
-					$game.$player.seedMode = 0;
+			else {
+				$game.$player.updateSeeds('draw', -1);
+				if(_seeds.draw === 0) {
+					$game.$mouse.drawMode = false;
+					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
@@ -1001,11 +1016,10 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 
 //update seed counts
 function _updateTotalSeeds() {
-	_totalSeeds = _seeds.normal + _seeds.riddle + _seeds.special;
+	_totalSeeds = _seeds.regular + _seeds.draw;
 	$seedHudCount.text(_totalSeeds);
-	$riddleHudCount.text(_seeds.riddle);
-	$normalHudCount.text(_seeds.normal);
-	$specialHudCount.text(_seeds.special);
+	$regularHudCount.text(_seeds.regular);
+	$drawHudCount.text(_seeds.draw);
 }
 
 //save out the current player info to the master info
@@ -1180,7 +1194,7 @@ function _endMove() {
 //determine what frame to render while standing
 function _idle() {
 	_idleCounter += 1;
-	if($game.$player.seedMode > 0) {
+	if($game.$player.seedMode) {
 		if(_idleCounter % 32 < 16) {
 			_renderInfo.colorNum = 0;
 		}

@@ -595,7 +595,7 @@ $game.$renderer = {
 
 			var col = $game.$player.getRGBA();
 
-			if($game.$player.seedMode > 0) {
+			if($game.$player.seedMode) {
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
 					mX,

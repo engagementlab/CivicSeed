@@ -36,9 +36,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				npc: Number
 			}],
 			seeds: {
-				normal: Number,
-				riddle: Number,
-				special: Number,
+				regular: Number,
+				draw: Number,
 				dropped: Number
 			},
 			botanistState: Number,

@@ -33,9 +33,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
@@ -78,9 +77,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
@@ -123,9 +121,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
@@ -165,9 +162,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 5,
-			riddle: 5,
-			special: 0,
+			regular: 5,
+			draw: 5,
 			dropped: 0
 		},
 		botanistState: 2,
@@ -207,9 +203,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,

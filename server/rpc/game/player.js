@@ -120,25 +120,27 @@ exports.actions = function(req, res, ss) {
 		},
 
 		dropSeed: function(bombed, info) {
+			console.log('info',info);
 			//welcome to the color server!
 			var num = bombed.length,
 				curOld = 0,
 				index = 0,
-				minX = info.x,
-				maxX = info.x + info.sz,
-				minY = info.y,
-				maxY = info.y + info.sz,
+				minX = info.x1,
+				maxX = info.x2,
+				minY = info.y1,
+				maxY = info.y2,
 				allTiles = null,
 				updateTiles = [],
 				insertTiles = [];
 
 			//get a chunk of the bounding tiles from the DB (instead of querying each individually)
 			colorModel
-				.where('instanceName').equals(req.session.game.instanceName)
-				.where('x').gte(minX).lt(maxX)
-				.where('y').gte(minY).lt(maxY)
+				.where('instanceName').equals(info.instanceName)
+				.where('x').gte(minX).lte(maxX)
+				.where('y').gte(minY).lte(maxY)
 				.sort('mapIndex')
 				.find(function (err, oldTiles) {
+					console.log(oldTiles);
 					if(err) {
 						res(false);
 					} else if(oldTiles) {
@@ -146,8 +148,8 @@ exports.actions = function(req, res, ss) {
 						var modifiedTiles = null;
 						if(oldTiles.length > 0) {
 							modifiedTiles = colorHelpers.modifyTiles(oldTiles, bombed);
-							console.log(modifiedTiles.insert.length);
-							console.log(modifiedTiles.update.length);
+							// console.log(modifiedTiles.insert.length);
+							// console.log(modifiedTiles.update.length);
 						} else {
 							modifiedTiles = {
 								insert: bombed,
@@ -155,6 +157,7 @@ exports.actions = function(req, res, ss) {
 							};
 						}
 						//saveEach tile
+						// console.log(modifiedTiles);
 						colorHelpers.saveTiles(modifiedTiles, function(done) {
 							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
 								//send out new bombs AND player info to update score
@@ -165,7 +168,7 @@ exports.actions = function(req, res, ss) {
 									tilesColored: newTileCount
 								};
 								// //we are done,send out the color information to each client to render
-								ss.publish.channel(req.session.game.instanceName,'ss-seedDropped', sendData);
+								ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
 
 								var newInfo = {
 									name: info.name,
@@ -173,11 +176,11 @@ exports.actions = function(req, res, ss) {
 									count: info.tilesColored
 								};
 
-								colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
+								colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates) {
 									if(updates.updateBoard) {
-										ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+										ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
 									}
-									ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
+									ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
 									//FINNNALLY done updating and stuff, respond to the player
 									//telling them if it was sucesful
 									res(allTiles.length);
@@ -338,9 +341,7 @@ exports.actions = function(req, res, ss) {
 								user.game[prop] = info[prop];
 							}
 						}
-						user.save(function(y) {
-							res('saved');
-						});
+						user.save();
 					}
 				});
 		}
@@ -348,9 +349,9 @@ exports.actions = function(req, res, ss) {
 };
 
 colorHelpers = {
-
 	modifyTiles: function(oldTiles, bombed) {
-		//console.log('old: ',oldTiles, 'new: ', bombed);
+		console.log('MOOOOOOOODIFY');
+		console.log('old: ',oldTiles, 'new: ', bombed);
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
 		var bIndex = bombed.length,
@@ -376,69 +377,22 @@ colorHelpers = {
 			}
 		}
 		return {insert: insertTiles, update: updateTiles};
-			// //if we haven't hit the beginning (-1) of the old index, look thru it
-			// //console.log(bIndex, oIndex);
-			// if(oIndex > -1) {
-			// 	console.log(bombed[bIndex].mapIndex, oldTiles[oIndex].mapIndex);
-			// 	//make sure they are the same tile before we modify any colors
-			// 	if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-			// 		console.log('modify');
-			// 		//modify tile
-			// 		var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
-			// 		updateTiles.push(modifiedTile);
-			// 		//console.log('modded');
-			// 		oIndex--;
-			// 	} else {
-			// 		//if we made it here, we are out of olds, must add it
-			// 		insertTiles.push(bombed[bIndex]);
-			// 		// console.log('new');
-			// 	}
-			// 	//check if new old tile index is <= the next one
-			// 	var lower = false;
-			// 	while(!lower) {
-			// 		if(oIndex < 0) {
-			// 			//exit out so we can continue
-			// 			lower = true;
-			// 		} else {
-			// 			//make sure there is a next bomb
-			// 			if(bIndex > 0) {
-			// 				if(oldTiles[oIndex].mapIndex <= bombed[bIndex-1].mapIndex) {
-			// 					lower = true;
-			// 				} else{
-			// 					oIndex--;
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// } else {
-			// 	insertTiles.push(bombed[bIndex]);
-			// 	//console.log('newb');
-			// }
-		//}
 	},
 
 	modifyOneTile: function(tile, bomb)  {
-		//AHHHH SO MANY POSSIBILITIES, stripping this down
-		//there IS a pre-existing color
-		//if the old one is a nobody (not owned)
-		if(tile.color.owner === 'nobody') {
-			//if the NEW one should be owner, then update tile and bomb curColor
-			if(bomb.color.owner !== 'nobody') {
-				tile.color = bomb.color;
-				tile.curColor = bomb.curColor;
-				return tile;
-			}
-			//new one should be modified -- if the opacity hasn't maxed out 
-			else if(tile.color.a < 0.5 ) {
+		//if we it exists we have to modify
+		if(tile.color) {
+			//perform a dominant override if not at max opacity
+			if(tile.color.a < 0.5 ) {
 				var prevR = tile.color.r,
 					prevG = tile.color.g,
 					prevB = tile.color.b,
 					prevA = tile.color.a;
-				var weightA = prevA / 0.1,
-					weightB = 1;
-				var newR = Math.floor((weightA * prevR + weightB * bomb.color.r) / (weightA + weightB)),
-					newG = Math.floor((weightA * prevG + weightB * bomb.color.g) / (weightA + weightB)),
-					newB = Math.floor((weightA * prevB + weightB * bomb.color.b) / (weightA + weightB)),
+				var weightOld = 0.2,
+					weightNew = 0.8;
+				var newR = Math.floor(weightOld * prevR + weightNew * bomb.color.r);
+					newG = Math.floor(weightOld * prevG + weightNew * bomb.color.g);
+					newB = Math.floor(weightOld * prevB + weightNew * bomb.color.b);
 					newA = Math.round((tile.color.a + 0.1) * 100) / 100,
 					rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
 				tile.color.r = newR;
@@ -447,14 +401,10 @@ colorHelpers = {
 				tile.color.a = newA;
 				tile.curColor = rgbString;
 				return tile;
-			}
-			//don't modify. change tile for sending out since maxed
-			else {
+			} else {
 				return tile;
 			}
-		}
-		//old one is the OWNER, so just modify tile for user
-		else {
+		} else {
 			return tile;
 		}
 	},
@@ -463,7 +413,6 @@ colorHelpers = {
 		var num = tiles.update.length,
 			cur = 0;
 		var save = function() {
-			console.log(tiles.update[cur]);
 			tiles.update[cur].save(function(err,suc) {
 				cur++;
 				if(cur >= num) {
