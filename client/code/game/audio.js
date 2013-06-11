@@ -83,7 +83,8 @@ $game.$audio = {
 			urls: [mp3, ogg],
 			autoplay: true,
 			loop: true,
-			volume: 0.2,
+			// volume: 0.2,
+			volume: 0.01,
 			buffer: true
 		});
 		//this goes thru all the tracks, and skips num since its preloaded
@@ -152,7 +153,8 @@ $game.$audio = {
 				pieceSelect: [15000, 300],
 				pieceDrop: [16000, 200]
 			},
-			volume: 0.4,
+			// volume: 0.4,
+			volume: 0.0,
 			onload: function() {
 				$game.$audio.loadEnvironmentLoopFx();
 			}
@@ -181,7 +183,8 @@ $game.$audio = {
 			onend: function() {
 				$game.$audio.checkLoopExit();
 			},
-			volume: 0.1,
+			// volume: 0.1,
+			volume: 0.0,
 			onload: function() {
 				$game.$audio.loadEnvironmentOnceFx();
 			}
@@ -219,7 +222,8 @@ $game.$audio = {
 				chatter: [43000, 5500],
 				forest3: [49000, 2700]
 			},
-			volume: 0.3,
+			// volume: 0.3,
+			volume: 0.0,
 			onend: function() {
 			},
 			onload: function() {
@@ -337,7 +341,8 @@ $game.$audio = {
 		});
 		_currentTrack = swap;
 
-		var val = $game.$audio.isMute ? 0.0 : 0.2;
+		// var val = $game.$audio.isMute ? 0.0 : 0.2;
+		var val = 0;
 		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
 			_midTransition = false;
 		});
@@ -406,15 +411,19 @@ $game.$audio = {
 
 	fadeLow: function() {
 		if(!$game.$audio.isMute) {
-			_soundtracks[_currentTrack].volume(0.05);
-			_environmentLoopFx.volume(0.03);
+			// _soundtracks[_currentTrack].volume(0.05);
+			// _environmentLoopFx.volume(0.03);
+			_soundtracks[_currentTrack].volume(0.0);
+			_environmentLoopFx.volume(0.0);
 		}
 	},
 
 	fadeHi: function() {
 		if(!$game.$audio.isMute) {
-			_soundtracks[_currentTrack].volume(0.2);
-			_environmentLoopFx.volume(0.2);
+			// _soundtracks[_currentTrack].volume(0.2);
+			// _environmentLoopFx.volume(0.2);
+			_soundtracks[_currentTrack].volume(0.0);
+			_environmentLoopFx.volume(0.0);
 		}
 	}
 

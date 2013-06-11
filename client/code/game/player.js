@@ -23,6 +23,8 @@ var _curFrame = 0,
 	$gameboard = null,
 	$inventoryBtn = null,
 	$inventory = null,
+	$graffiti = null,
+	$graffitiNum = null,
 	_startTime = null,
 
 	_seeds = null,
@@ -185,9 +187,10 @@ $game.$player = {
 
 	//decide what type of seed drop mechanic to do and check if they have seeds
 	dropSeed: function(options) {
-		options.mX = $game.$map.currentTiles[options.x][options.y].x,
-		options.mY = $game.$map.currentTiles[options.x][options.y].y;
-
+		if(options.x) {
+			options.mX = $game.$map.currentTiles[options.x][options.y].x,
+			options.mY = $game.$map.currentTiles[options.x][options.y].y;	
+		}
 		var mode = options.mode;
 
 		//regular seed mode
@@ -213,13 +216,15 @@ $game.$player = {
 					ySize = _drawSeedArea.maxY - _drawSeedArea.minY,
 					sz = xSize > ySize ? xSize : ySize,
 					topLeftTile = $game.$map.currentTiles[_drawSeedArea.minX][_drawSeedArea.minY],
-					bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY];
+					bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY],
+					centerTileX = $game.$map.currentTiles[15][7].x,
+					centerTileY = $game.$map.currentTiles[15][7].y;
 
 				var data = {
 					bombed: seedArray,
 					options: {
-						mX: topLeftTile.x + 15,
-						mY: topLeftTile.y + 7
+						mX: centerTileX,
+						mY: centerTileY
 					},
 					x1: topLeftTile.x,
 					y1: topLeftTile.y,
@@ -493,12 +498,14 @@ $game.$player = {
 		$('.seedventory').slideUp(function() {
 			$game.$player.seedventoryShowing = false;
 			$game.$player.seedPlanting = true;
+			$graffiti.show();
 		});
 		var msg;
 		if(choice === 'regular') {
 			msg = 'click a tile to drop some color';
 		} else {
 			msg = 'graffiti mode activated - click and drag to draw';
+			$graffitiNum.text(_seeds.draw);
 		}
 		$game.statusUpdate({message: msg,input:'status',screen: true,log:false});
 	},
@@ -578,7 +585,7 @@ $game.$player = {
 			id: $game.$player.id,
 			seeds: _seeds
 		};
-		ss.rpc('game.player.updateGameInfo', info);
+		//ss.rpc('game.player.updateGameInfo', info);
 		//update hud
 		_updateTotalSeeds();
 	},
@@ -782,76 +789,87 @@ $game.$player = {
 
 	//update the running array for current tiles colored to push to DB on end of drawing
 	drawSeed: function(pos) {
-		var drawLocal = false;
-		if($game.$player.seedMode === 'draw') {
-			var currentTile = $game.$map.currentTiles[pos.x][pos.y],
-				index = currentTile.mapIndex,
-				stringIndex = String(index),
-				tempRGB = _rgbString + '0.3)';
-			if(!_drawSeeds[index]) {
-				drawLocal = true;
-				_drawSeeds[index] = {
-					x: currentTile.x,
-					y: currentTile.y,
-					mapIndex: index,
-					color:
-					{
-						r: _colorInfo.r + 10,
-						g: _colorInfo.g + 10,
-						b: _colorInfo.b + 10,
-						a: 0.3
-					},
-					instanceName: $game.$player.instanceName,
-					curColor: tempRGB
-				};
-				//keep track area positions
-				if(pos.x < _drawSeedArea.minX) {
-					_drawSeedArea.minX = pos.x;
-				}
-				if(pos.y < _drawSeedArea.minY) {
-					_drawSeedArea.minY = pos.y;
-				}
-				if(pos.x > _drawSeedArea.maxX) {
-					_drawSeedArea.maxX = pos.x;
-				}
-				if(pos.y > _drawSeedArea.maxY) {
-					_drawSeedArea.maxY = pos.y;
-				}
-			} else {
-				if(_drawSeeds[index].color.a < 0.5) {
+		if(_seeds.draw > 0) {
+			$game.$player.updateSeeds('draw', -1);
+			$graffitiNum.text(_seeds.draw);
+			var drawLocal = false;
+			if($game.$player.seedMode === 'draw') {
+				var currentTile = $game.$map.currentTiles[pos.x][pos.y],
+					index = currentTile.mapIndex,
+					stringIndex = String(index),
+					tempRGB = _rgbString + '0.3)';
+				if(!_drawSeeds[index]) {
 					drawLocal = true;
-					_drawSeeds[index].color.a += 0.1;
-					_drawSeeds[index].curColor = tempRGB = _rgbString + _drawSeeds[index].color.a + ')';
-				}
-			}
-			if(drawLocal) {
-				//blend the prev. color with new color
-				var updateTile = false;
-				if(currentTile.color) {
-					if(currentTile.color.a < 0.5) {
-						updateTile = true;
-						var weightOld = 0.2,
-							weightNew = 0.8;
-						var newR = Math.floor(weightOld * currentTile.color.r + weightNew * _drawSeeds[index].color.r),
-							newG = Math.floor(weightOld * currentTile.color.g + weightNew * _drawSeeds[index].color.g),
-							newB = Math.floor(weightOld * currentTile.color.b + weightNew * _drawSeeds[index].color.b),
-							newA = Math.round((currentTile.color.a + 0.1) * 100) / 100,
-							rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
-						$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
-						$game.$map.currentTiles[pos.x][pos.y].color.a = newA;
-						$game.$map.currentTiles[pos.x][pos.y].curColor = rgbString;
+					_drawSeeds[index] = {
+						x: currentTile.x,
+						y: currentTile.y,
+						mapIndex: index,
+						color:
+						{
+							r: _colorInfo.r + 10,
+							g: _colorInfo.g + 10,
+							b: _colorInfo.b + 10,
+							a: 0.3
+						},
+						instanceName: $game.$player.instanceName,
+						curColor: tempRGB
+					};
+					//keep track area positions
+					if(pos.x < _drawSeedArea.minX) {
+						_drawSeedArea.minX = pos.x;
+					}
+					if(pos.y < _drawSeedArea.minY) {
+						_drawSeedArea.minY = pos.y;
+					}
+					if(pos.x > _drawSeedArea.maxX) {
+						_drawSeedArea.maxX = pos.x;
+					}
+					if(pos.y > _drawSeedArea.maxY) {
+						_drawSeedArea.maxY = pos.y;
 					}
 				} else {
-					$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
-					$game.$map.currentTiles[pos.x][pos.y].curColor = tempRGB;
-					updateTile = true;
+					if(_drawSeeds[index].color.a < 0.5) {
+						drawLocal = true;
+						_drawSeeds[index].color.a += 0.1;
+						_drawSeeds[index].curColor = tempRGB = _rgbString + _drawSeeds[index].color.a + ')';
+					}
 				}
-				if(updateTile) {
-					//draw over the current tiles to show player they are drawing
-					$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
-					$game.$renderer.renderTile(pos.x,pos.y);
+				if(drawLocal) {
+					//blend the prev. color with new color
+					var updateTile = false;
+					if(currentTile.color) {
+						if(currentTile.color.a < 0.5) {
+							updateTile = true;
+							var weightOld = 0.2,
+								weightNew = 0.8;
+							var newR = Math.floor(weightOld * currentTile.color.r + weightNew * _drawSeeds[index].color.r),
+								newG = Math.floor(weightOld * currentTile.color.g + weightNew * _drawSeeds[index].color.g),
+								newB = Math.floor(weightOld * currentTile.color.b + weightNew * _drawSeeds[index].color.b),
+								newA = Math.round((currentTile.color.a + 0.1) * 100) / 100,
+								rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
+							$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
+							$game.$map.currentTiles[pos.x][pos.y].color.a = newA;
+							$game.$map.currentTiles[pos.x][pos.y].curColor = rgbString;
+						}
+					} else {
+						$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
+						$game.$map.currentTiles[pos.x][pos.y].curColor = tempRGB;
+						updateTile = true;
+					}
+					if(updateTile) {
+						//draw over the current tiles to show player they are drawing
+						$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
+						$game.$renderer.renderTile(pos.x,pos.y);
+					}
 				}
 			}
+		} else {
+			$game.$player.dropSeed({mode: 'draw'});
+			$game.$mouse.drawMode = false;
+			$game.$player.seedMode = false;
+			$game.$player.seedPlanting = false;
+			$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
+			_saveSeedsToDB();
 		}
 	},
 
@@ -894,6 +912,8 @@ function _setDomSelectors() {
 	$gameboard = $('.gameboard');
 	$inventoryBtn = $('.inventoryButton > .hudCount');
 	$inventory = $('.inventory > .pieces');
+	$graffiti = $('.graffiti');
+	$graffitiNum = $('.graffiti p span');
 }
 
 //on init, set local and global variables for all player info
@@ -1031,12 +1051,12 @@ function _sendSeedBomb(data) {
 				}
 			}
 			else {
-				$game.$player.updateSeeds('draw', -1);
 				if(_seeds.draw === 0) {
 					$game.$mouse.drawMode = false;
 					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
+					$graffiti.hide();
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();

@@ -28,6 +28,7 @@ $(function() {
 			if($game.$player.seedMode) {
 				$BODY.off('mousedown touchend', '.gameboard');
 				$BODY.off('mouseup touchend', '.gameboard');
+				$('.graffiti').hide();
 				$game.$mouse.drawMode = false;
 				$game.$player.seedMode = false;
 				$game.$player.seedPlanting = false;
@@ -57,6 +58,7 @@ $(function() {
 				$game.$mouse.drawMode = false;
 				$game.$player.seedPlanting = false;
 			}
+			$('.graffiti').hide();
 			$(this).removeClass('currentButton');
 			$game.$player.saveMapImage();
 		}
