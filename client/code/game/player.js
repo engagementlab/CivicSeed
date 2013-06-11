@@ -245,9 +245,13 @@ $game.$player = {
 		_position.x = _info.x,
 		_position.y = _info.y;
 		_colorMap = $game.$map.saveImage();
-		//_savePlayerData();
 		var info = {
-			id: $game.$player.id
+			id: $game.$player.id,
+			playingTime: _playingTime,
+			position: {
+				x: _info.x,
+				y: _info.y
+			}
 		};
 		ss.rpc('game.player.exitPlayer', info, function(res) {
 			callback();
@@ -897,9 +901,7 @@ function _saveResourceToDB(resource) {
 		inventory: _inventory,
 		resourcesDiscovered: _resourcesDiscovered
 	};
-	ss.rpc('game.player.saveResource', info, function() {
-		// console.log('resource saved');
-	});
+	ss.rpc('game.player.saveResource', info);
 }
 
 //setup all the dom elements for reuse
@@ -1077,24 +1079,6 @@ function _updateTotalSeeds() {
 	$seedHudCount.text(_totalSeeds);
 	$regularHudCount.text(_seeds.regular);
 	$drawHudCount.text(_seeds.draw);
-}
-
-//save out the current player info to the master info
-function _savePlayerData() {
-	$game.$player.game.seeds = _seeds;
-	$game.$player.game.resources = _resources;
-	$game.$player.game.position = _position;
-	$game.$player.game.inventory = _inventory;
-	$game.$player.game.colorMap = _colorMap;
-	$game.$player.game.resume = _resume;
-	$game.$player.game.playingTime = _playingTime;
-	$game.$player.game.tilesColored = _tilesColored;
-	$game.$player.game.pledges = _pledges;
-	$game.$player.game.currentLevel = $game.$player.currentLevel;
-	$game.$player.game.botanistState = $game.$player.botanistState;
-	$game.$player.game.firstTime = $game.$player.firstTime;
-	$game.$player.game.seenRobot = $game.$player.seenRobot;
-	$game.$player.game.resourcesDiscovered = _resourcesDiscovered;
 }
 
 //calculate new render information based on the player's position

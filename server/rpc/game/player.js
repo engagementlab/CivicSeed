@@ -8,7 +8,8 @@ var intervalId = {},
 	colorModel,
 	rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
-	colorHelpers = null;
+	colorHelpers = null,
+	dbHelpers = null;
 
 exports.actions = function(req, res, ss) {
 
@@ -57,22 +58,19 @@ exports.actions = function(req, res, ss) {
 			//req.session.game = info;
 			//req.session.save();
 			//update mongo
+			dbHelpers.saveInfo(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						// user.game = info;
+						games[req.session.game.instanceName].numActivePlayers -= 1;
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: info.id});
+						delete games[req.session.game.instanceName].players[info.id];
 						user.isPlaying = false;
 						user.save(function (y) {
-							games[req.session.game.instanceName].numActivePlayers -= 1;
-							ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: info.id});
-							delete games[req.session.game.instanceName].players[info.id];
 							res(true);
 						});
-					} else {
-						// MIGHT NEED TO DO THIS HERE STILL???
-						// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
 					}
 				});
 		},
@@ -185,6 +183,8 @@ exports.actions = function(req, res, ss) {
 									//telling them if it was sucesful
 									res(allTiles.length);
 								});
+
+								dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
 							});
 					}
 				});
@@ -323,27 +323,13 @@ exports.actions = function(req, res, ss) {
 						//now we update the inventory and resourcesDiscovered
 						user.game.inventory = info.inventory;
 						user.game.resourcesDiscovered = info.resourcesDiscovered;
-						user.save(function (y) {
-							res('saved');
-						});
+						user.save();
 					}
 				});
 		},
 
 		updateGameInfo: function(info) {
-			userModel
-				.findById(info.id, function (err, user) {
-					if(err) {
-						console.log(err);
-					} else if(user) {
-						for(var prop in info) {
-							if(prop !== 'id') {
-								user.game[prop] = info[prop];
-							}
-						}
-						user.save();
-					}
-				});
+			dbHelpers.saveInfo(info);
 		}
 	};
 };
@@ -553,3 +539,21 @@ colorHelpers = {
 			});
 	}
 };
+
+dbHelpers = {
+	saveInfo: function(info) {
+		userModel
+			.findById(info.id, function (err, user) {
+				if(err) {
+					console.log(err);
+				} else if(user) {
+					for(var prop in info) {
+						if(prop !== 'id') {
+							user.game[prop] = info[prop];
+						}
+					}
+					user.save();
+				}
+			});
+	}
+ };
