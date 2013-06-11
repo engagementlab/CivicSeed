@@ -43,6 +43,7 @@ exports.$game = {
 	masterX: null,
 	masterY: null,
 	playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
+	bossModeUnlocked: null,
 
 	startNewAction: true,
 
@@ -240,6 +241,27 @@ exports.gameModuleReady = function(callback) {
 
 function _loadPlayer() {
 	$game.$player.init(function() {
+		_loadGameInfo();
+	});
+}
+
+function _loadGameInfo() {
+	//get the global game information stats
+	ss.rpc('game.player.getGameInfo', function(response) {
+		//regular game mode
+		//TODO: switch this back
+		// $game.bossModeUnlocked = response.bossModeUnlocked;
+		$game.bossModeUnlocked = true;
+		$game.resourceCount = response.resourceCount;
+		_stats = {
+			seedsDropped: response.seedsDropped,
+			seedsDroppedGoal: response.seedsDroppedGoal,
+			tilesColored: response.tilesColored,
+			leaderboard: response.leaderboard,
+			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
+			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
+		};
+		$game.$player.setPositionInfo();
 		_loadRenderer();
 	});
 }
@@ -305,23 +327,6 @@ function _loadChat() {
 
 function _loadLog() {
 	$game.$log.init(function() {
-		_loadGameInfo();
-	});
-}
-
-function _loadGameInfo() {
-	//get the global game information stats
-	ss.rpc('game.player.getGameInfo', function(response) {
-		//regular game mode
-		$game.resourceCount = response.resourceCount;
-		_stats = {
-			seedsDropped: response.seedsDropped,
-			seedsDroppedGoal: response.seedsDroppedGoal,
-			tilesColored: response.tilesColored,
-			leaderboard: response.leaderboard,
-			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
-			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
-		};
 		_loadExtra();
 	});
 }
@@ -368,6 +373,11 @@ function _setBoundaries() {
 
 
 function _startGame() {
+	if($game.bossModeUnlocked) {
+		$game.$boss.init(function() {
+			//something
+		});
+	}
 	$game.$map.firstStart(function() {
 		$('.loading').fadeOut(function() {
 			$(this).remove();

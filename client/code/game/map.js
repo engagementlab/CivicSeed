@@ -40,23 +40,31 @@ $game.$map = {
 
 	//pull down current viewport tiles, create the pathfinding grid
 	firstStart: function(callback) {
-		var info = {
-			x: $game.masterX,
-			y: $game.masterY,
-			numX: $game.VIEWPORT_WIDTH,
-			numY: $game.VIEWPORT_HEIGHT
-		};
-		_getTiles(info, function() {
-			_copyTileArray(function() {
-				$game.$map.createPathGrid(function() {
-					callback();
+		if($game.bossModeUnlocked) {
+			$('#minimapPlayer').toggleClass('hide');
+			_setupBossMap();
+			$game.$map.createPathGrid(function() {
+				callback();
+			}, true);
+		} else {
+			var info = {
+				x: $game.masterX,
+				y: $game.masterY,
+				numX: $game.VIEWPORT_WIDTH,
+				numY: $game.VIEWPORT_HEIGHT
+			};
+			_getTiles(info, function() {
+				_copyTileArray(function() {
+					$game.$map.createPathGrid(function() {
+						callback();
+					});
 				});
 			});
-		});
+		}
 	},
 
-	//create the go/nogo tiles based on tile data
-	createPathGrid: function(callback) {
+	//create the go/nogo tiles based on tile data, if bypass then all are go tiles
+	createPathGrid: function(callback, bypass) {
 		_gridTiles = null;
 		_graph = null;
 		_gridTiles = new Array($game.VIEWPORT_HEIGHT);
@@ -68,16 +76,20 @@ $game.$map = {
 
 			var x = $game.VIEWPORT_WIDTH;
 			while(--x >= 0) {
-				val = $game.$map.getTileState(x, y);
-				//the pathfinding takes 1 means its clear 0 not
-				var tempNoGo, stringId;
-				if(val === -1) {
-					tempNoGo = 1;
+				if(bypass) {
+					_gridTiles[y][x] = 1;
+				} else {
+					//the pathfinding takes 1 means its clear 0 not
+					var val = $game.$map.getTileState(x, y),
+						tempNoGo;
+					if(val === -1) {
+						tempNoGo = 1;
+					}
+					else {
+						tempNoGo = 0;
+					}
+					_gridTiles[y][x] = tempNoGo;
 				}
-				else {
-					tempNoGo = 0;
-				}
-				_gridTiles[y][x] = tempNoGo;
 			}
 		}
 
@@ -457,4 +469,28 @@ function _copyTileArray(callback) {
 	//reset array
 	_nextTiles = [];
 	callback();
+}
+
+//create the data for the boss map
+function _setupBossMap() {
+	$game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+	var i = $game.VIEWPORT_WIDTH;
+	while(--i >= 0) {
+		$game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
+		var j = $game.VIEWPORT_HEIGHT;
+		while(--j >= 0) {
+			$game.$map.currentTiles[i][j] = {
+				x: i,
+				y: j,
+				tileState: -1,
+				isMapEdge: true,
+				background: 0,
+				background2: 0,
+				background3: 0,
+				foreground: 0,
+				foreground2: 0,
+				mapIndex: j * $game.VIEWPORT_WIDTH + i
+			};
+		}
+	}
 }

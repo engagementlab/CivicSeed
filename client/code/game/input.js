@@ -363,6 +363,9 @@ $(function() {
 		$('.collectedResources').hide();
 	});
 
+	$BODY.on('click', '.bossArea .bossButton', function () {
+		$game.$boss.nextSlide();
+	});
 	//pause menu if we want it
 	// _w.blur(function(e) {
 	// 	if(!$game.$npc.isResource) {
@@ -377,7 +380,7 @@ $(function() {
 	//decide if we should or should not let buttons be clicked based on state
 	var startNewAction = function() {
 		//check all the game states (if windows are open ,in transit, etc.) to begin a new action
-		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing){
+		if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing){
 			return true;
 		}
 		return false;

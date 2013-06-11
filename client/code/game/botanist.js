@@ -837,6 +837,11 @@ $game.$botanist = {
 		_feedbackTimeout = setTimeout(function() {
 			$feedback.fadeOut();
 		},4500);
+	},
+
+	//return level question for resume
+	getLevelQuestion: function(level) {
+		return _levelQuestion[level];
 	}
 };
 

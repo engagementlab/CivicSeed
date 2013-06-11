@@ -57,54 +57,58 @@ $game.$mouse = {
 		}
 
 		if(clicked) {
-			//if the player is in seed mode, determine if drop seed or exit mode
-			if($game.$player.seedMode) {
-				if(!$game.$player.awaitingBomb) {
-					var m = {
-							mouse: true,
-							x: _curX,
-							y: _curY,
-							mode: $game.$player.seedMode
-						};
-					var r = $game.$player.dropSeed(m);
-					if(!r) {
-						$('.seedButton').removeClass('currentButton');
+			if($game.bossModeUnlocked) {
+				$game.$player.beginMove(_curX, _curY);
+			} else {
+				//if the player is in seed mode, determine if drop seed or exit mode
+				if($game.$player.seedMode) {
+					if(!$game.$player.awaitingBomb) {
+						var m = {
+								mouse: true,
+								x: _curX,
+								y: _curY,
+								mode: $game.$player.seedMode
+							};
+						var r = $game.$player.dropSeed(m);
+						if(!r) {
+							$('.seedButton').removeClass('currentButton');
+						}
 					}
 				}
-			}
-			else {
-				//if clicking on other player, show their info
-				var mX = $game.$map.currentTiles[_curX][_curY].x,
-					mY = $game.$map.currentTiles[_curX][_curY].y;
-				var user = $game.$others.playerCard(mX, mY);
+				else {
+					//if clicking on other player, show their info
+					var mX = $game.$map.currentTiles[_curX][_curY].x,
+						mY = $game.$map.currentTiles[_curX][_curY].y;
+					var user = $game.$others.playerCard(mX, mY);
 
-				if(!user) {
-					//determine if the player can go to new tile
-					var state = $game.$map.getTileState(_curX, _curY);
-					//if the player isn't "searching" for a path it is a green tile, move
-					if(state === -1 && !$game.$player.pathfinding) {
-						$game.$player.beginMove(_curX,_curY);
-						if($game.$npc.isChat) {
-							$game.$npc.hideChat();
-						}
-						if($game.$botanist.isChat) {
-							$game.$botanist.hideChat();
-						}
-					}
-					//they clicked on an NPC
-					else if(state >= 0 ) {
-						if(state !== $game.$botanist.index && !$game.$player.pathfinding) {
+					if(!user) {
+						//determine if the player can go to new tile
+						var state = $game.$map.getTileState(_curX, _curY);
+						//if the player isn't "searching" for a path it is a green tile, move
+						if(state === -1 && !$game.$player.pathfinding) {
+							$game.$player.beginMove(_curX,_curY);
 							if($game.$npc.isChat) {
 								$game.$npc.hideChat();
 							}
-							$game.$npc.selectNpc(state);
-							//move top bottom left of NPC
-							$game.$player.beginMove(_curX-2,_curY+1);
+							if($game.$botanist.isChat) {
+								$game.$botanist.hideChat();
+							}
 						}
-						else {
-							//show botanist stuff cuz you clicked him!
-							$('.speechBubble button').addClass('hideButton');
-							$game.$botanist.show();
+						//they clicked on an NPC
+						else if(state >= 0 ) {
+							if(state !== $game.$botanist.index && !$game.$player.pathfinding) {
+								if($game.$npc.isChat) {
+									$game.$npc.hideChat();
+								}
+								$game.$npc.selectNpc(state);
+								//move top bottom left of NPC
+								$game.$player.beginMove(_curX-2,_curY+1);
+							}
+							else {
+								//show botanist stuff cuz you clicked him!
+								$('.speechBubble button').addClass('hideButton');
+								$game.$botanist.show();
+							}
 						}
 					}
 				}

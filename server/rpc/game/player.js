@@ -330,6 +330,21 @@ exports.actions = function(req, res, ss) {
 
 		updateGameInfo: function(info) {
 			dbHelpers.saveInfo(info);
+		},
+
+		getRandomResumes: function(info) {
+			userModel
+				.where('role').equals('actor')
+				.where('game.instanceName').equals(info.instanceName)
+				.select('game.resume')
+				.find(function(err,results) {
+					console.log(results);
+					if(err) {
+						console.log(err);
+					} else if(results) {
+						res(results);
+					}
+				});
 		}
 	};
 };

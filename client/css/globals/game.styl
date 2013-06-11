@@ -1000,3 +1000,47 @@ p.privacyMessage
 	background rgba(50,50,50,0.7);
 	color $csLightGreen
 	z-index 9000
+
+.bossArea
+	position absolute
+	top 15px
+	left 15px
+	width 930px
+	height 450px
+	padding 0
+	
+	border-radius 5px	
+	box-shadow 2px 2px 4px 4px #333
+	z-index 9997
+	display none
+	overflow auto
+
+	.content
+		.videoFrame
+			margin 20px 0 0 0
+			text-align center
+			background url($cloudPath + 'img/bg/loading.png') no-repeat center center 
+		p 
+			padding 0 20px
+		.resumeQuestion
+			color $csPurple
+		.resumeAnswer
+			span 
+				color $csOrange
+		textarea 
+			margin 0 20px 20px 20px
+			height 100px
+	.buttons
+		text-align center
+		padding 10px
+	p.dialog
+		padding-top 10px
+		span
+			font-size 1.1em
+			font-weight 700
+			font-family $buttonFont
+			color $csBlue
+
+
+.bossHud
+	display none

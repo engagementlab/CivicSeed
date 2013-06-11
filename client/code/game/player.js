@@ -71,6 +71,7 @@ $game.$player = {
 		//get the players info from the db, alerts other users of presence
 		ss.rpc('game.player.init', function(playerInfo) {
 			//time in seconds since 1970 or whatever
+			//console.log(playerInfo);
 			_startTime = new Date().getTime() / 1000;
 
 			_info = {
@@ -145,32 +146,42 @@ $game.$player = {
 		$game.$player.pathfinding = true;
 		_info.offX = 0,
 		_info.offY = 0;
-		//check if it is an edge of the world
-		$game.$map.isMapEdge(x, y, function(anEdge) {
-			_willTravel = false;
-			//if a transition is necessary, load new data
-			if(!anEdge) {
-				if(x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
-					_willTravel = true;
-					$game.$map.calculateNext(x, y);
-				}
-			}
-			var loc = $game.$map.masterToLocal(_info.x, _info.y),
-				master = {x: x, y: y};
-			$game.$map.findPath(loc, master, function(result) {
+
+		if($game.bossModeUnlocked) {
+			$game.$map.findPath({x: _info.x, y: _info.y}, {x: x, y: y}, function(result) {
 				$game.$player.pathfinding = false;
 				if(result.length > 0) {
 					_sendMoveInfo(result);
-					ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-						var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
-							masterEndY = $game.$map.currentTiles[master.x][master.y].y;
-						$game.$audio.update(masterEndX, masterEndY);
-					});
-				} else {
-					$game.$player.npcOnDeck = false;
 				}
 			});
-		});
+		} else {
+			//check if it is an edge of the world
+			$game.$map.isMapEdge(x, y, function(anEdge) {
+				_willTravel = false;
+				//if a transition is necessary, load new data
+				if(!anEdge) {
+					if(x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
+						_willTravel = true;
+						$game.$map.calculateNext(x, y);
+					}
+				}
+				var loc = $game.$map.masterToLocal(_info.x, _info.y),
+					master = {x: x, y: y};
+				$game.$map.findPath(loc, master, function(result) {
+					$game.$player.pathfinding = false;
+					if(result.length > 0) {
+						_sendMoveInfo(result);
+						ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
+							var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
+								masterEndY = $game.$map.currentTiles[master.x][master.y].y;
+							$game.$audio.update(masterEndX, masterEndY);
+						});
+					} else {
+						$game.$player.npcOnDeck = false;
+					}
+				});
+			});
+		}
 	},
 
 	//moves the player as the viewport transitions
@@ -888,6 +899,12 @@ $game.$player = {
 			maxY: 0
 		};
 		$game.$player.drawSeed(pos);
+	},
+
+	//if boss mode then must change up pos info
+	setPositionInfo: function() {
+		_info.x = 15;
+		_info.y = 8;
 	}
 };
 
