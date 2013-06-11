@@ -22,6 +22,9 @@ $game.$boss = {
 	//advance to the resumes
 	nextSlide: function() {
 		_currentSlide++;
+		if(_currentSlide === 2) {
+			_saveFeedback();
+		}
 		_addContent();
 	}
 };
@@ -95,4 +98,16 @@ function _chooseResumes(people) {
 		cur++;
 	}
 	return responses;
+}
+
+function _saveFeedback() {
+	var info = [];
+	$('.bossArea textarea').each(function(i) {
+		var val = this.value;
+		info.push({
+			comment: val,
+			id: _resumes[i].id
+		});
+	});
+	ss.rpc('game.player.resumeFeedback', info);
 }

@@ -338,13 +338,16 @@ exports.actions = function(req, res, ss) {
 				.where('game.instanceName').equals(info.instanceName)
 				.select('game.resume')
 				.find(function(err,results) {
-					console.log(results);
 					if(err) {
 						console.log(err);
 					} else if(results) {
 						res(results);
 					}
 				});
+		},
+
+		resumeFeedback: function(info) {	
+			dbHelpers.saveFeedback(info, 0);
 		}
 	};
 };
@@ -570,5 +573,22 @@ dbHelpers = {
 					user.save();
 				}
 			});
+	},
+
+	saveFeedback: function(info, index) {
+		userModel.findById(info[index].id, function(err,user) {
+			if(err) {
+				console.log(err);
+			} else if(user) {
+				user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index});
+				user.save(function(err,okay) {
+					//keep savin til we aint got none
+					index++;
+					if(index < info.length) {
+						dbHelpers.saveFeedback(info,index);
+					}
+				});
+			}
+		});
 	}
  };

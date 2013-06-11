@@ -44,6 +44,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			firstTime: Boolean,
 			colorMap: String,
 			resume: [String],
+			resumeFeedback: [{
+				comment: String,
+				resumeIndex: Number
+			}],
 			seenRobot: Boolean,
 			playingTime: Number,
 			tilesColored: Number,

@@ -71,6 +71,7 @@ exports.actions = function(req, res, ss) {
 						botanistState: 0,
 						firstTime: true,
 						resume: [],
+						resumeFeedback: [],
 						seenRobot: false,
 						playingTime: 0,
 						tilesColored: 0,
