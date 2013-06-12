@@ -1041,6 +1041,32 @@ p.privacyMessage
 			font-family $buttonFont
 			color $csBlue
 
-
+.bossBox
+	cursor pointer
+	width 48px
+	height 36px
+	line-height 36px
+	margin-right 10px
+	margin-left 10px
+	background #ccc
+	// background rgba(0,0,0,.2)
+	border-radius 5px
+	position relative
+	text-align center
+	&:hover
+		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 .bossHud
-	display none
+	display none	
+	.clock
+		color $csBlue
+		font-size 1.5em
+		font-family	$buttonFont
+		text-align center
+		line-height 36px
+	.score
+		text-align right
+		line-height 36px
+		color $csOrange
+		font-size 1.2em
+	.muteButton
+		float left

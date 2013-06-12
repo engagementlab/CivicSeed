@@ -752,6 +752,46 @@ $game.$renderer = {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
 		newImg.src = map;
+	},
+
+	renderBossTiles: function(tiles) {
+		for(var t = 0; t < tiles.length; t++) {
+			$game.$renderer.clearMapTile(tiles[t].x * $game.TILE_SIZE, tiles[t].y * $game.TILE_SIZE);
+			_backgroundContext.fillStyle = tiles[t].color;
+			_backgroundContext.fillRect(
+				tiles[t].x * $game.TILE_SIZE,
+				tiles[t].y * $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE
+			);
+			if(tiles[t].item > -1) {
+				_backgroundContext.fillStyle = 'rgba(0,' + tiles[t].item * 50 + ',200,0.5)';
+				_backgroundContext.fillRect(
+					tiles[t].x * $game.TILE_SIZE,
+					tiles[t].y * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			if(tiles[t].charger > -1) {
+				_backgroundContext.fillStyle = 'rgba(255,0,0,0.9)';
+				_backgroundContext.fillRect(
+					tiles[t].x * $game.TILE_SIZE,
+					tiles[t].y * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+		}
+	},
+
+	clearBossLevel: function() {
+		_backgroundContext.clearRect(
+			0,
+			0,
+			$game.TILE_SIZE * $game.VIEWPORT_WIDTH,
+			$game.TILE_SIZE * $game.VIEWPORT_HEIGHT
+		);
 	}
 };
 

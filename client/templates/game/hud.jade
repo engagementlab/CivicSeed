@@ -26,5 +26,19 @@
 				i.icon-globe.icon-large(title='active players', data-placement='bottom')
 				span.badge.hudCount
 	.row.bossHud
-		p boss hud
+		.span4
+			.regularSeedButton.bossBox
+				i.icon-leaf.icon-large(title='seeds', data-placement='bottom')
+				span.badge.hudCount 20
+			//- .drawSeedButton.bossBox
+			//- 	i.icon-star.icon-large(title='seeds', data-placement='bottom')
+			//- 	span.badge.hudCount 20
+		.span4
+			p.clock 90
+		.span3
+			p.score score: <span>1000</span>
+		.span1
+			.muteButton.bossBox
+				i.icon-volume-up.icon-large(title='toggle music', data-placement='bottom')
+
 

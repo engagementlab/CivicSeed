@@ -685,6 +685,10 @@ $game.$player = {
 		return 'rgba('+_colorInfo.r+','+_colorInfo.g+','+_colorInfo.b+','+ 0.5 + ')';
 	},
 
+	getColorString: function() {
+		return _rgbString;
+	},
+
 	//get the current viewport position
 	getRenderPosition: function () {
 		return {x: _renderInfo.curX, y: _renderInfo.curY};
@@ -1138,10 +1142,17 @@ function _move() {
 
 	//if we done, finish
 	if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
-		if($game.$player.keyMoving) {
-			$game.$player.endKeyMove();
-		}
-		else {
+		if($game.bossModeUnlocked) {
+			_info.offX = 0,
+			_info.offY = 0;
+			_info.srcX = 0,
+			_info.srcY =  0;
+			_info.prevOffX= 0;
+			_info.prevOffY= 0;
+
+			$game.$player.isMoving = false;
+			$game.$boss.endMove(_info.x, _info.y);
+		} else {
 			_endMove();
 		}
 	}

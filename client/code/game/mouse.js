@@ -58,7 +58,11 @@ $game.$mouse = {
 
 		if(clicked) {
 			if($game.bossModeUnlocked) {
-				$game.$player.beginMove(_curX, _curY);
+				if($game.$player.seedMode) {
+					$game.$boss.dropSeed({x:_curX, y:_curY});
+				} else {
+					$game.$player.beginMove(_curX, _curY);
+				}
 			} else {
 				//if the player is in seed mode, determine if drop seed or exit mode
 				if($game.$player.seedMode) {
