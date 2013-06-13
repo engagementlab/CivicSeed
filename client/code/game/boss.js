@@ -11,8 +11,9 @@ var _currentSlide,
 	$clock,
 
 	_numChargers = 4,
+	_currentCharger = 0,
 	_numDrawSeeds = 100,
-	_numRegularSeeds = 100,
+	_numRegularSeeds = 20,
 	_seedMode = 0,
 	_rgbString,
 
@@ -24,7 +25,11 @@ var _currentSlide,
 	_pause,
 	_totalTime,
 	_clockRate,
-	_clockTimeout;
+	_clockTimeout,
+
+	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/';
+	_numVideos = 3,
+	_cutSceneVids = [];
 
 $game.$boss = {
 	isShowing: false,
@@ -42,6 +47,7 @@ $game.$boss = {
 		$game.$boss.nextSlide();
 		_placeCharger();
 		_addContent();
+		_loadVideo(0);
 		callback();
 	},
 
@@ -62,19 +68,23 @@ $game.$boss = {
 		_addContent();
 	},
 
+	//drop a seed to reveal clues
 	dropSeed: function(pos) {
 		//update hud
 		if(_seedMode === 1) {
 			_numRegularSeeds--;
 			$game.$audio.playTriggerFx('seedDrop');
 			$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
+			_renderTiles(pos);
 			if(_numRegularSeeds <= 0) {
 				//TODO: out of regular seeds display
 				_seedMode = 0;
 				$game.$player.seedMode = false;
 				$game.$player.resetRenderColor();
+				$('.bossHud .regularSeedButton').removeClass('currentButton');
+				//check if they fail
+				_checkFail();
 			}
-			_renderTiles(pos);
 		} else if(_seedMode === 2) {
 			_numDrawSeeds--;
 			$('.bossHud .drawSeedButton .hudCount').text(_numDrawSeeds);
@@ -89,11 +99,12 @@ $game.$boss = {
 		//update score
 	},
 
+	//finish walking, determine if we crushed charger or got item
 	endMove: function(x,y) {
 		//check for charger first
 		//charger = means it has a revealed charger
 		if(_grid[x][y].charger === 1) {
-			_placeCharger();
+			_checkWin();
 			$game.$renderer.clearBossLevel();
 		} else if(_grid[x][y].item > -1) {
 			//pick up good item
@@ -113,6 +124,8 @@ function _setDomSelectors() {
 	$seedButtonCount = $('.bossHud .seedButton .hudCount');
 	$clock = $('.bossHud .clock');
 }
+
+//add content to the display window
 function _addContent() {
 	$bossAreaContent.empty();
 	var html = '';
@@ -146,6 +159,7 @@ function _addContent() {
 	}
 }
 
+//pick random resume responses from peers
 function _chooseResumes(people) {
 	var numToGet = 4,
 		cur = 0,
@@ -180,6 +194,7 @@ function _chooseResumes(people) {
 	return responses;
 }
 
+//save feedback on resume responses to db for each user
 function _saveFeedback() {
 	var info = [];
 	$('.bossArea textarea').each(function(i) {
@@ -192,17 +207,21 @@ function _saveFeedback() {
 	ss.rpc('game.player.resumeFeedback', info);
 }
 
+//randomly place the charger
 function _placeCharger() {
 	var x = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
 		y = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT);
 	_charger.x = x;
 	_charger.y = y;
+	_charger.revealed = false;
+	_currentCharger++;
 	_calculateGrid();
 	//set the grid item with the charger, take items off it if has em
 	_grid[x][y].charger = 0;
 	_grid[x][y].item = -1;
 }
 
+//init the basic grid
 function _createGrid() {
 	_grid = [$game.VIEWPORT_WIDTH];
 	var i = $game.VIEWPORT_WIDTH;
@@ -219,6 +238,8 @@ function _createGrid() {
 		}
 	}
 }
+
+//recalc grid values based on charger placement, place item randomly
 function _calculateGrid() {
 	var i = $game.VIEWPORT_WIDTH;
 	while(--i >= 0) {
@@ -231,11 +252,13 @@ function _calculateGrid() {
 	}
 }
 
+//calculate how far from the charger the tile is
 function _distFromCharger(pos) {
 	var delta = Math.abs(pos.x - _charger.x)  + Math.abs(pos.y - _charger.y);
 	return delta;
 }
 
+//start the game, clock, sound
 function _beginGame() {
 	_start = new Date().getTime(),
     _time = 0,
@@ -249,8 +272,8 @@ function _beginGame() {
     $game.$audio.switchTrack(7);
 }
 
-function _updateTime()
-{
+//tick the clock
+function _updateTime(){
     _time += 100;
     _totalTime += 100 * _clockRate;
     _elapsed = _target - Math.floor(_totalTime / 1000);
@@ -266,10 +289,39 @@ function _updateTime()
     }
 }
 
+//check if they are out of seeds and the charger hasn't been revealed
+function _checkFail() {
+	if(!_charger.revealed || _currentCharger < _numChargers) {
+		_fail();
+	}
+}
+
+function _checkWin() {
+	if(_currentCharger === 4) {
+		alert('win');
+	} else {
+		var left = 'only '  +  (_numChargers - _currentCharger) + ' chargers left!';
+		$game.statusUpdate({message:left,input:'status',screen: true,log:false});
+		$('.gameboard').append(_cutSceneVids[_currentCharger]);
+		$('.cutScene').fadeIn('fast');
+		$('.cutScene')[0].play();
+		_clockRate = 0;
+		$('.cutScene')[0].addEventListener('ended', function() {
+			$('.cutScene').fadeOut('fast', function() {
+				_clockRate = 1;
+				$(this).remove();
+			});
+			_placeCharger();
+		});
+	}
+}
+
+//show stuff if they don't beat the level
 function _fail() {
 	alert('fail');
 }
 
+//setup the new hud for the level
 function _setupHud() {
 	$BODY.on('click','.bossHud .regularSeedButton', function() {
 		if(_seedMode === 0 && _numRegularSeeds > 0) {
@@ -312,6 +364,7 @@ function _setupHud() {
 	});
 }
 
+//figure out which tiles to render based on seed drop
 function _renderTiles(pos) {
 	var topLeftX = pos.x - 1,
 		topLeftY = pos.y - 1,
@@ -360,6 +413,7 @@ function _renderTiles(pos) {
 	$game.$renderer.renderBossTiles(squares);
 }
 
+//create a random item
 function _makeRandomItem() {
 	var ran = Math.floor(Math.random() * 200);
 	if(ran < 4) {
@@ -369,11 +423,14 @@ function _makeRandomItem() {
 	}
 }
 
+//the player reveals the charger
 function _foundCharger(x,y) {
 	_grid[x][y].charger = 1;
-	//TODO: prompt
+	$game.statusUpdate({message:'you found a charger! Go to it to disable it.',input:'status',screen: true,log:false});
+	_charger.revealed = true;
 }
 
+//player activates an special item
 function _activateItem(data) {
 	if(_grid[data.x][data.y].itemRevealed) {
 		//disable item in future
@@ -412,4 +469,30 @@ function _activateItem(data) {
 			$game.$renderer.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
 		}
 	}
+}
+
+//load all cut scene videos up at start
+function _loadVideo(num) {
+	vid = document.createElement('video');
+	if(CivicSeed.ENVIRONMENT === 'development') {
+		vid.src = Modernizr.video.h264 ? _videoPath + num + '.mp4' :
+			_videoPath + i + '.webm?VERSION=' + Math.round(Math.random(1) * 1000000000);
+	} else {
+		vid.src = Modernizr.video.h264 ? _videoPath + num + '.mp4?VERSION=' + CivicSeed.VERSION:
+			_videoPath + i + '.webm?VERSION=' + CivicSeed.VERSION;
+	}
+
+	vid.load();
+	vid.className = 'cutScene';
+	vid.addEventListener('canplaythrough', function (e) {
+		this.removeEventListener('canplaythrough', arguments.callee, false);
+		_cutSceneVids.push(vid);
+		num += 1;
+		if(num < _numVideos) {
+			_loadVideo(num);
+		}
+	},false);
+	vid.addEventListener('error', function (e) {
+		console.log('vid error');
+	}, false);
 }
