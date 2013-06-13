@@ -11,9 +11,9 @@ var _currentSlide,
 	$clock,
 
 	_numChargers = 4,
-	_currentCharger = 0,
-	_numDrawSeeds = 100,
-	_numRegularSeeds = 20,
+	_currentCharger,
+	_numDrawSeeds,
+	_numRegularSeeds,
 	_seedMode = 0,
 	_rgbString,
 
@@ -40,12 +40,10 @@ $game.$boss = {
 		$('.regularGameHud').fadeOut('fast');
 		_setupHud();
 		$bossArea.show();
-		$game.$boss.isShowing = true;
 		_rgbString = $game.$player.getColorString();
 		_currentSlide = 0;
 		_currentSlide = 1;
 		$game.$boss.nextSlide();
-		_placeCharger();
 		_addContent();
 		_loadVideo(0);
 		callback();
@@ -53,19 +51,23 @@ $game.$boss = {
 
 	//advance to the resumes
 	nextSlide: function() {
-		_currentSlide++;
-		if(_currentSlide === 2) {
-			//TODO: uncomment this
-			// _saveFeedback();
-			$('.bossHud').show();
-		} else if(_currentSlide > 2) {
-			_numSeeds = 7;
-			$bossArea.fadeOut('fast',function() {
-				$game.$boss.isShowing = false;
-				_beginGame();
-			});
+		if(_currentSlide === 4) {
+			//unlock profile
+		} else {
+			_currentSlide++;
+			if(_currentSlide === 2) {
+				//TODO: uncomment this
+				// _saveFeedback();
+				$('.bossHud').show();
+			} else if(_currentSlide > 2) {
+				_numSeeds = 7;
+				$bossArea.fadeOut('fast',function() {
+					$game.$boss.isShowing = false;
+					_beginGame();
+				});
+			}
+			_addContent();
 		}
-		_addContent();
 	},
 
 	//drop a seed to reveal clues
@@ -127,6 +129,7 @@ function _setDomSelectors() {
 
 //add content to the display window
 function _addContent() {
+	$game.$boss.isShowing = true;
 	$bossAreaContent.empty();
 	var html = '';
 	if(_currentSlide === 0) {
@@ -151,13 +154,25 @@ function _addContent() {
 				console.log('error');
 			}
 		});
-	} else {
+	} else if(_currentSlide === 2) {
 		//show instructions and begin
 		html = '<p class="dialog"><span>Botanist:</span> Great work.  You earned yourself 7 seeds. But remember, these are special seeds. Dropping one of these is like a color compass that will point you in the direction of the robot\'s charger. More instructions here...</p>';
 		$('.bossArea .bossButton').text('begin');
 		$bossAreaContent.append(html);
+	}  else if(_currentSlide === 3) {
+		//fail screen
+		html = '<p class="dialog"><span>Botanist:</span> You failed quite miserably!</p>';
+		html += '<p>You should try again.</p>';
+		$('.bossArea .bossButton').text('Play Again');
+		$bossAreaContent.append(html);
+	}else if(_currentSlide === 4) {
+		//win screen
+		html = '<p class="dialog"><span>Botanist:</span> You win, you won, you did it!</p>';
+		html += '<p>Some video here...</p>';
+		$('.bossArea .bossButton').text('Unlock Profile');
+		$bossAreaContent.append(html);
 	}
-}
+ }
 
 //pick random resume responses from peers
 function _chooseResumes(people) {
@@ -239,6 +254,16 @@ function _createGrid() {
 	}
 }
 
+function _hideItems() {
+	var i = $game.VIEWPORT_WIDTH;
+	while(--i >= 0) {
+		var j = $game.VIEWPORT_HEIGHT;
+		while(--j >= 0) {
+			_grid[i][j].itemRevealed = false;
+		}
+	}
+}
+
 //recalc grid values based on charger placement, place item randomly
 function _calculateGrid() {
 	var i = $game.VIEWPORT_WIDTH;
@@ -267,6 +292,11 @@ function _beginGame() {
     _totalTime = 0,
     _target = 90;
     _clockRate = 1;
+    _numRegularSeeds = 20;
+    _currentCharger = 0;
+    _seedMode = 0;
+    _placeCharger();
+    $('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
     //trigger boss music!
     $game.$audio.switchTrack(7);
@@ -296,13 +326,18 @@ function _checkFail() {
 	}
 }
 
+//see if the player has won, or set charger
 function _checkWin() {
 	if(_currentCharger === 4) {
-		alert('win');
+		_pause = true;
+		_currentSlide = 4;
+		_addContent();
+		$bossArea.show();
 	} else {
+		_hideItems();
 		var left = 'only '  +  (_numChargers - _currentCharger) + ' chargers left!';
 		$game.statusUpdate({message:left,input:'status',screen: true,log:false});
-		$('.gameboard').append(_cutSceneVids[_currentCharger]);
+		$('.gameboard').append(_cutSceneVids[_currentCharger - 1]);
 		$('.cutScene').fadeIn('fast');
 		$('.cutScene')[0].play();
 		_clockRate = 0;
@@ -318,7 +353,13 @@ function _checkWin() {
 
 //show stuff if they don't beat the level
 function _fail() {
-	alert('fail');
+	$('.bossHud .regularSeedButton').removeClass('currentButton');
+	$game.$player.seedMode = false;
+	$game.$player.resetRenderColor();
+	_pause = true;
+	_currentSlide = 3;
+	_addContent();
+	$bossArea.show();
 }
 
 //setup the new hud for the level
@@ -449,6 +490,7 @@ function _activateItem(data) {
 			//wipeout
 			$game.statusUpdate({message:'wipeout!',input:'status',screen: true,log:false});
 			setTimeout(function() {
+				_hideItems();
 				$game.$renderer.clearBossLevel();
 			}, 1000);
 			_grid[_charger.x][_charger.y].charger = 0;
