@@ -12,7 +12,7 @@ exports.authenticated = function(framework) {
 				}
 				return next();
 			} else {
-				// console.log('Not authenticated . . . sending ss response . . . '.yellow.inverse);
+				//console.log('Not authenticated . . . sending ss response . . . '.yellow.inverse);
 				return res('NOT_AUTHENTICATED');
 			}
 		}

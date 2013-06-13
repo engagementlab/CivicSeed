@@ -4,7 +4,7 @@ var _soundtracks = [],
 	_environmentOnceFx = null,
 	_currentTrack = -1,
 	_prevTrack = -1,
-	_numTracks = 7,
+	_numTracks = 8,
 	_tweenTimeout = null,
 	_newPlace = 'welcome...',
 	_targetV = 0,
@@ -337,8 +337,8 @@ $game.$audio = {
 		});
 		_currentTrack = swap;
 
-		// var val = $game.$audio.isMute ? 0.0 : 0.2;
-		var val = 0;
+		var val = $game.$audio.isMute ? 0.0 : 0.2;
+		// var val = 0;
 		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
 			_midTransition = false;
 		});

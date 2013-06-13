@@ -15,7 +15,7 @@ exports.actions = function(req, res, ss) {
 
 	req.use('session');
 	// req.use('debug');
-	req.use('account.authenticated');
+	//req.use('account.authenticated');
 
 	return {
 		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
@@ -68,9 +68,8 @@ exports.actions = function(req, res, ss) {
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: info.id});
 						delete games[req.session.game.instanceName].players[info.id];
 						user.isPlaying = false;
-						user.save(function (y) {
-							res(true);
-						});
+						user.save();
+						console.log('saved player');
 					}
 				});
 		},

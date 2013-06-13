@@ -391,8 +391,6 @@ $(function() {
 function leaveThisJoint() {
 	if(sessionStorage.isPlaying === 'true') {
 		sessionStorage.setItem('isPlaying', 'false');
-		$game.$player.exitAndSave(function() {
-			console.log('exit');
-		});
+		$game.$player.exitAndSave();
 	}
 }

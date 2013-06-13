@@ -15,7 +15,7 @@ var self = module.exports = {
 			// check if user experiences/authentic
 			//console.log('middleware session check');
 			ss.rpc('shared.account.getUserSession', function(userSessionObject) {
-				// console.log('server getUserSession response: ', userSessionObject);
+				//console.log('routesmiddleware getUserSession: ', userSessionObject);
 				if(userSessionObject.role) {
 					// console.log('Authenticated...');
 					// console.log('session storage:', sessionStorage);

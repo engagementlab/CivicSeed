@@ -37,7 +37,7 @@ $game.$boss = {
 		$bossArea.show();
 		$game.$boss.isShowing = true;
 		_rgbString = $game.$player.getColorString();
-		//_currentSlide = 0;
+		_currentSlide = 0;
 		_currentSlide = 1;
 		$game.$boss.nextSlide();
 		_placeCharger();
@@ -49,7 +49,8 @@ $game.$boss = {
 	nextSlide: function() {
 		_currentSlide++;
 		if(_currentSlide === 2) {
-			_saveFeedback();
+			//TODO: uncomment this
+			// _saveFeedback();
 			$('.bossHud').show();
 		} else if(_currentSlide > 2) {
 			_numSeeds = 7;
@@ -65,6 +66,7 @@ $game.$boss = {
 		//update hud
 		if(_seedMode === 1) {
 			_numRegularSeeds--;
+			$game.$audio.playTriggerFx('seedDrop');
 			$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
 			if(_numRegularSeeds <= 0) {
 				//TODO: out of regular seeds display
@@ -244,6 +246,7 @@ function _beginGame() {
     _clockRate = 1;
     setTimeout(_updateTime, 100);
     //trigger boss music!
+    $game.$audio.switchTrack(7);
 }
 
 function _updateTime()

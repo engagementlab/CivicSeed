@@ -2,9 +2,8 @@ exports.init = function(callback) {
 
 	var $body;
 
-	// console.log('game-setup getUserSession:');
 	ss.rpc('shared.account.getUserSession', function(userSessionObject) {
-		// console.log(userSessionObject);
+		//console.log('game-setup getUserSession:', userSessionObject);
 		if(userSessionObject === 'NOT_AUTHENTICATED') {
 			window.location.href = '/';
 		} else {

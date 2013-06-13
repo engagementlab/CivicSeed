@@ -243,13 +243,13 @@ $game.$player = {
 					y2: bottomRightTile.y
 				};
 				_sendSeedBomb(data);
-				return true;	
+				return true;
 			}
 		}
 	},
 
 	//save out all current status of player to db on exit
-	exitAndSave: function(callback) {
+	exitAndSave: function() {
 		var endTime = new Date().getTime() / 1000,
 			totalTime = endTime - _startTime;
 		_playingTime += totalTime;
@@ -264,9 +264,7 @@ $game.$player = {
 				y: _info.y
 			}
 		};
-		ss.rpc('game.player.exitPlayer', info, function(res) {
-			callback();
-		});
+		ss.rpc('game.player.exitPlayer', info);
 	},
 
 	//determine which returning to npc prompt to show based on if player answered it or not

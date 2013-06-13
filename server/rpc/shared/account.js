@@ -67,7 +67,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getUserSession: function() {
-			console.log('**** getUserSession ******');
+			//console.log('**** getUserSession ******');
 			if(req.session.userId) {
 				res({
 					id: req.session.userId,
@@ -81,7 +81,7 @@ exports.actions = function(req, res, ss) {
 					isPlaying: req.session.isPlaying
 				});
 			} else {
-				console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
+				//console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
 				res('NOT_AUTHENTICATED');
 			}
 		},
