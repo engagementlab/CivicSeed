@@ -50,7 +50,6 @@ $game.$resources = {
 					_resources[stringId].playerAnswers = [];
 				}
 			});
-
 			var allRes = all[0].resourceResponses;
 			$.each(allRes, function(key, answer) {
 				if(answer.madePublic) {

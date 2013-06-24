@@ -305,7 +305,8 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						var npc = info.resource.npc;
+						console.log(info);
+						var npc = info.index;
 						//hack cuz game doesn't start with resource object...
 						if(!user.game.resources) {
 							user.game.resources = {};

@@ -250,6 +250,7 @@ $game.$player = {
 
 	//save out all current status of player to db on exit
 	exitAndSave: function(callback) {
+		$game.$player.savePositionToDB();
 		ss.rpc('game.player.exitPlayer', $game.$player.id, function() {
 			callback();
 		});
@@ -553,13 +554,13 @@ $game.$player = {
 	//get ALL answers for all open questions for this player
 	compileAnswers: function() {
 		var html = '';
-		for (var item in _resources) {
+		$.each(_resources, function(key, item) {
 			// console.log(item);
-			if(_resources[item].questionType === 'open') {
-				var	npc = item.npc,
-					answer = _resources[item].answers[_resources[item].answers.length - 1],
+			if(item.questionType === 'open') {
+				var	npc = key,
+					answer = item.answers[item.answers.length - 1],
 					question = $game.$resources.getQuestion(npc),
-					seededCount = _resources[item].seeded.length;
+					seededCount = item.seeded.length;
 
 				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
 				if(seededCount > 0) {
@@ -567,8 +568,8 @@ $game.$player = {
 				}
 				html += '</div>';
 			}
+		});
 		return html;
-		}
 	},
 
 	//see if the player has the specific resource already
@@ -740,7 +741,7 @@ $game.$player = {
 				_inventory.push({name: shapeName, npc: npc, tagline: tagline});
 				_addToInventory({name: shapeName, npc: npc, tagline: tagline});
 		}
-		_saveResourceToDB(realResource);
+		_saveResourceToDB(realResource, npc);
 		//display npc bubble for comment num
 		$game.$player.displayNpcComments();
 	},
@@ -906,12 +907,13 @@ $game.$player = {
 /***** PRIVATE FUNCTIONS ******/
 
 //save a new resource to the database
-function _saveResourceToDB(resource) {
+function _saveResourceToDB(resource, npc) {
 	var info = {
 		id: $game.$player.id,
 		resource: resource,
 		inventory: _inventory,
-		resourcesDiscovered: _resourcesDiscovered
+		resourcesDiscovered: _resourcesDiscovered,
+		index: npc
 	};
 	ss.rpc('game.player.saveResource', info);
 }
