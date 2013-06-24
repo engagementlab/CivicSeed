@@ -249,9 +249,9 @@ function _loadGameInfo() {
 	//get the global game information stats
 	ss.rpc('game.player.getGameInfo', function(response) {
 		//regular game mode
-		//TODO: switch this back
-		// $game.bossModeUnlocked = response.bossModeUnlocked;
-		$game.bossModeUnlocked = true;
+		$game.bossModeUnlocked = response.bossModeUnlocked;
+		//for testing
+		//$game.bossModeUnlocked = true;
 		$game.resourceCount = response.resourceCount;
 		_stats = {
 			seedsDropped: response.seedsDropped,
@@ -375,7 +375,7 @@ function _setBoundaries() {
 function _startGame() {
 	if($game.bossModeUnlocked) {
 		$game.$boss.init(function() {
-			//something
+			//TODO: something here?
 		});
 	}
 	$game.$map.firstStart(function() {

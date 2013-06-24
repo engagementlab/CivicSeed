@@ -390,7 +390,7 @@ $(function() {
 //save and exit
 function leaveThisJoint() {
 	if(sessionStorage.isPlaying === 'true') {
-		sessionStorage.setItem('isPlaying', 'false');
+		sessionStorage.removeItem('isPlaying');
 		$game.$player.exitAndSave();
 	}
 }

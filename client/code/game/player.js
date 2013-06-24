@@ -249,22 +249,10 @@ $game.$player = {
 	},
 
 	//save out all current status of player to db on exit
-	exitAndSave: function() {
-		var endTime = new Date().getTime() / 1000,
-			totalTime = endTime - _startTime;
-		_playingTime += totalTime;
-		_position.x = _info.x,
-		_position.y = _info.y;
-		_colorMap = $game.$map.saveImage();
-		var info = {
-			id: $game.$player.id,
-			playingTime: _playingTime,
-			position: {
-				x: _info.x,
-				y: _info.y
-			}
-		};
-		ss.rpc('game.player.exitPlayer', info);
+	exitAndSave: function(callback) {
+		ss.rpc('game.player.exitPlayer', $game.$player.id, function() {
+			callback();
+		});
 	},
 
 	//determine which returning to npc prompt to show based on if player answered it or not
@@ -309,6 +297,7 @@ $game.$player = {
 		}
 		_resourcesDiscovered += 1;
 		//the answer was correct, add item to inventory
+		console.log(_resources);
 		if(info.correct) {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
@@ -566,7 +555,7 @@ $game.$player = {
 		var html = '';
 		for (var item in _resources) {
 			// console.log(item);
-			if(resources[item].questionType === 'open') {
+			if(_resources[item].questionType === 'open') {
 				var	npc = item.npc,
 					answer = _resources[item].answers[_resources[item].answers.length - 1],
 					question = $game.$resources.getQuestion(npc),
@@ -790,11 +779,15 @@ $game.$player = {
 
 	//save the player's current position to the DB
 	savePositionToDB: function() {
+		var endTime = new Date().getTime() / 1000,
+			totalTime = endTime - _startTime;
+		_playingTime += totalTime;
 		_position.x = _info.x;
 		_position.y = _info.y;
 		var info = {
 			id: $game.$player.id,
-			position: _position
+			position: _position,
+			playingTime: _playingTime
 		};
 		ss.rpc('game.player.updateGameInfo', info);
 	},

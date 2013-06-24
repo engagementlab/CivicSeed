@@ -53,23 +53,22 @@ exports.actions = function(req, res, ss) {
 			res(playerInfo);
 		},
 
-		exitPlayer: function(info) {
+		exitPlayer: function(id) {
 			//update redis
 			//req.session.game = info;
 			//req.session.save();
 			//update mongo
-			dbHelpers.saveInfo(info);
 			userModel
-				.findById(info.id, function (err, user) {
+				.findById(id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
 						games[req.session.game.instanceName].numActivePlayers -= 1;
-						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: info.id});
-						delete games[req.session.game.instanceName].players[info.id];
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
+						delete games[req.session.game.instanceName].players[id];
 						user.isPlaying = false;
 						user.save();
-						console.log('saved player');
+						res();
 					}
 				});
 		},
@@ -520,11 +519,10 @@ colorHelpers = {
 		});
 	},
 
-	endGameEmails: function() {
-		//the world is fully colored, 
-		//advance the game state to 2 = boss level
-		//send out emails
-		//get all emails from actors
+	endGameEmails: function() {		 
+		//set boss mode unlocked here for specific instance
+
+		//send out emails to players who have completed game
 		userModel
 			.where('role').equals('actor')
 			.select('email')

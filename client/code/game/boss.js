@@ -73,28 +73,30 @@ $game.$boss = {
 	//drop a seed to reveal clues
 	dropSeed: function(pos) {
 		//update hud
-		if(_seedMode === 1) {
-			_numRegularSeeds--;
-			$game.$audio.playTriggerFx('seedDrop');
-			$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
-			_renderTiles(pos);
-			if(_numRegularSeeds <= 0) {
-				//TODO: out of regular seeds display
-				_seedMode = 0;
-				$game.$player.seedMode = false;
-				$game.$player.resetRenderColor();
-				$('.bossHud .regularSeedButton').removeClass('currentButton');
-				//check if they fail
-				_checkFail();
-			}
-		} else if(_seedMode === 2) {
-			_numDrawSeeds--;
-			$('.bossHud .drawSeedButton .hudCount').text(_numDrawSeeds);
-			if(_numDrawSeeds <= 0) {
-				//TODO: out of regular seeds display
-				_seedMode = 0;
-				$game.$player.seedMode = false;
-				$game.$player.resetRenderColor();
+		if(!_pause) {
+			if(_seedMode === 1) {
+				_numRegularSeeds--;
+				$game.$audio.playTriggerFx('seedDrop');
+				$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
+				_renderTiles(pos);
+				if(_numRegularSeeds <= 0) {
+					//TODO: out of regular seeds display
+					_seedMode = 0;
+					$game.$player.seedMode = false;
+					$game.$player.resetRenderColor();
+					$('.bossHud .regularSeedButton').removeClass('currentButton');
+					//check if they fail
+					_checkFail();
+				}
+			} else if(_seedMode === 2) {
+				_numDrawSeeds--;
+				$('.bossHud .drawSeedButton .hudCount').text(_numDrawSeeds);
+				if(_numDrawSeeds <= 0) {
+					//TODO: out of regular seeds display
+					_seedMode = 0;
+					$game.$player.seedMode = false;
+					$game.$player.resetRenderColor();
+				}
 			}
 		}
 
@@ -105,12 +107,14 @@ $game.$boss = {
 	endMove: function(x,y) {
 		//check for charger first
 		//charger = means it has a revealed charger
-		if(_grid[x][y].charger === 1) {
-			_checkWin();
-			$game.$renderer.clearBossLevel();
-		} else if(_grid[x][y].item > -1) {
-			//pick up good item
-			_activateItem({x: x, y:y, item: _grid[x][y].item});
+		if(!_pause) {
+			if(_grid[x][y].charger === 1) {
+				_checkWin();
+				$game.$renderer.clearBossLevel();
+			} else if(_grid[x][y].item > -1) {
+				//pick up good item
+				_activateItem({x: x, y:y, item: _grid[x][y].item});
+			}
 		}
 	}
 };
@@ -335,14 +339,14 @@ function _checkWin() {
 		$bossArea.show();
 	} else {
 		_hideItems();
-		var left = 'only '  +  (_numChargers - _currentCharger) + ' chargers left!';
-		$game.statusUpdate({message:left,input:'status',screen: true,log:false});
 		$('.gameboard').append(_cutSceneVids[_currentCharger - 1]);
 		$('.cutScene').fadeIn('fast');
 		$('.cutScene')[0].play();
 		_clockRate = 0;
 		$('.cutScene')[0].addEventListener('ended', function() {
 			$('.cutScene').fadeOut('fast', function() {
+				var left = 'only '  + _numChargers + ' chargers left!';
+				$game.statusUpdate({message:left,input:'status',screen: true,log:false});
 				_clockRate = 1;
 				$(this).remove();
 			});
