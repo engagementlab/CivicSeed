@@ -251,7 +251,8 @@ function _loadGameInfo() {
 		//regular game mode
 		$game.bossModeUnlocked = response.bossModeUnlocked;
 		//for testing
-		$game.bossModeUnlocked = true;
+		// $game.bossModeUnlocked = true;
+		
 		$game.resourceCount = response.resourceCount;
 		_stats = {
 			seedsDropped: response.seedsDropped,

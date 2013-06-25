@@ -900,8 +900,10 @@ $game.$player = {
 
 	//if boss mode then must change up pos info
 	setPositionInfo: function() {
-		_info.x = 15;
-		_info.y = 8;
+		if($game.bossModeUnlocked) {
+			_info.x = 15;
+			_info.y = 8;
+		}
 	}
 };
 

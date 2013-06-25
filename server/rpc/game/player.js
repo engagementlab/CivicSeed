@@ -521,7 +521,7 @@ colorHelpers = {
 		});
 	},
 
-	endGameEmails: function() {		 
+	endGameEmails: function() {
 		//set boss mode unlocked here for specific instance
 
 		//send out emails to players who have completed game

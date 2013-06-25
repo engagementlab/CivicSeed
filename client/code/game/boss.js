@@ -42,9 +42,10 @@ $game.$boss = {
 		$bossArea.show();
 		_rgbString = $game.$player.getColorString();
 		_currentSlide = 0;
-		_currentSlide = 1;
-		$game.$boss.nextSlide();
 		_addContent();
+		//for testing
+		// _currentSlide = 1;
+		//$game.$boss.nextSlide();
 		_loadVideo(0);
 		$('#background').addClass('labBackground');
 		callback();
