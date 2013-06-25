@@ -153,37 +153,37 @@ exports.actions = function(req, res, ss) {
 							};
 						}
 						//saveEach tile
-						// console.log(modifiedTiles);
 						colorHelpers.saveTiles(modifiedTiles, function(done) {
 							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
-								//send out new bombs AND player info to update score
-								var newTileCount = info.tilesColored + allTiles.length,
-								sendData = {
-									bombed: allTiles,
-									id: info.id,
-									tilesColored: newTileCount
-								};
-								// //we are done,send out the color information to each client to render
-								ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
+							//send out new bombs AND player info to update score
+							var numNewTilesScaled = Math.ceil(allTiles.length / 9);
+							var newTileCount = info.tilesColored + allTiles.length,
+							sendData = {
+								bombed: allTiles,
+								id: info.id,
+								tilesColored: newTileCount
+							};
+							// //we are done,send out the color information to each client to render
+							ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
 
-								var newInfo = {
-									name: info.name,
-									numBombs: allTiles.length,
-									count: info.tilesColored
-								};
+							var newInfo = {
+								name: info.name,
+								numBombs: numNewTilesScaled,
+								newCount: newTileCount
+							};
 
-								colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates) {
-									if(updates.updateBoard) {
-										ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
-									}
-									ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
-									//FINNNALLY done updating and stuff, respond to the player
-									//telling them if it was sucesful
-									res(allTiles.length);
-								});
-
-								dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates) {
+								if(updates.updateBoard) {
+									ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+								}
+								ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
+								//FINNNALLY done updating and stuff, respond to the player
+								//telling them if it was sucesful
+								res(allTiles.length);
 							});
+
+							dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+						});
 					}
 				});
 		},
@@ -447,11 +447,9 @@ colorHelpers = {
 				//add tile count to our progress
 				var result = results[0],
 					oldCount = result.seedsDropped,
-					newCount = oldCount + 1;
-					oldColored = result.tilesColored,
-					newColored = oldColored + newInfo.numBombs,
-					oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
-					newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
+					newCount = oldCount + newInfo.numBombs;
+					seedsDroppedGoal = result.seedsDroppedGoal;
+				
 				//update leadeboard
 				var oldBoard = result.leaderboard,
 					gState = result.state,
@@ -460,7 +458,7 @@ colorHelpers = {
 					updateBoard = false,
 					newGuy = {
 						name: newInfo.name,
-						count: (newInfo.count + newInfo.numBombs)
+						count: newInfo.newCount
 					};
 
 				//if this is the first player on the leadeboard, push em and update status
@@ -496,25 +494,24 @@ colorHelpers = {
 				}
 
 				//check if the world is fully colored
-				if(newPercent > 99) {
+				console.log(newCount, seedsDroppedGoal);
+				if(newCount >= seedsDroppedGoal) {
 					//change the game state
 					//send out emails
 					result.set('bossModeUnlocked', true);
 					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
-					//colorHelpers.endGameEmails();
+					colorHelpers.endGameEmails();
 					newPercent = 100;
 				}
 				//save all changes
 				result.set('seedsDropped', newCount);
 				result.set('leaderboard', oldBoard);
-				result.set('tilesColored', newColored);
 				result.save();
 
 				var returnInfo = {
 					updateBoard: updateBoard,
 					board: oldBoard,
-					dropped: newCount,
-					colored: newColored
+					dropped: newCount
 				};
 				callback(returnInfo);
 			}

@@ -109,7 +109,7 @@ exports.actions = function(req, res, ss) {
 				console.log(emailList.join(', ') + '\n\n');
 				emailUtil.openEmailConnection();
 
-				emailList = emailList.slice(0, 20);
+				//emailList = emailList.slice(0, 20); --> doing this on front now
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
 					createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);
@@ -119,7 +119,7 @@ exports.actions = function(req, res, ss) {
 			}
 		},
 
-		newGameInstance: function(name) {
+		newGameInstance: function(name, numPlayers) {
 			gameModel
 				.where('instanceName').equals(name)
 				.select('instanceName')
@@ -132,9 +132,8 @@ exports.actions = function(req, res, ss) {
 					} else {
 						newGame = new gameModel();
 						newGame.players = 0;
-						newGame.tilesColored = 0;
 						newGame.seedsDropped = 0;
-						newGame.seedsDroppedGoal = 3200;
+						newGame.seedsDroppedGoal = numPlayers * 130; //130 is magic number (see calculation in trello)
 						newGame.active = true;
 						newGame.bossModeUnlocked = false;
 						newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'];

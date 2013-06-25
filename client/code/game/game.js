@@ -144,8 +144,8 @@ exports.$game = {
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
 		//other game stats and leaderboard
-		var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
-			displayLevel = $game.$player.currentLevel + 1,
+		// var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
+		var	displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
 		for(var i = 0; i < _stats.leaderboard.length; i++) {
 			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ' tiles)</li>';
@@ -204,7 +204,7 @@ exports.$game = {
 			leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true;
 		}
 		if(leaderChange) {
-			$game.statusUpdate({message:data.board[0].name + ' is top seeder!',input:'status',screen: true,log:false});
+			$game.statusUpdate({message:data.board[0].name + ' is top seeder!',input:'status',screen: true,log:true});
 		}
 		_stats.leaderboard = data.board;
 	},
@@ -219,7 +219,7 @@ exports.$game = {
 		//if we have gone up a milestone, feedback it
 		if(_stats.percent > 99) {
 			//do something for game over?
-				$game.statusUpdate({message:'the meter is filled!',input:'status',screen: true,log:false});
+				$game.statusUpdate({message:'the meter is filled!',input:'status',screen: true,log:true});
 		}
 		if(_stats.prevPercent != _stats.percent) {
 			_stats.prevPercent = _stats.percent;
@@ -252,12 +252,11 @@ function _loadGameInfo() {
 		$game.bossModeUnlocked = response.bossModeUnlocked;
 		//for testing
 		// $game.bossModeUnlocked = true;
-		
+
 		$game.resourceCount = response.resourceCount;
 		_stats = {
 			seedsDropped: response.seedsDropped,
 			seedsDroppedGoal: response.seedsDroppedGoal,
-			tilesColored: response.tilesColored,
 			leaderboard: response.leaderboard,
 			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
 			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)

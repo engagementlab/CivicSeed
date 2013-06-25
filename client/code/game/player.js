@@ -240,7 +240,8 @@ $game.$player = {
 					x1: topLeftTile.x,
 					y1: topLeftTile.y,
 					x2: bottomRightTile.x,
-					y2: bottomRightTile.y
+					y2: bottomRightTile.y,
+					kind: 'draw'
 				};
 				_sendSeedBomb(data);
 				return true;
@@ -304,7 +305,7 @@ $game.$player = {
 		if(info.correct) {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
-			$game.$player.updateSeeds('normal', numToAdd);
+			$game.$player.updateSeeds('regular', numToAdd);
 			return numToAdd;
 		}
 	},
@@ -589,7 +590,7 @@ $game.$player = {
 			id: $game.$player.id,
 			seeds: _seeds
 		};
-		//ss.rpc('game.player.updateGameInfo', info);
+		ss.rpc('game.player.updateGameInfo', info);
 		//update hud
 		_updateTotalSeeds();
 	},
@@ -1014,7 +1015,7 @@ function _calculateSeeds(options) {
 	}
 
 	if(bombed.length > 0) {
-		var sendData = {bombed: bombed, options: options, x1: origX, y1: origY, x2: origX + options.sz, y2: origY + options.sz};
+		var sendData = {bombed: bombed, options: options, x1: origX, y1: origY, x2: origX + options.sz, y2: origY + options.sz, kind: 'regular'};
 		_sendSeedBomb(sendData);
 	}
 }
@@ -1033,7 +1034,8 @@ function _sendSeedBomb(data) {
 		x2: data.x2,
 		y2: data.y2,
 		tilesColored: _tilesColored,
-		instanceName: $game.$player.instanceName
+		instanceName: $game.$player.instanceName,
+		kind: data.kind
 	};
 
 	var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);

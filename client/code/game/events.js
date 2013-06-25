@@ -13,7 +13,7 @@ $(function() {
 		$game.$others.add(data.info);
 		$activePlayers.text(data.num);
 		if(data.info.id !== $game.$player.id) {
-			$game.statusUpdate({message:data.info.name + ' has joined!',input:'status',screen: true,log:false});
+			$game.statusUpdate({message:data.info.name + ' has joined!',input:'status',screen: true,log:true});
 		}
 	});
 
@@ -55,7 +55,6 @@ $(function() {
 
 	ss.event.on('ss-progressChange', function(data, chan) {
 		$game.seedsDropped = data.dropped;
-		$game.tilesColored = data.colored;
 		$game.updatePercent();
 	});
 

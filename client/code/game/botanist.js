@@ -247,7 +247,7 @@ $game.$botanist = {
 				$game.$player.botanistState = 1;
 				_saveBotanistState();
 				if($game.$player.currentLevel === 0) {
-					$game.$player.updateSeeds('normal', 1);
+					$game.$player.updateSeeds('regular', 1);
 				}
 			}
 		});

@@ -48,7 +48,9 @@ var self = module.exports = {
 			var instanceName = $('#instanceName').val().trim();
 
 			if(instanceName && emailList) {
-				ss.rpc('admin.invitecodes.newGameInstance', instanceName, function(err, res) {
+				emailList = emailList.slice(0, 20);
+				emailListLength = emailList.length;
+				ss.rpc('admin.invitecodes.newGameInstance', instanceName, emailListLength, function(err, res) {
 					if(err) {
 						console.log('error with db', err);
 					} else if(res) {
