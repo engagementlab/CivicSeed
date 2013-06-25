@@ -115,6 +115,16 @@ var self = module.exports = {
 			self.showPlayerAnswers(index);
 		});
 
+		$body.on('click', '.deletePlayer', function() {
+			var id = $(this).attr('data-id'),
+				word = $('.input' + id).val();
+			if(word.indexOf('delete') > -1) {
+				self.deletePlayer(id, this);	
+			} else {
+				alert('you must type delete to delete user');
+			}
+		});
+
 		$body.on('click', '.allQuestion', function() {
 			var npc = $(this).attr('data-npc'),
 				instance = $(this).attr('data-instance');
@@ -125,12 +135,12 @@ var self = module.exports = {
 	showPlayersInfo: function() {
 		var html = '';
 		for(var i = 0; i < self.players.length; i++) {
-			html += '<h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
+			html += '<div class="player' + self.players[i]._id + '"><h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
 			html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>';
 			html += '<p>Is playing now: ' + self.players[i].isPlaying + '</p>';
 			html += '<p>Time played: ' + Math.floor(self.players[i].game.playingTime/60) + ' min.</p>';
-			html += '<p>Resources collected: ' + self.players[i].game.resources.length + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
-			html += '<p>Enter "delete" to remove user permanently: <input></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger" type="button">Delete User</button></p>';
+			html += '<p>Resources collected: ' + self.players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
+			html += '<p>Enter "delete" to remove user permanently: <input class="input' + self.players[i]._id + '"></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger deletePlayer" type="button">Delete User</button></p></div>';
 		}
 		$('.output').empty().append(html);
 	},
@@ -199,6 +209,17 @@ var self = module.exports = {
 		$('.output').empty().append(html);
 	},
 
+	deletePlayer: function(id) {
+		ss.rpc('admin.monitor.deletePlayer', id, function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				var sel = '.player' + id;
+				$(sel).remove();
+			}
+		});
+	},
+
 	showQuestions: function(instance) {
 		var html = '<h2>All Open-Ended Questions</h2>';
 		for(var q = 0; q < self.allQuestions.length; q++) {
@@ -218,7 +239,6 @@ var self = module.exports = {
 			} else {
 				self.allAnswers = [];
 			}
-			
 		});
 	},
 

@@ -9,6 +9,7 @@ var _currentSlide,
 	$seedButton,
 	$seedButtonCount,
 	$clock,
+	$score,
 
 	_numChargers = 4,
 	_currentCharger,
@@ -29,7 +30,8 @@ var _currentSlide,
 
 	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/';
 	_numVideos = 3,
-	_cutSceneVids = [];
+	_cutSceneVids = [],
+	_score;
 
 $game.$boss = {
 	isShowing: false,
@@ -131,6 +133,7 @@ function _setDomSelectors() {
 	$seedButton = $('.bossHud .seedButton');
 	$seedButtonCount = $('.bossHud .seedButton .hudCount');
 	$clock = $('.bossHud .clock');
+	$score = $('.bossHud .score span');
 }
 
 //add content to the display window
@@ -291,6 +294,9 @@ function _distFromCharger(pos) {
 
 //start the game, clock, sound
 function _beginGame() {
+	//set score from tiles colored
+	_score = $game.$player.getTilesColored();
+	$score.text(_score);
 	_start = new Date().getTime(),
     _time = 0,
     _elapsed = '0.0',
@@ -334,6 +340,10 @@ function _checkFail() {
 
 //see if the player has won, or set charger
 function _checkWin() {
+	//add X to score
+	_score += 50;
+	$score.text(_score);
+
 	if(_currentCharger === 4) {
 		_pause = true;
 		_currentSlide = 4;
