@@ -497,11 +497,10 @@ colorHelpers = {
 				console.log(newCount, seedsDroppedGoal);
 				if(newCount >= seedsDroppedGoal) {
 					//change the game state
-					//send out emails
 					result.set('bossModeUnlocked', true);
 					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+					//send out emails
 					colorHelpers.endGameEmails();
-					newPercent = 100;
 				}
 				//save all changes
 				result.set('seedsDropped', newCount);
@@ -539,7 +538,7 @@ colorHelpers = {
 						if(users[emailIterator].game.currentLevel < 4) {
 							html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
 							html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
-							subject = 'Come back.';
+							subject = 'Update!';
 
 						} else {
 							html = '<h2 style="color:green;">The Color has Returned!</h2>';

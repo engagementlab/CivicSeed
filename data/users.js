@@ -1,12 +1,14 @@
 module.exports.global = [{
 	firstName: 'Robert',
 	lastName: 'Hall',
+	school: 'Emerson College',
 	password: 'do-not-change-me',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
 	firstName: 'jimmy',
 	lastName: 'dolan',
+	school: 'Emerson College',
 	password: '',
 	email: 'c',
 	role: 'superadmin',
@@ -52,6 +54,7 @@ module.exports.global = [{
 }, {
 	firstName: 'tufts',
 	lastName: 'admin',
+	school: 'Emerson College',
 	password: 'funcarrots',
 	email: 'tufts',
 	role: 'admin',
@@ -97,6 +100,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Michael',
 	lastName: 'Jordan',
+	school: 'Emerson College',
 	password: '',
 	email: 'm',
 	role: 'actor',
@@ -139,6 +143,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Larry',
 	lastName: 'Bird',
+	school: 'Emerson College',
 	password: '',
 	email: 'l',
 	role: 'actor',
@@ -181,6 +186,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Pistol',
 	lastName: 'Pete',
+	school: 'Emerson College',
 	password: '',
 	email: 'p',
 	role: 'actor',

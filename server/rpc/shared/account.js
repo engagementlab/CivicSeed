@@ -129,20 +129,21 @@ exports.actions = function(req, res, ss) {
 				res(true);
 		},
 
-		changeInfo: function(first, last) {
+		changeInfo: function(info) {
 			UserModel.findOne({ email: req.session.email } , function(err, user) {
 				if(!err && user) {
 					user.set({
-						firstName: first,
-						lastName: last,
+						firstName: info.first,
+						lastName: info.last,
+						school: info.school,
 						profileSetup: true
 					});
 					user.save(function(err,suc) {
 						if(!err && suc) {
-							req.session.firstName = first;
-							req.session.lastName = last;
+							req.session.firstName = info.first;
+							req.session.lastName = info.last;
 							req.session.save();
-							res({firstName: first, lastName: last});
+							res({firstName: info.first, lastName: info.last});
 						}
 						else {
 							res(false);

@@ -40,6 +40,7 @@ exports.actions = function(req, res, ss) {
 								var d = {
 									firstName: 'Demo',
 									lastName: ('User' + i),
+									school: 'Demo University',
 									password: 'demo',
 									email: ('demo' + i),
 									role: 'actor',

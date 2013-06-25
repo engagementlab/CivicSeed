@@ -22,6 +22,7 @@ exports.actions = function(req, res, ss) {
 					var profileInfo = {
 						firstName: user.firstName,
 						lastName: user.lastName,
+						school: user.school,
 						resume: user.game.resume,
 						gameStarted: user.gameStarted,
 						profileUnlocked: user.profileUnlocked,

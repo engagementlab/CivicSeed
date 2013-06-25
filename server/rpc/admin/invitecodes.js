@@ -41,6 +41,7 @@ exports.actions = function(req, res, ss) {
 					user = new userModel();
 					user.firstName = nameParts[0];
 					user.lastName = nameParts[1];
+					user.school = 'university';
 					user.password = xkcd.generatePassword();
 					user.email = email;
 					user.role = 'actor';
