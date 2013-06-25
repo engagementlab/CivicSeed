@@ -250,7 +250,9 @@ $game.$player = {
 
 	//save out all current status of player to db on exit
 	exitAndSave: function(callback) {
-		$game.$player.savePositionToDB();
+		if(!$game.bossModeUnlocked) {
+			$game.$player.savePositionToDB();
+		}
 		ss.rpc('game.player.exitPlayer', $game.$player.id, function() {
 			callback();
 		});
@@ -431,21 +433,21 @@ $game.$player = {
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
 		$game.$robot.setPosition();
 
+		//save new information to DB
+		var info = {
+			id: $game.$player.id,
+			botanistState: $game.$player.botanistState,
+			seenRobot: $game.$player.seenRobot,
+			pledges: _pledges,
+			inventory: [],
+			currentLevel: $game.$player.currentLevel
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 		if($game.$player.currentLevel === 4) {
 			//they have beat the game!
-			//say there profile is available and send em there.
 			_gameOver();
 		}
 		else {
-			//save new information to DB
-			var info = {
-				id: $game.$player.id,
-				botanistState: $game.$player.botanistState,
-				seenRobot: $game.$player.seenRobot,
-				pledges: _pledges,
-				inventory: []
-			};
-			ss.rpc('game.player.updateGameInfo', info);
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
 			//send status to message board
@@ -453,7 +455,6 @@ $game.$player = {
 			// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
 			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
-			//load in other tree file
 		}
 	},
 
@@ -1312,17 +1313,18 @@ function _addToInventory(data) {
 
 //game over!
 function _gameOver() {
-	var endTime = new Date().getTime() / 1000,
-		totalTime = endTime - _startTime;
-	_playingTime += totalTime;
-	_position.x = _info.x,
-	_position.y = _info.y;
-	_colorMap = $game.$map.saveImage();
-	sessionStorage.setItem('isPlaying', 'false');
-	ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
+	//sessionStorage.setItem('isPlaying', 'false');
+	ss.rpc('game.player.gameOver', $game.$player.id, function(res){
 		if(res) {
-			var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
-			$('.gameboard').append(hooray);
+			if($game.bossModeUnlocked) {
+				//TODO: test this
+				$game.$boss.init(function() {
+
+				});
+			} else {
+				var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+				$('.gameboard').append(hooray);
+			}
 		}
 	});
 }

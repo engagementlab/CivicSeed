@@ -84,4 +84,9 @@ $(function() {
 			$game.$player.updateResource(data);
 		}
 	});
+
+	//the game meter has hit the end, boss mode is unlocked
+	ss.event.on('ss-bossModeUnlocked', function() {
+		$game.bossModeUnlocked = true;
+	});
 });

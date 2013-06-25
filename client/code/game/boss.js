@@ -46,6 +46,7 @@ $game.$boss = {
 		$game.$boss.nextSlide();
 		_addContent();
 		_loadVideo(0);
+		$('#background').addClass('labBackground');
 		callback();
 	},
 
@@ -345,7 +346,7 @@ function _checkWin() {
 		_clockRate = 0;
 		$('.cutScene')[0].addEventListener('ended', function() {
 			$('.cutScene').fadeOut('fast', function() {
-				var left = 'only '  + _numChargers + ' chargers left!';
+				var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
 				$game.statusUpdate({message:left,input:'status',screen: true,log:false});
 				_clockRate = 1;
 				$(this).remove();

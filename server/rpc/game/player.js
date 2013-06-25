@@ -247,10 +247,10 @@ exports.actions = function(req, res, ss) {
 			ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg);
 		},
 
-		gameOver: function(info, id) {
+		gameOver: function(id) {
 			//update redis
-			req.session.game = info;
-			req.session.profileSetup = true;
+			// req.session.game = info;
+			//req.session.profileSetup = true;
 			// console.log('exit: ', info);
 			req.session.save();
 			//update mongo
@@ -500,6 +500,7 @@ colorHelpers = {
 					//change the game state
 					//send out emails
 					result.set('bossModeUnlocked', true);
+					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
 					//colorHelpers.endGameEmails();
 					newPercent = 100;
 				}
