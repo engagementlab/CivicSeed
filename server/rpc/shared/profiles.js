@@ -57,6 +57,27 @@ exports.actions = function(req, res, ss) {
 					res(all);
 				}
 			});
+		},
+
+		updateResume: function(info) {
+			UserModel
+			.findById(info.id, function(err,user) {
+				if(err) {
+					console.log(err);
+					res(false);
+				}
+				else if(user) {
+					user.game.resume = info.resume;
+					user.save(function(err,okay) {
+						if(err) {
+							console.log('error saving');
+							res(false);
+						} else {
+							res(true);
+						}
+					})
+				}
+			});
 		}
 
 	};

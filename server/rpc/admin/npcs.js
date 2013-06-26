@@ -100,6 +100,7 @@ exports.actions = function(req, res, ss) {
 
 npcHelpers = {
 	updateTiles: function(oldIndex, newIndex, callback) {
+		console.log(oldIndex,newIndex);
 		//update new tile, make sure we can change it
 		tileModel.where('mapIndex').equals(newIndex)
 			.find(function(err,newTiles) {

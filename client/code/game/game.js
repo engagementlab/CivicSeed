@@ -148,20 +148,20 @@ exports.$game = {
 		var	displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
 		for(var i = 0; i < _stats.leaderboard.length; i++) {
-			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ' tiles)</li>';
+			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ')</li>';
 		}
 		topPlayers += '</ol>';
-		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ' tiles)</p>';
+		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ')</p>';
 
 		//player's answers for all the open-ended questions, some others stats
 		var allAnswers = $game.$player.compileAnswers();
-		var percentString = _stats.percent + '%';
+		// var percentString = _stats.percent + '%';
 		var numItems = $game.$player.getResourcesDiscovered();
 
 		//display everthing
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
-		$('.displayPercent').text(percentString);
+		//$('.displayPercent').text(percentString);
 		$('.topSeeders').empty().append(topPlayers);
 		$('.numCollected').text(numItems + ' / 42');
 		$('.progressArea').fadeIn(function() {
@@ -214,7 +214,7 @@ exports.$game = {
 		_stats.prevPercent = _stats.percent;
 		_stats.seedsDropped = dropped;
 		_stats.percent = Math.floor(( _stats.seedsDropped / _stats.seedsDroppedGoal) * 100);
-		var percentString = _stats.percent + '%';
+		//var percentString = _stats.percent + '%';
 
 		//if we have gone up a milestone, feedback it
 		if(_stats.percent > 99) {
@@ -224,8 +224,8 @@ exports.$game = {
 		if(_stats.prevPercent != _stats.percent) {
 			_stats.prevPercent = _stats.percent;
 			if(_stats.percent % 5 === 0) {
-				// $game.temporaryStatus('the world is now ' + percentString + ' colored!');
-				console.log('TODO');
+				//$game.temporaryStatus('the world is now ' + percentString + ' colored!');
+				//$game.statusUpdate({message:'',input:'status',screen: true,log:true});
 			}
 		}
 	}
@@ -346,8 +346,8 @@ function _loadExtra() {
 	$game.$map.createCollectiveImage();
 
 	//update text in HUD
-	var percentString = _stats.percent + '%';
-	$('.progressButton .hudCount').text(percentString);
+	// var percentString = _stats.percent + '%';
+	// $('.progressButton .hudCount').text(percentString);
 
 	//init chat rpc
 	ss.rpc('game.chat.init');

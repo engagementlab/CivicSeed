@@ -200,7 +200,7 @@ var self = module.exports = {
 			}
 		});
 
-		updates.index = y * 142 + x;
+		updates.index = (y * 142) + x;
 
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),

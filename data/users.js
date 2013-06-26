@@ -110,7 +110,7 @@ module.exports.global = [{
 	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
-		currentLevel: 0,
+		currentLevel: 1,
 		position: {
 			x: 64,
 			y: 77

@@ -8,26 +8,34 @@
 				p.nombre #{firstName} #{lastName}
 				p.school <em>#{school}</em>
 		if profileUnlocked
+			if (sessionStorage.userEmail === email)
+				.row
+					.span12.box
+						p 
+							a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!		
 			.row
-				.span12.box
-					p 
-						a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
+				.span12.instructions
+					p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 			.row
-				.span12.motivations.box
+				.span12.box.motivations
 					if resume[0]
-						p <span class="profileTitle">Motivations </span> #{resume[0]}
+						p(data-email=email) <span class="profileTitle">Motivations </span> <span class='resumeText'> #{resume[0]} </span>
 			.row
 				.span12.box.background
 					if resume[1]
-						p <span class="profileTitle">Background & Skills </span> #{resume[1]}
+						p(data-email=email) <span class="profileTitle">Background & Skills </span> <span class='resumeText'> #{resume[1]} </span>
 			.row
 				.span12.box.goals
 					if resume[2]
-						p <span class="profileTitle">Personal Goals </span> #{resume[2]}
+						p(data-email=email) <span class="profileTitle">Personal Goals </span> <span class='resumeText'> #{resume[2]} </span>
 			.row
 				.span12.box.objectives
 					if resume[3]
-						p <span class="profileTitle">Civic Objectives </span> #{resume[3]}
+						p(data-email=email) <span class="profileTitle">Civic Objectives </span> <span class='resumeText'> #{resume[3]} </span>
+			if (sessionStorage.userEmail === email)
+				.row
+					.span12
+						p.saveProfileChanges Save Changes		
 		else
 			if (firstName === 'Demo')
 				.row.demoProfile
@@ -58,10 +66,13 @@
 			else
 				.row
 					.span12
-						h2 Your profile is locked. Play the game to complete your profile!
 						if (sessionStorage.userEmail === email)
+							h2 Your profile is locked. Play the game to complete your profile!
 							p.buttonResume
 								a(href='/game') Resume Game
+						else 
+							h2 This profile has not yet been completed.
+		
 	else
 		h1 This person does not exist in our database.
 		

@@ -254,7 +254,7 @@ $game.$player = {
 		if(!$game.bossModeUnlocked) {
 			$game.$player.savePositionToDB();
 		}
-		ss.rpc('game.player.exitPlayer', $game.$player.id, function() {
+		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
 			callback();
 		});
 	},
@@ -418,16 +418,6 @@ $game.$player = {
 	//reset items and prepare other entities for fresh level
 	nextLevel: function() {
 		$game.$player.currentLevel += 1;
-
-		//hack for demo user to never pass level 1
-		if($game.$player.name === 'Demo') {
-			$game.$player.currentLevel = 0;
-			_resources = [],
-			_inventory = [],
-			_colorMap = '',
-			_tilesColored = 0,
-			_resume = [];
-		}
 		$game.$player.botanistState = 0;
 		$game.$player.seenRobot = false;
 		_pledges = 5;
@@ -1317,20 +1307,25 @@ function _addToInventory(data) {
 
 //game over!
 function _gameOver() {
-	//sessionStorage.setItem('isPlaying', 'false');
-	ss.rpc('game.player.gameOver', $game.$player.id, function(res){
-		if(res) {
-			if($game.bossModeUnlocked) {
-				//TODO: test this
-				$game.$boss.init(function() {
+	//if demo mode just send to boss level
+	if($game.$player.name === 'Demo') {
+		$game.$boss.init(function() {
+		});
+	} else {
+		ss.rpc('game.player.gameOver', $game.$player.id, function(res){
+			if(res) {
+				if($game.bossModeUnlocked) {
+					//TODO: test this
+					$game.$boss.init(function() {
 
-				});
-			} else {
-				var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
-				$('.gameboard').append(hooray);
+					});
+				} else {
+					var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+					$('.gameboard').append(hooray);
+				}
 			}
-		}
-	});
+		});
+	}
 }
 
 function _saveSeedsToDB() {

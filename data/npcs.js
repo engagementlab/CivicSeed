@@ -82,7 +82,7 @@ module.exports.global = [{
 }, {
 	index: '8542',
 	name: 'Foxy',
-	id: 0,
+	id: 4,
 	level: 0,
 	sprite: 4,
 	isHolding: true,
@@ -102,7 +102,7 @@ module.exports.global = [{
 }, {
 	index: '8956',
 	name: 'Turp',
-	id: 0,
+	id: 5,
 	level: 0,
 	sprite: 5,
 	isHolding: false,
@@ -112,7 +112,7 @@ module.exports.global = [{
 }, {
 	index: '2176',
 	name: 'RoggaBogga',
-	id: 0,
+	id: 6,
 	level: 0,
 	sprite: 6,
 	isHolding: true,
@@ -132,7 +132,7 @@ module.exports.global = [{
 }, {
 	index: '1608',
 	name: 'Goku',
-	id: 0,
+	id: 7,
 	level: 0,
 	sprite: 7,
 	isHolding: true,
@@ -152,7 +152,7 @@ module.exports.global = [{
 }, {
 	index: '4876',
 	name: 'Quix',
-	id: 0,
+	id: 8,
 	level: 0,
 	sprite: 8,
 	isHolding: true,
@@ -173,7 +173,7 @@ module.exports.global = [{
 }, {
 	index: '6707',
 	name: 'Bunzo',
-	id: 0,
+	id: 9,
 	level: 0,
 	sprite: 9,
 	isHolding: false,
@@ -183,7 +183,7 @@ module.exports.global = [{
 }, {
 	index: '9536',
 	name: 'Malo',
-	id: 0,
+	id: 10,
 	level: 0,
 	sprite: 10,
 	isHolding: true,

@@ -53,7 +53,7 @@ exports.actions = function(req, res, ss) {
 			res(playerInfo);
 		},
 
-		exitPlayer: function(id) {
+		exitPlayer: function(id, name) {
 			//update redis
 			//req.session.game = info;
 			//req.session.save();
@@ -67,6 +67,24 @@ exports.actions = function(req, res, ss) {
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
 						delete games[req.session.game.instanceName].players[id];
 						user.isPlaying = false;
+						if(name === 'Demo U') {
+							user.game.currentLevel = 0;
+							user.game.position.x = 64;
+							user.game.position.y = 77;
+							user.game.resources = {};
+							user.game.resourcesDiscovered = 0;
+							user.game.inventory = [];
+							user.game.seeds.regular = 0;
+							user.game.seeds.draw = 0;
+							user.game.seeds,dropped = 0;
+							user.game.botanistState = 0;
+							user.game.firstTime = true;
+							user.game.resume = [];
+							user.game.seenRobot = false;
+							user.game.playingTime = 0;
+							user.game.tilesColored = 0;
+							user.game.pledges = 5;
+						}
 						user.save();
 						res();
 					}
@@ -494,8 +512,7 @@ colorHelpers = {
 				}
 
 				//check if the world is fully colored
-				console.log(newCount, seedsDroppedGoal);
-				if(newCount >= seedsDroppedGoal) {
+				if(newCount >= seedsDroppedGoal && instanceName !== 'demo') {
 					//change the game state
 					result.set('bossModeUnlocked', true);
 					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
