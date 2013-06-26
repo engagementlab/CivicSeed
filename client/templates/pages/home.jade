@@ -1,36 +1,36 @@
 .row
-	.span7.welcome
+	.span12.welcome		
 		h1 Welcome to Civic Seed!
 		h4 Where civic engagement meets social gaming.
-		p <br> We believe learning becomes even more powerful when you have fun doing it. Civic Seed is an experimental gaming and teaching platform designed to do just that. By playing Civic Seed, you'll learn more about yourself and your peers, Tuft’s host communities, how to build mutually beneficial relationships with them, and the philosophies behind meaningful and effective civic engagement.
-		p Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and <b>build your own Civic Resume as you play!</b>
-		p Are <em>you</em> ready?
-		.iconInfo(style='font-size:28px;')
-			p
-				br
-				i.icon-book.icon-large
-				span(style='font-size:20px;') Equip yourself with the necessary knowledge.
-		.iconInfo(style='font-size:28px;')
-			p
-				i.icon-group.icon-large
-				span(style='font-size:20px;') Make lasting connections with people inside and outside of your peer group.
-		.iconInfo(style='font-size:28px;')
-			p
-				i.icon-trophy.icon-large
-				span(style='font-size:20px;') Have fun while learning!
-	.span4.offset1
+.row
+	.span8
+		p(style='text-align:center;')
+			img(src='/img/bg/cs.jpg')
+	.span4
 		- if(!sessionStorage.userId)
-			form.well#loginForm(method='post', action='/')
-				h2 Sign In:
-				//- p #{message}
-				.control-group
-					.controls
-						input#username.input-large(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
-				.control-group
-					.controls
-						input#password.input-large(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
+			form.form-inline#loginForm(method='post', action='/')
+				input#username.input(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
+				input#password.input(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
 				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
 				p.moreTopMargin: a(href='/remind-me') Forget your password?
 		- else
 			.well
 				h2: a(href='/profiles/'+sessionStorage.userFirstName+'.'+sessionStorage.userLastName) Your Profile
+.row
+	.span8.offset2
+		p <br> We believe learning becomes even more powerful when you have fun doing it. Civic Seed is an experimental gaming and teaching platform designed to do just that. By playing Civic Seed, you'll learn more about yourself and your peers, Tuft’s host communities, how to build mutually beneficial relationships with them, and the philosophies behind meaningful and effective civic engagement.
+		p Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and <b>build your own Civic Resume as you play!</b>
+		p Are <em>you</em> ready?
+//- .iconInfo(style='font-size:28px;')
+//- 			p
+//- 				br
+//- 				i.icon-book.icon-large
+//- 				span(style='font-size:20px;') Equip yourself with the necessary knowledge.
+//- 		.iconInfo(style='font-size:28px;')
+//- 			p
+//- 				i.icon-group.icon-large
+//- 				span(style='font-size:20px;') Make lasting connections with people inside and outside of your peer group.
+//- 		.iconInfo(style='font-size:28px;')
+//- 			p
+//- 				i.icon-trophy.icon-large
+//- 				span(style='font-size:20px;') Have fun while learning!

@@ -77,7 +77,7 @@
 	},
 
 	authenticate: function(email, password) {
-		console.log('client: account.authenticate');
+		//console.log('client: account.authenticate');
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
 			// console.log(authenticated);
 			if(authenticated) {

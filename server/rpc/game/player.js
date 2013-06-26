@@ -172,11 +172,21 @@ exports.actions = function(req, res, ss) {
 						}
 						//saveEach tile
 						colorHelpers.saveTiles(modifiedTiles, function(done) {
+							var bonus = modifiedTiles.update.length > 0 ? true : false;
 							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
 							//send out new bombs AND player info to update score
 							var numNewTilesScaled = Math.ceil(allTiles.length / 9);
-							var newTileCount = info.tilesColored + allTiles.length,
-							sendData = {
+							var newTileCount = info.tilesColored + allTiles.length;
+							if(bonus) {
+								var chance = Math.random();
+								var addBonus = chance < 0.1 ? true : false;
+								if(addBonus) {
+									newTileCount += 10;
+								} else {
+									bonus = false;
+								}
+							}
+							var sendData = {
 								bombed: allTiles,
 								id: info.id,
 								tilesColored: newTileCount
@@ -197,7 +207,7 @@ exports.actions = function(req, res, ss) {
 								ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
 								//FINNNALLY done updating and stuff, respond to the player
 								//telling them if it was sucesful
-								res(allTiles.length);
+								res(allTiles.length, bonus);
 							});
 
 							dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});

@@ -1037,12 +1037,15 @@ function _sendSeedBomb(data) {
 		})
 		.show();
 
-	ss.rpc('game.player.dropSeed', data.bombed, info, function(result) {
+	ss.rpc('game.player.dropSeed', data.bombed, info, function(result, bonus) {
 		_seeds.dropped += 1;
 		//increase the drop count for the player
 		$game.$player.awaitingBomb = false;
 		$waiting.fadeOut();
 		if(result > 0) {
+			if(bonus) {
+				$game.statusUpdate({message:'collaborative blending bonus!',input:'status',screen: true,log:false});
+			}
 			//play sound clip
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
