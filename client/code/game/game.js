@@ -148,7 +148,7 @@ exports.$game = {
 		var	displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
 		for(var i = 0; i < _stats.leaderboard.length; i++) {
-			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ')</li>';
+			topPlayers += '<li>' + _stats.leaderboard[i].name + ' -- ' + _stats.leaderboard[i].count + '</li>';
 		}
 		topPlayers += '</ol>';
 		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ')</p>';

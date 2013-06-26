@@ -493,13 +493,13 @@ $game.$player = {
 		$('.seedventory').slideUp(function() {
 			$game.$player.seedventoryShowing = false;
 			$game.$player.seedPlanting = true;
-			$graffiti.show();
 		});
 		var msg;
 		if(choice === 'regular') {
 			msg = 'click a tile to drop some color';
 		} else {
 			msg = 'graffiti mode activated - click and drag to draw';
+			$graffiti.show();
 			$graffitiNum.text(_seeds.draw);
 		}
 		$game.statusUpdate({message: msg,input:'status',screen: true,log:false});
