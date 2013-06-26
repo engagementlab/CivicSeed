@@ -28,7 +28,7 @@ var _currentSlide,
 	_clockRate,
 	_clockTimeout,
 
-	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/';
+	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/',
 	_numVideos = 3,
 	_cutSceneVids = [],
 	_score;
@@ -47,7 +47,7 @@ $game.$boss = {
 		_addContent();
 		//for testing
 		// _currentSlide = 1;
-		//$game.$boss.nextSlide();
+		// $game.$boss.nextSlide();
 		_loadVideo(0);
 		$('#background').addClass('labBackground');
 		callback();

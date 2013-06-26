@@ -50,7 +50,8 @@ var self = module.exports = {
 			if(instanceName && emailList) {
 				emailList = emailList.slice(0, 20);
 				emailListLength = emailList.length;
-				ss.rpc('admin.invitecodes.newGameInstance', instanceName, emailListLength, function(err, res) {
+				var id = sessionStorage.getItem('userId');
+				ss.rpc('admin.invitecodes.newGameInstance', {instanceName: instanceName, numPlayers: emailListLength, id: id}, function(err, res) {
 					if(err) {
 						console.log('error with db', err);
 					} else if(res) {
@@ -98,10 +99,12 @@ var self = module.exports = {
 				}
 			});
 		});
+		
 		$body.on('click', '#questions', function() {
 			var instance = $(this).attr('data-instance');
 			self.showQuestions(instance);
 		});
+		
 		$body.on('click', '#chat', function() {
 			var instance = $(this).attr('data-instance');
 			ss.rpc('admin.monitor.getRecentChat', instance, function(err, res) {
@@ -110,6 +113,12 @@ var self = module.exports = {
 				}
 			});
 		});
+		
+		$body.on('click', '#addPlayer', function() {
+			var instance = $(this).attr('data-instance');
+			self.showAddPlayerForm(instance);
+		});
+
 		$body.on('click', '.viewAnswers', function() {
 			var index = $(this).attr('data-index');
 			self.showPlayerAnswers(index);
@@ -129,6 +138,23 @@ var self = module.exports = {
 			var npc = $(this).attr('data-npc'),
 				instance = $(this).attr('data-instance');
 			self.showQuestionAnswers(npc, instance,this);
+		});
+
+		$body.on('click', '.addPlayerButton', function(e) {
+			e.preventDefault();
+			var email = $('#addPlayerEmail').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi),
+				instanceName = $(this).attr('data-instance');
+
+			if(email) {
+				ss.rpc('admin.invitecodes.sendInvites', email, instanceName,function(res) {
+					if(res) {
+						alert('added successfully');
+					}
+				});	
+			} else {
+				alert('invalid email.');
+			}
+			return false;
 		});
 	},
 
@@ -158,6 +184,11 @@ var self = module.exports = {
 		}
 
 		html += '</div>';
+		$('.output').empty().append(html);
+	},
+
+	showAddPlayerForm: function(instance) {
+		var html = '<h2>Add Player</h2><form id="addPlayerForm"><input placeholder="email address" id="addPlayerEmail"></input></form><p><button data-instance="' + instance + '"class="btn btn-success addPlayerButton" type="button">Add Player</button></p>';
 		$('.output').empty().append(html);
 	},
 
