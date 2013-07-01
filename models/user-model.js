@@ -6,6 +6,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		gameChannel: String, // not sure what type this should be...
 		firstName: String,
 		lastName: String,
+		school: String,
 		password: String,
 		email: String,
 		role: String,
@@ -16,7 +17,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		game: {
 			instanceName: String,
 			currentLevel: Number,
-			rank: String,
 			position: {
 				x: Number,
 				y: Number
@@ -29,27 +29,27 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				},
 				tilesheet: Number
 			},
-			resources: [{
-				npc: Number,
-				answers: [String],
-				attempts: Number,
-				result: Boolean,
-				madePublic: Boolean,
-				seeded: Number
+			resources: Object,
+			resourcesDiscovered: Number,
+			inventory: [{
+				name: String,
+				tagline: String,
+				npc: Number
 			}],
-			inventory: [Number],
 			seeds: {
-				normal: Number,
-				riddle: Number,
-				special: Number,
+				regular: Number,
+				draw: Number,
 				dropped: Number
 			},
 			botanistState: Number,
 			firstTime: Boolean,
 			colorMap: String,
 			resume: [String],
+			resumeFeedback: [{
+				comment: String,
+				resumeIndex: Number
+			}],
 			seenRobot: Boolean,
-			resourcesDiscovered: Number,
 			playingTime: Number,
 			tilesColored: Number,
 			pledges: Number

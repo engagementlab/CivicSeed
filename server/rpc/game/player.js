@@ -8,13 +8,14 @@ var intervalId = {},
 	colorModel,
 	rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
-	colorHelpers = null;
+	colorHelpers = null,
+	dbHelpers = null;
 
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
 	// req.use('debug');
-	req.use('account.authenticated');
+	//req.use('account.authenticated');
 
 	return {
 		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
@@ -52,27 +53,40 @@ exports.actions = function(req, res, ss) {
 			res(playerInfo);
 		},
 
-		exitPlayer: function(info, id) {
+		exitPlayer: function(id, name) {
 			//update redis
-			req.session.game = info;
-			req.session.save();
+			//req.session.game = info;
+			//req.session.save();
 			//update mongo
 			userModel
 				.findById(id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						user.game = info;
+						games[req.session.game.instanceName].numActivePlayers -= 1;
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
+						delete games[req.session.game.instanceName].players[id];
 						user.isPlaying = false;
-						user.save(function (y) {
-							games[req.session.game.instanceName].numActivePlayers -= 1;
-							ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
-							delete games[req.session.game.instanceName].players[id];
-							res(true);
-						});
-					} else {
-						// MIGHT NEED TO DO THIS HERE STILL???
-						// ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
+						if(name === 'Demo U') {
+							user.game.currentLevel = 0;
+							user.game.position.x = 64;
+							user.game.position.y = 77;
+							user.game.resources = {};
+							user.game.resourcesDiscovered = 0;
+							user.game.inventory = [];
+							user.game.seeds.regular = 0;
+							user.game.seeds.draw = 0;
+							user.game.seeds,dropped = 0;
+							user.game.botanistState = 0;
+							user.game.firstTime = true;
+							user.game.resume = [];
+							user.game.seenRobot = false;
+							user.game.playingTime = 0;
+							user.game.tilesColored = 0;
+							user.game.pledges = 5;
+						}
+						user.save();
+						res();
 					}
 				});
 		},
@@ -119,41 +133,28 @@ exports.actions = function(req, res, ss) {
 			// req.session.save();
 		},
 
-		saveImage: function(info) {
-			userModel
-				.findById(req.session.userId, function (err, user) {
-					if(err) {
-						console.log(err);
-						res(err);
-					} else if(user) {
-						user.game.colorMap = info;
-						user.save(function (y) {
-							res(true);
-						});
-					}
-				});
-		},
-
 		dropSeed: function(bombed, info) {
+			// console.log('info',info);
 			//welcome to the color server!
 			var num = bombed.length,
 				curOld = 0,
 				index = 0,
-				minX = info.x,
-				maxX = info.x + info.sz,
-				minY = info.y,
-				maxY = info.y + info.sz,
+				minX = info.x1,
+				maxX = info.x2,
+				minY = info.y1,
+				maxY = info.y2,
 				allTiles = null,
 				updateTiles = [],
 				insertTiles = [];
 
 			//get a chunk of the bounding tiles from the DB (instead of querying each individually)
 			colorModel
-				.where('instanceName').equals(req.session.game.instanceName)
-				.where('x').gte(minX).lt(maxX)
-				.where('y').gte(minY).lt(maxY)
+				.where('instanceName').equals(info.instanceName)
+				.where('x').gte(minX).lte(maxX)
+				.where('y').gte(minY).lte(maxY)
 				.sort('mapIndex')
 				.find(function (err, oldTiles) {
+					// console.log(oldTiles);
 					if(err) {
 						res(false);
 					} else if(oldTiles) {
@@ -161,8 +162,8 @@ exports.actions = function(req, res, ss) {
 						var modifiedTiles = null;
 						if(oldTiles.length > 0) {
 							modifiedTiles = colorHelpers.modifyTiles(oldTiles, bombed);
-							console.log(modifiedTiles.insert.length);
-							console.log(modifiedTiles.update.length);
+							// console.log(modifiedTiles.insert.length);
+							// console.log(modifiedTiles.update.length);
 						} else {
 							modifiedTiles = {
 								insert: bombed,
@@ -171,33 +172,46 @@ exports.actions = function(req, res, ss) {
 						}
 						//saveEach tile
 						colorHelpers.saveTiles(modifiedTiles, function(done) {
+							var bonus = modifiedTiles.update.length > 0 ? true : false;
 							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
-								//send out new bombs AND player info to update score
-								var newTileCount = info.tilesColored + allTiles.length,
-								sendData = {
-									bombed: allTiles,
-									id: info.id,
-									tilesColored: newTileCount
-								};
-								// //we are done,send out the color information to each client to render
-								ss.publish.channel(req.session.game.instanceName,'ss-seedDropped', sendData);
+							//send out new bombs AND player info to update score
+							var numNewTilesScaled = Math.ceil(allTiles.length / 9);
+							var newTileCount = info.tilesColored + allTiles.length;
+							if(bonus) {
+								var chance = Math.random();
+								var addBonus = chance < 0.1 ? true : false;
+								if(addBonus) {
+									newTileCount += 10;
+								} else {
+									bonus = false;
+								}
+							}
+							var sendData = {
+								bombed: allTiles,
+								id: info.id,
+								tilesColored: newTileCount
+							};
+							// //we are done,send out the color information to each client to render
+							ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
 
-								var newInfo = {
-									name: info.name,
-									numBombs: allTiles.length,
-									count: info.tilesColored
-								};
+							var newInfo = {
+								name: info.name,
+								numBombs: numNewTilesScaled,
+								newCount: newTileCount
+							};
 
-								colorHelpers.gameColorUpdate(newInfo, req.session.game.instanceName, function(updates) {
-									if(updates.updateBoard) {
-										ss.publish.channel(req.session.game.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
-									}
-									ss.publish.channel(req.session.game.instanceName,'ss-progressChange', {dropped: updates.dropped, colored: updates.colored});
-									//FINNNALLY done updating and stuff, respond to the player
-									//telling them if it was sucesful
-									res(allTiles.length);
-								});
+							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates) {
+								if(updates.updateBoard) {
+									ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+								}
+								ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
+								//FINNNALLY done updating and stuff, respond to the player
+								//telling them if it was sucesful
+								res(allTiles.length, bonus);
 							});
+
+							dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+						});
 					}
 				});
 		},
@@ -261,10 +275,10 @@ exports.actions = function(req, res, ss) {
 			ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg);
 		},
 
-		gameOver: function(info, id) {
+		gameOver: function(id) {
 			//update redis
-			req.session.game = info;
-			req.session.profileSetup = true;
+			// req.session.game = info;
+			//req.session.profileSetup = true;
 			// console.log('exit: ', info);
 			req.session.save();
 			//update mongo
@@ -296,7 +310,7 @@ exports.actions = function(req, res, ss) {
 						npcId = parseInt(info.npc,10);
 					while(!found) {
 						if(user.game.resources[i].npc === npcId) {
-							user.game.resources[i].seeded += 1;
+							user.game.resources[i].seeded.push(info.pledger);
 							found = true;
 						}
 						i++;
@@ -306,50 +320,67 @@ exports.actions = function(req, res, ss) {
 					}
 					user.save(function (err,suc) {
 						res(suc);
-						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info.id);
+						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info);
 					});
 				}
 			});
 		},
 
 		saveResource: function(info) {
-			console.log(info);
+			//console.log(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						//look thru resources and update if found
-						var found = false,
-							cur = 0;
-						while(cur < user.game.resources.length) {
-							console.log(user.game.resources[cur].npc, info.resource.npc);
-							if(user.game.resources[cur].npc === info.resource.npc) {
-								found = true;
-								user.game.resources[cur].answers = info.resource.answers;
-								user.game.resources[cur].attempts = info.resource.attempts;
-								user.game.resources[cur].result = info.resource.result;
-								cur = user.game.resources.length;
-							}
-							cur++;
+						console.log(info);
+						var npc = info.index;
+						//hack cuz game doesn't start with resource object...
+						if(!user.game.resources) {
+							user.game.resources = {};
 						}
-						if(!found) {
-							user.game.resources.push(info.resource);
+						//first we save the new resource
+						if(user.game.resources[npc]) {
+							user.game.resources[npc].answers = info.resource.answers;
+							user.game.resources[npc].attempts = info.resource.attempts;
+							user.game.resources[npc].result = info.resource.result;
+						} else {
+							user.game.resources[npc] = info.resource;
 						}
-						console.log(user);
-						user.save(function (y) {
-							res('good');
-						});
+						//now we update the inventory and resourcesDiscovered
+						user.game.inventory = info.inventory;
+						user.game.resourcesDiscovered = info.resourcesDiscovered;
+						user.save();
 					}
 				});
+		},
+
+		updateGameInfo: function(info) {
+			dbHelpers.saveInfo(info);
+		},
+
+		getRandomResumes: function(info) {
+			userModel
+				.where('role').equals('actor')
+				.where('game.instanceName').equals(info.instanceName)
+				.select('game.resume')
+				.find(function(err,results) {
+					if(err) {
+						console.log(err);
+					} else if(results) {
+						res(results);
+					}
+				});
+		},
+
+		resumeFeedback: function(info) {	
+			dbHelpers.saveFeedback(info, 0);
 		}
 	};
 };
 
 colorHelpers = {
-
 	modifyTiles: function(oldTiles, bombed) {
-		//console.log('old: ',oldTiles, 'new: ', bombed);
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
 		var bIndex = bombed.length,
@@ -375,69 +406,22 @@ colorHelpers = {
 			}
 		}
 		return {insert: insertTiles, update: updateTiles};
-			// //if we haven't hit the beginning (-1) of the old index, look thru it
-			// //console.log(bIndex, oIndex);
-			// if(oIndex > -1) {
-			// 	console.log(bombed[bIndex].mapIndex, oldTiles[oIndex].mapIndex);
-			// 	//make sure they are the same tile before we modify any colors
-			// 	if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-			// 		console.log('modify');
-			// 		//modify tile
-			// 		var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
-			// 		updateTiles.push(modifiedTile);
-			// 		//console.log('modded');
-			// 		oIndex--;
-			// 	} else {
-			// 		//if we made it here, we are out of olds, must add it
-			// 		insertTiles.push(bombed[bIndex]);
-			// 		// console.log('new');
-			// 	}
-			// 	//check if new old tile index is <= the next one
-			// 	var lower = false;
-			// 	while(!lower) {
-			// 		if(oIndex < 0) {
-			// 			//exit out so we can continue
-			// 			lower = true;
-			// 		} else {
-			// 			//make sure there is a next bomb
-			// 			if(bIndex > 0) {
-			// 				if(oldTiles[oIndex].mapIndex <= bombed[bIndex-1].mapIndex) {
-			// 					lower = true;
-			// 				} else{
-			// 					oIndex--;
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// } else {
-			// 	insertTiles.push(bombed[bIndex]);
-			// 	//console.log('newb');
-			// }
-		//}
 	},
 
 	modifyOneTile: function(tile, bomb)  {
-		//AHHHH SO MANY POSSIBILITIES, stripping this down
-		//there IS a pre-existing color
-		//if the old one is a nobody (not owned)
-		if(tile.color.owner === 'nobody') {
-			//if the NEW one should be owner, then update tile and bomb curColor
-			if(bomb.color.owner !== 'nobody') {
-				tile.color = bomb.color;
-				tile.curColor = bomb.curColor;
-				return tile;
-			}
-			//new one should be modified -- if the opacity hasn't maxed out 
-			else if(tile.color.a < 0.5 ) {
+		//if we it exists we have to modify
+		if(tile.color) {
+			//perform a dominant override if not at max opacity
+			if(tile.color.a < 0.5 ) {
 				var prevR = tile.color.r,
 					prevG = tile.color.g,
 					prevB = tile.color.b,
 					prevA = tile.color.a;
-				var weightA = prevA / 0.1,
-					weightB = 1;
-				var newR = Math.floor((weightA * prevR + weightB * bomb.color.r) / (weightA + weightB)),
-					newG = Math.floor((weightA * prevG + weightB * bomb.color.g) / (weightA + weightB)),
-					newB = Math.floor((weightA * prevB + weightB * bomb.color.b) / (weightA + weightB)),
+				var weightOld = 0.2,
+					weightNew = 0.8;
+				var newR = Math.floor(weightOld * prevR + weightNew * bomb.color.r);
+					newG = Math.floor(weightOld * prevG + weightNew * bomb.color.g),
+					newB = Math.floor(weightOld * prevB + weightNew * bomb.color.b),
 					newA = Math.round((tile.color.a + 0.1) * 100) / 100,
 					rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
 				tile.color.r = newR;
@@ -446,14 +430,10 @@ colorHelpers = {
 				tile.color.a = newA;
 				tile.curColor = rgbString;
 				return tile;
-			}
-			//don't modify. change tile for sending out since maxed
-			else {
+			} else {
 				return tile;
 			}
-		}
-		//old one is the OWNER, so just modify tile for user
-		else {
+		} else {
 			return tile;
 		}
 	},
@@ -462,7 +442,6 @@ colorHelpers = {
 		var num = tiles.update.length,
 			cur = 0;
 		var save = function() {
-			console.log(tiles.update[cur]);
 			tiles.update[cur].save(function(err,suc) {
 				cur++;
 				if(cur >= num) {
@@ -496,11 +475,9 @@ colorHelpers = {
 				//add tile count to our progress
 				var result = results[0],
 					oldCount = result.seedsDropped,
-					newCount = oldCount + 1;
-					oldColored = result.tilesColored,
-					newColored = oldColored + newInfo.numBombs,
-					oldPercent = Math.floor((oldCount / result.seedsDroppedGoal) * 100),
-					newPercent = Math.floor((newCount / result.seedsDroppedGoal) * 100);
+					newCount = oldCount + newInfo.numBombs;
+					seedsDroppedGoal = result.seedsDroppedGoal;
+				
 				//update leadeboard
 				var oldBoard = result.leaderboard,
 					gState = result.state,
@@ -509,7 +486,7 @@ colorHelpers = {
 					updateBoard = false,
 					newGuy = {
 						name: newInfo.name,
-						count: (newInfo.count + newInfo.numBombs)
+						count: newInfo.newCount
 					};
 
 				//if this is the first player on the leadeboard, push em and update status
@@ -545,24 +522,22 @@ colorHelpers = {
 				}
 
 				//check if the world is fully colored
-				if(newPercent > 99) {
+				if(newCount >= seedsDroppedGoal && instanceName !== 'demo') {
 					//change the game state
-					//send out emails
 					result.set('bossModeUnlocked', true);
-					//colorHelpers.endGameEmails();
-					newPercent = 100;
+					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+					//send out emails
+					colorHelpers.endGameEmails();
 				}
 				//save all changes
 				result.set('seedsDropped', newCount);
 				result.set('leaderboard', oldBoard);
-				result.set('tilesColored', newColored);
 				result.save();
 
 				var returnInfo = {
 					updateBoard: updateBoard,
 					board: oldBoard,
-					dropped: newCount,
-					colored: newColored
+					dropped: newCount
 				};
 				callback(returnInfo);
 			}
@@ -570,10 +545,9 @@ colorHelpers = {
 	},
 
 	endGameEmails: function() {
-		//the world is fully colored, 
-		//advance the game state to 2 = boss level
-		//send out emails
-		//get all emails from actors
+		//set boss mode unlocked here for specific instance
+
+		//send out emails to players who have completed game
 		userModel
 			.where('role').equals('actor')
 			.select('email')
@@ -591,7 +565,7 @@ colorHelpers = {
 						if(users[emailIterator].game.currentLevel < 4) {
 							html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
 							html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
-							subject = 'Come back.';
+							subject = 'Update!';
 
 						} else {
 							html = '<h2 style="color:green;">The Color has Returned!</h2>';
@@ -605,3 +579,38 @@ colorHelpers = {
 			});
 	}
 };
+
+dbHelpers = {
+	saveInfo: function(info) {
+		userModel
+			.findById(info.id, function (err, user) {
+				if(err) {
+					console.log(err);
+				} else if(user) {
+					for(var prop in info) {
+						if(prop !== 'id') {
+							user.game[prop] = info[prop];
+						}
+					}
+					user.save();
+				}
+			});
+	},
+
+	saveFeedback: function(info, index) {
+		userModel.findById(info[index].id, function(err,user) {
+			if(err) {
+				console.log(err);
+			} else if(user) {
+				user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index});
+				user.save(function(err,okay) {
+					//keep savin til we aint got none
+					index++;
+					if(index < info.length) {
+						dbHelpers.saveFeedback(info,index);
+					}
+				});
+			}
+		});
+	}
+ };

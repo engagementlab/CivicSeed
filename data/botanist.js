@@ -10,7 +10,8 @@ module.exports.global = {
 	dialog: [{
 		instructions: ['Thanks for coming to lend a hand today. As you can see, things are pretty gray. You’ll fix that by planting color seeds.', 'Once you’re done talking to me, you’ll have a seed! Plant it by clicking on the leaf icon at the bottom of your display. Try planting the seed now, then come back and talk to me.'],
 		riddle: {
-			sonnet: 'First, you must find a way<br>to tell me <b>what you brought</b> today<br>and how <b>your future</b> and <b>your past</b><br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: <b>Walk with humility.</b>',
+			sonnet: 'The first Mega Seed needs four pieces to complete... all of them about YOU.<br>One about why you want to engage<br>One about what you\'re trying to achieve<br>One about what makes you who you are, your identity<br>One about the important values that gude you.',
+			// sonnet: 'First, you must find a way<br>to tell me <b>what you brought</b> today<br>and how <b>your future</b> and <b>your past</b><br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: <b>Walk with humility.</b>',
 			prompts: ['Good work! But you need to plant a lot more. To fully color the world, you must work together with your peers and others in our community. Click the computer-screen icon on your display at any time to see your progress! When it reaches 100%, the world will be saved. Want find out how to get more seeds?', 'I think you have enough pieces to solve the enigma! Want to try?'],
 			response: 'That’s right! Great work! Now you’re ready to move to level 2. I’ve given you some Mega Seeds that cover more area. Now, when you enter seed-planting mode, you will have the ability to plant a Mega or normal seed.'
 		},
@@ -54,89 +55,89 @@ module.exports.global = {
 	},
 	tangram: [{
 		answer: [{
-			id: 2569,
+			id: 'correct1',
 			x: 430,
 			y: 220
 		}, {
-			id: 6265,
+			id: 'correct2',
 			x: 470,
 			y: 50
 		}, {
-			id: 2176,
+			id: 'correct3',
 			x: 470,
 			y: 150
 		}, {
-			id: 8986,
+			id: 'correct4',
 			x: 470,
 			y: 50
 		}]
 	}, {
 		answer: [{
-			id: 7052,
+			id: 'correct1',
 			x: 500,
 			y: 240
 		}, {
-			id: 9170,
+			id: 'correct2',
 			x: 320,
 			y: 160
 		}, {
-			id: 2649,
+			id: 'correct3',
 			x: 320,
 			y: 360
 		}, {
-			id: 2803,
+			id: 'correct4',
 			x: 620,
 			y: 360
 		}, {
-			id: 5219,
+			id: 'correct5',
 			x: 420,
 			y: 120
 		}]
 	}, {
 		answer: [{
-			id: 17599,
+			id: 'correct1',
 			x: 420,
 			y: 110
 		}, {
-			id: 16297,
+			id: 'correct2',
 			x: 320,
 			y: 110
 		}, {
-			id: 14588,
+			id: 'correct3',
 			x: 320,
 			y: 210
 		}, {
-			id: 14464,
+			id: 'correct4',
 			x: 380,
 			y: 210
 		}, {
-			id: 12760,
+			id: 'correct5',
 			x: 480,
 			y: 280
 		}, {
-			id: 16547,
+			id: 'correct6',
 			x: 320,
 			y: 110
 		}]
 	}, {
 		answer: [{
-			id: 17525,
+			id: 'correct1',
 			x: 470,
 			y: 140
 		}, {
-			id: 13246,
+			id: 'correct2',
 			x: 470,
 			y: 360
 		}, {
-			id: 15638,
+			id: 'correct3',
 			x: 470,
 			y: 180
 		}, {
-			id: 16912,
+			id: 'correct4',
 			x: 470,
 			y: 180
 		}, {
-			id: 13360,
+			id: 'correct5',
 			x: 470,
 			y: 220
 		}]

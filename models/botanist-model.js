@@ -28,7 +28,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			{
 				answer: [
 					{
-						id: Number,
+						id: String,
 						x: Number,
 						y: Number
 					}

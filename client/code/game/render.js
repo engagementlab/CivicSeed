@@ -31,6 +31,7 @@ $game.$renderer = {
 
 	ready: false,
 
+	//setup all rendering contexts then load images
 	init: function(callback) {
 		//create offscreen canvases for optimized rendering
 		_offscreen_backgroundCanvas = document.createElement('canvas');
@@ -69,6 +70,7 @@ $game.$renderer = {
 		checkDone();
 	},
 
+	//this loads the specified tilesheet
 	loadTilesheet: function(num, now) {
 		_currentTilesheet = new Image();
 		_currentTilesheet.src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
@@ -100,6 +102,7 @@ $game.$renderer = {
 		};
 	},
 
+	//loads all other images (accessories, npcs, etc)
 	loadImages: function(num) {
 
 		//load the images recursively until done
@@ -115,6 +118,8 @@ $game.$renderer = {
 			}
 		};
 	},
+
+	//load all player images
 	loadPlayerImages: function(num) {
 		var next = num + 1,
 			playerFile = CivicSeed.CLOUD_PATH + '/img/game/players/' + num + '.png';
@@ -144,6 +149,8 @@ $game.$renderer = {
 			}
 		};
 	},
+
+	//render a frame on every tick, clear canvases and draw updated content
 	renderFrame: function() {
 		// $game.$others.clear();
 		// $game.$player.clear();
@@ -175,6 +182,8 @@ $game.$renderer = {
 			}
 		});
 	},
+
+	//create order for drawing all characters (other players, your player, npcs, botanist, robot)
 	makeQueue: function(callback) {
 		var playerInfo = $game.$player.getRenderInfo(),
 			order = [playerInfo],
@@ -198,6 +207,7 @@ $game.$renderer = {
 		callback(finalOrder);
 	},
 
+	//figure out the information to draw on a tile
 	renderTile: function(i, j) {
 
 		//get the index (which refers to the location of the image)
@@ -243,6 +253,7 @@ $game.$renderer = {
 		}
 	},
 
+	//clear a single tile
 	clearMapTile: function(x, y) {
 		_backgroundContext.clearRect(
 			x,
@@ -252,6 +263,7 @@ $game.$renderer = {
 			);
 	},
 
+	//draw the actual tile on the canvas
 	drawMapTile: function(tileData) {
 
 		var srcX,srcY;
@@ -322,6 +334,7 @@ $game.$renderer = {
 		}
 	},
 
+	//draw a foreground tile to the canvas
 	drawForegroundTile: function(tileData) {
 		var srcX, srcY;
 		if(tileData.f1 > -1) {
@@ -357,6 +370,7 @@ $game.$renderer = {
 
 	},
 
+	//draw acessory items to a player
 	drawAccessories: function(srcX,destX,destY, level, color, client) {
 		if(client) {
 			//this will add your stuff to the gray player (for seed mode) as well
@@ -385,6 +399,7 @@ $game.$renderer = {
 		);
 	},
 
+	//draw a player on the backup canvas
 	playerToCanvas: function(lvl, color, client) {
 		//MAKE  SHIT MORE EFFICIENT
 		var h = 64,
@@ -445,6 +460,7 @@ $game.$renderer = {
 		}
 	},
 
+	//draw the player from backup to real canvas
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
 			_offscreenCharacterCanvas[info.colorNum],
@@ -459,8 +475,8 @@ $game.$renderer = {
 		);
 	},
 
+	//draw an npc to canvas
 	renderCharacter: function(info) {
-
 		_charactersContext.drawImage(
 		_offscreenCharacterCanvas[info.colorNum],
 		info.srcX,
@@ -474,6 +490,7 @@ $game.$renderer = {
 		);
 	},
 
+	//clear the character canvas
 	clearAll: function() {
 		_charactersContext.clearRect(
 			0,
@@ -483,6 +500,7 @@ $game.$renderer = {
 		);
 	},
 
+	//clear a specific region on the character canvas
 	clearCharacter: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
@@ -492,6 +510,7 @@ $game.$renderer = {
 		);
 	},
 
+	//clear all the canvases and draw all the tiles
 	renderAllTiles: function() {
 
 		_foregroundContext.clearRect(
@@ -532,6 +551,7 @@ $game.$renderer = {
 			);
 	},
 
+	//draw and npc to the canvas
 	renderNpc: function (npcData) {
 		_charactersContext.drawImage(
 			_tilesheets[5],
@@ -546,6 +566,7 @@ $game.$renderer = {
 		);
 	},
 
+	//draw the mouse box to the canvas
 	renderMouse: function(mouse) {
 
 		var mX = mouse.cX * $game.TILE_SIZE,
@@ -574,7 +595,7 @@ $game.$renderer = {
 
 			var col = $game.$player.getRGBA();
 
-			if($game.$player.seedMode > 0) {
+			if($game.$player.seedMode) {
 				_foregroundContext.fillStyle = col; // seed color
 				_foregroundContext.fillRect(
 					mX,
@@ -609,16 +630,16 @@ $game.$renderer = {
 				);
 			}
 
-			
-			
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
 	},
 
+	//clear the mini mpa
 	clearMiniMap: function() {
 		_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
 	},
 
+	//render a player to the mini map
 	renderMiniPlayer: function(player) {
 		//draw player
 		_minimapPlayerContext.fillStyle = player.col;
@@ -630,6 +651,7 @@ $game.$renderer = {
 		);
 	},
 
+	//render the botanist and dividing lines on the mini map
 	renderMiniMapConstants: function() {
 		_minimapPlayerContext.fillStyle = 'rgb(150,150,150)';
 		_minimapPlayerContext.fillRect(
@@ -658,8 +680,8 @@ $game.$renderer = {
       	// _minimapPlayerContext.stroke();
 	},
 
+	//render a specific tile on the mini map
 	renderMiniTile: function(x, y, col) {
-	
 		var	rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
 		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
@@ -671,6 +693,7 @@ $game.$renderer = {
 		
 	},
 
+	//clear the botanist from the canvas
 	clearBotanist: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
@@ -680,6 +703,7 @@ $game.$renderer = {
 		);
 	},
 
+	//clear the robot from canvas
 	clearRobot: function(info) {
 		_charactersContext.clearRect(
 			info.prevX,
@@ -689,6 +713,7 @@ $game.$renderer = {
 		);
 	},
 
+	//render the botanist on the canvas
 	renderBotanist: function(info) {
 		_charactersContext.drawImage(
 			_tilesheets[6],
@@ -703,6 +728,7 @@ $game.$renderer = {
 		);
 	},
 
+	//render the robot on the canvas
 	renderRobot: function(info) {
 		// console.log(info.srcX, info.srcY);
 		_charactersContext.drawImage(
@@ -718,6 +744,7 @@ $game.$renderer = {
 		);
 	},
 
+	//display the mini map image on the canvas
 	imageToCanvas: function(map) {
 		var newImg = new Image();
 
@@ -725,6 +752,46 @@ $game.$renderer = {
 			_minimapTileContext.drawImage(newImg,0,0);
 		};
 		newImg.src = map;
+	},
+
+	renderBossTiles: function(tiles) {
+		for(var t = 0; t < tiles.length; t++) {
+			$game.$renderer.clearMapTile(tiles[t].x * $game.TILE_SIZE, tiles[t].y * $game.TILE_SIZE);
+			_backgroundContext.fillStyle = tiles[t].color;
+			_backgroundContext.fillRect(
+				tiles[t].x * $game.TILE_SIZE,
+				tiles[t].y * $game.TILE_SIZE,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE
+			);
+			if(tiles[t].item > -1) {
+				_backgroundContext.fillStyle = 'rgba(0,' + tiles[t].item * 50 + ',200,0.5)';
+				_backgroundContext.fillRect(
+					tiles[t].x * $game.TILE_SIZE,
+					tiles[t].y * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+			if(tiles[t].charger > -1) {
+				_backgroundContext.fillStyle = 'rgba(255,0,0,0.9)';
+				_backgroundContext.fillRect(
+					tiles[t].x * $game.TILE_SIZE,
+					tiles[t].y * $game.TILE_SIZE,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE
+				);
+			}
+		}
+	},
+
+	clearBossLevel: function() {
+		_backgroundContext.clearRect(
+			0,
+			0,
+			$game.TILE_SIZE * $game.VIEWPORT_WIDTH,
+			$game.TILE_SIZE * $game.VIEWPORT_HEIGHT
+		);
 	}
 };
 

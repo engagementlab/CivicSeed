@@ -1,14 +1,16 @@
 module.exports.global = [{
 	firstName: 'Robert',
 	lastName: 'Hall',
+	school: 'Emerson College',
 	password: 'do-not-change-me',
 	email: 'langbert@gmail.com',
 	role: 'superadmin'
 }, {
 	firstName: 'jimmy',
 	lastName: 'dolan',
+	school: 'Emerson College',
 	password: '',
-	email: 'codenberg',
+	email: 'c',
 	role: 'superadmin',
 	gameStarted: true,
 	profileSetup: true,
@@ -17,7 +19,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -30,19 +31,19 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
 		firstTime: true,
 		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
+		resumeFeedback: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -53,6 +54,7 @@ module.exports.global = [{
 }, {
 	firstName: 'tufts',
 	lastName: 'admin',
+	school: 'Emerson College',
 	password: 'funcarrots',
 	email: 'tufts',
 	role: 'admin',
@@ -63,7 +65,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -76,29 +77,30 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
 		firstTime: true,
 		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
+		resumeFeedback: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
 	},
 	admin: {
 		instances: ['tufts-remote','tufts-local']
-	}	
+	}
 }, {
 	firstName: 'Michael',
 	lastName: 'Jordan',
+	school: 'Emerson College',
 	password: '',
 	email: 'm',
 	role: 'actor',
@@ -108,8 +110,7 @@ module.exports.global = [{
 	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
-		currentLevel: 0,
-		rank: 'novice gardener',
+		currentLevel: 1,
 		position: {
 			x: 64,
 			y: 77
@@ -122,19 +123,19 @@ module.exports.global = [{
 			},
 			tilesheet: 11
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: [],
+		resume: ['i am michael', 'i am great', 'i play basketball','you cannot beat me'],
+		resumeFeedback: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -142,6 +143,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Larry',
 	lastName: 'Bird',
+	school: 'Emerson College',
 	password: '',
 	email: 'l',
 	role: 'actor',
@@ -152,7 +154,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -165,19 +166,19 @@ module.exports.global = [{
 			},
 			tilesheet: 3
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 5,
-			riddle: 5,
-			special: 0,
+			regular: 5,
+			draw: 30,
 			dropped: 0
 		},
 		botanistState: 2,
 		firstTime: false,
-		resume: [],
+		resume: ['i am larry'],
+		resumeFeedback: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
@@ -185,6 +186,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Pistol',
 	lastName: 'Pete',
+	school: 'Emerson College',
 	password: '',
 	email: 'p',
 	role: 'actor',
@@ -195,7 +197,6 @@ module.exports.global = [{
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
-		rank: 'novice gardener',
 		position: {
 			x: 64,
 			y: 77
@@ -208,19 +209,19 @@ module.exports.global = [{
 			},
 			tilesheet: 4
 		},
-		resources: [],
+		resources: null,
+		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			normal: 0,
-			riddle: 0,
-			special: 0,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: [],
+		resume: ['i am pistol', 'i am a dude dood', 'i play sports and such','i have cool hair'],
+		resumeFeedback: [],
 		seenRobot: false,
-		resourcesDiscovered: 0,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5

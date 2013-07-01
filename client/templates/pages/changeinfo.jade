@@ -7,7 +7,11 @@
 				p What is your name?
 				.control-group
 					.controls
-						input#firstname.input-large(type='text', name='firstname', placeholder='first')
-						input#lastname.input-large(type='text', name='lastname', placeholder='last')
+						input#firstname.input-large(type='text', name='firstname', placeholder='first', maxlength='20')
+						input#lastname.input-large(type='text', name='lastname', placeholder='last', maxlength='20')
+				p What school do you attend?
+				.control-group
+					.controls
+						input#school.input-large(type='text', name='school', placeholder='school name', maxlength='40')
 				button.btn.btn-primary.btn-large(type='submit') Submit
 				p#message.moreTopMargin

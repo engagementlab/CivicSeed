@@ -245,8 +245,9 @@ $game.$botanist = {
 			//save that the player has looked at the instructions
 			if($game.$player.botanistState === 0) {
 				$game.$player.botanistState = 1;
+				_saveBotanistState();
 				if($game.$player.currentLevel === 0) {
-					$game.$player.updateSeeds('normal', 1);
+					$game.$player.updateSeeds('regular', 1);
 				}
 			}
 		});
@@ -424,6 +425,7 @@ $game.$botanist = {
 					//update botanistState
 					if($game.$player.currentLevel > 0) {
 						$game.$player.botanistState = 2;
+						_saveBotanistState();
 						$game.$player.checkBotanistState();
 						$game.$botanist.setBotanistState(2);
 					}
@@ -435,6 +437,12 @@ $game.$botanist = {
 				if($game.$player.currentLevel === 0) {
 					$game.$player.firstTime = false;
 					$game.$player.botanistState = 2;
+					var info = {
+						id: $game.$player.id,
+						firstTime: $game.$player.firstTime
+					};
+					ss.rpc('game.player.updateGameInfo', info);
+					_saveBotanistState();
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
 					$botanistAreaMessage.text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
@@ -456,13 +464,13 @@ $game.$botanist = {
 				});
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
 				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
-				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png';
-					// imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline">';
+				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
+					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
 				$botanistContent.html(newHTML);
 
 				//replace the tangram image in the inventory with tip
-				$inventoryPuzzle.hide();
+				$('.inventoryPuzzle').hide();
 				$('.inventoryHelp').show();
 			}
 			//right/wrong screen
@@ -488,7 +496,6 @@ $game.$botanist = {
 				$botanistAreaMessage.text(endQuestion);
 				var inputBox = '<textarea placeholder="type your answer here..."></textarea>';
 				$botanistContent.html(inputBox);
-				$game.changeStatus('this will go in your profile');
 			}
 		}
 	},
@@ -505,15 +512,13 @@ $game.$botanist = {
 				.css('height','450px');
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
-			$game.changeStatus();
-			$puzzleSvg.empty();
-			$inventoryItem.css('opacity',1);
+			$game.$botanist.clearBoard();
+			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
 			if($game.$player.botanistState === 0) {
 				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
-				$game.changeStatus('game progress and leaderboard');
 			}
 		});
 
@@ -549,14 +554,15 @@ $game.$botanist = {
 			allTangrams.each(function(i, d) {
 				//pull the coordinates for each tangram
 				var tanIdD = $(this).attr('class'),
-					tanId = parseInt(tanIdD.substring(2,tanIdD.length),10),
+					tanId = tanIdD.substring(2,tanIdD.length),
 					trans = $(this).attr('transform'),
 					transD = trans.substring(10,trans.length-1),
 					transD2 = transD.split(','),
 					transX = parseInt(transD2[0],10),
 					transY = parseInt(transD2[1],10),
 					t = aLength,
-					found = false;
+					found = false,
+					correctPiece = false;
 					//go through the answer sheet to see if the current tangram is there &&
 					//in the right place
 
@@ -567,9 +573,10 @@ $game.$botanist = {
 						//this is a hard check for snapping
 						if(transX === answer.x && transY === answer.y) {
 							numRight += 1;
+							correctPiece = true;
 						}
 						else {
-							correct = false;
+							correctPiece = false;
 						}
 					}
 				}
@@ -577,10 +584,20 @@ $game.$botanist = {
 				if(!found) {
 					wrongOne = true;
 					correct = false;
+					//remove it from the board
+					$('.br' + tanId).remove();
+					$('.r' + tanId)
+						.css('opacity', 1)
+						.attr('draggable', 'true');
 				}
-				else if(found && !correct) {
+				else if(found && !correctPiece) {
 					nudge = true;
 					correct = false;
+					//remove it from the board
+					$('.br' + tanId).remove();
+					$('.r' + tanId)
+						.css('opacity', 1)
+						.attr('draggable', 'true');
 				}
 			});
 
@@ -588,25 +605,21 @@ $game.$botanist = {
 				correct = false;
 				_numMegaSeeds -= 1;
 				message = 'at least TRY to solve it...';
-				$game.$botanist.clearBoard();
 			}
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'Oh! That’s not quite right. Think more about how the pieces of the Enigma relate to one another, and try again.';
-				$game.$botanist.clearBoard();
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'You are missing some pieces. Be sure to read the Enigma carefully to help pick out the right pieces.';
-				$game.$botanist.clearBoard();
 			}
 			else if(nudge) {
 				correct= false;
 				_numMegaSeeds -=1;
 				message = 'So close! You have the right pieces, just fix the placement.';
-				//$game.$botanist.clearBoard();
 			}
 
 			if(correct) {
@@ -628,8 +641,7 @@ $game.$botanist = {
 					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
 					$game.$player.updateSeeds('riddle', _numMegaSeeds);
 					$game.$player.botanistState = 4;
-
-					$game.changeStatus('congrats!');
+					_saveBotanistState();
 				}
 			}
 			else {
@@ -642,7 +654,7 @@ $game.$botanist = {
 			_numMegaSeeds = 5;
 			var portAnswer = $botanistTextArea.val();
 			$game.$player.resumeAnswer(portAnswer);
-			$game.changeStatus('talk to the botanist');
+			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});
 			$game.$player.nextLevel();
 			$game.$botanist.hideResource();
 			//upload the user's answer to the DB
@@ -669,11 +681,11 @@ $game.$botanist = {
 				.unbind('dragover')
 				.unbind('drop');
 
-			var id = e.data.npc,
+			var npcData = e.data,
 				dt = e.originalEvent.dataTransfer,
-				select = '.r' + id;
+				select = '.r' + npcData.name;
 
-			dt.setData('text/plain', id);
+			dt.setData('text/plain', npcData.npc);
 
 			//set drag over shit
 			$tangramArea
@@ -700,21 +712,26 @@ $game.$botanist = {
 		}
 		//set class name for new shape and fetch shape data
 		//e.originalEvent.offsetX
-		var npc = e.originalEvent.dataTransfer.getData('text/plain'),
-			selector = 'br' + npc,
+		var npcData = e.originalEvent.dataTransfer.getData('text/plain'),
+			splits = npcData.split(','),
+			npc = splits[0],
+			name = splits[1],
+			selector = 'br' + name,
 			x = e.originalEvent.layerX,
-			y =  e.originalEvent.layerY,
-			shape = $game.$resources.getShape(npc),
+			y =  e.originalEvent.layerY;
+
+		var	shape = $game.$resources.getShape(npc),
 			path = shape.path,
 			fill = _svgFills[shape.fill];
 
-		$('.r' + npc)
+
+		$('.r' + name)
 			.css('opacity','.4')
 			.attr('draggable', 'false');
 
 		_new = _svg.append('path')
 			.attr('class',selector)
-			.data([{x:x , y: y, id: npc, color: fill}])
+			.data([{x:x , y: y, id: name, color: fill}])
 			.attr('d', shape.path)
 			.attr('fill', fill)
 			.attr('stroke', 'rgb(255,255,255)')
@@ -746,12 +763,24 @@ $game.$botanist = {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
 			mX = x - _dragOffX,
-			mY = y - _dragOffY;
+			mY = y - _dragOffY,
+			trashing = false;
 
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.trash').css('opacity',1);
+			trashing = true;
+		}
+		else {
+			$('.trash').css('opacity',0.5);
+			trashing = false;
+		}
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
 
 		d3.select('.br' + d.id)
-			.attr('transform',trans);
+			.attr('transform',trans)
+			.attr('opacity', function() {
+				return trashing ? 0.5 : 1;
+			});
 	},
 
 	dropMove: function(d) {
@@ -764,11 +793,24 @@ $game.$botanist = {
 		d3.select('.br' + d.id)
 			.attr('stroke-width',0)
 			.attr('transform',trans);
+
+		if(x > 825 && x < 890 && y > 170 && y < 300) {
+			$('.br' + d.id).remove();
+			$('.r' + d.id)
+				.css('opacity', 1)
+				.attr('draggable', 'true');
+			$('.trash').css('opacity',0.5);
+		}
+		else {
+			d3.select('.br' + d.id)
+			.attr('stroke-width',0)
+			.attr('transform',trans);
+		}
 	},
 
 	clearBoard: function() {
-		$puzzleSvg.empty();
-		$inventoryItem.css('opacity', 1).attr('draggable', 'true');
+		$('.puzzleSvg').empty();
+		$('.inventoryItem').css('opacity', 1).attr('draggable', 'true');
 	},
 
 	snapTo: function(num) {
@@ -795,6 +837,11 @@ $game.$botanist = {
 		_feedbackTimeout = setTimeout(function() {
 			$feedback.fadeOut();
 		},4500);
+	},
+
+	//return level question for resume
+	getLevelQuestion: function(level) {
+		return _levelQuestion[level];
 	}
 };
 
@@ -810,11 +857,19 @@ function _setDomSelectors() {
 	$botanistArea = $('.botanistArea');
 	$feedback = $('.feedback');
 	$inventoryItem = $('.inventoryItem');
-	$tangramArea = $('.inventoryItem');
+	$tangramArea = $('.tangramArea');
 	$botanistTextArea = $('.botanistContent textarea');
 	$inventory = $('.inventory');
 	$inventoryBtn = $('.inventory button');
 	$inventoryPuzzle = $('.inventoryPuzzle');
 	$botanistContent = $('.botanistContent');
 	$botanistAreaMessage = $('.botanistArea .message');
+}
+
+function _saveBotanistState() {
+	var info = {
+		id: $game.$player.id,
+		botanistState: $game.$player.botanistState
+	};
+	ss.rpc('game.player.updateGameInfo', info);
 }

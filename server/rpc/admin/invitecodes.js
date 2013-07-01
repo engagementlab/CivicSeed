@@ -4,6 +4,7 @@ var rootDir = process.cwd(),
 	service = require(rootDir + '/service'),
 	userModel = service.useModel('user', 'preload'),
 	gameModel = service.useModel('game', 'preload'),
+	colorModel = service.useModel('color', 'preload'),
 	emailListLength,
 	emailIterator,
 	singleHtml;
@@ -40,6 +41,7 @@ exports.actions = function(req, res, ss) {
 					user = new userModel();
 					user.firstName = nameParts[0];
 					user.lastName = nameParts[1];
+					user.school = 'university';
 					user.password = xkcd.generatePassword();
 					user.email = email;
 					user.role = 'actor';
@@ -59,19 +61,19 @@ exports.actions = function(req, res, ss) {
 							rgb: newColor,
 							tilesheet: tilesheetNum
 						},
-						resources: [],
+						resources: {},
+						resourcesDiscovered: 0,
 						inventory: [],
 						seeds: {
-							normal: 0,
-							riddle: 0,
-							special: 0,
+							regular: 0,
+							draw: 0,
 							dropped: 0
 						},
 						botanistState: 0,
 						firstTime: true,
 						resume: [],
+						resumeFeedback: [],
 						seenRobot: false,
-						resourcesDiscovered: 0,
 						playingTime: 0,
 						tilesColored: 0,
 						pledges: 5
@@ -92,6 +94,12 @@ exports.actions = function(req, res, ss) {
 							}
 						}
 					});
+				} else {
+					if(i === emailListLength - 1) {
+						emailUtil.closeEmailConnection();
+						console.log('All emails have been sent...');
+						res(true);
+					}
 				}
 			}
 		});
@@ -108,7 +116,7 @@ exports.actions = function(req, res, ss) {
 				console.log(emailList.join(', ') + '\n\n');
 				emailUtil.openEmailConnection();
 
-				emailList = emailList.slice(0, 20);
+				//emailList = emailList.slice(0, 20); --> doing this on front now
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
 					createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);
@@ -118,45 +126,87 @@ exports.actions = function(req, res, ss) {
 			}
 		},
 
-		newGameInstance: function(name) {
+		newGameInstance: function(info) {
 			gameModel
-				.where('instanceName').equals(name)
-				.select('instanceName')
-				.find(function(err, results) {
-					//if it doesn't exist, create new game instance					
-					if(err) {
-						res(true, false);
-					} else if(results.length > 0) {
-						res(false, true);
-					} else {
-						newGame = new gameModel();
-						newGame.players = 0;
-						newGame.tilesColored = 0;
-						newGame.seedsDropped = 0;
-						newGame.seedsDroppedGoal = 3200;
-						newGame.active = true;
-						newGame.bossModeUnlocked = false;
-						newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'];
-						newGame.leaderboard = [];
-						newGame.levelNames= ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'];
-						newGame.resourceCount = [10, 14, 9, 10];
-						newGame.instanceName = name;
-						newGame.resourceResponses = {};
+			.where('instanceName').equals(info.instanceName)
+			.select('instanceName')
+			.find(function(err, results) {
+				//if it doesn't exist, create new game instance					
+				if(err) {
+					res(true, false);
+				} else if(results.length > 0) {
+					res(false, true);
+				} else {
+					newGame = new gameModel();
+					newGame.players = 0;
+					newGame.seedsDropped = 0;
+					newGame.seedsDroppedGoal = info.numPlayers * 130; //130 is magic number (see calculation in trello)
+					newGame.active = true;
+					newGame.bossModeUnlocked = false;
+					newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?'];
+					newGame.leaderboard = [];
+					newGame.levelNames= ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'];
+					newGame.resourceCount = [10, 14, 9, 10];
+					newGame.instanceName = info.instanceName;
+					newGame.resourceResponses = {};
 
-						newGame.save(function(err) {
-							if(err) {
-								console.log(error);
-								res(true, false);
-							}
-							else {
-								console.log('game instance has been created');
-								res(false, false);
-							}
-						});
-					}
-				});
+					newGame.save(function(err) {
+						if(err) {
+							console.log(error);
+							res(true, false);
+						}
+						else {
+							console.log('game instance has been created');
+							//put a single color in the world so we don't get an error when it searches
+							color = new colorModel();
+							color.instanceName = info.instanceName;
+							color.x = 0;
+							color.y = 0;
+							color.mapIndex = 0;
+							color.color = {
+								r: 255,
+								g: 0,
+								b: 0,
+								a: 0.3
+							};
+							color.curColor = 'rgba(255,0,0,0.3)';
+							color.save(function(err, okay) {
+								if(err) {
+									console.log(err);
+								} else if(okay) {
+									res(false, false);
+								}
+							});
+
+							//add instance to creator / superadmin for monitor panels
+							userModel
+							.findById(info.id, function (err, user) {
+								if(err) {
+									console.log(err);
+								} else if(user) {
+									if(user.role !== 'superadmin') {
+										user.admin.instances.push(info.instanceName);
+										user.save();	
+									}
+								}
+							});
+							userModel
+							.where('role').equals('superadmin')
+							.find(function (err, users) {
+								if(err) {
+									console.log(err);
+								} else if(users) {
+									for(var i = 0; i < users.length; i++) {
+										users[i].admin.instances.push(info.instanceName);
+										users[i].save();	
+									}
+								}
+							});
+						}
+					});
+				}
+			});
 		}
-
 	};
 
 };

@@ -14,8 +14,8 @@ var _curFrame = 0,
 	_numRequired = [4,5,6,5],
 
 	$seedHudCount = null,
-	$normalHudCount = null,
-	$riddleHudCount = null,
+	$regularHudCount = null,
+	$drawHudCount = null,
 	$specialHudCount = null,
 	_previousSeedsDropped = null,
 
@@ -23,6 +23,8 @@ var _curFrame = 0,
 	$gameboard = null,
 	$inventoryBtn = null,
 	$inventory = null,
+	$graffiti = null,
+	$graffitiNum = null,
 	_startTime = null,
 
 	_seeds = null,
@@ -40,7 +42,7 @@ var _curFrame = 0,
 	_pledges = null,
 	_resourcesDiscovered = null,
 
-	_specialSeedData = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]];
+	_drawSeeds = null;
 
 $game.$player = {
 
@@ -61,7 +63,7 @@ $game.$player = {
 	seedPlanting: false,
 	npcOnDeck: false,
 	ready: false,
-	seedMode: 0,
+	seedMode: false,
 	awaitingBomb: false,
 	pathfinding: false,
 
@@ -69,6 +71,7 @@ $game.$player = {
 		//get the players info from the db, alerts other users of presence
 		ss.rpc('game.player.init', function(playerInfo) {
 			//time in seconds since 1970 or whatever
+			//console.log(playerInfo);
 			_startTime = new Date().getTime() / 1000;
 
 			_info = {
@@ -82,8 +85,7 @@ $game.$player = {
 				prevOffY: 0
 			};
 
-			//TODO: REMOVE THIS AND CREATE VARS FOR EACH PROPERTY DIRECTLY UNDER PLAYER
-			//so we don't have to do _property everytime
+			//keeping this around because we then save to it on exit
 			$game.$player.game = playerInfo.game;
 			_setPlayerInformation(playerInfo);
 
@@ -116,6 +118,7 @@ $game.$player = {
 		});
 	},
 
+	//calculate movements and what to render for every game tick
 	update: function(){
 		if($game.$player.isMoving) {
 			_move();
@@ -133,61 +136,77 @@ $game.$player = {
 		}
 	},
 
+	//clear the character canvas to ready for redraw
 	clear: function() {
 		$game.$renderer.clearCharacter(_renderInfo);
 	},
 
+	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
 		$game.$player.pathfinding = true;
 		_info.offX = 0,
 		_info.offY = 0;
-		//check if it is an edge of the world
-		$game.$map.isMapEdge(x, y, function(anEdge) {
-			_willTravel = false;
-			//if a transition is necessary, load new data
-			if(!anEdge) {
-				if(x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
-					_willTravel = true;
-					$game.$map.calculateNext(x, y);
-				}
-			}
-			var loc = $game.$map.masterToLocal(_info.x, _info.y),
-				master = {x: x, y: y};
-			$game.$map.findPath(loc, master, function(result) {
+
+		if($game.bossModeUnlocked) {
+			$game.$map.findPath({x: _info.x, y: _info.y}, {x: x, y: y}, function(result) {
 				$game.$player.pathfinding = false;
 				if(result.length > 0) {
 					_sendMoveInfo(result);
-					ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
-						var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
-							masterEndY = $game.$map.currentTiles[master.x][master.y].y;
-						$game.$audio.update(masterEndX, masterEndY);
-					});
-				} else {
-					$game.$player.npcOnDeck = false;
 				}
 			});
-		});
+		} else {
+			//check if it is an edge of the world
+			$game.$map.isMapEdge(x, y, function(anEdge) {
+				_willTravel = false;
+				//if a transition is necessary, load new data
+				if(!anEdge) {
+					if(x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
+						_willTravel = true;
+						$game.$map.calculateNext(x, y);
+					}
+				}
+				var loc = $game.$map.masterToLocal(_info.x, _info.y),
+					master = {x: x, y: y};
+				$game.$map.findPath(loc, master, function(result) {
+					$game.$player.pathfinding = false;
+					if(result.length > 0) {
+						_sendMoveInfo(result);
+						ss.rpc('game.player.movePlayer', result, $game.$player.id, function() {
+							var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
+								masterEndY = $game.$map.currentTiles[master.x][master.y].y;
+							$game.$audio.update(masterEndX, masterEndY);
+						});
+					} else {
+						$game.$player.npcOnDeck = false;
+					}
+				});
+			});
+		}
 	},
 
+	//moves the player as the viewport transitions
 	slide: function(slideX, slideY) {
 		_info.prevOffX = slideX * _numSteps;
 		_info.prevOffY = slideY * _numSteps;
 	},
 
+	//when the player finishes moving or we just need a hard reset for rendering
 	resetRenderValues: function() {
 		_info.prevOffX = 0,
 		_info.prevOffY = 0;
 	},
 
+	//decide what type of seed drop mechanic to do and check if they have seeds
 	dropSeed: function(options) {
-		options.mX = $game.$map.currentTiles[options.x][options.y].x,
-		options.mY = $game.$map.currentTiles[options.x][options.y].y;
-
+		if(options.x) {
+			options.mX = $game.$map.currentTiles[options.x][options.y].x,
+			options.mY = $game.$map.currentTiles[options.x][options.y].y;	
+		}
 		var mode = options.mode;
 
 		//regular seed mode
-		if(mode === 1) {
-			if(_seeds.normal < 1) {
+		if(mode === 'regular') {
+			if(_seeds.regular < 1) {
 				return false;
 			}
 			else {
@@ -196,86 +215,84 @@ $game.$player = {
 				return true;
 			}
 		}
-		//riddle seed mode
-		else if(mode === 2 ){
-			if(_seeds.riddle < 1) {
-				return false;
-			}
-			else {
-				options.sz = ($game.$player.currentLevel * 2) + 5;
-				_calculateSeeds(options);
-				return true;
-			}
-		}
-		//special seed mode
-		else if(mode === 3 ){
-			if(_seeds.special < 1) {
-				return false;
-			}
-			else {
-				options.sz = 11;
-				options.special = Math.floor(Math.random()*4);
-				_calculateSeeds(options);
+		//draw seed mode
+		else {
+			var seedArray = $.map(_drawSeeds, function(k, v) {
+				return [k];
+			});
+
+			if(seedArray.length > 0) {
+				//figure out the size covered
+				var xSize = _drawSeedArea.maxX - _drawSeedArea.minX,
+					ySize = _drawSeedArea.maxY - _drawSeedArea.minY,
+					sz = xSize > ySize ? xSize : ySize,
+					topLeftTile = $game.$map.currentTiles[_drawSeedArea.minX][_drawSeedArea.minY],
+					bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY],
+					centerTileX = $game.$map.currentTiles[15][7].x,
+					centerTileY = $game.$map.currentTiles[15][7].y;
+
+				var data = {
+					bombed: seedArray,
+					options: {
+						mX: centerTileX,
+						mY: centerTileY
+					},
+					x1: topLeftTile.x,
+					y1: topLeftTile.y,
+					x2: bottomRightTile.x,
+					y2: bottomRightTile.y,
+					kind: 'draw'
+				};
+				_sendSeedBomb(data);
 				return true;
 			}
 		}
 	},
 
-	//TODO: test this
+	//save out all current status of player to db on exit
 	exitAndSave: function(callback) {
-		var endTime = new Date().getTime() / 1000,
-			totalTime = endTime - _startTime;
-		_playingTime += totalTime;
-		_position.x = _info.x,
-		_position.y = _info.y;
-		_colorMap = $game.$map.saveImage();
-		_savePlayerData();
-		ss.rpc('game.player.exitPlayer', $game.$player.game, $game.$player.id, function(res) {
+		if(!$game.bossModeUnlocked) {
+			$game.$player.savePositionToDB();
+		}
+		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
 			callback();
 		});
 	},
 
 	//determine which returning to npc prompt to show based on if player answered it or not
-	getPrompt: function(id) {
-		var	l = _resources.length;
-		while(--l > -1) {
-			if(id === _resources[l].npc) {
-				if(_resources[l].result) {
-					return 2;
-				}
-				else {
-					return 1;
-				}
-				continue;
+	getPrompt: function(index) {
+		if(_resources[index]) {
+			if(_resources[index].result) {
+				return 2;
+			}
+			else {
+				return 1;
 			}
 		}
 		return 0;
 	},
 
-	//saves the user's answer and pushes up to DB
+	//saves the user's answer locally
 	answerResource: function(info) {
 		var newInfo = {
-			npc: info.id,
 			answers: [info.answer],
 			attempts: 1,
 			result: info.correct,
-			seeded: 0
+			seeded: [],
+			questionType: info.questionType
 		};
 		var realResource = null,
-			l = _resources.length;
+			numString = info.index.toString();
 
 		//see if the resource is already in the list
-		while(--l > -1) {
-			if(info.id === _resources[l].npc) {
-				realResource = _resources[l];
-				continue;
-			}
+		if(_resources[numString]) {
+			realResource = _resources[numString];
 		}
 
 		//if not, then add it to the list
 		if(!realResource) {
-			_resources.push(newInfo);
-			realResource = _resources[_resources.length - 1];
+			_resources[numString] = newInfo;
+			realResource = _resources[numString];
 		}
 		else {
 			realResource.answers.push(newInfo.answers[0]);
@@ -284,20 +301,12 @@ $game.$player = {
 		}
 		_resourcesDiscovered += 1;
 		//the answer was correct, add item to inventory
+		console.log(_resources);
 		if(info.correct) {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
-			$game.$player.updateSeeds('normal', numToAdd);
-
-			if($game.$player.currentLevel === info.npcLevel) {
-				_inventory.push(info.id);
-				_addToInventory(info.id);
-				$game.$player.checkBotanistState();
-			}
-			_saveResourceToDB(realResource);
+			$game.$player.updateSeeds('regular', numToAdd);
 			return numToAdd;
-		} else {
-			_saveResourceToDB(realResource);
 		}
 	},
 
@@ -306,12 +315,16 @@ $game.$player = {
 		//only do this if we have dropped 5 new seeds
 		if(_seeds.dropped - _previousSeedsDropped > 4) {
 			_colorMap = $game.$map.saveImage();
-			ss.rpc('game.player.saveImage', _colorMap);
+			var info = {
+				id: $game.$player.id,
+				colorMap: _colorMap
+			};
+			ss.rpc('game.player.updateGameInfo', info);
 			_previousSeedsDropped = _seeds.dropped;
 		}
 	},
 
-	//determines what the botanist state should be based if the player has the right resources 
+	//determines what the botanist state should be based on if the player has the right resources 
 	checkBotanistState: function() {
 		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
@@ -321,21 +334,19 @@ $game.$player = {
 				a = answers.length;
 			//go through the answer sheet to see if the current tangram is there &&
 			//in the right place
-			//console.log(answers[a], _resources);
 			while(--a > -1) {
-				var curAnswerId = answers[a].id;
-				//look thru player's resources for this answer 
-				var p = 0,
+				var curAnswer = answers[a].id,
 					found = false;
-				while(p < _resources.length) {
-					if(_resources[p].npc === curAnswerId) {
-						found = true;
-						//console.log('found');
-						//get out of the loop
-						p = _resources.length;
+
+				//look thru player's resources for this answer (it is the shape)
+				$.each(_resources, function(index, resource) {
+					if(resource) {
+						var shape = $game.$resources.getShapeName(index);
+						if(shape === curAnswer) {
+							found = true;
+						}
 					}
-					p++;
-				}
+				});
 				if(!found) {
 					return false;
 				}
@@ -343,16 +354,19 @@ $game.$player = {
 			//if we made it here, that means you have all pieces
 			$game.$player.botanistState = 3;
 			$game.$botanist.setBotanistState(3);
+
+			//check if they have ALL pieces, of so, beam me up scotty
+			console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
+			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
+				$game.$player.beamMeUpScotty();
+			}
 		}
 	},
 
 	//gets player answer for specific resource
 	getAnswer: function(id) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(id === _resources[l].npc) {
-				return _resources[l];
-			}
+		if( _resources[id]) {
+			return _resources[id];
 		}
 	},
 
@@ -371,6 +385,7 @@ $game.$player = {
 			$game.$player.tangramToInventory();
 		}
 	},
+
 	//clear all items from the inventory
 	clearInventory: function() {
 		$('.inventoryItem').remove();
@@ -391,7 +406,7 @@ $game.$player = {
 		$inventoryBtn.text('0');
 	},
 
-	//make the bounding box for each possible resource
+	//make the bounding box for each possible resource in inventory
 	createInventoryOutlines: function() {
 		var io = $('.inventory > .outlines');
 		io.empty();
@@ -400,27 +415,27 @@ $game.$player = {
 		}
 	},
 
+	//reset items and prepare other entities for fresh level
 	nextLevel: function() {
 		$game.$player.currentLevel += 1;
-
-		//hack for demo user to never pass level 1
-		if($game.$player.name === 'Demo') {
-			$game.$player.currentLevel = 0;
-			_resources = [],
-			_inventory = [],
-			_colorMap = '',
-			_tilesColored = 0,
-			_resume = [];
-		}
 		$game.$player.botanistState = 0;
 		$game.$player.seenRobot = false;
 		_pledges = 5;
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
 		$game.$robot.setPosition();
 
+		//save new information to DB
+		var info = {
+			id: $game.$player.id,
+			botanistState: $game.$player.botanistState,
+			seenRobot: $game.$player.seenRobot,
+			pledges: _pledges,
+			inventory: [],
+			currentLevel: $game.$player.currentLevel
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 		if($game.$player.currentLevel === 4) {
 			//they have beat the game!
-			//say there profile is available and send em there.
 			_gameOver();
 		}
 		else {
@@ -430,189 +445,236 @@ $game.$player = {
 			var newLevelMsg = $game.$player.currentLevel + 1;
 			// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
-			console.log('no way boss');
 			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
-			//load in other tree file
 		}
 	},
 
+	//return the calculation of how long they have been playing for (total)
 	getPlayingTime: function() {
 		var currentTime = new Date().getTime() / 1000,
 			totalTime = Math.round((currentTime - _startTime) + _playingTime);
 		return totalTime;
 	},
 
+	//reveals the seed menu to choose which seed they want to use
 	openSeedventory: function() {
 		//open up the inventory
-		if(_seeds.riddle > 0 || _seeds.special > 0) {
+		if(_seeds.draw > 0) {
 			$('.seedventory').slideDown(function() {
-				var col0 = _seeds.normal > 0 ? '#eee': '#333',
-				col1 = _seeds.riddle > 0 ? '#eee': '#333',
-				col2 = _seeds.special > 0 ? '#eee': '#333';
+				var col0 = _seeds.regular > 0 ? '#eee': '#333',
+				col1 = _seeds.draw > 0 ? '#eee': '#333';
 
-				$('.normalButton').css('color',col0);
-				$('.riddleButton').css('color',col1);
-				$('.specialButton').css('color',col2);
+				$('.regularButton').css('color',col0);
+				$('.drawButton').css('color',col1);
 
 				$game.$player.seedventoryShowing = true;
-				$game.changeStatus('choose a seed to plant');
+				$game.statusUpdate({message:'choose a seed to plant',input:'status',screen: true,log:false});
 				$('.seedButton').addClass('currentButton');
 			});
 		}
 		//start seed mode on 0
 		else {
 			$('.seedButton').addClass('currentButton');
-			if(_seeds.normal > 0) {
+			if(_seeds.regular > 0) {
 				$game.$player.seedPlanting = true;
-				$game.$player.seedMode = 1;
-				$game.changeStatus();
+				$game.$player.seedMode = 'regular';
+				$game.statusUpdate({message:'click any tile to drop some color',input:'status',screen: true,log:false});
 			}
 			else {
 				$('.seedButton').removeClass('currentButton');
-				$game.temporaryStatus('you have no seeds');
+				$game.statusUpdate({message:'you have no seeds',input:'status',screen: true,log:false});
 			}
 		}
 	},
 
+	//remove the menu once they have selected a seed flash player and disable other actions
 	startSeeding: function(choice) {
 		$game.$player.seedMode = choice;
 		$('.seedventory').slideUp(function() {
 			$game.$player.seedventoryShowing = false;
 			$game.$player.seedPlanting = true;
 		});
-		$game.changeStatus();
+		var msg;
+		if(choice === 'regular') {
+			msg = 'click a tile to drop some color';
+		} else {
+			msg = 'graffiti mode activated - click and drag to draw';
+			$graffiti.show();
+			$graffitiNum.text(_seeds.draw);
+		}
+		$game.statusUpdate({message: msg,input:'status',screen: true,log:false});
 	},
 
+	//make a response public to all other users
 	makePublic: function(npcId) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(npcId == _resources[l].npc) {
-				//update this resource
-				_resources[l].madePublic = true;
-				//update resource db
-				var info = {
-					playerId: $game.$player.id,
-					npcId: npcId,
-					instanceName: $game.$player.instanceName
-				};
-				ss.rpc('game.npc.makeResponsePublic', info, function(res) {
-					//take away the make public and replcae with eye?
-					$('.publicButton').remove();
-					$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
-				});
-			}
+		if(_resources[npcId]) {
+			//update this resource
+			_resources[npcId].madePublic = true;
+			//update resource db
+			var info = {
+				playerId: $game.$player.id,
+				npcId: npcId,
+				instanceName: $game.$player.instanceName
+			};
+			ss.rpc('game.npc.makeResponsePublic', info, function(res) {
+				//take away the make public and replcae with eye?
+				$('.publicButton').remove();
+				$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
+			});
 		}
 	},
 
+	//make a previously public response private to all other users
 	makePrivate: function(npcId) {
-		var l = _resources.length;
-		while(--l > -1) {
-			if(npcId == _resources[l].npc) {
-				//update this resource
-				_resources[l].madePublic = false;
-				//update resource db
-				var info = {
-					playerId: $game.$player.id,
-					npcId: npcId,
-					instanceName: $game.$player.instanceName
-				};
-				ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
-					//take away the make public and replcae with eye?
-					$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
-					$('.privateButton').remove();
-				});
-			}
+		if(_resources[npcId]) {
+			//update this resource
+			_resources[npcId].madePublic = false;
+			//update resource db
+			var info = {
+				playerId: $game.$player.id,
+				npcId: npcId,
+				instanceName: $game.$player.instanceName
+			};
+			ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
+				//take away the make public and replcae with eye?
+				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
+				$('.privateButton').remove();
+			});
 		}
 	},
 
+	//get ALL answers for all open questions for this player
 	compileAnswers: function() {
 		var html = '';
-		for (var a = 0; a < _resources.length; a++) {
-			var item = _resources[a],
-				npc = item.npc,
-				answer = item.answers[item.answers.length - 1],
-				question = $game.$resources.getQuestion(npc);
-				html += '<p class="theQuestion">Q: ' + question + '</p><p class="theAnswer"><span>' + answer + '</span></p>';
-		}
+		$.each(_resources, function(key, item) {
+			// console.log(item);
+			if(item.questionType === 'open') {
+				var	npc = key,
+					answer = item.answers[item.answers.length - 1],
+					question = $game.$resources.getQuestion(npc),
+					seededCount = item.seeded.length;
+
+				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
+				if(seededCount > 0) {
+					html += '<p class="seededCount">' + seededCount + ' likes</p>';
+				}
+				html += '</div>';
+			}
+		});
 		return html;
 	},
 
+	//see if the player has the specific resource already
 	checkForResource: function(id) {
-		for(var r = 0; r < _resources.length; r++) {
-			if(_resources[r].npc === id) {
-				return true;
-			}
+		if(_resources[id]) {
+			return true;
 		}
 		return false;
 	},
 
+	//change seed count for specific seed
 	updateSeeds: function(kind, quantity) {
 		_seeds[kind] += quantity;
+		//save to DB
+		var info = {
+			id: $game.$player.id,
+			seeds: _seeds
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 		//update hud
 		_updateTotalSeeds();
 	},
 
+	//put new answer into the resume
 	resumeAnswer: function(answer) {
 		_resume.push(answer);
+		var info = {
+			id: $game.$player.id,
+			resume: _resume
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 	},
 
+	//keep track of how many seedITs the player has done
 	updatePledges: function(quantity) {
 		_pledges += quantity;
+		var info = {
+			id: $game.$player.id,
+			pledges: _pledges
+		};
+		ss.rpc('game.player.updateGameInfo', info);
 	},
 
+	//disable blinking seed planting mode
 	resetRenderColor: function() {
 		_renderInfo.colorNum = _playerColorNum;
 	},
 
+	//return the player's current position (x,y)
 	getPosition: function() {
 		return _info;
 	},
 
-	//get functions for other files to access player info
+	//get the players rgb colors
 	getColor: function() {
 		return _rgb;
 	},
 
+	//get the players image number (corresponds to 2.png for example)
 	getColorNum: function() {
 		return _renderInfo.colorNum;
 	},
 
+	//get all the render info to draw player
 	getRenderInfo: function() {
 		return _renderInfo;
 	},
 
+	//get the current color map
 	getColorMap: function() {
 		return _colorMap;
 	},
 
+	//get the number of tiles colored
 	getTilesColored: function() {
 		return _tilesColored;
 	},
 
+	//get the number of resources collected
 	getResourcesDiscovered: function() {
 		return _resourcesDiscovered;
 	},
 
+	//get the number of seeds dropped
 	getSeedsDropped: function() {
 		return _seeds.dropped;
 	},
 
+	//get the quantity of items in the player's inventory
 	getInventoryLength: function() {
 		return _inventory.length;
 	},
 
+	//get the quantity of seedITs made
 	getPledges: function() {
 		return _pledges;
 	},
 
+	//get the player's color as a string
 	getRGBA: function() {
 		return 'rgba('+_colorInfo.r+','+_colorInfo.g+','+_colorInfo.b+','+ 0.5 + ')';
 	},
 
+	getColorString: function() {
+		return _rgbString;
+	},
+
+	//get the current viewport position
 	getRenderPosition: function () {
 		return {x: _renderInfo.curX, y: _renderInfo.curY};
 	},
 
+	//transport player back to botanist's garden, magically
 	beamMeUpScotty: function(place) {
 		//x any y are viewport coords
 		$('.beamMeUp').show();
@@ -641,37 +703,230 @@ $game.$player = {
 			$game.inTransit = false;
 			setTimeout(function() {
 				$('.beamMeUp').fadeOut();
+				$game.$player.displayNpcComments();
 			}, 1000);
 		});
+	},
+
+	//when another player pledges a seed, make the update in your local resources
+	updateResource: function(data) {
+		if(resources[data.npc]) {
+			resources[data.npc].seeded.push(data.pledger);
+		}
+	},
+
+	//add the tagline to the resource, then save it to db
+	setTagline: function(tagline) {
+		var resource = $game.$resources.getCurResource(),
+			npc = resource.index,
+			realResource = null,
+			npcLevel = $game.$npc.getNpcLevel(),
+			shapeName = resource.shape;
+
+		//find the resource and add tagline
+		if(_resources[npc]) {
+			realResource = _resources[npc];
+			realResource.tagline = tagline;
+		}
+		//add piece to inventory
+		if($game.$player.currentLevel === npcLevel) {
+				_inventory.push({name: shapeName, npc: npc, tagline: tagline});
+				_addToInventory({name: shapeName, npc: npc, tagline: tagline});
+		}
+		_saveResourceToDB(realResource, npc);
+		//display npc bubble for comment num
+		$game.$player.displayNpcComments();
+	},
+
+	//show a bubble over visited npcs of how many comments there are
+	displayNpcComments: function() {
+		$('.npcBubble').remove();
+		var npcs = $game.$npc.getOnScreenNpcs();
+		//go thru each npc and see if they are in player resources
+		for (var n = 0; n < npcs.length; n++) {
+			if(_resources[npcs[n]]) {
+				var npcInfo = $game.$npc.getNpcCoords(npcs[n]),
+					npcId = 'npcBubble' + npcs[n],
+					num;
+				if(_resources[npcs[n]].questionType === 'open') {
+					num = $game.$resources.getNumResponses(npcs[n]);
+				} else {
+					num = '*';
+				}
+				bubble = $('<p class="npcBubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
+				$gameboard.append(bubble);
+				$('#' + npcId).css({
+					top: npcInfo.y - 68,
+					left: npcInfo.x
+				});
+				//only bind function to show answers for open ended
+				if(_resources[npcs[n]].questionType === 'open') {
+					$('#' + npcId).bind('click', function() {
+						var npc = $(this).attr('data-npc');
+						$game.$resources.beginResource(npc, true);
+					});
+				}
+			}
+		}
+	},
+
+	//save the player's current position to the DB
+	savePositionToDB: function() {
+		var endTime = new Date().getTime() / 1000,
+			totalTime = endTime - _startTime;
+		_playingTime += totalTime;
+		_position.x = _info.x;
+		_position.y = _info.y;
+		var info = {
+			id: $game.$player.id,
+			position: _position,
+			playingTime: _playingTime
+		};
+		ss.rpc('game.player.updateGameInfo', info);
+	},
+
+	//call the save seed function from outside player
+	saveSeeds: function() {
+		_saveSeedsToDB();
+	},
+
+	//update the running array for current tiles colored to push to DB on end of drawing
+	drawSeed: function(pos) {
+		if(_seeds.draw > 0) {
+			$game.$player.updateSeeds('draw', -1);
+			$graffitiNum.text(_seeds.draw);
+			var drawLocal = false;
+			if($game.$player.seedMode === 'draw') {
+				var currentTile = $game.$map.currentTiles[pos.x][pos.y],
+					index = currentTile.mapIndex,
+					stringIndex = String(index),
+					tempRGB = _rgbString + '0.3)';
+				if(!_drawSeeds[index]) {
+					drawLocal = true;
+					_drawSeeds[index] = {
+						x: currentTile.x,
+						y: currentTile.y,
+						mapIndex: index,
+						color:
+						{
+							r: _colorInfo.r + 10,
+							g: _colorInfo.g + 10,
+							b: _colorInfo.b + 10,
+							a: 0.3
+						},
+						instanceName: $game.$player.instanceName,
+						curColor: tempRGB
+					};
+					//keep track area positions
+					if(pos.x < _drawSeedArea.minX) {
+						_drawSeedArea.minX = pos.x;
+					}
+					if(pos.y < _drawSeedArea.minY) {
+						_drawSeedArea.minY = pos.y;
+					}
+					if(pos.x > _drawSeedArea.maxX) {
+						_drawSeedArea.maxX = pos.x;
+					}
+					if(pos.y > _drawSeedArea.maxY) {
+						_drawSeedArea.maxY = pos.y;
+					}
+				} else {
+					if(_drawSeeds[index].color.a < 0.5) {
+						drawLocal = true;
+						_drawSeeds[index].color.a += 0.1;
+						_drawSeeds[index].curColor = tempRGB = _rgbString + _drawSeeds[index].color.a + ')';
+					}
+				}
+				if(drawLocal) {
+					//blend the prev. color with new color
+					var updateTile = false;
+					if(currentTile.color) {
+						if(currentTile.color.a < 0.5) {
+							updateTile = true;
+							var weightOld = 0.2,
+								weightNew = 0.8;
+							var newR = Math.floor(weightOld * currentTile.color.r + weightNew * _drawSeeds[index].color.r),
+								newG = Math.floor(weightOld * currentTile.color.g + weightNew * _drawSeeds[index].color.g),
+								newB = Math.floor(weightOld * currentTile.color.b + weightNew * _drawSeeds[index].color.b),
+								newA = Math.round((currentTile.color.a + 0.1) * 100) / 100,
+								rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
+							$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
+							$game.$map.currentTiles[pos.x][pos.y].color.a = newA;
+							$game.$map.currentTiles[pos.x][pos.y].curColor = rgbString;
+						}
+					} else {
+						$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
+						$game.$map.currentTiles[pos.x][pos.y].curColor = tempRGB;
+						updateTile = true;
+					}
+					if(updateTile) {
+						//draw over the current tiles to show player they are drawing
+						$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
+						$game.$renderer.renderTile(pos.x,pos.y);
+					}
+				}
+			}
+		} else {
+			$game.$player.dropSeed({mode: 'draw'});
+			$game.$mouse.drawMode = false;
+			$game.$player.seedMode = false;
+			$game.$player.seedPlanting = false;
+			$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
+			_saveSeedsToDB();
+		}
+	},
+
+	//put initial seed drawn in running array
+	drawFirstSeed: function() {
+		var pos = $game.$mouse.getCurrentPosition();
+		_drawSeeds = {};
+		_drawSeedArea = {
+			minX: 29,
+			maxX: 0,
+			minY: 14,
+			maxY: 0
+		};
+		$game.$player.drawSeed(pos);
+	},
+
+	//if boss mode then must change up pos info
+	setPositionInfo: function() {
+		if($game.bossModeUnlocked) {
+			_info.x = 15;
+			_info.y = 8;
+		}
 	}
-
-
 };
 
-//private functions
-function _saveResourceToDB(resource) {
+/***** PRIVATE FUNCTIONS ******/
+
+//save a new resource to the database
+function _saveResourceToDB(resource, npc) {
 	var info = {
 		id: $game.$player.id,
-		resource: resource
+		resource: resource,
+		inventory: _inventory,
+		resourcesDiscovered: _resourcesDiscovered,
+		index: npc
 	};
-	ss.rpc('game.player.saveResource', info, function() {
-		console.log('resource saved');
-	});
+	ss.rpc('game.player.saveResource', info);
 }
 
+//setup all the dom elements for reuse
 function _setDomSelectors() {
 	//set variables for dom selectors
 	$seedHudCount = $('.seedButton .hudCount');
-	$normalHudCount = $('.normalButton .hudCount');
-	$riddleHudCount = $('.riddleButton .hudCount');
-	$specialHudCount = $('.specialButton .hudCount');
+	$regularHudCount = $('.regularButton .hudCount');
+	$drawHudCount = $('.drawButton .hudCount');
 	$waiting = $('.waitingForSeed');
 	$gameboard = $('.gameboard');
 	$inventoryBtn = $('.inventoryButton > .hudCount');
 	$inventory = $('.inventory > .pieces');
-	//selectors for chat stuff
+	$graffiti = $('.graffiti');
+	$graffitiNum = $('.graffiti p span');
 }
 
+//on init, set local and global variables for all player info
 function _setPlayerInformation(info) {
 	//private
 	_seeds = info.game.seeds;
@@ -688,8 +943,12 @@ function _setPlayerInformation(info) {
 	_playingTime = info.game.playingTime;
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
-	_resourcesDiscovered = _resources.length;
+	_resourcesDiscovered = info.game.resourcesDiscovered;
 
+	//hack
+	if(!_resources) {
+		_resources = {};
+	}
 	//public
 	$game.$player.id = info.id;
 	$game.$player.name = info.name;
@@ -700,8 +959,8 @@ function _setPlayerInformation(info) {
 	$game.$player.seenRobot = info.game.seenRobot;
 }
 
+//figure out what color to make which tiles when a seed is dropped
 function _calculateSeeds(options) {
-	//start at the top left corner and loop through (vertical first)
 	var mid = Math.floor(options.sz / 2),
 		origX = options.mX - mid,
 		origY = options.mY - mid,
@@ -709,82 +968,36 @@ function _calculateSeeds(options) {
 		sY = options.y - mid,
 		bombed = [],
 		mode = options.mode,
-		square = null;
-	if($game.$map.currentTiles[options.x][options.y].color) {
-		if($game.$map.currentTiles[options.x][options.y].color.owner !== 'nobody') {
-			$game.temporaryStatus('that tile has been planted on');
-			return false;
-		}
-	}
-	var tempRGB = null,
+		square = null,
+		tempRGB = null,
 		tempIndex = null,
 		b = 0;
+
+	//start at the top left corner and loop through (vertical first)
 	while(b < options.sz) {
 		var a = 0;
 		while(a < options.sz) {
 			//only add if it is in the map!
 			if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-				//only dynamically calculate seeds if riddle or normal mode
-				if(mode < 3) {
-					//this says: if you are part of the circle radius
-					//if you are basic, then do it regardless
-					if(mode === 1 || Math.abs(a - mid) * Math.abs(b - mid) < (mid * (mid - 1))) {
-						var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
-						//set x,y and color info for each square
-						tempRGB = _rgbString + tempA + ')';
-						tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
-						square = {
-							x: origX + a,
-							y: origY + b,
-							mapIndex: tempIndex,
-							color:
-							{
-								r: _colorInfo.r + 10,
-								g: _colorInfo.g + 10,
-								b: _colorInfo.b + 10,
-								a: tempA,
-								owner: 'nobody'
-							},
-							curColor: tempRGB,
-							instanceName: $game.$player.instanceName
-						};
-
-						//assign the middle one the owner
-						if( a === mid && b === mid) {
-							square.color.a = 0.6;
-							square.color.owner = $game.$player.name;
-						}
-						bombed.push(square);
-					}
-				}
-				//special seed, pull from data of
-				else {
-					//find the index based on the a,b values
-					var specialIndex = (b * options.sz) + a;
-
-					//only add a square if it exists in our special array
-					if(_specialSeedData[options.special][specialIndex] === 1) {
-						//set x,y and color info for each square
-						tempRGB = _rgbString + '0.3)';
-						tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
-						square = {
-							x: origX + a,
-							y: origY + b,
-							mapIndex: tempIndex,
-							color:
-							{
-								r: _colorInfo.r + 10,
-								g: _colorInfo.g + 10,
-								b: _colorInfo.b + 10,
-								a: 0.3,
-								owner: 'nobody'
-							},
-							curColor: tempRGB,
-							instanceName: $game.$player.instanceName
-						};
-						bombed.push(square);
-					}
-				}
+				var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
+				//set x,y and color info for each square
+				tempRGB = _rgbString + tempA + ')';
+				tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
+				square = {
+					x: origX + a,
+					y: origY + b,
+					mapIndex: tempIndex,
+					color:
+					{
+						r: _colorInfo.r + 10,
+						g: _colorInfo.g + 10,
+						b: _colorInfo.b + 10,
+						a: tempA
+					},
+					curColor: tempRGB,
+					instanceName: $game.$player.instanceName
+				};
+				bombed.push(square);	
 			}
 			a += 1;
 		}
@@ -792,11 +1005,13 @@ function _calculateSeeds(options) {
 	}
 
 	if(bombed.length > 0) {
-		_sendSeedBomb(bombed, options, origX, origY);
+		var sendData = {bombed: bombed, options: options, x1: origX, y1: origY, x2: origX + options.sz, y2: origY + options.sz, kind: 'regular'};
+		_sendSeedBomb(sendData);
 	}
 }
 
-function _sendSeedBomb(bombed, options, origX, origY) {
+//plant the seed on the server and wait for response and update hud and map
+function _sendSeedBomb(data) {
 	//set a waiting boolean so we don't plant more until receive data back from rpc
 	$game.$player.awaitingBomb = true;
 
@@ -804,13 +1019,16 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 	var info = {
 		id: $game.$player.id,
 		name: $game.$player.name,
-		sz: options.sz,
-		x: origX,
-		y: origY,
-		tilesColored: _tilesColored
+		x1: data.x1,
+		y1: data.y1,
+		x2: data.x2,
+		y2: data.y2,
+		tilesColored: _tilesColored,
+		instanceName: $game.$player.instanceName,
+		kind: data.kind
 	};
 
-	var loc = $game.$map.masterToLocal(options.mX,options.mY);
+	var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
 
 	$waiting
 		.css({
@@ -819,84 +1037,63 @@ function _sendSeedBomb(bombed, options, origX, origY) {
 		})
 		.show();
 
-	ss.rpc('game.player.dropSeed', bombed, info, function(result) {
+	ss.rpc('game.player.dropSeed', data.bombed, info, function(result, bonus) {
 		_seeds.dropped += 1;
 		//increase the drop count for the player
 		$game.$player.awaitingBomb = false;
 		$waiting.fadeOut();
 		if(result > 0) {
+			if(bonus) {
+				$game.statusUpdate({message:'collaborative blending bonus!',input:'status',screen: true,log:false});
+			}
 			//play sound clip
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
 						//update seed count in HUD
-			if(options.mode === 1) {
-				$game.$player.updateSeeds('normal', -1);
+			if(data.options.mode === 'regular') {
+				$game.$player.updateSeeds('regular', -1);
 				//bounce outta seed options.mode
-				if(_seeds.normal === 0) {
-					$game.$player.seedMode = 0;
+				if(_seeds.regular === 0) {
+					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.temporaryStatus('you are out seeds');
+					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
+					//TODO: save seed values to DB
+					_saveSeedsToDB();
 				}
 			}
-			else if(options.mode === 2) {
-				$game.$player.updateSeeds('riddle', -1);
-				if(_seeds.riddle === 0) {
-					$game.$player.seedMode = 0;
+			else {
+				if(_seeds.draw === 0) {
+					$game.$mouse.drawMode = false;
+					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.changeStatus('no more seeds for you!');
+					$graffiti.hide();
+					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
 					$game.$player.saveMapImage();
-				}
-			}
-			else if(options.mode === 3) {
-				$game.$player.updateSeeds('special', -1);
-				if(_seeds.special === 0) {
-					$game.$player.seedMode = 0;
-					_renderInfo.colorNum = _playerColorNum;
-					$game.$player.seedPlanting = false;
-					$game.changeStatus();
-					$game.changeStatus('no more seeds for you!');
-					$('.seedButton').removeClass('currentButton');
-					$game.$player.saveMapImage();
+					//TODO: save seed values to DB
+					_saveSeedsToDB();
 				}
 			}
 		}
 		else {
-			$game.changeStatus('sorry, someone beat you to that tile');
+			$game.statusUpdate({message:'sorry, someone beat you to that tile',input:'status',screen: true,log:false});
 		}
 	});
 }
 
+//update seed counts
 function _updateTotalSeeds() {
-	_totalSeeds = _seeds.normal + _seeds.riddle + _seeds.special;
+	_totalSeeds = _seeds.regular + _seeds.draw;
 	$seedHudCount.text(_totalSeeds);
-	$riddleHudCount.text(_seeds.riddle);
-	$normalHudCount.text(_seeds.normal);
-	$specialHudCount.text(_seeds.special);
+	$regularHudCount.text(_seeds.regular);
+	$drawHudCount.text(_seeds.draw);
 }
 
-function _savePlayerData() {
-	$game.$player.game.seeds = _seeds;
-	$game.$player.game.resources = _resources;
-	$game.$player.game.position = _position;
-	$game.$player.game.inventory = _inventory;
-	$game.$player.game.colorMap = _colorMap;
-	$game.$player.game.resume = _resume;
-	$game.$player.game.playingTime = _playingTime;
-	$game.$player.game.tilesColored = _tilesColored;
-	$game.$player.game.pledges = _pledges;
-	$game.$player.game.currentLevel = $game.$player.currentLevel;
-	$game.$player.game.botanistState = $game.$player.botanistState;
-	$game.$player.game.firstTime = $game.$player.firstTime;
-	$game.$player.game.seenRobot = $game.$player.seenRobot;
-}
-
+//calculate new render information based on the player's position
 function _updateRenderInfo() {
 	//get local render information. update if appropriate.
 	var loc = $game.$map.masterToLocal(_info.x, _info.y);
@@ -916,6 +1113,7 @@ function _updateRenderInfo() {
 	}
 }
 
+//figure out how much to move the player during a walk and wait frame to show
 function _move() {
 	/** IMPORTANT note: x and y are really flipped!!! **/
 	//update the step
@@ -935,10 +1133,17 @@ function _move() {
 
 	//if we done, finish
 	if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
-		if($game.$player.keyMoving) {
-			$game.$player.endKeyMove();
-		}
-		else {
+		if($game.bossModeUnlocked) {
+			_info.offX = 0,
+			_info.offY = 0;
+			_info.srcX = 0,
+			_info.srcY =  0;
+			_info.prevOffX= 0;
+			_info.prevOffY= 0;
+
+			$game.$player.isMoving = false;
+			$game.$boss.endMove(_info.x, _info.y);
+		} else {
 			_endMove();
 		}
 	}
@@ -995,6 +1200,7 @@ function _move() {
 	}
 }
 
+//once the move is sent out to all players, update the players next moves
 function _sendMoveInfo(moves) {
 	$game.$player.seriesOfMoves = new Array(moves.length);
 	$game.$player.seriesOfMoves = moves;
@@ -1004,6 +1210,7 @@ function _sendMoveInfo(moves) {
 	$game.$chat.hideChat();
 }
 
+//when a move is done, decide waht to do next (if it is a transition) and save position to DB
 function _endMove() {
 	var posInfo = {
 		id: $game.$player.id,
@@ -1044,9 +1251,10 @@ function _endMove() {
 	}
 }
 
+//determine what frame to render while standing
 function _idle() {
 	_idleCounter += 1;
-	if($game.$player.seedMode > 0) {
+	if($game.$player.seedMode) {
 		if(_idleCounter % 32 < 16) {
 			_renderInfo.colorNum = 0;
 		}
@@ -1075,14 +1283,15 @@ function _idle() {
 	}
 }
 
-function _addToInventory(id) {
+//add an item to the inventory in the hud and bind actions to it
+function _addToInventory(data) {
 	//create the class / ref to the image
-	var className = 'r' + id,
+	var className = 'r' + data.name,
 		levelFolder = 'level' + ($game.$player.currentLevel + 1),
-		imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  id +'.png',
-		tagline = $game.$resources.getTagline(id);
+		imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  data.name +'.png';
+		//tagline = $game.$resources.getTagline(index);
 	//put image on page in inventory
-	$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + tagline + '">');
+	$inventory.prepend('<img class="inventoryItem '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">');
 
 	$('.' + className).bind('mouseenter',function() {
 		//var info = $(this).attr('title');
@@ -1092,22 +1301,40 @@ function _addToInventory(id) {
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)
-		.bind('click',{npc: id}, $game.$resources.beginResource)
-		.bind('dragstart',{npc: id}, $game.$botanist.dragStart);
+		.bind('click', function() {
+			//false means don't go straight to answers
+			$game.$resources.beginResource(data.npc, false);
+		})
+		.bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
 }
 
+//game over!
 function _gameOver() {
-	var endTime = new Date().getTime() / 1000,
-		totalTime = endTime - _startTime;
-	_playingTime += totalTime;
-	_position.x = _info.x,
-	_position.y = _info.y;
-	_colorMap = $game.$map.saveImage();
-	sessionStorage.setItem('isPlaying', false);
-	ss.rpc('game.player.gameOver', $game.$player.game, $game.$player.id, function(res){
-		if(res) {
-			var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
-			$('.gameboard').append(hooray);
-		}
-	});
+	//if demo mode just send to boss level
+	if($game.$player.name === 'Demo') {
+		$game.$boss.init(function() {
+		});
+	} else {
+		ss.rpc('game.player.gameOver', $game.$player.id, function(res){
+			if(res) {
+				if($game.bossModeUnlocked) {
+					//TODO: test this
+					$game.$boss.init(function() {
+
+					});
+				} else {
+					var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+					$('.gameboard').append(hooray);
+				}
+			}
+		});
+	}
+}
+
+function _saveSeedsToDB() {
+	var info = {
+		id: $game.$player.id,
+		seeds: _seeds
+	};
+	ss.rpc('game.player.updateGameInfo', info);
 }

@@ -2,7 +2,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var gameSchema = new Schema({
 		players: Number,
-		tilesColored: Number,
 		seedsDropped: Number,
 		seedsDroppedGoal: Number,
 		active: Boolean,

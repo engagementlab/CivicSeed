@@ -1,5 +1,5 @@
 .container.hud
-	.row
+	.row.regularGameHud
 		.span4.playerHud
 			.inventoryButton
 				i.icon-briefcase.icon-large(title='toggle inventory', data-placement='bottom')
@@ -7,14 +7,13 @@
 			.seedButton
 				i.icon-leaf.icon-large(title='seeds', data-placement='bottom')
 				span.badge.hudCount
-			.chatButton
-				i.icon-comment.icon-large(title='chat input', data-placement='bottom')
+			.logButton
+				i.icon-reorder.icon-large(title='game log', data-placement='bottom')
+				span.badge.hudCount.hide
 		.span4.displayHud
-			form.form-inline.chatBox.hide
+			form.form-inline.chatBox
 				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='say something...')
 				button#chatButton.btn(type='submit') Chat
-			p.displayBox
-				span.displayBoxText Civic Seed
 		.span4.globalHud
 			.helpButton
 				i.icon-question-sign.icon-large(title='help', data-placement='bottom')
@@ -22,7 +21,24 @@
 				i.icon-volume-up.icon-large(title='toggle music', data-placement='bottom')
 			.progressButton
 				i.icon-desktop.icon-large(title='display progress', data-placement='bottom')
-				span.badge.hudCount
+				//- span.badge.hudCount
 			.activePlayers
 				i.icon-globe.icon-large(title='active players', data-placement='bottom')
 				span.badge.hudCount
+	.row.bossHud
+		.span4
+			.regularSeedButton.bossBox
+				i.icon-leaf.icon-large(title='seeds', data-placement='bottom')
+				span.badge.hudCount 20
+			//- .drawSeedButton.bossBox
+			//- 	i.icon-star.icon-large(title='seeds', data-placement='bottom')
+			//- 	span.badge.hudCount 20
+		.span4
+			p.clock 90
+		.span3
+			p.score score: <span>---</span>
+		.span1
+			.muteButton.bossBox
+				i.icon-volume-up.icon-large(title='toggle music', data-placement='bottom')
+
+

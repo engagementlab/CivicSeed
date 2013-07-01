@@ -8,12 +8,12 @@ $(function() {
 
 	//new player joining to keep track of
 	ss.event.on('ss-addPlayer', function(data, chan) {
-		console.log(data, chan);
+		// console.log(data, chan);
 		$game.numPlayers = data.num;
 		$game.$others.add(data.info);
 		$activePlayers.text(data.num);
 		if(data.info.id !== $game.$player.id) {
-			$game.temporaryStatus(data.info.name + ' has joined!');
+			$game.statusUpdate({message:data.info.name + ' has joined!',input:'status',screen: true,log:true});
 		}
 	});
 
@@ -43,21 +43,18 @@ $(function() {
 
 	//new message from chat
 	ss.event.on('ss-newMessage', function(data, chan) {
-		if(data.id === $game.$player.id) {
-			$game.$chat.message(data.message);
-		}
-		else {
-			$game.$others.message(data.message, data.id);
-		}
+		//put in log for everyone
+		data.input = 'chat';
+		$game.$log.addMessage(data);
 	});
 
 	ss.event.on('ss-statusUpdate', function(data, chan) {
-		$game.temporaryStatus(data);
+		// $game.temporaryStatus(data);
+		console.log('TODO lol');
 	});
 
 	ss.event.on('ss-progressChange', function(data, chan) {
 		$game.seedsDropped = data.dropped;
-		$game.tilesColored = data.colored;
 		$game.updatePercent();
 	});
 
@@ -80,9 +77,15 @@ $(function() {
 
 	//some one pledged a seed to someone's answer
 	ss.event.on('ss-seedPledged', function(data, chan) {
-		if($game.$player.id === data) {
-			$game.temporaryStatus('a peer liked your answer, +1 seed');
+		if($game.$player.id === data.id) {
+			$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have a seed.',input:'status',screen: true,log:true});
 			$game.$player.updateSeeds('riddle', 1);
+			$game.$player.updateResource(data);
 		}
+	});
+
+	//the game meter has hit the end, boss mode is unlocked
+	ss.event.on('ss-bossModeUnlocked', function() {
+		$game.bossModeUnlocked = true;
 	});
 });

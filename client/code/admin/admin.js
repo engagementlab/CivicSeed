@@ -48,7 +48,10 @@ var self = module.exports = {
 			var instanceName = $('#instanceName').val().trim();
 
 			if(instanceName && emailList) {
-				ss.rpc('admin.invitecodes.newGameInstance', instanceName, function(err, res) {
+				emailList = emailList.slice(0, 20);
+				emailListLength = emailList.length;
+				var id = sessionStorage.getItem('userId');
+				ss.rpc('admin.invitecodes.newGameInstance', {instanceName: instanceName, numPlayers: emailListLength, id: id}, function(err, res) {
 					if(err) {
 						console.log('error with db', err);
 					} else if(res) {
@@ -96,10 +99,12 @@ var self = module.exports = {
 				}
 			});
 		});
+		
 		$body.on('click', '#questions', function() {
 			var instance = $(this).attr('data-instance');
 			self.showQuestions(instance);
 		});
+		
 		$body.on('click', '#chat', function() {
 			var instance = $(this).attr('data-instance');
 			ss.rpc('admin.monitor.getRecentChat', instance, function(err, res) {
@@ -108,9 +113,25 @@ var self = module.exports = {
 				}
 			});
 		});
+		
+		$body.on('click', '#addPlayer', function() {
+			var instance = $(this).attr('data-instance');
+			self.showAddPlayerForm(instance);
+		});
+
 		$body.on('click', '.viewAnswers', function() {
 			var index = $(this).attr('data-index');
 			self.showPlayerAnswers(index);
+		});
+
+		$body.on('click', '.deletePlayer', function() {
+			var id = $(this).attr('data-id'),
+				word = $('.input' + id).val();
+			if(word.indexOf('delete') > -1) {
+				self.deletePlayer(id, this);	
+			} else {
+				alert('you must type delete to delete user');
+			}
 		});
 
 		$body.on('click', '.allQuestion', function() {
@@ -118,17 +139,34 @@ var self = module.exports = {
 				instance = $(this).attr('data-instance');
 			self.showQuestionAnswers(npc, instance,this);
 		});
+
+		$body.on('click', '.addPlayerButton', function(e) {
+			e.preventDefault();
+			var email = $('#addPlayerEmail').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi),
+				instanceName = $(this).attr('data-instance');
+
+			if(email) {
+				ss.rpc('admin.invitecodes.sendInvites', email, instanceName,function(res) {
+					if(res) {
+						alert('added successfully');
+					}
+				});	
+			} else {
+				alert('invalid email.');
+			}
+			return false;
+		});
 	},
 
 	showPlayersInfo: function() {
 		var html = '';
 		for(var i = 0; i < self.players.length; i++) {
-			html += '<h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
+			html += '<div class="player' + self.players[i]._id + '"><h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
 			html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>';
 			html += '<p>Is playing now: ' + self.players[i].isPlaying + '</p>';
 			html += '<p>Time played: ' + Math.floor(self.players[i].game.playingTime/60) + ' min.</p>';
-			html += '<p>Resources collected: ' + self.players[i].game.resources.length + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
-			html += '<p>Enter "delete" to remove user permanently: <input></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger" type="button">Delete User</button></p>';
+			html += '<p>Resources collected: ' + self.players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
+			html += '<p>Enter "delete" to remove user permanently: <input class="input' + self.players[i]._id + '"></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger deletePlayer" type="button">Delete User</button></p></div>';
 		}
 		$('.output').empty().append(html);
 	},
@@ -146,6 +184,11 @@ var self = module.exports = {
 		}
 
 		html += '</div>';
+		$('.output').empty().append(html);
+	},
+
+	showAddPlayerForm: function(instance) {
+		var html = '<h2>Add Player</h2><form id="addPlayerForm"><input placeholder="email address" id="addPlayerEmail"></input></form><p><button data-instance="' + instance + '"class="btn btn-success addPlayerButton" type="button">Add Player</button></p>';
 		$('.output').empty().append(html);
 	},
 
@@ -189,12 +232,23 @@ var self = module.exports = {
 				}
 				if(resources[i].seeded) {
 					//thumbs up icon with number
-					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded;
+					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded.length;
 				}
 				html += '</div></div>';
 			}
 		}
 		$('.output').empty().append(html);
+	},
+
+	deletePlayer: function(id) {
+		ss.rpc('admin.monitor.deletePlayer', id, function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				var sel = '.player' + id;
+				$(sel).remove();
+			}
+		});
 	},
 
 	showQuestions: function(instance) {
@@ -216,7 +270,6 @@ var self = module.exports = {
 			} else {
 				self.allAnswers = [];
 			}
-			
 		});
 	},
 

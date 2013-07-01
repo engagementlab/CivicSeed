@@ -9,8 +9,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			r: Number,
 			g: Number,
 			b: Number,
-			a: Number,
-			owner: String
+			a: Number
 		},
 		curColor: String
 	});
