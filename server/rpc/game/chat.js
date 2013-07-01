@@ -31,11 +31,10 @@ exports.actions = function(req, res, ss) {
 						return res(false);
 					}
 					else {
-						ss.publish.channel(req.session.game.instanceName, 'ss-newMessage', {message: data.msg, id: data.id});     // Broadcast the message to everyone
+						ss.publish.channel(req.session.game.instanceName, 'ss-newMessage', {message: data.msg, id: data.id, name: data.name});     // Broadcast the message to everyone
 						return res(true);                          // Confirm it was sent to the originating client
 					}
 				});
-				
 			}
 			else {
 				return res(false);

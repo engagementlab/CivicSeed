@@ -45,12 +45,18 @@
 		});
 		$body.on('submit', '#changeInfoForm', function() {
 			var first = document.getElementById('firstname').value.trim(),
-				last = document.getElementById('lastname').value.trim();
+				last = document.getElementById('lastname').value.trim(),
+				school = document.getElementById('school').value.trim();
 
 			var firstCheck = /^[a-zA-Z]*$/.test(first),
 				secondCheck = /^[a-zA-Z]*$/.test(last);
+			var info = {
+				first: first,
+				last: last,
+				school: school
+			};
 			if(firstCheck && secondCheck) {
-				ss.rpc('shared.account.changeInfo', first, last, function(response) {
+				ss.rpc('shared.account.changeInfo', info, function(response) {
 					if(response) {
 						sessionStorage.setItem('userFirstName', response.firstName);
 						sessionStorage.setItem('userLastName', response.lastName);
@@ -71,7 +77,7 @@
 	},
 
 	authenticate: function(email, password) {
-		console.log('client: account.authenticate');
+		//console.log('client: account.authenticate');
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
 			// console.log(authenticated);
 			if(authenticated) {

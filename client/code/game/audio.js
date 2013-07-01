@@ -4,7 +4,7 @@ var _soundtracks = [],
 	_environmentOnceFx = null,
 	_currentTrack = -1,
 	_prevTrack = -1,
-	_numTracks = 7,
+	_numTracks = 8,
 	_tweenTimeout = null,
 	_newPlace = 'welcome...',
 	_targetV = 0,
@@ -248,7 +248,7 @@ $game.$audio = {
 		var trackNum = $game.$audio.whichTrack(posX, posY);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
 			$game.$audio.switchTrack(trackNum);
-			$game.temporaryStatus(_newPlace);
+			$game.statusUpdate({message:_newPlace,input:'status',screen: true,log:false});
 		}
 		if(!_currentLoop) {
 			$game.$audio.checkEnvironmentLoopFx(trackNum);
@@ -338,6 +338,7 @@ $game.$audio = {
 		_currentTrack = swap;
 
 		var val = $game.$audio.isMute ? 0.0 : 0.2;
+		// var val = 0;
 		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
 			_midTransition = false;
 		});

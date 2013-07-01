@@ -25,16 +25,42 @@ body, button, p, a
 	-moz-user-select none
 	-ms-user-select none
 	user-select none
+	// cursor: url(http://placehold.it/32x32.png), auto;
+	ul, ol
+		font-size 16px
+	.cutScene
+		display none
+		position absolute
+		z-index 9999
+		top 0 
+		left 0
+		width 960px
+		height 480px
+
 .loading
 	margin 150px 0 0 0
 	text-align center
 	color #222, sans-serif
+
 .resourceStage
-	display none	
+	display none
+
 .resourceContent
 	max-height 340px
 	overflow auto
 	padding-right 10px
+	p.tangramPieceP
+		padding 0
+		margin 0
+	.taglineInput
+		padding 0
+		margin 0
+		text-align center
+		input
+			margin 0
+			width 400px
+			font-family $buttonFont
+
 .resourceArea
 	position absolute
 	top 15px
@@ -91,6 +117,8 @@ body, button, p, a
 
 	textarea
 		margin 20px
+	 .dialog
+		width 870px
 
 .newDislpay
 	background $csLightOrange
@@ -104,6 +132,20 @@ body, button, p, a
 	padding 0
 	z-index 9998
 	display none
+	.feedback
+		width 320px
+		height auto
+		position absolute
+		text-align left
+		font-size 1.2em
+		padding 10px
+		top 150px
+		left 310px
+		border-radius 5px
+		background $csPurple
+		display none
+		z-index 9999
+		color #eee
 
 .progressArea
 	position absolute
@@ -303,12 +345,25 @@ body, button, p, a
 			.theQuestion
 				font-size 1.1em
 				padding 10px 10px 5px 10px
-			.theAnswer 	
+			.theAnswer
+				position relative
 				margin 0 10px 15px 10px
 				font-family $buttonFont
 				background $csLightGreen
-				padding 5px 10px
 				border-radius 5px
+				.seededCount
+					position absolute
+					top 6px
+					right 6px
+					font-family $buttonFont
+					background $csPurple
+					padding 3px
+					border-radius 4px
+					line-height 1
+					color #fff
+				.answerText
+					width 780px
+					padding 5px 10px
 					
 			
 		// .playerAnswers
@@ -356,6 +411,7 @@ body, button, p, a
 
 .centerText
 	text-align center
+
 .inventory,
 .seedventory
 	position absolute
@@ -364,11 +420,38 @@ body, button, p, a
 	width 930px
 	height 60px
 	background rgba(50,50,50,0.9)
-	// box-shadow 0 0 2px 2px rgba(0,0,0,.6)
 	padding 0
 	border-radius 5px
 	z-index 9999
 	display none
+
+.graffiti
+	position absolute
+	display none
+	bottom 15px
+	left 15px
+	width 125px
+	height 36px
+	background rgba(50,50,50,0.9)
+	border-radius 5px
+	z-index 9999
+	font-size 24px
+	cursor pointer
+	p 
+		color white
+		padding 5px 10px 5px 10px
+		span 
+			color $csLightGreen
+			text-align right
+			float right
+
+.inventory > .outlines,
+.inventory > .pieces
+	position absolute
+	top 0
+	left 0
+	height 99%
+	width 100%
 
 .resourceArea h2,
 .resourceArea p,
@@ -378,12 +461,12 @@ body, button, p, a
 	padding 10px 10px 0px 15px
 
 .resourceArea .dialog
-	width: 875px	
-.botanistArea .dialog
-	width 870px
+	width: 875px
+
 .nextButton,
 .answerButton,
-.closeButton
+.closeButton,
+.saveButton
 	position absolute
 	bottom 20px
 	right 20px
@@ -392,14 +475,17 @@ body, button, p, a
 	position absolute
 	bottom 20px
 	left 20px
+
 .resourceArea a i,
 .botanistArea a i,
 .progressArea a i,
 .collectedResources a i,
-.helpArea a i
+.helpArea a i,
+.gameLog a i
 	position absolute
 	top 10px
 	right 10px
+
 .resourceArea form
 	padding 20px 0 0 20px
 	margin 0
@@ -408,6 +494,7 @@ body, button, p, a
 		margin 0
 	input
 		margin 10px
+
 .speechBubble
 	position absolute
 	top 10px
@@ -421,6 +508,7 @@ body, button, p, a
 	color #222
 	padding 10px
 	box-shadow 2px 2px 4px 4px #333
+
 .speechBubble p
 	margin 5px 0 0 0
 	padding 0
@@ -430,9 +518,11 @@ body, button, p, a
 	font-size 1.2em
 	font-weight 700
 	color $csBlue
+
 .speechBubble button
 	float right
 	margin 0 10px
+
 #background,
 #foreground,
 #characters,
@@ -440,12 +530,16 @@ body, button, p, a
 #minimapPlayer,
 #minimapTile
 	position absolute
+
 #background
 	z-index 0
+
 #npcs
 	z-index 1
+
 #characters
 	z-index 2
+
 #foreground
 	z-index 3
 
@@ -460,6 +554,7 @@ body, button, p, a
 	z-index 5
 	right 0px
 	border-radius 3px
+
 .hud
 	margin-top 20px
 	-webkit-touch-callout none
@@ -468,9 +563,11 @@ body, button, p, a
 	-moz-user-select none
 	-ms-user-select none
 	user-select none
+
 .debug p
 	float left
 	margin-left 20px
+
 .playerHud
 	div
 		cursor pointer
@@ -494,28 +591,15 @@ body, button, p, a
 	width 48px
 	cursor pointer
 	position relative
+
 .seedventory
 	padding-left 20px
-	width 190px
+	width 140px
+
 .hud div
 	font-size 22px
 	float left
 
-.playerChat
-	position absolute
-	font-size 16px
-	font-family $mono
-	width 200px
-	height 20px
-	background rgba(20,20,20,0.7)
-	border-radius 5px
-	padding 0 0 5px 10px
-	z-index 100
-	color #eee
-	$textOutline()
-
-#chatText
-	font-family $mono
 .pauseMenu
 	position absolute
 	top 15px
@@ -528,6 +612,7 @@ body, button, p, a
 	border-radius 5px
 	z-index 9999
 	display none
+
 .pauseMenu p
 	text-align center, Sans-serif
 	color #222
@@ -541,8 +626,10 @@ body, button, p, a
 
 .hideButton
 	display none
+
 #chatButton
 	margin-left 10px
+
 .riddleText
 	position absolute
 	top 40px
@@ -551,8 +638,10 @@ body, button, p, a
 	color #999
 	font-size .8em
 	font-family $buttonFont
+
 .botanistArea .answerButton, .botanistArea .clearBoardButton, .botanistArea i
 	z-index 9999
+
 .botanistArea .trash
 	opacity .5
 	position absolute
@@ -562,6 +651,7 @@ body, button, p, a
 .chatBox input
 	width 75%
 	font-size 16px, monospace
+
 textarea
 	font-family $buttonFont
 	width 800px
@@ -569,6 +659,7 @@ textarea
 	max-width 800px
 	max-height 200px
 	resize none
+
 p.finalQuestion
 	margin 0 20px 0 10px
 	font-size 1.2em
@@ -591,21 +682,8 @@ p.finalQuestion
 	div:hover
 		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 
-
 .hide
 	display none
-.displayBox
-	width 95%
-	height 24px
-	border 1px solid #ccc
-	border-radius 4px
-	font-size 16px
-	padding 4px
-	text-align center
-	overflow hidden, monospace
-	position relative
-	cursor default
-	font-family $mono
 
 .badge
 	position absolute
@@ -616,25 +694,13 @@ p.finalQuestion
 
 .activePlayers > p
 	right 10px
-.tangramArea > .feedback
-	width 320px
-	height auto
-	position absolute
-	text-align left
-	font-size 1.2em
-	padding 10px
-	top 150px
-	left 310px
-	border-radius 5px
-	background $csPurple
-	display none
-	z-index 9999
-	color #eee
+
 .tangramOutline
 	position absolute
 	z-index 0
 	top 0px
 	left 0px
+
 .botanistContent form
 	padding 20px
 
@@ -676,6 +742,7 @@ p.finalQuestion
 		position absolute
 		right 10px
 		top 10px
+
 .yourAnswer 
 	background #fff
 	background $csLightBlue
@@ -686,17 +753,18 @@ p.finalQuestion
 	z-index 99999
 	position absolute
 	display none
+
 .centerImage
 	margin-left 85px
+
 .buttonCorner
 	position absolute
 	bottom 10px
 	right 5px
+
 .progressArea > .tabbable
 	margin-left 20px
-.gameboard ul,
-.gameboard ol
-	font-size 16px
+
 .inventoryItem.puzzle0,
 .inventoryItem.puzzle1,
 .inventoryItem.puzzle2,
@@ -719,14 +787,6 @@ p.finalQuestion
 	cursor pointer
 	border 1px solid rgba(0,0,0,0)
 
-.inventory > .outlines,
-.inventory > .pieces
-	position absolute
-	top 0
-	left 0
-	height 99%
-	width 100%
-
 .gameCursor
 	position absolute
 	width 24px
@@ -739,17 +799,22 @@ p.finalQuestion
 	width 960px
 	height 480px
 	z-index 9999
+
 .hooray p 
 	margin-top 100px
 	font-size 2em
 	text-align center
+
 .message
 	font-family $bodyFont
+
 div.currentButton
 	background #666
+
 .speechBubble p.fitBubble
 	width 900px
-.check
+
+.check, .checkTagline
 	display none
 	width 320px
 	position absolute
@@ -767,6 +832,7 @@ div.currentButton
 		right 10px
 	.retryButton
 		left 10px
+
 .firstRiddle
 	width 60%
 	font-size: 1.4em
@@ -794,7 +860,9 @@ div.currentButton
 		margin 10px 10px 10px 20px
 		padding 0
 		font-family $buttonFont
-
+	ul li
+		margin 0 20px
+		font-size .9em
 	.videoResource
 		text-align center
 		background url($cloudPath + 'img/bg/loading.png') no-repeat center center 
@@ -820,24 +888,27 @@ div.currentButton
 		li
 			font-family $buttonFont
 			margin 5px 10px 0 20px
+
 p.digitalStory
 	text-align center
 	margin 150px 0 0 0
 	font-size 1.5em
+
 p.townSite
 	font-size 1.4em
 	margin 150px 100px 0 100px
-.resourceContentBody ul li
-	margin 0 20px
-	font-size .9em
+
 .hideLock
 	display none
+
 .privateButton
 	cursor pointer
+
 p.privacyMessage
 	margin 0 0 0 10px
 	color $csOrange
 	font-size .9em
+
 .demoProfile
 	p, li
 		color #333
@@ -869,14 +940,143 @@ p.privacyMessage
 	display none
 
 .beamMeUp
+	display none
 	position absolute
 	top 0
 	left 0
 	width 100%
 	height 100%
 	background url($cloudPath + 'img/game/teleport.gif') #eee no-repeat center center
-	//background url($cloudPath + 'img/game/beamMeUp.gif') #eee no-repeat center center
-	background-size contain
-	padding 0
+	background-size cover
+	z-index 99999
+
+.gameLog
+	position absolute
+	bottom 15px
+	left 15px
+	width 910px
+	height 220px
+	background rgba(50,50,50,0.9)
+	padding 10px
+	border-radius 5px
 	z-index 9999
 	display none
+	overflow auto
+	p
+		padding 0
+		margin 2px
+		font-family $buttonFont
+		.date 
+			color $csLightBlue
+			font-family $mono
+			font-size .8em
+			margin-right 8px
+		.playerName
+			color $csLightGreen
+			margin-right 4px
+	p.globalChat
+		color #fff
+	p.status
+		color $csLightOrange
+
+.statusUpdate
+	display none
+	position absolute
+	top 10px
+	left 10px
+	font-size 16px
+	font-family $mono
+	width auto
+	height 20px
+	background rgba(20,20,20,0.7)
+	// background $csBlue
+	border-radius 5px
+	padding 5px 10px 10px 10px
+	margin 0
+	z-index 100
+	color #eee
+
+.npcBubble
+	position absolute
+	width 22px
+	cursor pointer
+	font-family $mono
+	text-align center
+	padding 4px 5px
+	border-radius 22px
+	background rgba(50,50,50,0.7);
+	color $csLightGreen
+	z-index 9000
+
+.bossArea
+	position absolute
+	top 15px
+	left 15px
+	width 930px
+	height 450px
+	padding 0
+	
+	border-radius 5px	
+	box-shadow 2px 2px 4px 4px #333
+	z-index 9997
+	display none
+	overflow auto
+
+	.content
+		.videoFrame
+			margin 20px 0 0 0
+			text-align center
+			background url($cloudPath + 'img/bg/loading.png') no-repeat center center 
+		p 
+			padding 0 20px
+		.resumeQuestion
+			color $csPurple
+		.resumeAnswer
+			span 
+				color $csOrange
+		textarea 
+			margin 0 20px 20px 20px
+			height 100px
+	.buttons
+		text-align center
+		padding 10px
+	p.dialog
+		padding-top 10px
+		span
+			font-size 1.1em
+			font-weight 700
+			font-family $buttonFont
+			color $csBlue
+
+.bossBox
+	cursor pointer
+	width 48px
+	height 36px
+	line-height 36px
+	margin-right 10px
+	margin-left 10px
+	background #ccc
+	// background rgba(0,0,0,.2)
+	border-radius 5px
+	position relative
+	text-align center
+	&:hover
+		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+.bossHud
+	display none	
+	.clock
+		color $csBlue
+		font-size 1.5em
+		font-family	$buttonFont
+		text-align center
+		line-height 36px
+	.score
+		text-align right
+		line-height 36px
+		color $csOrange
+		font-size 1.2em
+	.muteButton
+		float left
+
+.labBackground
+	background url($cloudPath + 'img/game/lab_bg.jpg') no-repeat center center 

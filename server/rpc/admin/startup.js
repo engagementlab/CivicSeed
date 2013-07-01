@@ -40,6 +40,7 @@ exports.actions = function(req, res, ss) {
 								var d = {
 									firstName: 'Demo',
 									lastName: ('User' + i),
+									school: 'Demo University',
 									password: 'demo',
 									email: ('demo' + i),
 									role: 'actor',
@@ -50,7 +51,6 @@ exports.actions = function(req, res, ss) {
 									game: {
 										instanceName: 'demo',
 										currentLevel: 0,
-										rank: 'novice gardener',
 										position: {
 											x: 64,
 											y: 77,
@@ -60,19 +60,18 @@ exports.actions = function(req, res, ss) {
 											rgb: newColor,
 											tilesheet: i
 										},
-										resources: [],
+										resources: {},
+										resourcesDiscovered: 0,
 										inventory: [],
 										seeds: {
-											normal: 0,
-											riddle: 0,
-											special: 0,
+											regular: 0,
+											draw: 0,
 											dropped: 0
 										},
 										botanistState: 0,
 										firstTime: true,
 										resume: [],
 										seenRobot: false,
-										resourcesDiscovered: 0,
 										playingTime: 0,
 										tilesColored: 0,
 										pledges: 5

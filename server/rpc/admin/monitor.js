@@ -69,6 +69,18 @@ exports.actions = function(req, res, ss) {
 				.find(function(err,answers){
 					res(err,answers[0]);
 				});
+		},
+
+		deletePlayer: function(id) {
+			userModel
+				.findById(id, function(err,user) {
+					if(err) {
+						res(true);
+					} else if(user) {
+						user.remove();
+						res(false);
+					}
+				});
 		}
 	};
 

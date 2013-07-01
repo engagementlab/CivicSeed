@@ -1,6 +1,8 @@
 var self = module.exports = {
 
 	loadRoutes: function(ss, $app, $html, $body, $container) {
+		var profile = require('/profile');
+		profile.init();
 
 		$app.get('/profiles', function(req) {
 			ss.rpc('shared.profiles.getAllProfiles', function(users) {

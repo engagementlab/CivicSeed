@@ -19,8 +19,7 @@ var _stepNumber = 0,
 	_stats = null,
 	_badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
-	_displayTimeout = null,
-	_prevMessage = 'Civic Seed';
+	_displayTimeout = null;
 
 //public functions
 exports.$game = {
@@ -44,36 +43,42 @@ exports.$game = {
 	masterX: null,
 	masterY: null,
 	playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
+	bossModeUnlocked: null,
+
+	startNewAction: true,
 
 	init: function() {
 		//all the init calls will trigger others, a waterfall approach to assure
 		//the right data is loaded before we start
-		//private so not client accesible...
 		_loadPlayer();
 	},
 
+	//pause menu on browser tab unfocus (currently disabled)
 	pause: function() {
-		$('.pauseMenu').slideDown();
+		$('.pauseMenu').fadeIn();
 		$game.running = false;
-		// $game.$audio.pauseTheme();
+		//TODO: play pause music?
 	},
 
+	//resume from the pause menu, start up game loop
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
-			// $game.$audio.playTheme();
 			$game.tick();
 		});
 	},
 
+	//starts a transition from one viewport to another
 	beginTransition: function() {
 		$game.inTransit = true;
 		_stepNumber = 0;
 		$game.$chat.hideChat();
 		$game.$others.hideAllChats();
+		$('.npcBubble').remove();
 		$game.stepTransition();
 	},
 
+	//decides if we continue tweening the viewports or to end transition
 	stepTransition: function() {
 		if(_stepNumber !== $game.$map.numberOfSteps) {
 			_stepNumber += 1;
@@ -84,6 +89,7 @@ exports.$game = {
 		}
 	},
 
+	//resumes normal state of being able to walk and enables chat etc.
 	endTransition: function() {
 		$game.inTransit = false;
 		$game.$player.isMoving = false;
@@ -93,8 +99,11 @@ exports.$game = {
 		$game.$map.createPathGrid(function() {
 			$game.$map.stepDirection = null;
 		});
+		$game.$player.displayNpcComments();
+		$game.$player.savePositionToDB();
 	},
 
+	//the game loop, if it is running, call all the updates and render
 	tick: function() {
 		if($game.running) {
 			$game.$others.update();
@@ -107,21 +116,26 @@ exports.$game = {
 		}
 	},
 
+	//displays the progress area section, pulling the latest pertient data
 	showProgress: function() {
 
 		//save and show player's colors
 		var myImageSrc = $game.$map.saveImage();
 		$game.$map.createCollectiveImage();
 
+		//get stats
 		var tilesColored = $game.$player.getTilesColored(),
 			resourcesDiscovered = $game.$player.getResourcesDiscovered();
 
+		//show proper level image and color map
 		$('.levelImages img').removeClass('currentLevelImage');
 		$('.levelImages img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('currentLevelImage');
 		$('.personalInfo .currentLevel').text($game.playerRanks[$game.$player.currentLevel]);
 		$('.colorMapYou img')
 			.attr('src', myImageSrc)
 			.attr('width', '426px');
+
+		//calculate the playing time
 		var playingTime = $game.$player.getPlayingTime(),
 			hours = Math.floor(playingTime / 3600),
 			hoursRemainder = playingTime % 3600,
@@ -129,23 +143,25 @@ exports.$game = {
 			seconds = playingTime % 60,
 			displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
-
-		var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
-			displayLevel = $game.$player.currentLevel + 1,
+		//other game stats and leaderboard
+		// var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
+		var	displayLevel = $game.$player.currentLevel + 1,
 			topPlayers = '<p>top seeders:</p><ol>';
-
 		for(var i = 0; i < _stats.leaderboard.length; i++) {
-			topPlayers += '<li>' + _stats.leaderboard[i].name + ' (' + _stats.leaderboard[i].count + ' tiles)</li>';
+			topPlayers += '<li>' + _stats.leaderboard[i].name + ' -- ' + _stats.leaderboard[i].count + '</li>';
 		}
 		topPlayers += '</ol>';
-		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ' tiles)</p>';
-		//show player's seed droppings
+		topPlayers += '<p class="yourSeeds">You (' + tilesColored + ')</p>';
+
+		//player's answers for all the open-ended questions, some others stats
 		var allAnswers = $game.$player.compileAnswers();
+		// var percentString = _stats.percent + '%';
+		var numItems = $game.$player.getResourcesDiscovered();
+
+		//display everthing
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
-		var percentString = _stats.percent + '%';
-		var numItems = $game.$player.getResourcesDiscovered();
-		$('.displayPercent').text(percentString);
+		//$('.displayPercent').text(percentString);
 		$('.topSeeders').empty().append(topPlayers);
 		$('.numCollected').text(numItems + ' / 42');
 		$('.progressArea').fadeIn(function() {
@@ -153,33 +169,23 @@ exports.$game = {
 		});
 	},
 
-	temporaryStatus: function(msg) {
-		$('.displayBoxText').text(msg);
-		$('.displayBox').css('background','#a2f0e9');
-		clearTimeout(_displayTimeout);
-		_displayTimeout = setTimeout(function() {
-			$('.displayBoxText').text(_prevMessage);
-			$('.displayBox').css('background','white');
-		}, 3000);
+	//shows message in the display box that only lasts specific time
+	statusUpdate: function(data) {
+		if(data.screen) {
+			$('.statusUpdate').text(data.message).show();
+			clearTimeout(_displayTimeout);
+			var len = data.message.length,
+				fadeTime = len * 100 + 500;
+			_displayTimeout = setTimeout(function() {
+				$('.statusUpdate').fadeOut();
+			}, fadeTime);
+		}
+		if(data.log) {
+			$game.$log.addMessage(data);
+		}
 	},
 
-	changeStatus: function(custom) {
-		clearTimeout(_displayTimeout);
-		$('.displayBox').css('background','white');
-		if(custom) {
-			$('.displayBoxText').text(custom);
-		}
-		else {
-			if($game.$player.seedMode > 0) {
-				$('.displayBoxText').text('click a tile to drop a seed');
-			}
-			else {
-				$('.displayBoxText').text(_levelNames[$game.$player.currentLevel]);
-			}
-		}
-		_prevMessage = $('.displayBoxText').text();
-	},
-
+	//check for bad language to censor it in chat
 	checkPotty: function(msg) {
 		var temp = msg.toLowerCase();
 
@@ -191,32 +197,35 @@ exports.$game = {
 		return msg;
 	},
 
+	//triggered by a change server-side in the leaderboard
 	updateLeaderboard: function(data) {
 		var leaderChange = true;
 		if(_stats.leaderboard.length > 0) {
 			leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true;
 		}
 		if(leaderChange) {
-			$game.temporaryStatus(data.board[0].name + ' is top seeder!');
+			$game.statusUpdate({message:data.board[0].name + ' is top seeder!',input:'status',screen: true,log:true});
 		}
 		_stats.leaderboard = data.board;
 	},
 
+	//triggered by a change server-side in the color map percent
 	updatePercent: function(dropped) {
 		_stats.prevPercent = _stats.percent;
 		_stats.seedsDropped = dropped;
 		_stats.percent = Math.floor(( _stats.seedsDropped / _stats.seedsDroppedGoal) * 100);
-		var percentString = _stats.percent + '%';
+		//var percentString = _stats.percent + '%';
 
 		//if we have gone up a milestone, feedback it
 		if(_stats.percent > 99) {
 			//do something for game over?
-			$game.temporaryStatus('the color has been restored!');
+				$game.statusUpdate({message:'the meter is filled!',input:'status',screen: true,log:true});
 		}
 		if(_stats.prevPercent != _stats.percent) {
 			_stats.prevPercent = _stats.percent;
 			if(_stats.percent % 5 === 0) {
-				$game.temporaryStatus('the world is now ' + percentString + ' colored!');
+				//$game.temporaryStatus('the world is now ' + percentString + ' colored!');
+				//$game.statusUpdate({message:'',input:'status',screen: true,log:true});
 			}
 		}
 	}
@@ -228,9 +237,31 @@ exports.gameModuleReady = function(callback) {
 
 };
 
-//private functions
+/********* PRIVATE FUNCTIONS **********/
+
 function _loadPlayer() {
 	$game.$player.init(function() {
+		_loadGameInfo();
+	});
+}
+
+function _loadGameInfo() {
+	//get the global game information stats
+	ss.rpc('game.player.getGameInfo', function(response) {
+		//regular game mode
+		$game.bossModeUnlocked = response.bossModeUnlocked;
+		//for testing
+		// $game.bossModeUnlocked = true;
+
+		$game.resourceCount = response.resourceCount;
+		_stats = {
+			seedsDropped: response.seedsDropped,
+			seedsDroppedGoal: response.seedsDroppedGoal,
+			leaderboard: response.leaderboard,
+			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
+			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
+		};
+		$game.$player.setPositionInfo();
 		_loadRenderer();
 	});
 }
@@ -290,30 +321,18 @@ function _loadAudio() {
 
 function _loadChat() {
 	$game.$chat.init(function() {
-		_loadGameInfo();
+		_loadLog();
 	});
 }
 
-function _loadGameInfo() {
-	//get the global game information stats
-	ss.rpc('game.player.getGameInfo', function(response) {
-		//regular game mode
-		$game.resourceCount = response.resourceCount;
-		_stats = {
-			seedsDropped: response.seedsDropped,
-			seedsDroppedGoal: response.seedsDroppedGoal,
-			tilesColored: response.tilesColored,
-			leaderboard: response.leaderboard,
-			percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
-			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
-		};
+function _loadLog() {
+	$game.$log.init(function() {
 		_loadExtra();
 	});
 }
 
+//this is all the other stuff that needs to happen once everything is loaded
 function _loadExtra() {
-	//this is all the other stuff that needs to happen once everything is loaded
-
 	//fill player inventory and creat outlines
 	$game.$player.fillInventory();
 	$game.$player.createInventoryOutlines();
@@ -327,17 +346,15 @@ function _loadExtra() {
 	$game.$map.createCollectiveImage();
 
 	//update text in HUD
-	var percentString = _stats.percent + '%';
-	$('.progressButton .hudCount').text(percentString);
-	_prevMessage = _levelNames[$game.$player.currentLevel];
+	// var percentString = _stats.percent + '%';
+	// $('.progressButton .hudCount').text(percentString);
 
-	//update status
-	$game.changeStatus();
 	//init chat rpc
 	ss.rpc('game.chat.init');
 	_startGame();
 }
 
+//calculates the bounding box for the current viewport to get the right tiles
 function _setBoundaries() {
 	//calculate the top left corner of the viewport based on where the player is
 	var position = $game.$player.getPosition(),
@@ -354,7 +371,13 @@ function _setBoundaries() {
 	$game.$map.setBoundaries();
 }
 
+
 function _startGame() {
+	if($game.bossModeUnlocked) {
+		$game.$boss.init(function() {
+			//TODO: something here?
+		});
+	}
 	$game.$map.firstStart(function() {
 		$('.loading').fadeOut(function() {
 			$(this).remove();
@@ -362,6 +385,7 @@ function _startGame() {
 			$game.running = true;
 			$game.$renderer.renderAllTiles();
 			$game.tick();
+			$game.$player.displayNpcComments();
 		});
 	});
 }

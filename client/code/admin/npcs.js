@@ -163,6 +163,7 @@ var self = module.exports = {
 				isHolding: holding,
 				resource: {
 					url: null,
+					shape: null,
 					questionType: questionType,
 					answer: null,
 					question: null,
@@ -199,7 +200,7 @@ var self = module.exports = {
 			}
 		});
 
-		updates.index = y * 142 + x;
+		updates.index = (y * 142) + x;
 
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
@@ -207,6 +208,8 @@ var self = module.exports = {
 
 			if(area === 'url') {
 				updates.resource.url = val;
+			} else if(area === 'shape') {
+				updates.resource.shape = val;
 			} else if(area === 'question') {
 				updates.resource.question = val;
 			} else if(area === 'possibleAnswers') {
@@ -254,7 +257,7 @@ var self = module.exports = {
 				if(id > max) {
 					max = id;
 				}
-			}); 
+			});
 			max++;
 			updates.id = max;
 			//TODO: update information on client
@@ -281,7 +284,7 @@ var self = module.exports = {
 		} else {
 			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
 				if(err) {
-					console.log(err);
+					alert(err);
 				} else {
 					var saveButton = npc.find('.saveChanges');
 					var levelClass = 'level' + updates.level,

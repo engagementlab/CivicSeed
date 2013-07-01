@@ -22,6 +22,7 @@ exports.actions = function(req, res, ss) {
 					var profileInfo = {
 						firstName: user.firstName,
 						lastName: user.lastName,
+						school: user.school,
 						resume: user.game.resume,
 						gameStarted: user.gameStarted,
 						profileUnlocked: user.profileUnlocked,
@@ -54,6 +55,27 @@ exports.actions = function(req, res, ss) {
 						all.push(profile);
 					});
 					res(all);
+				}
+			});
+		},
+
+		updateResume: function(info) {
+			UserModel
+			.findById(info.id, function(err,user) {
+				if(err) {
+					console.log(err);
+					res(false);
+				}
+				else if(user) {
+					user.game.resume = info.resume;
+					user.save(function(err,okay) {
+						if(err) {
+							console.log('error saving');
+							res(false);
+						} else {
+							res(true);
+						}
+					})
 				}
 			});
 		}

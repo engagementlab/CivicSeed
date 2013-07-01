@@ -151,6 +151,11 @@ $game.$robot = {
 			$game.$robot.currentStep = 0;
 			$game.$robot.counter = 0;
 			$game.$robot.curFrame = 0;
+			var info = {
+				id: $game.$player.id,
+				seenRobot: $game.$player.seenRobot
+			};
+			ss.rpc('game.player.updateGameInfo', info);
 		}
 	},
 

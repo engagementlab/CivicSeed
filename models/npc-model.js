@@ -21,7 +21,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			possibleAnswers: [String],
 			answer: String,
 			feedbackWrong: String,
-			feedbackRight: String
+			feedbackRight: String,
+			shape: String
 		}
 	});
 
