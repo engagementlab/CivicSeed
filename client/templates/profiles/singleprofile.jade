@@ -4,9 +4,17 @@
 			.span1.withPlayer
 				p 
 					img(src='/img/game/players/mini/#{colorNum}.png')
-			.span11
+			.span8
 				p.nombre #{firstName} #{lastName}
 				p.school <em>#{school}</em>
+			if (sessionStorage.userEmail === email)
+				.span3.profileToggle(data-public=profilePublic)
+					if profilePublic
+						i.icon-unlock.icon-4x(title='make profile public', data-placement='top')
+						p your profile is public
+					else
+						i.icon-lock.icon-4x(title='make profile private', data-placement='top')
+						p your profile is private
 		if profileUnlocked
 			if (sessionStorage.userEmail === email)
 				.row

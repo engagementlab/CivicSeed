@@ -23,6 +23,7 @@ exports.actions = function(req, res, ss) {
 						school: user.school,
 						resume: user.game.resume,
 						gameStarted: user.gameStarted,
+						profilePublic: user.profilePublic,
 						profileUnlocked: user.profileUnlocked,
 						profileSetup: user.profileSetup,
 						colorNum: user.game.colorInfo.tilesheet,
@@ -67,6 +68,27 @@ exports.actions = function(req, res, ss) {
 				}
 				else if(user) {
 					user.game.resume = info.resume;
+					user.save(function(err,okay) {
+						if(err) {
+							console.log('error saving');
+							res(false);
+						} else {
+							res(true);
+						}
+					})
+				}
+			});
+		},
+
+		setPublic: function(info) {
+			UserModel
+			.findById(info.id, function(err,user) {
+				if(err) {
+					console.log(err);
+					res(false);
+				}
+				else if(user) {
+					user.profilePublic = info.changeTo;
 					user.save(function(err,okay) {
 						if(err) {
 							console.log('error saving');

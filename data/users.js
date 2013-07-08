@@ -13,7 +13,7 @@ module.exports.global = [{
 	email: 'c',
 	role: 'superadmin',
 	gameStarted: true,
-	profilePublic: false,
+	profilePublic: true,
 	profileLink: 'kae5e46pxifqolxr',
 	profileSetup: true,
 	profileUnlocked: true,
