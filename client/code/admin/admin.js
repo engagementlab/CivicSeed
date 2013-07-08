@@ -146,11 +146,19 @@ var self = module.exports = {
 				instanceName = $(this).attr('data-instance');
 
 			if(email) {
-				ss.rpc('admin.invitecodes.sendInvites', email, instanceName,function(res) {
-					if(res) {
-						alert('added successfully');
+				ss.rpc('admin.invitecodes.getCount', instanceName, function(space) {
+					if(space) {
+						ss.rpc('admin.invitecodes.sendInvites', email, instanceName, space,function(okay) {
+							if(okay) {
+								alert('added successfully');
+							} else {
+								alert('error');
+							}
+						});
+					} else {
+						alert('the game is full');
 					}
-				});	
+				});
 			} else {
 				alert('invalid email.');
 			}

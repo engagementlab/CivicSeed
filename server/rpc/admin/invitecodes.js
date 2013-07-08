@@ -109,7 +109,7 @@ exports.actions = function(req, res, ss) {
 
 	return {
 
-		sendInvites: function(emailList, instanceName) {
+		sendInvites: function(emailList, instanceName, i) {
 
 			if(req.session.role && (req.session.role === 'superadmin' || req.session.role === 'admin')) {
 				// emailList = ['russell@engagementgamelab.org', 'russell@russellgoldenberg.com', 'russell_goldenberg@emerson.edu', 'samuel.a.liberty@gmail.com', 'thebookofrobert@gmail.com', 'langbert@gmail.com', 'arxpoetica@gmail.com'];
@@ -121,7 +121,11 @@ exports.actions = function(req, res, ss) {
 				//emailList = emailList.slice(0, 20); --> doing this on front now
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-					createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);
+					if(i) {
+						createUserAndSendInvite(emailList[emailIterator], instanceName, i);	
+					} else {
+						createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);	
+					}
 				}
 			} else {
 				res(false);
@@ -208,8 +212,23 @@ exports.actions = function(req, res, ss) {
 					});
 				}
 			});
+		},
+
+		getCount: function(instanceName) {
+			//get count of players in current instance, if < 20 add new one
+			userModel
+			.count({'game.instanceName': instanceName}, function(err, count) {
+				if(err) {
+					res(false);
+				} else {
+					if(count >= 20) {
+						res(false);
+					} else {
+						res(count);	
+					}
+				}
+			});
 		}
 	};
 
 };
-
