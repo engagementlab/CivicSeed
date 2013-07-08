@@ -25,6 +25,7 @@ var self = module.exports = {
 						sessionStorage.setItem('userLastName', userSessionObject.lastName);
 						sessionStorage.setItem('userEmail', userSessionObject.email);
 						sessionStorage.setItem('userRole', userSessionObject.role);
+						sessionStorage.setItem('profileLink', userSessionObject.profileLink);
 					}
 					if(userSessionObject.role !== 'superadmin' && userSessionObject.role !== 'admin') {
 						// console.log('No admin rights...');

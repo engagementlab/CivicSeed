@@ -1,5 +1,5 @@
 .profiles
-	h1 Profiles
+	h1 Public Profiles
 	each user in users
 		p	
-			a(href='profiles/' + user.firstName + '.' + user.lastName)= user.firstName
+			a(href='profiles/' + user.profileLink)= user.firstName + ' ' + user.lastName

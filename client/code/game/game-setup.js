@@ -26,6 +26,7 @@ exports.init = function(callback) {
 							sessionStorage.setItem('userEmail', userSessionObject.email);
 							sessionStorage.setItem('userRole', userSessionObject.role);
 							sessionStorage.setItem('isPlaying', userSessionObject.isPlaying);
+							sessionStorage.setItem('profileLink', userSessionObject.profileLink);
 						}
 						sessionStorage.setItem('isPlaying', true);
 						$body.append(JT['partials-navigation']());

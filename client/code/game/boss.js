@@ -294,6 +294,8 @@ function _distFromCharger(pos) {
 
 //start the game, clock, sound
 function _beginGame() {
+	//clear the canvas if a restart
+	$game.$renderer.clearBossLevel();
 	//set score from tiles colored
 	_score = $game.$player.getTilesColored();
 	$score.text(_score);

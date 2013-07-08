@@ -89,6 +89,7 @@
 					sessionStorage.setItem('userEmail', userInfo.email);
 					sessionStorage.setItem('userRole', userInfo.role);
 					sessionStorage.setItem('isPlaying', userInfo.isPlaying);
+					sessionStorage.setItem('profileLink', userInfo.profileLink);
 					if(!userInfo.profileSetup) {
 						//send them to setup their profile info
 						location.href = '/change-info';
@@ -100,7 +101,7 @@
 					else {
 						//send them to their profile
 						//send them to their profile page
-						location.href = '/profiles/' + userInfo.firstName + '.' + userInfo.lastName;
+						location.href = '/profiles/' + userInfo.profileLink;
 					}
 				});
 			} else {
@@ -122,6 +123,7 @@
 			sessionStorage.removeItem('userEmail');
 			sessionStorage.removeItem('userRole');
 			sessionStorage.removeItem('isPlaying');
+			sessionStorage.removeItem('profileLink');
 			// console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
 				location.href = '/';

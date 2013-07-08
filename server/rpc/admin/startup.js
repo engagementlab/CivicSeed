@@ -45,6 +45,8 @@ exports.actions = function(req, res, ss) {
 									email: ('demo' + i),
 									role: 'actor',
 									gameStarted: true,
+									profilePublic: false,
+									profileLink: Math.random().toString(36).slice(2),
 									profileSetup: true,
 									profileUnlocked: false,
 									isPlaying: false,

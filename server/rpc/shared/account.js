@@ -32,6 +32,7 @@ exports.actions = function(req, res, ss) {
 						req.session.gameStarted = user.gameStarted;
 						req.session.profileSetup = user.profileSetup;
 						req.session.isPlaying = user.isPlaying;
+						req.session.profileLink = user.profileLink;
 						// if(!user.isPlaying) {}
 						req.session.channel.subscribe(user.game.instanceName);
 
@@ -62,6 +63,7 @@ exports.actions = function(req, res, ss) {
 			req.session.gameStarted = null;
 			req.session.profileSetup = null;
 			req.session.isPlaying = null;
+			req.session.profileLink = null;
 			req.session.save();
 			res(true);
 		},
@@ -78,7 +80,8 @@ exports.actions = function(req, res, ss) {
 					game: req.session.game,
 					gameStarted: req.session.gameStarted,
 					profileSetup: req.session.profileSetup,
-					isPlaying: req.session.isPlaying
+					isPlaying: req.session.isPlaying,
+					profileLink: req.session.profileLink
 				});
 			} else {
 				//console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);

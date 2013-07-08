@@ -10,10 +10,8 @@ exports.actions = function(req, res, ss) {
 
 	return {
 
-		getProfileInformation: function(fullName) {
-			//parse name, search in db
-			var name = fullName.split('.');
-			UserModel.findOne({ firstName: name[0], lastName: name[1]} , function(err, user) {
+		getProfileInformation: function(random) {
+			UserModel.findOne({ profileLink: random} , function(err, user) {
 				if(err) {
 					console.log(err);
 					res({firstName: false});
@@ -40,7 +38,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getAllProfiles: function() {
-			UserModel.find({role: 'actor'}, function(err, users) {
+			UserModel.find({role: 'actor', profilePublic: true}, function(err, users) {
 				if(err) {
 					console.log(err);
 					res(false);
@@ -50,7 +48,8 @@ exports.actions = function(req, res, ss) {
 					users.forEach(function(u,i) {
 						var profile = {
 							firstName: u.firstName,
-							lastName: u.lastName
+							lastName: u.lastName,
+							profileLink: u.profileLink
 						};
 						all.push(profile);
 					});
