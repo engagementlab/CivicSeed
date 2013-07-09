@@ -57,7 +57,11 @@ var self = module.exports = {
 			ss.rpc('shared.profiles.setPublic', updateInfo, function(res) {
 				//nothing to see here...
 			});
+		});
 
+		$body.on('click', '.feedback', function() {
+			var row = $(this).find('.row');
+			$(row).toggleClass('hideth');
 		});
 	}
 };

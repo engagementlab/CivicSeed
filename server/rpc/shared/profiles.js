@@ -22,6 +22,7 @@ exports.actions = function(req, res, ss) {
 						lastName: user.lastName,
 						school: user.school,
 						resume: user.game.resume,
+						resumeFeedback: user.game.resumeFeedback,
 						gameStarted: user.gameStarted,
 						profilePublic: user.profilePublic,
 						profileUnlocked: user.profileUnlocked,

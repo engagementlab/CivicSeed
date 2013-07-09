@@ -28,6 +28,15 @@
 				.span12.box.motivations
 					if resume[0]
 						p(data-email=email) <span class="profileTitle">Motivations </span> <span class='resumeText'> #{resume[0]} </span>
+			if (resumeFeedback.length > 0)
+				.feedback
+					p.clickForFeedback Peer Feedback
+					each comment, c in resumeFeedback
+						if (comment.resumeIndex === 0)
+							.row
+								p a peer said: #{comment.comment}
+
+
 			.row
 				.span12.box.background
 					if resume[1]
@@ -43,7 +52,7 @@
 			if (sessionStorage.userEmail === email)
 				.row
 					.span12
-						p.saveProfileChanges Save Changes		
+						p.saveProfileChanges Save Changes
 		else
 			if (firstName === 'Demo')
 				.row.demoProfile
