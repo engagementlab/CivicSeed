@@ -333,12 +333,12 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						console.log(info);
 						var npc = info.index;
-						//hack cuz game doesn't start with resource object...
+						// //hack cuz game doesn't start with resource object...
 						if(!user.game.resources) {
 							user.game.resources = {};
 						}
+						
 						//first we save the new resource
 						if(user.game.resources[npc]) {
 							user.game.resources[npc].answers = info.resource.answers;

@@ -143,6 +143,10 @@ $game.$player = {
 
 	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
+		var loc = $game.$map.masterToLocal(_info.x, _info.y);
+		if(loc.x === x && loc.y === y) {
+			return;
+		}
 		$game.$player.pathfinding = true;
 		_info.offX = 0,
 		_info.offY = 0;
@@ -301,7 +305,6 @@ $game.$player = {
 		}
 		_resourcesDiscovered += 1;
 		//the answer was correct, add item to inventory
-		console.log(_resources);
 		if(info.correct) {
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
@@ -355,8 +358,13 @@ $game.$player = {
 			$game.$player.botanistState = 3;
 			$game.$botanist.setBotanistState(3);
 
+			var info = {
+				id: $game.$player.id,
+				botanistState: $game.$player.botanistState
+			};
+			ss.rpc('game.player.updateGameInfo', info);
 			//check if they have ALL pieces, of so, beam me up scotty
-			console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
+			// console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
 			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
 				$game.$player.beamMeUpScotty();
 			}
@@ -439,6 +447,8 @@ $game.$player = {
 			_gameOver();
 		}
 		else {
+			var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
+			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
 			//send status to message board
@@ -520,6 +530,9 @@ $game.$player = {
 				//take away the make public and replcae with eye?
 				$('.publicButton').remove();
 				$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
+				setTimeout(function() {
+					$game.$player.displayNpcComments();
+				}, 250);
 			});
 		}
 	},
@@ -539,6 +552,10 @@ $game.$player = {
 				//take away the make public and replcae with eye?
 				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
 				$('.privateButton').remove();
+				//hack to make sure it updates...
+				setTimeout(function() {
+					$game.$player.displayNpcComments();
+				}, 250);
 			});
 		}
 	},
@@ -566,6 +583,8 @@ $game.$player = {
 
 	//see if the player has the specific resource already
 	checkForResource: function(id) {
+		// console.log(id);
+		// console.log(_resources);
 		if(_resources[id]) {
 			return true;
 		}
@@ -946,6 +965,7 @@ function _setPlayerInformation(info) {
 	_resourcesDiscovered = info.game.resourcesDiscovered;
 
 	//hack
+	//console.log(_resources);
 	if(!_resources) {
 		_resources = {};
 	}
