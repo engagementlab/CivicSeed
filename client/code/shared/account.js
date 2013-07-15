@@ -100,7 +100,6 @@
 					}
 					else {
 						//send them to their profile
-						//send them to their profile page
 						location.href = '/profiles/' + userInfo.profileLink;
 					}
 				});

@@ -14,7 +14,7 @@ exports.init = function(callback) {
 
 				} else {
 					if(response) {
-						location.href = '/profiles/' + userSessionObject.firstName + '.' + userSessionObject.lastName;
+						location.href = '/profiles/' + userSessionObject.profileLink;
 					} else {
 						$body = $(document.body);
 

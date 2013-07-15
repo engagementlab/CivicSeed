@@ -178,8 +178,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			regular: 5,
-			draw: 30,
+			regular: 99,
+			draw: 99,
 			dropped: 0
 		},
 		botanistState: 2,
