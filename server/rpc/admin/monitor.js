@@ -19,7 +19,7 @@ exports.actions = function(req, res, ss) {
 			userModel = service.useModel('user', 'ss');
 			npcModel
 				.where('isHolding').equals(true)
-				.select('id resource.question level resource.questionType')
+				.select('index resource.question level resource.questionType')
 				.find(function(err, npcs) {
 					res(err,npcs);
 			});

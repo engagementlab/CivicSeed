@@ -299,29 +299,23 @@ exports.actions = function(req, res, ss) {
 		},
 
 		pledgeSeed: function(info) {
+			// console.log(info);
 			userModel.findById(info.id, function (err, user) {
 				if(err) {
 
 				} else if(user) {
-					user.game.seeds.riddle += 1;
 					//find resource, update seeded number
-					var found = false,
-						i = 0,
-						npcId = parseInt(info.npc,10);
-					while(!found) {
-						if(user.game.resources[i].npc === npcId) {
-							user.game.resources[i].seeded.push(info.pledger);
-							found = true;
-						}
-						i++;
-						if(i >= user.game.resources.length) {
-							found = true;
-						}
+					if(user.game.resources[info.npc]) {
+						user.game.seeds.riddle += 1;
+						user.game.resources[info.npc].seeded.push(info.pledger);
+						user.save(function (err,suc) {
+							res(true);
+							ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info);
+						});
 					}
-					user.save(function (err,suc) {
-						res(suc);
-						ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info);
-					});
+					else {
+						res(false);
+					}
 				}
 			});
 		},

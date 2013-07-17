@@ -213,13 +213,13 @@ var self = module.exports = {
 		var resources = self.players[index].game.resources;
 		var numNPC = self.allQuestions.length;
 		var html = '<h2>' + self.players[index].firstName + ' '+ self.players[index].lastName+'</h2>';
-		for(var i = 0; i < resources.length; i++) {
-			var npc = resources[i].npc;
+		for (var npc in resources) {
+			var npcInt = parseInt(npc, 10);
 			var n = 0,
 				found = false,
 				open = false;
 			while(!found) {
-				if(self.allQuestions[n].id === npc) {
+				if(self.allQuestions[n].index === npcInt) {
 					found = true;
 					if(self.allQuestions[n].resource.questionType === 'open') {
 						open = true;
@@ -233,14 +233,14 @@ var self = module.exports = {
 			}
 			//answer only if open ended
 			if(open) {
-				html += '<div class="answer"><p>A: ' + resources[i].answers[0] + '</p><div class="extras">';
-				if(resources[i].madePublic) {
+				html += '<div class="answer"><p>A: ' + resources[npc].answers[0] + '</p><div class="extras">';
+				if(resources[npc].madePublic) {
 					//put unlocked icon
 					html += '<i class="icon-unlock icon-large"></i>';
 				}
-				if(resources[i].seeded) {
+				if(resources[npc].seeded) {
 					//thumbs up icon with number
-					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[i].seeded.length;
+					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[npc].seeded.length;
 				}
 				html += '</div></div>';
 			}
@@ -260,11 +260,12 @@ var self = module.exports = {
 	},
 
 	showQuestions: function(instance) {
+		console.log(self.allQuestions);
 		var html = '<h2>All Open-Ended Questions</h2>';
 		for(var q = 0; q < self.allQuestions.length; q++) {
 			if(self.allQuestions[q].resource.questionType === 'open') {
-				html += '<div class="allQuestion" data-instance="' + instance + '" data-npc="' + self.allQuestions[q].id +'">';
-				html += '<p data-npc="' + self.allQuestions[q].id +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>';
+				html += '<div class="allQuestion" data-instance="' + instance + '" data-npc="' + self.allQuestions[q].index +'">';
+				html += '<p data-npc="' + self.allQuestions[q].index +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>';
 			}
 		}
 		self.getAllAnswers(instance);

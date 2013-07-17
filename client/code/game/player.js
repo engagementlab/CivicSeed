@@ -752,6 +752,21 @@ $game.$player = {
 				_inventory.push({name: shapeName, npc: npc, tagline: tagline});
 				_addToInventory({name: shapeName, npc: npc, tagline: tagline});
 		}
+		//hack to not include demo users
+		var newAnswer = {
+			npc: npc,
+			id: $game.$player.id,
+			name: $game.$player.name,
+			answer: realResource.answers[realResource.answers.length - 1],
+			madePublic: false,
+			instanceName: $game.$player.instanceName,
+			questionType: realResource.questionType
+		};
+
+		if($game.$player.name !== 'Demo') {
+			ss.rpc('game.npc.saveResponse', newAnswer);
+		}
+
 		_saveResourceToDB(realResource, npc);
 		//display npc bubble for comment num
 		$game.$player.displayNpcComments();
@@ -1354,7 +1369,8 @@ function _gameOver() {
 function _saveSeedsToDB() {
 	var info = {
 		id: $game.$player.id,
-		seeds: _seeds
+		seeds: _seeds,
+		tilesColored: _tilesColored
 	};
 	ss.rpc('game.player.updateGameInfo', info);
 }

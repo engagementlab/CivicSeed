@@ -419,11 +419,9 @@ $game.$botanist = {
 				else {
 					$botanistAreaMessage.text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
 
-					//add this tangram outline to the inventory
-					$game.$player.tangramToInventory();
-
-					//update botanistState
 					if($game.$player.currentLevel > 0) {
+						//add this tangram outline to the inventory
+						$game.$player.tangramToInventory();
 						$game.$player.botanistState = 2;
 						_saveBotanistState();
 						$game.$player.checkBotanistState();
@@ -435,6 +433,8 @@ $game.$botanist = {
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
+					//add this tangram outline to the inventory
+					$game.$player.tangramToInventory();
 					$game.$player.firstTime = false;
 					$game.$player.botanistState = 2;
 					var info = {

@@ -223,30 +223,38 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
-		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>',
-			displayAnswers = '<ul>',
+		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>';
+			otherAnswers = '';
 			yourAnswer = $game.$player.getAnswer(_curResource.index),
 			rightOne = yourAnswer.answers.length - 1;
 
-		displayAnswers += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
-		if(!yourAnswer.madePublic) {
-			// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
-			displayAnswers += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public</button>';
-		} else {
-			displayAnswers += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.index +'"></i>';
-		}
-		displayAnswers += '</li>';
 		if(_curResource.playerAnswers) {
 			var recentAnswers = _curResource.playerAnswers,
-				spot = recentAnswers.length;
+				spot = recentAnswers.length,
+				yoursPublic;
 
 			while(--spot > -1) {
 				//double check
 				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
-					displayAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-npc="' + _curResource.index + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
+					otherAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><button class="btn btn-success pledgeButton" data-npc="' + _curResource.index + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></li>';
+				} else if(recentAnswers[spot].madePublic && recentAnswers[spot].id === $game.$player.id) {
+					yoursPublic = true;
 				}
 			}
-			displayAnswers += '</ul></div>';
+
+			//add in the player's answer with the appropriate button
+			var finalDisplay = '<ul>';
+
+			finalDisplay += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
+			
+			if(!yoursPublic) {
+				// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
+				finalDisplay += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public</button>';
+			} else {
+				finalDisplay += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.index +'"></i>';
+			}
+			finalDisplay +=  '</li>' + otherAnswers + '</ul></div>';
+
 			_speak = 'Here are some recent answers by your peers: ';
 		} else {
 			_speak = 'Congrats! You were the first to answer.';
@@ -254,7 +262,7 @@ $game.$resources = {
 		}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);
-			$resourceContent.html(finalQuestion + displayAnswers);
+			$resourceContent.html(finalQuestion + finalDisplay);
 	},
 
 	//hide the resource area and decide if we need to show inventory again or not
@@ -373,10 +381,6 @@ $game.$resources = {
 				instanceName: $game.$player.instanceName,
 				questionType: _curResource.questionType
 			};
-			//hack to not include demo users
-			if($game.$player.name !== 'Demo') {
-				ss.rpc('game.npc.saveResponse', newAnswer);
-			}
 		}
 		else {
 			var wrongInfo = {
