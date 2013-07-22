@@ -11,7 +11,7 @@ var _CivicSeed = {
 		String(now.getDate()) +
 		String(now.getHours()) +
 		String(now.getMinutes()) +
-		String(now.getSeconds()) : version,
+		String(now.getSeconds()) : String(version),
 	ENVIRONMENT: nodeEnv,
 	CLOUD_PATH: config.get('CLOUD_PATH')
 };

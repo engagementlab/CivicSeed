@@ -12,6 +12,7 @@ var rootDir = process.cwd() || '.',
 	cloudPath = config.get('CLOUD_PATH'),
 	flash = require('connect-flash'),
 	passport = require('passport'),
+	useRedis = config.get('USE_REDIS'),
 	service = require(rootDir + '/service'),
 	controllers = require(rootDir + '/controllers'),
 	CivicSeed = require(rootDir + '/CivicSeed'),
@@ -69,7 +70,10 @@ service.connectMongoose(app, function(databases) {
 			CivicSeed: JSON.stringify(CivicSeed.getGlobals())
 		}
 	});
-	ssStylus.prependStylus('$cloudPath = \'' + cloudPath + '/\'');
+	ssStylus.prependStylus(
+		'$cloudPath = \'' + cloudPath + '/\'\n' +
+		'$cache = \'' + CivicSeed.get('CACHE') + '\''
+	);
 	ss.client.formatters.add(ssStylus);
 
 	// // Server-side compiled templates for client
@@ -78,17 +82,19 @@ service.connectMongoose(app, function(databases) {
 	ss.client.templateEngine.use(require('ss-clientjade'));
 
 	// using engine.io for web sockets transport
-	if(config.get('USE_LOCAL_IP')) {
+	if(nodeEnv === 'development') {
 		service.getAndSetNetworkIp(function() {
 			var ip = config.get('IP');
 			ss.ws.transport.use(require('ss-engine.io'), { client: { host: ip, port: port } });
 		});
+		app.locals.pretty = true;
 	} else {
 		ss.ws.transport.use(require('ss-engine.io'));
 	}
 
 	// use redis
-	if(config.get('USE_REDIS')) {
+	if(useRedis) {
+		console.log('   * * * * * * * * * * * *   Configuring REDIS DB Service   * * * * * * * * * * * *   '.yellow);
 		redisConfig = {
 			host: config.get('REDIS_HOST'),
 			port: config.get('REDIS_PORT'),
@@ -98,6 +104,8 @@ service.connectMongoose(app, function(databases) {
 		ss.session.store.use('redis', redisConfig);
 		ss.publish.transport.use('redis', redisConfig);
 		ss.session.options.maxAge = 1261440000000; // forty years
+	} else {
+		console.log('   * * * * * * * * * * * *   REDIS Service Not Connected   * * * * * * * * * * * *   '.red);
 	}
 
 	// make the models accessible to Socket Stream
@@ -110,6 +118,9 @@ service.connectMongoose(app, function(databases) {
 
 		if(nodeEnv === 'development') {
 			app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+			// See: https://github.com/socketstream/ss-jade/pull/4
+			// ss.client.formatters.add(ssJade, { prettyHTML: true });
+			ssJade.addCompileOptions({ pretty: true });
 		}
 
 		if(nodeEnv === 'testing' || nodeEnv === 'production') {

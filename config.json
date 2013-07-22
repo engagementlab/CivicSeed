@@ -1,7 +1,6 @@
 {
 	"NAME": "Civic Seed",
 	"PORT": 3000,
-	"USE_LOCAL_IP": true,
 	"USE_REDIS": true,
 	"REDIS_HOST": "localhost",
 	"REDIS_PORT": 6379,

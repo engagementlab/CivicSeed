@@ -1,7 +1,6 @@
 {
 	"NAME": "Civic Seed",
 	"PORT": 80,
-	"USE_LOCAL_IP": false,
 	"USE_REDIS": true,
 	"REDIS_HOST": "nodejitsudb2689954699.redis.irstack.com",
 	"REDIS_PORT": 6379,
