@@ -82,8 +82,6 @@
 								.answerDiv.questionOptions(style="display:none;")
 									p Answer
 									textarea.answer(data-area='answer')
-							p Tagline
-							textarea(data-area='tagline', maxlength='24') #{npc.resource.tagline}
 							p Depends on NPC
 							if (npc.resource.dependsOn)
 								textarea.required(data-area='dependsOn', maxlength='4') #{npc.resource.dependsOn[0]}

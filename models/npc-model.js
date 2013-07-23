@@ -14,7 +14,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		dependsOn: [Number],
 		resource: {
 			url: String,
-			tagline: String,
 			question: String,
 			questionType: String,
 			requiredLength: Number,

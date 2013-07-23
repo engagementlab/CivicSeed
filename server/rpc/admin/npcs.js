@@ -50,7 +50,6 @@ exports.actions = function(req, res, ss) {
 									npc.resource.url = info.resource.url;
 									npc.resource.questionType = info.resource.questionType;
 									npc.resource.question = info.resource.question;
-									npc.resource.tagline = info.resource.tagline;
 									npc.resource.shape = info.resource.shape;
 									npc.dialog.prompts = info.dialog.prompts;
 
@@ -100,9 +99,12 @@ exports.actions = function(req, res, ss) {
 
 npcHelpers = {
 	updateTiles: function(oldIndex, newIndex, callback) {
-		console.log(oldIndex,newIndex);
+		//console.log(oldIndex,newIndex);
 		//update new tile, make sure we can change it
-		tileModel.where('mapIndex').equals(newIndex)
+		if(oldIndex === newIndex) {
+			callback();
+		} else {
+			tileModel.where('mapIndex').equals(newIndex)
 			.find(function(err,newTiles) {
 				if(err) {
 					callback('could not find new tile');
@@ -136,6 +138,8 @@ npcHelpers = {
 						callback('cant place npc there');
 					}
 				}
-			});
+			});	
+		}
+		
 	}
 };

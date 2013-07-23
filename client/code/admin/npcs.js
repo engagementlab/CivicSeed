@@ -168,7 +168,6 @@ var self = module.exports = {
 					answer: null,
 					question: null,
 					possibleAnswers: [],
-					tagline: null,
 					feedbackRight: null,
 					feedbackWrong: null,
 					dependsOn: []
@@ -218,8 +217,6 @@ var self = module.exports = {
 				updates.resource.answer = val;
 			} else if(area === 'requiredLength') {
 				updates.resource.requiredlength = parseInt(val, 10);
-			} else if(area === 'tagline') {
-				updates.resource.tagline = val;
 			} else if(area === 'dependsOn') {
 				updates.resource.dependsOn.push(parseInt(val, 10));
 			} else if(area === 'feedbackRight') {

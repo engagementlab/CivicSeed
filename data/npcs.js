@@ -11,7 +11,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct1',
 		url: '2569',
-		tagline: 'Guiding Values',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
 		question: 'Choose one of the ethics you just read about and explain why it is important to you.',
@@ -31,7 +30,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong1',
 		url: '4284',
-		tagline: 'Upstream or Downstream?',
 		feedbackRight: 'Exactly! Maybe you could also think about which approach appeals to you the most.',
 		feedbackWrong: 'Hoo...boy. That\'s not right.',
 		question: 'Imagine that you\'ve volunteered to help out at a soup kitchen by organizing donations, performing outreach, and preparing food for people in need. Would this be an example of...?',
@@ -52,7 +50,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong2',
 		url: '4693',
-		tagline: 'What\'s Important',
 		feedbackRight: 'Very interesting!',
 		feedbackWrong: 'You might want to think about that a little more and try again.',
 		question: 'There are many different ways you might serve the community. The resource talked about understanding root causes vs. just helping out any way you can. Which of these approaches appeals to you more? What do you see yourself doing in the future that addresses one or the other -- or both?',
@@ -72,7 +69,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct2',
 		url: '6265',
-		tagline: 'What You Will Achieve',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
 		question: 'Based on what you\'ve seen, set one goal and one objective for yourself.',
@@ -92,7 +88,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong3',
 		url: '8542',
-		tagline: 'Power and Privilege',
 		feedbackRight: 'You are SO right.',
 		feedbackWrong: 'Are you sure about that? Maybe take another look.',
 		question: 'Based on the quote, do you think Dr. Norieta would agree with the following statement? "People who help others out of a sense of charity are not approaching service from a productive angle."',
@@ -122,7 +117,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct3',
 		url: '2176',
-		tagline: 'What Motivates You',
 		feedbackRight: 'That will give me a lot to think about.',
 		feedbackWrong: '',
 		question: 'Which of these students resonated most with you? Why?',
@@ -142,7 +136,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong4',
 		url: '1608',
-		tagline: 'Struggles with Identiy',
 		feedbackRight: 'Thanks for sharing that.',
 		feedbackWrong: '',
 		question: 'Describe a time you had difficulty communicating or collaborating with others because of a difference between your respective social identities.',
@@ -163,7 +156,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong5',
 		url: '4876',
-		tagline: 'Thinking About Goals',
 		feedbackRight: 'I can think of 42 reasons why that\'s a great answer.',
 		feedbackWrong: '',
 		question: 'Choose and answer one of these 12 questions in detail. How does it effect your goals and objectives?',
@@ -193,7 +185,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong6',
 		url: '9536',
-		tagline: 'Social Identities At Work',
 		feedbackRight: 'Nailed it! We should totally hang out after this.',
 		feedbackWrong: 'Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.',
 		question: 'Sourney Cruz (the third student in the video) says her passions are derived from her social identity. What are three of the aspects of identity that she mentioned?',
@@ -214,7 +205,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct4',
 		url: '8986',
-		tagline: 'How Your Experiences Shape You',
 		feedbackRight: 'Very revealing, but of course there\'s more to you than that.',
 		feedbackWrong: 'Are you sure you understood the question? Try again!',
 		question: 'List what you believe are five of the most important aspects of your identity, that intersect to make up who you are.',
@@ -254,7 +244,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong1',
 		url: '1517',
-		tagline: 'Working With Chinatown',
 		feedbackRight: 'Interesting. Very interesting!',
 		feedbackWrong: '',
 		question: 'Think about your preconceptions of Chinatown as a neighborhood. How do they differ from what you saw in the resource videos?',
@@ -274,7 +263,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong2',
 		url: '2569',
-		tagline: 'Digital Chinatown',
 		feedbackRight: 'That\'s great! Thanks for sharing!',
 		feedbackWrong: '',
 		question: 'What did you learn from the video you selected?',
@@ -294,7 +282,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong3',
 		url: '3335',
-		tagline: 'All About Somerville',
 		feedbackRight: 'Great work!',
 		feedbackWrong: 'Maybe you should review the resource and try again...',
 		question: 'True or False: Somerville has a very large number of non-profit organizations.',
@@ -324,7 +311,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong4',
 		url: '6177',
-		tagline: 'All About Medford',
 		feedbackRight: 'That\'s right!  Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.',
 		feedbackWrong: 'Maybe you should review the resource and try again...',
 		question: 'True or False: The elementary schools in Medford are mostly outdated.',
@@ -354,7 +340,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct1',
 		url: '7052',
-		tagline: 'What Host Communities Give Back',
 		feedbackRight: 'Exactly right!',
 		feedbackWrong: 'Oh, I don\'t think so. Maybe you should take another look?',
 		question: 'True or False: Tufts Students use municipal services in our host communities, but Tufts plays no taxes to the communities.',
@@ -374,7 +359,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong5',
 		url: '9069',
-		tagline: 'Working With Somerville',
 		feedbackRight: 'I think that\'s probably true.',
 		feedbackWrong: '',
 		question: 'Based on what students, instructors, and stakeholders in Somerville said in the videos, what do you think makes Somerville unique in how it should be approached?',
@@ -394,7 +378,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong6',
 		url: '6773',
-		tagline: 'All About Chinatown',
 		feedbackRight: 'Bingo! Now that\'s what I\'m talkin\' about!',
 		feedbackWrong: 'That\'s not right! Check the resource and give it another shot.',
 		question: 'True or False: The overwhelming majority of youth in Chinatown who speak an Asian dialect also speak English.',
@@ -424,7 +407,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct2',
 		url: '9170',
-		tagline: 'An Assets-Based Approach',
 		feedbackRight: 'Yes. Our philosophical approach for civic engagement work with community partners is from the asset-based model. This explains why all community-based projects and opportunities should be based on community-identified needs. This does not mean that you cannot be creative and have ideas for addressing challenging issues, but unless the idea is based on a community-identified need and agreed upon with a community partner, there is little chance of success.',
 		feedbackWrong: 'That\'s not what we think. Try again, please!',
 		question: 'In an assets-based philosophy, who should identify the challenges (needs) that should be addressed in the community?',
@@ -445,7 +427,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct3',
 		url: '2649',
-		tagline: 'Give And Take',
 		feedbackRight: 'Insightful response, thanks!',
 		feedbackWrong: '',
 		question: 'Is there a time that you learned something from a community member, whether a child or an elderly resident, an organization leader or member, where you were “providing service’? Please describe below.',
@@ -465,7 +446,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong7',
 		url: '3075',
-		tagline: 'Digital Medford',
 		feedbackRight: 'Neat!',
 		feedbackWrong: '',
 		question: 'What is one thing you learned from the website?',
@@ -495,7 +475,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct4',
 		url: '2803',
-		tagline: 'Who You\'ll Work With',
 		feedbackRight: 'Yup, that\'s right!',
 		feedbackWrong: 'Confused? Check out the resource one more time and try again.',
 		question: 'You will choose to work in one of the three host communities closest to Tufts main campus. What are the three communities?',
@@ -516,7 +495,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong8',
 		url: '3229',
-		tagline: 'Working With Medford',
 		feedbackRight: 'That\'s an idea!',
 		feedbackWrong: '',
 		question: 'Select one of the challenges facing Medford discussed in the videos, and talk about one of the ways you might work to overcome it.',
@@ -556,7 +534,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct5',
 		url: '5219',
-		tagline: 'A Change of Perspective',
 		feedbackRight: 'Hm, interesting. Thanks for sharing!',
 		feedbackWrong: '',
 		question: 'What do you think was gained by the youths that made this video? Do you think it was successful?',
@@ -576,7 +553,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong9',
 		url: '5206',
-		tagline: 'Digital Somerville',
 		feedbackRight: 'Thanks for sharing that!',
 		feedbackWrong: '',
 		question: 'What is one thing you learned from the website?',
@@ -596,7 +572,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct1',
 		url: '17599',
-		tagline: 'Power and Privilege: Race',
 		feedbackRight: 'You got your helping hat on. I dig it.',
 		feedbackWrong: '',
 		question: 'In your own words, what is meant by "institutionalized racism" and "envirnoment racisim?"',
@@ -616,7 +591,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct2',
 		url: '16297',
-		tagline: 'Bridging The Gap',
 		feedbackRight: 'I believe I can fly. I believe if you try you can fill the sky with color.',
 		feedbackWrong: '',
 		question: 'Out of all the advice given in the video, what did you find most helpful, and why?',
@@ -646,7 +620,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct3',
 		url: '14588',
-		tagline: 'Reciprocity-Merging Your Objectives',
 		feedbackRight: 'By George, I think you\'ve got it!',
 		feedbackWrong: 'Perhaps you should re-read the resource and try again!',
 		question: 'Which of the following are important aspects of making sure your efforts benefit both yourself and the community?',
@@ -667,7 +640,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct4',
 		url: '14464',
-		tagline: 'Shared Goals and Objecitves',
 		feedbackRight: 'Thanks for that! Keep fighting the good fight.',
 		feedbackWrong: '',
 		question: 'Do you know of a goal or objective that you and the organization both share? If so, what?',
@@ -697,7 +669,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct5',
 		url: '12760',
-		tagline: 'Responsibility and Commitment',
 		feedbackRight: 'That sounds like a great start. Now keep your commitment to us and bring back all the color!',
 		feedbackWrong: '',
 		question: 'Name a couple things you will do that will help ensure you meet your commitments to the community.',
@@ -717,7 +688,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong1',
 		url: '11752',
-		tagline: 'Safety First',
 		feedbackRight: 'Glad to hear it!',
 		feedbackWrong: 'This is important! Please go back and take another look.',
 		question: 'Do you understand the safety policy of Tufts? If you will be working with people under the age of 17, have you taken the proper precautions and measures?',
@@ -737,7 +707,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong2',
 		url: '14706',
-		tagline: 'Power and Privilege: Poverty',
 		feedbackRight: 'That\'s true. The poverty threshold for a single individual under the age of 65 is $11,334. Seems low, huh?',
 		feedbackWrong: 'Nope! Try again, please.',
 		question: 'True or False: A single individual earning $13,000 per year is not officially counted as poor.',
@@ -757,7 +726,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct6',
 		url: '16547',
-		tagline: 'Keeping Professional Relationships',
 		feedbackRight: 'Thanks for your answer!',
 		feedbackWrong: '',
 		question: 'Think of a time when you were expected to behave professionally. What did you feel was expected of you? How did you act to ensure a strong professional relationship?',
@@ -787,7 +755,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong3',
 		url: '10780',
-		tagline: 'Power and Privilege: Classism',
 		feedbackRight: 'Way to take action',
 		feedbackWrong: '',
 		question: 'Which of the bulleted recomendations, if any, will you commit to?',
@@ -817,7 +784,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct1',
 		url: '17525',
-		tagline: 'Sustainability',
 		feedbackRight: 'Right on!',
 		feedbackWrong: 'Not quite. Remember, "An Ounce of Prevetion" and all that.',
 		question: 'When should you begin to think about the sustailabity of your work?',
@@ -848,7 +814,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong1',
 		url: '13696',
-		tagline: 'Understanding Reflection',
 		feedbackRight: 'Great! Now go find my friend Goober to talk more about how you\'ll reflect on things.',
 		feedbackWrong: '',
 		question: 'In your own words, what is reflection, and why is it important?',
@@ -878,7 +843,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong2',
 		url: '12249',
-		tagline: 'Tips For the Future',
 		feedbackRight: 'That\'s important to think about.',
 		feedbackWrong: '',
 		question: 'Which one of these tips do you think most applies to you?',
@@ -898,7 +862,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct2',
 		url: '13246',
-		tagline: 'Leading the Way',
 		feedbackRight: 'That\'s something I can get behind.',
 		feedbackWrong: '',
 		question: 'Are you interested in developing your capacity to be a leader? Why or why not?',
@@ -918,7 +881,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong3',
 		url: '14380',
-		tagline: 'Connected Learning',
 		feedbackRight: 'Awesome! I want to take a class on towels, and their relevance to galactic travel.',
 		feedbackWrong: '',
 		question: 'Complete this thought: I am now interested in taking a course on...',
@@ -958,7 +920,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong4',
 		url: '16920',
-		tagline: 'Future Connections',
 		feedbackRight: 'That sounds great. I know you can do it!',
 		feedbackWrong: '',
 		question: 'Name one connection that you would like to further explore.',
@@ -979,7 +940,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct3',
 		url: '15638',
-		tagline: 'How You Will Reflect',
 		feedbackRight: 'That\'s really great. Thank you!',
 		feedbackWrong: '',
 		question: 'Select one of the actions on the previous page that you will commit to, and explain your choice.',
@@ -999,7 +959,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct4',
 		url: '16912',
-		tagline: 'Where Will You Go From Here?',
 		feedbackRight: 'I like it!',
 		feedbackWrong: '',
 		question: 'Do you see a connection between your work in the community and thoughts about your future career? If so, how?',
@@ -1019,7 +978,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'wrong5',
 		url: '15626',
-		tagline: 'The Power of Civic Engagement',
 		feedbackRight: 'Yup! Amazing, huh?',
 		feedbackWrong: 'Did we read the same resource? Try again.',
 		question: 'True or False: According to Dr. Astin\'s study, simply participating in service, with no weight given to the quality results of that service, has a positive impact on a variety of measures, including leadership.',
@@ -1039,7 +997,6 @@ module.exports.global = [{
 	resource: {
 		shape: 'correct5',
 		url: '13360',
-		tagline: 'What You Leave Behind...',
 		feedbackRight: 'Perfect',
 		feedbackWrong: 'Close, but think bigger!',
 		question: 'Who benefits from evaluating the impact of your work?',
