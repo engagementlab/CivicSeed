@@ -1,13 +1,13 @@
 var self = module.exports = {
 
-	loadMiddleware: function(ss, $app, $html, $body, $container) {
+	loadMiddleware: function($app) {
 
 		// // check if user experiences/authentic
 		$app.before(function(req) {
 
 			var fullPath = req.fullPath;
 
-			$container.empty().append(JT['partials-navigation']({ fullPath: fullPath }));
+			$CONTAINER.empty().append(JT['partials-navigation']({ fullPath: fullPath }));
 
 			// TODO: SOMEHOW PAUSE DAVIS HANDLING UNTIL THE RPC IS FINISHED!!!!
 			// OTHERWISE, IT HANDLES STUFF, THEN DOES THIS, ARGH....

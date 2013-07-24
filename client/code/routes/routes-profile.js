@@ -1,12 +1,12 @@
 var self = module.exports = {
 
-	loadRoutes: function(ss, $app, $html, $body, $container) {
+	loadRoutes: function($app) {
 		var profile = require('/profile');
 		profile.init();
 
 		$app.get('/profiles', function(req) {
 			ss.rpc('shared.profiles.getAllProfiles', function(users) {
-				$container.append(JT['profiles-allprofiles']({users: users}));
+				$CONTAINER.append(JT['profiles-allprofiles']({users: users}));
 			});
 		});
 
@@ -16,7 +16,7 @@ var self = module.exports = {
 					//reroute to change info
 					location.href = 'change-info';
 				} else {
-					$container.append(JT['profiles-singleprofile'](info));
+					$CONTAINER.append(JT['profiles-singleprofile'](info));
 				}
 			});
 		});

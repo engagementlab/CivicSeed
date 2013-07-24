@@ -1,22 +1,21 @@
 var self = module.exports = {
 
-	loadRoutes: function(ss, $app, $html, $body, $container) {
+	loadRoutes: function($app) {
 
 		require('/admin').init();
 		var npcs = require('/npcs');
 		npcs.init();
 
 		$app.get('/admin', function(req) {
-			$container.append(JT['admin-panel']({
+			$CONTAINER.append(JT['admin-panel']({
 				message: 'User admin panel.'
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel ::: }');
-			$body.attr('class', 'adminPage');
+			$BODY.attr('class', 'adminPage');
 		});
 
-
 		$app.get('/admin/startup', function(req) {
-			$container.append(JT['admin-startup']({
+			$CONTAINER.append(JT['admin-startup']({
 				title: 'Startup',
 				bodyClass: 'admin startup',
 				nodeEnv: 'nodeEnv',
@@ -24,14 +23,14 @@ var self = module.exports = {
 				message: 'Startup admin panel.'
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
-			$body.attr('class', 'adminPage startupPage');
+			$BODY.attr('class', 'adminPage startupPage');
 		});
 
 		$app.get('/admin/monitor', function(req) {
 			ss.rpc('admin.monitor.getInstanceNames', sessionStorage.userId, function(err, info) {
-				$container.append(JT['admin-monitor']({instances: info}));
+				$CONTAINER.append(JT['admin-monitor']({instances: info}));
 				$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
-				$body.attr('class', 'adminPage');
+				$BODY.attr('class', 'adminPage');
 			});
 		});
 
@@ -46,9 +45,9 @@ var self = module.exports = {
 						result[r].y = y;
 					}
 					console.log(result);
-					$container.append(JT['admin-npcs']({npcs: result}));
+					$CONTAINER.append(JT['admin-npcs']({npcs: result}));
 					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
-					$body.attr('class', 'npcsPage');
+					$BODY.attr('class', 'npcsPage');
 					npcs.addSprites();
 				} else {
 					console.log('error');
@@ -56,116 +55,15 @@ var self = module.exports = {
 			});
 		});
 
-
-
-		// // // nodeEnv = app.get('env');
-		// // // User = service.useModel('user');
-		// // Invitee = service.useModel('user', 'preload');
-
 		$app.get('/admin/invitecodes', function(req) {
-			$container.append(JT['admin-invitecodes']({
+			$CONTAINER.append(JT['admin-invitecodes']({
 				title: 'Startup',
 				bodyClass: 'admin startup',
 				nodeEnv: 'nodeEnv',
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));
-		// 	$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
-		// 	$body.attr('class', 'adminPage startupPage');
-		// 	require('./admin').init();
-
-
-
-			// // var consoleOutput;
-			// Invitee.collection.distinct('sessionName', function(err, invitees) {
-			// 	if(err) {
-			// 		console.error('Could not find document: %s', err);
-			// 	}
-			// 	// console.log(invitees);
-			// 	res.render('admin/invitecodes.hbs', {
-			// 		title: 'Invite Codes',
-			// 		bodyClass: 'admin invitecodes',
-			// 		// nodeEnv: nodeEnv,
-			// 		// consoleOutput: consoleOutput,
-			// 		message: 'Invite codes.',
-			// 		invitees: invitees,
-			// 	});
-			// });
-
 		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// // create a set of codes
-		// app.get('/admin/action/create-invite-codes/:sessionName', function(req, res) {
-		// 	var i;
-		// 	var inviteeGroup = [];
-		// 	var inviteeObject;
-		// 	var sessionName = req.params.sessionName;
-		// 	function createCode() {
-		// 		var codeArray = [];
-		// 		var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.:;{}[]|-=_+()&^%$#@!?~`ç√∫¥';
-		// 		for(var i=0; i < 50; i++) {
-		// 			codeArray[i] = charSet.charAt(Math.floor(Math.random() * charSet.length));
-		// 		}
-		// 		return codeArray.join('');
-		// 	};
-
-		// 	// TODO: add in emails...???
-		// 	for(i = 0; i < 30; i++) {
-		// 		inviteeObject = {};
-		// 		inviteeObject.sessionName = sessionName;
-		// 		// inviteeObject.email = '???@???.???';
-		// 		inviteeObject.accepted = false;
-		// 		inviteeObject.code = createCode();
-		// 		inviteeGroup.push(inviteeObject);
-		// 	}
-
-		// 	// console.log(inviteeGroup);
-
-		// 	Invitee.create(inviteeGroup, function(err) {
-		// 		if(err) {
-		// 			console.error('  Could not create documents: %s  '.yellow.inverse, err);
-		// 			res.send('Error creating invite codes...');
-		// 		} else {
-
-		// 			Invitee.find({ sessionName: sessionName }, 'code', function (err, codes) {
-		// 				var length = codes.length;
-		// 				var i;
-		// 				var codesArray = [];
-		// 				for(i = 0; i < length; i++) {
-		// 					codesArray.push(codes[i].code);
-		// 				}
-		// 				// console.log(codesArray);
-		// 				console.log('CS: '.blue + 'Invite codes created and saved to database: '.green);
-		// 				res.send(codesArray);
-		// 			});
-
-		// 		}
-		// 	});
-
-		// });
-
-		// // recreate/overwrite a set of existing session codes
-		// app.get('/admin/action/delete-invite-codes/:session', function(req, res) {
-		// 	// res.render('admin/admin.hbs', {
-		// 	// 	title: 'Admin',
-		// 	// 	bodyClass: 'admin',
-		// 	// 	message: req.params.session,
-		// 	// });
-		// });
-
-
 
 	}
 
