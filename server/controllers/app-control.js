@@ -10,7 +10,7 @@ var self = module.exports = {
 			view: 'main.jade',
 			css: ['styles.styl'],
 			code: [
-				'libs/jquery-1.8.2.min.js',
+				'libs/jquery-2.0.3.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
 				'routes',
@@ -29,7 +29,7 @@ var self = module.exports = {
 			view: 'game.jade',
 			css: ['styles.styl'],
 			code: [
-				'libs/jquery-1.8.2.min.js',
+				'libs/jquery-2.0.3.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
 				'libs/d3.v2.min.js',
@@ -50,20 +50,13 @@ var self = module.exports = {
 
 		// 404'd
 		app.use(function(req, res, next) {
-			if(req.path === '/404') {
-				// res.send(404, 'Sorry cant find that!');
-				CivicSeed.SocketStream = false;
-				res.render(rootDir + '/client/views/app.jade', {
-					title: '404 - Page Not Found',
-					CivicSeed: JSON.stringify(CivicSeed),
-					SocketStream: ''
-				});
-			} else {
-				res.serveClient('main');
-				// ... send up the 'req.path' route to the front end somehow???
-				// ... or is that even needed????
-				// ... could also do some SEO stuff here???
-			}
+			// res.send(404, 'Sorry cant find that!');
+			CivicSeed.SocketStream = false;
+			res.render(rootDir + '/client/views/app.jade', {
+				title: '404 - Page Not Found',
+				CivicSeed: JSON.stringify(CivicSeed),
+				SocketStream: ''
+			});
 		});
 
 	}
