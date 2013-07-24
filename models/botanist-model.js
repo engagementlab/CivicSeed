@@ -12,18 +12,14 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		dialog: [
 			{
 				instructions: [String],
+				instructions2: [String],
 				riddle: {
-					sonnet: String,
 					prompts: [String],
 					response: String
 				},
 				hint: [String]
 			}
 		],
-		finale: {
-			videos: [String],
-			explanations: [String]
-		},
 		tangram: [
 			{
 				answer: [

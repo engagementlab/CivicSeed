@@ -16,6 +16,7 @@ var _info = null,
 	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
 	_numMegaSeeds = 5,
 	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
+	_firstTime = false,
 
 	$speakerName = null,
 	$message = null,
@@ -176,6 +177,7 @@ $game.$botanist = {
 			//and put it in the inventory...? (prompt, resource (riddle first screen, outline next))
 			else if($game.$player.botanistState === 1) {
 				var dropped = $game.$player.getSeedsDropped();
+				//make sure they have planted a seed in level 1
 				if($game.$player.currentLevel === 0 && dropped < 1) {
 					//make them plant first seed
 					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
@@ -189,7 +191,16 @@ $game.$botanist = {
 					});
 				}
 				else {
-					$game.$botanist.showPrompt(0);
+					//ugly hack so we see Second set of instructions in level 0
+					if(!_firstTime && $game.$player.currentLevel === 0) {
+						_messages = $game.$botanist.dialog[$game.$player.currentLevel].instructions2;
+						_currentMessage = 0;
+						_firstTime = true;
+						$game.$botanist.showChat();
+					} else {
+						$game.$botanist.showPrompt(0);	
+					}
+					
 				}
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
@@ -355,11 +366,11 @@ $game.$botanist = {
 		$('.botanistArea button').addClass('hideButton');
 
 		if(_promptNum === 0) {
+			// if(_currentSlide === 0) {
+			// 	$('.botanistArea .nextButton').removeClass('hideButton');
+			// }
 			if(_currentSlide === 0) {
-				$('.botanistArea .nextButton').removeClass('hideButton');
-			}
-			else if(_currentSlide === 1) {
-				$('.botanistArea .backButton').removeClass('hideButton');
+				// $('.botanistArea .backButton').removeClass('hideButton');
 				if($game.$player.firstTime) {
 					$('.botanistArea .nextButton').removeClass('hideButton');
 				} else {
@@ -367,6 +378,7 @@ $game.$botanist = {
 				}
 			}
 			else {
+				//$('.botanistArea .backButton').removeClass('hideButton');
 				$('.botanistArea .closeButton').removeClass('hideButton');
 			}
 		}
@@ -403,21 +415,21 @@ $game.$botanist = {
 		$('.botanistArea .speakerName').text($game.$botanist.name+': ');
 		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
 		if(_promptNum === 0) {
+			// if(_currentSlide === 0) {
+				// if($game.$player.firstTime) {
+				// 	$botanistAreaMessage.text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
+				// 	$botanistContent.html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
+				// } else {
+				// 	$botanistAreaMessage.text('Here is your next enigma ' + $game.$player.name + '.');
+				// 	$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
+				// }
+			// }
 			if(_currentSlide === 0) {
-				if($game.$player.firstTime) {
-					$botanistAreaMessage.text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
-					$botanistContent.html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
-				} else {
-					$botanistAreaMessage.text('Here is your next enigma ' + $game.$player.name + '.');
-					$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
-				}
-			}
-			else if(_currentSlide === 1) {
 				if($game.$player.botanistState > 1) {
-					$botanistAreaMessage.text('Here is the Enigma to view again.');
+					$botanistAreaMessage.text('Here is the notebook page to view again.');
 				}
 				else {
-					$botanistAreaMessage.text('This puzzle represents the next part of the Enigma. You can view it at anytime in your inventory.');
+					$botanistAreaMessage.text('Here is the page. You will be able to view it at anytime in your inventory.');
 
 					if($game.$player.currentLevel > 0) {
 						//add this tangram outline to the inventory
@@ -445,8 +457,8 @@ $game.$botanist = {
 					_saveBotanistState();
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
-					$botanistAreaMessage.text('The Enigma has four parts, each with a verse and a puzzle. You can view the Enigma and all the pieces you have collected by opening your inventory at any time. That’s the toolbox icon at the bottom of the display.');
-					$botanistContent.html('<p>To answer the Enigma, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable to you solve the <em>Enigma Civica.</em>  When you think you have enough pieces to solve the Enigma, come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The answers to the first part, <b>Looking Inward</b>, can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
+					$botanistAreaMessage.text('There are four seed recipes in my notebook. You can view the current recipe and all the research pieces you have collected by opening your inventory. That\'s the toolbox icon at the bottom of the display.');
+					$botanistContent.html('<p>To collect the pieces for the recipe, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b>, plus important <b>puzzle pieces</b> that will enable you to create paintbrush seeds.  When you think you have enough pieces to complete the recipe come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The pieces of the first recipe can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
 				}
 			}
 		}
@@ -463,7 +475,7 @@ $game.$botanist = {
 					$inventoryItem.attr('draggable','true');
 				});
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
-				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to solve the Enigma.');
+				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your paintbrush seeds. The fewer tries you take, the more paintbrush seeds you will receive.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
@@ -609,12 +621,12 @@ $game.$botanist = {
 			else if(wrongOne) {
 				correct= false;
 				_numMegaSeeds -=1;
-				message = 'Oh! That’s not quite right. Think more about how the pieces of the Enigma relate to one another, and try again.';
+				message = 'Oh! That’s not quite right. Think more about how the pieces relate to one another, and try again.';
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
 				_numMegaSeeds -=1;
-				message = 'You are missing some pieces. Be sure to read the Enigma carefully to help pick out the right pieces.';
+				message = 'You are missing some pieces. Be sure to read the notebook clues carefully to help pick out the right pieces.';
 			}
 			else if(nudge) {
 				correct= false;
