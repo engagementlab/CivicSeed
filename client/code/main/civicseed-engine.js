@@ -49,16 +49,6 @@ var self = module.exports = {
 
 		});
 
-		require('/routes-middleware.js').loadMiddleware($app);
-		require('/routes-main').loadRoutes($app);
-		require('/routes-account').loadRoutes($app);
-		require('/routes-admin').loadRoutes($app);
-		require('/routes-profile').loadRoutes($app);
-		// should always be last
-		require('/routes-errors').loadRoutes($app);
-
-		// config.generateRequestOnPageLoad = true;
-
 	}
 
 };
