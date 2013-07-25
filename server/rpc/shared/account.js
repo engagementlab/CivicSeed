@@ -38,7 +38,18 @@ exports.actions = function(req, res, ss) {
 
 						// req.session.gameChannel = channel....
 						req.session.save();
-						res(true);
+						res({
+							id: req.session.userId,
+							firstName: req.session.firstName,
+							lastName: req.session.lastName,
+							email: req.session.email,
+							role: req.session.role,
+							game: req.session.game,
+							gameStarted: req.session.gameStarted,
+							profileSetup: req.session.profileSetup,
+							isPlaying: req.session.isPlaying,
+							profileLink: req.session.profileLink
+						});
 					} else {
 						res(false);
 					}

@@ -81,26 +81,23 @@
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
 			// console.log(authenticated);
 			if(authenticated) {
-
-				$account.getUserSession(function(userInfo) {
-					sessionStorage.setItem('userId', userInfo.id);
-					sessionStorage.setItem('userFirstName', userInfo.firstName);
-					sessionStorage.setItem('userLastName', userInfo.lastName);
-					sessionStorage.setItem('userEmail', userInfo.email);
-					sessionStorage.setItem('userRole', userInfo.role);
-					sessionStorage.setItem('isPlaying', userInfo.isPlaying);
-					sessionStorage.setItem('profileLink', userInfo.profileLink);
-					if(!userInfo.profileSetup) {
-						//send them to setup their profile info
-						Davis.location.assign('/change-info');
-					} else if(!userInfo.gameStarted) {
-						//send them to watch the intro video
-						Davis.location.assign('/introduction');
-					} else {
-						//send them to their profile
-						Davis.location.assign('/profiles/' + userInfo.profileLink);
-					}
-				});
+				sessionStorage.setItem('userId', authenticated.id);
+				sessionStorage.setItem('userFirstName', authenticated.firstName);
+				sessionStorage.setItem('userLastName', authenticated.lastName);
+				sessionStorage.setItem('userEmail', authenticated.email);
+				sessionStorage.setItem('userRole', authenticated.role);
+				sessionStorage.setItem('isPlaying', authenticated.isPlaying);
+				sessionStorage.setItem('profileLink', authenticated.profileLink);
+				if(!authenticated.profileSetup) {
+					//send them to setup their profile info
+					Davis.location.assign('/change-info');
+				} else if(!authenticated.gameStarted) {
+					//send them to watch the intro video
+					Davis.location.assign('/introduction');
+				} else {
+					//send them to their profile
+					Davis.location.assign('/profiles/' + authenticated.profileLink);
+				}
 			} else {
 				apprise('Incorrect email/password pair.');
 				// handle the fact that it isn't authenticating...
