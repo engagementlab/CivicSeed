@@ -14,7 +14,7 @@ var self = module.exports = {
 			ss.rpc('shared.profiles.getProfileInformation', req.params['random'], function(info) {
 				if(!info.profileSetup && sessionStorage.userEmail === info.email) {
 					//reroute to change info
-					location.href = 'change-info';
+					Davis.location.assign('change-info');
 				} else {
 					$CONTAINER.append(JT['profiles-singleprofile'](info));
 				}

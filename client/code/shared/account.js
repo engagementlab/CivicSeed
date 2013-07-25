@@ -60,7 +60,7 @@
 					if(response) {
 						sessionStorage.setItem('userFirstName', response.firstName);
 						sessionStorage.setItem('userLastName', response.lastName);
-						location.href = '/introduction';
+						Davis.location.assign('/introduction');
 					}
 					else {
 						$('#message').addClass('error').text('There was an error. Please panic.');
@@ -92,15 +92,13 @@
 					sessionStorage.setItem('profileLink', userInfo.profileLink);
 					if(!userInfo.profileSetup) {
 						//send them to setup their profile info
-						location.href = '/change-info';
-					}
-					else if(!userInfo.gameStarted) {
+						Davis.location.assign('/change-info');
+					} else if(!userInfo.gameStarted) {
 						//send them to watch the intro video
-						location.href = '/introduction';
-					}
-					else {
+						Davis.location.assign('/introduction');
+					} else {
 						//send them to their profile
-						location.href = '/profiles/' + userInfo.profileLink;
+						Davis.location.assign('/profiles/' + userInfo.profileLink);
 					}
 				});
 			} else {
@@ -125,7 +123,7 @@
 			sessionStorage.removeItem('profileLink');
 			// console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
-				location.href = '/';
+				Davis.location.assign('/');
 				// console.log('Logging out...');
 			}
 		});
