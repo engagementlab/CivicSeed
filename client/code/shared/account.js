@@ -67,7 +67,7 @@
 					}
 				});
 			} else {
-				alert('only letters and no spaces please.');
+				apprise('only letters and no spaces please.');
 			}
 			return false;
 		});
@@ -102,7 +102,7 @@
 					}
 				});
 			} else {
-				alert('Incorrect email/password pair.');
+				apprise('Incorrect email/password pair.');
 				// handle the fact that it isn't authenticating...
 				// console.log('it\'s not authentic!');
 			}

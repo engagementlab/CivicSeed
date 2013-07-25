@@ -55,7 +55,7 @@ var self = module.exports = {
 					if(err) {
 						console.log('error with db', err);
 					} else if(res) {
-						alert('game name already exists');
+						apprise('game name already exists');
 					} else {
 						ss.rpc('admin.invitecodes.sendInvites', emailList, instanceName, function(res) {
 							console.log(res);
@@ -130,7 +130,7 @@ var self = module.exports = {
 			if(word.indexOf('delete') > -1) {
 				self.deletePlayer(id, this);	
 			} else {
-				alert('you must type delete to delete user');
+				apprise('you must type delete to delete user');
 			}
 		});
 
@@ -150,17 +150,17 @@ var self = module.exports = {
 					if(space) {
 						ss.rpc('admin.invitecodes.sendInvites', email, instanceName, space,function(okay) {
 							if(okay) {
-								alert('added successfully');
+								apprise('added successfully');
 							} else {
-								alert('error');
+								apprise('error');
 							}
 						});
 					} else {
-						alert('the game is full');
+						apprise('the game is full');
 					}
 				});
 			} else {
-				alert('invalid email.');
+				apprise('invalid email.');
 			}
 			return false;
 		});

@@ -13,6 +13,7 @@ var self = module.exports = {
 				'libs/jquery-2.0.3.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/bootstrap.min.js',
+				'libs/plugins.js',
 				'routes',
 				'admin',
 				'main',
@@ -34,6 +35,7 @@ var self = module.exports = {
 				'libs/bootstrap.min.js',
 				'libs/d3.v2.min.js',
 				'libs/howler.min.js',
+				'libs/plugins.js',
 				'routes',
 				'game',
 				'shared'

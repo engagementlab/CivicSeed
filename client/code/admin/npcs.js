@@ -281,7 +281,7 @@ var self = module.exports = {
 		} else {
 			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
 				if(err) {
-					alert(err);
+					apprise(err);
 				} else {
 					var saveButton = npc.find('.saveChanges');
 					var levelClass = 'level' + updates.level,
