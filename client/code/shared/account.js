@@ -120,7 +120,12 @@
 			sessionStorage.removeItem('profileLink');
 			// console.log('after: ', sessionStorage);
 			if(deAuthenticate) {
-				Davis.location.assign('/');
+				// TODO: when game is compiled w/ app, should just use Davis.js
+				if(Davis.location.current() === '/game') {
+					window.location.href = '/';
+				} else {
+					Davis.location.assign('/');
+				}
 				// console.log('Logging out...');
 			}
 		});
