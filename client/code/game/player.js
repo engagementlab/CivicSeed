@@ -283,20 +283,20 @@ $game.$player = {
 			attempts: 1,
 			result: info.correct,
 			seeded: [],
-			questionType: info.questionType
+			questionType: info.questionType,
+			index: info.index
 		};
-		var realResource = null,
-			numString = info.index.toString();
+		var realResource = null;
 
 		//see if the resource is already in the list
-		if(_resources[numString]) {
-			realResource = _resources[numString];
+		if(_resources[info.index]) {
+			realResource = _resources[info.index];
 		}
 
 		//if not, then add it to the list
 		if(!realResource) {
-			_resources[numString] = newInfo;
-			realResource = _resources[numString];
+			_resources[info.index] = newInfo;
+			realResource = _resources[info.index];
 		}
 		else {
 			realResource.answers.push(newInfo.answers[0]);
@@ -563,21 +563,19 @@ $game.$player = {
 	//get ALL answers for all open questions for this player
 	compileAnswers: function() {
 		var html = '';
-		$.each(_resources, function(key, item) {
-			// console.log(item);
-			if(item.questionType === 'open') {
-				var	npc = key,
-					answer = item.answers[item.answers.length - 1],
-					question = $game.$resources.getQuestion(npc),
-					seededCount = item.seeded.length;
+			$.each(_resources, function(index, resource) {
+				if(resource.questionType === 'open') {
+					var answer = resource.answers[resource.answers.length - 1],
+						question = $game.$resources.getQuestion(index),
+						seededCount = resource.seeded.length;
 
-				html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
-				if(seededCount > 0) {
-					html += '<p class="seededCount">' + seededCount + ' likes</p>';
+					html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
+					if(seededCount > 0) {
+						html += '<p class="seededCount">' + seededCount + ' likes</p>';
+					}
+					html += '</div>';
 				}
-				html += '</div>';
-			}
-		});
+			});
 		return html;
 	},
 
@@ -737,24 +735,23 @@ $game.$player = {
 	//add the tagline to the resource, then save it to db
 	setTagline: function(tagline) {
 		var resource = $game.$resources.getCurResource(),
-			npc = resource.index,
 			realResource = null,
 			npcLevel = $game.$npc.getNpcLevel(),
 			shapeName = resource.shape;
 
 		//find the resource and add tagline
-		if(_resources[npc]) {
-			realResource = _resources[npc];
+		if(_resources[resource.index]) {
+			realResource = _resources[resource.index];
 			realResource.tagline = tagline;
 		}
 		//add piece to inventory
 		if($game.$player.currentLevel === npcLevel) {
-				_inventory.push({name: shapeName, npc: npc, tagline: tagline});
-				_addToInventory({name: shapeName, npc: npc, tagline: tagline});
+				_inventory.push({name: shapeName, npc: resource.index, tagline: tagline});
+				_addToInventory({name: shapeName, npc: resource.indexpc, tagline: tagline});
 		}
 		//hack to not include demo users
 		var newAnswer = {
-			npc: npc,
+			npc: resource.index,
 			id: $game.$player.id,
 			name: $game.$player.name,
 			answer: realResource.answers[realResource.answers.length - 1],
@@ -767,7 +764,7 @@ $game.$player = {
 			ss.rpc('game.npc.saveResponse', newAnswer);
 		}
 
-		_saveResourceToDB(realResource, npc);
+		_saveResourceToDB(realResource);
 		//display npc bubble for comment num
 		$game.$player.displayNpcComments();
 	},
@@ -929,19 +926,23 @@ $game.$player = {
 			_info.x = 15;
 			_info.y = 8;
 		}
+	},
+
+	debug: function() {
+		console.log(_resources);
 	}
 };
 
 /***** PRIVATE FUNCTIONS ******/
 
 //save a new resource to the database
-function _saveResourceToDB(resource, npc) {
+function _saveResourceToDB(resource) {
 	var info = {
 		id: $game.$player.id,
 		resource: resource,
 		inventory: _inventory,
 		resourcesDiscovered: _resourcesDiscovered,
-		index: npc
+		index: resource.index
 	};
 	ss.rpc('game.player.saveResource', info);
 }
@@ -965,7 +966,7 @@ function _setPlayerInformation(info) {
 	//private
 	_seeds = info.game.seeds;
 	_previousSeedsDropped = _seeds.dropped;
-	_resources = info.game.resources;
+	_resources = _objectify(info.game.resources);
 	_position = info.game.position;
 	_colorInfo = info.game.colorInfo.rgb;
 	_rgb = 'rgb(' + info.game.colorInfo.rgb.r + ',' + info.game.colorInfo.rgb.g + ',' + info.game.colorInfo.rgb.b + ')';
@@ -1373,4 +1374,14 @@ function _saveSeedsToDB() {
 		tilesColored: _tilesColored
 	};
 	ss.rpc('game.player.updateGameInfo', info);
+}
+
+function _objectify(input) {
+	var result = {};
+	for(var i = 0; i < input.length; i++) {
+		result[input[i].index] = input[i];
+		result[input[i].index].arrayLookup = i;
+	}
+	console.log('resources', result);
+	return result;
 }

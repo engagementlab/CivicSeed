@@ -3,7 +3,7 @@ var hash = require('password-hash');
 module.exports = function(mongoose, db, Schema, ObjectId) {
 
 	var UserSchema = new Schema({
-		gameChannel: String, // not sure what type this should be...
+		gameChannel: String,
 		firstName: String,
 		lastName: String,
 		school: String,
@@ -31,7 +31,15 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				},
 				tilesheet: Number
 			},
-			resources: Object,
+			resources: [{
+				answers: [String],
+				attempts: Number,
+				result: Boolean,
+				seeded: [String],
+				questionType: String,
+				tagline: String,
+				index: Number
+			}],
 			resourcesDiscovered: Number,
 			inventory: [{
 				name: String,

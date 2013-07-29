@@ -63,7 +63,7 @@ exports.actions = function(req, res, ss) {
 							rgb: newColor,
 							tilesheet: tilesheetNum
 						},
-						resources: {},
+						resources: [],
 						resourcesDiscovered: 0,
 						inventory: [],
 						seeds: {

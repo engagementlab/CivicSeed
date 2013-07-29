@@ -321,30 +321,32 @@ exports.actions = function(req, res, ss) {
 		},
 
 		saveResource: function(info) {
-			//console.log(info);
+			console.log(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						var npc = info.index;
-						// //hack cuz game doesn't start with resource object...
-						if(!user.game.resources) {
-							user.game.resources = {};
-						}
-						
 						//first we save the new resource
-						if(user.game.resources[npc]) {
-							user.game.resources[npc].answers = info.resource.answers;
-							user.game.resources[npc].attempts = info.resource.attempts;
-							user.game.resources[npc].result = info.resource.result;
+						if(user.game.resources[info.index]) {
+							//TODO must use lookupIndex here
+							user.game.resources[info.index].answers = info.resource.answers;
+							user.game.resources[info.index].attempts = info.resource.attempts;
+							user.game.resources[info.index].result = info.resource.result;
 						} else {
-							user.game.resources[npc] = info.resource;
+							user.game.resources.push(info.resource);
 						}
 						//now we update the inventory and resourcesDiscovered
 						user.game.inventory = info.inventory;
 						user.game.resourcesDiscovered = info.resourcesDiscovered;
-						user.save();
+						console.log(user.game.resources);
+						user.save(function(err,suc) {
+							if(err) {
+								console.log('err');
+							} else {
+								console.log('successs');
+							}
+						});
 					}
 				});
 		},

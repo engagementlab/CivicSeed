@@ -26,7 +26,7 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
@@ -74,7 +74,7 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
@@ -121,7 +121,7 @@ module.exports.global = [{
 			},
 			tilesheet: 2
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
@@ -169,7 +169,7 @@ module.exports.global = [{
 			},
 			tilesheet: 11
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
@@ -214,7 +214,7 @@ module.exports.global = [{
 			},
 			tilesheet: 3
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
@@ -259,7 +259,7 @@ module.exports.global = [{
 			},
 			tilesheet: 4
 		},
-		resources: null,
+		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {

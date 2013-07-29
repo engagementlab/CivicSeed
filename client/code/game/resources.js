@@ -223,6 +223,7 @@ $game.$resources = {
 	showRecentAnswers: function() {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
+		//console.log(_curResource);
 		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 			otherAnswers = '';
 			yourAnswer = $game.$player.getAnswer(_curResource.index),
