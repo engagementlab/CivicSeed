@@ -1382,6 +1382,6 @@ function _objectify(input) {
 		result[input[i].index] = input[i];
 		result[input[i].index].arrayLookup = i;
 	}
-	console.log('resources', result);
+	// console.log('resources', result);
 	return result;
 }
