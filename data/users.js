@@ -276,4 +276,52 @@ module.exports.global = [{
 		tilesColored: 0,
 		pledges: 5
 	}
+}, {
+	firstName: 'Mindy',
+	lastName: 'Mindy',
+	school: 'Tufts University',
+	password: 'mindy',
+	email: 'mindy',
+	role: 'superadmin',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: '4cprkae7y5xqolx6',
+	profileSetup: true,
+	profileUnlocked: true,
+	isPlaying: false,
+	game: {
+		instanceName: 'awesome',
+		currentLevel: 0,
+		position: {
+			x: 64,
+			y: 77
+		},
+		colorInfo: {
+			rgb: {
+				r: 206,
+				g: 120,
+				b: 230
+			},
+			tilesheet: 2
+		},
+		resources: [],
+		resourcesDiscovered: 0,
+		inventory: [],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 0,
+		firstTime: true,
+		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
+		resumeFeedback: [{resumeIndex: 0, comment: 'this is a feedback response.'}, {resumeIndex: 0, comment: 'roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green'}],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5
+	},
+	admin: {
+		instances: []
+	}
 }];
