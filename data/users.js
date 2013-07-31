@@ -1,4 +1,5 @@
 module.exports.global = [{
+	activeSessionID: null,
 	firstName: 'jimmy',
 	lastName: 'dolan',
 	school: 'Emerson College',
@@ -47,6 +48,7 @@ module.exports.global = [{
 		instances: ['awesome','demo']
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Kareem',
 	lastName: 'Abdul-Jabbar',
 	school: 'UCLA',
@@ -94,7 +96,9 @@ module.exports.global = [{
 	admin: {
 		instances: ['awesome','demo']
 	}
-}, {	firstName: 'tufts',
+}, {
+	activeSessionID: null,
+	firstName: 'tufts',
 	lastName: 'admin',
 	school: 'Emerson College',
 	password: 'funcarrots',
@@ -142,6 +146,7 @@ module.exports.global = [{
 		instances: ['tufts-remote','tufts-local']
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Michael',
 	lastName: 'Jordan',
 	school: 'North Carolina',
@@ -151,7 +156,7 @@ module.exports.global = [{
 	gameStarted: true,
 	profilePublic: true,
 	profileLink: 'dysbaphy3e0icnmi',
-	profileSetup: true,
+	profileSetup: false,
 	profileUnlocked: false,
 	isPlaying: false,
 	game: {
@@ -187,6 +192,7 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Larry',
 	lastName: 'Bird',
 	school: 'Indiana State',
@@ -232,6 +238,7 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Pistol',
 	lastName: 'Pete',
 	school: 'LSU',
@@ -277,6 +284,7 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Magic',
 	lastName: 'Johnson',
 	school: 'Michigan State',
@@ -484,6 +492,7 @@ module.exports.global = [{
 		pledges: 5
 	}
 }, {
+	activeSessionID: null,
 	firstName: 'Mindy',
 	lastName: 'Mindy',
 	school: 'Tufts University',

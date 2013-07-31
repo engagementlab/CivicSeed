@@ -61,8 +61,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		updateResume: function(info) {
-			UserModel
-			.findById(info.id, function(err,user) {
+			UserModel.findById(info.id, function(err,user) {
 				if(err) {
 					console.log(err);
 					res(false);
@@ -82,8 +81,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		setPublic: function(info) {
-			UserModel
-			.findById(info.id, function(err,user) {
+			UserModel.findById(info.id, function(err,user) {
 				if(err) {
 					console.log(err);
 					res(false);
