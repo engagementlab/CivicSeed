@@ -62,21 +62,19 @@ exports.actions = function(req, res, ss) {
 		},
 
 		deAuthenticate: function() {
-			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 			console.log('****** deAuthenticate ******');
-			req.session.channel.reset();
-			req.session.setUserId(null);
-			req.session.firstName = null;
-			req.session.lastName = null;
-			req.session.email = null;
-			req.session.role = null;
-			req.session.game = null;
-			req.session.gameStarted = null;
-			req.session.profileSetup = null;
-			req.session.isPlaying = null;
-			req.session.profileLink = null;
-			req.session.save();
-			res(true);
+			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+			req.session.userId = null;
+			req.session.save(function(error) {
+				if(error) {
+					console.error('User session destroy failed!'.red)
+					res(false);
+				} else {
+					// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+					req.session.channel.reset();
+					res(true);
+				}
+			});
 		},
 
 		getUserSession: function() {
@@ -101,17 +99,16 @@ exports.actions = function(req, res, ss) {
 		},
 
 		checkGameSession: function() {
-			UserModel
-				.findById(req.session.userId, function(err,result) {
-					if(!result.isPlaying) {
-						result.isPlaying = true;
-						result.save(function(err,okay) {
-							res(err,false);
-						});
-					} else {
-						res(err,result.isPlaying);
-					}
-				});
+			UserModel.findById(req.session.userId, function(err, result) {
+				if(!result.isPlaying) {
+					result.isPlaying = true;
+					result.save(function(err, okay) {
+						res(err, false);
+					});
+				} else {
+					res(err, result.isPlaying);
+				}
+			});
 		},
 
 		remindMeMyPassword: function(email) {
@@ -152,7 +149,7 @@ exports.actions = function(req, res, ss) {
 						school: info.school,
 						profileSetup: true
 					});
-					user.save(function(err,suc) {
+					user.save(function(err, suc) {
 						if(!err && suc) {
 							req.session.firstName = info.first;
 							req.session.lastName = info.last;
