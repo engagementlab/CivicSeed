@@ -107,18 +107,8 @@
 	},
 
 	deAuthenticate: function() {
-		// ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) { console.log(deAuthenticate); });
 	 	ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
-			// console.log(deAuthenticate);
-			// console.log('before: ', sessionStorage);
-			sessionStorage.removeItem('userId');
-			sessionStorage.removeItem('userFirstName');
-			sessionStorage.removeItem('userLastName');
-			sessionStorage.removeItem('userEmail');
-			sessionStorage.removeItem('userRole');
-			sessionStorage.removeItem('isPlaying');
-			sessionStorage.removeItem('profileLink');
-			// console.log('after: ', sessionStorage);
+			sessionStorage.clear();
 			if(deAuthenticate) {
 				// TODO: when game is compiled w/ app, should just use Davis.js
 				if(Davis.location.current() === '/game') {
@@ -126,7 +116,6 @@
 				} else {
 					Davis.location.assign('/');
 				}
-				// console.log('Logging out...');
 			}
 		});
 	},
