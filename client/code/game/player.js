@@ -726,6 +726,14 @@ $game.$player = {
 				$('.beamMeUp').fadeOut();
 				$game.$player.displayNpcComments();
 			}, 1000);
+			
+			var info = {
+				id: $game.$player.id,
+				x: _info.x,
+				y: _info.y
+			};
+			ss.rpc('game.player.beam', info);
+			$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
 		});
 	},
 

@@ -333,19 +333,18 @@ $game.$botanist = {
 	},
 
 	showRiddle: function(num) {
+		_promptNum = num;
+		_currentSlide = 0;
 		//if they are solving, change functionality of inventory
-		if(num === 2) {
-			_promptNum = 1;
-			_currentSlide = 2;
+		if(num === 1) {
 			$game.$botanist.isChat = true;
-		}
-		else {
-			_promptNum = num;
-			_currentSlide = 0;
+		} else if(num === 2) {
+			_currentSlide = 2;	
 		}
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
 
+		console.log(_currentSlide, _promptNum);
 		$speechBubble.fadeOut(function() {
 			$speechBubbleBtn.addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
@@ -365,12 +364,9 @@ $game.$botanist = {
 	addButtons: function() {
 		$('.botanistArea button').addClass('hideButton');
 
+		//no buttons except close
 		if(_promptNum === 0) {
-			// if(_currentSlide === 0) {
-			// 	$('.botanistArea .nextButton').removeClass('hideButton');
-			// }
 			if(_currentSlide === 0) {
-				// $('.botanistArea .backButton').removeClass('hideButton');
 				if($game.$player.firstTime) {
 					$('.botanistArea .nextButton').removeClass('hideButton');
 				} else {
@@ -378,7 +374,6 @@ $game.$botanist = {
 				}
 			}
 			else {
-				//$('.botanistArea .backButton').removeClass('hideButton');
 				$('.botanistArea .closeButton').removeClass('hideButton');
 			}
 		}
@@ -388,11 +383,9 @@ $game.$botanist = {
 				$('.botanistArea .clearBoardButton').removeClass('hideButton');
 			}
 			else if(_currentSlide === 1) {
-				$('.botanistArea .answerButton').addClass('hideButton');
 				$('.botanistArea .nextButton').removeClass('hideButton');
 			}
 			else {
-				$('.botanistArea .nextButton').addClass('hideButton');
 				$('.botanistArea .answerButton').removeClass('hideButton');
 				$('.botanistArea .clearBoardButton').removeClass('hideButton');
 			}
@@ -413,17 +406,8 @@ $game.$botanist = {
 
 	addContent: function() {
 		$('.botanistArea .speakerName').text($game.$botanist.name+': ');
-		//if _promptNum is 0, then it is the just showing the riddle and tangram first time
+		//if _promptNum is 0, then it is the just showing the riddle no interaction
 		if(_promptNum === 0) {
-			// if(_currentSlide === 0) {
-				// if($game.$player.firstTime) {
-				// 	$botanistAreaMessage.text('Well -- first ' + $game.$player.name +', you must prove your worth by answering my riddle - the Enigma Civica. The more you understand, the more powerful your seeds will become. Behold!');
-				// 	$botanistContent.html('<p class="megaRiddle">Why and how this garden grows<br>is something you may never know --<br>that is unless you first uncover<br>how we work with one another.<br>So I\'ll tell you how this starts:<br> with a riddle in four parts.<br><br>First, you must find a way<br>to tell me what you brought today<br>and how your future and your past<br>combine to form a mold you cast.<br>How does pity become solidarity?<br>One hint: Walk with humility.<br><br>Second, what do you gain the more you give, <br>and how can you give if you are to gain?<br>Who out there can explain <br>what communities need and what they contain?<br>Do you see assets or do you see need <br>when you look at partners in the community?<br>Expand your view<br>and tell me too, <br>who can see it better than you?<br><br>You know how you got here and so do I &mdash;<br>can you forget it? Should you try?<br>How do people from here and there<br>build a dream that they both share<br>When is a goal obtainable? <br>Responsibility / maintainable? <br>Are your thoughts explainable? <br>Is what we teach retainable?<br><br>When the seed is fertile, who should sow it?<br>A challenge, a solution, who should own it?<br>Will you grow connections,<br>become a leader by reflection,<br> be inspired, plant roots, or discover direction?<br>The last question is the hardest of all,<br>so look into your crystal ball.<br>Will your mark be great or small?<br>Will we be glad you came at all?</p>');
-				// } else {
-				// 	$botanistAreaMessage.text('Here is your next enigma ' + $game.$player.name + '.');
-				// 	$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
-				// }
-			// }
 			if(_currentSlide === 0) {
 				if($game.$player.botanistState > 1) {
 					$botanistAreaMessage.text('Here is the notebook page to view again.');
@@ -464,9 +448,6 @@ $game.$botanist = {
 		}
 		//they are solving it, so riddle interface and stuff
 		else {
-			// if(_currentSlide === 0) {
-			// 	$botanistAreaMessage.text('here is your next riddle ' + $game.$player.name + '.');
-			// 	$botanistContent.html('<p class="firstRiddle">'+$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet+'</p>');
 			if(_currentSlide === 0) {
 				$inventoryBtn.addClass('hideButton');
 				$inventory.slideDown(function() {
@@ -478,7 +459,7 @@ $game.$botanist = {
 				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your paintbrush seeds. The fewer tries you take, the more paintbrush seeds you will receive.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<p class="riddleText">'+ $game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet +'</p><img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
+				var newHTML = '<img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
 				$botanistContent.html(newHTML);
 
 				//replace the tangram image in the inventory with tip
@@ -499,8 +480,7 @@ $game.$botanist = {
 				var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
 				$botanistAreaMessage.text(postTangramTalk);
-				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1]+ '</p><p img src="megaseed.png"></p>';
-					newHTML2 += '<p style="text-align:center;"><img src="/img/game/megaseed.png"></p>';
+				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '</p>';
 				$botanistContent.html(newHTML2);
 			}
 			else {
@@ -697,13 +677,12 @@ $game.$botanist = {
 				.unbind('drop');
 
 			var npcData = e.data,
-				dt = e.originalEvent.dataTransfer,
-				select = '.r' + npcData.name;
+				dt = e.originalEvent.dataTransfer;
 
 			dt.setData('text/plain', npcData.npc);
 
-			//set drag over shit
-			$tangramArea
+			//set drag over and drop to receive
+			$('.tangramArea')
 				.bind('dragover',$game.$botanist.dragOver)
 				.bind('drop', $game.$botanist.drop);
 		}
@@ -740,6 +719,7 @@ $game.$botanist = {
 			fill = _svgFills[shape.fill];
 
 
+		console.log(npcData, selector, x);
 		$('.r' + name)
 			.css('opacity','.4')
 			.attr('draggable', 'false');
