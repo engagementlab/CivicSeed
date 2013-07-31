@@ -144,7 +144,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Michael',
 	lastName: 'Jordan',
-	school: 'Emerson College',
+	school: 'North Carolina',
 	password: '',
 	email: 'm',
 	role: 'actor',
@@ -189,7 +189,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Larry',
 	lastName: 'Bird',
-	school: 'Emerson College',
+	school: 'Indiana State',
 	password: '',
 	email: 'l',
 	role: 'actor',
@@ -234,7 +234,7 @@ module.exports.global = [{
 }, {
 	firstName: 'Pistol',
 	lastName: 'Pete',
-	school: 'Emerson College',
+	school: 'LSU',
 	password: '',
 	email: 'p',
 	role: 'actor',
@@ -270,6 +270,213 @@ module.exports.global = [{
 		botanistState: 0,
 		firstTime: true,
 		resume: ['i like to volunteer', 'i want to work with the community', 'i play sports and such which has prepared me','i have cool hair'],
+		resumeFeedback: [],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5
+	}
+}, {
+	firstName: 'Magic',
+	lastName: 'Johnson',
+	school: 'Michigan State',
+	password: '',
+	email: 'j',
+	role: 'actor',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: '2o89d51qd3raace9',
+	profileSetup: true,
+	profileUnlocked: false,
+	isPlaying: false,
+	game: {
+		instanceName: 'awesome',
+		currentLevel: 0,
+		position: {
+			x: 64,
+			y: 77
+		},
+		colorInfo: {
+			rgb: {
+				r: 184,
+				g: 239,
+				b: 98
+			},
+			tilesheet: 4
+		},
+		resources: [
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 8986,
+				tagline: 'god this sucks.',
+				seeded: [ ],
+				answers: [
+					'het here'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'multiple',
+				index: 9536,
+				tagline: 'square',
+				seeded: [ ],
+				answers: [
+					'D) A daughter of immigrants, bilingual upbringing, latina female'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'yesno',
+				index: 8542,
+				tagline: 'hey billy bo what is shaking baby',
+				seeded: [ ],
+				answers: [
+					'yes'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 6265,
+				tagline: 'wicked narly',
+				seeded: [ ],
+				answers: [
+					'what the fudge ?'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 4693,
+				tagline: 'arm',
+				seeded: [ ],
+				answers: [
+					'a huge video, great.'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'multiple',
+				index: 4284,
+				tagline: 'diamnond',
+				seeded: [ ],
+				answers: [
+					'B) downstream-oriented service'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 2569,
+				tagline: 'rect',
+				seeded: [ ],
+				answers: [
+					'wahoooo'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 1608,
+				tagline: 'whh',
+				seeded: [ ],
+				answers: [
+					'way too long that'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 2176,
+				tagline: 'reree',
+				seeded: [ ],
+				answers: [
+					'fefefefefe'
+				]
+			},
+			{
+				attempts: 1,
+				result: true,
+				questionType: 'open',
+				index: 4876,
+				tagline: 'sdwdewd',
+				seeded: [ ],
+				answers: [
+					'hey ehey'
+				]
+			}
+		],
+		resourcesDiscovered: 10,
+		inventory: [
+			{
+				name: 'correct4',
+				tagline : 'god this sucks.',			
+				npc: 8986
+			},
+			{
+				name: 'wrong6',
+				tagline : 'square',			
+				npc: 9536
+			},
+			{
+				name: 'wrong3',
+				tagline : 'hey billy bo what is shaking baby',			
+				npc: 8542
+			},
+			{
+				name: 'correct2',
+				tagline : 'wicked narly',			
+				npc: 6265
+			},
+			{
+				name: 'wrong2',
+				tagline : 'arm',			
+				npc: 4693
+			},
+			{
+				name: 'wrong1',
+				tagline : 'diamnond',			
+				npc: 4284
+			},
+			{
+				name: 'correct1',
+				tagline : 'rect',			
+				npc: 2569
+			},
+			{
+				name: 'wrong4',
+				tagline : 'whh',			
+				npc: 1608
+			},
+			{
+				name: 'correct3',
+				tagline : 'reree',			
+				npc: 2176
+			},
+			{
+				name: 'wrong5',
+				tagline : 'sdwdewd',			
+				npc: 4876
+			}
+		],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 3,
+		firstTime: true,
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,

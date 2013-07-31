@@ -366,7 +366,11 @@ $game.$player = {
 			//check if they have ALL pieces, of so, beam me up scotty
 			// console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
 			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
-				$game.$player.beamMeUpScotty();
+				var msg = 'You collected all the pieces, to the botanist!';
+				$game.statusUpdate({message: msg, input:'status', screen: true , log:false});
+				setTimeout(function() {
+					$game.$player.beamMeUpScotty();
+				},3000);
 			}
 		}
 	},

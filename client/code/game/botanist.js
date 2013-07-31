@@ -14,7 +14,7 @@ var _info = null,
 	_dragOffY = 0,
 	_feedbackTimeout = null,
 	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
-	_numMegaSeeds = 5,
+	_paintbrushSeedFactor = 5,
 	_levelQuestion = ['What motivates you to civically engage with the community? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!','What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your community service to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
 	_firstTime = false,
 
@@ -615,22 +615,22 @@ $game.$botanist = {
 
 			if(allTangrams.length === 0) {
 				correct = false;
-				_numMegaSeeds -= 1;
+				_paintbrushSeedFactor -= 1;
 				message = 'at least TRY to solve it...';
 			}
 			else if(wrongOne) {
 				correct= false;
-				_numMegaSeeds -=1;
+				_paintbrushSeedFactor -=1;
 				message = 'Oh! That’s not quite right. Think more about how the pieces relate to one another, and try again.';
 			}
 			else if(allTangrams.length < aLength) {
 				correct= false;
-				_numMegaSeeds -=1;
+				_paintbrushSeedFactor -=1;
 				message = 'You are missing some pieces. Be sure to read the notebook clues carefully to help pick out the right pieces.';
 			}
 			else if(nudge) {
 				correct= false;
-				_numMegaSeeds -=1;
+				_paintbrushSeedFactor -=1;
 				message = 'So close! You have the right pieces, just fix the placement.';
 			}
 
@@ -650,8 +650,11 @@ $game.$botanist = {
 					$tangramArea.hide();
 					//remove them from player's inventory
 					$game.$player.emptyInventory();
-					_numMegaSeeds = _numMegaSeeds < 0 ? 1: _numMegaSeeds;
-					$game.$player.updateSeeds('riddle', _numMegaSeeds);
+					var numSeeds = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
+						level = $game.$player.currentLevel + 1;
+						totalSeeds = (20 + level * 4 ) + level * 2 * numSeeds;
+					
+					$game.$player.updateSeeds('riddle', totalSeeds);
 					$game.$player.botanistState = 4;
 					_saveBotanistState();
 				}
@@ -663,7 +666,7 @@ $game.$botanist = {
 
 		}
 		else {
-			_numMegaSeeds = 5;
+			_paintbrushSeedFactor = 5;
 			var portAnswer = $botanistTextArea.val();
 			$game.$player.resumeAnswer(portAnswer);
 			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});

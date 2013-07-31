@@ -321,7 +321,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		saveResource: function(info) {
-			console.log(info);
+			// console.log(info);
 			userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
@@ -339,7 +339,7 @@ exports.actions = function(req, res, ss) {
 						//now we update the inventory and resourcesDiscovered
 						user.game.inventory = info.inventory;
 						user.game.resourcesDiscovered = info.resourcesDiscovered;
-						console.log(user.game.resources);
+						//console.log(user.game.resources);
 						user.save(function(err,suc) {
 							if(err) {
 								console.log('err');
