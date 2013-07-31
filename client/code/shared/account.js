@@ -77,31 +77,30 @@
 	},
 
 	authenticate: function(email, password) {
-		//console.log('client: account.authenticate');
 		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
+			var session;
 			// console.log(authenticated);
-			if(authenticated) {
-				sessionStorage.setItem('userId', authenticated.id);
-				sessionStorage.setItem('userFirstName', authenticated.firstName);
-				sessionStorage.setItem('userLastName', authenticated.lastName);
-				sessionStorage.setItem('userEmail', authenticated.email);
-				sessionStorage.setItem('userRole', authenticated.role);
-				sessionStorage.setItem('isPlaying', authenticated.isPlaying);
-				sessionStorage.setItem('profileLink', authenticated.profileLink);
-				if(!authenticated.profileSetup) {
+			if(authenticated.status) {
+				session = authenticated.session;
+				sessionStorage.setItem('userId', session.id);
+				sessionStorage.setItem('userFirstName', session.firstName);
+				sessionStorage.setItem('userLastName', session.lastName);
+				sessionStorage.setItem('userEmail', session.email);
+				sessionStorage.setItem('userRole', session.role);
+				sessionStorage.setItem('isPlaying', session.isPlaying);
+				sessionStorage.setItem('profileLink', session.profileLink);
+				if(!session.profileSetup) {
 					//send them to setup their profile info
 					Davis.location.assign('/change-info');
-				} else if(!authenticated.gameStarted) {
+				} else if(!session.gameStarted) {
 					//send them to watch the intro video
 					Davis.location.assign('/introduction');
 				} else {
 					//send them to their profile
-					Davis.location.assign('/profiles/' + authenticated.profileLink);
+					Davis.location.assign('/profiles/' + session.profileLink);
 				}
 			} else {
-				apprise('Incorrect email/password pair.');
-				// handle the fact that it isn't authenticating...
-				// console.log('it\'s not authentic!');
+				apprise(authenticated.reason);
 			}
 		});
 	},
@@ -109,13 +108,12 @@
 	deAuthenticate: function() {
 	 	ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 			sessionStorage.clear();
-			if(deAuthenticate) {
-				// TODO: when game is compiled w/ app, should just use Davis.js
-				if(Davis.location.current() === '/game') {
-					window.location.href = '/';
-				} else {
-					Davis.location.assign('/');
-				}
+			// if(deAuthenticate.status) { }
+			// TODO: when game is compiled w/ app, should just use Davis.js
+			if(Davis.location.current() === '/game') {
+				window.location.href = '/';
+			} else {
+				Davis.location.assign('/');
 			}
 		});
 	},

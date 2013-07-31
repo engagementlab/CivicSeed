@@ -56,14 +56,14 @@ exports.actions = function(req, res, ss) {
 							// console.log(user.activeSessionID, req.sessionId);
 							if(user.activeSessionID === req.sessionId) {
 								// console.log('Active session matches session ID!'.green);
-								res(_setUserSession(user));
+								res({ status: true, session: _setUserSession(user) });
 								// // TODO: do we need to ALSO check if the user has already logged in???
 								// if(req.session.id === user.id) {
 								// 	console.log('THIS USER IS ALREADY LOGGED IN!!!'.red.inverse);
 								// }
 							} else {
-								console.error('Active session ID does not match session ID...'.red);
-								res(false);
+								console.error('Active session ID does not match session ID.'.red);
+								res({ status: false, reason: 'Active session ID does not match session ID.' });
 								// // TODO: handle the session changeover w/ a separate RPC call
 								// ss.session.store.get().get(req.sessionId, function(unknownVariable, session) {
 								// 	console.log('redone'.red.inverse);
@@ -79,18 +79,18 @@ exports.actions = function(req, res, ss) {
 							user.save(function(error) {
 								if(error) {
 									console.error('Error saving active session ID to mongodb'.red);
-									res(false);
+									res({ status: false, reason: error });
 								} else {
 									// console.log('Active session ID saved to mongodb'.green);
-									res(_setUserSession(user));
+									res({ status: true, session: _setUserSession(user) });
 								}
 							});
 						}
 					} else {
-						res(false);
+						res({ status: false, reason: 'Incorrect password.' });
 					}
 				} else {
-					res(false);
+					res({ status: false, reason: 'No user exists with that email.' });
 				}
 
 			});
@@ -117,15 +117,16 @@ exports.actions = function(req, res, ss) {
 			});
 
 			// REDIS
+			// NOTE: these cannot depend on each other: REDIS and MONGO deletions have to be independent
 			req.session.userId = null;
 			req.session.save(function(error) {
 				if(error) {
 					console.error('User session destroy failed!'.red)
-					res(false);
+					res({ status: false, reason: error });
 				} else {
 					// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 					req.session.channel.reset();
-					res(true);
+					res({ status: true, reason: 'Session destroyed.' });
 				}
 			});
 
