@@ -88,4 +88,12 @@ $(function() {
 	ss.event.on('ss-bossModeUnlocked', function() {
 		$game.bossModeUnlocked = true;
 	});
+
+	//another player has beamed
+	ss.event.on('ss-beam', function(info) {
+		//TODO: set others position to new info
+		if(info.id !== $game.$player.id) {
+			$game.$others.beam(info);
+		}
+	});
 });

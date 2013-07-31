@@ -371,6 +371,10 @@ exports.actions = function(req, res, ss) {
 
 		resumeFeedback: function(info) {	
 			dbHelpers.saveFeedback(info, 0);
+		},
+
+		beam: function(info) {
+			ss.publish.channel(req.session.game.instanceName,'ss-beam', info);
 		}
 	};
 };

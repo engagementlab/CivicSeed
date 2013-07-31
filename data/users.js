@@ -475,7 +475,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		botanistState: 3,
-		firstTime: true,
+		firstTime: false,
 		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,

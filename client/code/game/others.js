@@ -16,7 +16,6 @@ $game.$others = {
 		});
 	},
 
-	
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
@@ -37,6 +36,7 @@ $game.$others = {
 			player.update();
 		});
 	},
+
 	clear: function() {
 		//if is moving, move
 		$.each(_onScreenPlayers, function(key, player) {
@@ -49,7 +49,6 @@ $game.$others = {
 		$.each(_onScreenPlayers, function(key, player) {
 			player.slide(slideX, slideY);
 		});
-
 	},
 
 	resetRenderValues: function () {
@@ -244,7 +243,6 @@ $game.$others = {
 			},
 
 			getPlayerInfo: function() {
-
 			},
 
 			beginMove: function(moves) {
@@ -384,6 +382,14 @@ $game.$others = {
 			changeLevel: function(level) {
 				otherPlayer.level = level;
 				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
+			},
+
+			beam: function(info) {
+				console.log(info);
+				otherPlayer.info.x = info.x;
+				otherPlayer.info.y = info.y;
+				otherPlayer.updateRenderInfo();
+				$game.$map.updatePlayer(otherPlayer.id, otherPlayer.info.x, otherPlayer.info.y);
 			}
 		};
 		return otherPlayer;
@@ -404,6 +410,13 @@ $game.$others = {
 		if(_onScreenPlayers[id]) {
 			_onScreenPlayers[id].beginMove(moves);
 		}
+	},
+
+	beam: function(info) {
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.id === info.id) {
+				player.beam(info);
+			}
+		});
 	}
-	
 };
