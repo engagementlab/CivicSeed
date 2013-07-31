@@ -16,40 +16,76 @@ exports.actions = function(req, res, ss) {
 	// req.use('debug');
 	// req.use('account.authenticated');
 
+	var _setUserSession = function(user) {
+		req.session.setUserId(user.id);
+		req.session.firstName = user.firstName;
+		req.session.lastName = user.lastName;
+		req.session.email = user.email;
+		req.session.role = user.role;
+		req.session.game = user.game;
+		req.session.gameStarted = user.gameStarted;
+		req.session.profileSetup = user.profileSetup;
+		req.session.isPlaying = user.isPlaying;
+		req.session.profileLink = user.profileLink;
+		req.session.channel.subscribe(user.game.instanceName);
+		req.session.save();
+		return {
+			id: req.session.userId,
+			firstName: req.session.firstName,
+			lastName: req.session.lastName,
+			email: req.session.email,
+			role: req.session.role,
+			game: req.session.game,
+			gameStarted: req.session.gameStarted,
+			profileSetup: req.session.profileSetup,
+			isPlaying: req.session.isPlaying,
+			profileLink: req.session.profileLink
+		};
+	};
+
 	return {
 
 		authenticate: function(email, password) {
 			console.log('**** authenticate ******');
 			UserModel.findOne({ email: email } , function(err, user) {
-				if(user) {
-					if(user.password === password) {
-						req.session.setUserId(user.id);
-						req.session.firstName = user.firstName;
-						req.session.lastName = user.lastName;
-						req.session.email = user.email;
-						req.session.role = user.role;
-						req.session.game = user.game;
-						req.session.gameStarted = user.gameStarted;
-						req.session.profileSetup = user.profileSetup;
-						req.session.isPlaying = user.isPlaying;
-						req.session.profileLink = user.profileLink;
-						// if(!user.isPlaying) {}
-						req.session.channel.subscribe(user.game.instanceName);
 
-						// req.session.gameChannel = channel....
-						req.session.save();
-						res({
-							id: req.session.userId,
-							firstName: req.session.firstName,
-							lastName: req.session.lastName,
-							email: req.session.email,
-							role: req.session.role,
-							game: req.session.game,
-							gameStarted: req.session.gameStarted,
-							profileSetup: req.session.profileSetup,
-							isPlaying: req.session.isPlaying,
-							profileLink: req.session.profileLink
-						});
+				if(user) {
+					// console.log('user.activeSessionID: '.green + String(user.activeSessionID).green);
+					if(user.password === password) {
+						if(user.activeSessionID) {
+							// console.log(user.activeSessionID, req.sessionId);
+							if(user.activeSessionID === req.sessionId) {
+								// console.log('Active session matches session ID!'.green);
+								res(_setUserSession(user));
+								// // TODO: do we need to ALSO check if the user has already logged in???
+								// if(req.session.id === user.id) {
+								// 	console.log('THIS USER IS ALREADY LOGGED IN!!!'.red.inverse);
+								// }
+							} else {
+								console.error('Active session ID does not match session ID...'.red);
+								res(false);
+								// // TODO: handle the session changeover w/ a separate RPC call
+								// ss.session.store.get().get(req.sessionId, function(unknownVariable, session) {
+								// 	console.log('redone'.red.inverse);
+								// 	console.log(unknownVariable);
+								// 	console.log(session);
+								// 	console.log('redtwo'.red.inverse);
+								// });
+							}
+						} else {
+							console.log('No active session ID.');
+							// make sure to save the active session to mongodb, so we can look it up again
+							user.set({ activeSessionID: req.sessionId });
+							user.save(function(error) {
+								if(error) {
+									console.error('Error saving active session ID to mongodb'.red);
+									res(false);
+								} else {
+									// console.log('Active session ID saved to mongodb'.green);
+									res(_setUserSession(user));
+								}
+							});
+						}
 					} else {
 						res(false);
 					}
@@ -62,8 +98,25 @@ exports.actions = function(req, res, ss) {
 		},
 
 		deAuthenticate: function() {
+
 			console.log('****** deAuthenticate ******');
 			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
+
+			// MONGO
+			UserModel.findOne({ email: req.session.email } , function(err, user) {
+				if(user) {
+					user.set({ activeSessionID: null });
+					user.save(function(error) {
+						if(error) {
+							console.log('Error making active session ID null in mongodb'.red);
+						} else {
+							// console.log('Active session ID made null in mongodb'.green);
+						}
+					});
+				}
+			});
+
+			// REDIS
 			req.session.userId = null;
 			req.session.save(function(error) {
 				if(error) {
@@ -75,6 +128,7 @@ exports.actions = function(req, res, ss) {
 					res(true);
 				}
 			});
+
 		},
 
 		getUserSession: function() {
