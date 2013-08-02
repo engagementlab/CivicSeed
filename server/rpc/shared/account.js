@@ -2,6 +2,7 @@ var rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
+	_countdown = 5,
 	singleHtml;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
@@ -63,7 +64,23 @@ exports.actions = function(req, res, ss) {
 								// }
 							} else {
 								console.error('Active session ID does not match session ID.'.red);
-								res({ status: false, reason: 'Active session ID does not match session ID.' });
+
+								// res({
+								// 	status: false,
+								// 	reason: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds',
+								// 	logout: _countdown,
+								// 	// activeSessionID: user.activeSessionID,
+								// 	sessionId: req.sessionId
+								// });
+								res({
+									status: false,
+									reason: 'Please wait while we check other sessions which are currently logged in. This may take a few seconds.',
+									// logout: _countdown,
+									activeSessionID: user.activeSessionID
+									// sessionId: req.sessionId
+								});
+
+
 								// // TODO: handle the session changeover w/ a separate RPC call
 								// ss.session.store.get().get(req.sessionId, function(unknownVariable, session) {
 								// 	console.log('redone'.red.inverse);
@@ -71,6 +88,18 @@ exports.actions = function(req, res, ss) {
 								// 	console.log(session);
 								// 	console.log('redtwo'.red.inverse);
 								// });
+
+
+								// a) user logs in, gets message that someone else is logged in
+								// b) 10 or 5 second timer starts
+								// c) user who is logged in gets notice, "Are you still there?"
+								// d) if user clicks "yes," session is transferred, and user a logs in
+								// e) if user clicks deny, then they keep playing, user a gets denied
+
+
+
+
+
 							}
 						} else {
 							console.log('No active session ID.');
@@ -94,6 +123,14 @@ exports.actions = function(req, res, ss) {
 				}
 
 			});
+
+		},
+
+		approveSession: function(activeSessionID) {
+
+
+			ss.publish.user(activeSessionID, 'queryUserSession', 'Yay, IT HIT THE RIGHT USER!!!');
+
 
 		},
 
