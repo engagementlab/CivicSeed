@@ -58,8 +58,8 @@ exports.actions = function(req, res, ss) {
 										npc.resource.requiredLength = info.resource.requiredLength;
 									} else {
 										npc.resource.answer = info.resource.answer;
-										if(info.questionType === 'multiple') {
-											npc.resource.possibleAnswers = info.possibleAnswers;
+										if(info.resource.questionType === 'multiple') {
+											npc.resource.possibleAnswers = info.resource.possibleAnswers;
 										}
 									}
 								} else {
