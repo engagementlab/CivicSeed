@@ -93,11 +93,43 @@ var $account = module.exports = {
 		});
 
 
-		// socket events for authentication
-		ss.event.on('queryUserSession', function(message) {
-			apprise(message);
-			console.log(message);
+		// // socket events for authentication
+		// ss.event.on('queryUserSession', function(message) {
+		// 	apprise(message);
+		// 	console.log(message);
+		// });
+
+
+		ss.event.on('verifySession', function(req) {
+			apprise(req.message, { verify: true, textNo: 'Sign Out' }, function(response) {
+				if(response) {
+					// console.log('Okay! Stay active!', req.requestingUserId);
+					clearTimeout(_timer);
+					ss.rpc('shared.account.denyNewSession', req.requestingUserId);
+				} else {
+					console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
+					// ss.rpc('shared.account.allowSession', authenticated.sessionId, function() {
+					// });
+				}
+			});
+			_logoutCountDown(req.countdown, function() {
+				console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
+				$('#aOverlay').remove();
+				$('.appriseOuter').remove();
+				// ss.rpc('shared.account.allowSession', authenticated.sessionId, function() {
+				// 	// finished
+				// });
+			});
 		});
+		ss.event.on('denyNewSession', function(message) {
+			$('#aOverlay').remove();
+			$('.appriseOuter').remove();
+			apprise(message);
+		});
+
+
+
+
 
 	},
 
@@ -126,17 +158,10 @@ var $account = module.exports = {
 				}
 			} else {
 				if(authenticated.activeSessionID) {
-					// _logoutCountDown(authenticated.logout, function() {
-					// 	console.log('booting the THIS user and logging OTHER USER in...', authenticated.sessionId);
-					// 	// ss.rpc('shared.account.allowSession', authenticated.sessionId, function() {
-					// 	// 	// finished
-					// 	// });
-					// });
-
-					// apprise(authenticated.reason, { textOk: 'Yes' }, function(response) {
 					apprise(authenticated.reason);
-					ss.rpc('shared.account.approveSession', authenticated.activeSessionID, function() {
-					});
+					// ss.rpc('shared.account.approveSession', authenticated.activeSessionID, function() {
+					// 	// TO COME
+					// });
 				} else {
 					apprise(authenticated.reason);
 				}

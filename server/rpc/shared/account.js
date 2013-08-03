@@ -2,7 +2,7 @@ var rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
-	_countdown = 5,
+	_countdown = 10,
 	singleHtml;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
@@ -65,13 +65,19 @@ exports.actions = function(req, res, ss) {
 							} else {
 								console.error('Active session ID does not match session ID.'.red);
 
-								// res({
-								// 	status: false,
-								// 	reason: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds',
-								// 	logout: _countdown,
-								// 	// activeSessionID: user.activeSessionID,
-								// 	sessionId: req.sessionId
-								// });
+								// NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
+								// so we can log them in (or not) and actually assign them a user id
+								req.session.setUserId(req.sessionId);
+								req.session.save();
+
+								ss.publish.user(user.id, 'verifySession', {
+									// status: false,
+									message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
+									countdown: _countdown,
+									// activeSessionID: user.activeSessionID,
+									requestingUserId: req.sessionId
+								});
+
 								res({
 									status: false,
 									reason: 'Please wait while we check other sessions which are currently logged in. This may take a few seconds.',
@@ -126,10 +132,14 @@ exports.actions = function(req, res, ss) {
 
 		},
 
-		approveSession: function(activeSessionID) {
+		denyNewSession: function(requestingUserId) {
+			ss.publish.user(requestingUserId, 'denyNewSession', 'Authentication denied. There is another session/user currently logged into your account.<br>Reasons for this may be that you have given your username and password to someone else.<br>Please contact the administrator of this site if you think something is in error.');
+		},
+
+		approveNewSession: function(requestingUserId) {
 
 
-			ss.publish.user(activeSessionID, 'queryUserSession', 'Yay, IT HIT THE RIGHT USER!!!');
+			// ss.publish.user(activeSessionID, 'queryUserSession', 'Yay, IT HIT THE RIGHT USER!!!');
 
 
 		},
