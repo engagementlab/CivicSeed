@@ -92,14 +92,6 @@ var $account = module.exports = {
 			ss.rpc('shared.account.startGame');
 		});
 
-
-		// // socket events for authentication
-		// ss.event.on('queryUserSession', function(message) {
-		// 	apprise(message);
-		// 	console.log(message);
-		// });
-
-
 		ss.event.on('verifySession', function(req) {
 			apprise(req.message, { verify: true, textNo: 'Sign Out' }, function(response) {
 				clearTimeout(_timer);
@@ -107,28 +99,23 @@ var $account = module.exports = {
 					// console.log('Okay! Stay active!', req.requestingUserId);
 					ss.rpc('shared.account.denyNewSession', req.requestingUserId);
 				} else {
-				// TODO: look at $game.$player.exitAndSave(function() { function...
-				// DO THIS!!!
+					// TODO: look at $game.$player.exitAndSave(function() { function...
+					// DO THIS!!!
 
-					console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
+					// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
 					// make sure to sign out first
 					$account.deAuthenticate(function(deAuthenticate) {
-						console.log(deAuthenticate);
-						ss.rpc('shared.account.approveNewSession', req.requestingUserId, function() {
-
-
-
-						});
+						ss.rpc('shared.account.approveNewSession', req.requestingUserId);
 					});
 				}
 			});
 			_logoutCountDown(req.countdown, function() {
-				console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
+				// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
 				$('#aOverlay').remove();
 				$('.appriseOuter').remove();
-				// ss.rpc('shared.account.allowSession', authenticated.sessionId, function() {
-				// 	// finished
-				// });
+				$account.deAuthenticate(function(deAuthenticate) {
+					ss.rpc('shared.account.approveNewSession', req.requestingUserId);
+				});
 			});
 		});
 		ss.event.on('denyNewSession', function(message) {
@@ -139,7 +126,8 @@ var $account = module.exports = {
 		ss.event.on('approveNewSession', function(message) {
 			$('#aOverlay').remove();
 			$('.appriseOuter').remove();
-			apprise(message);
+			// apprise(message);
+			$('#loginForm').submit();
 		});
 
 	},
@@ -170,9 +158,6 @@ var $account = module.exports = {
 			} else {
 				if(authenticated.activeSessionID) {
 					apprise(authenticated.reason);
-					// ss.rpc('shared.account.approveSession', authenticated.activeSessionID, function() {
-					// 	// TO COME
-					// });
 				} else {
 					apprise(authenticated.reason);
 				}
