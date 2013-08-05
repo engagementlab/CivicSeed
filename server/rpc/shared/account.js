@@ -86,26 +86,6 @@ exports.actions = function(req, res, ss) {
 									// sessionId: req.sessionId
 								});
 
-
-								// // TODO: handle the session changeover w/ a separate RPC call
-								// ss.session.store.get().get(req.sessionId, function(unknownVariable, session) {
-								// 	console.log('redone'.red.inverse);
-								// 	console.log(unknownVariable);
-								// 	console.log(session);
-								// 	console.log('redtwo'.red.inverse);
-								// });
-
-
-								// a) user logs in, gets message that someone else is logged in
-								// b) 10 or 5 second timer starts
-								// c) user who is logged in gets notice, "Are you still there?"
-								// d) if user clicks "yes," session is transferred, and user a logs in
-								// e) if user clicks deny, then they keep playing, user a gets denied
-
-
-
-
-
 							}
 						} else {
 							console.log('No active session ID.');
@@ -137,11 +117,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		approveNewSession: function(requestingUserId) {
-
-
-			// ss.publish.user(activeSessionID, 'queryUserSession', 'Yay, IT HIT THE RIGHT USER!!!');
-
-
+			ss.publish.user(requestingUserId, 'approveNewSession', 'Authenticating...');
 		},
 
 		deAuthenticate: function() {
@@ -165,17 +141,19 @@ exports.actions = function(req, res, ss) {
 
 			// REDIS
 			// NOTE: these cannot depend on each other: REDIS and MONGO deletions have to be independent
-			req.session.userId = null;
+			req.session.setUserId(null);
 			req.session.save(function(error) {
 				if(error) {
 					console.error('User session destroy failed!'.red)
 					res({ status: false, reason: error });
 				} else {
+					// console.error('User session destroyed!'.red)
 					// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 					req.session.channel.reset();
 					res({ status: true, reason: 'Session destroyed.' });
 				}
 			});
+
 
 		},
 

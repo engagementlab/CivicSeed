@@ -102,14 +102,24 @@ var $account = module.exports = {
 
 		ss.event.on('verifySession', function(req) {
 			apprise(req.message, { verify: true, textNo: 'Sign Out' }, function(response) {
+				clearTimeout(_timer);
 				if(response) {
 					// console.log('Okay! Stay active!', req.requestingUserId);
-					clearTimeout(_timer);
 					ss.rpc('shared.account.denyNewSession', req.requestingUserId);
 				} else {
+				// TODO: look at $game.$player.exitAndSave(function() { function...
+				// DO THIS!!!
+
 					console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
-					// ss.rpc('shared.account.allowSession', authenticated.sessionId, function() {
-					// });
+					// make sure to sign out first
+					$account.deAuthenticate(function(deAuthenticate) {
+						console.log(deAuthenticate);
+						ss.rpc('shared.account.approveNewSession', req.requestingUserId, function() {
+
+
+
+						});
+					});
 				}
 			});
 			_logoutCountDown(req.countdown, function() {
@@ -126,10 +136,11 @@ var $account = module.exports = {
 			$('.appriseOuter').remove();
 			apprise(message);
 		});
-
-
-
-
+		ss.event.on('approveNewSession', function(message) {
+			$('#aOverlay').remove();
+			$('.appriseOuter').remove();
+			apprise(message);
+		});
 
 	},
 
@@ -169,8 +180,8 @@ var $account = module.exports = {
 		});
 	},
 
-	deAuthenticate: function() {
-	 	ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
+	deAuthenticate: function(callback) {
+		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 			sessionStorage.clear();
 			// if(deAuthenticate.status) { }
 			// TODO: when game is compiled w/ app, should just use Davis.js
@@ -178,6 +189,9 @@ var $account = module.exports = {
 				window.location.href = '/';
 			} else {
 				Davis.location.assign('/');
+			}
+			if(typeof callback === 'function') {
+				callback(deAuthenticate);
 			}
 		});
 	},
