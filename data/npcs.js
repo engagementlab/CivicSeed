@@ -262,7 +262,7 @@ module.exports.global = [{
 	},
 	resource: {
 		shape: 'wrong2',
-		url: '2569',
+		url: '352',
 		feedbackRight: 'That\'s great! Thanks for sharing!',
 		feedbackWrong: '',
 		question: 'What did you learn from the video you selected?',
