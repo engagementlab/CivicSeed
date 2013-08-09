@@ -10,7 +10,7 @@ var self = module.exports = {
 			window.$CONTAINER = $('#container');
 
 			// game specific:
-			CivicSeed.gameEngine = require('/game');
+			window.$game = require('/game');
 
 			self.setupRouter();
 

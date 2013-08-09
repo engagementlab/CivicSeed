@@ -15,7 +15,7 @@ var self = module.exports = {
 		});
 
 		$app.get('/game', function(req) {
-			CivicSeed.gameEngine.init();
+			$game.init();
 		});
 
 		$app.get('/introduction', function(req) {
