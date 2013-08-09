@@ -369,7 +369,7 @@ exports.actions = function(req, res, ss) {
 				});
 		},
 
-		resumeFeedback: function(info) {	
+		resumeFeedback: function(info) {
 			dbHelpers.saveFeedback(info, 0);
 		},
 

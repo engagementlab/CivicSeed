@@ -21,6 +21,64 @@ var _stepNumber = 0,
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
 	_displayTimeout = null;
 
+exports.init = function(callback) {
+
+	if(!CivicSeed.gameEngine.instantiated) {
+
+		// game specific:
+		window.$game = require('/game').$game;
+
+		// instantiating code (if not already done)
+		var $map = require('/map');
+		var $render = require('/render');
+		var $npc = require('/npc');
+		var $resources = require('/resources');
+		var $player = require('/player');
+		var $others = require('/others');
+		var $robot = require('/robot');
+		var $botanist = require('/botanist');
+		var $mouse = require('/mouse');
+		var $audio = require('/audio');
+		var $pathfinder = require('/pathfinder');
+		var $events = require('/events');
+		var $input = require('/input');
+		var $chat = require('/chat');
+		var $log = require('/log');
+		var $boss = require('/boss');
+
+		CivicSeed.gameEngine.instantiated = true;
+
+	}
+
+	//check if they are ACTUALLY playing
+	ss.rpc('shared.account.checkGameSession', function(err, response) {
+		// console.log('hey now', err, response);
+		if(err) {
+
+		} else {
+			// if(response) {
+			// 	location.href = '/profiles/' + userSessionObject.profileLink;
+			// } else {
+
+				sessionStorage.setItem('isPlaying', true);
+
+				$CONTAINER.append(JT['game-gameboard']());
+				$CONTAINER.append(JT['game-resourceStage']());
+				$CONTAINER.append(JT['game-hud']());
+
+				//all the init calls will trigger others, a waterfall approach to assure
+				//the right data is loaded before we start
+				_loadPlayer();
+
+			// }
+		}
+	});
+
+
+
+
+};
+
 //public functions
 exports.$game = {
 
@@ -46,12 +104,6 @@ exports.$game = {
 	bossModeUnlocked: null,
 
 	startNewAction: true,
-
-	init: function() {
-		//all the init calls will trigger others, a waterfall approach to assure
-		//the right data is loaded before we start
-		_loadPlayer();
-	},
 
 	//pause menu on browser tab unfocus (currently disabled)
 	pause: function() {
@@ -229,12 +281,6 @@ exports.$game = {
 			}
 		}
 	}
-};
-
-exports.gameModuleReady = function(callback) {
-
-	callback();
-
 };
 
 /********* PRIVATE FUNCTIONS **********/
