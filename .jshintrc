@@ -15,6 +15,7 @@
 		"Davis": true,
 		"$HTML": true,
 		"$BODY": true,
-		"$CONTAINER": true
+		"$CONTAINER": true,
+		"$game": true
 	}
 }
