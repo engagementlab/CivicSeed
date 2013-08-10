@@ -277,6 +277,10 @@ var $game = module.exports = {
 				//$game.statusUpdate({message:'',input:'status',screen: true,log:true});
 			}
 		}
+	},
+
+	exitGame: function() {
+		// console.log('exiting game!');
 	}
 
 };

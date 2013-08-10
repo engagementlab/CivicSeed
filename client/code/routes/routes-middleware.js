@@ -21,6 +21,12 @@ var self = module.exports = {
 			var fullPath = req.fullPath;
 			var userRole = sessionStorage.getItem('userRole');
 
+			if(Davis.previousPath && Davis.previousPath === '/game') {
+				// do something special here
+				$game.exitGame();
+			}
+			Davis.previousPath = req.fullPath;
+
 			if(typeof userRole !== 'string') {
 				userRole = 'non-user';
 			}
