@@ -2,7 +2,7 @@ var rootDir = process.cwd();
 var config = require(rootDir + '/config');
 var service = require(rootDir + '/service');
 var fs = require('fs');
-var dbActions = require(rootDir + '/server/utils/databaseActions');
+var dbActions = require(rootDir + '/server/utils/database-actions');
 
 var userModel = service.useModel('user', 'preload');
 var tileModel = service.useModel('tile', 'preload');
