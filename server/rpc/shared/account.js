@@ -1,4 +1,5 @@
 var rootDir = process.cwd(),
+	bcrypt = require('bcrypt'),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
@@ -6,10 +7,10 @@ var rootDir = process.cwd(),
 	singleHtml;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
-html += '<p style="color:red;">Someone is requesting access to your account. ';
-html += 'If you did not request this information, you can ignore and delete this email.</p>';
-html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>';
-html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
+	html += '<p style="color:red;">Someone is requesting access to your account. ';
+	html += 'If you did not request this information, you can ignore and delete this email.</p>';
+	html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>';
+	html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
 
 exports.actions = function(req, res, ss) {
 
@@ -53,61 +54,66 @@ exports.actions = function(req, res, ss) {
 
 				if(user) {
 					// console.log('user.activeSessionID: '.green + String(user.activeSessionID).green);
-					if(user.password === password) {
-						if(user.activeSessionID) {
-							// console.log(user.activeSessionID, req.sessionId);
-							if(user.activeSessionID === req.sessionId) {
-								// console.log('Active session matches session ID!'.green);
-								res({ status: true, session: _setUserSession(user) });
-								// // TODO: do we need to ALSO check if the user has already logged in???
-								// if(req.session.id === user.id) {
-								// 	console.log('THIS USER IS ALREADY LOGGED IN!!!'.red.inverse);
-								// }
-							} else {
-								console.error('Active session ID does not match session ID.'.red);
+					bcrypt.compare(password, user.password, function(err, authenticated) {
 
-								if(!req.session.verifyingSession) {
-									ss.publish.user(user.id, 'verifySession', {
-										// status: false,
-										message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
-										countdown: _countdown,
-										// activeSessionID: user.activeSessionID,
-										requestingUserId: req.sessionId
+						if(authenticated) {
+							if(user.activeSessionID) {
+								// console.log(user.activeSessionID, req.sessionId);
+								if(user.activeSessionID === req.sessionId) {
+									// console.log('Active session matches session ID!'.green);
+									res({ status: true, session: _setUserSession(user) });
+									// // TODO: do we need to ALSO check if the user has already logged in???
+									// if(req.session.id === user.id) {
+									// 	console.log('THIS USER IS ALREADY LOGGED IN!!!'.red.inverse);
+									// }
+								} else {
+									console.error('Active session ID does not match session ID.'.red);
+
+									if(!req.session.verifyingSession) {
+										ss.publish.user(user.id, 'verifySession', {
+											// status: false,
+											message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
+											countdown: _countdown,
+											// activeSessionID: user.activeSessionID,
+											requestingUserId: req.sessionId
+										});
+									}
+
+									// NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
+									// so we can log them in (or not) and actually assign them a user id
+									req.session.setUserId(req.sessionId);
+									req.session.verifyingSession = true;
+									req.session.save();
+
+									res({
+										status: false,
+										reason: 'Please wait while we check other sessions which are currently logged in. This may take a few seconds.',
+										// logout: _countdown,
+										activeSessionID: user.activeSessionID
+										// sessionId: req.sessionId
 									});
+
 								}
-
-								// NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
-								// so we can log them in (or not) and actually assign them a user id
-								req.session.setUserId(req.sessionId);
-								req.session.verifyingSession = true;
-								req.session.save();
-
-								res({
-									status: false,
-									reason: 'Please wait while we check other sessions which are currently logged in. This may take a few seconds.',
-									// logout: _countdown,
-									activeSessionID: user.activeSessionID
-									// sessionId: req.sessionId
+							} else {
+								console.log('No active session ID.');
+								// make sure to save the active session to mongodb, so we can look it up again
+								user.set({ activeSessionID: req.sessionId });
+								user.save(function(error) {
+									if(error) {
+										console.error('Error saving active session ID to mongodb'.red);
+										res({ status: false, reason: error });
+									} else {
+										// console.log('Active session ID saved to mongodb'.green);
+										res({ status: true, session: _setUserSession(user) });
+									}
 								});
-
 							}
 						} else {
-							console.log('No active session ID.');
-							// make sure to save the active session to mongodb, so we can look it up again
-							user.set({ activeSessionID: req.sessionId });
-							user.save(function(error) {
-								if(error) {
-									console.error('Error saving active session ID to mongodb'.red);
-									res({ status: false, reason: error });
-								} else {
-									// console.log('Active session ID saved to mongodb'.green);
-									res({ status: true, session: _setUserSession(user) });
-								}
-							});
+							res({ status: false, reason: 'Incorrect password.' });
 						}
-					} else {
-						res({ status: false, reason: 'Incorrect password.' });
-					}
+
+					});
+
 				} else {
 					res({ status: false, reason: 'No user exists with that email.' });
 				}
@@ -199,6 +205,7 @@ exports.actions = function(req, res, ss) {
 			UserModel.findOne({ email: email } , function(err, user) {
 				if(!err && user) {
 					// TODO: validate email before sending
+					// TODO: don't send them their password; do password reset
 					singleHtml = html.replace('#{firstName}', user.firstName);
 					singleHtml = singleHtml.replace('#{email}', user.email);
 					singleHtml = singleHtml.replace('#{password}', user.password);
