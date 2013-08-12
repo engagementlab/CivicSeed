@@ -72,6 +72,10 @@ var $game = module.exports = {
 			var $log = require('/log');
 			var $boss = require('/boss');
 
+			// events recevied by RPC
+			$events.init();
+			$input.init();
+
 			$game.instantiated = true;
 
 		}

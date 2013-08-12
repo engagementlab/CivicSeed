@@ -5,6 +5,7 @@ var self = module.exports = {
 		if(!CivicSeed.initialized) {
 
 			// self.registerModulesAndGlobals();
+			window.$WINDOW = $(window);
 			window.$HTML = $('html');
 			window.$BODY = $(document.body);
 			window.$CONTAINER = $('#container');

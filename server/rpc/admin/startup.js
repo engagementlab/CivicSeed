@@ -49,8 +49,6 @@ exports.actions = function(req, res, ss) {
 								hashUserData(++i);
 							});
 						} else {
-							console.log('GRAND FINALE!!!');
-
 							dbActions.dropCollection('users', function() {
 								dbActions.saveDocuments(userModel, userData, function() {
 									//create demo users

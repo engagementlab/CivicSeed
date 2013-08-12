@@ -13,6 +13,7 @@
 		"JT": true,
 		"CivicSeed": true,
 		"Davis": true,
+		"$WINDOW": true,
 		"$HTML": true,
 		"$BODY": true,
 		"$CONTAINER": true,
