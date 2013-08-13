@@ -18,7 +18,7 @@ exports.actions = function(req, res, ss) {
 	//req.use('account.authenticated');
 
 	return {
-		//MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
+		// MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 		init: function() {
 			// load models and database service only once
 			service = ss.service;
@@ -30,12 +30,12 @@ exports.actions = function(req, res, ss) {
 			//should we pull the game info from the db instead of it being passed in a session?
 			var lastInitial = req.session.lastName.substring(0,1).toUpperCase(),
 				firstName = req.session.firstName.substring(0,1).toUpperCase() + req.session.firstName.substring(1,req.session.firstName.length),
-				name = firstName + ' ' + lastInitial;
-			var playerInfo = {
-				id: req.session.userId,
-				name: name,
-				game: req.session.game
-			};
+				name = firstName + ' ' + lastInitial,
+				playerInfo = {
+					id: req.session.userId,
+					name: name,
+					game: req.session.game
+				};
 
 			if(!games[playerInfo.game.instanceName]) {
 				console.log('create! the game baby');

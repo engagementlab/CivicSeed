@@ -98,7 +98,10 @@ var $game = module.exports = {
 
 					//all the init calls will trigger others, a waterfall approach to assure
 					//the right data is loaded before we start
-					_loadPlayer();
+					$game.$player.init(function() {
+						_loadGameInfo();
+					});
+
 
 				// }
 			}
@@ -289,6 +292,7 @@ var $game = module.exports = {
 		if(sessionStorage.isPlaying === 'true') {
 			sessionStorage.removeItem('isPlaying');
 			$game.$player.exitAndSave();
+			$game.$audio.stopAll();
 		}
 	}
 
@@ -296,12 +300,6 @@ var $game = module.exports = {
 };
 
 /********* PRIVATE FUNCTIONS **********/
-
-function _loadPlayer() {
-	$game.$player.init(function() {
-		_loadGameInfo();
-	});
-}
 
 function _loadGameInfo() {
 	//get the global game information stats

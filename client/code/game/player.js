@@ -259,7 +259,9 @@ $game.$player = {
 			$game.$player.savePositionToDB();
 		}
 		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
-			callback();
+			if(typeof callback !== 'undefined') {
+				callback();
+			}
 		});
 	},
 
