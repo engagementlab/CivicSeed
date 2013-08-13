@@ -14,7 +14,8 @@ var $input = module.exports = {
 			_pledgeFeedbackTimeout = null;
 
 		$WINDOW.on('beforeunload', function() {
-			var x = $input.leaveThisJoint();
+			var x = $game.exitGame();
+			// RUSS: what is this for???
 			return x;
 		});
 
@@ -386,14 +387,6 @@ var $input = module.exports = {
 			return false;
 		};
 
-	},
-
-	// save and exit
-	leaveThisJoint: function() {
-		if(sessionStorage.isPlaying === 'true') {
-			sessionStorage.removeItem('isPlaying');
-			$game.$player.exitAndSave();
-		}
 	}
 
 };

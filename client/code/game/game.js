@@ -283,9 +283,15 @@ var $game = module.exports = {
 		}
 	},
 
+	// save and exit
 	exitGame: function() {
 		// console.log('exiting game!');
+		if(sessionStorage.isPlaying === 'true') {
+			sessionStorage.removeItem('isPlaying');
+			$game.$player.exitAndSave();
+		}
 	}
+
 
 };
 
