@@ -288,14 +288,18 @@ var $game = module.exports = {
 	},
 
 	// save and exit
-	exitGame: function() {
+	exitGame: function(callback) {
 		// console.log('exiting game!');
 		if(sessionStorage.isPlaying === 'true') {
 			sessionStorage.removeItem('isPlaying');
-			$game.$player.exitAndSave();
 			$game.running = false;
 			// TODO: fade out, instead of abrupt stop???
 			$game.$audio.stopAll();
+			$game.$player.exitAndSave(function() {
+				if(typeof callback === 'function') {
+					callback();
+				}
+			});
 		}
 	}
 

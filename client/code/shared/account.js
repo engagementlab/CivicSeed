@@ -29,7 +29,7 @@ var $account = module.exports = {
 			//if the user is playing the game? be sure to save their progress?
 			// console.log('look here dummy', sessionStorage.isPlaying);
 			if(sessionStorage.isPlaying === 'true') {
-				$game.$player.exitAndSave(function() {
+				$game.exitGame(function() {
 					$account.deAuthenticate();
 				});
 			} else {
@@ -169,12 +169,7 @@ var $account = module.exports = {
 		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 			sessionStorage.clear();
 			// if(deAuthenticate.status) { }
-			// TODO: when game is compiled w/ app, should just use Davis.js
-			if(Davis.location.current() === '/game') {
-				window.location.href = '/';
-			} else {
-				Davis.location.assign('/');
-			}
+			Davis.location.assign('/');
 			if(typeof callback === 'function') {
 				callback(deAuthenticate);
 			}
