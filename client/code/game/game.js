@@ -109,14 +109,15 @@ var $game = module.exports = {
 
 	},
 
-	//pause menu on browser tab unfocus (currently disabled)
+	// pause menu on browser tab unfocus (currently disabled)
 	pause: function() {
 		$('.pauseMenu').fadeIn();
 		$game.running = false;
-		//TODO: play pause music?
+		// TODO: play pause music?
+		// CAN USE: $game.$audio.stopAll();
 	},
 
-	//resume from the pause menu, start up game loop
+	// resume from the pause menu, start up game loop
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
@@ -292,6 +293,8 @@ var $game = module.exports = {
 		if(sessionStorage.isPlaying === 'true') {
 			sessionStorage.removeItem('isPlaying');
 			$game.$player.exitAndSave();
+			$game.running = false;
+			// TODO: fade out, instead of abrupt stop???
 			$game.$audio.stopAll();
 		}
 	}
@@ -326,7 +329,8 @@ function _loadGameInfo() {
 
 function _loadMap() {
 	$game.$map.init(function() {
-		_setBoundaries(); //required for npcs to be placed
+		// required for npcs to be placed
+		_setBoundaries();
 		_loadOthers();
 	});
 }

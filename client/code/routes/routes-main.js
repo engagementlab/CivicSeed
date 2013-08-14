@@ -15,15 +15,7 @@ var self = module.exports = {
 		});
 
 		$app.get('/game', function(req) {
-			// temporary fix, avoiding recursion but refreshing the game on '/game' route
-			// TODO: do not refresh and fix 
-			if(!sessionStorage.getItem('routing-the-game')) {
-				sessionStorage.setItem('routing-the-game', true);
-				location.href = '/game';
-			} else {
-				sessionStorage.removeItem('routing-the-game');
-				$game.init();
-			}
+			$game.init();
 		});
 
 		$app.get('/introduction', function(req) {
