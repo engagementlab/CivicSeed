@@ -27,20 +27,20 @@ var _tilesheets = [],
 	_playerColorNum = 0,
 	_playerLevelNum = 0;
 
-$game.$renderer = {
+var $renderer = $game.$renderer = {
 
 	ready: false,
 
-	//setup all rendering contexts then load images
+	// setup all rendering contexts then load images
 	init: function(callback) {
-		//create offscreen canvases for optimized rendering
+		// create offscreen canvases for optimized rendering
 		_offscreen_backgroundCanvas = document.createElement('canvas');
 		_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-		//offscreen contexts
+		// offscreen contexts
 		_offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
 
-		//access the canvases for rendering
+		// access the canvases for rendering
 		_backgroundContext = document.getElementById('background').getContext('2d');
 		_foregroundContext = document.getElementById('foreground').getContext('2d');
 		_charactersContext = document.getElementById('characters').getContext('2d');
@@ -48,8 +48,8 @@ $game.$renderer = {
 		_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 		_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
 
-		//set stroke stuff for mouse
-		_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Greeen default
+		// set stroke stuff for mouse
+		_foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Green default
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
@@ -57,11 +57,11 @@ $game.$renderer = {
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
-		$game.$renderer.loadTilesheet(_playerLevelNum, false);
+		$renderer.loadTilesheet(_playerLevelNum, false);
 
-		//hack to check if all stuff is loaded so we can callback
+		// hack to check if all stuff is loaded so we can callback
 		var checkDone = function() {
-			if($game.$renderer.ready) {
+			if($renderer.ready) {
 				callback();
 			} else {
 				setTimeout(checkDone, 30);
@@ -70,12 +70,12 @@ $game.$renderer = {
 		checkDone();
 	},
 
-	//this loads the specified tilesheet
+	// this loads the specified tilesheet
 	loadTilesheet: function(num, now) {
 		_currentTilesheet = new Image();
 		_currentTilesheet.src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
 		_currentTilesheet.onload = function() {
-			//we are in the game
+			// we are in the game
 			if(now) {
 				_tilesheetContext.clearRect(0,0,_tilesheetWidth,_tilesheetHeight);
 			} else {
@@ -86,8 +86,8 @@ $game.$renderer = {
 
 				_tilesheetWidth = _currentTilesheet.width / $game.TILE_SIZE;
 				_tilesheetHeight = _currentTilesheet.height / $game.TILE_SIZE;
-				//loop through all images, load in each one, when done, move on to map loading
-				$game.$renderer.loadImages(0);
+				// loop through all images, load in each one, when done, move on to map loading
+				$renderer.loadImages(0);
 			}
 			_tilesheetContext.drawImage(
 				_currentTilesheet,
@@ -96,8 +96,8 @@ $game.$renderer = {
 			);
 
 			if(now) {
-				//redraw all tiles
-				$game.$renderer.renderAllTiles();
+				// redraw all tiles
+				$renderer.renderAllTiles();
 			}
 		};
 	},
@@ -111,10 +111,10 @@ $game.$renderer = {
 		_tilesheets[num].onload = function() {
 			var next = num + 1;
 			if(num === _allImages.length - 1) {
-				$game.$renderer.loadPlayerImages(0);
+				$renderer.loadPlayerImages(0);
 			}
 			else {
-				$game.$renderer.loadImages(next);
+				$renderer.loadImages(next);
 			}
 		};
 	},
@@ -140,12 +140,12 @@ $game.$renderer = {
 			);
 
 			if(next === 21) {
-				$game.$renderer.ready = true;
-				$game.$renderer.playerToCanvas(_playerLevelNum, _playerColorNum, true);
+				$renderer.ready = true;
+				$renderer.playerToCanvas(_playerLevelNum, _playerColorNum, true);
 				return;
 			}
 			else {
-				$game.$renderer.loadPlayerImages(next);
+				$renderer.loadPlayerImages(next);
 			}
 		};
 	},
@@ -157,27 +157,27 @@ $game.$renderer = {
 		// $game.$npc.clear();
 		// $game.$botanist.clear();
 		// $game.$robot.clear();
-		$game.$renderer.clearAll();
+		$renderer.clearAll();
 
 		//only re-render all the tiles if the viewport is tranisitioning
 		if($game.inTransit) {
-			$game.$renderer.renderAllTiles();
+			$renderer.renderAllTiles();
 		}
 
-		$game.$renderer.makeQueue(function(all) {
+		$renderer.makeQueue(function(all) {
 			var a = all.length;
 			while(--a > -1) {
 				if(all[a].kind === 'npc') {
-					$game.$renderer.renderNpc(all[a]);
+					$renderer.renderNpc(all[a]);
 				}
 				else if(all[a].kind === 'botanist') {
-					$game.$renderer.renderBotanist(all[a]);
+					$renderer.renderBotanist(all[a]);
 				}
 				else if(all[a].kind === 'robot') {
-					$game.$renderer.renderRobot(all[a]);
+					$renderer.renderRobot(all[a]);
 				}
 				else {
-					$game.$renderer.renderPlayer(all[a]);
+					$renderer.renderPlayer(all[a]);
 				}
 			}
 		});
@@ -238,7 +238,7 @@ $game.$renderer = {
 		}
 
 		//send the tiledata to the artist aka mamagoo
-		$game.$renderer.drawMapTile(tileData);
+		$renderer.drawMapTile(tileData);
 
 		//foreground tiles
 		var foreData = {
@@ -249,7 +249,7 @@ $game.$renderer = {
 		};
 
 		if(foreIndex > -1 || foreIndex2 > -1) {
-			$game.$renderer.drawForegroundTile(foreData);
+			$renderer.drawForegroundTile(foreData);
 		}
 	},
 
@@ -428,31 +428,31 @@ $game.$renderer = {
 					var x = w * i;
 					//0 - forward / down
 					if(i === 0) {
-						$game.$renderer.drawAccessories(x,0,0,curLevel, color, client);
+						$renderer.drawAccessories(x,0,0,curLevel, color, client);
 						for(j = 0; j < 4; j += 1) {
-							$game.$renderer.drawAccessories(x,w * j, h * 3,curLevel, color, client);
+							$renderer.drawAccessories(x,w * j, h * 3,curLevel, color, client);
 						}
 					}
 					//1 - idle
 					else if(i === 1) {
-						$game.$renderer.drawAccessories(x,w,0,curLevel, color, client);
+						$renderer.drawAccessories(x,w,0,curLevel, color, client);
 					}
 					//2 - left
 					else if(i === 2) {
 						for(j = 0; j < 4; j += 1) {
-							$game.$renderer.drawAccessories(x, w * j, h * 1,curLevel, color, client);
+							$renderer.drawAccessories(x, w * j, h * 1,curLevel, color, client);
 						}
 					}
 					//3 - right
 					else if(i === 3) {
 						for(j = 0; j < 4; j += 1) {
-							$game.$renderer.drawAccessories(x, w * j, h * 2,curLevel, color, client);
+							$renderer.drawAccessories(x, w * j, h * 2,curLevel, color, client);
 						}
 					}
 					//4 - up
 					else {
 						for(j = 0; j < 4; j += 1) {
-							$game.$renderer.drawAccessories(x, w * j, h * 4,curLevel, color, client);
+							$renderer.drawAccessories(x, w * j, h * 4,curLevel, color, client);
 						}
 					}
 				}
@@ -539,7 +539,7 @@ $game.$renderer = {
 		while(--i >= 0) {
 			var j = $game.VIEWPORT_HEIGHT;
 			while(--j >= 0) {
-				$game.$renderer.renderTile(i,j);
+				$renderer.renderTile(i,j);
 			}
 		}
 
@@ -591,7 +591,7 @@ $game.$renderer = {
 					destY: _prevMouseY
 			};
 
-			$game.$renderer.drawForegroundTile(foreData);
+			$renderer.drawForegroundTile(foreData);
 
 			var col = $game.$player.getRGBA();
 
@@ -756,7 +756,7 @@ $game.$renderer = {
 
 	renderBossTiles: function(tiles) {
 		for(var t = 0; t < tiles.length; t++) {
-			$game.$renderer.clearMapTile(tiles[t].x * $game.TILE_SIZE, tiles[t].y * $game.TILE_SIZE);
+			$renderer.clearMapTile(tiles[t].x * $game.TILE_SIZE, tiles[t].y * $game.TILE_SIZE);
 			_backgroundContext.fillStyle = tiles[t].color;
 			_backgroundContext.fillRect(
 				tiles[t].x * $game.TILE_SIZE,

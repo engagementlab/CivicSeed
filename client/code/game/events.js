@@ -7,14 +7,19 @@ var $events = module.exports = {
 
 		/******* RPC EVENTS *********/
 
-		//new player joining to keep track of
+		// new player joining to keep track of
 		ss.event.on('ss-addPlayer', function(data, chan) {
 			// console.log(data, chan);
 			$game.numPlayers = data.num;
 			$game.$others.add(data.info);
 			$activePlayers.text(data.num);
 			if(data.info.id !== $game.$player.id) {
-				$game.statusUpdate({message:data.info.name + ' has joined!',input:'status',screen: true,log:true});
+				$game.statusUpdate({
+					message: data.info.name + ' has joined!',
+					input:'status',
+					screen: true,
+					log: true
+				});
 			}
 		});
 

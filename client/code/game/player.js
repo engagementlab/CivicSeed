@@ -70,8 +70,8 @@ $game.$player = {
 	init: function(callback) {
 		//get the players info from the db, alerts other users of presence
 		ss.rpc('game.player.init', function(playerInfo) {
-			//time in seconds since 1970 or whatever
-			//console.log(playerInfo);
+			// time in seconds since 1970 or whatever
+			// console.log(playerInfo);
 			_startTime = new Date().getTime() / 1000;
 
 			_info = {
@@ -85,11 +85,11 @@ $game.$player = {
 				prevOffY: 0
 			};
 
-			//keeping this around because we then save to it on exit
+			// keeping this around because we then save to it on exit
 			$game.$player.game = playerInfo.game;
 			_setPlayerInformation(playerInfo);
 
-			//set the render info
+			// set the render info
 			_renderInfo = {
 				colorNum: _playerColorNum,
 				srcX: 0,
@@ -102,17 +102,17 @@ $game.$player = {
 				level: $game.$player.currentLevel
 			};
 
-			//setup DOM selectors
+			// setup DOM selectors
 			_setDomSelectors();
 
-			//set the color of the hud to personalize it
+			// set the color of the hud to personalize it
 			var rgba = 'rgba(' + playerInfo.game.colorInfo.rgb.r + ',' + playerInfo.game.colorInfo.rgb.g + ',' + playerInfo.game.colorInfo.rgb.b + ', .6)';
 			$('.hudCount').css('background', rgba);
 
 			_updateTotalSeeds();
 			_updateRenderInfo();
 
-			//we are ready, let everyone know dat
+			// we are ready, let everyone know dat
 			$game.$player.ready = true;
 			callback();
 		});
@@ -975,9 +975,9 @@ function _setDomSelectors() {
 	$graffitiNum = $('.graffiti p span');
 }
 
-//on init, set local and global variables for all player info
+// on init, set local and global variables for all player info
 function _setPlayerInformation(info) {
-	//private
+	// private
 	_seeds = info.game.seeds;
 	_previousSeedsDropped = _seeds.dropped;
 	_resources = _objectify(info.game.resources);
@@ -994,12 +994,12 @@ function _setPlayerInformation(info) {
 	_pledges = info.game.pledges;
 	_resourcesDiscovered = info.game.resourcesDiscovered;
 
-	//hack
-	//console.log(_resources);
+	// hack
+	// console.log(_resources);
 	if(!_resources) {
 		_resources = {};
 	}
-	//public
+	// public
 	$game.$player.id = info.id;
 	$game.$player.name = info.name;
 	$game.$player.currentLevel = info.game.currentLevel;
@@ -1143,9 +1143,9 @@ function _updateTotalSeeds() {
 	$drawHudCount.text(_seeds.draw);
 }
 
-//calculate new render information based on the player's position
+// calculate new render information based on the player's position
 function _updateRenderInfo() {
-	//get local render information. update if appropriate.
+	// get local render information. update if appropriate.
 	var loc = $game.$map.masterToLocal(_info.x, _info.y);
 	if(loc) {
 		var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;

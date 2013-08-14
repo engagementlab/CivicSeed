@@ -302,11 +302,11 @@ var $game = module.exports = {
 /********* PRIVATE FUNCTIONS **********/
 
 function _loadGameInfo() {
-	//get the global game information stats
+	// get the global game information stats
 	ss.rpc('game.player.getGameInfo', function(response) {
-		//regular game mode
+		// regular game mode
 		$game.bossModeUnlocked = response.bossModeUnlocked;
-		//for testing
+		// for testing
 		// $game.bossModeUnlocked = true;
 
 		$game.resourceCount = response.resourceCount;
@@ -318,13 +318,9 @@ function _loadGameInfo() {
 			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
 		};
 		$game.$player.setPositionInfo();
-		_loadRenderer();
-	});
-}
-
-function _loadRenderer() {
-	$game.$renderer.init(function() {
-		_loadMap();
+		$game.$renderer.init(function() {
+			_loadMap();
+		});
 	});
 }
 

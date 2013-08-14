@@ -1,15 +1,15 @@
-var intervalId = {},
-	games = {},
-	service,
-	db,
-	userModel,
-	tileModel,
-	gameModel,
-	colorModel,
-	rootDir = process.cwd(),
+var rootDir = process.cwd(),
+
 	emailUtil = require(rootDir + '/server/utils/email'),
 	colorHelpers = null,
-	dbHelpers = null;
+	dbHelpers = null,
+
+	_games = {},
+	_service,
+	_userModel,
+	_tileModel,
+	_gameModel,
+	_colorModel;
 
 exports.actions = function(req, res, ss) {
 
@@ -20,12 +20,15 @@ exports.actions = function(req, res, ss) {
 	return {
 		// MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
 		init: function() {
-			// load models and database service only once
-			service = ss.service;
-			userModel = service.useModel('user', 'ss');
-			tileModel = service.useModel('tile', 'ss');
-			colorModel = service.useModel('color', 'ss');
-			gameModel = service.useModel('game', 'ss');
+
+			// load models and database _service only once
+			if(!_service) {
+				_service = ss.service;
+				_userModel = _service.useModel('user', 'ss');
+				_tileModel = _service.useModel('tile', 'ss');
+				_gameModel = _service.useModel('game', 'ss');
+				_colorModel = _service.useModel('color', 'ss');
+			}
 
 			//should we pull the game info from the db instead of it being passed in a session?
 			var lastInitial = req.session.lastName.substring(0,1).toUpperCase(),
@@ -37,19 +40,19 @@ exports.actions = function(req, res, ss) {
 					game: req.session.game
 				};
 
-			if(!games[playerInfo.game.instanceName]) {
+			if(!_games[playerInfo.game.instanceName]) {
 				console.log('create! the game baby');
-				games[playerInfo.game.instanceName] = {
+				_games[playerInfo.game.instanceName] = {
 					players: {},
 					numActivePlayers: 0
 				};
 			}
 
 			console.log('initializing ', playerInfo.name);
-			games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
-			games[req.session.game.instanceName].numActivePlayers += 1;
-			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
-			//send the number of active players and the new player info
+			_games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
+			_games[req.session.game.instanceName].numActivePlayers += 1;
+			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: _games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
+			// send the number of active players and the new player info
 			res(playerInfo);
 		},
 
@@ -58,14 +61,14 @@ exports.actions = function(req, res, ss) {
 			//req.session.game = info;
 			//req.session.save();
 			//update mongo
-			userModel
+			_userModel
 				.findById(id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
-						games[req.session.game.instanceName].numActivePlayers -= 1;
-						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: games[req.session.game.instanceName].numActivePlayers, id: id});
-						delete games[req.session.game.instanceName].players[id];
+						_games[req.session.game.instanceName].numActivePlayers -= 1;
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: _games[req.session.game.instanceName].numActivePlayers, id: id});
+						delete _games[req.session.game.instanceName].players[id];
 						user.isPlaying = false;
 						if(name === 'Demo U') {
 							user.game.currentLevel = 0;
@@ -92,12 +95,12 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getOthers: function() {
-			res(games[req.session.game.instanceName].players);
+			res(_games[req.session.game.instanceName].players);
 		},
 
 		// ------> this should be moved into our map rpc handler???
 		getMapData: function(x1,y1,x2,y2) {
-			tileModel
+			_tileModel
 				.where('x').gte(x1).lt(x2)
 				.where('y').gte(y1).lt(y2)
 				.sort('mapIndex')
@@ -105,7 +108,7 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						res(false);
 					} else if(allTiles) {
-						colorModel
+						_colorModel
 							.where('instanceName').equals(req.session.game.instanceName)
 							.where('x').gte(x1).lt(x2)
 							.where('y').gte(y1).lt(y2)
@@ -128,8 +131,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
-			games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
+			_games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
+			_games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
 			// req.session.save();
 		},
 
@@ -148,7 +151,7 @@ exports.actions = function(req, res, ss) {
 				insertTiles = [];
 
 			//get a chunk of the bounding tiles from the DB (instead of querying each individually)
-			colorModel
+			_colorModel
 				.where('instanceName').equals(info.instanceName)
 				.where('x').gte(minX).lte(maxX)
 				.where('y').gte(minY).lte(maxY)
@@ -217,7 +220,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getInfo: function(id) {
-			userModel.findById(id, function (err, user) {
+			_userModel.findById(id, function (err, user) {
 				if(err) {
 					res('user not found');
 				} else {
@@ -234,7 +237,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getGameInfo: function() {
-			gameModel
+			_gameModel
 				.where('instanceName').equals(req.session.game.instanceName)
 				.find(function (err, result) {
 					if(err) {
@@ -248,7 +251,7 @@ exports.actions = function(req, res, ss) {
 
 		getAllImages: function() {
 			var maps = [];
-			userModel
+			_userModel
 				.where('role').equals('actor')
 				.where('game.instanceName').equals(req.session.game.instanceName)
 				.select('game.colorMap')
@@ -282,7 +285,7 @@ exports.actions = function(req, res, ss) {
 			// console.log('exit: ', info);
 			req.session.save();
 			//update mongo
-			userModel.findById(id, function (err, user) {
+			_userModel.findById(id, function (err, user) {
 				if(!err && user) {
 					user.game = info;
 					user.profileUnlocked = true;
@@ -300,7 +303,7 @@ exports.actions = function(req, res, ss) {
 
 		pledgeSeed: function(info) {
 			// console.log(info);
-			userModel.findById(info.id, function (err, user) {
+			_userModel.findById(info.id, function (err, user) {
 				if(err) {
 
 				} else if(user) {
@@ -322,7 +325,7 @@ exports.actions = function(req, res, ss) {
 
 		saveResource: function(info) {
 			// console.log(info);
-			userModel
+			_userModel
 				.findById(info.id, function (err, user) {
 					if(err) {
 						console.log(err);
@@ -356,7 +359,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getRandomResumes: function(info) {
-			userModel
+			_userModel
 				.where('role').equals('actor')
 				.where('game.instanceName').equals(info.instanceName)
 				.select('game.resume')
@@ -453,7 +456,7 @@ colorHelpers = {
 		};
 
 		var insertNew = function() {
-			colorModel.create(tiles.insert, function(err,suc) {
+			_colorModel.create(tiles.insert, function(err,suc) {
 				callback(true);
 			});
 		};
@@ -466,7 +469,7 @@ colorHelpers = {
 
 	gameColorUpdate: function(newInfo, instanceName, callback) {
 		//access our global game model for status updates
-		gameModel
+		_gameModel
 			.where('instanceName').equals(instanceName)
 			.find(function (err, results) {
 			if(err) {
@@ -548,7 +551,7 @@ colorHelpers = {
 		//set boss mode unlocked here for specific instance
 
 		//send out emails to players who have completed game
-		userModel
+		_userModel
 			.where('role').equals('actor')
 			.select('email')
 			.find(function (err, users) {
@@ -582,7 +585,7 @@ colorHelpers = {
 
 dbHelpers = {
 	saveInfo: function(info) {
-		userModel
+		_userModel
 			.findById(info.id, function (err, user) {
 				if(err) {
 					console.log(err);
@@ -598,7 +601,7 @@ dbHelpers = {
 	},
 
 	saveFeedback: function(info, index) {
-		userModel.findById(info[index].id, function(err,user) {
+		_userModel.findById(info[index].id, function(err,user) {
 			if(err) {
 				console.log(err);
 			} else if(user) {
