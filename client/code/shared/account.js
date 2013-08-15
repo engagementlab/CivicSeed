@@ -133,11 +133,11 @@ var $account = module.exports = {
 	},
 
 	authenticate: function(email, password) {
-		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
+		ss.rpc('shared.account.authenticate', email, password, function(authResponse) {
 			var session;
-			// console.log(authenticated);
-			if(authenticated.status) {
-				session = authenticated.session;
+			// console.log(authResponse);
+			if(authResponse.status) {
+				session = authResponse.session;
 				sessionStorage.setItem('userId', session.id);
 				sessionStorage.setItem('userFirstName', session.firstName);
 				sessionStorage.setItem('userLastName', session.lastName);
@@ -156,11 +156,7 @@ var $account = module.exports = {
 					Davis.location.assign('/profiles/' + session.profileLink);
 				}
 			} else {
-				if(authenticated.activeSessionID) {
-					apprise(authenticated.reason);
-				} else {
-					apprise(authenticated.reason);
-				}
+				apprise(authResponse.reason);
 			}
 		});
 	},
