@@ -52,61 +52,59 @@ var $game = module.exports = {
 
 	init: function(callback) {
 
-		if(!$game.instantiated) {
+		// instantiating code (if not already done)
+		var $map = require('/map');
+		var $render = require('/render');
+		var $npc = require('/npc');
+		var $resources = require('/resources');
+		var $player = require('/player');
+		var $others = require('/others');
+		var $robot = require('/robot');
+		var $botanist = require('/botanist');
+		var $mouse = require('/mouse');
+		var $audio = require('/audio');
+		var $pathfinder = require('/pathfinder');
+		var $events = require('/events');
+		var $input = require('/input');
+		var $chat = require('/chat');
+		var $log = require('/log');
+		var $boss = require('/boss');
 
-			// instantiating code (if not already done)
-			var $map = require('/map');
-			var $render = require('/render');
-			var $npc = require('/npc');
-			var $resources = require('/resources');
-			var $player = require('/player');
-			var $others = require('/others');
-			var $robot = require('/robot');
-			var $botanist = require('/botanist');
-			var $mouse = require('/mouse');
-			var $audio = require('/audio');
-			var $pathfinder = require('/pathfinder');
-			var $events = require('/events');
-			var $input = require('/input');
-			var $chat = require('/chat');
-			var $log = require('/log');
-			var $boss = require('/boss');
+		// events recevied by RPC
+		$events.init();
+		$input.init();
 
-			// events recevied by RPC
-			$events.init();
-			$input.init();
+		$game.instantiated = true;
 
-			$game.instantiated = true;
+	},
 
-		}
-
+	enterGame: function(callback) {
 		//check if they are ACTUALLY playing
-		ss.rpc('shared.account.checkGameSession', function(err, response) {
-			// console.log('hey now', err, response);
-			if(err) {
+		ss.rpc('shared.account.checkGameSession', function(response) {
+			// YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
+			if(!$game.instantiated) {
+				$game.init();
+			}
+			if(response.status) {
+				sessionStorage.setItem('isPlaying', true);
+				// $CONTAINER.append(JT['game-gameboard']());
+				// $CONTAINER.append(JT['game-resourceStage']());
+				// $CONTAINER.append(JT['game-hud']());
 
+				// //all the init calls will trigger others, a waterfall approach to assure
+				// //the right data is loaded before we start
+				// $game.$player.init(function() {
+				// 	_loadGameInfo();
+				// });
 			} else {
-				// if(response) {
-				// 	location.href = '/profiles/' + userSessionObject.profileLink;
-				// } else {
-
-					sessionStorage.setItem('isPlaying', true);
-
-					$CONTAINER.append(JT['game-gameboard']());
-					$CONTAINER.append(JT['game-resourceStage']());
-					$CONTAINER.append(JT['game-hud']());
-
-					//all the init calls will trigger others, a waterfall approach to assure
-					//the right data is loaded before we start
-					$game.$player.init(function() {
-						_loadGameInfo();
-					});
-
-
-				// }
+				if(response.reason && response.profileLink) {
+					Davis.location.assign('/profiles/' + response.profileLink);
+					apprise('There seems to have been an error.');
+				} else {
+					// apprise('There are several buggies....');
+				}
 			}
 		});
-
 	},
 
 	// pause menu on browser tab unfocus (currently disabled)

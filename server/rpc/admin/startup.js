@@ -67,7 +67,6 @@ exports.actions = function(req, res, ss) {
 											profileLink: Math.random().toString(36).slice(2),
 											profileSetup: true,
 											profileUnlocked: false,
-											isPlaying: false,
 											game: {
 												instanceName: 'demo',
 												currentLevel: 0,

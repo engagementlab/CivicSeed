@@ -15,7 +15,7 @@ var self = module.exports = {
 		});
 
 		$app.get('/game', function(req) {
-			$game.init();
+			$game.enterGame();
 		});
 
 		$app.get('/introduction', function(req) {

@@ -27,7 +27,6 @@ exports.actions = function(req, res, ss) {
 		req.session.game = user.game;
 		req.session.gameStarted = user.gameStarted;
 		req.session.profileSetup = user.profileSetup;
-		req.session.isPlaying = user.isPlaying;
 		req.session.profileLink = user.profileLink;
 		req.session.channel.subscribe(user.game.instanceName);
 		req.session.verifyingSession = null;
@@ -41,7 +40,6 @@ exports.actions = function(req, res, ss) {
 			game: req.session.game,
 			gameStarted: req.session.gameStarted,
 			profileSetup: req.session.profileSetup,
-			isPlaying: req.session.isPlaying,
 			profileLink: req.session.profileLink
 		};
 	};
@@ -63,15 +61,6 @@ exports.actions = function(req, res, ss) {
 					res({ status: false, reason: 'No user exists with that email.' });
 				}
 			});
-		},
-
-		denyNewSession: function(requestingUserId) {
-			// TODO: destroy requestingUserId
-			ss.publish.user(requestingUserId, 'denyNewSession', 'Authentication denied. There is another session/user currently logged into your account.<br>Reasons for this may be that you have given your username and password to someone else.<br>Please contact the administrator of this site if you think something is in error.');
-		},
-
-		approveNewSession: function(requestingUserId) {
-			ss.publish.user(requestingUserId, 'approveNewSession', 'Authenticating...');
 		},
 
 		deAuthenticate: function() {
@@ -122,7 +111,6 @@ exports.actions = function(req, res, ss) {
 					game: req.session.game,
 					gameStarted: req.session.gameStarted,
 					profileSetup: req.session.profileSetup,
-					isPlaying: req.session.isPlaying,
 					profileLink: req.session.profileLink
 				});
 			} else {
@@ -132,16 +120,73 @@ exports.actions = function(req, res, ss) {
 		},
 
 		checkGameSession: function() {
-			UserModel.findById(req.session.userId, function(err, result) {
-				if(!result.isPlaying) {
-					result.isPlaying = true;
-					result.save(function(err, okay) {
-						res(err, false);
+			UserModel.findById(req.session.userId, function(error, user) {
+				if(error) {
+					console.error('Error finding user (game) session in Mongo.'.red);
+					res({
+						status: false,
+						reason: error
 					});
 				} else {
-					res(err, result.isPlaying);
+					if(user.activeSessionID) {
+						console.log(user.activeSessionID, req.sessionId);
+
+						if(user.activeSessionID === req.sessionId) {
+							// NOTE: this is sort of a weird scenario -- not sure it's even needed to check it!
+							console.log('Active session matches session ID -- good to go!'.green);
+							res({ status: true });
+						} else {
+							console.error('Active session ID does not match session ID.'.red);
+							res({ status: false });
+
+							// DO SOMETHING!!!
+							// if(!req.session.verifyingSession) {
+								ss.publish.user(user.id, 'verifyGameStatus', {
+									// status: false,
+									// message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
+									countdown: _countdown,
+									// activeSessionID: user.activeSessionID,
+									// requestingUserId: req.sessionId
+									// sessionId: req.sessionId
+									userId: user.id
+								});
+							// }
+
+							// // NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
+							// // so we can log them in (or not) and actually assign them a user id
+							// req.session.setUserId(req.sessionId);
+							// req.session.verifyingSession = true;
+							// req.session.save();
+
+						}
+					} else {
+						console.log('No active session ID.');
+						// make sure to save the active session to mongodb, so we can look it up again
+						user.set({ activeSessionID: req.sessionId });
+						user.save(function(error) {
+							if(error) {
+								console.error('Error saving active session ID to mongodb'.red);
+								res({
+									status: false,
+									reason: error,
+									profileLink: user.profileLink
+								});
+							} else {
+								console.log('Active session ID saved to mongodb'.green);
+								res({ status: true });
+							}
+						});
+					}
 				}
 			});
+		},
+
+		denyNewSession: function(userId) {
+			ss.publish.user(userId, 'denyNewSession', 'Authentication denied. There is another session/user currently logged into your account.<br>Reasons for this may be that you have given your username and password to someone else.<br>Please contact the administrator of this site if you think something is in error.');
+		},
+
+		approveNewSession: function(userId) {
+			ss.publish.user(userId, 'approveNewSession', 'Authenticating...');
 		},
 
 		remindMeMyPassword: function(email) {

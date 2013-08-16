@@ -92,71 +92,92 @@ var $account = module.exports = {
 			ss.rpc('shared.account.startGame');
 		});
 
-		ss.event.on('verifySession', function(req) {
-			apprise(req.message, { verify: true, textNo: 'Sign Out' }, function(response) {
-				clearTimeout(_timer);
-				if(response) {
-					// console.log('Okay! Stay active!', req.requestingUserId);
-					ss.rpc('shared.account.denyNewSession', req.requestingUserId);
-				} else {
+		ss.event.on('verifyGameStatus', function(req) {
+			var message;
+			// console.log('Verifying game status through ss event listener!!!!');
+			if(sessionStorage.getItem('isPlaying')) {
+				message = 'Are you still there? Signing out in <strong class="countdown">' + req.countdown + '</strong> seconds.';
+				apprise(message, { verify: true, textNo: 'Sign Out' }, function(response) {
+					clearTimeout(_timer);
+					if(response) {
+						console.log('Okay! Stay active!', req.userId);
+						ss.rpc('shared.account.denyNewSession', req.userId);
+					} else {
+						// TODO: look at $game.$player.exitAndSave(function() { function...
+						// DO THIS!!!
+						console.log('Booting THIS user and allowing OTHER USER.', req.userId);
+						// make sure to sign out first
+						$account.deAuthenticate(function(deAuthenticate) {
+							ss.rpc('shared.account.approveNewSession', req.userId);
+						});
+					}
+				});
+				_logoutCountDown(req.countdown, function() {
 					// TODO: look at $game.$player.exitAndSave(function() { function...
 					// DO THIS!!!
-
-					// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
-					// make sure to sign out first
-					$account.deAuthenticate(function(deAuthenticate) {
-						ss.rpc('shared.account.approveNewSession', req.requestingUserId);
-					});
-				}
-			});
-			_logoutCountDown(req.countdown, function() {
-				// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
-				$('#aOverlay').remove();
-				$('.appriseOuter').remove();
-				$account.deAuthenticate(function(deAuthenticate) {
-					ss.rpc('shared.account.approveNewSession', req.requestingUserId);
+					console.log('Booting THIS user and allowing OTHER USER.', req.userId);
+					$('#aOverlay').remove();
+					$('.appriseOuter').remove();
+					// $account.deAuthenticate(function(deAuthenticate) {
+					// 	ss.rpc('shared.account.approveNewSession', req.userId);
+					// });
 				});
-			});
+			} else {
+				message = 'There is another active game session matching your credentials. \
+					Please wait while we check the session. \
+					This may take a few seconds (<strong class="countdown">' + req.countdown + '</strong>).\
+					<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, \
+					please contact the website administrator.)</span>';
+				apprise(message);
+				_logoutCountDown(req.countdown + 5, function() {
+					// console.log('booting the THIS user and logging OTHER USER in...', req.userId);
+					$('#aOverlay').remove();
+					$('.appriseOuter').remove();
+					// $account.deAuthenticate(function(deAuthenticate) {
+					// 	ss.rpc('shared.account.approveNewSession', req.userId);
+					// });
+				});
+			}
 		});
 		ss.event.on('denyNewSession', function(message) {
-			$('#aOverlay').remove();
-			$('.appriseOuter').remove();
-			apprise(message);
+			console.log(sessionStorage.getItem('isPlaying'), message);
+			// $('#aOverlay').remove();
+			// $('.appriseOuter').remove();
+			// apprise(message);
 		});
 		ss.event.on('approveNewSession', function(message) {
-			$('#aOverlay').remove();
-			$('.appriseOuter').remove();
-			// apprise(message);
-			$('#loginForm').submit();
+			console.log(sessionStorage.getItem('isPlaying'), message);
+			// $('#aOverlay').remove();
+			// $('.appriseOuter').remove();
+			// // apprise(message);
+			// $('#loginForm').submit();
 		});
-
 	},
 
 	authenticate: function(email, password) {
-		ss.rpc('shared.account.authenticate', email, password, function(authResponse) {
+		ss.rpc('shared.account.authenticate', email, password, function(response) {
 			var session;
-			// console.log(authResponse);
-			if(authResponse.status) {
-				session = authResponse.session;
+			// console.log(response);
+			if(response.status) {
+				session = response.session;
 				sessionStorage.setItem('userId', session.id);
 				sessionStorage.setItem('userFirstName', session.firstName);
 				sessionStorage.setItem('userLastName', session.lastName);
 				sessionStorage.setItem('userEmail', session.email);
 				sessionStorage.setItem('userRole', session.role);
-				sessionStorage.setItem('isPlaying', session.isPlaying);
 				sessionStorage.setItem('profileLink', session.profileLink);
 				if(!session.profileSetup) {
-					//send them to setup their profile info
+					// send them to setup their profile info
 					Davis.location.assign('/change-info');
 				} else if(!session.gameStarted) {
-					//send them to watch the intro video
+					// send them to watch the intro video
 					Davis.location.assign('/introduction');
 				} else {
-					//send them to their profile
+					// send them to their profile
 					Davis.location.assign('/profiles/' + session.profileLink);
 				}
 			} else {
-				apprise(authResponse.reason);
+				apprise(response.reason);
 			}
 		});
 	},

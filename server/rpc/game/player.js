@@ -69,7 +69,6 @@ exports.actions = function(req, res, ss) {
 						_games[req.session.game.instanceName].numActivePlayers -= 1;
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: _games[req.session.game.instanceName].numActivePlayers, id: id});
 						delete _games[req.session.game.instanceName].players[id];
-						user.isPlaying = false;
 						if(name === 'Demo U') {
 							user.game.currentLevel = 0;
 							user.game.position.x = 64;
@@ -289,7 +288,6 @@ exports.actions = function(req, res, ss) {
 				if(!err && user) {
 					user.game = info;
 					user.profileUnlocked = true;
-					user.isPlaying = false;
 					user.save(function (y) {
 						var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName;
 						res(url);
