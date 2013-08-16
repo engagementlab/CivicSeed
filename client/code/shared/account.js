@@ -101,7 +101,10 @@ var $account = module.exports = {
 					clearTimeout(_timer);
 					if(response) {
 						console.log('Okay! Stay active!', req.userId);
-						ss.rpc('shared.account.denyNewSession', req.userId);
+						ss.rpc('shared.account.denyNewSession', {
+							userId: req.userId,
+							profileLink: req.profileLink
+						});
 					} else {
 						// TODO: look at $game.$player.exitAndSave(function() { function...
 						// DO THIS!!!
@@ -116,7 +119,7 @@ var $account = module.exports = {
 					// TODO: look at $game.$player.exitAndSave(function() { function...
 					// DO THIS!!!
 					console.log('Booting THIS user and allowing OTHER USER.', req.userId);
-					$('#aOverlay').remove();
+					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
 					// $account.deAuthenticate(function(deAuthenticate) {
 					// 	ss.rpc('shared.account.approveNewSession', req.userId);
@@ -131,7 +134,7 @@ var $account = module.exports = {
 				apprise(message);
 				_logoutCountDown(req.countdown + 5, function() {
 					// console.log('booting the THIS user and logging OTHER USER in...', req.userId);
-					$('#aOverlay').remove();
+					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
 					// $account.deAuthenticate(function(deAuthenticate) {
 					// 	ss.rpc('shared.account.approveNewSession', req.userId);
@@ -139,15 +142,26 @@ var $account = module.exports = {
 				});
 			}
 		});
-		ss.event.on('denyNewSession', function(message) {
-			console.log(sessionStorage.getItem('isPlaying'), message);
-			// $('#aOverlay').remove();
-			// $('.appriseOuter').remove();
-			// apprise(message);
+		ss.event.on('denyNewSession', function(req) {
+			var message;
+			if(Davis.location.current() === '/game') {
+				clearTimeout(_timer);
+				if(!sessionStorage.getItem('isPlaying')) {
+					Davis.location.assign('/profiles/' + req.profileLink);
+					$('.appriseOverlay').remove();
+					$('.appriseOuter').remove();
+					apprise('Game access denied. \
+						There is another session currently accessing your account.<br>\
+						Reasons for this may be that you have given your username and password \
+						to someone else or you have left another computer open running the game.\
+						Please contact the administrator of this site if you \
+						think something is wrong.');
+				}
+			}
 		});
 		ss.event.on('approveNewSession', function(message) {
 			console.log(sessionStorage.getItem('isPlaying'), message);
-			// $('#aOverlay').remove();
+			// $('.appriseOverlay').remove();
 			// $('.appriseOuter').remove();
 			// // apprise(message);
 			// $('#loginForm').submit();

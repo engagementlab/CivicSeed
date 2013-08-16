@@ -148,7 +148,8 @@ exports.actions = function(req, res, ss) {
 									// activeSessionID: user.activeSessionID,
 									// requestingUserId: req.sessionId
 									// sessionId: req.sessionId
-									userId: user.id
+									userId: user.id,
+									profileLink: user.profileLink
 								});
 							// }
 
@@ -181,8 +182,8 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
-		denyNewSession: function(userId) {
-			ss.publish.user(userId, 'denyNewSession', 'Authentication denied. There is another session/user currently logged into your account.<br>Reasons for this may be that you have given your username and password to someone else.<br>Please contact the administrator of this site if you think something is in error.');
+		denyNewSession: function(req) {
+			ss.publish.user(req.userId, 'denyNewSession', req);
 		},
 
 		approveNewSession: function(userId) {

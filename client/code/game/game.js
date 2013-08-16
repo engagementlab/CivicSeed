@@ -99,10 +99,8 @@ var $game = module.exports = {
 			} else {
 				if(response.reason && response.profileLink) {
 					Davis.location.assign('/profiles/' + response.profileLink);
-					apprise('There seems to have been an error.');
-				} else {
-					// apprise('There are several buggies....');
 				}
+				apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
 			}
 		});
 	},
