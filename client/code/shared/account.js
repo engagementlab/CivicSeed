@@ -143,7 +143,6 @@ var $account = module.exports = {
 			}
 		});
 		ss.event.on('denyNewSession', function(req) {
-			var message;
 			if(Davis.location.current() === '/game') {
 				clearTimeout(_timer);
 				if(!sessionStorage.getItem('isPlaying')) {
@@ -160,11 +159,13 @@ var $account = module.exports = {
 			}
 		});
 		ss.event.on('approveNewSession', function(message) {
-			console.log(sessionStorage.getItem('isPlaying'), message);
-			// $('.appriseOverlay').remove();
-			// $('.appriseOuter').remove();
-			// // apprise(message);
-			// $('#loginForm').submit();
+			clearTimeout(_timer);
+			if(Davis.location.current() === '/game') {
+				$('.appriseOverlay').remove();
+				$('.appriseOuter').remove();
+				// apprise(message);
+				// MAKE IT HAPPEN CAP'N!!!!
+			}
 		});
 	},
 

@@ -23,7 +23,7 @@ var self = module.exports = {
 			dataType = button.data().type;
 			button.removeClass('btn-success');
 			ss.rpc('admin.startup.loadData', dataType, function(res) {
-				//console.log(res);
+				// console.log(res);
 				button.addClass('btn-success');
 			});
 		});
