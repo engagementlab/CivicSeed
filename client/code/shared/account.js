@@ -20,8 +20,10 @@ var _bootUser = function(userId) {
 	// DO THIS!!!
 	console.log('Booting THIS user and allowing OTHER USER.', userId);
 	// make sure to sign out first
-	$account.deAuthenticate(function(deAuthenticate) {
-		ss.rpc('shared.account.approveNewSession', userId);
+	$game.exitGame(function() {
+		$account.deAuthenticate(function(deAuthenticate) {
+			ss.rpc('shared.account.approveNewSession', userId);
+		});
 	});
 };
 
