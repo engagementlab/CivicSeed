@@ -87,22 +87,23 @@ var $game = module.exports = {
 			}
 			if(response.status) {
 				sessionStorage.setItem('isPlaying', true);
-				// $CONTAINER.append(JT['game-gameboard']());
-				// $CONTAINER.append(JT['game-resourceStage']());
-				// $CONTAINER.append(JT['game-hud']());
-
-				// //all the init calls will trigger others, a waterfall approach to assure
-				// //the right data is loaded before we start
-				// $game.$player.init(function() {
-				// 	_loadGameInfo();
-				// });
+				$game.kickOffGame();
 			} else {
-				if(response.reason && response.profileLink) {
-					Davis.location.assign('/profiles/' + response.profileLink);
+				if(response.reason) {
+					if(response.profileLink) {
+						Davis.location.assign('/profiles/' + response.profileLink);
+					}
+					apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
 				}
-				apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
 			}
 		});
+	},
+
+	kickOffGame: function() {
+		$CONTAINER.append(JT['game-gameboard']());
+		$CONTAINER.append(JT['game-resourceStage']());
+		$CONTAINER.append(JT['game-hud']());
+		_kickOffGame();
 	},
 
 	// pause menu on browser tab unfocus (currently disabled)
@@ -303,6 +304,14 @@ var $game = module.exports = {
 };
 
 /********* PRIVATE FUNCTIONS **********/
+
+// all the init calls will trigger others, a waterfall approach to assure
+// the right data is loaded before we start
+function _kickOffGame() {
+	$game.$player.init(function() {
+		_loadGameInfo();
+	});
+}
 
 function _loadGameInfo() {
 	// get the global game information stats

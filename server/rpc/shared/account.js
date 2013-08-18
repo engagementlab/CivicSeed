@@ -29,7 +29,6 @@ exports.actions = function(req, res, ss) {
 		req.session.profileSetup = user.profileSetup;
 		req.session.profileLink = user.profileLink;
 		req.session.channel.subscribe(user.game.instanceName);
-		req.session.verifyingSession = null;
 		req.session.save();
 		return {
 			id: req.session.userId,
@@ -138,27 +137,11 @@ exports.actions = function(req, res, ss) {
 						} else {
 							console.error('Active session ID does not match session ID.'.red);
 							res({ status: false });
-
-							// DO SOMETHING!!!
-							// if(!req.session.verifyingSession) {
-								ss.publish.user(user.id, 'verifyGameStatus', {
-									// status: false,
-									// message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
-									countdown: _countdown,
-									// activeSessionID: user.activeSessionID,
-									// requestingUserId: req.sessionId
-									// sessionId: req.sessionId
-									userId: user.id,
-									profileLink: user.profileLink
-								});
-							// }
-
-							// // NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
-							// // so we can log them in (or not) and actually assign them a user id
-							// req.session.setUserId(req.sessionId);
-							// req.session.verifyingSession = true;
-							// req.session.save();
-
+							ss.publish.user(user.id, 'verifyGameStatus', {
+								countdown: _countdown,
+								userId: user.id,
+								profileLink: user.profileLink
+							});
 						}
 					} else {
 						console.log('No active session ID.');

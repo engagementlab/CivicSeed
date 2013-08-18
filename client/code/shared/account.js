@@ -13,6 +13,17 @@ var _logoutCountDown = function(seconds, callback) {
 		callback();
 	}
 };
+var _bootUser = function(userId) {
+	$('.appriseOverlay').remove();
+	$('.appriseOuter').remove();
+	// TODO: look at $game.$player.exitAndSave(function() { function...
+	// DO THIS!!!
+	console.log('Booting THIS user and allowing OTHER USER.', userId);
+	// make sure to sign out first
+	$account.deAuthenticate(function(deAuthenticate) {
+		ss.rpc('shared.account.approveNewSession', userId);
+	});
+};
 
 // public handlers
 var $account = module.exports = {
@@ -106,24 +117,11 @@ var $account = module.exports = {
 							profileLink: req.profileLink
 						});
 					} else {
-						// TODO: look at $game.$player.exitAndSave(function() { function...
-						// DO THIS!!!
-						console.log('Booting THIS user and allowing OTHER USER.', req.userId);
-						// make sure to sign out first
-						$account.deAuthenticate(function(deAuthenticate) {
-							ss.rpc('shared.account.approveNewSession', req.userId);
-						});
+						_bootUser(req.userId);
 					}
 				});
 				_logoutCountDown(req.countdown, function() {
-					// TODO: look at $game.$player.exitAndSave(function() { function...
-					// DO THIS!!!
-					console.log('Booting THIS user and allowing OTHER USER.', req.userId);
-					$('.appriseOverlay').remove();
-					$('.appriseOuter').remove();
-					// $account.deAuthenticate(function(deAuthenticate) {
-					// 	ss.rpc('shared.account.approveNewSession', req.userId);
-					// });
+					_bootUser(req.userId);
 				});
 			} else {
 				message = 'There is another active game session matching your credentials. \
@@ -133,12 +131,8 @@ var $account = module.exports = {
 					please contact the website administrator.)</span>';
 				apprise(message);
 				_logoutCountDown(req.countdown + 5, function() {
-					// console.log('booting the THIS user and logging OTHER USER in...', req.userId);
 					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
-					// $account.deAuthenticate(function(deAuthenticate) {
-					// 	ss.rpc('shared.account.approveNewSession', req.userId);
-					// });
 				});
 			}
 		});
@@ -163,8 +157,8 @@ var $account = module.exports = {
 			if(Davis.location.current() === '/game') {
 				$('.appriseOverlay').remove();
 				$('.appriseOuter').remove();
-				// apprise(message);
-				// MAKE IT HAPPEN CAP'N!!!!
+				sessionStorage.setItem('isPlaying', true);
+				$game.kickOffGame();
 			}
 		});
 	},

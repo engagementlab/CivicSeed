@@ -56,6 +56,7 @@ exports.actions = function(req, res, ss) {
 									for(var i = 1; i < 16; i++) {
 										var newColor = colorData[i-1];
 										var d = {
+											activeSessionID: null,
 											firstName: 'Demo',
 											lastName: ('User' + i),
 											school: 'Demo University',
