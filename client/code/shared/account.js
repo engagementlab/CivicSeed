@@ -16,8 +16,6 @@ var _logoutCountDown = function(seconds, callback) {
 var _bootUser = function(userId) {
 	$('.appriseOverlay').remove();
 	$('.appriseOuter').remove();
-	// TODO: look at $game.$player.exitAndSave(function() { function...
-	// DO THIS!!!
 	console.log('Booting THIS user and allowing OTHER USER.', userId);
 	// make sure to sign out first
 	$game.exitGame(function() {
@@ -39,7 +37,7 @@ var $account = module.exports = {
 			return false;
 		});
 		$body.on('click', '.signOut', function() {
-			//if the user is playing the game? be sure to save their progress?
+			// if the user is playing the game? be sure to save their progress?
 			// console.log('look here dummy', sessionStorage.isPlaying);
 			if(sessionStorage.isPlaying === 'true') {
 				$game.exitGame(function() {

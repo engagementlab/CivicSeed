@@ -253,19 +253,7 @@ $game.$player = {
 		}
 	},
 
-	//save out all current status of player to db on exit
-	exitAndSave: function(callback) {
-		if(!$game.bossModeUnlocked) {
-			$game.$player.savePositionToDB();
-		}
-		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
-			if(typeof callback !== 'undefined') {
-				callback();
-			}
-		});
-	},
-
-	//determine which returning to npc prompt to show based on if player answered it or not
+	// determine which returning to npc prompt to show based on if player answered it or not
 	getPrompt: function(index) {
 		if(_resources[index]) {
 			if(_resources[index].result) {
