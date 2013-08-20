@@ -75,6 +75,9 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
+						if(user.activeSessionID && user.activeSessionID === req.sessionId) {
+							user.set({ activeSessionID: null });
+						}
 						_games[req.session.game.instanceName].numActivePlayers -= 1;
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: _games[req.session.game.instanceName].numActivePlayers, id: id});
 						delete _games[req.session.game.instanceName].players[id];
