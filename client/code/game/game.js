@@ -74,6 +74,15 @@ var $game = module.exports = {
 		$events.init();
 		$input.init();
 
+		// TODO: there needs to be some other kind of mechanism to see if the user has retired from the game...
+		$WINDOW.on('beforeunload', function() {
+			if(sessionStorage.isPlaying === 'true') {
+				var x = $game.exitGame();
+				// RUSS: what is this for???
+				return x;
+			}
+		});
+
 		$game.instantiated = true;
 
 	},
