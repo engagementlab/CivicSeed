@@ -1,3 +1,4 @@
+var _lastTime = 0;
 window.requestAnimationFrame = (function() {
 	return window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame ||
@@ -14,15 +15,15 @@ window.requestAnimationFrame = (function() {
 		};
 }());
 
-//PRIVATE GAME VARS
+// PRIVATE GAME VARS
 var _stepNumber = 0,
 	_stats = null,
 	_badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
 	_displayTimeout = null;
 
-//public functions
-exports.$game = {
+// PUBLIC EXPORTS
+var $game = module.exports = {
 
 	//GLOBAL GAME CONSTANTS
 	VIEWPORT_WIDTH: 30,
@@ -47,20 +48,73 @@ exports.$game = {
 
 	startNewAction: true,
 
-	init: function() {
-		//all the init calls will trigger others, a waterfall approach to assure
-		//the right data is loaded before we start
-		_loadPlayer();
+	instantiated: false,
+
+	init: function(callback) {
+
+		// instantiating code (if not already done)
+		var $map = require('/map');
+		var $render = require('/render');
+		var $npc = require('/npc');
+		var $resources = require('/resources');
+		var $player = require('/player');
+		var $others = require('/others');
+		var $robot = require('/robot');
+		var $botanist = require('/botanist');
+		var $mouse = require('/mouse');
+		var $audio = require('/audio');
+		var $pathfinder = require('/pathfinder');
+		var $events = require('/events');
+		var $input = require('/input');
+		var $chat = require('/chat');
+		var $log = require('/log');
+		var $boss = require('/boss');
+
+		// events recevied by RPC
+		$events.init();
+		$input.init();
+
+		$game.instantiated = true;
+
 	},
 
-	//pause menu on browser tab unfocus (currently disabled)
+	enterGame: function(callback) {
+		//check if they are ACTUALLY playing
+		ss.rpc('shared.account.checkGameSession', function(response) {
+			// YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
+			if(!$game.instantiated) {
+				$game.init();
+			}
+			if(response.status) {
+				sessionStorage.setItem('isPlaying', true);
+				$game.kickOffGame();
+			} else {
+				if(response.reason) {
+					if(response.profileLink) {
+						Davis.location.assign('/profiles/' + response.profileLink);
+					}
+					apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
+				}
+			}
+		});
+	},
+
+	kickOffGame: function() {
+		$CONTAINER.append(JT['game-gameboard']());
+		$CONTAINER.append(JT['game-resourceStage']());
+		$CONTAINER.append(JT['game-hud']());
+		_kickOffGame();
+	},
+
+	// pause menu on browser tab unfocus (currently disabled)
 	pause: function() {
 		$('.pauseMenu').fadeIn();
 		$game.running = false;
-		//TODO: play pause music?
+		// TODO: play pause music?
+		// CAN USE: $game.$audio.stopAll();
 	},
 
-	//resume from the pause menu, start up game loop
+	// resume from the pause menu, start up game loop
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
@@ -228,29 +282,44 @@ exports.$game = {
 				//$game.statusUpdate({message:'',input:'status',screen: true,log:true});
 			}
 		}
+	},
+
+	// save and exit game
+	exitGame: function(callback) {
+		// console.log('exiting game!');
+		sessionStorage.removeItem('isPlaying');
+		$game.running = false;
+		// TODO: fade out, instead of abrupt stop???
+		$game.$audio.stopAll();
+		// save out all current status of player to db on exit
+		if(!$game.bossModeUnlocked) {
+			$game.$player.savePositionToDB();
+		}
+		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
+			if(typeof callback === 'function') {
+				callback();
+			}
+		});
 	}
-};
-
-exports.gameModuleReady = function(callback) {
-
-	callback();
 
 };
 
 /********* PRIVATE FUNCTIONS **********/
 
-function _loadPlayer() {
+// all the init calls will trigger others, a waterfall approach to assure
+// the right data is loaded before we start
+function _kickOffGame() {
 	$game.$player.init(function() {
 		_loadGameInfo();
 	});
 }
 
 function _loadGameInfo() {
-	//get the global game information stats
+	// get the global game information stats
 	ss.rpc('game.player.getGameInfo', function(response) {
-		//regular game mode
+		// regular game mode
 		$game.bossModeUnlocked = response.bossModeUnlocked;
-		//for testing
+		// for testing
 		// $game.bossModeUnlocked = true;
 
 		$game.resourceCount = response.resourceCount;
@@ -262,19 +331,16 @@ function _loadGameInfo() {
 			prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
 		};
 		$game.$player.setPositionInfo();
-		_loadRenderer();
-	});
-}
-
-function _loadRenderer() {
-	$game.$renderer.init(function() {
-		_loadMap();
+		$game.$renderer.init(function() {
+			_loadMap();
+		});
 	});
 }
 
 function _loadMap() {
 	$game.$map.init(function() {
-		_setBoundaries(); //required for npcs to be placed
+		// required for npcs to be placed
+		_setBoundaries();
 		_loadOthers();
 	});
 }

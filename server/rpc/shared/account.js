@@ -1,4 +1,5 @@
 var rootDir = process.cwd(),
+	bcrypt = require('bcrypt'),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
@@ -6,10 +7,10 @@ var rootDir = process.cwd(),
 	singleHtml;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
-html += '<p style="color:red;">Someone is requesting access to your account. ';
-html += 'If you did not request this information, you can ignore and delete this email.</p>';
-html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>';
-html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
+	html += '<p style="color:red;">Someone is requesting access to your account. ';
+	html += 'If you did not request this information, you can ignore and delete this email.</p>';
+	html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>';
+	html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>';
 
 exports.actions = function(req, res, ss) {
 
@@ -26,10 +27,8 @@ exports.actions = function(req, res, ss) {
 		req.session.game = user.game;
 		req.session.gameStarted = user.gameStarted;
 		req.session.profileSetup = user.profileSetup;
-		req.session.isPlaying = user.isPlaying;
 		req.session.profileLink = user.profileLink;
 		req.session.channel.subscribe(user.game.instanceName);
-		req.session.verifyingSession = null;
 		req.session.save();
 		return {
 			id: req.session.userId,
@@ -40,7 +39,6 @@ exports.actions = function(req, res, ss) {
 			game: req.session.game,
 			gameStarted: req.session.gameStarted,
 			profileSetup: req.session.profileSetup,
-			isPlaying: req.session.isPlaying,
 			profileLink: req.session.profileLink
 		};
 	};
@@ -48,81 +46,20 @@ exports.actions = function(req, res, ss) {
 	return {
 
 		authenticate: function(email, password) {
-			console.log('**** authenticate ******');
+			console.log('**** checking authenticate ******');
 			UserModel.findOne({ email: email } , function(err, user) {
-
 				if(user) {
-					// console.log('user.activeSessionID: '.green + String(user.activeSessionID).green);
-					if(user.password === password) {
-						if(user.activeSessionID) {
-							// console.log(user.activeSessionID, req.sessionId);
-							if(user.activeSessionID === req.sessionId) {
-								// console.log('Active session matches session ID!'.green);
-								res({ status: true, session: _setUserSession(user) });
-								// // TODO: do we need to ALSO check if the user has already logged in???
-								// if(req.session.id === user.id) {
-								// 	console.log('THIS USER IS ALREADY LOGGED IN!!!'.red.inverse);
-								// }
-							} else {
-								console.error('Active session ID does not match session ID.'.red);
-
-								if(!req.session.verifyingSession) {
-									ss.publish.user(user.id, 'verifySession', {
-										// status: false,
-										message: 'Are you still there? Logging out in <strong class="countdown">' + _countdown + '</strong> seconds.',
-										countdown: _countdown,
-										// activeSessionID: user.activeSessionID,
-										requestingUserId: req.sessionId
-									});
-								}
-
-								// NOTE: important to set userId === sessionId, so we can find this NON AUTHENTICATED user later
-								// so we can log them in (or not) and actually assign them a user id
-								req.session.setUserId(req.sessionId);
-								req.session.verifyingSession = true;
-								req.session.save();
-
-								res({
-									status: false,
-									reason: 'Please wait while we check other sessions which are currently logged in. This may take a few seconds.',
-									// logout: _countdown,
-									activeSessionID: user.activeSessionID
-									// sessionId: req.sessionId
-								});
-
-							}
+					bcrypt.compare(password, user.password, function(err, authenticated) {
+						if(authenticated) {
+							res({ status: true, session: _setUserSession(user) });
 						} else {
-							console.log('No active session ID.');
-							// make sure to save the active session to mongodb, so we can look it up again
-							user.set({ activeSessionID: req.sessionId });
-							user.save(function(error) {
-								if(error) {
-									console.error('Error saving active session ID to mongodb'.red);
-									res({ status: false, reason: error });
-								} else {
-									// console.log('Active session ID saved to mongodb'.green);
-									res({ status: true, session: _setUserSession(user) });
-								}
-							});
+							res({ status: false, reason: 'Incorrect password.' });
 						}
-					} else {
-						res({ status: false, reason: 'Incorrect password.' });
-					}
+					});
 				} else {
 					res({ status: false, reason: 'No user exists with that email.' });
 				}
-
 			});
-
-		},
-
-		denyNewSession: function(requestingUserId) {
-			// TODO: destroy requestingUserId
-			ss.publish.user(requestingUserId, 'denyNewSession', 'Authentication denied. There is another session/user currently logged into your account.<br>Reasons for this may be that you have given your username and password to someone else.<br>Please contact the administrator of this site if you think something is in error.');
-		},
-
-		approveNewSession: function(requestingUserId) {
-			ss.publish.user(requestingUserId, 'approveNewSession', 'Authenticating...');
 		},
 
 		deAuthenticate: function() {
@@ -173,7 +110,6 @@ exports.actions = function(req, res, ss) {
 					game: req.session.game,
 					gameStarted: req.session.gameStarted,
 					profileSetup: req.session.profileSetup,
-					isPlaying: req.session.isPlaying,
 					profileLink: req.session.profileLink
 				});
 			} else {
@@ -183,22 +119,65 @@ exports.actions = function(req, res, ss) {
 		},
 
 		checkGameSession: function() {
-			UserModel.findById(req.session.userId, function(err, result) {
-				if(!result.isPlaying) {
-					result.isPlaying = true;
-					result.save(function(err, okay) {
-						res(err, false);
+			UserModel.findById(req.session.userId, function(error, user) {
+				if(error) {
+					console.error('Error finding user (game) session in Mongo.'.red);
+					res({
+						status: false,
+						reason: error
 					});
 				} else {
-					res(err, result.isPlaying);
+					if(user.activeSessionID) {
+						console.log(user.activeSessionID, req.sessionId);
+
+						if(user.activeSessionID === req.sessionId) {
+							// NOTE: this is sort of a weird scenario -- not sure it's even needed to check it!
+							console.log('Active session matches session ID -- good to go!'.green);
+							res({ status: true });
+						} else {
+							console.error('Active session ID does not match session ID.'.red);
+							res({ status: false });
+							ss.publish.user(user.id, 'verifyGameStatus', {
+								countdown: _countdown,
+								userId: user.id,
+								profileLink: user.profileLink
+							});
+						}
+					} else {
+						console.log('No active session ID.');
+						// make sure to save the active session to mongodb, so we can look it up again
+						user.set({ activeSessionID: req.sessionId });
+						user.save(function(error) {
+							if(error) {
+								console.error('Error saving active session ID to mongodb'.red);
+								res({
+									status: false,
+									reason: error,
+									profileLink: user.profileLink
+								});
+							} else {
+								console.log('Active session ID saved to mongodb'.green);
+								res({ status: true });
+							}
+						});
+					}
 				}
 			});
+		},
+
+		denyNewSession: function(req) {
+			ss.publish.user(req.userId, 'denyNewSession', req);
+		},
+
+		approveNewSession: function(userId) {
+			ss.publish.user(userId, 'approveNewSession', 'Authenticating...');
 		},
 
 		remindMeMyPassword: function(email) {
 			UserModel.findOne({ email: email } , function(err, user) {
 				if(!err && user) {
 					// TODO: validate email before sending
+					// TODO: don't send them their password; do password reset
 					singleHtml = html.replace('#{firstName}', user.firstName);
 					singleHtml = singleHtml.replace('#{email}', user.email);
 					singleHtml = singleHtml.replace('#{password}', user.password);

@@ -50,7 +50,6 @@ exports.actions = function(req, res, ss) {
 					user.profileSetup = false;
 					user.profileUnlocked = false;
 					user.gameStarted = false;
-					user.isPlaying = false;
 					user.game = {
 						instanceName: instanceName,
 						currentLevel: 0,

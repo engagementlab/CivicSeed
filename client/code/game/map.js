@@ -13,7 +13,7 @@ var _nextTiles = null,
 	_topEdge = 0,
 	_bottomEdge = 0;
 
-$game.$map = {
+var $map = $game.$map = {
 
 	coloredTiles: [],
 	growingSeed: false,
@@ -31,9 +31,9 @@ $game.$map = {
 		var id = $game.$player.id,
 			position = $game.$player.getPosition(),
 			color = $game.$player.getColor();
-		$game.$map.addPlayer(id, position.x, position.y, color);
+		$map.addPlayer(id, position.x, position.y, color);
 		ss.rpc('game.map.init', function() {
-			$game.$map.ready = true;
+			$map.ready = true;
 			callback();
 		});
 	},
@@ -43,7 +43,7 @@ $game.$map = {
 		if($game.bossModeUnlocked) {
 			$('#minimapPlayer').toggleClass('hide');
 			_setupBossMap();
-			$game.$map.createPathGrid(function() {
+			$map.createPathGrid(function() {
 				callback();
 			}, true);
 		} else {
@@ -55,7 +55,7 @@ $game.$map = {
 			};
 			_getTiles(info, function() {
 				_copyTileArray(function() {
-					$game.$map.createPathGrid(function() {
+					$map.createPathGrid(function() {
 						callback();
 					});
 				});
@@ -80,7 +80,7 @@ $game.$map = {
 					_gridTiles[y][x] = 1;
 				} else {
 					//the pathfinding takes 1 means its clear 0 not
-					var val = $game.$map.getTileState(x, y),
+					var val = $map.getTileState(x, y),
 						tempNoGo;
 					if(val === -1) {
 						tempNoGo = 1;
@@ -101,9 +101,9 @@ $game.$map = {
 	getTileState: function(x, y) {
 		//must first do a check to see if the tile BOTTOM is the npc
 		//if so, then return npc val (THIS IS A HACK SORT OF)
-		var tileStateVal = $game.$map.currentTiles[x][y].tileState;
+		var tileStateVal = $map.currentTiles[x][y].tileState;
 		if( y < $game.VIEWPORT_HEIGHT - 1) {
-			var belowState = $game.$map.currentTiles[x][y+1].tileState;
+			var belowState = $map.currentTiles[x][y+1].tileState;
 
 			if(belowState >= 0 ) {
 				tileStateVal = belowState;
@@ -114,38 +114,38 @@ $game.$map = {
 
 	//return if player is on the edge of the world
 	isMapEdge: function(x, y, callback) {
-		var edge = $game.$map.currentTiles[x][y].isMapEdge;
+		var edge = $map.currentTiles[x][y].isMapEdge;
 		callback(edge);
 	},
 
 	//add a player to the minimap
 	addPlayer: function(id, x, y, col) {
-		$game.$map.miniMap[id] = {};
-		$game.$map.miniMap[id].x = x,
-		$game.$map.miniMap[id].y = y;
-		$game.$map.miniMap[id].col = col;
-		$game.$map.render();
+		$map.miniMap[id] = {};
+		$map.miniMap[id].x = x,
+		$map.miniMap[id].y = y;
+		$map.miniMap[id].col = col;
+		$map.render();
 	},
 
 	//update a player on the minimap
 	updatePlayer: function(id, x, y) {
 		$game.$renderer.clearMiniMap();
-		$game.$map.miniMap[id].x = x;
-		$game.$map.miniMap[id].y = y;
-		$game.$map.render();
+		$map.miniMap[id].x = x;
+		$map.miniMap[id].y = y;
+		$map.render();
 	},
 
 	//remove a player from the minimap
 	removePlayer: function(id) {
 		$game.$renderer.clearMiniMap();
-		delete $game.$map.miniMap[id];
-		$game.$map.render();
+		delete $map.miniMap[id];
+		$map.render();
 	},
 
 	//render all the players on the minimap
 	render: function() {
 		$game.$renderer.renderMiniMapConstants();
-		$.each($game.$map.miniMap, function(key, player) {
+		$.each($map.miniMap, function(key, player) {
 			$game.$renderer.renderMiniPlayer(player);
 		});
 	},
@@ -154,11 +154,11 @@ $game.$map = {
 	newBomb: function(bombed, id) {
 		for(var b = 0; b < bombed.length; b += 1) {
 			//only add it to render list if it is on current screen
-			var loc = $game.$map.masterToLocal(bombed[b].x, bombed[b].y),
+			var loc = $map.masterToLocal(bombed[b].x, bombed[b].y),
 				curTile = null;
 			if(loc) {
 				//if there IS a color
-				curTile = $game.$map.currentTiles[loc.x][loc.y];
+				curTile = $map.currentTiles[loc.x][loc.y];
 				curTile.color = bombed[b].color;
 				curTile.curColor = bombed[b].curColor;
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
@@ -213,8 +213,8 @@ $game.$map = {
 			_nextX = $game.masterX - ($game.VIEWPORT_WIDTH - 2);
 			_stepX = -1;
 			_shiftArray = -1;
-			$game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
-			$game.$map.stepDirection = 'left';
+			$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
+			$map.stepDirection = 'left';
 			getThisManyX = $game.VIEWPORT_WIDTH - 2;
 			getThisManyY = $game.VIEWPORT_HEIGHT;
 			getThisX = _nextX;
@@ -225,8 +225,8 @@ $game.$map = {
 			_nextX = $game.masterX + $game.VIEWPORT_WIDTH - 2;
 			_stepX = 1;
 			_shiftArray = 1;
-			$game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
-			$game.$map.stepDirection = 'right';
+			$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
+			$map.stepDirection = 'right';
 			getThisManyX = $game.VIEWPORT_WIDTH - 2;
 			getThisManyY = $game.VIEWPORT_HEIGHT;
 			getThisX = _nextX + 2;
@@ -237,8 +237,8 @@ $game.$map = {
 			_nextY = $game.masterY - ($game.VIEWPORT_HEIGHT - 2);
 			_stepY = -1;
 			_shiftArray = -$game.totalVIEWPORT_HEIGHT;
-			$game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
-			$game.$map.stepDirection = 'up';
+			$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
+			$map.stepDirection = 'up';
 			getThisManyX = $game.VIEWPORT_WIDTH;
 			getThisManyY = $game.VIEWPORT_HEIGHT - 2;
 			getThisX = $game.masterX;
@@ -249,8 +249,8 @@ $game.$map = {
 			_nextY = $game.masterY+$game.VIEWPORT_HEIGHT - 2;
 			_stepY = 1;
 			_shiftArray = $game.totalVIEWPORT_HEIGHT;
-			$game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
-			$game.$map.stepDirection = 'down';
+			$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
+			$map.stepDirection = 'down';
 			getThisManyX = $game.VIEWPORT_WIDTH;
 			getThisManyY = $game.VIEWPORT_HEIGHT - 2;
 			getThisX = $game.masterX;
@@ -267,13 +267,13 @@ $game.$map = {
 		//--------RIGHT------------
 		//go thru current array and shift everthing
 		var i, j;
-		if($game.$map.stepDirection === 'right') {
+		if($map.stepDirection === 'right') {
 			//shift all except last column
 			i = 0;
 			while(i < $game.VIEWPORT_WIDTH - 1) {
 				j = 0;
 				while(j < $game.VIEWPORT_HEIGHT) {
-					$game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i + 1 ][j];
+					$map.currentTiles[i][j] = $map.currentTiles[ i + 1 ][j];
 					j += 1;
 				}
 				i += 1;
@@ -281,7 +281,7 @@ $game.$map = {
 			//shift a new column from the next array to the last spot
 			j = $game.VIEWPORT_HEIGHT;
 			while(--j >= 0) {
-				$game.$map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j];
+				$map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j];
 			}
 			$game.masterX += 1;
 			$game.$player.slide(1,0);
@@ -289,14 +289,14 @@ $game.$map = {
 		}
 		//--------LEFT------------
 		//go thru current array and shift everthing
-		if($game.$map.stepDirection === 'left') {
+		if($map.stepDirection === 'left') {
 			//shift all except last column
 			i = $game.VIEWPORT_WIDTH - 1;
 
 			while(i > 0) {
 				j = 0;
 				while(j < $game.VIEWPORT_HEIGHT) {
-					$game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i - 1 ][j];
+					$map.currentTiles[i][j] = $map.currentTiles[ i - 1 ][j];
 					j += 1;
 
 				}
@@ -305,7 +305,7 @@ $game.$map = {
 			//shift a new column from the next array to the last spot
 			j = $game.VIEWPORT_HEIGHT;
 			while(--j >= 0) {
-				$game.$map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j];
+				$map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j];
 			}
 
 			$game.masterX -= 1;
@@ -314,13 +314,13 @@ $game.$map = {
 		}
 		//--------UP------------
 		//go thru current array and shift everthing
-		if($game.$map.stepDirection==='up') {
+		if($map.stepDirection==='up') {
 			//shift all except last column
 			j = $game.VIEWPORT_HEIGHT - 1;
 			while(j > 0) {
 				i = 0;
 				while(i < $game.VIEWPORT_WIDTH) {
-					$game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j - 1];
+					$map.currentTiles[i][j] = $map.currentTiles[i][j - 1];
 					i += 1;
 				}
 				j -= 1;
@@ -328,7 +328,7 @@ $game.$map = {
 			//shift a new column from the next array to the last spot
 			i = $game.VIEWPORT_WIDTH;
 			while(--i >= 0) {
-				$game.$map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber];
+				$map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber];
 			}
 			$game.masterY -= 1;
 			$game.$player.slide(0,-1);
@@ -336,13 +336,13 @@ $game.$map = {
 		}
 		//--------DOWN------------
 		//go thru current array and shift everthing
-		if($game.$map.stepDirection === 'down') {
+		if($map.stepDirection === 'down') {
 			//shift all except last column
 			j = 0;
 			while(j < $game.VIEWPORT_HEIGHT-1) {
 				i = 0;
 				while(i < $game.VIEWPORT_WIDTH) {
-					$game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j + 1];
+					$map.currentTiles[i][j] = $map.currentTiles[i][j + 1];
 					i += 1;
 				}
 				j += 1;
@@ -350,7 +350,7 @@ $game.$map = {
 			//shift a new column from the next array to the last spot
 			i = $game.VIEWPORT_WIDTH;
 			while(--i >= 0) {
-				$game.$map.currentTiles[i][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[i][stepNumber - 1];
+				$map.currentTiles[i][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[i][stepNumber - 1];
 			}
 			$game.masterY += 1;
 			$game.$player.slide(0,1);
@@ -397,7 +397,7 @@ $game.$map = {
 
 //get new tiles from DB for new viewport
 function _getTiles(data, callback) {
-	$game.$map.dataLoaded = false;
+	$map.dataLoaded = false;
 	var x1 = data.x,
 		y1 = data.y,
 		x2 = data.x + data.numX,
@@ -448,22 +448,22 @@ function _getTiles(data, callback) {
 			}
 			c++;
 		}
-		$game.$map.dataLoaded = true;
+		$map.dataLoaded = true;
 		callback();
 	});
 }
 
 //copy over new tiles to current tiles
 function _copyTileArray(callback) {
-	// $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
-	$game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+	// $map.currentTiles = new Array($game.VIEWPORT_WIDTH);
+	$map.currentTiles = [$game.VIEWPORT_WIDTH];
 
 	var i = $game.VIEWPORT_WIDTH;
 	while(--i >= 0) {
-		$game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
+		$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
 		var j = $game.VIEWPORT_HEIGHT;
 		while(--j >= 0) {
-			$game.$map.currentTiles[i][j] = _nextTiles[i][j];
+			$map.currentTiles[i][j] = _nextTiles[i][j];
 		}
 	}
 	//reset array
@@ -473,13 +473,13 @@ function _copyTileArray(callback) {
 
 //create the data for the boss map
 function _setupBossMap() {
-	$game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+	$map.currentTiles = [$game.VIEWPORT_WIDTH];
 	var i = $game.VIEWPORT_WIDTH;
 	while(--i >= 0) {
-		$game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
+		$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
 		var j = $game.VIEWPORT_HEIGHT;
 		while(--j >= 0) {
-			$game.$map.currentTiles[i][j] = {
+			$map.currentTiles[i][j] = {
 				x: i,
 				y: j,
 				tileState: -1,

@@ -1,0 +1,22 @@
+{
+	// See https://raw.github.com/jshint/jshint/master/examples/.jshintrc
+
+	"strict": false,
+	"unused": false,
+
+	"node": true,
+	"browser": true,
+	"jquery": true,
+
+	"globals": {
+		"ss": true,
+		"JT": true,
+		"CivicSeed": true,
+		"Davis": true,
+		"$WINDOW": true,
+		"$HTML": true,
+		"$BODY": true,
+		"$CONTAINER": true,
+		"$game": true
+	}
+}

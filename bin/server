@@ -48,15 +48,6 @@ service.connectMongoose(app, function(databases) {
 	app.use(passport.initialize());
 	app.use(passport.session());
 
-	// var expressMiddleware = {
-	// 	account: require(rootDir + '/server/middleware/account'),
-	// };
-
-	// // var temply1 = expressMiddleware.account.authenticated;
-	// // var temply2 = expressMiddleware.account.authenticated();
-	// // console.log(temply1, temply2);
-	// app.use(expressMiddleware.account.authenticated('express'));
-
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>> SOCKET STREAM
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
@@ -103,7 +94,7 @@ service.connectMongoose(app, function(databases) {
 		};
 		ss.session.store.use('redis', redisConfig);
 		ss.publish.transport.use('redis', redisConfig);
-		ss.session.options.maxAge = 1261440000000; // forty years
+		// ss.session.options.maxAge = 1261440000000; // forty years --> default is 30 days
 	} else {
 		console.log('   * * * * * * * * * * * *   REDIS Service Not Connected   * * * * * * * * * * * *   '.red);
 	}

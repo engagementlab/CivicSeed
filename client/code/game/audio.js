@@ -38,9 +38,13 @@ var _soundtracks = [],
 
 	],
 	_currentLoop = null,
-	_currentPos = null;
+	_currentPos = null,
+	// TODO: add the following to Modernizr
+	_isWebAudio = function(audioObject) {
+		return audioObject && '_webAudio' in audioObject;
+	};
 
-$game.$audio = {
+var $audio = $game.$audio = {
 
 	ready: false,
 	isMuted: false,
@@ -50,15 +54,15 @@ $game.$audio = {
 			_extension = CivicSeed.version;
 		}
 		var position = $game.$player.getPosition();
-		var firstTrack = $game.$audio.whichTrack(position.x, position.y);
+		var firstTrack = $audio.whichTrack(position.x, position.y);
 		if(firstTrack === -1) {
 			firstTrack = 4;
 		}
-		$game.$audio.loadTrack(firstTrack);
+		$audio.loadTrack(firstTrack);
 
 		//hack to check if all stuff is loaded so we can callback
 		var checkDone = function() {
-			if($game.$audio.ready) {
+			if($audio.ready) {
 				callback();
 			} else {
 				setTimeout(checkDone, 30);
@@ -87,8 +91,8 @@ $game.$audio = {
 			buffer: true
 		});
 		//this goes thru all the tracks, and skips num since its preloaded
-		$game.$audio.loadOtherTrack(0, num);
-		$game.$audio.loadTriggerFx();
+		$audio.loadOtherTrack(0, num);
+		$audio.loadTriggerFx();
 		_currentTrack = num;
 	},
 
@@ -113,12 +117,12 @@ $game.$audio = {
 			});
 			track++;
 			if(track !== _numTracks) {
-				$game.$audio.loadOtherTrack(track, num);
+				$audio.loadOtherTrack(track, num);
 			}
 		} else {
 			track++;
 			if(track !== _numTracks) {
-				$game.$audio.loadOtherTrack(track, num);
+				$audio.loadOtherTrack(track, num);
 			}
 		}
 	},
@@ -154,7 +158,7 @@ $game.$audio = {
 			},
 			volume: 0.4,
 			onload: function() {
-				$game.$audio.loadEnvironmentLoopFx();
+				$audio.loadEnvironmentLoopFx();
 			}
 		});
 	},
@@ -179,11 +183,11 @@ $game.$audio = {
 			},
 			loop: true,
 			onend: function() {
-				$game.$audio.checkLoopExit();
+				$audio.checkLoopExit();
 			},
 			volume: 0.1,
 			onload: function() {
-				$game.$audio.loadEnvironmentOnceFx();
+				$audio.loadEnvironmentOnceFx();
 			}
 		});
 	},
@@ -223,7 +227,7 @@ $game.$audio = {
 			onend: function() {
 			},
 			onload: function() {
-				$game.$audio.ready = true;
+				$audio.ready = true;
 			}
 		});
 	},
@@ -245,15 +249,15 @@ $game.$audio = {
 
 	update: function(posX, posY) {
 		_currentPos = {x: posX, y: posY};
-		var trackNum = $game.$audio.whichTrack(posX, posY);
+		var trackNum = $audio.whichTrack(posX, posY);
 		if(_soundtracks[trackNum]._loaded && trackNum !== _currentTrack && !_midTransition) {
-			$game.$audio.switchTrack(trackNum);
+			$audio.switchTrack(trackNum);
 			$game.statusUpdate({message:_newPlace,input:'status',screen: true,log:false});
 		}
 		if(!_currentLoop) {
-			$game.$audio.checkEnvironmentLoopFx(trackNum);
+			$audio.checkEnvironmentLoopFx(trackNum);
 		}
-		$game.$audio.checkEnvironmentOnceFx(trackNum);
+		$audio.checkEnvironmentOnceFx(trackNum);
 	},
 
 	checkEnvironmentLoopFx: function() {
@@ -266,10 +270,10 @@ $game.$audio = {
 				l = 0;
 
 			while(l < numLocations) {
-				var inProx = $game.$audio.getProximity(place.locations[l], place.prox);
+				var inProx = $audio.getProximity(place.locations[l], place.prox);
 					if(inProx) {
 						_currentLoop = place;
-						$game.$audio.playEnvironmentLoopFx(place.sound);
+						$audio.playEnvironmentLoopFx(place.sound);
 						//get out of BOTH loops
 						l = numLocations;
 						p = numPlaces;
@@ -286,12 +290,12 @@ $game.$audio = {
 
 		while(p < numPlaces) {
 			var place = _environmentOnceFxPlaces[p],
-				inProx = $game.$audio.getProximity(place.location, place.prox);
+				inProx = $audio.getProximity(place.location, place.prox);
 			if(inProx) {
 				var rollDice = Math.random();
 				if(rollDice < place.chance) {
 					var soundIndex = Math.floor((rollDice / place.chance) * place.sounds.length);
-					$game.$audio.playEnvironmentOnceFx(place.sounds[soundIndex]);
+					$audio.playEnvironmentOnceFx(place.sounds[soundIndex]);
 					//if we don't want overlapping of sounds triggered at a time
 					p = numPlaces;
 				}
@@ -316,7 +320,7 @@ $game.$audio = {
 			inRange = false;
 
 		while(l < numLocations) {
-			var inProx = $game.$audio.getProximity(_currentLoop.locations[l], _currentLoop.prox);
+			var inProx = $audio.getProximity(_currentLoop.locations[l], _currentLoop.prox);
 			if(inProx) {
 				inRange = true;
 				l = numLocations;
@@ -337,7 +341,7 @@ $game.$audio = {
 		});
 		_currentTrack = swap;
 
-		var val = $game.$audio.isMute ? 0.0 : 0.2;
+		var val = $audio.isMute ? 0.0 : 0.2;
 		// var val = 0;
 		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
 			_midTransition = false;
@@ -389,8 +393,8 @@ $game.$audio = {
 	},
 
 	toggleMute: function() {
-		$game.$audio.isMute = $game.$audio.isMute ? false: true;
-		if($game.$audio.isMute) {
+		$audio.isMute = $audio.isMute ? false: true;
+		if($audio.isMute) {
 			_soundtracks[_currentTrack].volume(0);
 			_environmentLoopFx.volume(0);
 			_environmentOnceFx.volume(0);
@@ -402,21 +406,31 @@ $game.$audio = {
 			_environmentOnceFx.volume(0.3);
 			_triggerFx.volume(0.4);
 		}
-		return $game.$audio.isMute;
+		return $audio.isMute;
 	},
 
 	fadeLow: function() {
-		if(!$game.$audio.isMute) {
+		if(!$audio.isMute) {
 			_soundtracks[_currentTrack].volume(0.05);
 			_environmentLoopFx.volume(0.03);
 		}
 	},
 
 	fadeHi: function() {
-		if(!$game.$audio.isMute) {
+		if(!$audio.isMute) {
 			_soundtracks[_currentTrack].volume(0.2);
 			_environmentLoopFx.volume(0.2);
 		}
-	}
+	},
+
+	stopAll: function() {
+		if(_isWebAudio(_soundtracks[_currentTrack])) {
+			_soundtracks[_currentTrack].stop();
+		}
+		if(_isWebAudio(_environmentLoopFx)) {
+			_environmentLoopFx.stop();
+		}
+	},
+
 
 };

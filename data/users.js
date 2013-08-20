@@ -11,7 +11,6 @@ module.exports.global = [{
 	profileLink: 'kae5e46pxifqolxr',
 	profileSetup: true,
 	profileUnlocked: true,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -60,7 +59,6 @@ module.exports.global = [{
 	profileLink: '5eprkae4xifqolx6',
 	profileSetup: true,
 	profileUnlocked: true,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -109,7 +107,6 @@ module.exports.global = [{
 	profileLink: '3uk8q5vqvikn8kt9',
 	profileSetup: true,
 	profileUnlocked: true,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -158,7 +155,6 @@ module.exports.global = [{
 	profileLink: 'dysbaphy3e0icnmi',
 	profileSetup: false,
 	profileUnlocked: false,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 1,
@@ -204,7 +200,6 @@ module.exports.global = [{
 	profileLink: '8ym5dh4b42qehfr',
 	profileSetup: true,
 	profileUnlocked: false,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -250,7 +245,6 @@ module.exports.global = [{
 	profileLink: '7o89d51qd8rjatt9',
 	profileSetup: true,
 	profileUnlocked: false,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -296,7 +290,6 @@ module.exports.global = [{
 	profileLink: '2o89d51qd3raace9',
 	profileSetup: true,
 	profileUnlocked: false,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,
@@ -504,7 +497,6 @@ module.exports.global = [{
 	profileLink: '4cprkae7y5xqolx6',
 	profileSetup: true,
 	profileUnlocked: true,
-	isPlaying: false,
 	game: {
 		instanceName: 'awesome',
 		currentLevel: 0,

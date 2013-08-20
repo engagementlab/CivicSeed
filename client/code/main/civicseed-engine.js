@@ -2,18 +2,20 @@ var self = module.exports = {
 
 	init: function() {
 
-
 		if(!CivicSeed.initialized) {
 
 			// self.registerModulesAndGlobals();
+			window.$WINDOW = $(window);
 			window.$HTML = $('html');
 			window.$BODY = $(document.body);
 			window.$CONTAINER = $('#container');
 
+			// game specific:
+			window.$game = require('/game');
+
 			self.setupRouter();
 
-			var $account = require('/account');
-			$account.accountHandlers();
+			require('/account').accountHandlers();
 
 			CivicSeed.initialized = true;
 

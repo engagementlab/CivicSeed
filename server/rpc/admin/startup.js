@@ -1,17 +1,17 @@
-var rootDir = process.cwd();
-var config = require(rootDir + '/config');
-var service = require(rootDir + '/service');
-var fs = require('fs');
-var dbActions = require(rootDir + '/server/utils/databaseActions');
+var rootDir = process.cwd(),
+	fs = require('fs'),
 
-var userModel = service.useModel('user', 'preload');
-var tileModel = service.useModel('tile', 'preload');
-var colorModel = service.useModel('color', 'preload');
-var npcModel = service.useModel('npc', 'preload');
-var botanistModel = service.useModel('botanist', 'preload');
-var gameModel = service.useModel('game', 'preload');
+	config = require(rootDir + '/config'),
+	service = require(rootDir + '/service'),
+	dbActions = require(rootDir + '/server/utils/database-actions'),
+	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 
-// var nodeEnv;
+	userModel = service.useModel('user', 'preload'),
+	tileModel = service.useModel('tile', 'preload'),
+	colorModel = service.useModel('color', 'preload'),
+	npcModel = service.useModel('npc', 'preload'),
+	botanistModel = service.useModel('botanist', 'preload'),
+	gameModel = service.useModel('game', 'preload');
 
 exports.actions = function(req, res, ss) {
 
@@ -23,69 +23,90 @@ exports.actions = function(req, res, ss) {
 
 		loadData: function(dataType) {
 
-			var userData, tileData, npcData, botanistData, resourceData, gameData;
+			var userData,
+				colorData,
+				userDataLength,
+				tileData,
+				npcData,
+				botanistData,
+				resourceData,
+				gameData,
+				hashUserData;
 
 			if(req.session.role && req.session.role === 'superadmin') {
 
 				if(dataType === 'users') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
-					userData = require(rootDir + '/data/users');
-					var colorData = require(rootDir + '/data/colors');
-					dbActions.dropCollection('users', function() {
-						dbActions.saveDocuments(userModel, userData.global, function() {
-							//create demo users
-							demoUsers = [];
-							for(var i = 1; i < 16; i++) {
-								var newColor = colorData.global[i-1];
-								var d = {
-									firstName: 'Demo',
-									lastName: ('User' + i),
-									school: 'Demo University',
-									password: 'demo',
-									email: ('demo' + i),
-									role: 'actor',
-									gameStarted: true,
-									profilePublic: false,
-									profileLink: Math.random().toString(36).slice(2),
-									profileSetup: true,
-									profileUnlocked: false,
-									isPlaying: false,
-									game: {
-										instanceName: 'demo',
-										currentLevel: 0,
-										position: {
-											x: 64,
-											y: 77,
-											inTransit: false
-										},
-										colorInfo: {
-											rgb: newColor,
-											tilesheet: i
-										},
-										resources: [],
-										resourcesDiscovered: 0,
-										inventory: [],
-										seeds: {
-											regular: 0,
-											draw: 0,
-											dropped: 0
-										},
-										botanistState: 0,
-										firstTime: true,
-										resume: [],
-										seenRobot: false,
-										playingTime: 0,
-										tilesColored: 0,
-										pledges: 5
-									}
-								};
-								demoUsers.push(d);
-							}
-							dbActions.saveDocuments(userModel, demoUsers, function() {
-								res('Data loaded: ' + dataType);
+					userData = require(rootDir + '/data/users').global;
+					colorData = require(rootDir + '/data/colors').global;
+
+					userDataLength = userData.length;
+
+					hashUserData = function(i) {
+						if(i < userDataLength) {
+							accountHelpers.hashPassword(userData[i].password, function(hashedPassword) {
+								userData[i].password = hashedPassword.hash;
+								hashUserData(++i);
 							});
-						});
-					});
+						} else {
+							dbActions.dropCollection('users', function() {
+								dbActions.saveDocuments(userModel, userData, function() {
+									//create demo users
+									var demoUsers = [];
+									for(var i = 1; i < 16; i++) {
+										var newColor = colorData[i-1];
+										var d = {
+											activeSessionID: null,
+											firstName: 'Demo',
+											lastName: ('User' + i),
+											school: 'Demo University',
+											password: 'demo',
+											email: ('demo' + i),
+											role: 'actor',
+											gameStarted: true,
+											profilePublic: false,
+											profileLink: Math.random().toString(36).slice(2),
+											profileSetup: true,
+											profileUnlocked: false,
+											game: {
+												instanceName: 'demo',
+												currentLevel: 0,
+												position: {
+													x: 64,
+													y: 77,
+													inTransit: false
+												},
+												colorInfo: {
+													rgb: newColor,
+													tilesheet: i
+												},
+												resources: [],
+												resourcesDiscovered: 0,
+												inventory: [],
+												seeds: {
+													regular: 0,
+													draw: 0,
+													dropped: 0
+												},
+												botanistState: 0,
+												firstTime: true,
+												resume: [],
+												seenRobot: false,
+												playingTime: 0,
+												tilesColored: 0,
+												pledges: 5
+											}
+										};
+										demoUsers.push(d);
+									}
+									dbActions.saveDocuments(userModel, demoUsers, function() {
+										res('Data loaded: ' + dataType);
+									});
+								});
+							});
+						}
+					};
+					hashUserData(0);
 				} else if(dataType === 'tiles') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
 					tileData = require(rootDir + '/data/tiles');

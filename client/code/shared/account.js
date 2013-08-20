@@ -13,6 +13,17 @@ var _logoutCountDown = function(seconds, callback) {
 		callback();
 	}
 };
+var _bootUser = function(userId) {
+	$('.appriseOverlay').remove();
+	$('.appriseOuter').remove();
+	console.log('Booting THIS user and allowing OTHER USER.', userId);
+	// make sure to sign out first
+	$game.exitGame(function() {
+		$account.deAuthenticate(function(deAuthenticate) {
+			ss.rpc('shared.account.approveNewSession', userId);
+		});
+	});
+};
 
 // public handlers
 var $account = module.exports = {
@@ -26,10 +37,10 @@ var $account = module.exports = {
 			return false;
 		});
 		$body.on('click', '.signOut', function() {
-			//if the user is playing the game? be sure to save their progress?
+			// if the user is playing the game? be sure to save their progress?
 			// console.log('look here dummy', sessionStorage.isPlaying);
 			if(sessionStorage.isPlaying === 'true') {
-				$game.$player.exitAndSave(function() {
+				$game.exitGame(function() {
 					$account.deAuthenticate();
 				});
 			} else {
@@ -92,75 +103,90 @@ var $account = module.exports = {
 			ss.rpc('shared.account.startGame');
 		});
 
-		ss.event.on('verifySession', function(req) {
-			apprise(req.message, { verify: true, textNo: 'Sign Out' }, function(response) {
-				clearTimeout(_timer);
-				if(response) {
-					// console.log('Okay! Stay active!', req.requestingUserId);
-					ss.rpc('shared.account.denyNewSession', req.requestingUserId);
-				} else {
-					// TODO: look at $game.$player.exitAndSave(function() { function...
-					// DO THIS!!!
-
-					// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
-					// make sure to sign out first
-					$account.deAuthenticate(function(deAuthenticate) {
-						ss.rpc('shared.account.approveNewSession', req.requestingUserId);
-					});
-				}
-			});
-			_logoutCountDown(req.countdown, function() {
-				// console.log('booting the THIS user and logging OTHER USER in...', req.requestingUserId);
-				$('#aOverlay').remove();
-				$('.appriseOuter').remove();
-				$account.deAuthenticate(function(deAuthenticate) {
-					ss.rpc('shared.account.approveNewSession', req.requestingUserId);
+		ss.event.on('verifyGameStatus', function(req) {
+			var message;
+			// console.log('Verifying game status through ss event listener!!!!');
+			if(sessionStorage.getItem('isPlaying')) {
+				message = 'Are you still there? Signing out in <strong class="countdown">' + req.countdown + '</strong> seconds.';
+				apprise(message, { verify: true, textNo: 'Sign Out' }, function(response) {
+					clearTimeout(_timer);
+					if(response) {
+						console.log('Okay! Stay active!', req.userId);
+						ss.rpc('shared.account.denyNewSession', {
+							userId: req.userId,
+							profileLink: req.profileLink
+						});
+					} else {
+						_bootUser(req.userId);
+					}
 				});
-			});
+				_logoutCountDown(req.countdown, function() {
+					_bootUser(req.userId);
+				});
+			} else {
+				message = 'There is another active game session matching your credentials. \
+					Please wait while we check the session. \
+					This may take a few seconds (<strong class="countdown">' + req.countdown + '</strong>).\
+					<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, \
+					please contact the website administrator.)</span>';
+				apprise(message);
+				_logoutCountDown(req.countdown + 5, function() {
+					$('.appriseOverlay').remove();
+					$('.appriseOuter').remove();
+				});
+			}
 		});
-		ss.event.on('denyNewSession', function(message) {
-			$('#aOverlay').remove();
-			$('.appriseOuter').remove();
-			apprise(message);
+		ss.event.on('denyNewSession', function(req) {
+			if(Davis.location.current() === '/game') {
+				clearTimeout(_timer);
+				if(!sessionStorage.getItem('isPlaying')) {
+					Davis.location.assign('/profiles/' + req.profileLink);
+					$('.appriseOverlay').remove();
+					$('.appriseOuter').remove();
+					apprise('Game access denied. \
+						There is another session currently accessing your account.<br>\
+						Reasons for this may be that you have given your username and password \
+						to someone else or you have left another computer open running the game.\
+						Please contact the administrator of this site if you \
+						think something is wrong.');
+				}
+			}
 		});
 		ss.event.on('approveNewSession', function(message) {
-			$('#aOverlay').remove();
-			$('.appriseOuter').remove();
-			// apprise(message);
-			$('#loginForm').submit();
+			clearTimeout(_timer);
+			if(Davis.location.current() === '/game') {
+				$('.appriseOverlay').remove();
+				$('.appriseOuter').remove();
+				sessionStorage.setItem('isPlaying', true);
+				$game.kickOffGame();
+			}
 		});
-
 	},
 
 	authenticate: function(email, password) {
-		ss.rpc('shared.account.authenticate', email, password, function(authenticated) {
+		ss.rpc('shared.account.authenticate', email, password, function(response) {
 			var session;
-			// console.log(authenticated);
-			if(authenticated.status) {
-				session = authenticated.session;
+			// console.log(response);
+			if(response.status) {
+				session = response.session;
 				sessionStorage.setItem('userId', session.id);
 				sessionStorage.setItem('userFirstName', session.firstName);
 				sessionStorage.setItem('userLastName', session.lastName);
 				sessionStorage.setItem('userEmail', session.email);
 				sessionStorage.setItem('userRole', session.role);
-				sessionStorage.setItem('isPlaying', session.isPlaying);
 				sessionStorage.setItem('profileLink', session.profileLink);
 				if(!session.profileSetup) {
-					//send them to setup their profile info
+					// send them to setup their profile info
 					Davis.location.assign('/change-info');
 				} else if(!session.gameStarted) {
-					//send them to watch the intro video
+					// send them to watch the intro video
 					Davis.location.assign('/introduction');
 				} else {
-					//send them to their profile
+					// send them to their profile
 					Davis.location.assign('/profiles/' + session.profileLink);
 				}
 			} else {
-				if(authenticated.activeSessionID) {
-					apprise(authenticated.reason);
-				} else {
-					apprise(authenticated.reason);
-				}
+				apprise(response.reason);
 			}
 		});
 	},
@@ -169,12 +195,7 @@ var $account = module.exports = {
 		ss.rpc('shared.account.deAuthenticate', function(deAuthenticate) {
 			sessionStorage.clear();
 			// if(deAuthenticate.status) { }
-			// TODO: when game is compiled w/ app, should just use Davis.js
-			if(Davis.location.current() === '/game') {
-				window.location.href = '/';
-			} else {
-				Davis.location.assign('/');
-			}
+			Davis.location.assign('/');
 			if(typeof callback === 'function') {
 				callback(deAuthenticate);
 			}
