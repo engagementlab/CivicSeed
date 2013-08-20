@@ -804,15 +804,12 @@ $game.$player = {
 	},
 
 	//save the player's current position to the DB
-	savePositionToDB: function() {
+	saveTimeToDB: function() {
 		var endTime = new Date().getTime() / 1000,
 			totalTime = endTime - _startTime;
 		_playingTime += totalTime;
-		_position.x = _info.x;
-		_position.y = _info.y;
 		var info = {
 			id: $game.$player.id,
-			position: _position,
 			playingTime: _playingTime
 		};
 		ss.rpc('game.player.updateGameInfo', info);
@@ -1252,11 +1249,12 @@ function _sendMoveInfo(moves) {
 function _endMove() {
 	var posInfo = {
 		id: $game.$player.id,
-		x: _info.x,
-		y: _info.y
+		position: {
+			x: _info.x,
+			y: _info.y	
+		}
 	};
 	ss.rpc('game.player.savePosition', posInfo);
-
 	$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
 
 	//put the character back to normal position

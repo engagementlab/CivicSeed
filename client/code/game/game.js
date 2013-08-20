@@ -154,7 +154,7 @@ var $game = module.exports = {
 			$game.$map.stepDirection = null;
 		});
 		$game.$player.displayNpcComments();
-		$game.$player.savePositionToDB();
+		$game.$player.saveTimeToDB();
 	},
 
 	//the game loop, if it is running, call all the updates and render
@@ -293,7 +293,7 @@ var $game = module.exports = {
 		$game.$audio.stopAll();
 		// save out all current status of player to db on exit
 		if(!$game.bossModeUnlocked) {
-			$game.$player.savePositionToDB();
+			$game.$player.saveTimeToDB();
 		}
 		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
 			if(typeof callback === 'function') {

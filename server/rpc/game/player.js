@@ -37,23 +37,32 @@ exports.actions = function(req, res, ss) {
 				playerInfo = {
 					id: req.session.userId,
 					name: name,
-					game: req.session.game
+					game: null
 				};
 
-			if(!_games[playerInfo.game.instanceName]) {
-				console.log('create! the game baby');
-				_games[playerInfo.game.instanceName] = {
-					players: {},
-					numActivePlayers: 0
-				};
-			}
+			dbHelpers.getUserGameInfo(req.session.userId, function(game) {
+				if(game) {
+					playerInfo.game = game;	
+					if(!_games[playerInfo.game.instanceName]) {
+						console.log('create! the game baby');
+						_games[playerInfo.game.instanceName] = {
+							players: {},
+							numActivePlayers: 0
+						};
+					}
 
-			console.log('initializing ', playerInfo.name);
-			_games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
-			_games[req.session.game.instanceName].numActivePlayers += 1;
-			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: _games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
-			// send the number of active players and the new player info
-			res(playerInfo);
+					console.log('initializing ', playerInfo);
+					_games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
+					_games[req.session.game.instanceName].numActivePlayers += 1;
+					ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: _games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
+					// send the number of active players and the new player info
+					res(playerInfo);
+				} else {
+					res(false);
+				}
+			});
+
+			
 		},
 
 		exitPlayer: function(id, name) {
@@ -130,8 +139,9 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			_games[req.session.game.instanceName].players[info.id].game.position.x = info.x;
-			_games[req.session.game.instanceName].players[info.id].game.position.y = info.y;
+			_games[req.session.game.instanceName].players[info.id].game.position.x = info.position.x;
+			_games[req.session.game.instanceName].players[info.id].game.position.y = info.position.y;
+			dbHelpers.saveInfo(info);
 			// req.session.save();
 		},
 
@@ -590,6 +600,7 @@ dbHelpers = {
 				} else if(user) {
 					for(var prop in info) {
 						if(prop !== 'id') {
+							console.log(info[prop]);
 							user.game[prop] = info[prop];
 						}
 					}
@@ -613,5 +624,15 @@ dbHelpers = {
 				});
 			}
 		});
+	},
+
+	getUserGameInfo: function(id, callback) {
+		_userModel.findById(id, function(err,user) {
+			if(err) {
+				callback(false);
+			} else if(user) {
+				callback(user.game);
+			}
+		});	
 	}
  };
