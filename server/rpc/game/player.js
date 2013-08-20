@@ -51,7 +51,7 @@ exports.actions = function(req, res, ss) {
 						};
 					}
 
-					console.log('initializing ', playerInfo);
+					console.log('initializing ', name);
 					_games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
 					_games[req.session.game.instanceName].numActivePlayers += 1;
 					ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: _games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
