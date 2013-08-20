@@ -13,12 +13,6 @@ var $input = module.exports = {
 			_logShowing = false,
 			_pledgeFeedbackTimeout = null;
 
-		$WINDOW.on('beforeunload', function() {
-			var x = $game.exitGame();
-			// RUSS: what is this for???
-			return x;
-		});
-
 		//show / hide the seed inventory, start blinking
 		$BODY.on('click', '.seedButton', function () {
 			var goAhead = startNewAction();
