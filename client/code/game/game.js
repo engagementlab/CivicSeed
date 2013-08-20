@@ -284,7 +284,7 @@ var $game = module.exports = {
 		}
 	},
 
-	// save and exit
+	// save and exit game
 	exitGame: function(callback) {
 		// console.log('exiting game!');
 		sessionStorage.removeItem('isPlaying');
@@ -301,7 +301,6 @@ var $game = module.exports = {
 			}
 		});
 	}
-
 
 };
 

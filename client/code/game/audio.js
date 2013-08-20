@@ -38,7 +38,11 @@ var _soundtracks = [],
 
 	],
 	_currentLoop = null,
-	_currentPos = null;
+	_currentPos = null,
+	// TODO: add the following to Modernizr
+	_isWebAudio = function(audioObject) {
+		return audioObject && '_webAudio' in audioObject;
+	};
 
 var $audio = $game.$audio = {
 
@@ -420,8 +424,13 @@ var $audio = $game.$audio = {
 	},
 
 	stopAll: function() {
-		_soundtracks[_currentTrack].stop()
-		_environmentLoopFx.stop()
-	}
+		if(_isWebAudio(_soundtracks[_currentTrack])) {
+			_soundtracks[_currentTrack].stop();
+		}
+		if(_isWebAudio(_environmentLoopFx)) {
+			_environmentLoopFx.stop();
+		}
+	},
+
 
 };

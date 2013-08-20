@@ -23,7 +23,10 @@ var self = module.exports = {
 
 			if(Davis.previousPath && Davis.previousPath === '/game') {
 				// do something special here
-				$game.exitGame();
+				// console.log('exit the game!');
+				if(sessionStorage.getItem('isPlaying')) {
+					$game.exitGame();
+				}
 			}
 			Davis.previousPath = req.fullPath;
 
