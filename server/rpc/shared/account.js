@@ -67,17 +67,22 @@ exports.actions = function(req, res, ss) {
 			console.log('****** deAuthenticate ******');
 			// console.log(req.session.firstName, req.session.email, req.session.role, req.session.gameChannel, req.session.userId);
 
+			var sessionId = req.sessionId;
+			var sessionEmail = req.session.email;
+
 			// MONGO
-			UserModel.findOne({ email: req.session.email } , function(err, user) {
-				if(user) {
-					user.set({ activeSessionID: null });
-					user.save(function(error) {
-						if(error) {
-							console.log('Error making active session ID null in mongodb'.red);
-						} else {
-							// console.log('Active session ID made null in mongodb'.green);
-						}
-					});
+			UserModel.findOne({ email: sessionEmail } , function(err, user) {
+				if(user.activeSessionID && user.activeSessionID === sessionId) {
+					if(user) {
+						user.set({ activeSessionID: null });
+						user.save(function(error) {
+							if(error) {
+								console.log('Error making active session ID null in mongodb'.red);
+							} else {
+								console.log('Active session ID made null in mongodb'.green);
+							}
+						});
+					}
 				}
 			});
 
@@ -170,7 +175,24 @@ exports.actions = function(req, res, ss) {
 		},
 
 		approveNewSession: function(userId) {
-			ss.publish.user(userId, 'approveNewSession', 'Authenticating...');
+			ss.publish.user(userId, 'approveNewSession', userId);
+		},
+
+		setActiveSessionId: function(userId) {
+			UserModel.findById(userId, function(error, user) {
+				if(error) {
+					console.error('Error finding user in Mongo.'.red);
+				} else {
+					user.set({ activeSessionID: req.sessionId });
+					user.save(function(error) {
+						if(error) {
+							console.error('Error saving active session ID to mongodb'.red);
+						} else {
+							console.log('Saved a new activeSessionID'.green);
+						}
+					});
+				}
+			});
 		},
 
 		remindMeMyPassword: function(email) {

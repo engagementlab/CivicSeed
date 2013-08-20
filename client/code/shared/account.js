@@ -152,9 +152,10 @@ var $account = module.exports = {
 				}
 			}
 		});
-		ss.event.on('approveNewSession', function(message) {
+		ss.event.on('approveNewSession', function(userId) {
 			clearTimeout(_timer);
 			if(Davis.location.current() === '/game') {
+				ss.rpc('shared.account.setActiveSessionId', userId);
 				$('.appriseOverlay').remove();
 				$('.appriseOuter').remove();
 				sessionStorage.setItem('isPlaying', true);
