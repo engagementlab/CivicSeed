@@ -600,7 +600,6 @@ dbHelpers = {
 				} else if(user) {
 					for(var prop in info) {
 						if(prop !== 'id') {
-							console.log(info[prop]);
 							user.game[prop] = info[prop];
 						}
 					}
