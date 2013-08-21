@@ -133,6 +133,9 @@ var $account = module.exports = {
 				_logoutCountDown(req.countdown + 5, function() {
 					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
+					ss.rpc('shared.account.setActiveSessionId', req.userId);
+					sessionStorage.setItem('isPlaying', true);
+					$game.kickOffGame();
 				});
 			}
 		});
