@@ -37,8 +37,6 @@ var $account = module.exports = {
 			return false;
 		});
 		$body.on('click', '.signOut', function() {
-			// if the user is playing the game? be sure to save their progress?
-			// console.log('look here dummy', sessionStorage.isPlaying);
 			if(sessionStorage.isPlaying === 'true') {
 				$game.exitGame(function() {
 					$account.deAuthenticate();
