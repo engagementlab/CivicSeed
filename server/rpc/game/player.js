@@ -70,8 +70,8 @@ exports.actions = function(req, res, ss) {
 			//req.session.game = info;
 			//req.session.save();
 			//update mongo
-			_userModel
-				.findById(id, function (err, user) {
+			if(id) {
+				_userModel.findById(id, function (err, user) {
 					if(err) {
 						console.log(err);
 					} else if(user) {
@@ -103,6 +103,9 @@ exports.actions = function(req, res, ss) {
 						res();
 					}
 				});
+			} else {
+				res();
+			}
 		},
 
 		getOthers: function() {
@@ -596,8 +599,8 @@ colorHelpers = {
 
 dbHelpers = {
 	saveInfo: function(info) {
-		_userModel
-			.findById(info.id, function (err, user) {
+		if(info && info.id) {
+			_userModel.findById(info.id, function (err, user) {
 				if(err) {
 					console.log(err);
 				} else if(user) {
@@ -609,6 +612,7 @@ dbHelpers = {
 					user.save();
 				}
 			});
+		}
 	},
 
 	saveFeedback: function(info, index) {

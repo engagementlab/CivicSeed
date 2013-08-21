@@ -98,12 +98,10 @@ var $game = module.exports = {
 				sessionStorage.setItem('isPlaying', true);
 				$game.kickOffGame();
 			} else {
-				if(response.reason) {
-					if(response.profileLink) {
+				if(response.profileLink) {
 						Davis.location.assign('/profiles/' + response.profileLink);
-					}
-					apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
 				}
+				apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
 			}
 		});
 	},

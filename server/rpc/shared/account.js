@@ -72,17 +72,17 @@ exports.actions = function(req, res, ss) {
 
 			// MONGO
 			UserModel.findOne({ email: sessionEmail } , function(err, user) {
-				if(user.activeSessionID && user.activeSessionID === sessionId) {
-					if(user) {
-						user.set({ activeSessionID: null });
-						user.save(function(error) {
-							if(error) {
-								console.log('Error making active session ID null in mongodb'.red);
-							} else {
-								console.log('Active session ID made null in mongodb'.green);
-							}
-						});
-					}
+				if(user && user.activeSessionID && user.activeSessionID === sessionId) {
+					// req.session.activeSessionID = null;
+					// req.session.save();
+					user.set({ activeSessionID: null });
+					user.save(function(error) {
+						if(error) {
+							console.log('Error making active session ID null in mongodb'.red);
+						} else {
+							console.log('Active session ID made null in mongodb'.green);
+						}
+					});
 				}
 			});
 
@@ -125,7 +125,7 @@ exports.actions = function(req, res, ss) {
 
 		checkGameSession: function() {
 			UserModel.findById(req.session.userId, function(error, user) {
-				if(error) {
+				if(error || !user) {
 					console.error('Error finding user (game) session in Mongo.'.red);
 					res({
 						status: false,
@@ -150,6 +150,8 @@ exports.actions = function(req, res, ss) {
 						}
 					} else {
 						console.log('No active session ID.');
+						// req.session.activeSessionID = req.sessionId;
+						// req.session.save();
 						// make sure to save the active session to mongodb, so we can look it up again
 						user.set({ activeSessionID: req.sessionId });
 						user.save(function(error) {
@@ -183,6 +185,8 @@ exports.actions = function(req, res, ss) {
 				if(error) {
 					console.error('Error finding user in Mongo.'.red);
 				} else {
+					// req.session.activeSessionID = req.sessionId;
+					// req.session.save();
 					user.set({ activeSessionID: req.sessionId });
 					user.save(function(error) {
 						if(error) {
