@@ -8,10 +8,12 @@ ss.server.on('ready', function() {
 
 ss.server.on('disconnect', function() {
 	if(CivicSeed.ENVIRONMENT === 'production') {
-		if(CivicSeed.CONNECTED) {
+		if(CivicSeed.CONNECTED && sessionStorage.getItem('userId')) {
 			CivicSeed.CONNECTED = false;
 			$game.running = false;
-			$game.$audio.stopAll();
+			if($game.$audio) {
+				$game.$audio.stopAll();
+			}
 			sessionStorage.clear();
 			Davis.location.assign('/');
 			$('.appriseOverlay').remove();
