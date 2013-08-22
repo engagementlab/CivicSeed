@@ -45,16 +45,15 @@ exports.actions = function(req, res, ss) {
 					playerInfo.game = game;	
 					if(!_games[playerInfo.game.instanceName]) {
 						console.log('create! the game baby');
-						_games[playerInfo.game.instanceName] = {
-							players: {},
-							numActivePlayers: 0
-						};
+						_games[playerInfo.game.instanceName] = {};
 					}
 
-					console.log('initializing ', name);
-					_games[req.session.game.instanceName].players[playerInfo.id] = playerInfo;
-					_games[req.session.game.instanceName].numActivePlayers += 1;
-					ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: _games[req.session.game.instanceName].numActivePlayers, info: playerInfo});
+					_games[req.session.game.instanceName][playerInfo.id] = playerInfo;
+					var numActivePlayers = Object.keys(_games[playerInfo.game.instanceName]).length;
+					
+					console.log('initializing ', name, 'players: ', numActivePlayers);
+
+					ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: numActivePlayers, info: playerInfo});
 					// send the number of active players and the new player info
 					res(playerInfo);
 				} else {
@@ -78,9 +77,9 @@ exports.actions = function(req, res, ss) {
 						if(user.activeSessionID && user.activeSessionID === req.sessionId) {
 							user.set({ activeSessionID: null });
 						}
-						_games[req.session.game.instanceName].numActivePlayers -= 1;
-						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: _games[req.session.game.instanceName].numActivePlayers, id: id});
-						delete _games[req.session.game.instanceName].players[id];
+						delete _games[req.session.game.instanceName][id];
+						var numActivePlayers = Object.keys(_games[req.session.game.instanceName]).length;
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: numActivePlayers, id: id});
 						if(name === 'Demo U') {
 							user.game.currentLevel = 0;
 							user.game.position.x = 64;
@@ -109,7 +108,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getOthers: function() {
-			res(_games[req.session.game.instanceName].players);
+			res(_games[req.session.game.instanceName]);
 		},
 
 		// ------> this should be moved into our map rpc handler???
@@ -145,8 +144,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			_games[req.session.game.instanceName].players[info.id].game.position.x = info.position.x;
-			_games[req.session.game.instanceName].players[info.id].game.position.y = info.position.y;
+			_games[req.session.game.instanceName][info.id].game.position.x = info.position.x;
+			_games[req.session.game.instanceName][info.id].game.position.y = info.position.y;
 			dbHelpers.saveInfo(info);
 			// req.session.save();
 		},

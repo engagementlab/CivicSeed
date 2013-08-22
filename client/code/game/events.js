@@ -2,17 +2,15 @@ var $events = module.exports = {
 
 	init: function() {
 
-		var $activePlayers = $('.activePlayers span'),
-			$progressHudCount = $('.progressButton .hudCount');
+		var $progressHudCount = $('.progressButton .hudCount');
 
 		/******* RPC EVENTS *********/
 
 		// new player joining to keep track of
 		ss.event.on('ss-addPlayer', function(data, chan) {
-			// console.log(data, chan);
 			$game.numPlayers = data.num;
 			$game.$others.add(data.info);
-			$activePlayers.text(data.num);
+			$('.activePlayers span').text(data.num);
 			if(data.info.id !== $game.$player.id) {
 				$game.statusUpdate({
 					message: data.info.name + ' has joined!',
@@ -29,7 +27,7 @@ var $events = module.exports = {
 			if(data.id != $game.$player.id) {
 				$game.$others.remove(data.id);
 			}
-			$activePlayers.text(data.num);
+			$('.activePlayers span').text(data.num);
 		});
 
 		//player moves
