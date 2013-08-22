@@ -7,10 +7,9 @@ $game.$others = {
 	init: function(callback) {
 		ss.rpc('game.player.getOthers', function(response) {
 			_onScreenPlayers = {};
-
-			$.each(response, function(key, player) {
-				$game.$others.add(player);
-			});
+			for(var p = 0; p < response.length; p++) {
+				$game.$others.add(response[p]);
+			}
 			$game.$others.ready = true;
 			callback();
 		});
@@ -19,8 +18,8 @@ $game.$others = {
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
-		if(player.id != $game.$player.id) {
-			// console.log('new player added!');
+		if(player._id != $game.$player.id) {
+			
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[player.id] = newbie;
@@ -111,8 +110,8 @@ $game.$others = {
 	createOther: function(player) {
 		var otherPlayer = {
 
-			name: player.name,
-			id: player.id,
+			name: player.firstName,
+			id: player._id,
 			isMoving: false,
 			currentStep: 0,
 			currentMove: 0,

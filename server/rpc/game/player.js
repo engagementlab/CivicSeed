@@ -30,13 +30,9 @@ exports.actions = function(req, res, ss) {
 				_colorModel = _service.useModel('color', 'ss');
 			}
 
-			//should we pull the game info from the db instead of it being passed in a session?
-			var lastInitial = req.session.lastName.substring(0,1).toUpperCase(),
-				firstName = req.session.firstName.substring(0,1).toUpperCase() + req.session.firstName.substring(1,req.session.firstName.length),
-				name = firstName + ' ' + lastInitial,
 				playerInfo = {
 					id: req.session.userId,
-					name: name,
+					firstName: req.session.firstName,
 					game: null
 				};
 
@@ -51,17 +47,20 @@ exports.actions = function(req, res, ss) {
 					_games[req.session.game.instanceName][playerInfo.id] = playerInfo;
 					var numActivePlayers = Object.keys(_games[playerInfo.game.instanceName]).length;
 					
-					console.log('initializing ', name, 'players: ', numActivePlayers);
+					console.log('initializing ', playerInfo.name, 'players: ', numActivePlayers);
 
-					ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: numActivePlayers, info: playerInfo});
-					// send the number of active players and the new player info
 					res(playerInfo);
+					
 				} else {
 					res(false);
 				}
 			});
+		},
 
-			
+		tellOthers: function(info) {
+			// send the number of active players and the new player info
+			var numActivePlayers = Object.keys(_games[req.session.game.instanceName]).length;
+			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: numActivePlayers, info: info});
 		},
 
 		exitPlayer: function(id, name) {
@@ -108,7 +107,16 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getOthers: function() {
-			res(_games[req.session.game.instanceName]);
+			_userModel
+				.where('activeSessionID').ne(null)
+				.select('id firstName game.tilesColored game.rank game.currentLevel game.position game.colorInfo')
+				.find(function (err, users) {
+					if(err) {
+						console.log('error', err);
+					} else {
+						res(users);
+					}
+				});
 		},
 
 		// ------> this should be moved into our map rpc handler???

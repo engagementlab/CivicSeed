@@ -124,7 +124,7 @@ var $input = module.exports = {
 			var sentence = $chatText.val(),
 				data = {
 					msg: $game.checkPotty(sentence),
-					name: $game.$player.name,
+					name: $game.$player.firstName,
 					id: $game.$player.id,
 					log: sentence,
 					instanceName: $game.$player.instanceName
@@ -338,7 +338,7 @@ var $input = module.exports = {
 		$BODY.on('click', '.pledgeButton', function() {
 			var info = {
 				id: $(this).attr('data-player'),
-				pledger: $game.$player.name,
+				pledger: $game.$player.firstName,
 				npc: $(this).attr('data-npc')
 			};
 			var pledges = $game.$player.getPledges();

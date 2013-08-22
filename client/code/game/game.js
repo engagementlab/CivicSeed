@@ -320,7 +320,7 @@ var $game = module.exports = {
 		if(!$game.bossModeUnlocked) {
 			$game.$player.saveTimeToDB();
 		}
-		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.name, function() {
+		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.firstName, function() {
 			if(typeof callback === 'function') {
 				callback();
 			}

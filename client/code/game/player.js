@@ -89,6 +89,20 @@ $game.$player = {
 			$game.$player.game = playerInfo.game;
 			_setPlayerInformation(playerInfo);
 
+			//tell others you have joined
+			var subsetInfo = {
+				_id: playerInfo.id,
+				firstName: playerInfo.firstName,
+				game: {
+					tilesColored: playerInfo.game.tilesColored,
+					rank: playerInfo.game.rank,
+					currentLevel: playerInfo.game.currentLevel,
+					position: playerInfo.game.position,
+					colorInfo: playerInfo.game.colorInfo
+				}
+			};
+			ss.rpc('game.player.tellOthers', subsetInfo);
+
 			// set the render info
 			_renderInfo = {
 				colorNum: _playerColorNum,
@@ -447,7 +461,7 @@ $game.$player = {
 			$game.$player.createInventoryOutlines();
 			//send status to message board
 			var newLevelMsg = $game.$player.currentLevel + 1;
-			// var stat = $game.$player.name + 'is on level' + newLevelMsg + '!';
+			// var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
 			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
 		}
@@ -755,14 +769,14 @@ $game.$player = {
 		var newAnswer = {
 			npc: resource.index,
 			id: $game.$player.id,
-			name: $game.$player.name,
+			name: $game.$player.firstName,
 			answer: realResource.answers[realResource.answers.length - 1],
 			madePublic: false,
 			instanceName: $game.$player.instanceName,
 			questionType: realResource.questionType
 		};
 
-		if($game.$player.name !== 'Demo') {
+		if($game.$player.firstName !== 'Demo') {
 			ss.rpc('game.npc.saveResponse', newAnswer);
 		}
 
@@ -986,7 +1000,7 @@ function _setPlayerInformation(info) {
 	}
 	// public
 	$game.$player.id = info.id;
-	$game.$player.name = info.name;
+	$game.$player.firstName = info.firstName;
 	$game.$player.currentLevel = info.game.currentLevel;
 	$game.$player.botanistState = info.game.botanistState;
 	$game.$player.firstTime = info.game.firstTime;
@@ -1053,7 +1067,7 @@ function _sendSeedBomb(data) {
 	//send the data to the rpc
 	var info = {
 		id: $game.$player.id,
-		name: $game.$player.name,
+		name: $game.$player.firstName,
 		x1: data.x1,
 		y1: data.y1,
 		x2: data.x2,
@@ -1347,7 +1361,7 @@ function _addToInventory(data) {
 //game over!
 function _gameOver() {
 	//if demo mode just send to boss level
-	if($game.$player.name === 'Demo') {
+	if($game.$player.firstName === 'Demo') {
 		$game.$boss.init(function() {
 		});
 	} else {

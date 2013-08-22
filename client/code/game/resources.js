@@ -376,7 +376,7 @@ $game.$resources = {
 			var newAnswer = {
 				npc: _curResource.index,
 				id: $game.$player.id,
-				name: $game.$player.name,
+				name: $game.$player.firstName,
 				answer: response,
 				madePublic: false,
 				instanceName: $game.$player.instanceName,

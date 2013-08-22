@@ -16,10 +16,10 @@ var $events = module.exports = {
 		ss.event.on('ss-addPlayer', function(data, chan) {
 			$game.numPlayers = data.num;
 			$game.$others.add(data.info);
-			$('.activePlayers span').text(data.num);
-			if(data.info.id !== $game.$player.id) {
+			$activePlayers.text(data.num);
+			if(data.info._id !== $game.$player.id) {
 				$game.statusUpdate({
-					message: data.info.name + ' has joined!',
+					message: data.info.firstName + ' has joined!',
 					input:'status',
 					screen: true,
 					log: true
