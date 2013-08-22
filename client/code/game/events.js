@@ -1,9 +1,14 @@
+var $activePlayers,
+	$progressHudCount;
+
 var $events = module.exports = {
 
-	init: function() {
+	registerVariables: function() {
+		$activePlayers = $('.activePlayers span');
+		$progressHudCount = $('.progressButton .hudCount');
+	},
 
-		var $activePlayers = $('.activePlayers span'),
-			$progressHudCount = $('.progressButton .hudCount');
+	init: function() {
 
 		/******* RPC EVENTS *********/
 

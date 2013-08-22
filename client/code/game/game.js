@@ -20,7 +20,23 @@ var _stepNumber = 0,
 	_stats = null,
 	_badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
-	_displayTimeout = null;
+	_displayTimeout = null,
+	$map,
+	$render,
+	$npc,
+	$resources,
+	$player,
+	$others,
+	$robot,
+	$botanist,
+	$mouse,
+	$audio,
+	$pathfinder,
+	$events,
+	$input,
+	$chat,
+	$log,
+	$boss;
 
 // PUBLIC EXPORTS
 var $game = module.exports = {
@@ -53,22 +69,22 @@ var $game = module.exports = {
 	init: function(callback) {
 
 		// instantiating code (if not already done)
-		var $map = require('/map');
-		var $render = require('/render');
-		var $npc = require('/npc');
-		var $resources = require('/resources');
-		var $player = require('/player');
-		var $others = require('/others');
-		var $robot = require('/robot');
-		var $botanist = require('/botanist');
-		var $mouse = require('/mouse');
-		var $audio = require('/audio');
-		var $pathfinder = require('/pathfinder');
-		var $events = require('/events');
-		var $input = require('/input');
-		var $chat = require('/chat');
-		var $log = require('/log');
-		var $boss = require('/boss');
+		$map = require('/map');
+		$render = require('/render');
+		$npc = require('/npc');
+		$resources = require('/resources');
+		$player = require('/player');
+		$others = require('/others');
+		$robot = require('/robot');
+		$botanist = require('/botanist');
+		$mouse = require('/mouse');
+		$audio = require('/audio');
+		$pathfinder = require('/pathfinder');
+		$events = require('/events');
+		$input = require('/input');
+		$chat = require('/chat');
+		$log = require('/log');
+		$boss = require('/boss');
 
 		// events recevied by RPC
 		$events.init();
@@ -110,6 +126,8 @@ var $game = module.exports = {
 		$CONTAINER.append(JT['game-gameboard']());
 		$CONTAINER.append(JT['game-resourceStage']());
 		$CONTAINER.append(JT['game-hud']());
+		$events.registerVariables();
+		$input.registerVariables();
 		_kickOffGame();
 	},
 
