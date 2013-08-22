@@ -1,17 +1,30 @@
+var $chatText,
+	$chatBox,
+	$displayBox,
+	$inventory,
+	$displayBoxText,
+	$progressArea,
+	$gameLog,
+	_helpShowing,
+	_logShowing,
+	_pledgeFeedbackTimeout;
+
 var $input = module.exports = {
 
-	init: function() {
+	registerVariables: function() {
+		$chatText = $('#chatText');
+		$chatBox = $('.chatBox');
+		$displayBox = $('.displayBox');
+		$inventory = $('.inventory');
+		$displayBoxText = $('.displayBoxText');
+		$progressArea = $('.progressArea');
+		$gameLog = $('.gameLog');
+		_helpShowing = false;
+		_logShowing = false;
+		_pledgeFeedbackTimeout = null;
+	},
 
-		var $chatText = $('#chatText'),
-			$chatBox = $('.chatBox'),
-			$displayBox = $('.displayBox'),
-			$inventory = $('.inventory'),
-			$displayBoxText = $('.displayBoxText'),
-			$progressArea = $('.progressArea'),
-			$gameLog = $('.gameLog'),
-			_helpShowing = false,
-			_logShowing = false,
-			_pledgeFeedbackTimeout = null;
+	init: function() {
 
 		//show / hide the seed inventory, start blinking
 		$BODY.on('click', '.seedButton', function () {
