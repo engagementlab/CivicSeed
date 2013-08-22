@@ -22,10 +22,10 @@ $game.$others = {
 			
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
-			_onScreenPlayers[player.id] = newbie;
+			_onScreenPlayers[player._id] = newbie;
 			newbie.updateRenderInfo();
 			//console.log("added: " + player.id);
-			$game.$map.addPlayer(player.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
+			$game.$map.addPlayer(player._id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
 		}
 	},
 
@@ -352,7 +352,6 @@ $game.$others = {
 						chatIdSelector: otherPlayer.chatIdSelector,
 						position: position
 					};
-					console.log(info);
 					clearTimeout(otherPlayer.hideTimer);
 					otherPlayer.isChatting = true;
 					var fadeTime = $game.$chat.message(message, info);
@@ -384,7 +383,6 @@ $game.$others = {
 			},
 
 			beam: function(info) {
-				console.log(info);
 				otherPlayer.info.x = info.x;
 				otherPlayer.info.y = info.y;
 				otherPlayer.updateRenderInfo();
