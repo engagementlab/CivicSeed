@@ -137,6 +137,11 @@ var $account = module.exports = {
 				});
 			}
 		});
+
+		ss.event.on('inactiveGameRedirect', function(req) {
+			Davis.location.assign('/profiles/' + req.profileLink);
+		});
+
 		ss.event.on('denyNewSession', function(req) {
 			if(Davis.location.current() === '/game') {
 				clearTimeout(_timer);

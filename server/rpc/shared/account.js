@@ -3,8 +3,10 @@ var rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
+	GameModel = service.useModel('game'),
 	_countdown = 10,
-	singleHtml;
+	singleHtml,
+	dbHelper = null;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
 	html += '<p style="color:red;">Someone is requesting access to your account. ';
@@ -124,50 +126,60 @@ exports.actions = function(req, res, ss) {
 		},
 
 		checkGameSession: function() {
-			UserModel.findById(req.session.userId, function(error, user) {
-				if(error || !user) {
-					console.error('Error finding user (game) session in Mongo.'.red);
-					res({
-						status: false,
-						reason: error
+			dbHelpers.checkGameActive(req.session.game.instanceName, function(active) {
+				if(active) {
+					UserModel.findById(req.session.userId, function(error, user) {
+						if(error || !user) {
+							console.error('Error finding user (game) session in Mongo.'.red);
+							res({
+								status: false,
+								reason: error
+							});
+						} else {
+							if(user.activeSessionID) {
+								console.log(user.activeSessionID, req.sessionId);
+
+								if(user.activeSessionID === req.sessionId) {
+									// NOTE: this is sort of a weird scenario -- not sure it's even needed to check it!
+									console.log('Active session matches session ID -- good to go!'.green);
+									res({ status: true });
+								} else {
+									console.error('Active session ID does not match session ID.'.red);
+									res({ status: false });
+									ss.publish.user(user.id, 'verifyGameStatus', {
+										countdown: _countdown,
+										userId: user.id,
+										profileLink: user.profileLink
+									});
+								}
+							} else {
+								console.log('No active session ID.');
+								// req.session.activeSessionID = req.sessionId;
+								// req.session.save();
+								// make sure to save the active session to mongodb, so we can look it up again
+								user.set({ activeSessionID: req.sessionId });
+								user.save(function(error) {
+									if(error) {
+										console.error('Error saving active session ID to mongodb'.red);
+										res({
+											status: false,
+											reason: error,
+											profileLink: user.profileLink
+										});
+									} else {
+										console.log('Active session ID saved to mongodb'.green);
+										res({ status: true });
+									}
+								});
+							}
+						}
 					});
 				} else {
-					if(user.activeSessionID) {
-						console.log(user.activeSessionID, req.sessionId);
-
-						if(user.activeSessionID === req.sessionId) {
-							// NOTE: this is sort of a weird scenario -- not sure it's even needed to check it!
-							console.log('Active session matches session ID -- good to go!'.green);
-							res({ status: true });
-						} else {
-							console.error('Active session ID does not match session ID.'.red);
-							res({ status: false });
-							ss.publish.user(user.id, 'verifyGameStatus', {
-								countdown: _countdown,
-								userId: user.id,
-								profileLink: user.profileLink
-							});
-						}
-					} else {
-						console.log('No active session ID.');
-						// req.session.activeSessionID = req.sessionId;
-						// req.session.save();
-						// make sure to save the active session to mongodb, so we can look it up again
-						user.set({ activeSessionID: req.sessionId });
-						user.save(function(error) {
-							if(error) {
-								console.error('Error saving active session ID to mongodb'.red);
-								res({
-									status: false,
-									reason: error,
-									profileLink: user.profileLink
-								});
-							} else {
-								console.log('Active session ID saved to mongodb'.green);
-								res({ status: true });
-							}
-						});
-					}
+					console.log('Game inactive');
+					res({ status: false });
+					ss.publish.user(req.session.userId, 'inactiveGameRedirect', {
+						profileLink: req.session.profileLink
+					});
 				}
 			});
 		},
@@ -272,4 +284,18 @@ exports.actions = function(req, res, ss) {
 
 	};
 
-}
+};
+
+dbHelpers = {
+	checkGameActive: function(instance, callback) {
+		GameModel
+			.where('instanceName').equals(instance)
+			.findOne(function (err, game) {
+				if(err) {
+					callback(false);
+				} else {
+					callback(game.active);
+				}
+			});
+	}
+};
