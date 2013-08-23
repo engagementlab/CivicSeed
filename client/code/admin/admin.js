@@ -119,9 +119,9 @@ var self = module.exports = {
 			self.showAddPlayerForm(instance);
 		});
 
-		$body.on('click', '#stop', function() {
+		$body.on('click', '#startStop', function() {
 			var instance = $(this).attr('data-instance');
-			self.addStopButton(instance);
+			self.addStartStopButton(instance);
 		});
 
 		$body.on('click', '.viewAnswers', function() {
@@ -131,7 +131,12 @@ var self = module.exports = {
 
 		$body.on('click', '.stopGameButton', function() {
 			var instance = $(this).attr('data-instance');
-			self.stopGame(instance);
+			self.toggleGame(instance, false);
+		});
+
+		$body.on('click', '.startGameButton', function() {
+			var instance = $(this).attr('data-instance');
+			self.toggleGame(instance, true);
 		});
 
 		$body.on('click', '.deletePlayer', function() {
@@ -210,8 +215,8 @@ var self = module.exports = {
 		$('.output').empty().append(html);
 	},
 
-	addStopButton: function(instance) {
-		var html = '<h2>Make the game inactive?</h2><p><button data-instance="' + instance + '"class="btn btn-success stopGameButton" type="button">Stop Game</button></p>';
+	addStartStopButton: function(instance) {
+		var html = '<h2>Make the game active or inactive:</h2><p><button data-instance="' + instance + '"class="btn btn-success startGameButton" type="button">Start Game</button></p><p><button data-instance="' + instance + '"class="btn btn-warning stopGameButton" type="button">Stop Game</button></p>';
 		$('.output').empty().append(html);
 	},
 
@@ -274,12 +279,16 @@ var self = module.exports = {
 		});
 	},
 
-	stopGame: function(instance) {
-		ss.rpc('admin.monitor.stopGame', instance, function(err) {
+	toggleGame: function(instance, bool) {
+		ss.rpc('admin.monitor.toggleGame', instance, bool, function(err) {
 			if(err) {
-				apprise('error stopping game');
+				apprise('error switching game');
 			} else {
-				apprise('the game has been stopped');
+				if(bool) {
+					apprise('the game is now active');	
+				} else {
+					apprise('the game is now inactive');
+				}
 			}
 		});	
 	},

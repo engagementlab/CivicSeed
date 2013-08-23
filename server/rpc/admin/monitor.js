@@ -83,14 +83,14 @@ exports.actions = function(req, res, ss) {
 				});
 		},
 
-		stopGame: function(instance) {
+		toggleGame: function(instance, bool) {
 			gameModel
 				.where('instanceName').equals(instance)
 				.findOne(function(err,game) {
 					if(err) {
 						res(err);
 					} else if(game) {
-						game.active = false;
+						game.active = bool;
 						game.save(function(err,ok) {
 							if(err) {
 								res(err);
