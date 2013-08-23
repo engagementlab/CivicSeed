@@ -194,19 +194,22 @@ exports.actions = function(req, res, ss) {
 							res('Data loaded: ' + dataType);
 						});
 					});
-				} else if(dataType === 'npcs') {
-					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCs and Botanist   * * * * * * * * * * * *   \n\n'.yellow);
-					npcData = require(rootDir + '/data/npcs');
+				} else if(dataType === 'botanist') {
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Botanist   * * * * * * * * * * * *   \n\n'.yellow);
 					botanistData = require(rootDir + '/data/botanist');
-					dbActions.dropCollection('npcs', function() {
-						dbActions.saveDocuments(npcModel, npcData.global, function() {
-							dbActions.dropCollection('botanists', function() {
-								dbActions.saveDocuments(botanistModel, botanistData.global, function() {
-									res('Data loaded: ' + dataType);
-								});
-							});
+					dbActions.dropCollection('botanists', function() {
+						dbActions.saveDocuments(botanistModel, botanistData.global, function() {
+							res('Data loaded: ' + dataType);
 						});
 					});
+				} else if(dataType === 'npcs') {
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCS   * * * * * * * * * * * *   \n\n'.yellow);
+					npcData = require(rootDir + '/data/npcs');
+					dbActions.dropCollection('npcs', function() {
+						dbActions.saveDocuments(npcModel, npcData.global, function() {
+							res('Data loaded: ' + dataType);
+						});
+					});	
 				} else if(dataType === 'game') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
 					gameData = require(rootDir + '/data/game');
