@@ -601,7 +601,7 @@ colorHelpers = {
 							subject = 'Breaking News!';
 						}
 						//TODO remove this check
-						if(users[emailIterator].email.length > 3) {
+						if(users[emailIterator].email.length > 6) {
 							emailUtil.sendEmail(subject, html, users[emailIterator].email);
 						}
 					}

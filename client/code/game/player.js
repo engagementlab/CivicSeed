@@ -388,17 +388,19 @@ $game.$player = {
 
 	//this happens on load to put all items from DB -> inventory
 	fillInventory: function() {
-		var l = _inventory.length,
-			cur = 0;
-		$inventoryBtn.text(l);
+		if($game.$player.currentLevel < 4) {
+			var l = _inventory.length,
+				cur = 0;
+			$inventoryBtn.text(l);
 
-		while(cur < l) {
-			_addToInventory(_inventory[cur]);
-			cur++;
-		}
-		//if the player has gotten the riddle, put the tangram in the inventory + bind actions
-		if($game.$player.botanistState > 1) {
-			$game.$player.tangramToInventory();
+			while(cur < l) {
+				_addToInventory(_inventory[cur]);
+				cur++;
+			}
+			//if the player has gotten the riddle, put the tangram in the inventory + bind actions
+			if($game.$player.botanistState > 1) {
+				$game.$player.tangramToInventory();
+			}
 		}
 	},
 
@@ -424,10 +426,12 @@ $game.$player = {
 
 	//make the bounding box for each possible resource in inventory
 	createInventoryOutlines: function() {
-		var io = $('.inventory > .outlines');
-		io.empty();
-		for(var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i +=1) {
-			io.append('<div class="inventoryOutline"></div>');
+		if($game.$player.currentLevel < 4) {
+			var io = $('.inventory > .outlines');
+			io.empty();
+			for(var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i +=1) {
+				io.append('<div class="inventoryOutline"></div>');
+			}
 		}
 	},
 
