@@ -254,7 +254,7 @@ $game.$botanist = {
 			$speechBubbleCloseBtn.unbind('click');
 			$game.$botanist.isChat = false;
 			//save that the player has looked at the instructions
-			if($game.$player.botanistState === 0) {
+			if($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
 				$game.$player.botanistState = 1;
 				_saveBotanistState();
 				if($game.$player.currentLevel === 0) {

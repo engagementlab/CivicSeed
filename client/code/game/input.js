@@ -311,11 +311,13 @@ var $input = module.exports = {
 		});
 
 		//close help area
-		$BODY.on('click', '.helpArea a i', function () {
+		$BODY.on('click', '.helpArea a i', function (e) {
+			e.preventDefault();
 			$('.helpButton').toggleClass('currentButton');
 			$('.helpArea').fadeOut('fast', function() {
 				_helpShowing = false;
 			});
+			return false;
 		});
 
 		//tooltip for HUD controls
@@ -373,6 +375,11 @@ var $input = module.exports = {
 
 		$BODY.on('click', '.bossArea .bossButton', function () {
 			$game.$boss.nextSlide();
+		});
+
+		$BODY.on('click', '.tabbable li a', function(e) {
+			e.preventDefault();
+			return false;
 		});
 		//pause menu if we want it
 		// $WINDOW.blur(function(e) {

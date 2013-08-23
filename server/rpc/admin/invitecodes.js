@@ -1,5 +1,6 @@
 var rootDir = process.cwd(),
 	emailUtil = require(rootDir + '/server/utils/email'),
+	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 	xkcd = require('xkcd-pwgen'),
 	service = require(rootDir + '/service'),
 	userModel = service.useModel('user', 'preload'),
@@ -37,63 +38,66 @@ exports.actions = function(req, res, ss) {
 					var newColor = colorData.global[i],
 						tilesheetNum = i + 1;
 
-					nameParts = email.split('@');
-					user = new userModel();
-					user.firstName = nameParts[0];
-					user.lastName = nameParts[1];
-					user.school = 'university';
-					user.password = xkcd.generatePassword();
-					user.email = email;
-					user.role = 'actor';
-					user.profilePublic = false;
-					user.profileLink = Math.random().toString(36).slice(2);
-					user.profileSetup = false;
-					user.profileUnlocked = false;
-					user.gameStarted = false;
-					user.game = {
-						instanceName: instanceName,
-						currentLevel: 0,
-						rank: 'nothing',
-						position: {
-							x: 64,
-							y: 77
-						},
-						colorInfo: {
-							rgb: newColor,
-							tilesheet: tilesheetNum
-						},
-						resources: [],
-						resourcesDiscovered: 0,
-						inventory: [],
-						seeds: {
-							regular: 0,
-							draw: 0,
-							dropped: 0
-						},
-						botanistState: 0,
-						firstTime: true,
-						resume: [],
-						resumeFeedback: [],
-						seenRobot: false,
-						playingTime: 0,
-						tilesColored: 0,
-						pledges: 5
-					};
-					console.log('Created user: ' + user.email);
-					user.save(function(err) {
-						if(err) {
-							console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
-						} else {
-							singleHtml = html.replace('#{firstName}', user.firstName);
-							singleHtml = singleHtml.replace('#{password}', user.password);
-							singleHtml = singleHtml.replace('#{email}', user.email);
-							emailUtil.sendEmail('Greetings from Civic Seed', singleHtml, user.email);
-							if(i === emailListLength - 1) {
-								emailUtil.closeEmailConnection();
-								console.log('All emails have been sent...');
-								res(true);
+					var password = xkcd.generatePassword();
+					accountHelpers.hashPassword(password, function(hashedPassword) {
+						nameParts = email.split('@');
+						user = new userModel();
+						user.firstName = nameParts[0];
+						user.lastName = nameParts[1];
+						user.school = 'university';
+						user.password = hashedPassword.hash;
+						user.email = email;
+						user.role = 'actor';
+						user.profilePublic = false;
+						user.profileLink = Math.random().toString(36).slice(2);
+						user.profileSetup = false;
+						user.profileUnlocked = false;
+						user.gameStarted = false;
+						user.game = {
+							instanceName: instanceName,
+							currentLevel: 0,
+							rank: 'nothing',
+							position: {
+								x: 64,
+								y: 77
+							},
+							colorInfo: {
+								rgb: newColor,
+								tilesheet: tilesheetNum
+							},
+							resources: [],
+							resourcesDiscovered: 0,
+							inventory: [],
+							seeds: {
+								regular: 0,
+								draw: 0,
+								dropped: 0
+							},
+							botanistState: 0,
+							firstTime: true,
+							resume: [],
+							resumeFeedback: [],
+							seenRobot: false,
+							playingTime: 0,
+							tilesColored: 0,
+							pledges: 5
+						};
+						console.log('Created user: ' + user.email);
+						user.save(function(err) {
+							if(err) {
+								console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
+							} else {
+								singleHtml = html.replace('#{firstName}', user.firstName);
+								singleHtml = singleHtml.replace('#{password}', password);
+								singleHtml = singleHtml.replace('#{email}', user.email);
+								emailUtil.sendEmail('Greetings from Civic Seed', singleHtml, user.email);
+								if(i === emailListLength - 1) {
+									emailUtil.closeEmailConnection();
+									console.log('All emails have been sent...');
+									res(true);
+								}
 							}
-						}
+						});
 					});
 				} else {
 					if(i === emailListLength - 1) {

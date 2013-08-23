@@ -225,13 +225,16 @@ exports.actions = function(req, res, ss) {
 								newCount: newTileCount
 							};
 
-							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates) {
+							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates, gameOver) {
 								if(updates.updateBoard) {
 									ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
 								}
 								ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
 								//FINNNALLY done updating and stuff, respond to the player
 								//telling them if it was sucesful
+								if(gameOver) {
+									ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+								}
 								res(allTiles.length, bonus);
 							});
 
@@ -549,9 +552,9 @@ colorHelpers = {
 				if(newCount >= seedsDroppedGoal && instanceName !== 'demo') {
 					//change the game state
 					result.set('bossModeUnlocked', true);
-					ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+					console.log('game over!');
 					//send out emails
-					colorHelpers.endGameEmails();
+					colorHelpers.endGameEmails(instanceName);
 				}
 				//save all changes
 				result.set('seedsDropped', newCount);
@@ -563,18 +566,19 @@ colorHelpers = {
 					board: oldBoard,
 					dropped: newCount
 				};
-				callback(returnInfo);
+				callback(returnInfo, true);
 			}
 		});
 	},
 
-	endGameEmails: function() {
+	endGameEmails: function(instanceName) {
 		//set boss mode unlocked here for specific instance
 
 		//send out emails to players who have completed game
 		_userModel
 			.where('role').equals('actor')
-			.select('email')
+			.where('game.instanceName').equals(instanceName)
+			.select('email game.currentLevel')
 			.find(function (err, users) {
 				if(err) {
 					res(false);
@@ -596,7 +600,10 @@ colorHelpers = {
 							html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
 							subject = 'Breaking News!';
 						}
-						emailUtil.sendEmail(subject, html, users[emailIterator].email);
+						//TODO remove this check
+						if(users[emailIterator].email.length > 6) {
+							emailUtil.sendEmail(subject, html, users[emailIterator].email);
+						}
 					}
 					emailUtil.closeEmailConnection();
 				}

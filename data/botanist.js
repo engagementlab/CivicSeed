@@ -37,7 +37,7 @@ module.exports.global = {
 		},
 		hint: ['You must go to the southwest and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have the right pieces to solve the enigma! Go back to the Port District, in the southwest section of the world, and talk to some more people.']
 	}, {
-		instructions: ['Welcome to the game. I am your humble botanist.', 'We are a simple land, with creatures like you and me.', 'However, we have a constant problem where our world becomes colorless. We love color....', 'Solve my riddles and I will give you seeds to plant color.', 'LEAVE ME ALONE, ROARRRRRRR!!!!'],
+		instructions: ['Ah the color has not yet been restored to the world. You can use your remaining seeds to help it out.', 'I will contact you when the color has returned to the world.'],
 		riddle: {
 			prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 			response: 'ya'
