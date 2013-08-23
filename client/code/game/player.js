@@ -165,7 +165,7 @@ $game.$player = {
 		_info.offX = 0,
 		_info.offY = 0;
 
-		if($game.bossModeUnlocked) {
+		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 			$game.$map.findPath({x: _info.x, y: _info.y}, {x: x, y: y}, function(result) {
 				$game.$player.pathfinding = false;
 				if(result.length > 0) {
@@ -450,13 +450,9 @@ $game.$player = {
 			currentLevel: $game.$player.currentLevel
 		};
 		ss.rpc('game.player.updateGameInfo', info);
-		if($game.$player.currentLevel === 4) {
-			//they have beat the game!
-			_gameOver();
-		}
-		else {
-			var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
-			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
+		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
+		$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
+		if($game.$player.currentLevel < 4) {
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
 			//send status to message board
@@ -935,7 +931,7 @@ $game.$player = {
 
 	//if boss mode then must change up pos info
 	setPositionInfo: function() {
-		if($game.bossModeUnlocked) {
+		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 			_info.x = 15;
 			_info.y = 8;
 		}
@@ -1182,7 +1178,7 @@ function _move() {
 
 	//if we done, finish
 	if($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
-		if($game.bossModeUnlocked) {
+		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 			_info.offX = 0,
 			_info.offY = 0;
 			_info.srcX = 0,
@@ -1367,13 +1363,13 @@ function _gameOver() {
 	} else {
 		ss.rpc('game.player.gameOver', $game.$player.id, function(res){
 			if(res) {
-				if($game.bossModeUnlocked) {
+				if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 					//TODO: test this
 					$game.$boss.init(function() {
 
 					});
 				} else {
-					var hooray = '<div class="hooray"><p>You beat the game, hooray! <a href="' + res + '">CLICK HERE</a> to see your profile</p></div>';
+					var hooray = '<div class="hooray"><h2>You beat the game, hooray!</h2><p>But the color has not yet returned to the world... If you have more seeds go and color the world. I will contact you when it has returned.</div>';
 					$('.gameboard').append(hooray);
 				}
 			}

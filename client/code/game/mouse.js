@@ -57,7 +57,7 @@ $game.$mouse = {
 		}
 
 		if(clicked) {
-			if($game.bossModeUnlocked) {
+			if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 				if($game.$player.seedMode) {
 					$game.$boss.dropSeed({x:_curX, y:_curY});
 				} else {

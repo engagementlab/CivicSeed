@@ -401,6 +401,8 @@ var $renderer = $game.$renderer = {
 
 	//draw a player on the backup canvas
 	playerToCanvas: function(lvl, color, client) {
+		//hack to draw right accessories
+		lvl = lvl < 4 ? lvl : 3;
 		//MAKE  SHIT MORE EFFICIENT
 		var h = 64,
 			w = 32,

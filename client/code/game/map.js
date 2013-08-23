@@ -40,7 +40,7 @@ var $map = $game.$map = {
 
 	//pull down current viewport tiles, create the pathfinding grid
 	firstStart: function(callback) {
-		if($game.bossModeUnlocked) {
+		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 			$('#minimapPlayer').toggleClass('hide');
 			_setupBossMap();
 			$map.createPathGrid(function() {

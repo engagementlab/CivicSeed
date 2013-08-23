@@ -464,7 +464,7 @@ function _setBoundaries() {
 
 
 function _startGame() {
-	if($game.bossModeUnlocked) {
+	if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 		$game.$boss.init(function() {
 			//TODO: something here?
 		});
