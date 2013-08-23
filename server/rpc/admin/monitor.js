@@ -81,6 +81,25 @@ exports.actions = function(req, res, ss) {
 						res(false);
 					}
 				});
+		},
+
+		stopGame: function(instance) {
+			gameModel
+				.where('instanceName').equals(instance)
+				.findOne(function(err,game) {
+					if(err) {
+						res(err);
+					} else if(game) {
+						game.active = false;
+						game.save(function(err,ok) {
+							if(err) {
+								res(err);
+							} else {
+								res();
+							}
+						});
+					}
+				});
 		}
 	};
 

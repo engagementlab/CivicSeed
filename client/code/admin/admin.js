@@ -119,9 +119,19 @@ var self = module.exports = {
 			self.showAddPlayerForm(instance);
 		});
 
+		$body.on('click', '#stop', function() {
+			var instance = $(this).attr('data-instance');
+			self.addStopButton(instance);
+		});
+
 		$body.on('click', '.viewAnswers', function() {
 			var index = $(this).attr('data-index');
 			self.showPlayerAnswers(index);
+		});
+
+		$body.on('click', '.stopGameButton', function() {
+			var instance = $(this).attr('data-instance');
+			self.stopGame(instance);
 		});
 
 		$body.on('click', '.deletePlayer', function() {
@@ -200,6 +210,11 @@ var self = module.exports = {
 		$('.output').empty().append(html);
 	},
 
+	addStopButton: function(instance) {
+		var html = '<h2>Make the game inactive?</h2><p><button data-instance="' + instance + '"class="btn btn-success stopGameButton" type="button">Stop Game</button></p>';
+		$('.output').empty().append(html);
+	},
+
 	getQuestions: function() {
 		ss.rpc('admin.monitor.init', function(err,res) {
 			if(res) {
@@ -257,6 +272,16 @@ var self = module.exports = {
 				$(sel).remove();
 			}
 		});
+	},
+
+	stopGame: function(instance) {
+		ss.rpc('admin.monitor.stopGame', instance, function(err) {
+			if(err) {
+				apprise('error stopping game');
+			} else {
+				apprise('the game has been stopped');
+			}
+		});	
 	},
 
 	showQuestions: function(instance) {

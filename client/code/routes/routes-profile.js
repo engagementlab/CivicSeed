@@ -12,11 +12,15 @@ var self = module.exports = {
 
 		$app.get('/profiles/:random', function(req) {
 			ss.rpc('shared.profiles.getProfileInformation', req.params['random'], function(info) {
-				if(!info.profileSetup && sessionStorage.userEmail === info.email) {
-					//reroute to change info
-					Davis.location.assign('change-info');
+				if(!info) {
+					console.log('error!');
 				} else {
-					$CONTAINER.append(JT['profiles-singleprofile'](info));
+					if(!info.profileSetup && sessionStorage.userEmail === info.email) {
+					//reroute to change info
+						Davis.location.assign('change-info');
+					} else {
+						$CONTAINER.append(JT['profiles-singleprofile'](info));
+					}	
 				}
 			});
 		});

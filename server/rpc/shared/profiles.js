@@ -1,6 +1,7 @@
 var rootDir = process.cwd();
 var service = require(rootDir + '/service');
 var UserModel = service.useModel('user');
+var GameModel = service.useModel('game');
 
 exports.actions = function(req, res, ss) {
 
@@ -31,7 +32,16 @@ exports.actions = function(req, res, ss) {
 						colorMap: user.game.colorMap,
 						email: user.email
 					};
-					res(profileInfo);
+					GameModel
+						.where('instanceName').equals(user.game.instanceName)
+						.findOne(function(err,game) {
+							if(err) {
+								res(false);
+							} else if(game) {
+								profileInfo.active = game.active;
+								res(profileInfo);
+							}
+						});
 				}
 				else {
 					res({firstName: false});

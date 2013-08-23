@@ -84,9 +84,12 @@
 				.row
 					.span12
 						if (sessionStorage.userEmail === email)
-							h2 Your profile is locked. Play the game to complete your profile!
-							p.buttonResume
-								a(href='/game') Resume Game
+							if (active)
+								h2 Your profile is locked. Play the game to complete your profile!
+								p.buttonResume
+									a(href='/game') Resume Game
+							else 
+								h2 The game is currently inactive.
 						else 
 							h2 This profile has not yet been completed.
 		
