@@ -32,24 +32,28 @@ $game.$robot = {
 	isMoving: false,
 
 	init: function(callback) {
-		//create things position and render info based on players state
-		_info = {
-			x: 0,
-			y: 0
-		};
-		_renderInfo = {
-			kind: 'robot',
-			prevX: 0,
-			prevY: 0,
-			curX: 0,
-			curY: 0,
-			srcX: 0,
-			srcY: 0
-		};
-		if(!$game.$player.seenRobot) {
-			$game.$robot.setPosition();
+		if($game.bossModeUnlocked) {
+			callback();
+		} else {
+			//create things position and render info based on players state
+			_info = {
+				x: 0,
+				y: 0
+			};
+			_renderInfo = {
+				kind: 'robot',
+				prevX: 0,
+				prevY: 0,
+				curX: 0,
+				curY: 0,
+				srcX: 0,
+				srcY: 0
+			};
+			if(!$game.$player.seenRobot) {
+				$game.$robot.setPosition();
+			}
+			callback();
 		}
-		callback();
 	},
 
 	setPosition: function() {
@@ -234,6 +238,10 @@ $game.$robot = {
 
 	getLoc: function() {
 		return _coords[$game.$player.currentLevel];
+	},
+
+	disable: function() {
+		_onScreen = false;
 	}
 
 };

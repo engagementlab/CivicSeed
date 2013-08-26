@@ -185,11 +185,13 @@ var $game = module.exports = {
 	//the game loop, if it is running, call all the updates and render
 	tick: function() {
 		if($game.running) {
-			$game.$others.update();
+			if($game.bossModeUnlocked && $game.$player.currentLevel < 4) {
+				$game.$others.update();
+				$game.$npc.update();
+				$game.$botanist.update();
+				$game.$robot.update();
+			}
 			$game.$player.update();
-			$game.$npc.update();
-			$game.$botanist.update();
-			$game.$robot.update();
 			$game.$renderer.renderFrame();
 			requestAnimationFrame($game.tick);
 		}
@@ -325,6 +327,15 @@ var $game = module.exports = {
 				callback();
 			}
 		});
+	},
+
+	toBossLevel: function() {
+		$game.$player.setPositionInfo();
+		$game.$botanist.disable();
+		$game.$robot.disable();
+		$game.$others.disable();
+		_setBoundaries();
+		_startGame(true);
 	}
 
 };
@@ -463,20 +474,22 @@ function _setBoundaries() {
 }
 
 
-function _startGame() {
+function _startGame(ingame) {
 	if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 		$game.$boss.init(function() {
 			//TODO: something here?
 		});
 	}
 	$game.$map.firstStart(function() {
-		$('.loading').fadeOut(function() {
-			$(this).remove();
-			$game.ready = true;
-			$game.running = true;
-			$game.$renderer.renderAllTiles();
-			$game.tick();
-			$game.$player.displayNpcComments();
-		});
+		if(!ingame) {
+			$('.loading').fadeOut(function() {
+				$(this).remove();
+				$game.ready = true;
+				$game.running = true;
+				$game.$renderer.renderAllTiles();
+				$game.tick();
+				$game.$player.displayNpcComments();
+			});
+		}
 	});
 }

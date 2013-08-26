@@ -344,7 +344,6 @@ $game.$botanist = {
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
 
-		console.log(_currentSlide, _promptNum);
 		$speechBubble.fadeOut(function() {
 			$speechBubbleBtn.addClass('hideButton');
 			$('.speechBubble .yesButton').unbind('click');
@@ -508,7 +507,7 @@ $game.$botanist = {
 			$('.inventoryItem').css('opacity',1);
 
 			//if they just beat a level, then show progreess
-			if($game.$player.botanistState === 0) {
+			if($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
 				$('.progressButton').toggleClass('currentButton');
 				$game.showProgress();
 			}
@@ -837,6 +836,10 @@ $game.$botanist = {
 	//return level question for resume
 	getLevelQuestion: function(level) {
 		return _levelQuestion[level];
+	},
+
+	disable: function() {
+		_onScreen = false;
 	}
 };
 
