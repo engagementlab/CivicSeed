@@ -162,7 +162,7 @@ $game.$player = {
 			return;
 		}
 		$game.$player.pathfinding = true;
-		_info.offX = 0,
+		_info.offX = 0;
 		_info.offY = 0;
 
 		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
@@ -442,8 +442,6 @@ $game.$player = {
 		$game.$player.seenRobot = false;
 		_pledges = 5;
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
-		$game.$robot.setPosition();
-
 		//save new information to DB
 		var info = {
 			id: $game.$player.id,
@@ -455,8 +453,9 @@ $game.$player = {
 		};
 		ss.rpc('game.player.updateGameInfo', info);
 		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
-		$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
 		if($game.$player.currentLevel < 4) {
+			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
+			$game.$robot.setPosition();
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
 			//send status to message board
@@ -464,6 +463,11 @@ $game.$player = {
 			// var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
 			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
+		} else {
+			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
+			if($game.bossModeUnlocked) {
+				$game.toBossLevel();
+			}
 		}
 	},
 

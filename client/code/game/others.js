@@ -415,5 +415,11 @@ $game.$others = {
 				player.beam(info);
 			}
 		});
+	},
+
+	disable: function() {
+		$.each(_onScreenPlayers, function(key, player) {
+			player.offScreen = true;
+		});
 	}
 };
