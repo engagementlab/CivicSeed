@@ -182,7 +182,10 @@ var $account = module.exports = {
 				sessionStorage.setItem('userEmail', session.email);
 				sessionStorage.setItem('userRole', session.role);
 				sessionStorage.setItem('profileLink', session.profileLink);
-				if(!session.profileSetup) {
+				if(session.role === 'superadmin' || session.role === 'admin') {
+					// send them to admin
+					Davis.location.assign('/admin');
+				} else if(!session.profileSetup) {
 					// send them to setup their profile info
 					Davis.location.assign('/change-info');
 				} else if(!session.gameStarted) {
