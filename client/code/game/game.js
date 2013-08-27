@@ -185,7 +185,7 @@ var $game = module.exports = {
 	//the game loop, if it is running, call all the updates and render
 	tick: function() {
 		if($game.running) {
-			if($game.bossModeUnlocked && $game.$player.currentLevel < 4) {
+			if($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
 				$game.$others.update();
 				$game.$npc.update();
 				$game.$botanist.update();
@@ -330,6 +330,7 @@ var $game = module.exports = {
 	},
 
 	toBossLevel: function() {
+		$game.$renderer.clearMap();
 		$game.$player.setPositionInfo();
 		$game.$botanist.disable();
 		$game.$robot.disable();
