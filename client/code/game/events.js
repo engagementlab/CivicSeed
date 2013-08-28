@@ -97,6 +97,9 @@ var $events = module.exports = {
 		//the game meter has hit the end, boss mode is unlocked
 		ss.event.on('ss-bossModeUnlocked', function() {
 			$game.bossModeUnlocked = true;
+			if($game.$player.currentLevel > 3) {
+				$game.toBossLevel();
+			}
 		});
 
 		//another player has beamed

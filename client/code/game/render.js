@@ -794,6 +794,15 @@ var $renderer = $game.$renderer = {
 			$game.TILE_SIZE * $game.VIEWPORT_WIDTH,
 			$game.TILE_SIZE * $game.VIEWPORT_HEIGHT
 		);
+	},
+
+	clearMap: function() {
+		_foregroundContext.clearRect(
+			0,
+			0,
+			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+			$game.VIEWPORT
+		);
 	}
 };
 
