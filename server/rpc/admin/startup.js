@@ -13,6 +13,8 @@ var rootDir = process.cwd(),
 	botanistModel = service.useModel('botanist', 'preload'),
 	gameModel = service.useModel('game', 'preload');
 
+var _copyData;
+
 exports.actions = function(req, res, ss) {
 
 	req.use('session');
@@ -40,6 +42,7 @@ exports.actions = function(req, res, ss) {
 					userData = require(rootDir + '/data/users').global;
 					colorData = require(rootDir + '/data/colors').global;
 
+					var userDataCopy = _copyData(userData);
 					userDataLength = userData.length;
 					var numDemoUsers = 16;
 					var demoUsers = [];
@@ -47,12 +50,12 @@ exports.actions = function(req, res, ss) {
 					hashUserData = function(i) {
 						if(i < userDataLength) {
 							accountHelpers.hashPassword(userData[i].password, function(hashedPassword) {
-								userData[i].password = hashedPassword.hash;
+								userDataCopy[i].password = hashedPassword.hash;
 								hashUserData(++i);
 							});
 						} else {
 							dbActions.dropCollection('users', function() {
-								dbActions.saveDocuments(userModel, userData, function() {
+								dbActions.saveDocuments(userModel, userDataCopy, function() {
 									hashDemoData(0);
 								});
 							});
@@ -246,4 +249,18 @@ exports.actions = function(req, res, ss) {
 
 	};
 
-}
+};
+
+_copyData = function(data) {
+	var duplicate = [];
+	for(var i = 0; i < data.length; i++) {
+		var obj = data[i];
+		duplicate[i] = {};
+		for (var prop in obj) {
+			if(obj.hasOwnProperty(prop)){
+				duplicate[i][prop] = obj[prop];
+			}
+		}
+	}
+	return duplicate;
+};
