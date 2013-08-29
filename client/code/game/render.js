@@ -53,7 +53,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -767,21 +767,43 @@ var $renderer = $game.$renderer = {
 				$game.TILE_SIZE
 			);
 			if(tiles[t].item > -1) {
-				_backgroundContext.fillStyle = 'rgba(0,' + tiles[t].item * 50 + ',200,0.5)';
-				_backgroundContext.fillRect(
+				// _backgroundContext.fillStyle = 'rgba(0,' + tiles[t].item * 50 + ',200,0.5)';
+				// _backgroundContext.fillRect(
+				// 	tiles[t].x * $game.TILE_SIZE,
+				// 	tiles[t].y * $game.TILE_SIZE,
+				// 	$game.TILE_SIZE,
+				// 	$game.TILE_SIZE
+				// );
+				_backgroundContext.drawImage(
+					_tilesheets[11],
+					tiles[t].item * $game.TILE_SIZE,
+					0,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
 					tiles[t].x * $game.TILE_SIZE,
 					tiles[t].y * $game.TILE_SIZE,
 					$game.TILE_SIZE,
-					$game.TILE_SIZE
+					$game.TILE_SIZE							
 				);
 			}
 			if(tiles[t].charger > -1) {
-				_backgroundContext.fillStyle = 'rgba(255,0,0,0.9)';
-				_backgroundContext.fillRect(
+				// _backgroundContext.fillStyle = 'rgba(255,0,0,0.9)';
+				// _backgroundContext.fillRect(
+				// 	tiles[t].x * $game.TILE_SIZE,
+				// 	tiles[t].y * $game.TILE_SIZE,
+				// 	$game.TILE_SIZE,
+				// 	$game.TILE_SIZE
+				// );
+				_backgroundContext.drawImage(
+					_tilesheets[11],
+					128,
+					0,
+					$game.TILE_SIZE,
+					$game.TILE_SIZE,
 					tiles[t].x * $game.TILE_SIZE,
 					tiles[t].y * $game.TILE_SIZE,
 					$game.TILE_SIZE,
-					$game.TILE_SIZE
+					$game.TILE_SIZE							
 				);
 			}
 		}
