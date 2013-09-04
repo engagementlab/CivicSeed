@@ -132,7 +132,7 @@ To run the REDIS database as a daemon:
 
 Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.) You'll need to use the `sudo` command if you're using a production client port lower than 1024:
 
-	$ [sudo] NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+	$ sudo NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
 
 Once the app is running and assets are packed, make sure to commit the compiled assets (`/client/assets/*`) to git and push them up to where you're hosting static assets.
 
@@ -151,10 +151,6 @@ You will need your S3 Access Key and Secret Key handy for the configuration.
 Once the configuration is setup, make sure you are in the root of the Civic Seed game folder (`cd CivicSeed`). From the root folder run the following command to sync the static folder with S3.
 
 	s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
-
-For further directions on syncing files, refer to:
-
-	http://s3tools.org/s3cmd-sync
 
 #### Caching
 

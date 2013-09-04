@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{ ::: Civic Seed ::: }</title>
-    <meta name="viewport" content="width=device-width">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="http://fonts.googleapis.com/css?family=Arvo:400,700,400italic" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Nunito:300,700" rel="stylesheet" type="text/css">
-    <script src="/js/modernizr-2.6.2.min.js"></script>
-    <script>window.CivicSeed = {"VERSION":"0.0.8-7","CACHE":"2013630121043","ENVIRONMENT":"development","CLOUD_PATH":""};</script><link href="/assets/main/1375200643990.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1375200643990.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+<!DOCTYPE html><html lang="en" class="no-js"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>{ ::: Civic Seed ::: }</title><meta name="viewport" content="width=device-width"><meta name="description" content=""><meta name="author" content=""><link href="http://fonts.googleapis.com/css?family=Arvo:400,700,400italic" rel="stylesheet" type="text/css"><link href="http://fonts.googleapis.com/css?family=Nunito:300,700" rel="stylesheet" type="text/css"><script src="/js/modernizr-2.6.2.min.js"></script><script>window.CivicSeed = {"VERSION":"0.0.8-7","CACHE":"0.0.8-7","ENVIRONMENT":"production","CLOUD_PATH":"http://s3.amazonaws.com/civicseed","CONNECTED":true};</script><link href="http://s3.amazonaws.com/civicseed/assets/main/1378322089576.css" media="screen" rel="stylesheet" type="text/css"><script src="http://s3.amazonaws.com/civicseed/assets/main/1378322089576.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
 window.JT['admin-invitecodes'] = (function anonymous(locals, attrs, escape, rethrow, merge) {
 attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow || jade.rethrow; merge = merge || jade.merge;
 var buf = [];
@@ -42,7 +30,9 @@ buf.push('>Chat Logs</p><p');
 buf.push(attrs({ 'id':('questions'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
 buf.push('>Questions</p><p');
 buf.push(attrs({ 'id':('addPlayer'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
-buf.push('>Add Player</p></div>');
+buf.push('>Add Player</p><p');
+buf.push(attrs({ 'id':('startStop'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
+buf.push('>Start / Stop</p></div>');
     }
 
   } else {
@@ -58,7 +48,9 @@ buf.push('>Chat Logs</p><p');
 buf.push(attrs({ 'id':('questions'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
 buf.push('>Questions</p><p');
 buf.push(attrs({ 'id':('addPlayer'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
-buf.push('>Add Player</p></div>');
+buf.push('>Add Player</p><p');
+buf.push(attrs({ 'id':('startStop'), 'data-instance':('' + (instance) + ''), "class": ('adminLink') }, {"data-instance":true}));
+buf.push('>Start / Stop</p></div>');
     }
 
   }
@@ -401,7 +393,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="console"><h1>Startup</h1><h2>Database Initialization</h2><h4>' + escape((interp = nodeEnv) == null ? '' : interp) + ' Environment</h4><div id="dataLoaders" class="loader"><button id="userLoadBtn" data-type="users" class="btn">Users *caution*</button><button id="gameLoadBtn" data-type="game" class="btn">Game</button><button id="gameLoadBtn" data-type="colors" class="btn">Colors		</button><button id="chatLoadBtn" data-type="chat" class="btn">Chat</button><button id="tileLoadBtn" data-type="tiles" class="btn">Tiles</button><button id="botanistLoadBtn" data-type="npcs" class="btn">Botanist &amp; NPCs</button></div></div>');
+buf.push('<div class="console"><h1>Startup</h1><h2>Database Initialization</h2><h4>' + escape((interp = nodeEnv) == null ? '' : interp) + ' Environment</h4><div id="dataLoaders" class="loader"><button id="userLoadBtn" data-type="users" class="btn">Users *caution*</button><button id="gameLoadBtn" data-type="game" class="btn">Game</button><button id="gameLoadBtn" data-type="colors" class="btn">Colors		</button><button id="chatLoadBtn" data-type="chat" class="btn">Chat</button><button id="tileLoadBtn" data-type="tiles" class="btn">Tiles</button><button id="botanistLoadBtn" data-type="botanist" class="btn">Botanist</button><button id="npcLoadBtn" data-type="npcs" class="btn">NPC *super caution*</button></div></div>');
 }
 return buf.join("");
 });
@@ -459,7 +451,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="about"><h1>About the Game</h1><p>Civic Seed is a game designed to prepare university students for civic engagement.</p></div>');
+buf.push('<div class="about"><div class="row"><div class="span12"><h1>The Story of Civic Seed</h1><h2>Call to Action</h2><p>At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.</p><p>Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.</p><h2>Exploring the Mystery</h2><p>As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.</p><h2>The Big Reveal</h2><p>After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color. </p><p>The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.</p><h2>Boss Battle and Final Sequence</h2><p>Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each. </p><p>This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.</p><h2>Features of the full version of Civic Seed</h2><ul><li>Music and sound effects</li><li>Animated intro and finale sequences</li><li>Timed boss level</li><li>Hidden “Easter Egg” seeds</li><li>Heads-up knowledge contests between players</li><li>Sharable Community Service Resumes</li></ul><iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div></div></div>');
 }
 return buf.join("");
 });
@@ -514,7 +506,7 @@ buf.push('<div class="introduction"><h1>Civic Seed Introduction</h1><iframe src=
 if ((sessionStorage.userFirstName))
 {
 buf.push('<p><a');
-buf.push(attrs({ 'id':('startGame'), 'href':('/profiles/'+sessionStorage.userFirstName+'.'+sessionStorage.userLastName) }, {"href":true}));
+buf.push(attrs({ 'id':('startGame'), 'href':('/profiles/'+sessionStorage.profileLink) }, {"href":true}));
 buf.push('>Your Profile</a></p>');
 }
 buf.push('</div>');
@@ -562,7 +554,7 @@ attrs = attrs || jade.attrs; escape = escape || jade.escape; rethrow = rethrow |
 var buf = [];
 with (locals || {}) {
 var interp;
-buf.push('<div class="profiles"><h1>Public Profiles</h1>');
+buf.push('<div class="profiles"><h1>Public Profiles</h1><p>Below is a list of all users who have chosen to make their profile publicly available.</p>');
 // iterate users
 ;(function(){
   if ('number' == typeof users.length) {
@@ -710,7 +702,14 @@ else
 buf.push('<div class="row"><div class="span12">');
 if ( (sessionStorage.userEmail === email))
 {
+if ( (active))
+{
 buf.push('<h2>Your profile is locked. Play the game to complete your profile!</h2><p class="buttonResume"><a href="/game">Resume Game</a></p>');
+}
+else
+{
+buf.push('<h2>The game is currently inactive.</h2>');
+}
 }
 else
 {
@@ -728,9 +727,4 @@ buf.push('</div>');
 }
 return buf.join("");
 });
-</script>
-  </head>
-</html>
-<body>
-  <div id="container" class="container"></div>
-</body>
+</script></head></html><body><div id="container" class="container"></div></body>
