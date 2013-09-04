@@ -1,17 +1,3 @@
-.monitor
-.DS_Store
-Thumbs.db
-node_modules
-*.sublime-*
-#/client/static/assets/
 /data/map/expanded/
 /data/demo-users.js
-/models/_temp/
-/server/controllers/_temp/
-/server/controllers/game/_temp/
-_*.wav
-_*.mp3
-_*.ogg
-_*.mp4
-_*.webm
 /_HIDDEN
