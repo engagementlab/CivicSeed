@@ -180,6 +180,8 @@ Other helps:
     ... --add-header='Content-Encoding: gzip' ... ???
 
 
+#### Mailgun
+Setup a mail client instead of google with mailgun since google can only send out 200 msg / day.
 
 ### Running Civic Seed
 
@@ -214,29 +216,3 @@ Or check the logs:
 To actually stop the server:
 
 	$ forever stopall
-
-
-
-
-
-
-
-
-
-
-## Front End
-
-### Calculating Map Size
-
-1. The viewport displays a 30 x 15 tile grid.  A "quadrant" is really 28 x 13 because there is overlap.
-
-2. Formula for exact dimensions where:
-    - vX = width of viewport in tiles
-    - vY = height of viewport in tiles
-    - qX = number horizontal quadrants
-    - qY = number of vertical quadrants
-
-    #### total X tiles = vX * qX - (qX-1 * 2)
-    #### total Y tiles =  vY * qY - (qY-1 * 2)
-
-    ### DON'T QUESTION THE FORMULA...
