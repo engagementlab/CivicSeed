@@ -138,25 +138,19 @@ Once the app is running and assets are packed, make sure to commit the compiled 
 
 #### Static Assets
 
-CivicSeed uses Amazon S3 Files...[to be modified]...
-
-For immediate uploads of files, 3Hub is recommended.
-
-For automatic file syncing, however, CivicSeed employs s3cmd. Install s3cmd using homebrew:
+CivicSeed uses Amazon S3 to store static files. Several 3rd party tools are available for managing these files (3Hub, CyberDuck), or you can use the website to upload. However because of header caching and automatic syncing concerns, it is better to use a command line tool called "s3cmd". This tool can be installed easily with homebrew:
 
 	$ brew install s3cmd
 
-Once installed, run the following command (found at http://s3tools.org/s3cmd):
+Once installed, run the following command (found at the [s3cmd website](http://s3tools.org/s3cmd)), and follow the simple config instructions:
 
 	$ s3cmd --configure
 
-Then create a post-commit git hook file with the following content (see http://s3tools.org/s3cmd-sync):
+You will need your S3 Access Key and Secret Key handy for the configuration.
 
-    (to add? gzipping?)
-    echo "Writing the following files to S3://civicseed --> $(date +'%Y-%m-%d %H:%M:%S')" >> ~/path/to/logs/S3-commit.log
-    s3cmd sync --acl-public --delete-removed --add-header='Cache-Control:public,max-age=94608000' --rexclude "$(<~/Dropbox/civicseed_static/.s3ignore)" ~/path/to/dropbox/files/ s3://civicseed/ >> ~/path/to/logs/S3-commit.log
-    echo >> ~/path/to/logs/S3-commit.log
-    echo >> ~/path/to/logs/S3-commit.log
+Once the configuration is setup, make sure you are in the root of the Civic Seed game folder (`cd CivicSeed`). From the root folder run the following command to sync the static folder with S3.
+
+	s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
 
 For further directions on syncing files, refer to:
 
@@ -166,24 +160,24 @@ For further directions on syncing files, refer to:
 
 Remember to set S3 cache headers `max-age` and/or `Expires` headers to files during upload. One year is `31536000`, but it's probably better in this case to set it to three years (`94608000`), since who knows how long things won't change. We can always cache bust it. Note from s3cmd above the following:
 
-    ... --add-header='Cache-Control:public,max-age=94608000' ...
+	... --add-header='Cache-Control:public,max-age=94608000' ...
 
 Other helps:
 
-    http://html5boilerplate.com/html5boilerplate-site/built/en_US/docs/cachebusting/
-    http://www.newvem.com/how-to-add-caching-headers-to-your-objects-using-amazon-s3/
-    https://developers.google.com/speed/articles/caching
-    https://github.com/s3tools/s3cmd/issues/37
-    http://www.newvem.com/how-to-add-caching-headers-to-your-objects-using-amazon-s3/
-    http://stackoverflow.com/questions/3142388/how-to-make-10-000-files-in-s3-public
-    http://awspolicygen.s3.amazonaws.com/policygen.html
+	http://html5boilerplate.com/html5boilerplate-site/built/en_US/docs/cachebusting/
+	http://www.newvem.com/how-to-add-caching-headers-to-your-objects-using-amazon-s3/
+	https://developers.google.com/speed/articles/caching
+	https://github.com/s3tools/s3cmd/issues/37
+	http://www.newvem.com/how-to-add-caching-headers-to-your-objects-using-amazon-s3/
+	http://stackoverflow.com/questions/3142388/how-to-make-10-000-files-in-s3-public
+	http://awspolicygen.s3.amazonaws.com/policygen.html
 
 #### GZipping
 
   See: http://stackoverflow.com/questions/9988407/set-metadata-while-using-s3cmd-to-upload-static-website-to-amazon-s3
   And: https://github.com/s3tools/s3cmd/issues/37
 
-    ... --add-header='Content-Encoding: gzip' ... ???
+	... --add-header='Content-Encoding: gzip' ... ???
 
 ### Running Civic Seed
 
