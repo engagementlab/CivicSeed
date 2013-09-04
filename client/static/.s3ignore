@@ -1,0 +1,1 @@
+(\.s3ignore|\.DS_Store|\.git|^Icon$|sublime-|node_modules|^EXAMPLE_IGNORE_FOLDER_ONLY/.*)
