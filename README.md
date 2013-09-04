@@ -41,6 +41,12 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
 		"CLOUD_PATH": "http://sample.cloud.path.com"
 	}
 
+#### Account Emails
+
+Civic Seed requires an emailing service that can send multiple emails to users. [Mail Gun](http://www.mailgun.com/) is a recommended service that can send out 1000s of emails for free. (Google limits to 200 msg/day by comparison.)
+
+Use the email and password provided by this service for the above `ACCOUNT_EMAIL` and `ACCOUNT_PW` configuration variables.
+
 ## Production
 
 ### Hosting Environment and Server Setup
@@ -178,10 +184,6 @@ Other helps:
   And: https://github.com/s3tools/s3cmd/issues/37
 
     ... --add-header='Content-Encoding: gzip' ... ???
-
-
-#### Mailgun
-Setup a mail client instead of google with mailgun since google can only send out 200 msg / day.
 
 ### Running Civic Seed
 
