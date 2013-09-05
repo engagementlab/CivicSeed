@@ -455,7 +455,7 @@ $game.$botanist = {
 					$inventoryItem.attr('draggable','true');
 				});
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
-				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your paintbrush seeds. The fewer tries you take, the more paintbrush seeds you will receive.');
+				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
