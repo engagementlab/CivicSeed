@@ -99,6 +99,17 @@ In rare cases, you may need to kill running MongoDB instances and restart. Here'
 	$ sudo chkconfig mongod on
 	$ sudo /etc/init.d/mongod start
 
+##### To backup MongoDB data:
+
+On the MongoDB server:
+
+	$ mongodump
+	$ zip -rv civicseed_mongo_backup.zip dump/[databasename]/
+
+On your local machine:
+
+	$ scp -i ~/.ssh/civicseed.pem ec2-user@[instanceaddress]:/home/ec2-user/dump/civicseed_mongo_backup.zip ~/Desktop
+
 #### Data Initialization
 
 Before initializing data, we need to make sure there's a super admin to create startup data. To create a temporary user, open a new terminal window and run the following command in the `/CivicSeed` project directory:
