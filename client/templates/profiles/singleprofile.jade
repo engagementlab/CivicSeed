@@ -8,7 +8,7 @@
 				p.nombre #{firstName} #{lastName}
 				p.school <em>#{school}</em>
 			if (sessionStorage.userEmail === email)
-				.span3.profileToggle(data-public=profilePublic)
+				.span3.profileToggle.no-print(data-public=profilePublic)
 					if profilePublic
 						i.icon-unlock.icon-4x(title='make profile public', data-placement='top')
 						p your profile is public
@@ -17,11 +17,11 @@
 						p your profile is private
 		if profileUnlocked
 			if (sessionStorage.userEmail === email)
-				.row
+				.row.no-print
 					.span12.box
 						p 
 							a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!		
-				.row
+				.row.no-print
 					.span12.instructions
 						p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 			.row
@@ -29,7 +29,7 @@
 					if resume[0]
 						p(data-email=email) <span class="profileTitle">Motivations </span> <span class='resumeText'> #{resume[0]} </span>
 			if (resumeFeedback.length > 0)
-				.feedback
+				.feedback.no-print
 					p.clickForFeedback Peer Feedback
 					each comment, c in resumeFeedback
 						if (comment.resumeIndex === 0)
@@ -50,7 +50,7 @@
 					if resume[3]
 						p(data-email=email) <span class="profileTitle">Civic Objectives </span> <span class='resumeText'> #{resume[3]} </span>
 			if (sessionStorage.userEmail === email)
-				.row
+				.row.no-print
 					.span12
 						p.saveProfileChanges Save Changes
 		else

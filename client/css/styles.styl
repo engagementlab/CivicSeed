@@ -1,54 +1,10 @@
+@charset 'utf-8'
+
 @import 'globals/variables'
 @import 'globals/normalize'
-// @import 'bootstrap/bootstrap' <-- old. it will break if you uncomment. left in for legacy.
 @import 'bootstylus/bootstrap'
 @import 'libs/alerts'
 @import 'globals/game'
 @import 'globals/pages'
 @import 'globals/profiles'
 @import 'globals/admin'
-
-body
-	padding-top 80px
-	font-family $bodyFont
-
-p, li, h1,h2, h3, h4, h5
-	font-family $bodyFont
-
-a, button, i, span
-	font-family $buttonFont
-	font-weight 300
-
-a:hover
-	text-decoration none
-.moreTopMargin
-	margin-top 10px
-.iconInfo
-	margin-bottom 30px
-
-.console
-	margin 25px auto
-	padding 25px
-	width 800px
-	background #eee
-	box-shadow 3px 3px 3px #999
-	form
-		margin 12px 0
-		padding 20px 20px 8px
-		border 2px solid #ddd
-		background-color white
-	.loader
-		margin 12px 0
-		padding 20px 20px 8px
-		border 2px solid #ddd
-		background-color white
-		pre
-			margin 12px 0
-.tempFixMargin
-	margin-right 50px
-.navPadding
-	padding 10px
-.navPadding a.brand
-	color $csGreen
-	font-size 1.8em
-	line-height .8em

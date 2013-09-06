@@ -1,0 +1,36 @@
+@charset 'utf-8';
+@page {
+	margin: 1in;
+}
+* {
+	color: #000 !important;
+	border-color: #000 !important;
+	border-radius: 0 !important;
+}
+body {
+	padding: 0;
+}
+#container:before {
+	display: block;
+	content: 'Thank you for printing our content at http://civicseed.org/.'; /*  [Say whatever you want here...] */
+	margin-bottom: 10px;
+	border: 1px solid #bbb;
+	padding: 3px 5px;
+	font-style: italic;
+}
+#container {
+	margin: 0;
+	width: auto;
+}
+img {
+	max-width: 500px;
+	border: 0 !important;
+}
+.profileTitle {
+	display: block;
+	font-weight: bold !important;
+}
+.no-print,
+.no-print * {
+	display: none !important;
+}
