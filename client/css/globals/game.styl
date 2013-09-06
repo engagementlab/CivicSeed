@@ -1,7 +1,7 @@
 @font-face
 	font-family 'InconsolataMedium'
-	src url($cloudPath + 'fonts/Inconsolata-webfont.woff') format('woff'),
-		url($cloudPath + 'fonts/Inconsolata-webfont.ttf') format('truetype')
+	src $cloudUrl('fonts/Inconsolata-webfont.woff') format('woff'),
+		$cloudUrl('fonts/Inconsolata-webfont.ttf') format('truetype')
 	font-weight normal
 	font-style normal
 
@@ -85,13 +85,13 @@ body, button, p, a
 		color white
 
 .patternBg1
-	background url($cloudPath + 'img/bg/grey.png') #efefef
+	background $cloudUrl('img/bg/grey.png') #efefef
 
 .patternBg2
-	background url($cloudPath + 'img/bg/grey.png') #efefef
+	background $cloudUrl('img/bg/grey.png') #efefef
 
 .patternBg3
-	background url($cloudPath + 'img/bg/tri.png') #efefef
+	background $cloudUrl('img/bg/tri.png') #efefef
 
 .megaRiddle
 	width 780px
@@ -606,7 +606,7 @@ body, button, p, a
 	left 15px
 	width 930px
 	height 450px
-	background url($cloudPath + 'img/bg/maze.png') #efefef
+	background $cloudUrl('img/bg/maze.png') #efefef
 	box-shadow 2px 2px 4px 4px #333
 	padding 0
 	border-radius 5px
@@ -865,7 +865,7 @@ div.currentButton
 		font-size .9em
 	.videoResource
 		text-align center
-		background url($cloudPath + 'img/bg/loading.png') no-repeat center center 
+		background $cloudUrl('img/bg/loading.png') no-repeat center center 
 	.rabby img
 		float left
 		width 320px
@@ -946,7 +946,7 @@ p.privacyMessage
 	left 0
 	width 100%
 	height 100%
-	background url($cloudPath + 'img/game/teleport.gif') #eee no-repeat center center
+	background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
 	background-size cover
 	z-index 99999
 
@@ -1026,7 +1026,7 @@ p.privacyMessage
 		.videoFrame
 			margin 20px 0 0 0
 			text-align center
-			background url($cloudPath + 'img/bg/loading.png') no-repeat center center 
+			background $cloudUrl('img/bg/loading.png') no-repeat center center 
 		p 
 			padding 0 20px
 		.resumeQuestion
@@ -1079,4 +1079,4 @@ p.privacyMessage
 		float left
 
 .labBackground
-	background url($cloudPath + 'img/game/lab_bg.png') no-repeat center center 
+	background $cloudUrl('img/game/lab_bg.png') no-repeat center center 

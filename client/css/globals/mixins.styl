@@ -1,0 +1,104 @@
+// vendors = webkit moz official
+// $vendor(property, arguments)
+// 	-webkit-{property} arguments
+// 	// -moz-{property} arguments
+// 	// -ms-{property} arguments
+// 	// -o-{property} arguments
+// 	{property} arguments
+
+// $filter()
+// 	$vendor('filter', arguments)
+
+// $blur($amount)
+// 	$filter(blur($amount))
+
+// $grayscale($amount)
+// 	$filter(grayscale($amount))
+
+// $boxShadow()
+// 	$vendor('box-shadow', arguments)
+
+// $boxSizing()
+// 	$vendor('box-sizing', arguments)
+
+// // SEE: http://css-tricks.com/perfect-full-page-background-image/
+// $backgroundSize()
+// 	// -webkit-background-size arguments
+// 	// -moz-background-size arguments
+// 	background-size arguments
+
+
+// // surprisingly (OR NOT) < IE10 has no text-shadow of happy...though they have their own biznatch
+// // this is only for easier changing if we decide to integrate IE support later
+// $textShadow()
+// 	text-shadow arguments
+
+$borderRadius()
+	-webkit-border-radius arguments
+	border-radius arguments
+	background-clip padding-box
+
+// $backgroundGradient(start, end)
+// 	background-color start
+// 	background-image -webkit-gradient(linear, left top, left bottom, from(start), to(end))
+// 	background-image -webkit-linear-gradient(top, start, end)
+// 	// background-image -moz-linear-gradient(top, start, end)
+// 	background-image -o-linear-gradient(top, start, end)
+// 	background-image linear-gradient(to bottom, start, end)
+
+// $columns($count = 2, $gap = 15px)
+// 	-webkit-column-count $count
+// 	// -moz-column-count $count
+// 	column-count $count
+// 	-webkit-column-gap $gap
+// 	// -moz-column-gap $gap
+// 	column-gap $gap
+
+// $rotate()
+// 	$vendor('transform', rotate(arguments))
+
+// $scale()
+// 	$vendor('transform', scale(arguments))
+
+// $threeDRotate()
+// 	-webkit-perspective 300
+// 	// -moz-perspective 300
+// 	// -ms-perspective 300
+// 	perspective 300
+// 	-webkit-transform rotateY(180deg)
+// 	// -moz-transform rotateY(180deg)
+// 	// -ms-transform rotateY(180deg)
+// 	transform rotateY(180deg)
+// 	-webkit-transform-style preserve-3d
+// 	// -moz-transform-style preserve-3d
+// 	// -ms-transform-style preserve-3d
+// 	transform-style preserve-3d
+
+// $transition()
+// 	// $vendor('transition', arguments)
+// 	-webkit-transition arguments
+
+// $translate3d()
+// 	// $vendor('transform', translate3d(0, 0, 0))
+// 	-webkit-transform translate3d(0, 0, 0)
+
+// $accelerate()
+// 	$translate3d()
+
+// // $userSelect()
+// // 	$vendor('user-select', arguments)
+// $noUserSelect()
+// 	$vendor('user-select', none)
+// 	cursor default
+
+// $clearfix()
+// 	&:before
+// 	&:after
+// 		content ' '
+// 		display table
+// 	    line-height 0
+// 	&:after
+// 		clear both
+
+$cloudUrl($url)
+	url($cloudPath + $url + '?cache=' + $cache)
