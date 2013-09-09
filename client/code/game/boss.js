@@ -299,11 +299,11 @@ function _beginGame() {
 	//set score from tiles colored
 	_score = $game.$player.getTilesColored();
 	$score.text(_score);
-	_start = new Date().getTime(),
-    _time = 0,
-    _elapsed = '0.0',
-    _pause = false,
-    _totalTime = 0,
+	_start = new Date().getTime();
+    _time = 0;
+    _elapsed = '0.0';
+    _pause = false;
+    _totalTime = 0;
     _target = 90;
     _clockRate = 1;
     _numRegularSeeds = 20;
@@ -346,27 +346,30 @@ function _checkWin() {
 	_score += 50;
 	$score.text(_score);
 
-	if(_currentCharger === 4) {
-		_pause = true;
-		_currentSlide = 4;
-		_addContent();
-		$bossArea.show();
-	} else {
-		_hideItems();
-		$('.gameboard').append(_cutSceneVids[_currentCharger - 1]);
-		$('.cutScene').fadeIn('fast');
-		$('.cutScene')[0].play();
-		_clockRate = 0;
-		$('.cutScene')[0].addEventListener('ended', function() {
-			$('.cutScene').fadeOut('fast', function() {
-				var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
-				$game.statusUpdate({message:left,input:'status',screen: true,log:false});
-				_clockRate = 1;
-				$(this).remove();
-			});
-			_placeCharger();
+	_hideItems();
+	var newCutScene = '<div class="cutSceneBg"></div>';
+	$('.gameboard').append(newCutScene);
+	var newVid = _cutSceneVids[_currentCharger - 1]
+	$('.cutSceneBg').append(newVid);
+	$('.cutSceneBg').fadeIn('fast');
+	$('.cutScene')[0].play();
+	_clockRate = 0;
+	$('.cutScene')[0].addEventListener('ended', function() {
+		$('.cutSceneBg').fadeOut('fast', function() {
+			var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
+			$game.statusUpdate({message:left,input:'status',screen: true,log:false});
+			_clockRate = 1;
+			$('.cutSceneBg').remove();
 		});
-	}
+		if(_currentCharger === 4) {
+			_pause = true;
+			_currentSlide = 4;
+			_addContent();
+			$bossArea.show();
+		} else {
+			_placeCharger();
+		}
+	});
 }
 
 //show stuff if they don't beat the level

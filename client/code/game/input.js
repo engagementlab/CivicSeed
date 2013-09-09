@@ -112,7 +112,7 @@ var $input = module.exports = {
 					y: e.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 				$game.$mouse.updateMouse(mInfo,true);
 			}
