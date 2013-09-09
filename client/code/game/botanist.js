@@ -386,7 +386,7 @@ $game.$botanist = {
 			}
 			else {
 				$('.botanistArea .answerButton').removeClass('hideButton');
-				$('.botanistArea .clearBoardButton').removeClass('hideButton');
+				//$('.botanistArea .clearBoardButton').removeClass('hideButton');
 			}
 		}
 	},
@@ -479,7 +479,10 @@ $game.$botanist = {
 				var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
 				$botanistAreaMessage.text(postTangramTalk);
-				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '</p>';
+				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '</p>',
+					imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
+				
+				newHTML2 += '<p class="seedChips"><img src="' + imgPath3 +'"></p>';
 				$botanistContent.html(newHTML2);
 			}
 			else {
@@ -633,7 +636,7 @@ $game.$botanist = {
 						level = $game.$player.currentLevel + 1;
 						totalSeeds = (20 + level * 4 ) + level * 2 * numSeeds;
 					
-					$game.$player.updateSeeds('riddle', totalSeeds);
+					$game.$player.updateSeeds('draw', totalSeeds);
 					$game.$player.botanistState = 4;
 					_saveBotanistState();
 				}

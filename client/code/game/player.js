@@ -307,9 +307,9 @@ $game.$player = {
 			realResource.attempts += 1;
 			realResource.result = newInfo.result;
 		}
-		_resourcesDiscovered += 1;
 		//the answer was correct, add item to inventory
 		if(info.correct) {
+			_resourcesDiscovered += 1;
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
 			$game.$player.updateSeeds('regular', numToAdd);
@@ -421,6 +421,7 @@ $game.$player = {
 	//empty everything  from inventory
 	emptyInventory: function() {
 		_inventory = [];
+		$('.inventoryItem').remove();
 		$inventoryBtn.text('0');
 	},
 
@@ -520,7 +521,7 @@ $game.$player = {
 		if(choice === 'regular') {
 			msg = 'click a tile to drop some color';
 		} else {
-			msg = 'graffiti mode activated - click and drag to draw';
+			msg = 'paintbrush mode activated - click and drag to draw';
 			$graffiti.show();
 			$graffitiNum.text(_seeds.draw);
 		}
