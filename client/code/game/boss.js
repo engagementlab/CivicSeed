@@ -29,7 +29,7 @@ var _currentSlide,
 	_clockTimeout,
 
 	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/',
-	_numVideos = 3,
+	_numVideos = 4,
 	_cutSceneVids = [],
 	_score;
 
