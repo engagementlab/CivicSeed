@@ -276,7 +276,7 @@ $game.$npc = {
 	//show dialog from npc in chat bubble
 	showSmalltalk: function(firstTime) {
 		//they have a resource with just one random response
-		if(firstTime) {
+		if(firstTime || $game.$player.botanistState === 0) {
 			_speak = 'You should really see the botanist before exploring the world.';
 		} else {
 			if(_curNpc.isHolding) {

@@ -79,7 +79,7 @@ exports.actions = function(req, res, ss) {
 						delete _games[req.session.game.instanceName][id];
 						var numActivePlayers = Object.keys(_games[req.session.game.instanceName]).length;
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: numActivePlayers, id: id});
-						if(name === 'Demo U') {
+						if(name === 'Demo' && req.session.email.indexOf('demo') > -1) {
 							user.game.currentLevel = 0;
 							user.game.position.x = 64;
 							user.game.position.y = 77;
