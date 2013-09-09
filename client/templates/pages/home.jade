@@ -1,26 +1,22 @@
-.row
-	.span12.welcome		
+.row.homepage
+	.span7.welcome		
 		h1 Welcome to Civic Seed!
 		h4 Where civic engagement meets social gaming.
-.row
-	.span8
+		p <br> We believe learning becomes even more powerful when you have fun doing it. Civic Seed is an experimental gaming and teaching platform designed to do just that. By playing Civic Seed, you'll learn more about yourself and your peers, Tuft’s host communities, how to build mutually beneficial relationships with them, and the philosophies behind meaningful and effective civic engagement.
+		p Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and <b>build your own Civic Resume as you play!</b>
+		p.ready Are <em>you</em> ready?
+	.span4.offset1.welcome
 		p(style='text-align:center;')
-			img(src='/img/bg/cs.jpg')
-	.span4
-		- if(!sessionStorage.userId)
+			img(src='/img/other/trees.png')
+		if(!sessionStorage.userId)
 			form.form-inline#loginForm(method='post', action='/')
 				input#username.input(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
 				input#password.input(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
 				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
 				p.moreTopMargin: a(href='/remind-me') Forget your password?
-		- else
+		else
 			.well
 				h2: a(href='/profiles/'+sessionStorage.profileLink) Your Profile
-.row
-	.span8.offset2
-		p <br> We believe learning becomes even more powerful when you have fun doing it. Civic Seed is an experimental gaming and teaching platform designed to do just that. By playing Civic Seed, you'll learn more about yourself and your peers, Tuft’s host communities, how to build mutually beneficial relationships with them, and the philosophies behind meaningful and effective civic engagement.
-		p Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and <b>build your own Civic Resume as you play!</b>
-		p Are <em>you</em> ready?
 //- .iconInfo(style='font-size:28px;')
 //- 			p
 //- 				br
