@@ -236,10 +236,11 @@ var $game = module.exports = {
 
 		//player's answers for all the open-ended questions, some others stats
 		var allAnswers = $game.$player.compileAnswers();
-		// var percentString = _stats.percent + '%';
+		var percentString = _stats.percent + '%';
 		var numItems = $game.$player.getResourcesDiscovered();
 
 		//display everthing
+		$('.displayPercent .progress .bar').css('width', percentString);
 		$('.displayMyAnswers').empty().append(allAnswers);
 		$('.displayTime').html('<i class="icon-time icon-large"></i> ' + displayTime);
 		//$('.displayPercent').text(percentString);

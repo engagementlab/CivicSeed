@@ -524,8 +524,8 @@ $game.$botanist = {
 			$inventory.slideUp(function() {
 				$game.$player.inventoryShowing = false;
 				$inventoryBtn.removeClass('hideButton');
+				$('.inventoryPuzzle').show();
 				$('.inventoryHelp').hide();
-				$inventoryPuzzle.show();
 			});
 		}
 	},
@@ -718,7 +718,7 @@ $game.$botanist = {
 			fill = _svgFills[shape.fill];
 
 
-		console.log(npcData, selector, x);
+		//console.log(npcData, selector, x);
 		$('.r' + name)
 			.css('opacity','.4')
 			.attr('draggable', 'false');
