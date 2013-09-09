@@ -79,14 +79,19 @@ var $audio = $game.$audio = {
 			mp3 += _extension;
 			ogg += _extension;
 		} else {
-			mp3 += Math.round(Math.random(1) * 1000000000),
+			mp3 += Math.round(Math.random(1) * 1000000000);
 			ogg += Math.round(Math.random(1) * 1000000000);
+		}
+
+		var autoplay = true;
+		if($game.$player.currentLevel > 3 && $game.bossModeUnlocked) {
+			autoplay = false;
 		}
 
 		_soundtracks[num] = new Howl({
 			urls: [mp3, ogg],
 			autoplay: true,
-			loop: true,
+			loop: autoplay,
 			volume: 0.2,
 			buffer: true
 		});

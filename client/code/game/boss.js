@@ -143,14 +143,14 @@ function _addContent() {
 	var html = '';
 	if(_currentSlide === 0) {
 		//show intro videp
-		html = '<div class="videoFrame"><iframe src="http://player.vimeo.com/video/64315985" width="620" height="350" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
+		html = '<div class="videoFrame"><iframe src="//player.vimeo.com/video/74129371" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 		$bossAreaContent.append(html);
 	} else if(_currentSlide === 1) {
 		//show resumes and responses
 		ss.rpc('game.player.getRandomResumes',{instanceName: $game.$player.instanceName}, function(result) {
 			if(result.length > 0) {
 				_resumes = _chooseResumes(result);
-				html = '<p class="dialog"><span>Botanist:</span> In order to defeat the robot you must have some special seeds.  To get them, provide feedback on a few of your peers\' resume responses.</p>';
+				html = '<p class="dialog"><span>Botanist:</span>  To find the charging modules, you will need to use my SPECIAL SEEDS. But... the seeds aren\'t finished yet. You\'ll need to add the last ingredient. Please read what your fellow players have said and provide feedback. This will help them improve their civic resumes. Review all four to receive your SPECIAL SEEDS!</p>';
 				for(var i = 0; i < _resumes.length; i++) {
 					var levelQuestion = $game.$botanist.getLevelQuestion(i);
 					html += '<p class="resumeQuestion">Q: ' + levelQuestion + '</p>';
@@ -165,8 +165,18 @@ function _addContent() {
 		});
 	} else if(_currentSlide === 2) {
 		//show instructions and begin
-		html = '<p class="dialog"><span>Botanist:</span> Great work.  You earned yourself 7 seeds. But remember, these are special seeds. Dropping one of these is like a color compass that will point you in the direction of the robot\'s charger. More instructions here...</p>';
-		$('.bossArea .bossButton').text('begin');
+		var img1 = CivicSeed.CLOUD_PATH + '/img/game/mini_lab.jpg',
+			img2 = CivicSeed.CLOUD_PATH + '/img/game/charger.png',
+			img3  = CivicSeed.CLOUD_PATH + '/img/game/thing1.png',
+			img4  = CivicSeed.CLOUD_PATH + '/img/game/thing2.png',
+			img5  = CivicSeed.CLOUD_PATH + '/img/game/thing3.png',
+			img6  = CivicSeed.CLOUD_PATH + '/img/game/thing4.png';
+
+		html = '<p class="dialog"><span>Botanist:</span> Thanks! You got 20 special seeds.</p>';
+		html += '<p class="detailedInstructions"><img class="minilab" src="' + img1 + '"> This is the basement of my lab. The CHARGING MODULES <img src="' + img2 + '"> are hidden somwhere here.  To find the charging modules, you\'ll need to use the SPECIAL SEEDS  you earned.  These special seeds can detect and reveal the charging modules. Whenver you plant one, the color bursts will be DARKER the CLOSER it is to a charging module. It will help guide the way!</p>';
+		html += '<p class="detailedInstructions">Once you reveal a charging module, you have to WALK OVER TO IT, and disable it by hand. Find all four to shut down the robot!  You might also find some of my other inventions down here. These can give you more seeds <img src="' + img3 + '"> , or more time <img src="' + img4 + '"> . Watch out for the red potion <img src="' + img5 + '">  which can erase your progress, or the watch <img src="' + img6 + '">  that speeds up the timer. If you run out seeds, or run out of time, you\'ll have to try again.</p>';
+		
+		$('.bossArea .bossButton').text('Ready?');
 		$bossAreaContent.append(html);
 	}  else if(_currentSlide === 3) {
 		//fail screen
@@ -176,12 +186,12 @@ function _addContent() {
 		$bossAreaContent.append(html);
 	}else if(_currentSlide === 4) {
 		//win screen
-		ss.rpc('game.player.unlockProfile', function(err) {
+		ss.rpc('game.player.unlockProfile', $game.$player.id, function(err) {
 			if(err) {
-				console.log(err);
+				console.log('error');
 			} else {
 				html = '<p class="dialog"><span>Botanist:</span> You win, you won, you did it!</p>';
-				html += '<p>Some video here...</p>';
+				html += '<p><iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>';
 				$('.bossArea .bossButton').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
 				$bossAreaContent.append(html);
 			}

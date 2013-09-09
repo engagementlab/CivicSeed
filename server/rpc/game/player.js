@@ -303,10 +303,9 @@ exports.actions = function(req, res, ss) {
 			ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg);
 		},
 
-		unlockProfile: function() {
+		unlockProfile: function(id) {
 			_userModel.findById(id, function (err, user) {
 				if(!err && user) {
-					user.game = info;
 					user.profileUnlocked = true;
 					user.save(function (err,ok) {
 						if(err) {
