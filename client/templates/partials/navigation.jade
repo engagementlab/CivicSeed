@@ -7,6 +7,7 @@
 				span.icon-bar
 			
 			a.brand(href='/') Civic Seed
+				//- img(src='/img/logo.png')
 
 			- if(sessionStorage.userFirstName)
 				.btn-group.pull-right.tempFixMargin
@@ -20,7 +21,7 @@
 						li.signOut: a(href='/signout') Sign Out
 
 
-			#mainNavigation.nav-collapse
+			#mainNavigation.nav-collapse.pull-right
 				- if(locals && locals.fullPath)
 					style
 						#mainNavigation a[href='#{locals.fullPath}'] {
@@ -28,9 +29,10 @@
 						}
 				ul.nav
 					li: a(href='/') Home
-					li: a(href='/about') About
-					li: a(href='/profiles') Profiles
-					li: a(href='/contact') Contact Us
+					li: a(href='/about') About 
+					li: a(href='/profiles') Profiles 
+					li: a(href='/contact', style='border:none;') Contact Us
 
 					- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
 						li: a(href='/admin') Admin Console
+	.zag

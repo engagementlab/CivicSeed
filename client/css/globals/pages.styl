@@ -13,7 +13,7 @@
 			color white
 			font-size 1.5em
 .homepage
-	margin-top 20px
+	margin-top 80px
 	.welcome
 		h1
 			font-size 3em
@@ -31,13 +31,16 @@
 			font-size 1.2em
 			text-align justify
 			color $csGray
-			.ready
-				text-align center
+		.span3
+			p
+				margin-bottom 0
+				padding-bottom 0
 	#loginForm
 		input 
 			margin 10px 0
 			width 100%
-
+.welcome p.ready
+	text-align center
 body
 	padding-top 80px
 	font-family $bodyFont
@@ -76,9 +79,30 @@ a:hover
 			margin 12px 0
 .tempFixMargin
 	margin-right 50px
+
+.navbar-inner
+	background white
+	box-shadow none
+	// border-bottom 2px dashed $csOrange
+
+.navbar .nav > li > a
+	line-height 1
+	color $csGray
+	border-right 1px solid $csGray
+
 .navPadding
 	padding 10px
+
 .navPadding a.brand
-	color $csGreen
-	font-size 1.8em
-	line-height .8em
+	font-family $cursiveFont
+	color $csGray
+	font-size 3em
+	padding-bottom 0
+	padding-left 40px
+.zag
+	position fixed
+	width 100%
+	height 10px
+	background $cloudUrl('img/other/zig.png')
+#mainNavigation
+	margin-top 8px
