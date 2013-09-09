@@ -56,7 +56,7 @@ $game.$npc = {
 	//get render info for all npcs to draw them
 	getRenderInfo: function() {
 		var all = [];
-		if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+		if((!$game.bossModeUnlocked && $game.$player.currentLevel > 3) || $game.$player.currentLevel < 3) {
 			$.each(_allNpcs, function(key, npc) {
 				var temp = npc.getRenderInfo();
 				if(temp) {

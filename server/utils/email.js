@@ -6,7 +6,7 @@ var rootDir = process.cwd(),
 	accountPassword = config.get('ACCOUNT_PW'),
 	smtpTransport,
 	mailOptions = {
-		from: accountName + ' ✔ <' + accountEmail + '>',
+		from: accountName + ' <' + accountEmail + '>',
 		replyTo: accountEmail,
 		to: '',
 		subject: '',
