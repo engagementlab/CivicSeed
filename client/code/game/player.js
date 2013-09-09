@@ -1363,7 +1363,7 @@ function _addToInventory(data) {
 		.bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
 }
 
-//game over!
+//game over (deprecated)
 function _gameOver() {
 	//if demo mode just send to boss level
 	if($game.$player.firstName === 'Demo') {

@@ -176,10 +176,16 @@ function _addContent() {
 		$bossAreaContent.append(html);
 	}else if(_currentSlide === 4) {
 		//win screen
-		html = '<p class="dialog"><span>Botanist:</span> You win, you won, you did it!</p>';
-		html += '<p>Some video here...</p>';
-		$('.bossArea .bossButton').text('Unlock Profile');
-		$bossAreaContent.append(html);
+		ss.rpc('game.player.unlockProfile', function(err) {
+			if(err) {
+				console.log(err);
+			} else {
+				html = '<p class="dialog"><span>Botanist:</span> You win, you won, you did it!</p>';
+				html += '<p>Some video here...</p>';
+				$('.bossArea .bossButton').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
+				$bossAreaContent.append(html);
+			}
+		});
 	}
  }
 
