@@ -81,7 +81,7 @@ exports.actions = function(req, res, ss) {
 									profileUnlocked: false,
 									game: {
 										instanceName: 'demo',
-										currentLevel: 0,
+										currentLevel: 4,
 										position: {
 											x: 64,
 											y: 77,
@@ -101,7 +101,7 @@ exports.actions = function(req, res, ss) {
 										},
 										botanistState: 0,
 										firstTime: true,
-										resume: [],
+										resume: ['My mother is an emergency room doctor in Worcester, MA. When I was younger, I sometimes spent a day with her at work when I was home sick from school, or on half days when her schedule didn\'t allow her to watch me at home. I saw people from all different walks of life. They had immediate problems (why else would they be in the ER?) but I also saw many who did not have insurance because they could not afford it. In comparison, I have been very fortunate, and I want to give something back to the community.','I\'ve done work at the Jewish Community Center, putting together care packages and delivering them, but I haven\'t had much "field experience" yet. That\'s something that I\'d like to improve on.','My main interest is in health and wellness, so I\'d like to work with people in that capacity. Signing up for insurance and learning about health care is difficult and time consuming, especially when communication barriers and education are a factor. I think I would be a great asset to under-served communities with poor access to health services.','I have been thinking about a career in medicine. I think engaging with people one-on-one will help give me important skills that I\'ll use later on.'],
 										seenRobot: false,
 										playingTime: 0,
 										tilesColored: 0,
