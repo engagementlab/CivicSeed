@@ -143,7 +143,7 @@ function _addContent() {
 	var html = '';
 	if(_currentSlide === 0) {
 		//show intro videp
-		html = '<div class="videoFrame"><iframe src="//player.vimeo.com/video/74129371" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
+		html = '<div class="videoFrame"><iframe src="//player.vimeo.com/video/74144898" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
 		$bossAreaContent.append(html);
 	} else if(_currentSlide === 1) {
 		//show resumes and responses
