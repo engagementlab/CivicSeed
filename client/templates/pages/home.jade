@@ -6,7 +6,7 @@
 		p Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and build your own Civic Resume as you play!
 	.span3.offset2.welcome
 		p(style='text-align:center; margin-bottom:0;')
-			img(src='/img/other/trees.png')
+			img(src='#{CivicSeed.CLOUD_PATH}/img/other/trees.png')
 		if(!sessionStorage.userId)
 			form.form-inline#loginForm(method='post', action='/')
 				input#username.input(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')

@@ -7,7 +7,7 @@
 	canvas#minimapPlayer(width='142px', height='132px')
 	.loading
 		p
-			img(src='/img/game/loader.gif')
+			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
 		p loading
 	.resourceArea
 		a(href='#', style='font-size: 24px;')
@@ -51,10 +51,10 @@
 		h2 Progress
 		div.personalInfo
 			.levelImages
-				img(src='/img/game/rank/0.png').currentLevelImage
-				img(src='/img/game/rank/1.png')
-				img(src='/img/game/rank/2.png')
-				img(src='/img/game/rank/3.png')
+				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').currentLevelImage
+				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')
+				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
+				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
 			p.currentLevel novice gardener
 			p.resourcesCollected resources collected:
 			p.numCollected 12/40
@@ -195,5 +195,5 @@
 		p
 			button.unPause.btn.btn-success(type='button') Resume Game
 	div.waitingForSeed
-		img(src='/img/game/spinloader.gif')
+		img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
 	.beamMeUp
