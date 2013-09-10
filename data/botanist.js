@@ -14,28 +14,28 @@ module.exports.global = {
 			prompts: ['There are two ways to get more seeds. As you explore Calliope, the people you meet will pose challenges and reward you with seeds. They’ll also give you bits of research that I’ve tasked them with creating. This research will help create the next generation of seed... the paintbrush seed! Here, look at this page from my note book.', 'I think you have enough pieces to make the paintbrush seed. Want to try?'],
 			response: 'That\'s right! Great work! Now you’re ready to move to level 2. I’ve given you some Paintbrush Seeds so you can color the world as you see fit. Now, when you enter seed-planting mode, you will have the ability to enter Paintbrush Mode.'
 		},
-		hint: ['You must go to the northwest and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back into Brightwood Forest, in the northwest section of the world, and talk to some more people.']
+		hint: ['You must go to the northwest and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back into Brightwood Forest, in the northwest section of the world, and talk to some more people.']
 	}, {
-		instructions: ['To answer the second section of the enigma, journey to the town of Calliope, located in the northeast section of the world.','Level 2, Expanding Outward, is about exploring the concepts of community partnerships and specifics about Tufts host communities.','Now that you understand the importance of looking inward, it is important to learn about the basics of community engagement and discover as much as possible about the communities in which you will serve and learn.'],
+		instructions: ['To find research for the second recipe, journey to the town of Calliope, located in the northeast section of the world.','Level 2, Expanding Outward, is about exploring the concepts of community partnerships and specifics about Tufts host communities.','Now that you understand the importance of looking inward, it is important to learn about the basics of community engagement and discover as much as possible about the communities in which you will serve and learn.'],
 		riddle: {
-			prompts: ['Here, take a look at the next part of the enigma', 'It looks like you have enough pieces to solve the enigma, ready to try?'],
-			response: 'Great work! Now you’re ready to move to level 3. Your Mega Seeds are now even more powerful!'
+			prompts: ['Here, take a look at the next seed recipe from my notebook', 'I think you have enough pieces to make the paintbrush seeds! Want to try?'],
+			response: 'Great work! Now you’re ready to move to level 3.'
 		},
-		hint: ['You must go to the northeast and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have the right pieces to solve the enigma! Go back into the town of Calliope, in the northeast section of the world, and talk to some more people.']
+		hint: ['You must go to the northeast and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back into the town of Calliope, in the northeast section of the world, and talk to some more people.']
 	}, {
-		instructions: ['To answer the third section of the enigma, journey to the Ranch, located in the southeast section of the world.','Working Together, is about feflecting on intercultural, social, and socio-economic identities, along with developing practical skills and common goals.','Working together successfully is dependent on building mutual trust and understanding, developing mutually beneficial goals, and having the skills needed for project implementation.'],
+		instructions: ['To find research for the third recipe, journey to the Ranch, located in the southeast section of the world.','Working Together, is about feflecting on intercultural, social, and socio-economic identities, along with developing practical skills and common goals.','Working together successfully is dependent on building mutual trust and understanding, developing mutually beneficial goals, and having the skills needed for project implementation.'],
 		riddle: {
-			prompts: ['Here, take a look at the next part of the enigma', 'It looks like you have enough pieces to solve the enigma, ready to try?'],
-			response: 'Great work! Now you’re ready to move to level 4. Your Mega Seeds have become more powerful than ever.'
+			prompts: ['Here, take a look at the next seed recipe from my notebook', 'I think you have enough pieces to make the paintbrush seeds! Want to try?'],
+			response: 'Great work! Now you’re ready to move to level 4.'
 		},
-		hint: ['You must go to the southeast and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have the right pieces to solve the enigma! Go back to the Ranch, in the southeast section of the world, and talk to some more people.']
+		hint: ['You must go to the southeast and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back to the Ranch, in the southeast section of the world, and talk to some more people.']
 	}, {
-		instructions: ['To answer the fourth section of the enigma, journey to the Port District, located in the southwest section of the world.','Level 4,  Looking Forward, is about building upon your experience, evaluating it, sustaining it, and connecting with others.','Even though you have not yet begun, it is useful to think about how you will build upon your community engagement experience to be an even more effective active citizen and create lasting positive change.'],
+		instructions: ['To find research for the second recipe, journey to the Port District, located in the southwest section of the world.','Level 4,  Looking Forward, is about building upon your experience, evaluating it, sustaining it, and connecting with others.','Even though you have not yet begun, it is useful to think about how you will build upon your community engagement experience to be an even more effective active citizen and create lasting positive change.'],
 		riddle: {
-			prompts: ['Here, take a look at the next part of the enigma', 'It looks like you have enough pieces to solve the enigma, ready to try?'],
-			response: 'You did it! You solved the final piece of the enigma!'
+			prompts: ['Here, take a look at the next seed recipe from my notebook', 'I think you have enough pieces to make the paintbrush seeds! Want to try?'],
+			response: 'You did it! You completed the last seed recipe!'
 		},
-		hint: ['You must go to the southwest and talk to some people to collect the puzzle pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have the right pieces to solve the enigma! Go back to the Port District, in the southwest section of the world, and talk to some more people.']
+		hint: ['You must go to the southwest and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back to the Port District, in the southwest section of the world, and talk to some more people.']
 	}, {
 		instructions: ['Ah the color has not yet been restored to the world. You can use your remaining seeds to help it out.', 'I will contact you when the color has returned to the world.'],
 		riddle: {
