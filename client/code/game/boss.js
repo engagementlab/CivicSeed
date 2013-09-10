@@ -180,9 +180,8 @@ function _addContent() {
 		$bossAreaContent.append(html);
 	}  else if(_currentSlide === 3) {
 		//fail screen
-		html = '<p class="dialog"><span>Botanist:</span> You failed quite miserably!</p>';
-		html += '<p>You should try again.</p>';
-		$('.bossArea .bossButton').text('Play Again');
+		html = '<p class="dialog"><span>Botanist:</span> You failed to defeat the robot. Why don\'t you try again?</p>';
+		$('.bossArea .bossButton').text('Play Again').css('margin-top', '50px');
 		$bossAreaContent.append(html);
 	}else if(_currentSlide === 4) {
 		//win screen
@@ -329,7 +328,7 @@ function _beginGame() {
     $('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
     //trigger boss music!
-    $game.$audio.switchTrack(7);
+    $game.$audio.switchTrack(7,true);
 }
 
 //tick the clock

@@ -90,8 +90,8 @@ var $audio = $game.$audio = {
 
 		_soundtracks[num] = new Howl({
 			urls: [mp3, ogg],
-			autoplay: true,
-			loop: autoplay,
+			autoplay: autoplay,
+			loop: true,
 			volume: 0.2,
 			buffer: true
 		});
@@ -338,12 +338,14 @@ var $audio = $game.$audio = {
 		}
 	},
 
-	switchTrack: function(swap) {
+	switchTrack: function(swap, same) {
 		_midTransition = true;
 		_prevTrack = _currentTrack;
-		_soundtracks[_currentTrack].fadeOut(0, 1000, function() {
-			_soundtracks[_prevTrack].pause();
-		});
+		if(!same) {
+			_soundtracks[_currentTrack].fadeOut(0, 1000, function() {
+				_soundtracks[_prevTrack].pause();
+			});
+		}
 		_currentTrack = swap;
 
 		var val = $audio.isMute ? 0.0 : 0.2;
