@@ -62,6 +62,10 @@ exports.actions = function(req, res, ss) {
 											npc.resource.possibleAnswers = info.resource.possibleAnswers;
 										}
 									}
+									//depends
+									if(info.dependsOn.length > 0) {
+										npc.dependsOn = info.dependsOn;
+									}
 								} else {
 									//smalltalk
 									npc.dialog.smalltalk = info.dialog.smalltalk;

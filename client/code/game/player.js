@@ -768,7 +768,7 @@ $game.$player = {
 		//add piece to inventory
 		if($game.$player.currentLevel === npcLevel) {
 				_inventory.push({name: shapeName, npc: resource.index, tagline: tagline});
-				_addToInventory({name: shapeName, npc: resource.indexpc, tagline: tagline});
+				_addToInventory({name: shapeName, npc: resource.index, tagline: tagline});
 		}
 		//hack to not include demo users
 		var newAnswer = {

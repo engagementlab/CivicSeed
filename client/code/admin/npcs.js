@@ -169,9 +169,9 @@ var self = module.exports = {
 					question: null,
 					possibleAnswers: [],
 					feedbackRight: null,
-					feedbackWrong: null,
-					dependsOn: []
+					feedbackWrong: null
 				},
+				dependsOn: [],
 				dialog: {
 					prompts: [],
 					smalltalk: []
@@ -218,7 +218,7 @@ var self = module.exports = {
 			} else if(area === 'requiredLength') {
 				updates.resource.requiredlength = parseInt(val, 10);
 			} else if(area === 'dependsOn') {
-				updates.resource.dependsOn.push(parseInt(val, 10));
+				updates.dependsOn.push(parseInt(val, 10));
 			} else if(area === 'feedbackRight') {
 				updates.resource.feedbackRight = val;
 			} else if(area === 'feedbackWrong') {

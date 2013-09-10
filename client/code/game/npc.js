@@ -70,6 +70,7 @@ $game.$npc = {
 	//get a specific name of npc
 	getName: function(index) {
 		var stringId = String(index);
+		console.log(_allNpcs,index,stringId);
 		return _allNpcs[stringId].name;
 	},
 
