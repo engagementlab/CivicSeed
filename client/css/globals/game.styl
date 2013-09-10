@@ -188,7 +188,6 @@ body, button, p, a
 		margin 0 0 0 25px
 		padding 10px
 		// border 3px solid $csLightOrange
-		border-radius 10px
 		color white
 		.levelImages img
 			margin 7px
@@ -569,7 +568,7 @@ body, button, p, a
 	background rgba(20,20,20,0.8)
 	z-index 5
 	right 0px
-	border-radius 3px
+	$borderRadius(0)
 
 .hud
 	margin-top 20px
@@ -592,8 +591,8 @@ body, button, p, a
 		line-height 36px
 		margin-right 10px
 		margin-left 10px
-		background #ccc
-		// background rgba(0,0,0,.2)
+		background #222
+		color #dedede
 		$borderRadius(0)
 		position relative
 		text-align center
@@ -645,6 +644,7 @@ body, button, p, a
 
 #chatButton
 	margin-left 10px
+	background #333
 
 .riddleText
 	position absolute
@@ -692,8 +692,8 @@ p.finalQuestion
 		float right
 		line-height 36px
 		text-align center
-		background #ccc
-		// background rgba(0,0,0,.2)
+		background #222
+		color #dedede
 		$borderRadius(0)
 	div:hover
 		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
@@ -707,6 +707,7 @@ p.finalQuestion
 	color #333
 	padding 3px
 	line-height 1.2em
+	$borderRadius(0)
 
 .activePlayers > p
 	right 10px
@@ -860,7 +861,8 @@ div.currentButton
 	position absolute
 	top 20px
 	left 20px
-	background #eee
+	// background #eee
+	background #333
 	border 3px solid $csGray
 	$borderRadius(0)
 	width 820px
@@ -876,6 +878,9 @@ div.currentButton
 		margin 10px 10px 10px 20px
 		padding 0
 		font-family $buttonFont
+		line-height 1.4
+		font-size 1.1em
+		color #eee
 	ul li
 		margin 0 20px
 		font-size .9em
