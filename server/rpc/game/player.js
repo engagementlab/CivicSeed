@@ -47,7 +47,7 @@ exports.actions = function(req, res, ss) {
 					_games[req.session.game.instanceName][playerInfo.id] = playerInfo;
 					var numActivePlayers = Object.keys(_games[playerInfo.game.instanceName]).length;
 					
-					console.log('initializing ', playerInfo.name, 'players: ', numActivePlayers);
+					console.log('initializing ', playerInfo.firstName, 'players: ', numActivePlayers);
 
 					res(playerInfo);
 					

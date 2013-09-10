@@ -88,7 +88,7 @@ var $events = module.exports = {
 		//some one pledged a seed to someone's answer
 		ss.event.on('ss-seedPledged', function(data, chan) {
 			if($game.$player.id === data.id) {
-				$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have a seed.',input:'status',screen: true,log:true});
+				$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have some seeds.',input:'status',screen: true,log:true});
 				$game.$player.updateSeeds('regular', 1);
 				$game.$player.updateResource(data);
 			}
