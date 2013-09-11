@@ -18,6 +18,7 @@ $game.$npc = {
 		//load all the npc info from the DB store it in an array
 		//where the index is the id of the npc / mapIndex
 		ss.rpc('game.npc.getNpcs', function(response) {
+			console.log(response);
 			//iterate through repsonses, create a key
 			//with the id and value is the object
 			_allNpcs = {};
@@ -247,7 +248,7 @@ $game.$npc = {
 
 	//find out if an npc is available or not
 	npcLocked: function() {
-		if(_curNpc.dependsOn.length > 0) {
+		if(_curNpc.dependsOn.length > 0 && _curNpc.dependsOn[0]) {
 			for(var d = 0; d < _curNpc.dependsOn.length; d++) {
 				var id = _curNpc.dependsOn[d];
 				var playerHasIt = $game.$player.checkForResource(id);
