@@ -103,12 +103,20 @@ var $game = module.exports = {
 
 	},
 
+	reInit: function() {
+
+		// Russ's playground
+
+	},
+
 	enterGame: function(callback) {
 		//check if they are ACTUALLY playing
 		ss.rpc('shared.account.checkGameSession', function(response) {
 			// YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
 			if(!$game.instantiated) {
 				$game.init();
+			} else {
+				$game.reInit();
 			}
 			if(response.status) {
 				sessionStorage.setItem('isPlaying', true);
