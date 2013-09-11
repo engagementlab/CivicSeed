@@ -439,6 +439,7 @@ $game.$player = {
 			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
 				var msg = 'You collected all the pieces, to the botanist!';
 				$game.statusUpdate({message: msg, input:'status', screen: true , log:false});
+				$game.inTransit = true;
 				setTimeout(function() {
 					$game.$player.beamMeUpScotty();
 				},3000);
@@ -793,12 +794,11 @@ $game.$player = {
 		$game.masterY = startY;
 
 		//update npcs, other players?
-		$game.inTransit = true;
 		$game.$map.setBoundaries();
 		$game.$map.firstStart(function() {
 			$game.$renderer.renderAllTiles();
-			$game.inTransit = false;
 			setTimeout(function() {
+				$game.inTransit = false;
 				$('.beamMeUp').fadeOut();
 				$game.$player.displayNpcComments();
 			}, 1000);

@@ -102,7 +102,7 @@ var $audio = $game.$audio = {
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
 
-		var autoplay = $audio.isMute;
+		var autoplay = true;
 		if($game.$player.currentLevel > 3 && $game.bossModeUnlocked) {
 			autoplay = false;
 		}

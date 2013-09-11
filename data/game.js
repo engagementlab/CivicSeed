@@ -6,7 +6,7 @@ module.exports.global = [{
 	active: true,
 	bossModeUnlocked: false,
 	leaderboard: [],
-	resourceCount: [10, 14, 9, 10],
+	resourceCount: [10, 12, 9, 10],
 	instanceName: 'awesome',
 	resourceResponses: []
 }, {
@@ -17,7 +17,7 @@ module.exports.global = [{
 	active: true,
 	bossModeUnlocked: true,
 	leaderboard: [],
-	resourceCount: [10, 14, 9, 10],
+	resourceCount: [10, 12, 9, 10],
 	instanceName: 'demo',
 	resourceResponses: []
 }];

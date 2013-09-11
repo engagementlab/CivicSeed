@@ -554,7 +554,7 @@ function _addAnsweredContent() {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
 			$game.$resources.waitingForTagline = true;
-			var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type ="text" value="" maxLength = "60"></input></p><p class="privacyMessage taglineInput">Write words. Remember things.</p>',
+			var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type ="text" value="" maxLength = "60"></input></p><p class="privacyMessage taglineInput">Name this resource to remember it.</p>',
 				npcLevel = $game.$npc.getNpcLevel(),
 				html;
 			if(npcLevel < $game.$player.currentLevel) {
