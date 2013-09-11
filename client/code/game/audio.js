@@ -357,18 +357,17 @@ var $audio = $game.$audio = {
 		}
 	},
 
-	switchTrack: function(swap, same) {
+	switchTrack: function(swap) {
 		_midTransition = true;
 		_prevTrack = _currentTrack;
-		if(!same) {
-			_soundtracks[_currentTrack].fadeOut(0, 1000, function() {
+		_currentTrack = swap;
+		if(_prevTrack !== _currentTrack) {
+			_soundtracks[_prevTrack].fadeOut(0, 1000, function() {
 				_soundtracks[_prevTrack].pause();
 			});
-			_currentTrack = swap;
-
 			var val = $audio.isMute ? 0.0 : 0.2;
-			// var val = 0;
-			_soundtracks[swap].fadeIn(val, 3000, function(swap) {
+
+			_soundtracks[_currentTrack].fadeIn(val, 3000, function(swap) {
 				_midTransition = false;
 			});
 		}

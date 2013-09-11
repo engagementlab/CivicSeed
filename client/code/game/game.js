@@ -104,7 +104,6 @@ var $game = module.exports = {
 	},
 
 	reInit: function() {
-		console.log('reinit');
 		$game.resetInit();
 		$game.$map.resetInit();
 		$game.$renderer.resetInit();

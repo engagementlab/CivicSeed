@@ -216,8 +216,8 @@ function _addContent() {
 			if(err) {
 				console.log('error');
 			} else {
-				html = '<p class="dialog"><span>Botanist:</span> You win, you won, you did it!</p>';
-				html += '<p><iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>';
+				html = '<p class="dialog"><span>Botanist:</span> Congratulations, you defeated the robot!</p>';
+				html += '<p class="hoorayVideo"><iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>';
 				$('.bossArea .bossButton').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
 				$bossAreaContent.append(html);
 			}
@@ -355,7 +355,7 @@ function _beginGame() {
     $('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
     //trigger boss music!
-    $game.$audio.switchTrack(7,true);
+    $game.$audio.switchTrack(7);
 }
 
 //tick the clock
