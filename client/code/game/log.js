@@ -16,6 +16,13 @@ $game.$log = {
 		callback();
 	},
 
+	resetInit: function() {
+		_unread = null;
+		_maxItems = 50;
+		_numItems = 0;
+		$game.$log.ready = false;
+	},
+
 	//add message to game log
 	addMessage: function(data) {
 		//update unread messages icon number

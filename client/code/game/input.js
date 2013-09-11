@@ -9,7 +9,7 @@ var $chatText,
 	_logShowing,
 	_pledgeFeedbackTimeout;
 
-var $input = module.exports = {
+var $input = $game.$input = module.exports = {
 
 	registerVariables: function() {
 		$chatText = $('#chatText');
@@ -113,7 +113,7 @@ var $input = module.exports = {
 					y: e.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 				$game.$mouse.updateMouse(mInfo,true);
 			}
@@ -396,12 +396,19 @@ var $input = module.exports = {
 		//decide if we should or should not let buttons be clicked based on state
 		var startNewAction = function() {
 			//check all the game states (if windows are open ,in transit, etc.) to begin a new action
+			console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
 			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing){
 				return true;
 			}
 			return false;
 		};
 
+	},
+
+	resetInit: function() {
+		_helpShowing = null;
+		_logShowing = null;
+		_pledgeFeedbackTimeout = null;
 	}
 
 };

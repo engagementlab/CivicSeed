@@ -30,6 +30,21 @@ $game.$npc = {
 		});
 	},
 
+	resetInit: function() {
+
+		_loaded = false;
+		_allNpcs = {};
+		_curNpc = null;
+		_speak = null;
+		_who = null;
+		_resourceOnDeck = null;
+
+		$game.$npc.ready= false;
+		$game.$npc.hideTimer= null;
+		$game.$npc.isResource= false;
+		$game.$npc.isChat= false;
+	},
+
 	//add an npc to the list
 	addNpc: function(npc) {
 		var newbie = $game.$npc.createNpc(npc);
@@ -70,7 +85,6 @@ $game.$npc = {
 	//get a specific name of npc
 	getName: function(index) {
 		var stringId = String(index);
-		console.log(_allNpcs,index,stringId);
 		return _allNpcs[stringId].name;
 	},
 

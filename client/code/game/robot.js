@@ -56,6 +56,20 @@ $game.$robot = {
 		}
 	},
 
+	resetInit: function() {
+		_info = null;
+		_renderInfo = null;
+		_onScreen = false;
+		_triggered = false;
+
+		$game.$robot.ready= false;
+		$game.$robot.active= false;
+		$game.$robot.currentStep= 0;
+		$game.$robot.counter= Math.floor(Math.random() * 64);
+		$game.$robot.curFrame= 0;
+		$game.$robot.isMoving= false;
+	},
+
 	setPosition: function() {
 		_info = _positions[$game.$player.currentLevel];
 		_info.offX = 0;

@@ -53,6 +53,33 @@ $game.$boss = {
 		callback();
 	},
 
+	resetInit: function() {
+		_currentSlide = null;
+		_resumes = null;
+		_charger = {};
+		_grid = null;
+		_currentCharger = null;
+		_numDrawSeeds = null;
+		_numRegularSeeds = null;
+		_seedMode = 0;
+		_rgbString = null;
+
+		//clock stuff
+		_start = null;
+		_time = null;
+		_elapsed = null;
+		_target = null;
+		_pause = null;
+		_totalTime = null;
+		_clockRate = null;
+		_clockTimeout = null;
+		
+		_cutSceneVids = [];
+		_score = null;
+
+		$game.$boss.isShowing= false;
+	},
+
 	//advance to the resumes
 	nextSlide: function() {
 		if(_currentSlide === 4) {

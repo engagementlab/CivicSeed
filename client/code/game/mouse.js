@@ -7,6 +7,17 @@ var _prevX = 0,
 
 $game.$mouse = {
 	drawMode: false,
+
+	resetInit: function() {
+		_prevX = 0;
+		_prevY = 0;
+		_curX = 0;
+		_curY = 0;
+		_changed = false;
+		_index = 0;
+
+		$game.$mouse.drawMode = false;
+	},
 	//returns local x,y grid data based on mouse location
 	updateMouse: function(mouseInfo, clicked) {
 

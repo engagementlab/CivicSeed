@@ -54,9 +54,9 @@ $game.$botanist = {
 
 	init: function(callback) {
 		ss.rpc('game.npc.loadBotanist', function(botanist) {
-			$game.$botanist.index = botanist.id,
-			$game.$botanist.dialog = botanist.dialog,
-			$game.$botanist.name = botanist.name,
+			$game.$botanist.index = botanist.id;
+			$game.$botanist.dialog = botanist.dialog;
+			$game.$botanist.name = botanist.name;
 			$game.$botanist.tangram = botanist.tangram;
 
 			_info = {
@@ -81,6 +81,55 @@ $game.$botanist = {
 			$game.$botanist.ready = true;
 			callback();
 		});
+	},
+
+	resetInit: function() {
+		_info = null;
+		_renderInfo = null;
+		_onScreen = false;
+		_messages = null;
+		_currentMessage = 0;
+		_currentSlide = 0;
+		_promptNum = 0;
+		_transferData = {};
+		_svg = null;
+		_drag = null;
+		_new = null;
+		_counter = 0;
+		_dragOffX = 0;
+		_dragOffY = 0;
+		_feedbackTimeout = null;
+		_firstTime = false;
+
+		$speakerName = null;
+		$message = null;
+		$speechBubble = null;
+		$speechBubbleP = null;
+		$speechBubbleBtn = null;
+		$speechBubbleNextBtn = null;
+		$speechBubbleCloseBtn = null;
+		$puzzleSvg = null;
+		$botanistArea = null;
+		$feedback = null;
+		$inventoryItem = null;
+		$tangramArea = null;
+		$botanistTextArea = null;
+		$inventory = null;
+		$inventoryBtn = null;
+		$inventoryPuzzle = null;
+		$botanistContent = null;
+		$botanistAreaMessage = null;
+
+		$game.$botanist.index= 0;
+		$game.$botanist.counter= Math.floor(Math.random() * 64);
+		$game.$botanist.curFrame= 0;
+		$game.$botanist.dialog= null;
+		$game.$botanist.tangram= null;
+		$game.$botanist.name= null;
+		$game.$botanist.isChat= false;
+		$game.$botanist.isShowing= false;
+		$game.$botanist.isSolving= false;
+		$game.$botanist.ready= false;
 	},
 
 	clear: function() {

@@ -70,6 +70,39 @@ var $renderer = $game.$renderer = {
 		checkDone();
 	},
 
+	resetInit: function() {
+		_tilesheets = [];
+		_currentTilesheet = null;
+		_allImages = [];
+		_playerImages = [];
+		_tilesheetWidth = 0;
+		_tilesheetHeight = 0;
+
+		_tilesheetCanvas = null;
+		_tilesheetContext = null;
+
+		_offscreen_backgroundCanvas= null;
+		_offscreen_backgroundContext = null;
+
+		_offscreenCharacterCanvas = [];
+		_offscreenCharacterContext = [];
+
+		_backgroundContext= null;
+		_foregroundContext= null;
+		_charactersContext= null;
+
+		_minimapPlayerContext = null;
+		_minimapTileContext = null;
+		_prevMouseX = 0;
+		_prevMouseY = 0;
+		_hasNpc = false;
+		_wasNpc = false;
+		_playerColorNum = 0;
+		_playerLevelNum = 0;
+
+		$game.$renderer.ready = false;
+	},
+
 	// this loads the specified tilesheet
 	loadTilesheet: function(num, now) {
 		_currentTilesheet = new Image();

@@ -66,6 +66,44 @@ $game.$resources = {
 		});
 	},
 
+	resetInit: function() {
+		_resources = [];
+		_currentSlide = 0;
+		_numSlides = 0;
+		_speak = null;
+		_answered = false;
+		_who = null;
+		_correctAnswer = false;
+		_curResource = null;
+		_revisiting = false;
+		_inventory = false;
+
+		$resourceStage = null;
+		$speechBubble = null;
+		$inventory = null;
+		$resourceArea = null;
+		$speechButton = null;
+		$resourceButton = null;
+		$speakerName = null;
+		$resourceMessage = null;
+		$resourceContent = null;
+		$resourceContentBody = null;
+		$nextButton = null;
+		$closeButton = null;
+		$backButton = null;
+		$answerButton = null;
+
+		_numSeedsToAdd = 0;
+		_questionType = null;
+		_feedbackRight = null;
+		_publicAnswers = null;
+		_preloadedPieceImage = null;
+
+		$game.$resources.isShowing= false;
+		$game.$resources.ready= false;
+		$game.$resources.waitingForTagline= false;
+	},
+
 	//called when player clicks on resource from inventory to simulate clicking the NPC
 	beginResource: function(npc, answers) {
 		var nombre = $game.$npc.getName(npc);

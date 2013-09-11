@@ -15,6 +15,11 @@ $game.$others = {
 		});
 	},
 
+	resetInit: function() {
+		_onScreenPlayers = {};
+		$game.$others.ready = false;
+	},
+
 	add: function(player) {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself

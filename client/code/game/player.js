@@ -132,6 +132,72 @@ $game.$player = {
 		});
 	},
 
+	resetInit: function() {
+		_curFrame = 0;
+		_currentStepIncX = 0;
+		_currentStepIncY = 0;
+		_direction = 0;
+		_willTravel = null;
+		_idleCounter = 0;
+		_getMaster = true;
+
+		_info = null;
+		_renderInfo = null;
+
+		$seedHudCount = null;
+		$regularHudCount = null;
+		$drawHudCount = null;
+		$specialHudCount = null;
+		_previousSeedsDropped = null;
+
+		$waiting = null;
+		$gameboard = null;
+		$inventoryBtn = null;
+		$inventory = null;
+		$graffiti = null;
+		$graffitiNum = null;
+		_startTime = null;
+
+		_seeds = null;
+		_totalSeeds = null;
+		_resources = null;
+		_position = null;
+		_rgb = null;
+		_rgbString = null;
+		_playerColorNum = null;
+		_inventory = null;
+		_colorMap = null;
+		_resume = null;
+		_playingTime = null;
+		_tilesColored = null;
+		_pledges = null;
+		_resourcesDiscovered = null;
+		_test = false;
+
+		_drawSeeds = null;
+
+		$game.$player.name= null;
+		$game.$player.id= null;
+		$game.$player.game= null;
+		$game.$player.instanceName= null;
+		$game.$player.currentLevel= null;
+		$game.$player.botanistState= null;
+		$game.$player.firstTime= null;
+		$game.$player.seenRobot= null;
+		$game.$player.seriesOfMoves= null;
+		$game.$player.currentMove= 0;
+		$game.$player.currentStep= 0;
+		$game.$player.isMoving= false;
+		$game.$player.inventoryShowing= false;
+		$game.$player.seedventoryShowing= false;
+		$game.$player.seedPlanting= false;
+		$game.$player.npcOnDeck= false;
+		$game.$player.ready= false;
+		$game.$player.seedMode= false;
+		$game.$player.awaitingBomb= false;
+		$game.$player.pathfinding= false;
+	},
+
 	//calculate movements and what to render for every game tick
 	update: function(){
 		if($game.$player.isMoving) {
@@ -157,6 +223,7 @@ $game.$player = {
 
 	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
+		_test = true;
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc.x === x && loc.y === y) {
 			return;
@@ -818,6 +885,21 @@ $game.$player = {
 						$game.$resources.beginResource(npc, true);
 					});
 				}
+
+				//mouseneter functions
+				$('#' + npcId).bind('mouseenter', function() {
+					var numComments = $(this).text(),
+						msg;
+					if(isNaN(numComments)) {
+						msg = 'You answered this question correctly';
+					} else {
+						msg = 'There are no public answers, click to make yours public';
+						if(numComments > 0) {
+							msg = 'Click to view ' + numComments + ' public answers';
+						}						
+					}
+					$game.statusUpdate({message:msg,input: 'status', screen: true, log:false});
+				});
 			}
 		}
 	},

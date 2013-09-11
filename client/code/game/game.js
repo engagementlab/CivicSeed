@@ -22,7 +22,7 @@ var _stepNumber = 0,
 	_levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
 	_displayTimeout = null,
 	$map,
-	$render,
+	$game_render,
 	$npc,
 	$resources,
 	$player,
@@ -104,9 +104,41 @@ var $game = module.exports = {
 	},
 
 	reInit: function() {
+		console.log('reinit');
+		$game.resetInit();
+		$game.$map.resetInit();
+		$game.$renderer.resetInit();
+		$game.$npc.resetInit();
+		$game.$resources.resetInit();
+		$game.$player.resetInit();
+		$game.$others.resetInit();
+		$game.$robot.resetInit();
+		$game.$botanist.resetInit();
+		$game.$mouse.resetInit();
+		$game.$audio.resetInit();
+		$game.$input.resetInit();
+		$game.$chat.resetInit();
+		$game.$log.resetInit();
+		$game.$boss.resetInit();
+	},
 
-		// Russ's playground
-
+	resetInit: function() {
+		_lastTime = 0;
+		_stepNumber = 0;
+		_stats = null;
+		_displayTimeout = null;
+	
+		$game.currentTiles = [];
+		$game.inTransit = false;
+		$game.running = false;
+		$game.ready = false;
+		$game.showingProgress  = false;
+		$game.resourceCount = [];
+		$game.graph = null;
+		$game.masterX = null;
+		$game.masterY = null;
+		$game.bossModeUnlocked = null;
+		$game.startNewAction = true;
 	},
 
 	enterGame: function(callback) {
@@ -331,6 +363,7 @@ var $game = module.exports = {
 		if(!$game.bossModeUnlocked) {
 			$game.$player.saveTimeToDB();
 		}
+		$game.$map.removePlayer($game.$player.id);
 		ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.firstName, function() {
 			if(typeof callback === 'function') {
 				callback();

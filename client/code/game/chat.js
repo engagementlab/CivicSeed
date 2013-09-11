@@ -5,10 +5,17 @@ var _isChatting = false,
 
 $game.$chat = {
 	init: function(callback) {
-		_chatId = 'player'+ $game.$player.id,
+		_chatId = 'player'+ $game.$player.id;
 		_chatIdSelector = '#' + _chatId;
 		$gameboard = $('.gameboard');
 		callback();
+	},
+
+	resetInit: function() {
+		_isChatting = false;
+		_hideTimer = null;
+		_chatId = null;
+		_chatIdSelector = null;
 	},
 
 	message: function(message, other) {

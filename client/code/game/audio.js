@@ -71,6 +71,25 @@ var $audio = $game.$audio = {
 		checkDone();
 	},
 
+	resetInit: function() {
+		_soundtracks = [];
+		_triggerFx = null;
+		_environmentLoopFx = null;
+		_environmentOnceFx = null;
+		_currentTrack = -1;
+		_prevTrack = -1;
+		_tweenTimeout = null;
+		_newPlace = 'welcome...';
+		_targetV = 0;
+		_midTransition = false;
+		_extension = null;
+		_currentLoop = null;
+		_currentPos = null;
+
+		$game.$audio.ready= false;
+		$game.$audio.isMuted= false;
+	},
+
 	loadTrack: function(num) {
 		var mp3 = _musicPath + num + '.mp3?VERSION=',
 			ogg = _musicPath + num + '.ogg?VERSION=';
@@ -83,7 +102,7 @@ var $audio = $game.$audio = {
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
 
-		var autoplay = true;
+		var autoplay = $audio.isMute;
 		if($game.$player.currentLevel > 3 && $game.bossModeUnlocked) {
 			autoplay = false;
 		}
@@ -345,14 +364,14 @@ var $audio = $game.$audio = {
 			_soundtracks[_currentTrack].fadeOut(0, 1000, function() {
 				_soundtracks[_prevTrack].pause();
 			});
-		}
-		_currentTrack = swap;
+			_currentTrack = swap;
 
-		var val = $audio.isMute ? 0.0 : 0.2;
-		// var val = 0;
-		_soundtracks[swap].fadeIn(val, 3000, function(swap) {
-			_midTransition = false;
-		});
+			var val = $audio.isMute ? 0.0 : 0.2;
+			// var val = 0;
+			_soundtracks[swap].fadeIn(val, 3000, function(swap) {
+				_midTransition = false;
+			});
+		}
 	},
 
 	whichTrack: function(posX, posY) {
