@@ -31,7 +31,12 @@ var _currentSlide,
 	_videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/',
 	_numVideos = 4,
 	_cutSceneVids = [],
-	_score;
+	_score,
+	_bossScore,
+
+	_hackTimeout,
+	_canPlace;
+
 
 $game.$boss = {
 	isShowing: false,
@@ -76,6 +81,7 @@ $game.$boss = {
 		
 		_cutSceneVids = [];
 		_score = null;
+		_bossScore = null;
 
 		$game.$boss.isShowing= false;
 	},
@@ -91,7 +97,6 @@ $game.$boss = {
 				// _saveFeedback();
 				$('.bossHud').show();
 			} else if(_currentSlide > 2) {
-				_numSeeds = 7;
 				$bossArea.fadeOut('fast',function() {
 					$game.$boss.isShowing = false;
 					_beginGame();
@@ -275,16 +280,22 @@ function _saveFeedback() {
 
 //randomly place the charger
 function _placeCharger() {
-	var x = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
-		y = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT);
-	_charger.x = x;
-	_charger.y = y;
-	_charger.revealed = false;
-	_currentCharger++;
-	_calculateGrid();
-	//set the grid item with the charger, take items off it if has em
-	_grid[x][y].charger = 0;
-	_grid[x][y].item = -1;
+	if(_canPlace) {
+		_canPlace = false;
+		_hackTimeout = setTimeout(function() {
+			_canPlace = true;	
+		},200);
+		var x = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
+			y = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT);
+		_charger.x = x;
+		_charger.y = y;
+		_charger.revealed = false;
+		_currentCharger++;
+		_calculateGrid();
+		//set the grid item with the charger, take items off it if has em
+		_grid[x][y].charger = 0;
+		_grid[x][y].item = -1;
+	}
 }
 
 //init the basic grid
@@ -340,17 +351,20 @@ function _beginGame() {
 	$game.$renderer.clearBossLevel();
 	//set score from tiles colored
 	_score = $game.$player.getTilesColored();
+	_bossScore = 0;
 	$score.text(_score);
 	_start = new Date().getTime();
     _time = 0;
     _elapsed = '0.0';
     _pause = false;
     _totalTime = 0;
-    _target = 90;
+    _target = 40;
     _clockRate = 1;
     _numRegularSeeds = 20;
     _currentCharger = 0;
+    _charger = {};
     _seedMode = 0;
+    _canPlace = true;
     _placeCharger();
     $('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
@@ -386,6 +400,7 @@ function _checkFail() {
 function _checkWin() {
 	//add X to score
 	_score += 50;
+	_bossScore += 50;
 	$score.text(_score);
 
 	_hideItems();
@@ -397,13 +412,14 @@ function _checkWin() {
 	$('.cutScene')[0].play();
 	_clockRate = 0;
 	$('.cutScene')[0].addEventListener('ended', function() {
+		$('.cutScene')[0].removeEventListener('ended');
 		$('.cutSceneBg').fadeOut('fast', function() {
 			var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
 			$game.statusUpdate({message:left,input:'status',screen: true,log:false});
 			_clockRate = 1;
 			$('.cutSceneBg').remove();
 		});
-		if(_currentCharger === 4) {
+		if(_currentCharger >= 4 && _bossScore === 200) {
 			_pause = true;
 			_currentSlide = 4;
 			_addContent();
