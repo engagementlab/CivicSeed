@@ -406,7 +406,7 @@ function _checkWin() {
 	_hideItems();
 	var newCutScene = '<div class="cutSceneBg"></div>';
 	$('.gameboard').append(newCutScene);
-	var newVid = _cutSceneVids[_currentCharger - 1]
+	var newVid = _cutSceneVids[_currentCharger - 1];
 	$('.cutSceneBg').append(newVid);
 	$('.cutSceneBg').fadeIn('fast');
 	$('.cutScene')[0].play();
