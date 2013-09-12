@@ -41,7 +41,7 @@ exports.actions = function(req, res, ss) {
 			userModel
 				.where('game.instanceName').equals(instance)
 				.where('role').equals('actor')
-				.select('firstName lastName id profileUnlocked game.resourcesDiscovered game.resources game.playingTime')
+				.select('firstName lastName id profileUnlocked game.resourcesDiscovered game.resources game.playingTime activeSessionID')
 				.find(function(err,data) {
 					//console.log(err,data);
 					if(err) {

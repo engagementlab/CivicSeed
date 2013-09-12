@@ -204,7 +204,6 @@ var self = module.exports = {
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
 				val = this.value;
-
 			if(area === 'url') {
 				updates.resource.url = val;
 			} else if(area === 'shape') {
@@ -218,7 +217,9 @@ var self = module.exports = {
 			} else if(area === 'requiredLength') {
 				updates.resource.requiredlength = parseInt(val, 10);
 			} else if(area === 'dependsOn') {
-				updates.dependsOn.push(parseInt(val, 10));
+				if(val.length < 1) {
+					updates.dependsOn[0] = parseInt(val,10);
+				}
 			} else if(area === 'feedbackRight') {
 				updates.resource.feedbackRight = val;
 			} else if(area === 'feedbackWrong') {

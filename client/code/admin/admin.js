@@ -58,7 +58,7 @@ var self = module.exports = {
 						apprise('game name already exists');
 					} else {
 						ss.rpc('admin.invitecodes.sendInvites', emailList, instanceName, function(res) {
-							console.log(res);
+							// console.log(res);
 							button.addClass('btn-success');
 						});
 					}
@@ -184,10 +184,20 @@ var self = module.exports = {
 	showPlayersInfo: function() {
 		var html = '';
 		for(var i = 0; i < self.players.length; i++) {
+			var playingTime = self.players[i].game.playingTime,
+				hours = Math.floor(playingTime / 3600),
+				hoursRemainder = playingTime % 3600,
+				minutes = Math.floor(hoursRemainder / 60),
+				time = hours + 'h ' + minutes + 'm',
+				isPlaying = self.players[i].activeSessionID ? true : false;
+
+			hours = Math.floor(playingTime / 3600),
+			hoursRemainder = playingTime % 3600,
+			minutes = Math.floor(hoursRemainder / 60);
 			html += '<div class="player' + self.players[i]._id + '"><h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
 			html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>';
-			html += '<p>Is playing now: ' + self.players[i].isPlaying + '</p>';
-			html += '<p>Time played: ' + Math.floor(self.players[i].game.playingTime/60) + ' min.</p>';
+			html += '<p>Logged in: ' + isPlaying + '</p>';
+			html += '<p>Time played: ' + time + '</p>';
 			html += '<p>Resources collected: ' + self.players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>';
 			html += '<p>Enter "delete" to remove user permanently: <input class="input' + self.players[i]._id + '"></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger deletePlayer" type="button">Delete User</button></p></div>';
 		}
@@ -223,8 +233,7 @@ var self = module.exports = {
 	getQuestions: function() {
 		ss.rpc('admin.monitor.init', function(err,res) {
 			if(res) {
-				self.allQuestions = res;
-				// console.log(res);
+				self.allQuestions = res.sort(self.sortByLevel);
 			}
 		});
 	},
@@ -233,8 +242,9 @@ var self = module.exports = {
 		var resources = self.players[index].game.resources;
 		var numNPC = self.allQuestions.length;
 		var html = '<h2>' + self.players[index].firstName + ' '+ self.players[index].lastName+'</h2>';
-		for (var npc in resources) {
-			var npcInt = parseInt(npc, 10);
+		for (var i = 0; i < resources.length; i++) {
+			var npc = resources[i],
+				npcInt = npc.index;
 			var n = 0,
 				found = false,
 				open = false;
@@ -253,14 +263,14 @@ var self = module.exports = {
 			}
 			//answer only if open ended
 			if(open) {
-				html += '<div class="answer"><p>A: ' + resources[npc].answers[0] + '</p><div class="extras">';
-				if(resources[npc].madePublic) {
+				html += '<div class="answer"><p>A: ' + npc.answers[0] + '</p><div class="extras">';
+				if(npc.madePublic) {
 					//put unlocked icon
 					html += '<i class="icon-unlock icon-large"></i>';
 				}
-				if(resources[npc].seeded) {
+				if(npc.seeded) {
 					//thumbs up icon with number
-					html += '<i class="icon-thumbs-up icon-large"></i> ' + resources[npc].seeded.length;
+					html += '<i class="icon-thumbs-up icon-large"></i> ' + npc.seeded.length;
 				}
 				html += '</div></div>';
 			}
@@ -294,7 +304,6 @@ var self = module.exports = {
 	},
 
 	showQuestions: function(instance) {
-		console.log(self.allQuestions);
 		var html = '<h2>All Open-Ended Questions</h2>';
 		for(var q = 0; q < self.allQuestions.length; q++) {
 			if(self.allQuestions[q].resource.questionType === 'open') {
@@ -308,10 +317,11 @@ var self = module.exports = {
 
 	getAllAnswers: function(instance) {
 		ss.rpc('admin.monitor.getInstanceAnswers', instance, function(err, res){
-			if(res) {
-				self.allAnswers = res.resourceResponses;
-			} else {
+			if(err) {
 				self.allAnswers = [];
+			} else if(res) {
+				self.allAnswers = res.resourceResponses;
+				console.log(self.allAnswers);
 			}
 		});
 	},
@@ -321,6 +331,7 @@ var self = module.exports = {
 		var html = '',
 			found = false,
 			npcInt = parseInt(npc,10);
+		console.log(npcInt);
 		for(var i = 0; i < self.allAnswers.length; i++) {
 			if(self.allAnswers[i].npc === npcInt) {
 				found = true;
@@ -333,5 +344,15 @@ var self = module.exports = {
 		}
 
 		$(selector).append(html);
-	}
+	},
+
+	sortByLevel: function(a,b) {
+  		if (a.level < b.level) {
+  			return -1;
+  		}
+  		if (a.level > b.level) {
+  			return 1;		
+  		}
+    	return 0;
+    }
 };
