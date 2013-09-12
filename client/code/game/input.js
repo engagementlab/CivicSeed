@@ -86,7 +86,6 @@ var $input = $game.$input = module.exports = {
 			});
 			$BODY.on('mouseup touchend', '.gameboard', function() {
 				$game.$mouse.drawMode = false;
-				$BODY.off('mousedown touchstart', '.gameboard');
 			});
 		});
 

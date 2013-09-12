@@ -277,14 +277,14 @@ $game.$player = {
 
 	//when the player finishes moving or we just need a hard reset for rendering
 	resetRenderValues: function() {
-		_info.prevOffX = 0,
+		_info.prevOffX = 0;
 		_info.prevOffY = 0;
 	},
 
 	//decide what type of seed drop mechanic to do and check if they have seeds
 	dropSeed: function(options) {
 		if(options.x) {
-			options.mX = $game.$map.currentTiles[options.x][options.y].x,
+			options.mX = $game.$map.currentTiles[options.x][options.y].x;
 			options.mY = $game.$map.currentTiles[options.x][options.y].y;	
 		}
 		var mode = options.mode;
@@ -1003,6 +1003,7 @@ $game.$player = {
 			$game.$player.dropSeed({mode: 'draw'});
 			$game.$mouse.drawMode = false;
 			$game.$player.seedMode = false;
+			$BODY.off('mousedown touchstart', '.gameboard');
 			$game.$player.seedPlanting = false;
 			$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 			_saveSeedsToDB();
@@ -1032,6 +1033,11 @@ $game.$player = {
 
 	debug: function() {
 		console.log(_resources);
+	},
+	checkSeedLevel: function() {
+		if(_seed.draw <= 0) {
+			$game.$mouse.drawMode = false;
+		}
 	}
 };
 
@@ -1187,8 +1193,9 @@ function _sendSeedBomb(data) {
 			//play sound clip
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
-						//update seed count in HUD
-			if(data.options.mode === 'regular') {
+			//update seed count in HUD
+			// console.log(data.kind, _seeds.draw);
+			if(data.kind === 'regular') {
 				$game.$player.updateSeeds('regular', -1);
 				//bounce outta seed options.mode
 				if(_seeds.regular === 0) {
@@ -1205,6 +1212,7 @@ function _sendSeedBomb(data) {
 			else {
 				if(_seeds.draw === 0) {
 					$game.$mouse.drawMode = false;
+					$BODY.off('mousedown touchstart', '.gameboard');
 					$game.$player.seedMode = false;
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
@@ -1491,7 +1499,7 @@ function _objectify(input) {
 
 function _resourceExists(npc) {
 	for(var i = 0; i < _inventory.length; i++) {
-		console.log(_inventory[i].npc, npc);
+		// console.log(_inventory[i].npc, npc);
 		if(_inventory[i].npc === npc) {
 			return true;
 		}
