@@ -18,7 +18,7 @@ $game.$npc = {
 		//load all the npc info from the DB store it in an array
 		//where the index is the id of the npc / mapIndex
 		ss.rpc('game.npc.getNpcs', function(response) {
-			console.log(response);
+			// console.log(response);
 			//iterate through repsonses, create a key
 			//with the id and value is the object
 			_allNpcs = {};

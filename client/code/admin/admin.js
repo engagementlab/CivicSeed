@@ -321,7 +321,6 @@ var self = module.exports = {
 				self.allAnswers = [];
 			} else if(res) {
 				self.allAnswers = res.resourceResponses;
-				console.log(self.allAnswers);
 			}
 		});
 	},

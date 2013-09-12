@@ -834,8 +834,10 @@ $game.$player = {
 		}
 		//add piece to inventory
 		if($game.$player.currentLevel === npcLevel) {
+			if(!_resourceExists(resource.index)) {
 				_inventory.push({name: shapeName, npc: resource.index, tagline: tagline});
-				_addToInventory({name: shapeName, npc: resource.index, tagline: tagline});
+				_addToInventory({name: shapeName, npc: resource.index, tagline: tagline});	
+			}
 		}
 		//hack to not include demo users
 		var newAnswer = {
@@ -1485,4 +1487,14 @@ function _objectify(input) {
 	}
 	// console.log('resources', result);
 	return result;
+}
+
+function _resourceExists(npc) {
+	for(var i = 0; i < _inventory.length; i++) {
+		console.log(_inventory[i].npc, npc);
+		if(_inventory[i].npc === npc) {
+			return true;
+		}
+	}
+	return false;
 }
