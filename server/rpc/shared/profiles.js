@@ -32,6 +32,9 @@ exports.actions = function(req, res, ss) {
 						colorMap: user.game.colorMap,
 						email: user.email
 					};
+					if(!profileInfo.colorMap) {
+						profileInfo.colorMap = false;
+					}
 					GameModel
 						.where('instanceName').equals(user.game.instanceName)
 						.findOne(function(err,game) {

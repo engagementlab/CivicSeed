@@ -53,6 +53,8 @@
 				.row.no-print
 					.span12
 						p.saveProfileChanges Save Changes
+							if colorMap
+								img(src='#{colorMap}')
 		else
 			if (firstName === 'Demo')
 				.row.demoProfile

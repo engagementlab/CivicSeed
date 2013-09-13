@@ -88,8 +88,8 @@ $game.$others = {
 		var found = false;
 		$.each(_onScreenPlayers, function(key, player) {
 			if(player.info.x === x && player.info.y === y) {
-					player.showPlayerCard();
-					found = true;
+				player.showPlayerCard();
+				found = true;
 			}
 		});
 
@@ -378,8 +378,10 @@ $game.$others = {
 			},
 
 			showPlayerCard: function() {
-				var msg = 'A ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles. Jealous?';
-				otherPlayer.message(msg);
+				var msg = otherPlayer.name + ' is a ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles';
+				if(!otherPlayer.offScreen) {
+					$game.statusUpdate({message: msg, input:'status', screen: true , log:false});
+				}
 			},
 
 			changeLevel: function(level) {

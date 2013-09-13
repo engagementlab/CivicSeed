@@ -16,9 +16,10 @@ var self = module.exports = {
 					console.log('error!');
 				} else {
 					if(!info.profileSetup && sessionStorage.userEmail === info.email) {
-					//reroute to change info
+						//reroute to change info
 						Davis.location.assign('change-info');
 					} else {
+						console.log(info);
 						$CONTAINER.append(JT['profiles-singleprofile'](info));
 					}	
 				}
