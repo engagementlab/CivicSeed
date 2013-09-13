@@ -909,7 +909,7 @@ $game.$player = {
 	//save the player's current position to the DB
 	saveTimeToDB: function() {
 		var endTime = new Date().getTime() / 1000,
-			totalTime = endTime - _startTime;
+			totalTime = parseInt(endTime - _startTime, 10);
 		_playingTime += totalTime;
 		var info = {
 			id: $game.$player.id,

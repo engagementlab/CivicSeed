@@ -188,12 +188,10 @@ var self = module.exports = {
 				hours = Math.floor(playingTime / 3600),
 				hoursRemainder = playingTime % 3600,
 				minutes = Math.floor(hoursRemainder / 60),
-				time = hours + 'h ' + minutes + 'm',
+				seconds = playingTime % 60,
+				time = hours + 'h ' + minutes + 'm ' + seconds + 's',
 				isPlaying = self.players[i].activeSessionID ? true : false;
 
-			hours = Math.floor(playingTime / 3600),
-			hoursRemainder = playingTime % 3600,
-			minutes = Math.floor(hoursRemainder / 60);
 			html += '<div class="player' + self.players[i]._id + '"><h2>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h2>';
 			html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>';
 			html += '<p>Logged in: ' + isPlaying + '</p>';
