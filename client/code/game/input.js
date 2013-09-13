@@ -143,15 +143,20 @@ var $input = $game.$input = module.exports = {
 
 		//open the game log
 		$BODY.on('click', '.logButton', function () {
-			var goAhead = startNewAction();
-			if(goAhead || _logShowing) {
-				_logShowing = !_logShowing;
-				$('.logButton').toggleClass('currentButton');
-				$gameLog.fadeToggle();
-				$gameLog.scrollTop($gameLog[0].scrollHeight);
-				$game.$log.clearUnread();
-			}
-			return false;
+			var h = $(window).height();
+			$('html, body').stop().animate({
+            	scrollTop: h
+        	}, 250);
+        		$game.$log.clearUnread();
+			// var goAhead = startNewAction();
+			// if(goAhead || _logShowing) {
+			// 	_logShowing = !_logShowing;
+			// 	$('.logButton').toggleClass('currentButton');
+			// 	$gameLog.fadeToggle();
+			// 	$gameLog.scrollTop($gameLog[0].scrollHeight);
+			// 	$game.$log.clearUnread();
+			// }
+			// return false;
 		});
 
 		//show / hide the inventory

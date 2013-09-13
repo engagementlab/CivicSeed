@@ -11,8 +11,8 @@ $game.$log = {
 	init: function(callback) {
 		_setupDomSelectors();
 		$game.$log.clearUnread();
-		$game.statusUpdate({message: 'Welcome to Civic Seed', input: 'status', log: true, screen: false});
 		$game.$log.ready = true;
+		$game.statusUpdate({message: 'Welcome to Civic Seed', input: 'status', log: true, screen: false});
 		callback();
 	},
 
@@ -45,10 +45,11 @@ $game.$log = {
 				html += data.message + '</p>';
 			}
 			if(_numItems > _maxItems) {
-				$('.gameLog p').first().remove();
+				$('.gameLog p').last().remove();
 			}
-			$gameLog.append(html);
-			$gameLog.scrollTop($gameLog[0].scrollHeight);
+			$gameLog.prepend(html);
+			// $gameLog.scrollTop($gameLog[0].scrollHeight);
+			// $gameLog.scrollTop(0);
 		}
 		
 	},
