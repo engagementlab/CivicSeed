@@ -48,7 +48,7 @@ var self = module.exports = {
 						result[r].x = x;
 						result[r].y = y;
 					}
-					console.log(result);
+					// console.log(result);
 					$CONTAINER.append(JT['admin-npcs']({npcs: result}));
 					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
 					$BODY.attr('class', 'npcsPage');

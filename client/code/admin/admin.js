@@ -328,7 +328,7 @@ var self = module.exports = {
 		var html = '',
 			found = false,
 			npcInt = parseInt(npc,10);
-		console.log(npcInt);
+
 		for(var i = 0; i < self.allAnswers.length; i++) {
 			if(self.allAnswers[i].npc === npcInt) {
 				found = true;
