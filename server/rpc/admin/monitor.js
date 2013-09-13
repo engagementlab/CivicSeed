@@ -12,7 +12,7 @@ exports.actions = function(req, res, ss) {
 
 		init: function(id) {
 			service = ss.service;
-			console.log('rpc.admin.initAdmin');
+			console.log('rpc.admin.initAdmin'.rainbow);
 			gameModel = service.useModel('game', 'ss');
 			npcModel = service.useModel('npc', 'ss');
 			chatModel = service.useModel('chat', 'ss');
@@ -28,11 +28,12 @@ exports.actions = function(req, res, ss) {
 		getInstanceNames: function(id) {
 			userModel
 				.findById(id, function(err,data) {
-					//console.log(err,data);
 					if(err) {
-						res(err, false);
-					} else {
+						res('error with db search', false);
+					} else if(data) {
 						res(false, data.admin.instances);
+					} else {
+						res('you must logout / login to do more admin stuff');
 					}
 				});
 		},

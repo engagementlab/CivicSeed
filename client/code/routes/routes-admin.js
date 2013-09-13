@@ -28,9 +28,13 @@ var self = module.exports = {
 
 		$app.get('/admin/monitor', function(req) {
 			ss.rpc('admin.monitor.getInstanceNames', sessionStorage.userId, function(err, info) {
-				$CONTAINER.append(JT['admin-monitor']({instances: info}));
-				$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
-				$BODY.attr('class', 'adminPage');
+				if(err) {
+					apprise(err);
+				} else {
+					$CONTAINER.append(JT['admin-monitor']({instances: info}));
+					$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
+					$BODY.attr('class', 'adminPage');
+				}
 			});
 		});
 
