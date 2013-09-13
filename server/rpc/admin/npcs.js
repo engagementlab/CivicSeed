@@ -52,6 +52,7 @@ exports.actions = function(req, res, ss) {
 									npc.resource.question = info.resource.question;
 									npc.resource.shape = info.resource.shape;
 									npc.dialog.prompts = info.dialog.prompts;
+									npc.dependsOn = info.dependsOn;
 
 									//not open
 									if(info.questionType === 'open') {
@@ -61,10 +62,6 @@ exports.actions = function(req, res, ss) {
 										if(info.resource.questionType === 'multiple') {
 											npc.resource.possibleAnswers = info.resource.possibleAnswers;
 										}
-									}
-									//depends
-									if(info.dependsOn.length > 0) {
-										npc.dependsOn = info.dependsOn;
 									}
 								} else {
 									//smalltalk

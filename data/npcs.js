@@ -149,7 +149,7 @@ module.exports.global = [{
 	level: 0,
 	sprite: 8,
 	isHolding: true,
-	dependsOn: [6265],
+	dependsOn: 6265,
 	dialog: {
 		prompts: ['Oh! Hello! You startled me. I was just thinking about the answer to life, the universe, and everything. But you came to ask for help right? First, can you help me?', 'Hmm...It doesn\'t seem like you took my question seriously. This is important! You want to give me another answer?', 'Maybe the real answer to life, the universe, and everything can be found by working with people rather than with a super computer? If so, you should try talking to the others! Maybe you can help them and find the answer?']
 	},
@@ -933,7 +933,7 @@ module.exports.global = [{
 	level: 3,
 	sprite: 48,
 	isHolding: true,
-	dependsOn: [13696],
+	dependsOn: 13696,
 	dialog: {
 		prompts: ['I thought these things were Raisinets, but they\'re really seeds! Want some? Then answer my question.', '2', 'It\'s peanutbutter jelly time!']
 	},

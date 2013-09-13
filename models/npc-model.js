@@ -11,7 +11,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			smalltalk: [String],
 			prompts: [String]
 		},
-		dependsOn: [Number],
+		dependsOn: Number,
 		resource: {
 			url: String,
 			question: String,

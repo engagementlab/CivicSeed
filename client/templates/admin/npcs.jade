@@ -84,7 +84,7 @@
 									textarea.answer(data-area='answer')
 							p Depends on NPC
 							if (npc.dependsOn)
-								textarea.required(data-area='dependsOn', maxlength='4') #{npc.dependsOn[0]}
+								textarea.required(data-area='dependsOn', maxlength='4') #{npc.dependsOn}
 							else 
 								textarea.required(data-area='dependsOn', maxlength='4')
 							p Feedback Correct

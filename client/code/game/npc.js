@@ -248,14 +248,12 @@ $game.$npc = {
 
 	//find out if an npc is available or not
 	npcLocked: function() {
-		if(_curNpc.dependsOn.length > 0 && _curNpc.dependsOn[0]) {
-			for(var d = 0; d < _curNpc.dependsOn.length; d++) {
-				var id = _curNpc.dependsOn[d];
-				var playerHasIt = $game.$player.checkForResource(id);
-				if(!playerHasIt) {
-					var name = $game.$npc.getName(id);
-					return name;
-				}
+		var id = _curNpc.dependsOn;
+		if(id) {
+			var playerHasIt = $game.$player.checkForResource(id);
+			if(!playerHasIt) {
+				var name = $game.$npc.getName(id);
+				return name;
 			}
 			return false;
 		} else {
