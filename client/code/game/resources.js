@@ -672,24 +672,24 @@ var _shapes = [{
 	}
 },{
 	correct1: {
+		path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+		fill: 'green'
+	},
+	wrong1: {
 		path: 'm0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z',
 		fill: 'orange'
 	},
-	wrong1: {
+	wrong2: {
 		path: 'm0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z',
 		fill: 'lightOrange'
 	},
-	wrong2: {
+	wrong3: {
 		path: 'm0,0l100,-40l100,0l100,40l-300,0z',
 		fill: 'green'
 	},
-	wrong3: {
+	wrong4: {
 		path: 'm0,0l100,0l0,-40l-50,-40l-50,40l0,40z',
 		fill: 'lightGreen'
-	},
-	wrong4: {
-		path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
-		fill: 'green'
 	},
 	wrong5: {
 		path: 'm0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z',
