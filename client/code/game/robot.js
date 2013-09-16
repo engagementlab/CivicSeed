@@ -165,6 +165,7 @@ $game.$robot = {
 		if(dX + dY < 6) {
 			_triggered = true;
 			$game.$audio.playTriggerFx('robot');
+			$game.statusUpdate({message:'You just saw a strange robot!', input:'status', screen: true, log: true});
 			$game.$player.seenRobot = true;
 			$game.$robot.isMoving = true;
 			$game.$robot.currentStep = 0;
