@@ -64,8 +64,7 @@ var $events = module.exports = {
 		});
 
 		ss.event.on('ss-progressChange', function(data, chan) {
-			$game.seedsDropped = data.dropped;
-			$game.updatePercent();
+			$game.updatePercent(data.dropped);
 		});
 
 		ss.event.on('ss-leaderChange', function(data, chan) {
