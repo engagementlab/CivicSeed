@@ -84,21 +84,84 @@ exports.actions = function(req, res, ss) {
 		addNpc: function(info) {
 			npcModel
 				.create(info, function(err,result) {
-					res(err,result);
+					if(err) {
+						res(err);
+					} else if(result) {
+						npcHelpers.addNpcTile(info.index, function(err) {
+							res(err);
+						});
+					}
 				});
 		},
 
 		deleteNpc: function(id) {
 			npcModel
 				.where('id').equals(id)
-				.remove(function(err,result) {
-					res(err,result);
+				.find(function(err,npc) {
+					if(err) {
+						res(err);
+					} else if(npc) {
+						var index = npc[0].index;
+						npcModel
+							.where('id').equals(id)
+							.remove(function(err,result) {
+								if(err) {
+									res(err);
+								} else {
+									npcHelpers.removeNpcTile(index, function(err) {
+										res(err);
+									});
+								}
+							});
+					}
 				});
 		}
 	};
 };
 
 npcHelpers = {
+	addNpcTile: function(index, callback) {
+		console.log(index);
+		tileModel.where('mapIndex').equals(index)
+			.find(function(err,tiles) {
+				if(err) {
+					callback('could not find tile');
+				} else if (tiles) {
+					//console.log(tiles);
+					if(tiles[0].tileState === -1) {
+						tiles[0].tileState = index;
+						tiles[0].save(function(err, saved) {
+							if(err) {
+								callback('could not save tile');
+							} else if(saved) {
+								callback();
+							}
+						});
+					}
+				}
+			});
+	},
+
+	removeNpcTile: function(index, callback) {
+		console.log(index);
+		tileModel.where('mapIndex').equals(index)
+			.find(function(err,tiles) {
+				if(err) {
+					callback('could not find tile');
+				} else if (tiles) {
+					//console.log(tiles);
+					tiles[0].tileState = -1;
+					tiles[0].save(function(err, saved) {
+						if(err) {
+							callback('could not save tile');
+						} else if(saved) {
+							callback();
+						}
+					});
+				}
+			});
+	},
+
 	updateTiles: function(oldIndex, newIndex, callback) {
 		//console.log(oldIndex,newIndex);
 		//update new tile, make sure we can change it
@@ -110,7 +173,7 @@ npcHelpers = {
 				if(err) {
 					callback('could not find new tile');
 				} else if (newTiles) {
-					console.log(newTiles[0]);
+					//console.log(newTiles[0]);
 					if(newTiles[0].tileState === -1) {
 						newTiles[0].tileState = newIndex;
 						newTiles[0].save(function(err, saved) {

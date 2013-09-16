@@ -268,7 +268,7 @@ var self = module.exports = {
 			$(deleteButton).attr('data-id', updates.id);
 			ss.rpc('admin.npcs.addNpc', updates, function(err) {
 				if(err) {
-					console.log(err);
+					apprise(err);
 				} else {
 					var saveButton = npc.find('.saveChanges');
 					$(saveButton).addClass('justSaved');
