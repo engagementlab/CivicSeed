@@ -53,7 +53,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -701,18 +701,24 @@ var $renderer = $game.$renderer = {
 			1,
 			132
 		);
-		_minimapPlayerContext.fillStyle = 'rgb(255,255,255)';
-		_minimapPlayerContext.fillRect(
-			67,
-			68,
-			8,
-			8
+		// _minimapPlayerContext.fillStyle = 'rgb(255,255,255)';
+		// _minimapPlayerContext.fillRect(
+		// 	67,
+		// 	68,
+		// 	8,
+		// 	8
+		// );
+		_minimapPlayerContext.drawImage(
+			_tilesheets[12],
+			0,
+			0,
+			20,
+			16,
+			60,
+			64,
+			20,
+			16
 		);
-		//_minimapPlayerContext.beginPath();
-      	// _minimapPlayerContext.arc(71, 72, 20, 0, 2 * Math.PI, false);
-      	// _minimapPlayerContext.lineWidth = 2;
-      	// _minimapPlayerContext.strokeStyle = 'rgb(220,220,220)';
-      	// _minimapPlayerContext.stroke();
 	},
 
 	//render a specific tile on the mini map

@@ -32,6 +32,7 @@ $game.$log = {
 			var hudText = _unread;
 			if(_unread > 10) {
 				hudText = '10+';
+				$game.statusUpdate({message: 'There are new messages in your game log below', input: 'status', log: false, screen: true});
 			}
 			$hudCount.text(hudText).removeClass('hide');
 			var	date = Date(),

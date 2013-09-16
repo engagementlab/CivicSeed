@@ -112,7 +112,7 @@ var $input = $game.$input = module.exports = {
 					y: e.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 				$game.$mouse.updateMouse(mInfo,true);
 			}
@@ -157,6 +157,10 @@ var $input = $game.$input = module.exports = {
 			// 	$game.$log.clearUnread();
 			// }
 			// return false;
+		});
+
+		$BODY.on('click', '.gameLog', function() {
+			$game.$log.clearUnread();
 		});
 
 		//show / hide the inventory
