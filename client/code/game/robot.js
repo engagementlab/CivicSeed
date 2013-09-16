@@ -164,6 +164,7 @@ $game.$robot = {
 		//if close enough, trigger robot to run!
 		if(dX + dY < 6) {
 			_triggered = true;
+			$game.$audio.playTriggerFx('robot');
 			$game.$player.seenRobot = true;
 			$game.$robot.isMoving = true;
 			$game.$robot.currentStep = 0;

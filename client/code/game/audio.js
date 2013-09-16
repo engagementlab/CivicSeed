@@ -178,7 +178,8 @@ var $audio = $game.$audio = {
 				puzzleRight: [12000, 1200],
 				puzzleWrong: [14000, 700],
 				pieceSelect: [15000, 300],
-				pieceDrop: [16000, 200]
+				pieceDrop: [16000, 200],
+				robot: [17000, 2800]
 			},
 			volume: 0.4,
 			onload: function() {
