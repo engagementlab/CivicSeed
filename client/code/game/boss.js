@@ -197,12 +197,12 @@ function _addContent() {
 		});
 	} else if(_currentSlide === 2) {
 		//show instructions and begin
-		var img1 = CivicSeed.CLOUD_PATH + '/img/game/mini_lab.jpg',
-			img2 = CivicSeed.CLOUD_PATH + '/img/game/charger.png',
-			img3  = CivicSeed.CLOUD_PATH + '/img/game/thing1.png',
-			img4  = CivicSeed.CLOUD_PATH + '/img/game/thing2.png',
-			img5  = CivicSeed.CLOUD_PATH + '/img/game/thing3.png',
-			img6  = CivicSeed.CLOUD_PATH + '/img/game/thing4.png';
+		var img1 = CivicSeed.CLOUD_PATH + '/img/game/boss/mini_lab.jpg',
+			img2 = CivicSeed.CLOUD_PATH + '/img/game/boss/charger.png',
+			img3  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing1.png',
+			img4  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing2.png',
+			img5  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing3.png',
+			img6  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing4.png';
 
 		html = '<p class="dialog"><span>Botanist:</span> Thanks! You got 20 special seeds.</p>';
 		html += '<p class="detailedInstructions"><img class="minilab" src="' + img1 + '"> This is the basement of my lab. The CHARGING MODULES <img src="' + img2 + '"> are hidden somwhere here.  To find the charging modules, you\'ll need to use the SPECIAL SEEDS  you earned.  These special seeds can detect and reveal the charging modules. Whenver you plant one, the color bursts will be DARKER the CLOSER it is to a charging module. It will help guide the way!</p>';
