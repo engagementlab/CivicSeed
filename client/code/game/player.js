@@ -249,6 +249,8 @@ $game.$player = {
 						_willTravel = true;
 						$game.$map.calculateNext(x, y);
 					}
+				} else {
+					$game.statusUpdate({message: 'Edge of the world!', input:'status', screen: true , log:false});
 				}
 				var loc = $game.$map.masterToLocal(_info.x, _info.y),
 					master = {x: x, y: y};
