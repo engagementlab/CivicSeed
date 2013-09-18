@@ -673,14 +673,16 @@ $game.$player = {
 	},
 
 	//change seed count for specific seed
-	updateSeeds: function(kind, quantity) {
+	updateSeeds: function(kind, quantity, skip) {
 		_seeds[kind] += quantity;
 		//save to DB
 		var info = {
 			id: $game.$player.id,
 			seeds: _seeds
 		};
-		ss.rpc('game.player.updateGameInfo', info);
+		if(!skip) {
+			ss.rpc('game.player.updateGameInfo', info);
+		}
 		//update hud
 		_updateTotalSeeds();
 	},
@@ -928,7 +930,7 @@ $game.$player = {
 	//update the running array for current tiles colored to push to DB on end of drawing
 	drawSeed: function(pos) {
 		if(_seeds.draw > 0) {
-			$game.$player.updateSeeds('draw', -1);
+			$game.$player.updateSeeds('draw', -1, true);
 			$graffitiNum.text(_seeds.draw);
 			var drawLocal = false;
 			if($game.$player.seedMode === 'draw') {
@@ -1212,6 +1214,7 @@ function _sendSeedBomb(data) {
 				}
 			}
 			else {
+				$game.$player.updateSeeds('draw', 0);
 				if(_seeds.draw === 0) {
 					$game.$mouse.drawMode = false;
 					$BODY.off('mousedown touchstart', '.gameboard');
