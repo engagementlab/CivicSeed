@@ -53,15 +53,15 @@ module.exports.global = [{
 	school: 'UCLA',
 	password: '',
 	email: 'k',
-	role: 'admin',
+	role: 'actor',
 	gameStarted: true,
 	profilePublic: true,
 	profileLink: '5eprkae4xifqolx6',
 	profileSetup: true,
-	profileUnlocked: true,
+	profileUnlocked: false,
 	game: {
 		instanceName: 'awesome',
-		currentLevel: 0,
+		currentLevel: 1,
 		position: {
 			x: 64,
 			y: 77
@@ -83,7 +83,7 @@ module.exports.global = [{
 			dropped: 0
 		},
 		botanistState: 0,
-		firstTime: true,
+		firstTime: false,
 		resume: ['Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.','Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.','Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.','Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth.'],
 		resumeFeedback: [{resumeIndex: 0, comment: 'hello russell.'}, {resumeIndex: 0, comment: 'roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green'}],
 		seenRobot: false,
@@ -138,9 +138,6 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5
-	},
-	admin: {
-		instances: ['tufts-remote','tufts-local']
 	}
 }, {
 	activeSessionID: null,
@@ -153,11 +150,11 @@ module.exports.global = [{
 	gameStarted: true,
 	profilePublic: true,
 	profileLink: 'dysbaphy3e0icnmi',
-	profileSetup: false,
+	profileSetup: true,
 	profileUnlocked: false,
 	game: {
 		instanceName: 'awesome',
-		currentLevel: 1,
+		currentLevel: 0,
 		position: {
 			x: 64,
 			y: 77
@@ -219,12 +216,12 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			regular: 99,
-			draw: 99,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
-		botanistState: 2,
-		firstTime: false,
+		botanistState: 0,
+		firstTime: true,
 		resume: ['i am larry'],
 		resumeFeedback: [],
 		seenRobot: false,
