@@ -19,7 +19,7 @@ var self = module.exports = {
 						//reroute to change info
 						Davis.location.assign('change-info');
 					} else {
-						console.log(info);
+						// console.log(info);
 						$CONTAINER.append(JT['profiles-singleprofile'](info));
 					}	
 				}

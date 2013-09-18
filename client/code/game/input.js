@@ -280,9 +280,9 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//toggle minimap
-		$BODY.on('click', '.activePlayers', function () {
-			$('#minimapPlayer').toggleClass('hide');
-		});
+		// $BODY.on('click', '.activePlayers', function () {
+		// 	$('#minimapPlayer').toggleClass('hide');
+		// });
 
 		//open or close progress area
 		$BODY.on('click', '.progressButton', function () {
