@@ -55,12 +55,17 @@ var $events = module.exports = {
 		ss.event.on('ss-newMessage', function(data, chan) {
 			//put in log for everyone
 			data.input = 'chat';
-			$game.$log.addMessage(data);
+			if($game.$player.firstName === data.name) {
+				$game.$chat.message(data);	
+			} else {
+				$game.$others.message(data);
+			}
+			
 		});
 
 		ss.event.on('ss-statusUpdate', function(data, chan) {
 			// $game.temporaryStatus(data);
-			console.log('TODO lol');
+			// console.log('TODO lol');
 		});
 
 		ss.event.on('ss-progressChange', function(data, chan) {

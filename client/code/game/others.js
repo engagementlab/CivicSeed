@@ -67,10 +67,10 @@ $game.$others = {
 		});
 	},
 
-	message: function(message, id) {
+	message: function(data) {
 		$.each(_onScreenPlayers, function(key, player) {
-			if(player.id === id) {
-				player.message(message);
+			if(player.id === data.id) {
+				player.message(data);
 			}
 		});
 	},
@@ -348,19 +348,24 @@ $game.$others = {
 				}
 			},
 
-			message: function(message) {
+			message: function(data) {
 				if(!otherPlayer.offScreen) {
 					var position = {x: otherPlayer.renderInfo.curX, y: otherPlayer.renderInfo.curY};
-					var info = {
-						name: otherPlayer.name,
-						isChatting: otherPlayer.isChatting,
-						chatId: otherPlayer.chatId,
-						chatIdSelector: otherPlayer.chatIdSelector,
-						position: position
-					};
+					// var info = {
+					// 	name: otherPlayer.name,
+					// 	isChatting: otherPlayer.isChatting,
+					// 	chatId: otherPlayer.chatId,
+					// 	chatIdSelector: otherPlayer.chatIdSelector,
+					// 	position: position
+					// };
+					data.isChatting = otherPlayer.isChatting;
+					data.chatId = otherPlayer.chatId;
+					data.chatIdSelector = otherPlayer.chatIdSelector;
+					data.position = position;
+
 					clearTimeout(otherPlayer.hideTimer);
 					otherPlayer.isChatting = true;
-					var fadeTime = $game.$chat.message(message, info);
+					var fadeTime = $game.$chat.message(data);
 					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat, fadeTime);
 				}
 			},

@@ -18,36 +18,44 @@ $game.$chat = {
 		_chatIdSelector = null;
 	},
 
-	message: function(message, other) {
-		// var len = message.length + 4,
-		// 	fadeTime = len * 150 + 1000,
-		// 	sz = Math.floor(len * 8) + 10;
-		// fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
-		// //this was the client's message
-		// if(!other) {
-		// 	if(_isChatting) {
-		// 		clearTimeout(_hideTimer);
-		// 		$(_chatIdSelector).text('me: '+ message);
-		// 	}
-		// 	else {
-		// 		$gameboard.append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
-		// 	}
-		// 	_hideTimer = setTimeout($game.$chat.hideChat, fadeTime);
-		// 	_placeChat(sz);
-		// 	_isChatting = true;
-		// } else {
-		// 	len = message.length + other.name.length + 2;
-		// 	sz = Math.floor(len * 8) + 10;
-		// 	if(other.isChatting) {
-		// 		$(other.chatIdSelector).text(other.name+': '+message);
-		// 	}
-		// 	else {
-		// 		$('.gameboard').append('<p class=\'playerChat\' id=' + other.chatId + '>' + other.name +': '+ message + '</p>');
-		// 	}
-		// 	$game.$audio.playTriggerFx('chatReceive');
-		// 	_placeChat(sz, other);
-		// 	return fadeTime;
-		// }
+	message: function(data) {
+		var message = data.message,
+			other = false;
+
+		if(data.name !== $game.$player.firstName) {
+			other = data;
+		}
+
+		var len = message.length + 4,
+			fadeTime = len * 150 + 1000,
+			sz = Math.floor(len * 8) + 10;
+		fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
+		//this was the client's message
+		if(!other) {
+			if(_isChatting) {
+				clearTimeout(_hideTimer);
+				$(_chatIdSelector).text('me: '+ message);
+			}
+			else {
+				$gameboard.append('<p class=\'playerChat\' id=' + _chatId + '>me: ' + message + '</p>');
+			}
+			_hideTimer = setTimeout($game.$chat.hideChat, fadeTime);
+			_placeChat(sz);
+			_isChatting = true;
+		} else {
+			len = message.length + other.name.length + 2;
+			sz = Math.floor(len * 8) + 10;
+			if(other.isChatting) {
+				$(other.chatIdSelector).text(other.name+': '+message);
+			}
+			else {
+				$('.gameboard').append('<p class=\'playerChat\' id=' + other.chatId + '>' + other.name +': '+ message + '</p>');
+			}
+			$game.$audio.playTriggerFx('chatReceive');
+			_placeChat(sz, other);
+			return fadeTime;
+		}
+		$game.$log.addMessage(data);
 	},
 
 	hideChat: function(other) {
@@ -81,7 +89,6 @@ function _placeChat(sz, other) {
 		}
 	}
 	else {
-
 		if(half > position.x) {
 			placeX = position.x - half + (half - position.x) + 10;
 		}
@@ -91,13 +98,13 @@ function _placeChat(sz, other) {
 	}
 	if(other) {
 		$(other.chatIdSelector).css({
-			'top': position.y - 72,
+			'top': position.y - 68,
 			'left': placeX,
 			'width': sz
 		});
 	} else {
 		$(_chatIdSelector).css({
-			'top': position.y - 72,
+			'top': position.y - 68,
 			'left': placeX,
 			'width': sz
 		});
