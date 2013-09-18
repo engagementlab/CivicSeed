@@ -156,7 +156,8 @@ $game.$others = {
 				curY: player.y,
 				prevX: player.x,
 				prevY: player.y,
-				kind: 'player'
+				kind: 'player',
+				firstName: player.firstName
 			},
 
 			update: function() {

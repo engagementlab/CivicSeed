@@ -46,7 +46,7 @@ var _curFrame = 0,
 
 $game.$player = {
 
-	name: null,
+	firstName: null,
 	id: null,
 	game: null,
 	instanceName: null,
@@ -113,7 +113,8 @@ $game.$player = {
 				prevX: _info.x * $game.TILE_SIZE,
 				prevY: _info.y * $game.TILE_SIZE,
 				kind: 'player',
-				level: $game.$player.currentLevel
+				level: $game.$player.currentLevel,
+				firstName: $game.$player.firstName
 			};
 
 			// setup DOM selectors
@@ -176,7 +177,7 @@ $game.$player = {
 
 		_drawSeeds = null;
 
-		$game.$player.name= null;
+		$game.$player.firsName = null;
 		$game.$player.id= null;
 		$game.$player.game= null;
 		$game.$player.instanceName= null;

@@ -45,6 +45,12 @@ var $renderer = $game.$renderer = {
 		_foregroundContext = document.getElementById('foreground').getContext('2d');
 		_charactersContext = document.getElementById('characters').getContext('2d');
 
+		_charactersContext.shadowColor = '#000';
+	 	_charactersContext.fillStyle = '#fff';
+		_charactersContext.textAlign = 'center';
+		_charactersContext.textBaseline = 'bottom';
+		_charactersContext.font = '12pt Inconsolata, monospace';
+
 		_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 		_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
 
@@ -508,6 +514,12 @@ var $renderer = $game.$renderer = {
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
 		);
+		_charactersContext.save();
+		_charactersContext.shadowBlur = 3;
+		_charactersContext.shadowOffsetX = 0;
+		_charactersContext.shadowOffsetY = 0;
+		_charactersContext.fillText(info.firstName,info.curX + $game.TILE_SIZE / 2, info.curY - 32);
+		_charactersContext.restore();
 	},
 
 	//draw an npc to canvas
