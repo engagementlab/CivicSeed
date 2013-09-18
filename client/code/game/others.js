@@ -367,6 +367,8 @@ $game.$others = {
 					otherPlayer.isChatting = true;
 					var fadeTime = $game.$chat.message(data);
 					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat, fadeTime);
+				} else {
+					$game.$log.addMessage(data);
 				}
 			},
 

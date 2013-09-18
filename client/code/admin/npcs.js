@@ -53,7 +53,7 @@ var self = module.exports = {
 				npc = $(parents[parents.length-1]),
 				sprite = npc.attr('data-sprite'),
 				bg = $(parents[1]);
-			if(sprite < 51) {
+			if(sprite < 53) {
 				sprite++;
 				var locY = sprite * -64,
 					pos = '0 ' + locY + 'px';
