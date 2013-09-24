@@ -668,7 +668,7 @@ $game.$botanist = {
 			else if(nudge) {
 				correct= false;
 				_paintbrushSeedFactor -=1;
-				message = 'So close! You have the right pieces, just fix the placement.';
+				message = 'So close! You had the right pieces, just fix the placement.';
 			}
 
 			if(correct) {
@@ -698,6 +698,10 @@ $game.$botanist = {
 			}
 			else {
 				//display modal on current screen with feedback
+				allTangrams.remove();
+				$('.inventoryItem').not('.inventoryPuzzle')
+					.css('opacity', 1)
+					.attr('draggable', 'true');
 				$game.$botanist.feedback(message);
 			}
 
