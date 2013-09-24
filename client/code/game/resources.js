@@ -27,7 +27,7 @@ var _resources = [],
 	_numSeedsToAdd = 0,
 	_questionType = null,
 	_feedbackRight = null,
-	_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
+	//_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 	_publicAnswers = null,
 	_preloadedPieceImage = null;
 
@@ -380,8 +380,9 @@ $game.$resources = {
 				return false;
 			} else {
 				_correctAnswer = true;
-				var ran = Math.floor(Math.random() * 3);
-				_feedbackRight = _rightOpenRandom[ran];
+				if(_feedbackRight.length < 1) {
+					_feedbackRight = 'Thanks for sharing.';
+				}
 			}
 		}
 		else {
