@@ -358,7 +358,7 @@ function _beginGame() {
     _elapsed = '0.0';
     _pause = false;
     _totalTime = 0;
-    _target = 40;
+    _target = 90;
     _clockRate = 1;
     _numRegularSeeds = 20;
     _currentCharger = 0;
