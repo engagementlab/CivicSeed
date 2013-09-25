@@ -51,3 +51,48 @@ exports.saveDocuments = function(model, documents, count, callback) {
 		}
 	});
 };
+
+exports.resetDefaultData = function(model, callback) {
+	var collectionName = model.collection.collection.collectionName;
+	if(collectionName === 'users') {
+		model.remove({'game.instanceName': 'demo'}, function(err) {
+			if(err) {
+				callback(err);
+			} else {
+				model.remove({'game.instanceName': 'test'}, function(err) {
+					if(err) {
+						callback(err);
+					} else {
+						model.remove({'game.instanceName': 'boss'}, function(err) {
+							if(err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					}
+				});
+			}
+		});
+	} else if(collectionName === 'game' || collectionName === 'colors' || collectionName === 'chat') {
+		model.remove({instanceName: 'demo'}, function(err) {
+			if(err) {
+				callback(err);
+			} else {
+				model.remove({instanceName: 'test'}, function(err) {
+					if(err) {
+						callback(err);
+					} else {
+						model.remove({instanceName: 'boss'}, function(err) {
+							if(err) {
+								callback(err);
+							} else {
+								callback();
+							}
+						});
+					}
+				});
+			}
+		});
+	}
+};
