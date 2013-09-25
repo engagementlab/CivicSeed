@@ -530,12 +530,12 @@ colorHelpers = {
 				//add tile count to our progress
 				var result = results[0],
 					oldCount = result.seedsDropped,
-					newCount = oldCount + newInfo.numBombs;
+					newCount = oldCount + newInfo.numBombs,
+					bossModeUnlocked = result.bossModeUnlocked,
 					seedsDroppedGoal = result.seedsDroppedGoal;
 				
 				//update leadeboard
 				var oldBoard = result.leaderboard,
-					gState = result.state,
 					ob = oldBoard.length,
 					found = false,
 					updateBoard = false,
@@ -577,7 +577,7 @@ colorHelpers = {
 				}
 
 				//check if the world is fully colored
-				if(newCount >= seedsDroppedGoal && instanceName !== 'demo') {
+				if(newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
 					//change the game state
 					result.set('bossModeUnlocked', true);
 					console.log('game over!');

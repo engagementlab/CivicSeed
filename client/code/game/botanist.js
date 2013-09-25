@@ -698,10 +698,7 @@ $game.$botanist = {
 			}
 			else {
 				//display modal on current screen with feedback
-				allTangrams.remove();
-				$('.inventoryItem').not('.inventoryPuzzle')
-					.css('opacity', 1)
-					.attr('draggable', 'true');
+				$game.$botanist.clearBoard();
 				$game.$botanist.feedback(message);
 			}
 
