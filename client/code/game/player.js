@@ -527,6 +527,7 @@ $game.$player = {
 		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
 		if($game.$player.currentLevel < 4) {
 			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
+			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});
 			$game.$robot.setPosition();
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();

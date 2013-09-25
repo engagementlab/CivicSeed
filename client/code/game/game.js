@@ -340,7 +340,7 @@ var $game = module.exports = {
 		//if we have gone up a milestone, feedback it
 		if(_stats.percent > 99 && !$game.bossModeUnlocked) {
 			//do something for game over?
-				$game.statusUpdate({message:'The meter is filled! The color has been restored.',input:'status',screen: true,log:true});
+				$game.statusUpdate({message:'The meter is full! The color has been restored.',input:'status',screen: true,log:true});
 		}
 		if(_stats.prevPercent != _stats.percent) {
 			_stats.prevPercent = _stats.percent;
@@ -371,6 +371,7 @@ var $game = module.exports = {
 	},
 
 	toBossLevel: function() {
+		$game.$audio.pauseTrack();
 		$game.$renderer.clearMap();
 		$game.$player.setPositionInfo();
 		$game.$botanist.disable();

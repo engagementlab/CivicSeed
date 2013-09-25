@@ -705,9 +705,8 @@ $game.$botanist = {
 		}
 		else {
 			_paintbrushSeedFactor = 5;
-			var portAnswer = $botanistTextArea.val();
+			var portAnswer = $('.botanistContent textarea').val();
 			$game.$player.resumeAnswer(portAnswer);
-			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});
 			$game.$player.nextLevel();
 			$game.$botanist.hideResource();
 			//upload the user's answer to the DB

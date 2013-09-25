@@ -358,6 +358,10 @@ var $audio = $game.$audio = {
 		}
 	},
 
+	pauseTrack: function() {
+		_soundtracks[_currentTrack].pause();
+	},
+
 	switchTrack: function(swap) {
 		_midTransition = true;
 		_prevTrack = _currentTrack;
