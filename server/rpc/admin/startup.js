@@ -11,7 +11,8 @@ var rootDir = process.cwd(),
 	colorModel = service.useModel('color', 'preload'),
 	npcModel = service.useModel('npc', 'preload'),
 	botanistModel = service.useModel('botanist', 'preload'),
-	gameModel = service.useModel('game', 'preload');
+	gameModel = service.useModel('game', 'preload'),
+	chatModel = service.useModel('chat', 'preload');
 
 var _copyData;
 
@@ -54,10 +55,19 @@ exports.actions = function(req, res, ss) {
 								hashUserData(++i);
 							});
 						} else {
-							dbActions.dropCollection('users', function() {
-								dbActions.saveDocuments(userModel, userDataCopy, function() {
-									hashDemoData(0);
-								});
+							// dbActions.dropCollection('users', function() {
+							// 	dbActions.saveDocuments(userModel, userDataCopy, function() {
+							// 		hashDemoData(0);
+							// 	});
+							// });
+							dbActions.resetDefaultData(userModel, function(err) {
+								if(err) {
+									apprise(err);
+								} else {
+									dbActions.saveDocuments(userModel, userDataCopy, function() {
+										hashDemoData(0);
+									});
+								}
 							});
 						}
 					};
@@ -81,7 +91,7 @@ exports.actions = function(req, res, ss) {
 									profileUnlocked: false,
 									game: {
 										instanceName: 'demo',
-										currentLevel: 4,
+										currentLevel: 0,
 										position: {
 											x: 64,
 											y: 77,
@@ -101,7 +111,8 @@ exports.actions = function(req, res, ss) {
 										},
 										botanistState: 0,
 										firstTime: true,
-										resume: ['My mother is an emergency room doctor in Worcester, MA. When I was younger, I sometimes spent a day with her at work when I was home sick from school, or on half days when her schedule didn\'t allow her to watch me at home. I saw people from all different walks of life. They had immediate problems (why else would they be in the ER?) but I also saw many who did not have insurance because they could not afford it. In comparison, I have been very fortunate, and I want to give something back to the community.','I\'ve done work at the Jewish Community Center, putting together care packages and delivering them, but I haven\'t had much "field experience" yet. That\'s something that I\'d like to improve on.','My main interest is in health and wellness, so I\'d like to work with people in that capacity. Signing up for insurance and learning about health care is difficult and time consuming, especially when communication barriers and education are a factor. I think I would be a great asset to under-served communities with poor access to health services.','I have been thinking about a career in medicine. I think engaging with people one-on-one will help give me important skills that I\'ll use later on.'],
+										// resume: ['My mother is an emergency room doctor in Worcester, MA. When I was younger, I sometimes spent a day with her at work when I was home sick from school, or on half days when her schedule didn\'t allow her to watch me at home. I saw people from all different walks of life. They had immediate problems (why else would they be in the ER?) but I also saw many who did not have insurance because they could not afford it. In comparison, I have been very fortunate, and I want to give something back to the community.','I\'ve done work at the Jewish Community Center, putting together care packages and delivering them, but I haven\'t had much "field experience" yet. That\'s something that I\'d like to improve on.','My main interest is in health and wellness, so I\'d like to work with people in that capacity. Signing up for insurance and learning about health care is difficult and time consuming, especially when communication barriers and education are a factor. I think I would be a great asset to under-served communities with poor access to health services.','I have been thinking about a career in medicine. I think engaging with people one-on-one will help give me important skills that I\'ll use later on.'],
+										resume: [],
 										seenRobot: false,
 										playingTime: 0,
 										tilesColored: 0,
@@ -187,7 +198,20 @@ exports.actions = function(req, res, ss) {
 					});
 				} else if(dataType === 'colors') {
 					var colors = [{
-						instanceName: 'awesome',
+						instanceName: 'test',
+						x: 0,
+						y: 0,
+						mapIndex: 0,
+						color: {
+							r: 255,
+							g: 0,
+							b: 0,
+							a: 0.5,
+							owner: 'nobody'
+						},
+						curColor: 'rgba(255,0,0,0.5)'
+					}, {
+						instanceName: 'demo',
 						x: 0,
 						y: 0,
 						mapIndex: 0,
@@ -200,11 +224,21 @@ exports.actions = function(req, res, ss) {
 						},
 						curColor: 'rgba(255,0,0,0.5)'
 					}];
-					dbActions.dropCollection('colors', function() {
-						dbActions.saveDocuments(colorModel, colors, function() {
-							res('Data loaded: ' + dataType);
-						});
+					// dbActions.dropCollection('colors', function() {
+					// 	dbActions.saveDocuments(colorModel, colors, function() {
+					// 		res('Data loaded: ' + dataType);
+					// 	});
+					// });
+					dbActions.resetDefaultData(colorModel, function(err) {
+						if(err) {
+							apprise(err);
+						} else {
+							dbActions.saveDocuments(gameModel, colors, function() {
+								res('Data loaded: ' + dataType);
+							});	
+						}
 					});
+				
 				} else if(dataType === 'botanist') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Botanist   * * * * * * * * * * * *   \n\n'.yellow);
 					botanistData = require(rootDir + '/data/botanist');
@@ -224,10 +258,19 @@ exports.actions = function(req, res, ss) {
 				} else if(dataType === 'game') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
 					gameData = require(rootDir + '/data/game');
-					dbActions.dropCollection('game', function() {
-						dbActions.saveDocuments(gameModel, gameData.global, function() {
-							res('Data loaded: ' + dataType);
-						});
+					// dbActions.dropCollection('game', function() {
+					// 	dbActions.saveDocuments(gameModel, gameData.global, function() {
+					// 		res('Data loaded: ' + dataType);
+					// 	});
+					// });
+					dbActions.resetDefaultData(gameModel, function(err) {
+						if(err) {
+							apprise(err);
+						} else {
+							dbActions.saveDocuments(gameModel, gameData.global, function() {
+								res('Data loaded: ' + dataType);
+							});	
+						}
 					});
 				// } else if(dataType === 'resources') {
 				// 	console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Resources   * * * * * * * * * * * *   \n\n'.yellow);
@@ -240,9 +283,16 @@ exports.actions = function(req, res, ss) {
 				}
 				else if(dataType === 'chat') {
 					console.log('\n\n   * * * * * * * * * * * *   Deleting Chat Logs   * * * * * * * * * * * *   \n\n'.yellow);
-					dbActions.dropCollection('chat', function() {
-						res('Chat logs deleted');
+					dbActions.resetDefaultData(chatModel, function(err) {
+						if(err) {
+							apprise(err);
+						} else {
+							res('Chat logs deleted');
+						}
 					});
+					// dbActions.dropCollection('chat', function() {
+					// 	res('Chat logs deleted');
+					// });
 				}
 			}
 		}

@@ -324,8 +324,10 @@ $game.$npc = {
 		$('.speechBubble .speakerName').text(_who +': ');
 		$('.speechBubble .message').text(_speak);
 
+		var time = _speak.length * 50 + 1000;
+
 		$('.speechBubble').fadeIn(function() {
-			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,8000);
+			$game.$npc.hideTimer = setTimeout($game.$npc.hideChat,time);
 		});
 	},
 
