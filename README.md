@@ -120,7 +120,17 @@ This command will load a temporary super admin user with username `temp` and pas
 
 To initialize data in the databases, once the app is running, sign in using the temporary credentials and navigate to `Admin Console` -> `Startup` (located at `/admin/startup`). On this page is a series of load buttons. (*Data is found in .json files in the `/data` folder of the project, if you wish to modify data before loading.*)
 
-**IMPORTANT: please note, you may only initialize data ONCE in production or staging modes. If you initialize again, this will wipe the database of all previous existing data. So be careful in `/admin/startup`.** However, you may wipe data in testing or development as many times as needed.
+**The loading buttons users, game, colors, and chat only delete and reset the default data (testing users, demo users).  To delete real game data, you must go into the mongo instance and remove them (this is to prevent accidently wiping critical info)
+
+In order to "reset" npc and botanist, it is recommended to use the mongoimport command and use the data files in backup_data.  This is due to the fact that while there are original data files in data folder, they aren't up to date since you can always make changes in the admin interface to both the npc and tile data sets.  Therefore it is recommended to occasionally do a mongoexport of these two data sets from production in case a reset is needed.
+
+###Export /Import Data
+To export: mongoexport --db civicseed_testing --collection collection_name --out file_name.json
+
+To import: mongoimport --db civic_testing --collection collection_name --file file_name.json --drop
+
+To move file from server to local: scp -i yourpemkey.pem ec2-user@ipaddress:file_name.json ~/Desktop
+
 
 *Note, when the users are reloaded, this also deletes the `temp` super admin user.*
 
