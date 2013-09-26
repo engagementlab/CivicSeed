@@ -923,6 +923,7 @@ $game.$player = {
 			id: $game.$player.id,
 			playingTime: _playingTime
 		};
+		_startTime = endTime;
 		ss.rpc('game.player.updateGameInfo', info);
 	},
 
