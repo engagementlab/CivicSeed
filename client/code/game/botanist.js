@@ -542,7 +542,7 @@ $game.$botanist = {
 	hideResource: function() {
 		//slide up the botanist area that contains big content
 		//re-enable clicking by setting bools to false
-		if($game.$player.firstTime) {
+		if($game.$player.firstTime && $game.$player.botanistState === 2) {
 			$game.$player.firstTime = false;
 			var info = {
 				id: $game.$player.id,

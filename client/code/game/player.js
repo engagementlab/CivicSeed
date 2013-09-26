@@ -512,7 +512,6 @@ $game.$player = {
 		$game.$player.currentLevel += 1;
 		$game.$player.botanistState = 0;
 		$game.$botanist.setBotanistState(0);
-		$game.$player.firstTime = true;
 		$game.$player.seenRobot = false;
 		_pledges = 5;
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);

@@ -217,7 +217,7 @@ $game.$npc = {
 	//show npc info, decide to show chat bubble or resource
 	show: function() {
 		//if there is no other stuff on screen, then show dialog
-		if($game.$player.firstTime) {
+		if($game.$player.botanistState < 2) {
 			$game.$npc.isChat = true;
 			$game.$npc.showSmalltalk(true);
 		}

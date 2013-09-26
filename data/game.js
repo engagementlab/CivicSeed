@@ -12,10 +12,10 @@ module.exports.global = [{
 }, {
 	players: 0,
 	tilesColored: 0,
-	seedsDropped: 1,
-	seedsDroppedGoal: 0,
+	seedsDropped: 0,
+	seedsDroppedGoal: 99999,
 	active: true,
-	bossModeUnlocked: true,
+	bossModeUnlocked: false,
 	leaderboard: [],
 	resourceCount: [10, 12, 9, 10],
 	instanceName: 'demo',
