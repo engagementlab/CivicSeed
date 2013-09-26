@@ -208,8 +208,8 @@ $game.$map = {
 
 	//get all the images from all players and make composite
 	createCollectiveImage: function() {
+		$('.colorMapEveryone').empty();
 		ss.rpc('game.player.getAllImages', function(data) {
-			//console.log(data.length);
 			var index = data.length;
 			//go thru each image create a new image using canvas?
 			while(--index > -1) {
