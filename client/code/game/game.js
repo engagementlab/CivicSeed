@@ -398,8 +398,6 @@ function _loadGameInfo() {
 	ss.rpc('game.player.getGameInfo', function(response) {
 		// regular game mode
 		$game.bossModeUnlocked = response.bossModeUnlocked;
-		// for testing
-		// $game.bossModeUnlocked = true;
 
 		$game.resourceCount = response.resourceCount;
 		_stats = {

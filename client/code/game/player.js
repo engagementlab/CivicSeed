@@ -511,6 +511,8 @@ $game.$player = {
 	nextLevel: function() {
 		$game.$player.currentLevel += 1;
 		$game.$player.botanistState = 0;
+		$game.$botanist.setBotanistState(0);
+		$game.$player.firstTime = true;
 		$game.$player.seenRobot = false;
 		_pledges = 5;
 		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
@@ -521,7 +523,8 @@ $game.$player = {
 			seenRobot: $game.$player.seenRobot,
 			pledges: _pledges,
 			inventory: [],
-			currentLevel: $game.$player.currentLevel
+			currentLevel: $game.$player.currentLevel,
+			firstTime: $game.$player.firstTime
 		};
 		ss.rpc('game.player.updateGameInfo', info);
 		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';

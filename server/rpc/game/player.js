@@ -525,7 +525,7 @@ colorHelpers = {
 			.where('instanceName').equals(instanceName)
 			.find(function (err, results) {
 			if(err) {
-
+				console.log('error finding instance');
 			} else {
 				//add tile count to our progress
 				var result = results[0],
@@ -577,11 +577,13 @@ colorHelpers = {
 				}
 
 				//check if the world is fully colored
+				var gameisover = false;
 				if(newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
 					//change the game state
 					result.set('bossModeUnlocked', true);
 					console.log('game over!');
 					//send out emails
+					gameisover = true;
 					colorHelpers.endGameEmails(instanceName);
 				}
 				//save all changes
@@ -594,7 +596,7 @@ colorHelpers = {
 					board: oldBoard,
 					dropped: newCount
 				};
-				callback(returnInfo, true);
+				callback(returnInfo, gameisover);
 			}
 		});
 	},
