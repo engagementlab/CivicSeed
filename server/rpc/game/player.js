@@ -274,19 +274,19 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
-		getAllImages: function() {
+		getAllImages: function(id) {
 			var maps = [];
 			_userModel
 				.where('role').equals('actor')
 				.where('game.instanceName').equals(req.session.game.instanceName)
-				.select('game.colorMap')
+				.select('game.colorMap _id')
 				.find(function(err, users) {
 					if(err) {
 						console.log(err);
 					} else {
 						for(var i = 0; i < users.length; i +=1) {
 							var map = users[i].game.colorMap;
-							if(map) {
+							if(map && id != users[i]._id) {
 								maps.push(users[i].game.colorMap);
 							}
 						}
