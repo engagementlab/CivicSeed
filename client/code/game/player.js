@@ -388,9 +388,9 @@ $game.$player = {
 	},
 
 	//checks if we should save out a new image of player's color map
-	saveMapImage: function() {
+	saveMapImage: function(force) {
 		//only do this if we have dropped 5 new seeds
-		if(_seeds.dropped - _previousSeedsDropped > 4) {
+		if(_seeds.dropped - _previousSeedsDropped > 4 || force) {
 			_colorMap = $game.$map.saveImage();
 			var info = {
 				id: $game.$player.id,
@@ -1212,7 +1212,7 @@ function _sendSeedBomb(data) {
 					$game.$player.seedPlanting = false;
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
-					$game.$player.saveMapImage();
+					$game.$player.saveMapImage(true);
 					//TODO: save seed values to DB
 					_saveSeedsToDB();
 				}
@@ -1228,7 +1228,7 @@ function _sendSeedBomb(data) {
 					$graffiti.hide();
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
 					$('.seedButton').removeClass('currentButton');
-					$game.$player.saveMapImage();
+					$game.$player.saveMapImage(true);
 					//TODO: save seed values to DB
 					_saveSeedsToDB();
 				}

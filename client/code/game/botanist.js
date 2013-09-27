@@ -246,6 +246,7 @@ $game.$botanist = {
 						_currentMessage = 0;
 						_firstTime = true;
 						$game.$botanist.showChat();
+						$game.$player.saveMapImage(true);
 					} else {
 						$game.$botanist.showPrompt(0);	
 					}
