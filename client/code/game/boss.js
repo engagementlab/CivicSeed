@@ -241,12 +241,17 @@ function _chooseResumes(people) {
 		var foundPerson = false,
 			person;
 		while(!foundPerson) {
-			var ran1 = Math.floor(Math.random() * numPeople);
-			person = people[ran1];
-			if(person._id !== $game.$player.id) {
+			if(numPeople === 1) {
+				person = people[0];
 				foundPerson = true;
-				if(!person.game.resume[question]) {
-					foundPerson = false;
+			} else {
+				var ran1 = Math.floor(Math.random() * numPeople);
+				person = people[ran1];
+				if(person._id !== $game.$player.id) {
+					foundPerson = true;
+					if(!person.game.resume[question]) {
+						foundPerson = false;
+					}
 				}
 			}
 		}

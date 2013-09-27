@@ -345,6 +345,7 @@ $game.$botanist = {
 	},
 
 	showPrompt: function(p) {
+		$speechBubble.hide();
 		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
