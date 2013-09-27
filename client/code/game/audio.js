@@ -363,18 +363,18 @@ var $audio = $game.$audio = {
 	},
 
 	switchTrack: function(swap) {
-		_midTransition = true;
 		_prevTrack = _currentTrack;
 		_currentTrack = swap;
 		if(_prevTrack !== _currentTrack) {
-			_soundtracks[_prevTrack].fadeOut(0, 1000, function() {
-				_soundtracks[_prevTrack].pause();
-			});
-			var val = $audio.isMute ? 0.0 : 0.2;
-
-			_soundtracks[_currentTrack].fadeIn(val, 3000, function(swap) {
-				_midTransition = false;
-			});
+			if(!$audio.isMute) {
+				_midTransition = true;
+				_soundtracks[_prevTrack].fadeOut(0, 1000, function() {
+					_soundtracks[_prevTrack].pause();
+				});
+				_soundtracks[_currentTrack].fadeIn(0.2, 3000, function(swap) {
+					_midTransition = false;
+				});
+			}
 		}
 	},
 
@@ -425,12 +425,14 @@ var $audio = $game.$audio = {
 	toggleMute: function() {
 		$audio.isMute = $audio.isMute ? false: true;
 		if($audio.isMute) {
-			_soundtracks[_currentTrack].volume(0);
+			//_soundtracks[_currentTrack].volume(0);
+			_soundtracks[_currentTrack].pause();
 			_environmentLoopFx.volume(0);
 			_environmentOnceFx.volume(0);
 			_triggerFx.volume(0);
 		}
 		else {
+			_soundtracks[_currentTrack].play();
 			_soundtracks[_currentTrack].volume(0.2);
 			_environmentLoopFx.volume(0.1);
 			_environmentOnceFx.volume(0.3);

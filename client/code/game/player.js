@@ -522,8 +522,7 @@ $game.$player = {
 			seenRobot: $game.$player.seenRobot,
 			pledges: _pledges,
 			inventory: [],
-			currentLevel: $game.$player.currentLevel,
-			firstTime: $game.$player.firstTime
+			currentLevel: $game.$player.currentLevel
 		};
 		ss.rpc('game.player.updateGameInfo', info);
 		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
