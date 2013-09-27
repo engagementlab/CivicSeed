@@ -456,12 +456,14 @@ var $audio = $game.$audio = {
 	},
 
 	stopAll: function() {
-		if(_isWebAudio(_soundtracks[_currentTrack])) {
-			_soundtracks[_currentTrack].stop();
-		}
-		if(_isWebAudio(_environmentLoopFx)) {
-			_environmentLoopFx.stop();
-		}
+		_soundtracks[_currentTrack].stop();
+		_environmentLoopFx.stop();
+		// if(_isWebAudio(_soundtracks[_currentTrack])) {
+		// 	_soundtracks[_currentTrack].stop();
+		// }
+		// if(_isWebAudio(_environmentLoopFx)) {
+		// 	_environmentLoopFx.stop();
+		// }
 	},
 
 
