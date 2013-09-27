@@ -477,6 +477,12 @@ $game.$botanist = {
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
+					$game.$player.firstTime = false;
+					var info = {
+						id: $game.$player.id,
+						firstTime: $game.$player.firstTime
+					};
+					ss.rpc('game.player.updateGameInfo', info);
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
 					$game.$player.botanistState = 2;
@@ -543,12 +549,6 @@ $game.$botanist = {
 		//slide up the botanist area that contains big content
 		//re-enable clicking by setting bools to false
 		if($game.$player.firstTime && $game.$player.botanistState === 2) {
-			$game.$player.firstTime = false;
-			var info = {
-				id: $game.$player.id,
-				firstTime: $game.$player.firstTime
-			};
-			ss.rpc('game.player.updateGameInfo', info);
 			$game.statusUpdate({message:'Level 1: Looking Inward.  See the log below for more details.',input:'status',screen: true,log:false});
 			$game.statusUpdate({message:'Level 1 is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.',input:'status',screen: false, log: true});
 		}
