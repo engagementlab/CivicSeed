@@ -49,15 +49,11 @@ exports.actions = function(req, res, ss) {
 		},
 
 		tellOthers: function(info) {
-			//send the new info
+			//send player info to all others
 			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {info: info});
 		},
 
 		exitPlayer: function(id, name) {
-			//update redis
-			//req.session.game = info;
-			//req.session.save();
-			//update mongo
 			if(id) {
 				_userModel.findById(id, function (err, user) {
 					if(err) {
@@ -67,6 +63,8 @@ exports.actions = function(req, res, ss) {
 							user.set({ activeSessionID: null });
 						}
 						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {id: id});
+
+						//if demo user reset all data
 						if(name === 'Demo' && req.session.email.indexOf('demo') > -1) {
 							user.game.currentLevel = 0;
 							user.game.position.x = 64;
@@ -95,6 +93,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getOthers: function() {
+			//find out who else is playing and get their data
 			_userModel
 				.where('activeSessionID').ne(null)
 				.where('game.instanceName').equals(req.session.game.instanceName)
@@ -108,7 +107,6 @@ exports.actions = function(req, res, ss) {
 				});
 		},
 
-		// ------> this should be moved into our map rpc handler???
 		getMapData: function(x1,y1,x2,y2) {
 			_tileModel
 				.where('x').gte(x1).lt(x2)
