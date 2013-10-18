@@ -97,6 +97,7 @@ exports.actions = function(req, res, ss) {
 		getOthers: function() {
 			_userModel
 				.where('activeSessionID').ne(null)
+				.where('game.instanceName').equals(req.session.game.instanceName)
 				.select('id firstName game.tilesColored game.rank game.currentLevel game.position game.colorInfo')
 				.find(function (err, users) {
 					if(err) {
