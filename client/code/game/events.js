@@ -1,10 +1,8 @@
-var $activePlayers,
-	$progressHudCount;
+var $progressHudCount;
 
 var $events = module.exports = {
 
 	registerVariables: function() {
-		$activePlayers = $('.activePlayers span');
 		$progressHudCount = $('.progressButton .hudCount');
 	},
 
@@ -14,9 +12,7 @@ var $events = module.exports = {
 
 		// new player joining to keep track of
 		ss.event.on('ss-addPlayer', function(data, chan) {
-			$game.numPlayers = data.num;
 			$game.$others.add(data.info);
-			$activePlayers.text(data.num);
 			if(data.info._id !== $game.$player.id) {
 				$game.statusUpdate({
 					message: data.info.firstName + ' has joined!',
@@ -29,11 +25,9 @@ var $events = module.exports = {
 
 		//player removing
 		ss.event.on('ss-removePlayer', function(data, chan) {
-			$game.numPlayers = data.num;
 			if(data.id != $game.$player.id) {
 				$game.$others.remove(data.id);
 			}
-			$('.activePlayers span').text(data.num);
 		});
 
 		//player moves

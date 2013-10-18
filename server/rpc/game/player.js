@@ -4,7 +4,7 @@ var rootDir = process.cwd(),
 	colorHelpers = null,
 	dbHelpers = null,
 
-	_games = {},
+	// _games = {},
 	_service,
 	_userModel,
 	_tileModel,
@@ -39,16 +39,7 @@ exports.actions = function(req, res, ss) {
 			dbHelpers.getUserGameInfo(req.session.userId, function(game) {
 				if(game) {
 					playerInfo.game = game;	
-					if(!_games[playerInfo.game.instanceName]) {
-						console.log('create! the game baby');
-						_games[playerInfo.game.instanceName] = {};
-					}
-
-					_games[req.session.game.instanceName][playerInfo.id] = playerInfo;
-					var numActivePlayers = Object.keys(_games[playerInfo.game.instanceName]).length;
-					
-					console.log('initializing ', playerInfo.firstName, 'players: ', numActivePlayers);
-
+					console.log('initializing ', playerInfo.firstName);
 					res(playerInfo);
 					
 				} else {
@@ -58,9 +49,8 @@ exports.actions = function(req, res, ss) {
 		},
 
 		tellOthers: function(info) {
-			// send the number of active players and the new player info
-			var numActivePlayers = Object.keys(_games[req.session.game.instanceName]).length;
-			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {num: numActivePlayers, info: info});
+			//send the new info
+			ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {info: info});
 		},
 
 		exitPlayer: function(id, name) {
@@ -76,9 +66,7 @@ exports.actions = function(req, res, ss) {
 						if(user.activeSessionID && user.activeSessionID === req.sessionId) {
 							user.set({ activeSessionID: null });
 						}
-						delete _games[req.session.game.instanceName][id];
-						var numActivePlayers = Object.keys(_games[req.session.game.instanceName]).length;
-						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {num: numActivePlayers, id: id});
+						ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', {id: id});
 						if(name === 'Demo' && req.session.email.indexOf('demo') > -1) {
 							user.game.currentLevel = 0;
 							user.game.position.x = 64;
@@ -152,10 +140,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		savePosition: function(info) {
-			_games[req.session.game.instanceName][info.id].game.position.x = info.position.x;
-			_games[req.session.game.instanceName][info.id].game.position.y = info.position.y;
 			dbHelpers.saveInfo(info);
-			// req.session.save();
 		},
 
 		dropSeed: function(bombed, info) {
@@ -630,7 +615,7 @@ colorHelpers = {
 							html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
 							subject = 'Breaking News!';
 						}
-						//TODO remove this check
+						//TODO remove this check (this is to not send out test player emails?)
 						if(users[emailIterator].email.length > 6) {
 							emailUtil.sendEmail(subject, html, users[emailIterator].email);
 						}

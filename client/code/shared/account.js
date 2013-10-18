@@ -122,9 +122,7 @@ var $account = module.exports = {
 					_bootUser(req.userId);
 				});
 			} else {
-				message = 'There is another active game session matching your credentials. \
-					Please wait while we check the session. \
-					This may take a few seconds (<strong class="countdown">' + req.countdown + '</strong>).\
+				message = 'There is an active game with your creds. Please wait while we check it.<br>This may take a few seconds (<strong class="countdown">' + req.countdown + '</strong>).\
 					<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, \
 					please contact the website administrator.)</span>';
 				apprise(message);
@@ -149,12 +147,7 @@ var $account = module.exports = {
 					Davis.location.assign('/profiles/' + req.profileLink);
 					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
-					apprise('Game access denied. \
-						There is another session currently accessing your account.<br>\
-						Reasons for this may be that you have given your username and password \
-						to someone else or you have left another computer open running the game.\
-						Please contact the administrator of this site if you \
-						think something is wrong.');
+					apprise('Game access denied (possibly already logged in). Contact Admin if you think you should have access.');
 				}
 			}
 		});
