@@ -8,6 +8,7 @@ var _resources = [],
 	_curResource = null,
 	_revisiting = false,
 	_inventory = false,
+	_temporaryAnswer = '',
 
 	$resourceStage = null,
 	$speechBubble = null,
@@ -120,6 +121,7 @@ $game.$resources = {
 		_answered = answers;
 		_correctAnswer = answers;
 		_currentSlide = 0;
+		_temporaryAnswer = '';
 
 		$resourceStage.empty();
 		var stringId = String(index);
@@ -331,6 +333,10 @@ $game.$resources = {
 
 	//go back a slide in the resource (hack to go back 2 since next slide advances one)
 	previousSlide: function() {
+		//if they were answering the question, store their answer
+		if(_currentSlide === _numSlides && _questionType === 'open') {
+			_temporaryAnswer = $('.resourceContent textarea').val();
+		}
 		_currentSlide -= 2;
 		$game.$resources.nextSlide();
 	},
@@ -607,7 +613,7 @@ function _addRealContent() {
 				inputBox += '</form>';
 			}
 			else if(_questionType === 'open') {
-				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
+				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';	
 			}
 			else if(_questionType === 'truefalse') {
 				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
@@ -619,6 +625,9 @@ function _addRealContent() {
 							'<br><input name="resourceMultipleChoice" type ="radio" value="no">no</input>';
 			}
 			$resourceContent.html(finalQuestion + inputBox);
+			if(_temporaryAnswer.length > 0 && _questionType === 'open') {
+				$('.resourceContent textarea').val(_temporaryAnswer);
+			}
 		}
 	}
 	else{
