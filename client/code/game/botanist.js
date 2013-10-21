@@ -492,7 +492,7 @@ $game.$botanist = {
 					_saveBotanistState();
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
-					$botanistAreaMessage.text('The pieces you need to complete this recipe lie in Brightwood Forest, located in the northwest.');
+					$botanistAreaMessage.text('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.');
 					// $botanistContent.html('<p>To collect the pieces for the recipe, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b> and, more importantly, <b>research</b> that will enable to you create paintbrush seeds..  When you think you have enough pieces to complete the recipe come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The pieces of the first recipe can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="icon-question-sign icon-large"></i>) for more details on how to play.');
 					$botanistContent.html('<p class="miniExample" ><img src="/img/game/minimap.png"></p><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>');
 				}
@@ -691,7 +691,7 @@ $game.$botanist = {
 					$game.$player.emptyInventory();
 					var numSeeds = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
 						level = $game.$player.currentLevel + 1;
-						totalSeeds = (20 + level * 4 ) + level * 2 * numSeeds;
+						totalSeeds = (30 + level * 4 ) + level * 4 * numSeeds;
 					
 					$game.$player.updateSeeds('draw', totalSeeds);
 					$game.$player.botanistState = 4;
