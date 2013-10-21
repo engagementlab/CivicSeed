@@ -224,6 +224,12 @@ $game.$player = {
 
 	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
+		if($game.$player.inventoryShowing) {
+			$('.inventory').slideUp(function() {
+				$game.$player.inventoryShowing = false;
+				$('.inventoryButton').removeClass('currentButton');
+			});
+		}
 		_test = true;
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc.x === x && loc.y === y) {

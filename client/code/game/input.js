@@ -404,8 +404,9 @@ var $input = $game.$input = module.exports = {
 		//decide if we should or should not let buttons be clicked based on state
 		var startNewAction = function() {
 			//check all the game states (if windows are open ,in transit, etc.) to begin a new action
-			//console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
-			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.$player.inventoryShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing){
+			// console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
+			// !$game.$player.inventoryShowing
+			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing){
 				return true;
 			}
 			return false;
