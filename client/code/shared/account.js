@@ -50,6 +50,7 @@ var $account = module.exports = {
 			var email = document.getElementById('username').value;
 			ss.rpc('shared.account.remindMeMyPassword', email, function(response) {
 				if(response) {
+					$('#username').val('');
 					$('#message').removeClass('error').text('A reminder email was successfully sent to you! ✔');
 				} else {
 					$('#message').addClass('error').text('There was an error. Please enter the correct email.');

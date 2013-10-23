@@ -1,5 +1,7 @@
 var rootDir = process.cwd(),
 	bcrypt = require('bcrypt'),
+	xkcd = require('xkcd-pwgen'),
+	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 	emailUtil = require(rootDir + '/server/utils/email'),
 	service = require(rootDir + '/service'),
 	UserModel = service.useModel('user'),
@@ -214,16 +216,23 @@ exports.actions = function(req, res, ss) {
 		remindMeMyPassword: function(email) {
 			UserModel.findOne({ email: email } , function(err, user) {
 				if(!err && user) {
-					// TODO: validate email before sending
-					// TODO: don't send them their password; do password reset
-					singleHtml = html.replace('#{firstName}', user.firstName);
-					singleHtml = singleHtml.replace('#{email}', user.email);
-					singleHtml = singleHtml.replace('#{password}', user.password);
-					emailUtil.openEmailConnection();
-					emailUtil.sendEmail('Password reminder from Civic Seed (Working Test 1) ✔', singleHtml, user.email);
-					// TODO: close connection on *** CALLBACK ***
-					emailUtil.closeEmailConnection();
-					res(true);
+					
+					//TODO THIS AUTO RESETS without creds!!
+					var password = xkcd.generatePassword();
+					accountHelpers.hashPassword(password, function(hashedPassword) {
+						user.password = hashedPassword.hash;
+
+						singleHtml = html.replace('#{firstName}', user.firstName);
+						singleHtml = singleHtml.replace('#{email}', user.email);
+						singleHtml = singleHtml.replace('#{password}', password);
+						user.save(function(err) {
+							emailUtil.openEmailConnection();
+							emailUtil.sendEmail('Password reset from Civic Seed', singleHtml, user.email);
+							// TODO: close connection on *** CALLBACK ***
+							emailUtil.closeEmailConnection();
+							res(true);
+						});
+					});
 				} else {
 					res(false);
 				}
