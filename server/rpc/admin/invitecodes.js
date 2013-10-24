@@ -124,10 +124,11 @@ exports.actions = function(req, res, ss) {
 				//emailList = emailList.slice(0, 20); --> doing this on front now
 				emailListLength = emailList.length;
 				for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+					var email = emailList[emailIterator].toLowerCase();
 					if(i) {
-						createUserAndSendInvite(emailList[emailIterator], instanceName, i);	
+						createUserAndSendInvite(email, instanceName, i);	
 					} else {
-						createUserAndSendInvite(emailList[emailIterator], instanceName, emailIterator);	
+						createUserAndSendInvite(email, instanceName, emailIterator);	
 					}
 				}
 			} else {

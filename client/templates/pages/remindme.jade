@@ -1,14 +1,14 @@
 .row
 	.span6
 		h2 Forget your password?
-		h5 Let us help you remember.
+		h5 Let us help you.
 		.span6.offset3.moreTopMargin
 			form.well#remindMeForm(method='post', action='/remind-me')
-				p Provide us with your username (your email address) and we'll send you a password reminder.
+				p Provide us with your email address and we'll reset your password via email.
 				.control-group
 					.controls
 						input#username.input-large(type='text', name='username', placeholder='Email')
-				button.btn.btn-primary.btn-large(type='submit') Remind Me
+				button.btn.btn-primary.btn-large(type='submit') Reset
 				p#message.moreTopMargin
 			p.moreTopMargin Forget your username?
-			p: small Your username should be your email address. Please contact your administrator if your email is not working as a username.
+			p: small Please contact your administrator if your email is not working.

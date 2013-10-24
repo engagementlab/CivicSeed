@@ -31,7 +31,7 @@ var $account = module.exports = {
 	accountHandlers: function() {
 		var $body = $(document.body);
 		$body.on('submit', '#loginForm', function() {
-			var email = document.getElementById('username').value,
+			var email = document.getElementById('username').value.toLowerCase(),
 				password = document.getElementById('password').value;
 			$account.authenticate(email, password);
 			return false;
@@ -47,7 +47,7 @@ var $account = module.exports = {
 			return false;
 		});
 		$body.on('submit', '#remindMeForm', function() {
-			var email = document.getElementById('username').value;
+			var email = document.getElementById('username').value.toLowerCase();
 			ss.rpc('shared.account.remindMeMyPassword', email, function(response) {
 				if(response) {
 					$('#username').val('');
