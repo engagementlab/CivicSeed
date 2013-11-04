@@ -435,8 +435,8 @@ exports.actions = function(req, res, ss) {
 							var pos = results[i].game.position;
 							if(pos.x > 4 && pos.x < 17 && pos.y > 8 && pos.y < 12) {
 								//add them to bonus list if in cave and not done one yet
+								count++;
 								if(!results[i].game.collaborativeChallenge) {
-									count++;
 									ids.push(i);
 								}
 							}
@@ -445,17 +445,15 @@ exports.actions = function(req, res, ss) {
 						var playerIds = [];
 						if(count > 1) {
 							for(var d = 0; d < ids.length; d++) {
-								if(!results[ids[d]].game.collaborativeChallenge) {
-									playerIds.push(results[ids[d]]._id);
-									results[ids[d]].game.collaborativeChallenge = true;
-									results[ids[d]].game.seeds.draw += count * 50;
-									results[ids[d]].save();
-								}
+								playerIds.push(results[ids[d]]._id);
+								results[ids[d]].game.collaborativeChallenge = true;
+								results[ids[d]].game.seeds.draw += count * 50;
+								resulzxts[ids[d]].save();
 							}
 							res();
 							ss.publish.channel(req.session.game.instanceName, 'ss-collaborativeChallenge', {players: playerIds, seeds: count * 50});
 						} else {
-							res('You were alone. No soup for you!');
+							res('not enough');
 						}
 					}
 				});
