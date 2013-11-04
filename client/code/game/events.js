@@ -108,6 +108,16 @@ var $events = module.exports = {
 			}
 		});
 
+		ss.event.on('ss-collaborativeChallenge', function(info) {
+			for(var i = 0; i < info.players.length; i++) {
+				if(info.players[i] === $game.$player.id) {
+					//TODO add seeds
+					$game.statusUpdate({message: 'Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.',input:'status', screen:true, log:true});
+					$game.$player.updateSeeds('draw', info.seeds, true);
+					break;
+				}	
+			}
+		});
 	}
 
 };

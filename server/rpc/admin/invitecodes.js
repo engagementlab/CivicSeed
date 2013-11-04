@@ -80,7 +80,8 @@ exports.actions = function(req, res, ss) {
 							seenRobot: false,
 							playingTime: 0,
 							tilesColored: 0,
-							pledges: 5
+							pledges: 5,
+							collaborativeChallenge: false
 						};
 						console.log('Created user: ' + user.email);
 						user.save(function(err) {

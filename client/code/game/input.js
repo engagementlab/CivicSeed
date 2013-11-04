@@ -112,7 +112,7 @@ var $input = $game.$input = module.exports = {
 					y: e.pageY,
 					offX: this.offsetLeft,
 					offY: this.offsetTop,
-					debug: false
+					debug: true
 				};
 				$game.$mouse.updateMouse(mInfo,true);
 			}
@@ -132,6 +132,13 @@ var $input = $game.$input = module.exports = {
 			$game.$audio.playTriggerFx('chatSend');
 			if(data.msg.indexOf('beam me up, Scotty!') > -1) {
 				$game.$player.beamMeUpScotty();
+			} else if(data.msg.indexOf('shazaam') > -1) {
+				ss.rpc('game.player.collaborativeChallenge', function(err) {
+					//nothing here...
+					if(err) {
+						$game.statusUpdate({message: 'You came alone, you get no bone(us).',input:'status', screen:true, log:true});
+					}
+				});
 			} else {
 				ss.rpc('game.chat.sendMessage', data, function(r) {
 					//nothing here...

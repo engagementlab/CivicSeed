@@ -414,6 +414,51 @@ exports.actions = function(req, res, ss) {
 
 		beam: function(info) {
 			ss.publish.channel(req.session.game.instanceName,'ss-beam', info);
+		},
+
+		collaborativeChallenge: function() {
+			//get all active players locations
+			_userModel
+				.where('role').equals('actor')
+				.where('activeSessionID').ne(null)
+				.where('game.instanceName').equals(req.session.game.instanceName)
+				.select('game.position game.collaborativeChallenge _id game.seeds')
+				.find(function(err,results) {
+					if(err) {
+						console.log(err);
+						res(err);
+					} else if(results) {
+						//see if they are in the magic spot for this level (hard coded right now)
+						var count = 0,
+							ids = [];
+						for(var i = 0; i < results.length; i++) {
+							var pos = results[i].game.position;
+							if(pos.x > 4 && pos.x < 17 && pos.y > 8 && pos.y < 12) {
+								//add them to bonus list if in cave and not done one yet
+								if(!results[i].game.collaborativeChallenge) {
+									count++;
+									ids.push(i);
+								}
+							}
+						}
+						//if more than 1 person showed up, reward them
+						var playerIds = [];
+						if(count > 1) {
+							for(var d = 0; d < ids.length; d++) {
+								if(!results[ids[d]].game.collaborativeChallenge) {
+									playerIds.push(results[ids[d]]._id);
+									results[ids[d]].game.collaborativeChallenge = true;
+									results[ids[d]].game.seeds.draw += count * 50;
+									results[ids[d]].save();
+								}
+							}
+							res();
+							ss.publish.channel(req.session.game.instanceName, 'ss-collaborativeChallenge', {players: playerIds, seeds: count * 50});
+						} else {
+							res('You were alone. No soup for you!');
+						}
+					}
+				});
 		}
 	};
 };

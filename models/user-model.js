@@ -60,7 +60,8 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			seenRobot: Boolean,
 			playingTime: Number,
 			tilesColored: Number,
-			pledges: Number
+			pledges: Number,
+			collaborativeChallenge: Boolean
 		},
 		admin: {
 			instances: [String]

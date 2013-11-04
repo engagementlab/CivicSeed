@@ -41,7 +41,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	},
 	admin: {
 		instances: ['test','demo','boss']
@@ -89,7 +90,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }, {
 	activeSessionID: null,
@@ -108,8 +110,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
-			y: 77
+			x: 20,
+			y: 20
 		},
 		colorInfo: {
 			rgb: {
@@ -134,7 +136,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }, {
 	activeSessionID: null,
@@ -153,8 +156,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
-			y: 77
+			x: 20,
+			y: 20
 		},
 		colorInfo: {
 			rgb: {
@@ -179,7 +182,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }, {
 	activeSessionID: null,
@@ -224,7 +228,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }, {
 	activeSessionID: null,
@@ -431,7 +436,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }, {
 	activeSessionID: null,
@@ -476,7 +482,8 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	},
 	admin: {
 		instances: []
@@ -524,6 +531,7 @@ module.exports.global = [{
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
-		pledges: 5
+		pledges: 5,
+		collaborativeChallenge: false
 	}
 }];
