@@ -104,7 +104,6 @@ var $account = module.exports = {
 
 		ss.event.on('verifyGameStatus', function(req) {
 			var message;
-			// console.log('Verifying game status through ss event listener!!!!');
 			if(sessionStorage.getItem('isPlaying')) {
 				message = 'Are you still there? Signing out in <strong class="countdown">' + req.countdown + '</strong> seconds.';
 				apprise(message, { verify: true, textNo: 'Sign Out' }, function(response) {
@@ -125,8 +124,11 @@ var $account = module.exports = {
 			} else {
 				message = 'There is an active game with your creds. Please wait while we check it.<br>This may take a few seconds (<strong class="countdown">' + req.countdown + '</strong>).\
 					<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, \
-					please contact the website administrator.)</span>';
+					please use the Contact Us link to tell the admin.)</span>';
 				apprise(message);
+				//hack to prevent ok button from showing up so user has to wait countdown
+				//so it doesn't say try starting game and showing error message
+				$('.appriseInner .aButtons').remove();
 				_logoutCountDown(req.countdown + 5, function() {
 					$('.appriseOverlay').remove();
 					$('.appriseOuter').remove();
