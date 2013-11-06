@@ -132,7 +132,7 @@ var $input = $game.$input = module.exports = {
 			$game.$audio.playTriggerFx('chatSend');
 			if(data.msg.indexOf('beam me up, Scotty!') > -1) {
 				$game.$player.beamMeUpScotty();
-			} else if(data.msg.indexOf('shazaam') > -1) {
+			} else if(data.msg.indexOf('kazaam') > -1) {
 				ss.rpc('game.player.collaborativeChallenge', function(err) {
 					//nothing here...
 					if(err) {

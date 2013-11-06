@@ -448,7 +448,7 @@ exports.actions = function(req, res, ss) {
 								playerIds.push(results[ids[d]]._id);
 								results[ids[d]].game.collaborativeChallenge = true;
 								results[ids[d]].game.seeds.draw += count * 50;
-								resulzxts[ids[d]].save();
+								results[ids[d]].save();
 							}
 							res();
 							ss.publish.channel(req.session.game.instanceName, 'ss-collaborativeChallenge', {players: playerIds, seeds: count * 50});
