@@ -46,7 +46,7 @@ var $renderer = $game.$renderer = {
 		_charactersContext = document.getElementById('characters').getContext('2d');
 
 		_charactersContext.shadowColor = '#000';
-	 	_charactersContext.fillStyle = '#fff';
+		_charactersContext.fillStyle = '#fff';
 		_charactersContext.textAlign = 'center';
 		_charactersContext.textBaseline = 'bottom';
 		_charactersContext.font = '12pt Inconsolata, monospace';
@@ -59,7 +59,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png'];
+		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png','cursors.png'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -642,40 +642,57 @@ var $renderer = $game.$renderer = {
 
 			var col = $game.$player.getRGBA();
 
+			var srcX = 0;
 			if($game.$player.seedMode) {
-				_foregroundContext.fillStyle = col; // seed color
-				_foregroundContext.fillRect(
-					mX,
-					mY,
-					$game.TILE_SIZE,
-					$game.TILE_SIZE
-				);
+				// _foregroundContext.fillStyle = col; // seed color
+				// _foregroundContext.fillRect(
+				// 	mX,
+				// 	mY,
+				// 	$game.TILE_SIZE,
+				// 	$game.TILE_SIZE
+				// );
+				srcX  = $game.TILE_SIZE * 3;
 			}
 			//
 			else {
+			
+				//go
 				if(state == -1) {
-					col = 'rgba(50,255,50,.5)';
-					_foregroundContext.strokeStyle = col;
+					// col = 'rgba(50,255,50,.5)';
+					// _foregroundContext.strokeStyle = col;
 
 				}
 				//nogo
 				else if(state === -2) {
-					col = 'rgba(255,50,50,.5)';
-					_foregroundContext.strokeStyle = col;
+					// col = 'rgba(255,50,50,.5)';
+					// _foregroundContext.strokeStyle = col;
+					srcX  = $game.TILE_SIZE;
 
 				}
 				//npc
 				else {
-					col = 'rgba(50,50,235,.5)';
-					_foregroundContext.strokeStyle = col;
+					// col = 'rgba(50,50,235,.5)';
+					// _foregroundContext.strokeStyle = col;
+					srcX  = $game.TILE_SIZE * 2;
 				}
-				_foregroundContext.strokeRect(
-					mX + 2,
-					mY + 2,
-					$game.TILE_SIZE - 4,
-					$game.TILE_SIZE - 4
-				);
+				// _foregroundContext.strokeRect(
+				// 	mX + 2,
+				// 	mY + 2,
+				// 	$game.TILE_SIZE - 4,
+				// 	$game.TILE_SIZE - 4
+				// );
 			}
+			_foregroundContext.drawImage(
+				_tilesheets[13],
+				srcX,
+				0,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE,
+				mX,
+				mY,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE
+			);
 
 			_prevMouseX = mouse.cX;
 			_prevMouseY = mouse.cY;
