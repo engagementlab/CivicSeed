@@ -21,14 +21,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				x: Number,
 				y: Number
 			},
-			colorInfo: {
-				rgb: {
-					r: Number,
-					g: Number,
-					b: Number
-				},
-				tilesheet: Number
-			},
 			resources: [{
 				answers: [String],
 				attempts: Number,

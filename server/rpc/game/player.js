@@ -97,7 +97,7 @@ exports.actions = function(req, res, ss) {
 			_userModel
 				.where('activeSessionID').ne(null)
 				.where('game.instanceName').equals(req.session.game.instanceName)
-				.select('id firstName game.tilesColored game.rank game.currentLevel game.position game.colorInfo')
+				.select('id firstName game.tilesColored game.rank game.currentLevel game.position')
 				.find(function (err, users) {
 					if(err) {
 						console.log('error', err);
@@ -163,40 +163,23 @@ exports.actions = function(req, res, ss) {
 				.where('y').gte(minY).lte(maxY)
 				.sort('mapIndex')
 				.find(function (err, oldTiles) {
-					// console.log(oldTiles);
 					if(err) {
 						res(false);
 					} else if(oldTiles) {
-						//console.log('oldTiles: ', oldTiles);
-						var modifiedTiles = null;
+						var newTiles = null;
 						if(oldTiles.length > 0) {
-							modifiedTiles = colorHelpers.modifyTiles(oldTiles, bombed);
-							// console.log(modifiedTiles.insert.length);
-							// console.log(modifiedTiles.update.length);
+							newTiles = colorHelpers.modifyTiles(oldTiles, bombed);
 						} else {
-							modifiedTiles = {
-								insert: bombed,
-								update: []
-							};
+							newTiles = bombed;
 						}
 						//saveEach tile
-						colorHelpers.saveTiles(modifiedTiles, function(done) {
-							var bonus = modifiedTiles.update.length > 0 ? true : false;
-							allTiles = modifiedTiles.insert.concat(modifiedTiles.update);
+						colorHelpers.saveTiles(newTiles, function() {
 							//send out new bombs AND player info to update score
-							var numNewTilesScaled = Math.ceil(allTiles.length / 9);
-							var newTileCount = info.tilesColored + allTiles.length;
-							if(bonus) {
-								var chance = Math.random();
-								var addBonus = chance < 0.1 ? true : false;
-								if(addBonus) {
-									newTileCount += 10;
-								} else {
-									bonus = false;
-								}
-							}
+							var numBombsScaled = Math.ceil(newTiles.length / 9);
+							var newTileCount = info.tilesColored + newTiles.length;
+
 							var sendData = {
-								bombed: allTiles,
+								bombed: newTiles,
 								id: info.id,
 								tilesColored: newTileCount
 							};
@@ -205,10 +188,11 @@ exports.actions = function(req, res, ss) {
 
 							var newInfo = {
 								name: info.name,
-								numBombs: numNewTilesScaled,
-								newCount: newTileCount
+								newCount: newTileCount,
+								numBombs: numBombsScaled
 							};
 
+							
 							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates, gameOver) {
 								if(updates.updateBoard) {
 									ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
@@ -219,9 +203,8 @@ exports.actions = function(req, res, ss) {
 								if(gameOver) {
 									ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
 								}
-								res(allTiles.length, bonus);
+								res(newTiles.length);
 							});
-
 							dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
 						});
 					}
@@ -237,8 +220,7 @@ exports.actions = function(req, res, ss) {
 						tilesColored: user.game.tilesColored,
 						level: user.game.currentLevel,
 						rank: user.game.rank,
-						name: user.name,
-						color: user.game.color
+						name: user.name
 					};
 					res(data);
 				}
@@ -477,8 +459,6 @@ colorHelpers = {
 			//stop when we find it
 			while(--oIndex > -1) {
 				if(oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-					var modifiedTile = colorHelpers.modifyOneTile(oldTiles[oIndex], bombed[bIndex]);
-					updateTiles.push(modifiedTile);
 					found = true;
 					oIndex = -1;
 				}
@@ -487,62 +467,19 @@ colorHelpers = {
 				insertTiles.push(bombed[bIndex]);
 			}
 		}
-		return {insert: insertTiles, update: updateTiles};
-	},
-
-	modifyOneTile: function(tile, bomb)  {
-		//if we it exists we have to modify
-		if(tile.color) {
-			//perform a dominant override if not at max opacity
-			if(tile.color.a < 0.5 ) {
-				var prevR = tile.color.r,
-					prevG = tile.color.g,
-					prevB = tile.color.b,
-					prevA = tile.color.a;
-				var weightOld = 0.2,
-					weightNew = 0.8;
-				var newR = Math.floor(weightOld * prevR + weightNew * bomb.color.r);
-					newG = Math.floor(weightOld * prevG + weightNew * bomb.color.g),
-					newB = Math.floor(weightOld * prevB + weightNew * bomb.color.b),
-					newA = Math.round((tile.color.a + 0.1) * 100) / 100,
-					rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
-				tile.color.r = newR;
-				tile.color.g = newG;
-				tile.color.b = newB;
-				tile.color.a = newA;
-				tile.curColor = rgbString;
-				return tile;
-			} else {
-				return tile;
-			}
-		} else {
-			return tile;
-		}
+		return insertTiles;
 	},
 
 	saveTiles: function(tiles, callback) {
-		var num = tiles.update.length,
-			cur = 0;
 		var save = function() {
-			tiles.update[cur].save(function(err,suc) {
-				cur++;
-				if(cur >= num) {
-					insertNew();
-				} else {
-					save();
-				}
+			_colorModel.create(tiles, function(err,suc) {
+				callback();
 			});
 		};
-
-		var insertNew = function() {
-			_colorModel.create(tiles.insert, function(err,suc) {
-				callback(true);
-			});
-		};
-		if(num > 0) {
+		if(tiles.length > 0) {
 			save();
 		} else {
-			insertNew();
+			callback();
 		}
 	},
 
@@ -560,7 +497,7 @@ colorHelpers = {
 					newCount = oldCount + newInfo.numBombs,
 					bossModeUnlocked = result.bossModeUnlocked,
 					seedsDroppedGoal = result.seedsDroppedGoal;
-				
+
 				//update leadeboard
 				var oldBoard = result.leaderboard,
 					ob = oldBoard.length,
@@ -570,6 +507,7 @@ colorHelpers = {
 						name: newInfo.name,
 						count: newInfo.newCount
 					};
+
 
 				//if this is the first player on the leadeboard, push em and update status
 				if(ob === 0) {

@@ -18,14 +18,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 106,
-				g: 220,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -67,14 +59,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 106,
-				g: 220,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -113,14 +97,6 @@ module.exports.global = [{
 			x: 20,
 			y: 20
 		},
-		colorInfo: {
-			rgb: {
-				r: 205,
-				g: 95,
-				b: 243
-			},
-			tilesheet: 11
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -156,22 +132,14 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 20,
-			y: 20
-		},
-		colorInfo: {
-			rgb: {
-				r: 242,
-				g: 202,
-				b: 93
-			},
-			tilesheet: 3
+			x: 40,
+			y: 40
 		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			regular: 0,
+			regular: 10,
 			draw: 0,
 			dropped: 0
 		},
@@ -204,14 +172,6 @@ module.exports.global = [{
 		position: {
 			x: 64,
 			y: 77
-		},
-		colorInfo: {
-			rgb: {
-				r: 184,
-				g: 239,
-				b: 98
-			},
-			tilesheet: 4
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -250,14 +210,6 @@ module.exports.global = [{
 		position: {
 			x: 64,
 			y: 77
-		},
-		colorInfo: {
-			rgb: {
-				r: 184,
-				g: 239,
-				b: 98
-			},
-			tilesheet: 4
 		},
 		resources: [
 			{
@@ -459,14 +411,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 206,
-				g: 120,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -507,14 +451,6 @@ module.exports.global = [{
 		position: {
 			x: 64,
 			y: 77
-		},
-		colorInfo: {
-			rgb: {
-				r: 242,
-				g: 202,
-				b: 93
-			},
-			tilesheet: 3
 		},
 		resources: [],
 		resourcesDiscovered: 0,

@@ -1,22 +1,21 @@
 var _tilesheets = [],
-	_currentTilesheet = null,
 	_allImages = [],
 	_playerImages = [],
-	_tilesheetWidth= 0,
-	_tilesheetHeight= 0,
+	_tilesheetWidth = 0,
+	_tilesheetHeight = 0,
 
-	_tilesheetCanvas= null,
-	_tilesheetContext= null,
+	_tilesheetCanvas = [],
+	_tilesheetContext = [],
 
-	_offscreen_backgroundCanvas= null,
+	_offscreen_backgroundCanvas = null,
 	_offscreen_backgroundContext = null,
 
 	_offscreenCharacterCanvas = [],
 	_offscreenCharacterContext = [],
 
-	_backgroundContext= null,
-	_foregroundContext= null,
-	_charactersContext= null,
+	_backgroundContext = null,
+	_foregroundContext = null,
+	_charactersContext = null,
 
 	_minimapPlayerContext = null,
 	_minimapTileContext = null,
@@ -59,11 +58,19 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png','cursors.png'];
+		//0 - gray
+		//1 - color
+		//2 - npcs
+		//3 - botanist
+		//4 - robot
+		//5 - boss items
+		//6 - tiny botanist
+		//7 - cursors
+		_allImages = ['tilesheet_gray.png', 'tilesheet_color.png', 'npcs.png', 'botanist.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png','cursors.png'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
-		$renderer.loadTilesheet(_playerLevelNum, false);
+		$renderer.loadTilesheets(0);
 
 		// hack to check if all stuff is loaded so we can callback
 		var checkDone = function() {
@@ -84,8 +91,8 @@ var $renderer = $game.$renderer = {
 		_tilesheetWidth = 0;
 		_tilesheetHeight = 0;
 
-		_tilesheetCanvas = null;
-		_tilesheetContext = null;
+		_tilesheetCanvas = [];
+		_tilesheetContext = [];
 
 		_offscreen_backgroundCanvas= null;
 		_offscreen_backgroundContext = null;
@@ -110,40 +117,7 @@ var $renderer = $game.$renderer = {
 	},
 
 	// this loads the specified tilesheet
-	loadTilesheet: function(num, now) {
-		_currentTilesheet = new Image();
-		_currentTilesheet.src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
-		_currentTilesheet.onload = function() {
-			// we are in the game
-			if(now) {
-				_tilesheetContext.clearRect(0,0,_tilesheetWidth,_tilesheetHeight);
-			} else {
-				_tilesheetCanvas = document.createElement('canvas');
-				_tilesheetCanvas.setAttribute('width', _currentTilesheet.width);
-				_tilesheetCanvas.setAttribute('height', _currentTilesheet.height);
-				_tilesheetContext = _tilesheetCanvas.getContext('2d');
-
-				_tilesheetWidth = _currentTilesheet.width / $game.TILE_SIZE;
-				_tilesheetHeight = _currentTilesheet.height / $game.TILE_SIZE;
-				// loop through all images, load in each one, when done, move on to map loading
-				$renderer.loadImages(0);
-			}
-			_tilesheetContext.drawImage(
-				_currentTilesheet,
-				0,
-				0
-			);
-
-			if(now) {
-				// redraw all tiles
-				$renderer.renderAllTiles();
-			}
-		};
-	},
-
-	//loads all other images (accessories, npcs, etc)
-	loadImages: function(num) {
-
+	loadTilesheets: function(num) {
 		//load the images recursively until done
 		_tilesheets[num] = new Image();
 		_tilesheets[num].src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
@@ -153,7 +127,34 @@ var $renderer = $game.$renderer = {
 				$renderer.loadPlayerImages(0);
 			}
 			else {
-				$renderer.loadImages(next);
+				//if they are the world ones, do render them to canvas
+				if(num === 0) {
+					//gray
+					_tilesheetCanvas[0] = document.createElement('canvas');
+					_tilesheetCanvas[0].setAttribute('width', _tilesheets[num].width);
+					_tilesheetCanvas[0].setAttribute('height', _tilesheets[num].height);
+					_tilesheetContext[0] = _tilesheetCanvas[0].getContext('2d');
+
+					_tilesheetWidth = _tilesheets[num].width / $game.TILE_SIZE;
+					_tilesheetHeight = _tilesheets[num].height / $game.TILE_SIZE;
+					_tilesheetContext[0].drawImage(
+						_tilesheets[num],
+						0,
+						0
+					);
+				} else if(num === 1) {
+					//color
+					_tilesheetCanvas[1] = document.createElement('canvas');
+					_tilesheetCanvas[1].setAttribute('width', _tilesheets[num].width);
+					_tilesheetCanvas[1].setAttribute('height', _tilesheets[num].height);
+					_tilesheetContext[1] = _tilesheetCanvas[1].getContext('2d');
+					_tilesheetContext[1].drawImage(
+						_tilesheets[num],
+						0,
+						0
+					);
+				}
+				$renderer.loadTilesheets(next);
 			}
 		};
 	},
@@ -178,14 +179,14 @@ var $renderer = $game.$renderer = {
 				0
 			);
 
-			if(next === 21) {
+			if(next === 1) {
 				$renderer.ready = true;
-				$renderer.playerToCanvas(_playerLevelNum, _playerColorNum, true);
+				$renderer.playerToCanvas(_playerLevelNum, 0, true);
 				return;
 			}
-			else {
-				$renderer.loadPlayerImages(next);
-			}
+			// else {
+			// 	$renderer.loadPlayerImages(next);
+			// }
 		};
 	},
 
@@ -260,21 +261,16 @@ var $renderer = $game.$renderer = {
 			foreIndex = curTile.foreground-1,
 			foreIndex2 = curTile.foreground2-1,
 			tileStateVal = curTile.tileState,
-			colorVal = curTile.curColor,
+			colored = curTile.colored,
 
 			tileData = {
 				b1: backIndex1,
 				b2: backIndex2,
 				b3: backIndex3,
 				destX: i,
-				destY: j
+				destY: j,
+				colored: colored
 			};
-
-		//color tile first if it needs to be done
-		if(colorVal) {
-			//rgb string
-			tileData.color = colorVal;
-		}
 
 		//send the tiledata to the artist aka mamagoo
 		$renderer.drawMapTile(tileData);
@@ -284,7 +280,8 @@ var $renderer = $game.$renderer = {
 			f1: foreIndex,
 			f2: foreIndex2,
 			destX: i,
-			destY: j
+			destY: j,
+			colored: colored
 		};
 
 		if(foreIndex > -1 || foreIndex2 > -1) {
@@ -307,27 +304,30 @@ var $renderer = $game.$renderer = {
 
 		var srcX,srcY;
 
-		//draw color tile first
-		if(tileData.color) {
-			//var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
-			_backgroundContext.fillStyle = tileData.color;
-			_backgroundContext.fillRect(
+		var tilesheetIndex = tileData.colored ? 1 : 0;
+		//background1, the ground texture
+		if(tilesheetIndex === 1) {
+			//4 is bg
+			_backgroundContext.drawImage(
+				_tilesheetCanvas[tilesheetIndex],
+				4 * $game.TILE_SIZE,
+				0,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE,
 				tileData.destX * $game.TILE_SIZE,
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 
-		//background1, the ground texture
 		if(tileData.b1 > -1) {
-			srcX =  tileData.b1 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b1 / _tilesheetWidth),
-
+			srcX =  tileData.b1 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b1 / _tilesheetWidth);
 
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -336,15 +336,15 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 
 		if(tileData.b2 > -1) {
-			srcX = tileData.b2 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
+			srcX = tileData.b2 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b2 / _tilesheetWidth);
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -353,14 +353,14 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 		if(tileData.b3 > -1) {
-			srcX = tileData.b3 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b3 / _tilesheetWidth),
+			srcX = tileData.b3 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b3 / _tilesheetWidth);
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -369,18 +369,20 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 	},
 
 	//draw a foreground tile to the canvas
 	drawForegroundTile: function(tileData) {
 		var srcX, srcY;
+
+		var tilesheetIndex = tileData.colored ? 1 : 0;
 		if(tileData.f1 > -1) {
 			srcX = tileData.f1 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f1 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -395,7 +397,7 @@ var $renderer = $game.$renderer = {
 			srcX = tileData.f2 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f2 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -407,35 +409,6 @@ var $renderer = $game.$renderer = {
 				);
 		}
 
-	},
-
-	//draw acessory items to a player
-	drawAccessories: function(srcX,destX,destY, level, color, client) {
-		if(client) {
-			//this will add your stuff to the gray player (for seed mode) as well
-			_offscreenCharacterContext[0].drawImage(
-				_tilesheets[level],
-				srcX,
-				0,
-				32,
-				64,
-				destX,
-				destY,
-				32,
-				64
-			);
-		}
-		_offscreenCharacterContext[color].drawImage(
-			_tilesheets[level],
-			srcX,
-			0,
-			32,
-			64,
-			destX,
-			destY,
-			32,
-			64
-		);
 	},
 
 	//draw a player on the backup canvas
@@ -504,7 +477,7 @@ var $renderer = $game.$renderer = {
 	//draw the player from backup to real canvas
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
-			_offscreenCharacterCanvas[info.colorNum],
+			_offscreenCharacterCanvas[0],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -601,7 +574,7 @@ var $renderer = $game.$renderer = {
 	//draw and npc to the canvas
 	renderNpc: function (npcData) {
 		_charactersContext.drawImage(
-			_tilesheets[5],
+			_tilesheets[2],
 			npcData.srcX,
 			npcData.srcY,
 			$game.TILE_SIZE,
@@ -628,62 +601,39 @@ var $renderer = $game.$renderer = {
 			);
 
 			//redraw that area
-			var foreIndex = $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground-1,
-				foreIndex2 =  $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground2-1,
+		var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
+			var foreIndex = tile.foreground - 1,
+				foreIndex2 =  tile.foreground2 - 1,
+				colored = tile.colored,
 
 				foreData = {
 					f1: foreIndex,
 					f2: foreIndex2,
 					destX: _prevMouseX,
-					destY: _prevMouseY
+					destY: _prevMouseY,
+					colored: colored
 			};
 
 			$renderer.drawForegroundTile(foreData);
 
-			var col = $game.$player.getRGBA();
-
-			var srcX = 0;
+			var srcX;
 			if($game.$player.seedMode) {
-				// _foregroundContext.fillStyle = col; // seed color
-				// _foregroundContext.fillRect(
-				// 	mX,
-				// 	mY,
-				// 	$game.TILE_SIZE,
-				// 	$game.TILE_SIZE
-				// );
 				srcX  = $game.TILE_SIZE * 3;
 			}
-			//
 			else {
-			
-				//go
-				if(state == -1) {
-					// col = 'rgba(50,255,50,.5)';
-					// _foregroundContext.strokeStyle = col;
-
-				}
-				//nogo
-				else if(state === -2) {
-					// col = 'rgba(255,50,50,.5)';
-					// _foregroundContext.strokeStyle = col;
+				if(state === -1) {
+					//go
+					srcX = 0;
+				} else if(state === -2) {
+					//nogo
 					srcX  = $game.TILE_SIZE;
-
-				}
-				//npc
-				else {
-					// col = 'rgba(50,50,235,.5)';
-					// _foregroundContext.strokeStyle = col;
+				} else {
+					//npc
 					srcX  = $game.TILE_SIZE * 2;
 				}
-				// _foregroundContext.strokeRect(
-				// 	mX + 2,
-				// 	mY + 2,
-				// 	$game.TILE_SIZE - 4,
-				// 	$game.TILE_SIZE - 4
-				// );
 			}
 			_foregroundContext.drawImage(
-				_tilesheets[13],
+				_tilesheets[7],
 				srcX,
 				0,
 				$game.TILE_SIZE,
@@ -738,7 +688,7 @@ var $renderer = $game.$renderer = {
 		// 	8
 		// );
 		_minimapPlayerContext.drawImage(
-			_tilesheets[12],
+			_tilesheets[6],
 			0,
 			0,
 			20,
@@ -751,8 +701,8 @@ var $renderer = $game.$renderer = {
 	},
 
 	//render a specific tile on the mini map
-	renderMiniTile: function(x, y, col) {
-		var	rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
+	renderMiniTile: function(x, y) {
+		var	rgba = 'rgba(255,0,0)';
 		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
 			x,
@@ -786,7 +736,7 @@ var $renderer = $game.$renderer = {
 	//render the botanist on the canvas
 	renderBotanist: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[6],
+			_tilesheets[3],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE * 6,
@@ -802,7 +752,7 @@ var $renderer = $game.$renderer = {
 	renderRobot: function(info) {
 		// console.log(info.srcX, info.srcY);
 		_charactersContext.drawImage(
-			_tilesheets[10],
+			_tilesheets[4],
 			info.srcX,
 			info.srcY,
 			64,
@@ -843,7 +793,7 @@ var $renderer = $game.$renderer = {
 				// 	$game.TILE_SIZE
 				// );
 				_backgroundContext.drawImage(
-					_tilesheets[11],
+					_tilesheets[5],
 					tiles[t].item * $game.TILE_SIZE,
 					0,
 					$game.TILE_SIZE,
@@ -863,7 +813,7 @@ var $renderer = $game.$renderer = {
 				// 	$game.TILE_SIZE
 				// );
 				_backgroundContext.drawImage(
-					_tilesheets[11],
+					_tilesheets[5],
 					128,
 					0,
 					$game.TILE_SIZE,

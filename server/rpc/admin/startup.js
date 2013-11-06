@@ -97,10 +97,6 @@ exports.actions = function(req, res, ss) {
 											y: 77,
 											inTransit: false
 										},
-										colorInfo: {
-											rgb: newColor,
-											tilesheet: i
-										},
 										resources: [],
 										resourcesDiscovered: 0,
 										inventory: [],
@@ -198,43 +194,24 @@ exports.actions = function(req, res, ss) {
 						});
 					});
 				} else if(dataType === 'colors') {
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Colors   * * * * * * * * * * * *   \n\n'.yellow);
 					var colors = [{
 						instanceName: 'test',
 						x: 0,
 						y: 0,
-						mapIndex: 0,
-						color: {
-							r: 255,
-							g: 0,
-							b: 0,
-							a: 0.5,
-							owner: 'nobody'
-						},
-						curColor: 'rgba(255,0,0,0.5)'
+						mapIndex: 0
 					}, {
 						instanceName: 'demo',
 						x: 0,
 						y: 0,
-						mapIndex: 0,
-						color: {
-							r: 255,
-							g: 0,
-							b: 0,
-							a: 0.5,
-							owner: 'nobody'
-						},
-						curColor: 'rgba(255,0,0,0.5)'
+						mapIndex: 0
 					}];
-					// dbActions.dropCollection('colors', function() {
-					// 	dbActions.saveDocuments(colorModel, colors, function() {
-					// 		res('Data loaded: ' + dataType);
-					// 	});
-					// });
+
 					dbActions.resetDefaultData(colorModel, function(err) {
 						if(err) {
 							apprise(err);
 						} else {
-							dbActions.saveDocuments(gameModel, colors, function() {
+							dbActions.saveDocuments(colorModel, colors, function() {
 								res('Data loaded: ' + dataType);
 							});	
 						}

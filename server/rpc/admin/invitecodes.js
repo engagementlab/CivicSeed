@@ -61,10 +61,6 @@ exports.actions = function(req, res, ss) {
 								x: 64,
 								y: 77
 							},
-							colorInfo: {
-								rgb: newColor,
-								tilesheet: tilesheetNum
-							},
 							resources: [],
 							resourcesDiscovered: 0,
 							inventory: [],
