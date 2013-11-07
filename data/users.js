@@ -168,8 +168,8 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
+			head: 'purple',
+			torso: 'purple',
 			legs: 'lion'
 		}
 	}

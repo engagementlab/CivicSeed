@@ -97,7 +97,7 @@ exports.actions = function(req, res, ss) {
 			_userModel
 				.where('activeSessionID').ne(null)
 				.where('game.instanceName').equals(req.session.game.instanceName)
-				.select('id firstName game.tilesColored game.rank game.currentLevel game.position')
+				.select('id firstName game.tilesColored game.rank game.currentLevel game.position game.skinSuit')
 				.find(function (err, users) {
 					if(err) {
 						console.log('error', err);

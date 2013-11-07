@@ -41,6 +41,7 @@ var _curFrame = 0,
 	_tilesColored = null,
 	_pledges = null,
 	_resourcesDiscovered = null,
+	_skinSuit = null,
 
 	_drawSeeds = null;
 
@@ -97,7 +98,8 @@ $game.$player = {
 					tilesColored: playerInfo.game.tilesColored,
 					rank: playerInfo.game.rank,
 					currentLevel: playerInfo.game.currentLevel,
-					position: playerInfo.game.position
+					position: playerInfo.game.position,
+					skinSuit: playerInfo.game.skinSuit
 				}
 			};
 			ss.rpc('game.player.tellOthers', subsetInfo);
@@ -169,7 +171,7 @@ $game.$player = {
 		_tilesColored = null;
 		_pledges = null;
 		_resourcesDiscovered = null;
-		_test = false;
+		_skinSuit = null;
 
 		_drawSeeds = null;
 
@@ -226,7 +228,7 @@ $game.$player = {
 				$('.inventoryButton').removeClass('currentButton');
 			});
 		}
-		_test = true;
+
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc.x === x && loc.y === y) {
 			return;
@@ -538,7 +540,6 @@ $game.$player = {
 			var newLevelMsg = $game.$player.currentLevel + 1;
 			// var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
-			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
 		} else {
 			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
 			if($game.bossModeUnlocked) {
@@ -750,6 +751,10 @@ $game.$player = {
 	//get the number of resources collected
 	getResourcesDiscovered: function() {
 		return _resourcesDiscovered;
+	},
+
+	getSkinSuit: function() {
+		return _skinSuit;
 	},
 
 	//get the number of seeds dropped
@@ -1056,6 +1061,7 @@ function _setPlayerInformation(info) {
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
 	_resourcesDiscovered = info.game.resourcesDiscovered;
+	_skinSuit = info.game.skinSuit;
 
 	// hack
 	// console.log(_resources);
@@ -1322,9 +1328,9 @@ function _endMove() {
 	$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
 
 	//put the character back to normal position
-	_info.offX = 0,
+	_info.offX = 0;
 	_info.offY = 0;
-	_info.srcX = 0,
+	_info.srcX = 0;
 	_info.srcY =  0;
 	_info.prevOffX= 0;
 	_info.prevOffY= 0;

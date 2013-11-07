@@ -1,10 +1,10 @@
 var _tilesheets = {},
 	_allImages = [],
-	_playerImageNames = [],
+	_skinSuitNames = [],
 	_tilesheetWidth = 0,
 	_tilesheetHeight = 0,
-	_playerWidth = 0,
-	_playerHeight = 0,
+	_skinSuitWidth = 0,
+	_skinSuitHeight = 0,
 
 	_tilesheetCanvas = [],
 	_tilesheetContext = [],
@@ -12,8 +12,8 @@ var _tilesheets = {},
 	_offscreenBackgroundCanvas = null,
 	_offscreenBackgroundContext = null,
 
-	_offscreenCharacterCanvas = {},
-	_offscreenCharacterContext = {},
+	_offscreenSkinSuitCanvas = {},
+	_offscreenSkinSuitContext = {},
 
 	_offscreenPlayersCanvas = {},
 	_offscreenPlayersContext = {},
@@ -64,7 +64,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.save();
 
 		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
-		_playerImageNames = ['lion','purple'];
+		_skinSuitNames = ['lion','purple'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -85,11 +85,11 @@ var $renderer = $game.$renderer = {
 		_tilesheets = {};
 		_currentTilesheet = null;
 		_allImages = [];
-		_playerImageNames = [];
+		_skinSuitNames = [];
 		_tilesheetWidth = 0;
 		_tilesheetHeight = 0;
-		_playerWidth = 0;
-		_playerHeight = 0;
+		_skinSuitWidth = 0;
+		_skinSuitHeight = 0;
 
 		_tilesheetCanvas = [];
 		_tilesheetContext = [];
@@ -97,8 +97,8 @@ var $renderer = $game.$renderer = {
 		_offscreenBackgroundCanvas= null;
 		_offscreenBackgroundContext = null;
 
-		_offscreenCharacterCanvas = {};
-		_offscreenCharacterContext = {};
+		_offscreenSkinSuitCanvas = {};
+		_offscreenSkinSuitContext = {};
 
 		_offscreenPlayersCanvas = {};
 		_offscreenPlayersContext = {};
@@ -128,7 +128,7 @@ var $renderer = $game.$renderer = {
 		_tilesheets[filename].onload = function() {
 			var next = num + 1;
 			if(num === _allImages.length - 1) {
-				$renderer.loadPlayerImages(0);
+				$renderer.loadSkinSuitImages(0);
 			}
 			else {
 				//if they are the world ones, do render them to canvas
@@ -164,36 +164,36 @@ var $renderer = $game.$renderer = {
 	},
 
 	//load all player images
-	loadPlayerImages: function(num) {
+	loadSkinSuitImages: function(num) {
 		var next = num + 1,
-			filename = _playerImageNames[num],
-			playerFile = CivicSeed.CLOUD_PATH + '/img/game/players/' + filename + '.png';
+			filename = _skinSuitNames[num],
+			skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + filename + '.png';
 		
-		var playerImage = new Image();
-		playerImage.src = playerFile;
+		var skinSuitImage = new Image();
+		skinSuitImage.src = skinSuitFile;
 
-		playerImage.onload = function() {
+		skinSuitImage.onload = function() {
 
-			_offscreenCharacterCanvas[filename] = document.createElement('canvas');
-			_offscreenCharacterCanvas[filename].setAttribute('width', playerImage.width);
-			_offscreenCharacterCanvas[filename].setAttribute('height', playerImage.height);
-			_offscreenCharacterContext[filename] = _offscreenCharacterCanvas[filename].getContext('2d');
+			_offscreenSkinSuitCanvas[filename] = document.createElement('canvas');
+			_offscreenSkinSuitCanvas[filename].setAttribute('width', skinSuitImage.width);
+			_offscreenSkinSuitCanvas[filename].setAttribute('height', skinSuitImage.height);
+			_offscreenSkinSuitContext[filename] = _offscreenSkinSuitCanvas[filename].getContext('2d');
 
-			_offscreenCharacterContext[filename].drawImage(
-				playerImage,
+			_offscreenSkinSuitContext[filename].drawImage(
+				skinSuitImage,
 				0,
 				0
 			);
 
-			if(next === _playerImageNames.length) {
+			if(next === _skinSuitNames.length) {
 				$renderer.ready = true;
-				_playerWidth = playerImage.width;
-				_playerHeight = playerImage.height;
-				$renderer.createCanvasForPlayer($game.$player.id);
+				_skinSuitWidth = skinSuitImage.width;
+				_skinSuitHeight = skinSuitImage.height;
+				$renderer.createCanvasForPlayer($game.$player.id, false);
 				return;
 			}
 			else {
-				$renderer.loadPlayerImages(next);
+				$renderer.loadSkinSuitImages(next);
 			}
 		};
 	},
@@ -420,34 +420,87 @@ var $renderer = $game.$renderer = {
 	},
 
 	//create a canvas for each an active player
-	createCanvasForPlayer: function(id) {
-		_offscreenPlayersCanvas[id] = document.createElement('canvas');
-		_offscreenPlayersCanvas[id].setAttribute('width', _playerWidth);
-		_offscreenPlayersCanvas[id].setAttribute('height', _playerHeight);
-		_offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
-		
-		_offscreenPlayersContext[id].drawImage(
-			_offscreenCharacterCanvas.lion,
-			0,
-			0
-		);
-	},
+	createCanvasForPlayer: function(id, suit) {
+		//if it exists, clear it
+		if(_offscreenPlayersContext[id]) {
+			_offscreenPlayersContext[id].clearRect(0,0,_skinSuitWidth,_skinSuitHeight);
+		} else {
+			_offscreenPlayersCanvas[id] = document.createElement('canvas');
+			_offscreenPlayersCanvas[id].setAttribute('width', _skinSuitWidth);
+			_offscreenPlayersCanvas[id].setAttribute('height', _skinSuitHeight);
+			_offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
+		}
+		var skinSuit = suit;
+		if(!skinSuit) {
+			skinSuit = $game.$player.getSkinSuit();
+		}
+		//draw the head, torso, and legs
+		var h = $game.TILE_SIZE * 2,
+			numRows = Math.floor(_skinSuitHeight / h);
 
-	//draw a player on the backup canvas
-	playerToCanvas: function(client) {
-		
-		// //clear and redraw then add accessories
-		// _offscreenCharacterContext['lion'].clearRect(
-		// 	0,
-		// 	0,
-		// 	_playerImages[1].width,
-		// 	_playerImages[1].height
-		// );
-		// _offscreenCharacterContext['lion'].drawImage(
-		// 	_playerImages[1],
-		// 	0,
-		// 	0
-		// );
+		var r = 0;
+		//draw all the heads from this spritesheet
+		var headHeight = 30,
+			torsoHeight = 16,
+			legsHeight = 18;
+
+
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.head],
+				0,
+				r * h,
+				_skinSuitWidth,
+				headHeight,
+				0,
+				r * h,
+				_skinSuitWidth,
+				headHeight
+			);
+		}
+		//draw all the torso from this spritesheet
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.torso],
+				0,
+				r * h + headHeight,
+				_skinSuitWidth,
+				torsoHeight,
+				0,
+				r * h + headHeight,
+				_skinSuitWidth,
+				torsoHeight
+			);
+		}
+		//draw all the legs from this spritesheet
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.legs],
+				0,
+				r * h + headHeight + torsoHeight,
+				_skinSuitWidth,
+				legsHeight,
+				0,
+				r * h + headHeight + torsoHeight,
+				_skinSuitWidth,
+				legsHeight
+			);
+		}
+
+				//tinting proof
+		// var theImage = _offscreenSkinSuitContext.lion.getImageData(0, 0, _skinSuitWidth, _skinSuitHeight);
+  //           pix = theImage.data;
+            
+  //       // Every four values equals 1 pixel.	
+  //       for (i = 0; i < pix.length; i += 4) {
+  //           pix[i]  = 255;
+  //           pix[i + 1]  = 255;
+  //           pix[i + 3] = 0;
+  //           // green[i + 1] = 255;
+  //           // blue[i + 2]  = pix[i + 2];
+  //           // alpha[i + 3] = pix[i + 3];
+  //       }
+  //       _offscreenSkinSuitContext.lion.putImageData(theImage, 0,0);
 	},
 
 	//draw the player from backup to real canvas
@@ -469,21 +522,6 @@ var $renderer = $game.$renderer = {
 		_charactersContext.shadowOffsetY = 0;
 		_charactersContext.fillText(info.firstName,info.curX + $game.TILE_SIZE / 2, info.curY - 32);
 		_charactersContext.restore();
-	},
-
-	//draw an npc to canvas
-	renderCharacter: function(info) {
-		_charactersContext.drawImage(
-		_offscreenCharacterCanvas[info.colorNum],
-		info.srcX,
-		info.srcY,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2,
-		info.curX,
-		info.curY - $game.TILE_SIZE,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2
-		);
 	},
 
 	//clear the character canvas

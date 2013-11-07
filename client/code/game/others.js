@@ -27,10 +27,10 @@ $game.$others = {
 			
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
-			_onScreenPlayers[player._id] = newbie;
+			_onScreenPlayers[newbie.id] = newbie;
 			newbie.updateRenderInfo();
-			//console.log("added: " + player.id);
-			$game.$map.addPlayer(player._id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
+			$game.$renderer.createCanvasForPlayer(newbie.id, newbie.skinSuit);
+			$game.$map.addPlayer(newbie.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
 		}
 	},
 
@@ -136,6 +136,7 @@ $game.$others = {
 			tilesColored: player.game.tilesColored,
 			rank: player.game.rank,
 			level: player.game.currentLevel,
+			skinSuit: player.game.skinSuit,
 
 			info: {
 				x: player.game.position.x,
@@ -149,7 +150,6 @@ $game.$others = {
 			},
 
 			renderInfo: {
-				colorNum: player.game.colorInfo.tilesheet,
 				srcX: 0,
 				srcY: 0,
 				curX: player.x,
@@ -157,7 +157,8 @@ $game.$others = {
 				prevX: player.x,
 				prevY: player.y,
 				kind: 'player',
-				firstName: player.firstName
+				firstName: player.firstName,
+				id: player._id
 			},
 
 			update: function() {
@@ -185,12 +186,12 @@ $game.$others = {
 						curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS,
 						curY = loc.y * $game.TILE_SIZE + otherPlayer.info.offY * $game.STEP_PIXELS;
 
-					otherPlayer.renderInfo.prevX = prevX,
+					otherPlayer.renderInfo.prevX = prevX;
 					otherPlayer.renderInfo.prevY = prevY;
 
-					otherPlayer.renderInfo.srcX = otherPlayer.info.srcX,
-					otherPlayer.renderInfo.srcY = otherPlayer.info.srcY,
-					otherPlayer.renderInfo.curX = curX,
+					otherPlayer.renderInfo.srcX = otherPlayer.info.srcX;
+					otherPlayer.renderInfo.srcY = otherPlayer.info.srcY;
+					otherPlayer.renderInfo.curX = curX;
 					otherPlayer.renderInfo.curY = curY;
 
 					otherPlayer.offScreen = false;
@@ -198,9 +199,6 @@ $game.$others = {
 				else {
 					otherPlayer.offScreen = true;
 				}
-
-				//add accessories to player
-				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
 			},
 
 			idle: function() {
@@ -229,12 +227,12 @@ $game.$others = {
 			},
 
 			slide: function(sX, sY) {
-				otherPlayer.info.prevOffX = sX * otherPlayer.numSteps,
+				otherPlayer.info.prevOffX = sX * otherPlayer.numSteps;
 				otherPlayer.info.prevOffY = sY * otherPlayer.numSteps;
 			},
 
 			resetRenderValues: function() {
-				otherPlayer.info.prevOffX = 0,
+				otherPlayer.info.prevOffX = 0;
 				otherPlayer.info.prevOffY = 0;
 			},
 
@@ -343,7 +341,7 @@ $game.$others = {
 						}
 					}
 
-					otherPlayer.info.srcX = otherPlayer.curFrame * $game.TILE_SIZE,
+					otherPlayer.info.srcX = otherPlayer.curFrame * $game.TILE_SIZE;
 					otherPlayer.info.srcY =  otherPlayer.direction * $game.TILE_SIZE*2;
 				}
 			},
@@ -351,13 +349,6 @@ $game.$others = {
 			message: function(data) {
 				if(!otherPlayer.offScreen) {
 					var position = {x: otherPlayer.renderInfo.curX, y: otherPlayer.renderInfo.curY};
-					// var info = {
-					// 	name: otherPlayer.name,
-					// 	isChatting: otherPlayer.isChatting,
-					// 	chatId: otherPlayer.chatId,
-					// 	chatIdSelector: otherPlayer.chatIdSelector,
-					// 	position: position
-					// };
 					data.isChatting = otherPlayer.isChatting;
 					data.chatId = otherPlayer.chatId;
 					data.chatIdSelector = otherPlayer.chatIdSelector;
@@ -394,7 +385,6 @@ $game.$others = {
 
 			changeLevel: function(level) {
 				otherPlayer.level = level;
-				$game.$renderer.playerToCanvas(otherPlayer.level, otherPlayer.renderInfo.colorNum);
 			},
 
 			beam: function(info) {
@@ -402,7 +392,7 @@ $game.$others = {
 				otherPlayer.info.y = info.y;
 				otherPlayer.updateRenderInfo();
 				$game.$map.updatePlayer(otherPlayer.id, otherPlayer.info.x, otherPlayer.info.y);
-			}
+			},
 		};
 		return otherPlayer;
 	},
