@@ -47,7 +47,7 @@ $game.$boss = {
 		$('.regularGameHud').fadeOut('fast');
 		_setupHud();
 		$bossArea.show();
-		_rgbString = $game.$player.getColorString();
+		_rgbString = 'rgba(255,0,0,';
 		_currentSlide = 0;
 		_addContent();
 		//for testing

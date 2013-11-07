@@ -174,38 +174,43 @@ exports.actions = function(req, res, ss) {
 						}
 						//saveEach tile
 						colorHelpers.saveTiles(newTiles, function() {
-							//send out new bombs AND player info to update score
-							var numBombsScaled = Math.ceil(newTiles.length / 9);
-							var newTileCount = info.tilesColored + newTiles.length;
+							//only do updating stuff if new tiles
+							if(newTiles.length > 0) {
+								//send out new bombs AND player info to update score
+								var numBombsScaled = Math.ceil(newTiles.length / 9);
+								var newTileCount = info.tilesColored + newTiles.length;
 
-							var sendData = {
-								bombed: newTiles,
-								id: info.id,
-								tilesColored: newTileCount
-							};
-							// //we are done,send out the color information to each client to render
-							ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
+								var sendData = {
+									bombed: newTiles,
+									id: info.id,
+									tilesColored: newTileCount
+								};
+								// //we are done,send out the color information to each client to render
+								ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
 
-							var newInfo = {
-								name: info.name,
-								newCount: newTileCount,
-								numBombs: numBombsScaled
-							};
+								var newInfo = {
+									name: info.name,
+									newCount: newTileCount,
+									numBombs: numBombsScaled
+								};
 
-							
-							colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates, gameOver) {
-								if(updates.updateBoard) {
-									ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
-								}
-								ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
-								//FINNNALLY done updating and stuff, respond to the player
-								//telling them if it was sucesful
-								if(gameOver) {
-									ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
-								}
-								res(newTiles.length);
-							});
-							dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+								
+								colorHelpers.gameColorUpdate(newInfo, info.instanceName, function(updates, gameOver) {
+									if(updates.updateBoard) {
+										ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+									}
+									ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
+									//FINNNALLY done updating and stuff, respond to the player
+									//telling them if it was sucesful
+									if(gameOver) {
+										ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+									}
+									res(newTiles.length);
+								});
+								dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+							} else {
+								res(0);
+							}
 						});
 					}
 				});
@@ -448,7 +453,6 @@ colorHelpers = {
 		//curIndex ALWAYS increases, but bomb only does if we found 
 		//the matching tile, tricky
 		var bIndex = bombed.length,
-			updateTiles = [],
 			insertTiles = [];
 
 		//go thru each new tile (bombed)
