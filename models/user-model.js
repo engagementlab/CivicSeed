@@ -53,7 +53,12 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			playingTime: Number,
 			tilesColored: Number,
 			pledges: Number,
-			collaborativeChallenge: Boolean
+			collaborativeChallenge: Boolean,
+			skinSuit: {
+				head: String,
+				torso: String,
+				legs: String
+			}
 		},
 		admin: {
 			instances: [String]

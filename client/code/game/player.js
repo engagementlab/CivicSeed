@@ -113,7 +113,8 @@ $game.$player = {
 				prevY: _info.y * $game.TILE_SIZE,
 				kind: 'player',
 				level: $game.$player.currentLevel,
-				firstName: $game.$player.firstName
+				firstName: $game.$player.firstName,
+				id: $game.$player.id
 			};
 
 			// setup DOM selectors

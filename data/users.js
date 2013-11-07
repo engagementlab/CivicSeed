@@ -34,7 +34,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	},
 	admin: {
 		instances: ['test','demo','boss']
@@ -75,7 +80,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -113,7 +123,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -139,8 +154,8 @@ module.exports.global = [{
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			regular: 10,
-			draw: 0,
+			regular: 500,
+			draw: 500,
 			dropped: 0
 		},
 		botanistState: 0,
@@ -151,7 +166,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -189,7 +209,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -389,7 +414,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -427,7 +457,12 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	},
 	admin: {
 		instances: []
@@ -468,6 +503,11 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'lion',
+			torso: 'lion',
+			legs: 'lion'
+		}
 	}
 }];

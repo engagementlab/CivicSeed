@@ -77,7 +77,12 @@ exports.actions = function(req, res, ss) {
 							playingTime: 0,
 							tilesColored: 0,
 							pledges: 5,
-							collaborativeChallenge: false
+							collaborativeChallenge: false,
+							skinSuit: {
+								head: 'lion',
+								torso: 'lion',
+								legs: 'lion'
+							}
 						};
 						console.log('Created user: ' + user.email);
 						user.save(function(err) {

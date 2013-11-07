@@ -1,17 +1,22 @@
 var _tilesheets = {},
 	_allImages = [],
-	_playerImages = [],
+	_playerImageNames = [],
 	_tilesheetWidth = 0,
 	_tilesheetHeight = 0,
+	_playerWidth = 0,
+	_playerHeight = 0,
 
 	_tilesheetCanvas = [],
 	_tilesheetContext = [],
 
-	_offscreen_backgroundCanvas = null,
-	_offscreen_backgroundContext = null,
+	_offscreenBackgroundCanvas = null,
+	_offscreenBackgroundContext = null,
 
-	_offscreenCharacterCanvas = [],
-	_offscreenCharacterContext = [],
+	_offscreenCharacterCanvas = {},
+	_offscreenCharacterContext = {},
+
+	_offscreenPlayersCanvas = {},
+	_offscreenPlayersContext = {},
 
 	_backgroundContext = null,
 	_foregroundContext = null,
@@ -33,11 +38,11 @@ var $renderer = $game.$renderer = {
 	// setup all rendering contexts then load images
 	init: function(callback) {
 		// create offscreen canvases for optimized rendering
-		_offscreen_backgroundCanvas = document.createElement('canvas');
-		_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-		_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+		_offscreenBackgroundCanvas = document.createElement('canvas');
+		_offscreenBackgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+		_offscreenBackgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		// offscreen contexts
-		_offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
+		_offscreenBackgroundContext = _offscreenBackgroundCanvas.getContext('2d');
 
 		// access the canvases for rendering
 		_backgroundContext = document.getElementById('background').getContext('2d');
@@ -59,6 +64,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.save();
 
 		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
+		_playerImageNames = ['lion','purple'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -79,18 +85,23 @@ var $renderer = $game.$renderer = {
 		_tilesheets = {};
 		_currentTilesheet = null;
 		_allImages = [];
-		_playerImages = [];
+		_playerImageNames = [];
 		_tilesheetWidth = 0;
 		_tilesheetHeight = 0;
+		_playerWidth = 0;
+		_playerHeight = 0;
 
 		_tilesheetCanvas = [];
 		_tilesheetContext = [];
 
-		_offscreen_backgroundCanvas= null;
-		_offscreen_backgroundContext = null;
+		_offscreenBackgroundCanvas= null;
+		_offscreenBackgroundContext = null;
 
-		_offscreenCharacterCanvas = [];
-		_offscreenCharacterContext = [];
+		_offscreenCharacterCanvas = {};
+		_offscreenCharacterContext = {};
+
+		_offscreenPlayersCanvas = {};
+		_offscreenPlayersContext = {};
 
 		_backgroundContext= null;
 		_foregroundContext= null;
@@ -155,26 +166,30 @@ var $renderer = $game.$renderer = {
 	//load all player images
 	loadPlayerImages: function(num) {
 		var next = num + 1,
-			playerFile = CivicSeed.CLOUD_PATH + '/img/game/players/' + num + '.png';
-		_playerImages[num] = new Image();
-		_playerImages[num].src = playerFile;
+			filename = _playerImageNames[num],
+			playerFile = CivicSeed.CLOUD_PATH + '/img/game/players/' + filename + '.png';
+		
+		var playerImage = new Image();
+		playerImage.src = playerFile;
 
-		_playerImages[num].onload = function() {
+		playerImage.onload = function() {
 
-			_offscreenCharacterCanvas[num] = document.createElement('canvas');
-			_offscreenCharacterCanvas[num].setAttribute('width', _playerImages[num].width);
-			_offscreenCharacterCanvas[num].setAttribute('height', _playerImages[num].height);
-			_offscreenCharacterContext[num] = _offscreenCharacterCanvas[num].getContext('2d');
+			_offscreenCharacterCanvas[filename] = document.createElement('canvas');
+			_offscreenCharacterCanvas[filename].setAttribute('width', playerImage.width);
+			_offscreenCharacterCanvas[filename].setAttribute('height', playerImage.height);
+			_offscreenCharacterContext[filename] = _offscreenCharacterCanvas[filename].getContext('2d');
 
-			_offscreenCharacterContext[num].drawImage(
-				_playerImages[num],
+			_offscreenCharacterContext[filename].drawImage(
+				playerImage,
 				0,
 				0
 			);
 
-			if(next === 2) {
+			if(next === _playerImageNames.length) {
 				$renderer.ready = true;
-				$renderer.playerToCanvas(true);
+				_playerWidth = playerImage.width;
+				_playerHeight = playerImage.height;
+				$renderer.createCanvasForPlayer($game.$player.id);
 				return;
 			}
 			else {
@@ -404,27 +419,41 @@ var $renderer = $game.$renderer = {
 
 	},
 
-	//draw a player on the backup canvas
-	playerToCanvas: function(client) {
+	//create a canvas for each an active player
+	createCanvasForPlayer: function(id) {
+		_offscreenPlayersCanvas[id] = document.createElement('canvas');
+		_offscreenPlayersCanvas[id].setAttribute('width', _playerWidth);
+		_offscreenPlayersCanvas[id].setAttribute('height', _playerHeight);
+		_offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
 		
-		//clear and redraw then add accessories
-		_offscreenCharacterContext[1].clearRect(
-			0,
-			0,
-			_playerImages[1].width,
-			_playerImages[1].height
-		);
-		_offscreenCharacterContext[1].drawImage(
-			_playerImages[1],
+		_offscreenPlayersContext[id].drawImage(
+			_offscreenCharacterCanvas.lion,
 			0,
 			0
 		);
 	},
 
+	//draw a player on the backup canvas
+	playerToCanvas: function(client) {
+		
+		// //clear and redraw then add accessories
+		// _offscreenCharacterContext['lion'].clearRect(
+		// 	0,
+		// 	0,
+		// 	_playerImages[1].width,
+		// 	_playerImages[1].height
+		// );
+		// _offscreenCharacterContext['lion'].drawImage(
+		// 	_playerImages[1],
+		// 	0,
+		// 	0
+		// );
+	},
+
 	//draw the player from backup to real canvas
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
-			_offscreenCharacterCanvas[1],
+			_offscreenPlayersCanvas[info.id],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -488,7 +517,7 @@ var $renderer = $game.$renderer = {
 			);
 
 		//start fresh for the offscreen every time we change ALL tiles
-		_offscreen_backgroundContext.clearRect(
+		_offscreenBackgroundContext.clearRect(
 			0,
 			0,
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
