@@ -104,8 +104,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 20,
-			y: 20
+			x: 40,
+			y: 44
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -125,9 +125,9 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
+			head: 'cactus',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'tuxedo'
 		}
 	}
 }, {
@@ -168,8 +168,8 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'purple',
-			torso: 'purple',
+			head: 'tuxedo',
+			torso: 'cactus',
 			legs: 'lion'
 		}
 	}

@@ -64,7 +64,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.save();
 
 		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
-		_skinSuitNames = ['lion','purple'];
+		_skinSuitNames = ['lion','tuxedo','cactus'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -441,8 +441,8 @@ var $renderer = $game.$renderer = {
 		var r = 0;
 		//draw all the heads from this spritesheet
 		var headHeight = 30,
-			torsoHeight = 16,
-			legsHeight = 18;
+			torsoHeight = 15,
+			legsHeight = 19;
 
 
 		for(r = 0; r < numRows; r++) {
