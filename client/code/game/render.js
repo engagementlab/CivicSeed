@@ -629,12 +629,16 @@ var $renderer = $game.$renderer = {
 			};
 
 			$renderer.drawForegroundTile(foreData);
-
 			var srcX;
 			if($game.$player.seedMode) {
 				srcX  = $game.TILE_SIZE * 3;
 			}
 			else {
+				// var user = $game.$others.playerCard(tile.x, tile.y);
+				// console.log(tile.x, user);
+				// if(user) {
+				// 	srcX = $game.TILE_SIZE * 2;
+				// } else if(state === -1) {
 				if(state === -1) {
 					//go
 					srcX = 0;

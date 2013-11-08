@@ -84,16 +84,17 @@ $game.$others = {
 		//console.log(_onScreenPlayers);
 	},
 
-	playerCard: function(x, y) {
-		var found = false;
+	playerCard: function(x, y, show) {
 		$.each(_onScreenPlayers, function(key, player) {
+			console.log(player.info.x);
 			if(player.info.x === x && player.info.y === y) {
-				player.showPlayerCard();
-				found = true;
+				if(show) {
+					player.showPlayerCard();
+				}
+				return true;
 			}
 		});
-
-		return found;
+		return false;
 	},
 
 	updateTilesColored: function(id, count) {
