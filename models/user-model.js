@@ -57,7 +57,12 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			skinSuit: {
 				head: String,
 				torso: String,
-				legs: String
+				legs: String,
+				unlocked: {
+					head: [String],
+					torso: [String],
+					legs: [String]
+				}
 			}
 		},
 		admin: {

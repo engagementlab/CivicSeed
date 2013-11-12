@@ -38,7 +38,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	},
 	admin: {
@@ -84,7 +89,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }, {
@@ -127,7 +137,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'cactus',
 			torso: 'lion',
-			legs: 'tuxedo'
+			legs: 'tuxedo',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }, {
@@ -170,7 +185,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'tuxedo',
 			torso: 'cactus',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }, {
@@ -213,7 +233,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }, {
@@ -418,7 +443,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }, {
@@ -461,7 +491,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	},
 	admin: {
@@ -507,7 +542,12 @@ module.exports.global = [{
 		skinSuit: {
 			head: 'lion',
 			torso: 'lion',
-			legs: 'lion'
+			legs: 'lion',
+			unlocked: {
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
+			}
 		}
 	}
 }];

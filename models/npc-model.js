@@ -22,6 +22,10 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			feedbackWrong: String,
 			feedbackRight: String,
 			shape: String
+		},
+		skinSuit: {
+			part: String,
+			name: String 
 		}
 	});
 

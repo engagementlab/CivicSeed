@@ -117,7 +117,12 @@ exports.actions = function(req, res, ss) {
 										skinSuit: {
 											head: 'lion',
 											torso: 'lion',
-											legs: 'lion'
+											legs: 'lion',
+											unlocked: {
+												head: ['lion'],
+												torso: ['lion'],
+												legs: ['lion']
+											}
 										}
 									}
 								};
