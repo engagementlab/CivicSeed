@@ -405,6 +405,27 @@ var $input = $game.$input = module.exports = {
 			e.preventDefault();
 			return false;
 		});
+
+		$BODY.on('click', '.outer', function () {
+			var locked = $(this).find('i').hasClass('locked');
+			if(!locked) {
+				var parent = $(this).parent();
+				$(parent).children().removeClass('currentPart');
+				$(this).addClass('currentPart');
+
+				var part = $(parent).attr('data-part');
+				var child = $(this).children().first(),
+					name = $(child).attr('data-name');
+				$game.$player.setSkinSuit(part, name);
+			}
+		});
+
+		$BODY.on('click', '.skinventory .closeButton', function (e) {
+			e.preventDefault();
+			$('.skinventory').hide();
+			$game.showingSkinventory = false;
+			return false;
+		});
 		//pause menu if we want it
 		// $WINDOW.blur(function(e) {
 		// 	if(!$game.$npc.isResource) {

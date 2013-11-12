@@ -164,7 +164,12 @@
 	div.skinventory
 		.skinContent
 			h2 SKINVENTORY
-			h3 Customize your skin suit!
+			h3 Customize your skin suit! Choose a head, torso, and legs below.
+			.parts
+				.head.part(data-part='head')
+				.torso.part(data-part='torso') 
+				.legs.part(data-part='legs') 
+			button.closeButton.btn.btn-primary(type='button') Close
 
 	div.inventory
 		div.outlines

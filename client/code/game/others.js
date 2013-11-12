@@ -394,6 +394,11 @@ $game.$others = {
 				otherPlayer.updateRenderInfo();
 				$game.$map.updatePlayer(otherPlayer.id, otherPlayer.info.x, otherPlayer.info.y);
 			},
+
+			skinSuitChange: function(info) {
+				otherPlayer.skinSuit = info.skinSuit;
+				$game.$renderer.createCanvasForPlayer(info.id, info.skinSuit);
+			}
 		};
 		return otherPlayer;
 	},
@@ -426,6 +431,14 @@ $game.$others = {
 	disable: function() {
 		$.each(_onScreenPlayers, function(key, player) {
 			player.offScreen = true;
+		});
+	},
+
+	skinSuitChange: function(info) {
+		$.each(_onScreenPlayers, function(key, player) {
+			if(player.id === info.id) {
+				player.skinSuitChange(info);
+			}
 		});
 	}
 };

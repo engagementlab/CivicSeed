@@ -102,7 +102,6 @@ var $events = module.exports = {
 
 		//another player has beamed
 		ss.event.on('ss-beam', function(info) {
-			//TODO: set others position to new info
 			if(info.id !== $game.$player.id) {
 				$game.$others.beam(info);
 			}
@@ -116,6 +115,12 @@ var $events = module.exports = {
 					$game.$player.updateSeeds('draw', info.seeds, true);
 					break;
 				}	
+			}
+		});
+
+		ss.event.on('ss-skinSuitChange', function(info) {
+			if(info.id !== $game.$player.id) {
+				$game.$others.skinSuitChange(info);
 			}
 		});
 	}

@@ -426,6 +426,7 @@ body, button, p, a
 				padding-right 10px
 
 .skinventory
+	cursor default
 	position absolute
 	top 15px
 	left 15px
@@ -446,6 +447,47 @@ body, button, p, a
 			color $csGreen
 		p
 			font-family $buttonFont
+		.parts
+			.part
+				position absolute
+				left 50px
+				p
+					float left
+					width 100px
+				.outer
+					cursor pointer
+					float left
+					margin-right 20px
+					padding 10px
+					border 2px solid white
+					.bodypart
+						width 32px
+						font-size 1.5em
+						color $csBlue
+						text-align center
+						i 
+							display none
+						.locked
+							display inline
+
+					&:hover
+						border 2px solid $csGreen
+				.currentPart
+					border 2px solid $csGreen
+						
+			.head
+				top 150px
+				.bodypart
+					height 30px
+					
+			.torso
+				top 215px
+				.bodypart
+					height 15px
+			.legs
+				top 265px
+				.bodypart
+					height 19px					
 
 .centerText
 	text-align center

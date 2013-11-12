@@ -1012,10 +1012,21 @@ $game.$player = {
 	debug: function() {
 		console.log(_resources);
 	},
+
 	checkSeedLevel: function() {
 		if(_seed.draw <= 0) {
 			$game.$mouse.drawMode = false;
 		}
+	},
+
+	setSkinSuit: function(part, name) {
+		_skinSuit[part] = name;
+		var info = {
+			id: $game.$player.id,
+			skinSuit: _skinSuit
+		};
+		ss.rpc('game.player.changeSkinSuit', info);
+		$game.$renderer.createCanvasForPlayer($game.$player.id, false);
 	}
 };
 

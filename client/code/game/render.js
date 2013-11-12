@@ -64,7 +64,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.save();
 
 		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
-		_skinSuitNames = ['lion','tuxedo','cactus'];
+		_skinSuitNames = ['lion','tuxedo','cactus', 'cone'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
@@ -189,6 +189,7 @@ var $renderer = $game.$renderer = {
 				$renderer.ready = true;
 				_skinSuitWidth = skinSuitImage.width;
 				_skinSuitHeight = skinSuitImage.height;
+				$renderer.renderSkinventory();
 				$renderer.createCanvasForPlayer($game.$player.id, false);
 				return;
 			}
@@ -419,7 +420,7 @@ var $renderer = $game.$renderer = {
 
 	},
 
-	//create a canvas for each an active player
+	//create a canvas for each active player
 	createCanvasForPlayer: function(id, suit) {
 		//if it exists, clear it
 		if(_offscreenPlayersContext[id]) {
@@ -867,6 +868,107 @@ var $renderer = $game.$renderer = {
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
 			$game.VIEWPORT
 		);
+	},
+
+	renderSkinventory: function() {
+		//go thru each skinsuit, create top middle bottom for them in skinventory
+		var playerSuit = $game.$player.getSkinSuit(),
+			unlocked = playerSuit.unlocked;
+
+		for(var i = 0; i < _skinSuitNames.length; i++) {
+			//grab head and create new image
+			var name = _skinSuitNames[i],
+				bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + name + '.png';
+
+			var head = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.head').append(head);
+
+			//check if currently selected
+			if(name === playerSuit.head) {
+				head.addClass('currentPart');
+			}
+
+			var headSpan = $('.head .' + name);
+
+			var headUnlocked = false;
+			for(var h = 0; h < unlocked.head.length; h++) {
+				if(unlocked.head[h] === name) {
+					headUnlocked = true;
+					headSpan.css({
+						background: 'url(' + bg + ')'
+					});
+					break;
+				}
+			}
+			if(!headUnlocked) {
+				//show lock
+				headSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				headSpan.html('<i class="icon-lock"></i>');
+			}
+
+			headSpan.addClass('bodypart');
+
+			var torso = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.torso').append(torso);
+
+			//check if currently selected
+			if(name === playerSuit.torso) {
+				torso.addClass('currentPart');
+			}
+
+			var torsoSpan = $('.torso .' + name);
+			
+			var torsoUnlocked = false;
+			for(var t = 0; t < unlocked.torso.length; t++) {
+				if(unlocked.torso[t] === name) {
+					torsoUnlocked = true;
+					torsoSpan.css({
+						background: 'url(' + bg + ')',
+						backgroundPosition: '0 -30px'
+					});
+					break;
+				}
+			}
+			if(!torsoUnlocked) {
+				//show lock
+				torsoSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				torsoSpan.html('<i class="icon-lock"></i>');
+			}
+
+			torsoSpan.addClass('bodypart');
+
+			var legs = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.legs').append(legs);
+
+			//check if currently selected
+			if(name === playerSuit.legs) {
+				legs.addClass('currentPart');
+			}
+
+			var legsSpan = $('.legs .' + name);
+			
+			var legsUnlocked = false;
+			for(var l = 0; l < unlocked.legs.length; l++) {
+				if(unlocked.legs[l] === name) {
+					legsUnlocked = true;
+					legsSpan.css({
+						background: 'url(' + bg + ')',
+						backgroundPosition: '0 -30px'
+					});
+					break;
+				}
+			}
+			if(!legsUnlocked) {
+				//show lock
+				legsSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				legsSpan.html('<i class="icon-lock"></i>');
+			}
+
+			legsSpan.addClass('bodypart');
+		}
 	}
 };
 
