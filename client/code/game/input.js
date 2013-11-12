@@ -89,6 +89,17 @@ var $input = $game.$input = module.exports = {
 			});
 		});
 
+		$BODY.on('click', '.skinventoryButton', function () {
+			var goAhead = startNewAction();
+			if(goAhead) {
+				$game.showingSkinventory = true;
+				$('.skinventory').show();
+			} else if($game.showingSkinventory) {
+				$('.skinventory').hide();
+				$game.showingSkinventory = false;
+			}
+		});
+
 		//change cursor on mouse move
 		$BODY.on('mousemove', '.gameboard', function(e) {
 			if( !$game.inTransit && !$game.$resources.isShowing && $game.running){
@@ -280,9 +291,8 @@ var $input = $game.$input = module.exports = {
 		$BODY.on('click', '.progressArea a i', function (e) {
 			e.preventDefault();
 			$('.progressButton').removeClass('currentButton');
-			$progressArea.fadeOut(function() {
-				$game.showingProgress = false;
-			});
+			$progressArea.hide();
+			$game.showingProgress = false;
 			return false;
 		});
 
@@ -295,9 +305,8 @@ var $input = $game.$input = module.exports = {
 		$BODY.on('click', '.progressButton', function () {
 			if($game.showingProgress) {
 				$(this).toggleClass('currentButton');
-				$progressArea.fadeOut(function() {
-					$game.showingProgress = false;
-				});
+				$progressArea.hide();
+				$game.showingProgress = false;
 			}
 			else {
 				var goAhead = startNewAction();
@@ -322,7 +331,7 @@ var $input = $game.$input = module.exports = {
 		//show or hide help area
 		$BODY.on('click', '.helpButton', function () {
 			_helpShowing = !_helpShowing;
-			$('.helpArea').fadeToggle();
+			$('.helpArea').toggle();
 			$('.helpButton').toggleClass('currentButton');
 		});
 
@@ -330,9 +339,8 @@ var $input = $game.$input = module.exports = {
 		$BODY.on('click', '.helpArea a i', function (e) {
 			e.preventDefault();
 			$('.helpButton').toggleClass('currentButton');
-			$('.helpArea').fadeOut('fast', function() {
-				_helpShowing = false;
-			});
+			$('.helpArea').hide();
+			_helpShowing = false;
 			return false;
 		});
 
@@ -413,7 +421,7 @@ var $input = $game.$input = module.exports = {
 			//check all the game states (if windows are open ,in transit, etc.) to begin a new action
 			// console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
 			// !$game.$player.inventoryShowing
-			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing){
+			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing && !$game.showingSkinventory){
 				return true;
 			}
 			return false;

@@ -4,12 +4,11 @@
 			.inventoryButton
 				i.icon-briefcase.icon-large(title='toggle inventory', data-placement='bottom')
 				span.badge.hudCount
+			.skinventoryButton
+				i.icon-user.icon-large(title='skinventory', data-placement='bottom')
 			.seedButton
 				i.icon-leaf.icon-large(title='seeds', data-placement='bottom')
 				span.badge.hudCount
-			.logButton
-				i.icon-reorder.icon-large(title='game log', data-placement='bottom')
-				span.badge.hudCount.hide
 		.span4.displayHud
 			form.form-inline.chatBox
 				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='chat with other players...')
@@ -21,10 +20,9 @@
 				i.icon-volume-up.icon-large(title='toggle music', data-placement='bottom')
 			.progressButton
 				i.icon-desktop.icon-large(title='display progress', data-placement='bottom')
-				//- span.badge.hudCount
-			//- .activePlayers
-			//- 	i.icon-globe.icon-large(title='active players', data-placement='bottom')
-			//- 	span.badge.hudCount
+			.logButton
+				i.icon-reorder.icon-large(title='game log', data-placement='bottom')
+				span.badge.hudCount.hide
 	.row.bossHud
 		.span4
 			.regularSeedButton.bossBox
