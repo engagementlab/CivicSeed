@@ -102,7 +102,7 @@ var $input = $game.$input = module.exports = {
 
 		//change cursor on mouse move
 		$BODY.on('mousemove', '.gameboard', function(e) {
-			if( !$game.inTransit && !$game.$resources.isShowing && $game.running){
+			if( !$game.inTransit && $game.running){
 				var mInfo = {
 					x: e.pageX,
 					y: e.pageY,
