@@ -28,6 +28,7 @@ var _resources = [],
 	_numSeedsToAdd = 0,
 	_questionType = null,
 	_feedbackRight = null,
+	_skinSuitReward = null,
 	//_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 	_publicAnswers = null,
 	_preloadedPieceImage = null;
@@ -49,6 +50,7 @@ $game.$resources = {
 					_resources[stringId] = npc.resource;
 					_resources[stringId].index = npc.index;
 					_resources[stringId].playerAnswers = [];
+					_resources[stringId].skinSuit = npc.skinSuit;
 				}
 			});
 			var allRes = all[0].resourceResponses;
@@ -97,6 +99,7 @@ $game.$resources = {
 		_numSeedsToAdd = 0;
 		_questionType = null;
 		_feedbackRight = null;
+		_skinSuitReward = null;
 		_publicAnswers = null;
 		_preloadedPieceImage = null;
 
@@ -128,6 +131,7 @@ $game.$resources = {
 		_curResource = _resources[stringId];
 		_questionType = _curResource.questionType;
 		_feedbackRight = _curResource.feedbackRight;
+		_skinSuitReward = _curResource.skinSuit;
 
 		var npcLevel = $game.$npc.getNpcLevel(index);
 		if(npcLevel <= $game.$player.currentLevel) {
@@ -407,7 +411,8 @@ $game.$resources = {
 				index: _curResource.index,
 				answer: response,
 				npcLevel: npcLevel,
-				questionType: _curResource.questionType
+				questionType: _curResource.questionType,
+				skinSuitPart: _skinSuitReward
 			};
 			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
 
@@ -577,6 +582,10 @@ function _addAnsweredContent() {
 
 				html = _preloadedPieceImage + inputBox;
 				$resourceContent.empty().html(html).css('overflow', 'hidden');
+			}
+			//give them the skinsuit regardless if in prev level or not
+			if(_skinSuitReward.part) {
+				_speak += ' You unlocked an item! Check it by clicking the customizer button.';
 			}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);

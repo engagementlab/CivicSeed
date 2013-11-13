@@ -135,12 +135,12 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'cactus',
+			head: 'lion',
 			torso: 'lion',
-			legs: 'tuxedo',
+			legs: 'lion',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
+				head: ['lion','tuxedo'],
+				torso: ['lion','tuxedo', 'cactus'],
 				legs: ['lion']
 			}
 		}
@@ -184,12 +184,12 @@ module.exports.global = [{
 		collaborativeChallenge: false,
 		skinSuit: {
 			head: 'tuxedo',
-			torso: 'cactus',
+			torso: 'lion',
 			legs: 'lion',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['lion','tuxedo','cactus','cone'],
+				torso: ['lion','tuxedo','cactus','cone'],
+				legs: ['lion','tuxedo','cactus','cone']
 			}
 		}
 	}
@@ -210,8 +210,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
-			y: 77
+			x: 44,
+			y: 65
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -221,8 +221,8 @@ module.exports.global = [{
 			draw: 0,
 			dropped: 0
 		},
-		botanistState: 0,
-		firstTime: true,
+		botanistState: 2,
+		firstTime: false,
 		resume: ['i like to volunteer', 'i want to work with the community', 'i play sports and such which has prepared me','i have cool hair'],
 		resumeFeedback: [],
 		seenRobot: false,

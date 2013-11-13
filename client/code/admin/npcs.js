@@ -150,11 +150,12 @@ var self = module.exports = {
 	},
 
 	saveChanges: function(id) {
-		var npc = $('.npcs').find('.npc' + id);
+		var npc = $('.npcs').find('.npc' + id),
 			informationAreas = npc.find('.information textarea'),
 			resourceAreas = npc.find('.resource textarea'),
 			promptAreas = npc.find('.prompts textarea'),
 			smalltalkAreas = npc.find('.smalltalk textarea'),
+			skinSuitAreas = npc.find('.skinSuit textareas'),
 			holding = npc.find('.information input')[0].checked,
 			questionType = npc.find('.resource input:checked').val(),
 			sprite = parseInt(npc.attr('data-sprite'),10),
@@ -179,8 +180,13 @@ var self = module.exports = {
 				level: null,
 				sprite: sprite,
 				index: null,
-				name: null
+				name: null,
+				skinSuit: {
+					part: null,
+					name: null
+				}
 			};
+			
 
 		//update information
 		var x,y;
@@ -241,6 +247,17 @@ var self = module.exports = {
 
 			if(area === 'smalltalk') {
 				updates.dialog.smalltalk.push(val);
+			}
+		});
+
+		skinSuitAreas.each(function(i) {
+			var area = $(this).attr('data-area'),
+				val = this.value;
+
+			if(area === 'skinPart') {
+				updates.skinSuit.part = val;
+			} else if(area === 'skinName') {
+				updates.skinSuit.name = val;
 			}
 		});
 

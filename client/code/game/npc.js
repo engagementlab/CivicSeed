@@ -107,6 +107,7 @@ $game.$npc = {
 			counter: Math.floor(Math.random() * 64),
 			curFrame: 0,
 			numFrames: 4,
+			skinSuit: npc.skinSuit,
 
 
 			info: {

@@ -955,7 +955,7 @@ var $renderer = $game.$renderer = {
 					legsUnlocked = true;
 					legsSpan.css({
 						background: 'url(' + bg + ')',
-						backgroundPosition: '0 -30px'
+						backgroundPosition: '0 -45px'
 					});
 					break;
 				}
@@ -969,6 +969,26 @@ var $renderer = $game.$renderer = {
 
 			legsSpan.addClass('bodypart');
 		}
+	},
+
+	unlockSkinSuit: function(skinSuit) {
+		var sel = $('.' + skinSuit.part + ' .' + skinSuit.name);
+		sel.find('i').removeClass('locked');
+
+		var bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skinSuit.name + '.png',
+			pos;
+
+		if(skinSuit.part === 'head') {
+			pos = '0';
+		} else if (skinSuit.part === 'torso') {
+			pos = '-30px';
+		} else if (skinSuit.part === 'head') {
+			pos = '-45px';
+		}
+		sel.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 ' + pos
+		});
 	}
 };
 

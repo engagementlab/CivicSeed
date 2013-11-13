@@ -381,6 +381,19 @@ $game.$player = {
 			realResource.attempts += 1;
 			realResource.result = newInfo.result;
 		}
+
+		console.log(info);
+		if(info.skinSuitPart) {
+			_skinSuit.unlocked[info.skinSuitPart.part].push(info.skinSuitPart.name);
+			var saveInfo = {
+				id: $game.$player.id,
+				skinSuit: _skinSuit
+			};
+			//update skinventory
+			$game.$renderer.unlockSkinSuit(info.skinSuitPart);
+			ss.rpc('game.player.updateGameInfo', saveInfo);
+		}
+		
 		//the answer was correct, add item to inventory
 		if(info.correct) {
 			_resourcesDiscovered += 1;
