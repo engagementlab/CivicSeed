@@ -532,7 +532,7 @@ $game.$player = {
 		$game.$botanist.setBotanistState(0);
 		$game.$player.seenRobot = false;
 		_pledges = 5;
-		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
+		// $game.$renderer.loadTilesheet($game.$player.currentLevel, true);
 		//save new information to DB
 		var info = {
 			id: $game.$player.id,

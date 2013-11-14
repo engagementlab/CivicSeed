@@ -165,7 +165,7 @@ npcHelpers = {
 	},
 
 	updateTiles: function(oldIndex, newIndex, callback) {
-		//console.log(oldIndex,newIndex);
+		console.log(oldIndex,newIndex);
 		//update new tile, make sure we can change it
 		if(oldIndex === newIndex) {
 			callback();

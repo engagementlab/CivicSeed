@@ -721,7 +721,7 @@ var $renderer = $game.$renderer = {
 
 	//render a specific tile on the mini map
 	renderMiniTile: function(x, y) {
-		var	rgba = 'rgba(255,0,0)';
+		var	rgba = 'rgb(124,202,176)';
 		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
 			x,
