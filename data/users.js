@@ -139,8 +139,8 @@ module.exports.global = [{
 			torso: 'lion',
 			legs: 'lion',
 			unlocked: {
-				head: ['lion','tuxedo'],
-				torso: ['lion','tuxedo', 'cactus'],
+				head: ['lion'],
+				torso: ['lion'],
 				legs: ['lion']
 			}
 		}
@@ -162,15 +162,15 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 40,
-			y: 40
+			x: 64,
+			y: 77
 		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
 		seeds: {
-			regular: 500,
-			draw: 500,
+			regular: 0,
+			draw: 0,
 			dropped: 0
 		},
 		botanistState: 0,
@@ -183,13 +183,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'tuxedo',
+			head: 'lion',
 			torso: 'lion',
 			legs: 'lion',
 			unlocked: {
-				head: ['lion','tuxedo','cactus','cone'],
-				torso: ['lion','tuxedo','cactus','cone'],
-				legs: ['lion','tuxedo','cactus','cone']
+				head: ['lion'],
+				torso: ['lion'],
+				legs: ['lion']
 			}
 		}
 	}
@@ -210,8 +210,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 44,
-			y: 65
+			x: 64,
+			y: 77
 		},
 		resources: [],
 		resourcesDiscovered: 0,

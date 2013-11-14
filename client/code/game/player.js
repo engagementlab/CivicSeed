@@ -382,15 +382,16 @@ $game.$player = {
 			realResource.result = newInfo.result;
 		}
 
-		console.log(info);
-		if(info.skinSuitPart) {
-			_skinSuit.unlocked[info.skinSuitPart.part].push(info.skinSuitPart.name);
+		if(info.skinSuit) {
+			_skinSuit.unlocked.head.push(info.skinSuit);
+			_skinSuit.unlocked.torso.push(info.skinSuit);
+			_skinSuit.unlocked.legs.push(info.skinSuit);
 			var saveInfo = {
 				id: $game.$player.id,
 				skinSuit: _skinSuit
 			};
 			//update skinventory
-			$game.$renderer.unlockSkinSuit(info.skinSuitPart);
+			$game.$renderer.unlockSkinSuit(info.skinSuit);
 			ss.rpc('game.player.updateGameInfo', saveInfo);
 		}
 		

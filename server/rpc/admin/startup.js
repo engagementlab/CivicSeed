@@ -172,11 +172,11 @@ exports.actions = function(req, res, ss) {
 							if(tileStateArray[i] === 0) {
 								tileStateVal = -1;
 							}
-
-							//2: this refers to the BLUE tile, means there is an NPC
-							else if(tileStateArray[i] === 2	) {
-								tileStateVal = i;
-							}
+							//THIS WILL NOW BE DONE AUTOMAGICALLY by the NPC load
+							// //2: this refers to the BLUE tile, means there is an NPC
+							// else if(tileStateArray[i] === 2	) {
+							// 	tileStateVal = i;
+							// }
 							//3: this is the pink? tile, it is the botanist
 							else if(tileStateArray[i] === 3) {
 								tileStateVal = 99999;
@@ -240,7 +240,14 @@ exports.actions = function(req, res, ss) {
 					npcData = require(rootDir + '/data/npcs');
 					dbActions.dropCollection('npcs', function() {
 						dbActions.saveDocuments(npcModel, npcData.global, function() {
-							res('Data loaded: ' + dataType);
+							//go thru npc data, save tilestate at that tile
+							dbActions.saveNpcTilestate(tileModel, npcData.global, function(err) {
+								if(err) {
+									console.log('error saving tilestate');
+								} else {
+									res('Data loaded: ' + dataType);
+								}
+							});
 						});
 					});	
 				} else if(dataType === 'game') {

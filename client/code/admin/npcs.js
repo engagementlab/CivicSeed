@@ -155,7 +155,7 @@ var self = module.exports = {
 			resourceAreas = npc.find('.resource textarea'),
 			promptAreas = npc.find('.prompts textarea'),
 			smalltalkAreas = npc.find('.smalltalk textarea'),
-			skinSuitAreas = npc.find('.skinSuit textareas'),
+			skinSuitArea = npc.find('.skinSuit textarea'),
 			holding = npc.find('.information input')[0].checked,
 			questionType = npc.find('.resource input:checked').val(),
 			sprite = parseInt(npc.attr('data-sprite'),10),
@@ -181,10 +181,7 @@ var self = module.exports = {
 				sprite: sprite,
 				index: null,
 				name: null,
-				skinSuit: {
-					part: null,
-					name: null
-				}
+				skinSuit: null
 			};
 			
 
@@ -250,16 +247,11 @@ var self = module.exports = {
 			}
 		});
 
-		skinSuitAreas.each(function(i) {
-			var area = $(this).attr('data-area'),
-				val = this.value;
-
-			if(area === 'skinPart') {
-				updates.skinSuit.part = val;
-			} else if(area === 'skinName') {
-				updates.skinSuit.name = val;
-			}
-		});
+		var skinVal = skinSuitArea.val();
+		// console.log(skinVal);
+		if(skinVal.length > 0) {
+			updates.skinSuit = skinVal;
+		}
 
 		//this means it is a new one, do not save, but add new in db
 		if(id < 0) {

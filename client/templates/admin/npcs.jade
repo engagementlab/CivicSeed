@@ -157,10 +157,8 @@
 							p Future
 							textarea(data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
 					.skinSuit
-						p Skin Suit Part
-						textarea(data-area='skinPart') #{npc.skinSuit.part}
-						p Skin Suit Name
-						textarea(data-area='skinName') #{npc.skinSuit.name}
+						p Skin Suit
+						textarea #{npc.skinSuit}
 					.options
 						p
 							<span class='saveChanges' data-id=#{npc.id}>save</span>
@@ -242,8 +240,7 @@
 					textarea(data-area='smalltalk')
 				.skinSuit
 					p Skin Suit
-					textarea(data-area='skinPart') part
-					textarea(data-area='skinName') name
+					textarea
 				.options
 					p
 						<span class='saveChanges' data-id='-1'>save</span>

@@ -46,6 +46,7 @@ exports.actions = function(req, res, ss) {
 								npc.level = info.level;
 								npc.index = info.index;
 								npc.skinSuit = info.skinSuit;
+
 								//resource
 								if(info.isHolding) {
 									npc.resource.url = info.resource.url;

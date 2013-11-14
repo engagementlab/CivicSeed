@@ -412,7 +412,7 @@ $game.$resources = {
 				answer: response,
 				npcLevel: npcLevel,
 				questionType: _curResource.questionType,
-				skinSuitPart: _skinSuitReward
+				skinSuit: _skinSuitReward
 			};
 			_numSeedsToAdd = $game.$player.answerResource(rightInfo);
 
@@ -584,8 +584,8 @@ function _addAnsweredContent() {
 				$resourceContent.empty().html(html).css('overflow', 'hidden');
 			}
 			//give them the skinsuit regardless if in prev level or not
-			if(_skinSuitReward.part) {
-				_speak += ' You unlocked an item! Check it by clicking the customizer button.';
+			if(_skinSuitReward) {
+				_speak += ' You unlocked the ' + _skinSuitReward + ' suit! Try it on or browse your other suits by clicking the changing room button below.';
 			}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);

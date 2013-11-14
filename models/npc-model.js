@@ -23,10 +23,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			feedbackRight: String,
 			shape: String
 		},
-		skinSuit: {
-			part: String,
-			name: String 
-		}
+		skinSuit: String
 	});
 
 	var NpcModel = db.model('npc', npcSchema, 'npcs');

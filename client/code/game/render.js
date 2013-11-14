@@ -972,23 +972,32 @@ var $renderer = $game.$renderer = {
 	},
 
 	unlockSkinSuit: function(skinSuit) {
-		var sel = $('.' + skinSuit.part + ' .' + skinSuit.name);
-		sel.find('i').removeClass('locked');
+		var bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skinSuit + '.png';
 
-		var bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skinSuit.name + '.png',
-			pos;
+		var head = $('.head .' + skinSuit);
+		head.find('i').removeClass('locked');
 
-		if(skinSuit.part === 'head') {
-			pos = '0';
-		} else if (skinSuit.part === 'torso') {
-			pos = '-30px';
-		} else if (skinSuit.part === 'head') {
-			pos = '-45px';
-		}
-		sel.css({
+
+		head.css({
 			background: 'url(' + bg + ')',
-			backgroundPosition: '0 ' + pos
+			backgroundPosition: '0 0'
 		});
+
+		var torso = $('.torso .' + skinSuit);
+		torso.find('i').removeClass('locked');
+
+		torso.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 -30px'
+		});
+
+		var legs = $('.legs .' + skinSuit);
+		legs.find('i').removeClass('locked');
+
+		legs.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 -45px'
+		});		
 	}
 };
 
