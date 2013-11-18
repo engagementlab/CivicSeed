@@ -7,7 +7,7 @@
 	"REDIS_PW": "",
 	"REDIS_DB": "civic_dev_db",
 	"MONGO_URL": "mongodb://localhost/civic_dev_db",
-	"ACCOUNT_EMAIL": "civicseed@gmail.com",
-	"ACCOUNT_PW": "gnomes4eva",
+	"ACCOUNT_EMAIL": "postmaster@sandbox862.mailgun.org",
+	"ACCOUNT_PW": "9p68tr3n6xx5",
 	"CLOUD_PATH": ""
 }
