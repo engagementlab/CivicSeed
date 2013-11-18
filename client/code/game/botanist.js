@@ -242,12 +242,15 @@ $game.$botanist = {
 				else {
 					//ugly hack so we see Second set of instructions in level 0
 					if(!_firstTime && $game.$player.currentLevel === 0) {
+						$('.seedButton').removeClass('highlightBox');
 						_messages = $game.$botanist.dialog[$game.$player.currentLevel].instructions2;
 						_currentMessage = 0;
 						_firstTime = true;
+						$('.progressButton').addClass('highlightBox');
 						$game.$botanist.showChat();
 						$game.$player.saveMapImage(true);
 					} else {
+						$('.progressButton').removeClass('highlightBox');
 						$game.$botanist.showPrompt(0);	
 					}
 					
@@ -308,6 +311,8 @@ $game.$botanist = {
 				$game.$player.botanistState = 1;
 				_saveBotanistState();
 				if($game.$player.currentLevel === 0) {
+					//highlight the seed button
+					$('.seedButton').addClass('highlightBox');
 					$game.$player.updateSeeds('regular', 1);
 				}
 			}
@@ -329,11 +334,21 @@ $game.$botanist = {
 			});
 		}
 		if(_currentMessage === _messages.length - 1) {
-			$speechBubbleNextBtn.unbind('click').addClass('hideButton');
-
-			$speechBubbleCloseBtn.removeClass('hideButton').bind('click', (function () {
-				$game.$botanist.hideChat();
-			}));
+			//jn all levels except 1 we want to show prompt instead of closing
+			if($game.$player.currentLevel > 0) {
+				$speechBubbleNextBtn.unbind('click');
+				$speechBubbleNextBtn.bind('click', (function () {
+					$game.$player.botanistState = 1;
+					_saveBotanistState();
+					$speechBubbleNextBtn.addClass('hideButton').unbind('click');
+					$game.$botanist.showPrompt(0);
+				}));
+			} else { 
+				$speechBubbleNextBtn.unbind('click').addClass('hideButton');
+				$speechBubbleCloseBtn.removeClass('hideButton').bind('click', (function () {
+					$game.$botanist.hideChat();
+				}));
+			}
 		}
 	},
 
