@@ -36,13 +36,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	},
@@ -87,13 +87,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}
@@ -114,8 +114,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 40,
-			y: 44
+			x: 64,
+			y: 77
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -127,7 +127,7 @@ module.exports.global = [{
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: ['i like to do things in the community', 'i am great at communicationg', 'i play basketball','i want to share experiences'],
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
@@ -135,13 +135,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}
@@ -162,7 +162,7 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
+			x: 65,
 			y: 77
 		},
 		resources: [],
@@ -175,7 +175,7 @@ module.exports.global = [{
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: ['i am larry'],
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
@@ -183,13 +183,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}
@@ -210,7 +210,7 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
+			x: 66,
 			y: 77
 		},
 		resources: [],
@@ -221,9 +221,9 @@ module.exports.global = [{
 			draw: 0,
 			dropped: 0
 		},
-		botanistState: 2,
-		firstTime: false,
-		resume: ['i like to volunteer', 'i want to work with the community', 'i play sports and such which has prepared me','i have cool hair'],
+		botanistState: 0,
+		firstTime: true,
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
@@ -231,16 +231,112 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}
+}, {
+	activeSessionID: null,
+	firstName: 'Bill',
+	lastName: 'Russell',
+	school: 'UCLA',
+	password: '',
+	email: 'b',
+	role: 'actor',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: 'aodeef1qd8rjatt9',
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'test',
+		currentLevel: 0,
+		position: {
+			x: 67,
+			y: 77
+		},
+		resources: [],
+		resourcesDiscovered: 0,
+		inventory: [],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 0,
+		firstTime: true,
+		resume: [],
+		resumeFeedback: [],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5,
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
+	}
+}, {
+	activeSessionID: null,
+	firstName: 'Julius',
+	lastName: 'Erving',
+	school: 'UMass',
+	password: '',
+	email: 'e',
+	role: 'actor',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: 'f443ef1qd8rjatt9',
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'test',
+		currentLevel: 0,
+		position: {
+			x: 67,
+			y: 77
+		},
+		resources: [],
+		resourcesDiscovered: 0,
+		inventory: [],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 0,
+		firstTime: true,
+		resume: [],
+		resumeFeedback: [],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5,
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
+	}	
 }, {
 	activeSessionID: null,
 	firstName: 'Magic',
@@ -441,13 +537,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}
@@ -489,13 +585,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	},
@@ -540,13 +636,13 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'lion',
-			torso: 'lion',
-			legs: 'lion',
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
 			unlocked: {
-				head: ['lion'],
-				torso: ['lion'],
-				legs: ['lion']
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
 			}
 		}
 	}

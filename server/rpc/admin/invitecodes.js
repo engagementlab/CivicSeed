@@ -79,13 +79,13 @@ exports.actions = function(req, res, ss) {
 							pledges: 5,
 							collaborativeChallenge: false,
 							skinSuit: {
-								head: 'lion',
-								torso: 'lion',
-								legs: 'lion',
+								head: 'basic',
+								torso: 'basic',
+								legs: 'basic',
 								unlocked: {
-									head: ['lion'],
-									torso: ['lion'],
-									legs: ['lion']
+									head: ['basic'],
+									torso: ['basic'],
+									legs: ['basic']
 								}
 							}
 						};

@@ -64,7 +64,7 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.save();
 
 		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
-		_skinSuitNames = ['lion','tuxedo','cactus', 'cone'];
+		_skinSuitNames = ['basic','lion','tuxedo','cactus','cone'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;

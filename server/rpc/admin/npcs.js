@@ -53,6 +53,8 @@ exports.actions = function(req, res, ss) {
 									npc.resource.questionType = info.resource.questionType;
 									npc.resource.question = info.resource.question;
 									npc.resource.shape = info.resource.shape;
+									npc.resource.feedbackRight = info.resource.feedbackRight;
+									npc.resource.feedbackWrong = info.resource.feedbackWrong;
 									npc.dialog.prompts = info.dialog.prompts;
 									npc.dependsOn = info.dependsOn;
 
@@ -123,7 +125,6 @@ exports.actions = function(req, res, ss) {
 
 npcHelpers = {
 	addNpcTile: function(index, callback) {
-		console.log(index);
 		tileModel.where('mapIndex').equals(index)
 			.find(function(err,tiles) {
 				if(err) {
@@ -145,7 +146,6 @@ npcHelpers = {
 	},
 
 	removeNpcTile: function(index, callback) {
-		console.log(index);
 		tileModel.where('mapIndex').equals(index)
 			.find(function(err,tiles) {
 				if(err) {
@@ -165,7 +165,6 @@ npcHelpers = {
 	},
 
 	updateTiles: function(oldIndex, newIndex, callback) {
-		console.log(oldIndex,newIndex);
 		//update new tile, make sure we can change it
 		if(oldIndex === newIndex) {
 			callback();
