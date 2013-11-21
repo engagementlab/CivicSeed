@@ -1,8 +1,7 @@
 var rootDir = process.cwd();
 
 var fs = require('fs');
-// var nconf = require('nconf');
-var config = require(rootDir + '/config');
+var nconf = require('nconf');
 var colors = require('colors');
 var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
@@ -15,15 +14,16 @@ var configFilename = nodeEnv !== 'development' ? '/config_' + nodeEnv + '.json' 
 
 var accountHelpers = require(rootDir + '/server/utils/account-helpers');
 
-// nconf.argv().env().file({
-// 	file: process.env.configFile || rootDir + configFilename
-// });
+nconf.argv().env().file({
+	file: process.env.configFile || rootDir + configFilename
+});
 
 var _db;
 var _userModel;
 var _superAdminUser;
 
-_db = mongoose.createConnection(config.get('MONGO_URL'));
+console.log(nconf.get('MONGO_URL'));
+_db = mongoose.createConnection(nconf.get('MONGO_URL'));
 _db.on('error', console.error.bind(console, ' CONNECTION ERROR: '.red.inverse));
 _db.once('open', function() {
 	console.log('MongoDB connection opened...'.green);
