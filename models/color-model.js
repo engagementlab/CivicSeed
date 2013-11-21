@@ -4,14 +4,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 		instanceName: String,
 		x: Number,
 		y: Number,
-		mapIndex: Number,
-		color: {
-			r: Number,
-			g: Number,
-			b: Number,
-			a: Number
-		},
-		curColor: String
+		mapIndex: Number
 	});
 
 

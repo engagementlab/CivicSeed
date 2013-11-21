@@ -1,13 +1,14 @@
 {
 	"NAME": "Civic Seed",
-	"PORT": 80,
+	"PORT": 8000,
 	"USE_REDIS": true,
-	"REDIS_HOST": "nodejitsudb2689954699.redis.irstack.com",
+	"USE_REDIS": true,
+	"REDIS_HOST": "localhost",
 	"REDIS_PORT": 6379,
-	"REDIS_PW": "wouldntyouliketoknow",
-	"REDIS_DB": "civic-redis",
-	"MONGO_URL": "mongodb://nodejitsu:569751d119d82e3741e515009cb2afe0@linus.mongohq.com:10099/nodejitsudb2709176694",
+	"REDIS_PW": "",
+	"REDIS_DB": "civic_dev_db",
+	"MONGO_URL": "mongodb://localhost/civic_dev_db",
 	"ACCOUNT_EMAIL": "civicseed@gmail.com",
-	"ACCOUNT_PW": "wouldntyouliketoknow",
-	"CLOUD_PATH": ""
+	"ACCOUNT_PW": "gnomes4eva",
+	"CLOUD_PATH": "http://s3.amazonaws.com/civicseed"
 }

@@ -21,14 +21,6 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 				x: Number,
 				y: Number
 			},
-			colorInfo: {
-				rgb: {
-					r: Number,
-					g: Number,
-					b: Number
-				},
-				tilesheet: Number
-			},
 			resources: [{
 				answers: [String],
 				attempts: Number,
@@ -61,7 +53,17 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			playingTime: Number,
 			tilesColored: Number,
 			pledges: Number,
-			collaborativeChallenge: Boolean
+			collaborativeChallenge: Boolean,
+			skinSuit: {
+				head: String,
+				torso: String,
+				legs: String,
+				unlocked: {
+					head: [String],
+					torso: [String],
+					legs: [String]
+				}
+			}
 		},
 		admin: {
 			instances: [String]

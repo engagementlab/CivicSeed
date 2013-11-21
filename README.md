@@ -13,13 +13,14 @@ Then install the project:
 	$ cd CivicSeed
 	$ npm install
 
+*Note that Civic Seed runs on node version >= 0.10.x. Civic Seed also utilizes the SocketStream framework to run on web sockets. Civic Seed is currently only built to run in the Chrome, Firefox, and Safari.*
+
 Civic Seed utilizes both REDIS and MongoDB. Make sure these are both installed and running before starting the Civic Seed app. Once these databases are running (see configuration below), start the app:
 
 	$ npm start
 	[or]
 	$ nodemon
 
-*Note that Civic Seed runs on node version >= 0.10.x. Civic Seed also utilizes the SocketStream framework to run on web sockets. Civic Seed is currently only built to run in the Chrome browser.*
 
 ### Environmental Configuration
 

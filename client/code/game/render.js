@@ -1,22 +1,26 @@
-var _tilesheets = [],
-	_currentTilesheet = null,
+var _tilesheets = {},
 	_allImages = [],
-	_playerImages = [],
-	_tilesheetWidth= 0,
-	_tilesheetHeight= 0,
+	_skinSuitNames = [],
+	_tilesheetWidth = 0,
+	_tilesheetHeight = 0,
+	_skinSuitWidth = 0,
+	_skinSuitHeight = 0,
 
-	_tilesheetCanvas= null,
-	_tilesheetContext= null,
+	_tilesheetCanvas = [],
+	_tilesheetContext = [],
 
-	_offscreen_backgroundCanvas= null,
-	_offscreen_backgroundContext = null,
+	_offscreenBackgroundCanvas = null,
+	_offscreenBackgroundContext = null,
 
-	_offscreenCharacterCanvas = [],
-	_offscreenCharacterContext = [],
+	_offscreenSkinSuitCanvas = {},
+	_offscreenSkinSuitContext = {},
 
-	_backgroundContext= null,
-	_foregroundContext= null,
-	_charactersContext= null,
+	_offscreenPlayersCanvas = {},
+	_offscreenPlayersContext = {},
+
+	_backgroundContext = null,
+	_foregroundContext = null,
+	_charactersContext = null,
 
 	_minimapPlayerContext = null,
 	_minimapTileContext = null,
@@ -34,11 +38,11 @@ var $renderer = $game.$renderer = {
 	// setup all rendering contexts then load images
 	init: function(callback) {
 		// create offscreen canvases for optimized rendering
-		_offscreen_backgroundCanvas = document.createElement('canvas');
-		_offscreen_backgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-		_offscreen_backgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+		_offscreenBackgroundCanvas = document.createElement('canvas');
+		_offscreenBackgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
+		_offscreenBackgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
 		// offscreen contexts
-		_offscreen_backgroundContext = _offscreen_backgroundCanvas.getContext('2d');
+		_offscreenBackgroundContext = _offscreenBackgroundCanvas.getContext('2d');
 
 		// access the canvases for rendering
 		_backgroundContext = document.getElementById('background').getContext('2d');
@@ -59,11 +63,12 @@ var $renderer = $game.$renderer = {
 		_foregroundContext.lineWidth = 4;
 		_foregroundContext.save();
 
-		_allImages = ['tilesheet1.png', 'tilesheet2.png', 'tilesheet3.png', 'tilesheet4.png', 'tilesheet5.png','npcs.png', 'botanist.png', '1.png', '2.png', '3.png', 'robot.png', 'bossItems.png', 'tiny_botanist.png','cursors.png'];
+		_allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
+		_skinSuitNames = ['basic','tuxedo','lion','cactus','cone','astronaut','ninja'];
 
 		_playerColorNum = $game.$player.getColorNum();
 		_playerLevelNum = $game.$player.currentLevel;
-		$renderer.loadTilesheet(_playerLevelNum, false);
+		$renderer.loadTilesheets(0);
 
 		// hack to check if all stuff is loaded so we can callback
 		var checkDone = function() {
@@ -77,21 +82,26 @@ var $renderer = $game.$renderer = {
 	},
 
 	resetInit: function() {
-		_tilesheets = [];
+		_tilesheets = {};
 		_currentTilesheet = null;
 		_allImages = [];
-		_playerImages = [];
+		_skinSuitNames = [];
 		_tilesheetWidth = 0;
 		_tilesheetHeight = 0;
+		_skinSuitWidth = 0;
+		_skinSuitHeight = 0;
 
-		_tilesheetCanvas = null;
-		_tilesheetContext = null;
+		_tilesheetCanvas = [];
+		_tilesheetContext = [];
 
-		_offscreen_backgroundCanvas= null;
-		_offscreen_backgroundContext = null;
+		_offscreenBackgroundCanvas= null;
+		_offscreenBackgroundContext = null;
 
-		_offscreenCharacterCanvas = [];
-		_offscreenCharacterContext = [];
+		_offscreenSkinSuitCanvas = {};
+		_offscreenSkinSuitContext = {};
+
+		_offscreenPlayersCanvas = {};
+		_offscreenPlayersContext = {};
 
 		_backgroundContext= null;
 		_foregroundContext= null;
@@ -110,81 +120,81 @@ var $renderer = $game.$renderer = {
 	},
 
 	// this loads the specified tilesheet
-	loadTilesheet: function(num, now) {
-		_currentTilesheet = new Image();
-		_currentTilesheet.src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
-		_currentTilesheet.onload = function() {
-			// we are in the game
-			if(now) {
-				_tilesheetContext.clearRect(0,0,_tilesheetWidth,_tilesheetHeight);
-			} else {
-				_tilesheetCanvas = document.createElement('canvas');
-				_tilesheetCanvas.setAttribute('width', _currentTilesheet.width);
-				_tilesheetCanvas.setAttribute('height', _currentTilesheet.height);
-				_tilesheetContext = _tilesheetCanvas.getContext('2d');
-
-				_tilesheetWidth = _currentTilesheet.width / $game.TILE_SIZE;
-				_tilesheetHeight = _currentTilesheet.height / $game.TILE_SIZE;
-				// loop through all images, load in each one, when done, move on to map loading
-				$renderer.loadImages(0);
-			}
-			_tilesheetContext.drawImage(
-				_currentTilesheet,
-				0,
-				0
-			);
-
-			if(now) {
-				// redraw all tiles
-				$renderer.renderAllTiles();
-			}
-		};
-	},
-
-	//loads all other images (accessories, npcs, etc)
-	loadImages: function(num) {
-
+	loadTilesheets: function(num) {
 		//load the images recursively until done
-		_tilesheets[num] = new Image();
-		_tilesheets[num].src = CivicSeed.CLOUD_PATH + '/img/game/' + _allImages[num];
-		_tilesheets[num].onload = function() {
+		var filename = _allImages[num];
+		_tilesheets[filename] = new Image();
+		_tilesheets[filename].src = CivicSeed.CLOUD_PATH + '/img/game/' + filename + '.png';
+		_tilesheets[filename].onload = function() {
 			var next = num + 1;
 			if(num === _allImages.length - 1) {
-				$renderer.loadPlayerImages(0);
+				$renderer.loadSkinSuitImages(0);
 			}
 			else {
-				$renderer.loadImages(next);
+				//if they are the world ones, do render them to canvas
+				if(num === 0) {
+					//gray
+					_tilesheetCanvas[0] = document.createElement('canvas');
+					_tilesheetCanvas[0].setAttribute('width', _tilesheets[filename].width);
+					_tilesheetCanvas[0].setAttribute('height', _tilesheets[filename].height);
+					_tilesheetContext[0] = _tilesheetCanvas[0].getContext('2d');
+
+					_tilesheetWidth = _tilesheets[filename].width / $game.TILE_SIZE;
+					_tilesheetHeight = _tilesheets[filename].height / $game.TILE_SIZE;
+					_tilesheetContext[0].drawImage(
+						_tilesheets[filename],
+						0,
+						0
+					);
+				} else if(num === 1) {
+					//color
+					_tilesheetCanvas[1] = document.createElement('canvas');
+					_tilesheetCanvas[1].setAttribute('width', _tilesheets[filename].width);
+					_tilesheetCanvas[1].setAttribute('height', _tilesheets[filename].height);
+					_tilesheetContext[1] = _tilesheetCanvas[1].getContext('2d');
+					_tilesheetContext[1].drawImage(
+						_tilesheets[filename],
+						0,
+						0
+					);
+				}
+				$renderer.loadTilesheets(next);
 			}
 		};
 	},
 
 	//load all player images
-	loadPlayerImages: function(num) {
+	loadSkinSuitImages: function(num) {
 		var next = num + 1,
-			playerFile = CivicSeed.CLOUD_PATH + '/img/game/players/' + num + '.png';
-		_playerImages[num] = new Image();
-		_playerImages[num].src = playerFile;
+			filename = _skinSuitNames[num],
+			skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + filename + '.png';
+		
+		var skinSuitImage = new Image();
+		skinSuitImage.src = skinSuitFile;
 
-		_playerImages[num].onload = function() {
+		skinSuitImage.onload = function() {
 
-			_offscreenCharacterCanvas[num] = document.createElement('canvas');
-			_offscreenCharacterCanvas[num].setAttribute('width', _playerImages[num].width);
-			_offscreenCharacterCanvas[num].setAttribute('height', _playerImages[num].height);
-			_offscreenCharacterContext[num] = _offscreenCharacterCanvas[num].getContext('2d');
+			_offscreenSkinSuitCanvas[filename] = document.createElement('canvas');
+			_offscreenSkinSuitCanvas[filename].setAttribute('width', skinSuitImage.width);
+			_offscreenSkinSuitCanvas[filename].setAttribute('height', skinSuitImage.height);
+			_offscreenSkinSuitContext[filename] = _offscreenSkinSuitCanvas[filename].getContext('2d');
 
-			_offscreenCharacterContext[num].drawImage(
-				_playerImages[num],
+			_offscreenSkinSuitContext[filename].drawImage(
+				skinSuitImage,
 				0,
 				0
 			);
 
-			if(next === 21) {
+			if(next === _skinSuitNames.length) {
 				$renderer.ready = true;
-				$renderer.playerToCanvas(_playerLevelNum, _playerColorNum, true);
+				_skinSuitWidth = skinSuitImage.width;
+				_skinSuitHeight = skinSuitImage.height;
+				$renderer.renderSkinventory();
+				$renderer.createCanvasForPlayer($game.$player.id, false);
 				return;
 			}
 			else {
-				$renderer.loadPlayerImages(next);
+				$renderer.loadSkinSuitImages(next);
 			}
 		};
 	},
@@ -260,21 +270,16 @@ var $renderer = $game.$renderer = {
 			foreIndex = curTile.foreground-1,
 			foreIndex2 = curTile.foreground2-1,
 			tileStateVal = curTile.tileState,
-			colorVal = curTile.curColor,
+			colored = curTile.colored,
 
 			tileData = {
 				b1: backIndex1,
 				b2: backIndex2,
 				b3: backIndex3,
 				destX: i,
-				destY: j
+				destY: j,
+				colored: colored
 			};
-
-		//color tile first if it needs to be done
-		if(colorVal) {
-			//rgb string
-			tileData.color = colorVal;
-		}
 
 		//send the tiledata to the artist aka mamagoo
 		$renderer.drawMapTile(tileData);
@@ -284,7 +289,8 @@ var $renderer = $game.$renderer = {
 			f1: foreIndex,
 			f2: foreIndex2,
 			destX: i,
-			destY: j
+			destY: j,
+			colored: colored
 		};
 
 		if(foreIndex > -1 || foreIndex2 > -1) {
@@ -307,27 +313,30 @@ var $renderer = $game.$renderer = {
 
 		var srcX,srcY;
 
-		//draw color tile first
-		if(tileData.color) {
-			//var rgba = 'rgba('+tileData.color.r+','+tileData.color.g +','+tileData.color.b +','+tileData.color.a + ')';
-			_backgroundContext.fillStyle = tileData.color;
-			_backgroundContext.fillRect(
+		var tilesheetIndex = tileData.colored ? 1 : 0;
+		//background1, the ground texture
+		if(tilesheetIndex === 1) {
+			//4 is bg
+			_backgroundContext.drawImage(
+				_tilesheetCanvas[tilesheetIndex],
+				4 * $game.TILE_SIZE,
+				0,
+				$game.TILE_SIZE,
+				$game.TILE_SIZE,
 				tileData.destX * $game.TILE_SIZE,
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 
-		//background1, the ground texture
 		if(tileData.b1 > -1) {
-			srcX =  tileData.b1 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b1 / _tilesheetWidth),
-
+			srcX =  tileData.b1 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b1 / _tilesheetWidth);
 
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -336,15 +345,15 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 
 		if(tileData.b2 > -1) {
-			srcX = tileData.b2 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b2 / _tilesheetWidth),
+			srcX = tileData.b2 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b2 / _tilesheetWidth);
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -353,14 +362,14 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 		if(tileData.b3 > -1) {
-			srcX = tileData.b3 % _tilesheetWidth,
-			srcY =  Math.floor(tileData.b3 / _tilesheetWidth),
+			srcX = tileData.b3 % _tilesheetWidth;
+			srcY =  Math.floor(tileData.b3 / _tilesheetWidth);
 			//draw it to offscreen
 			_backgroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -369,18 +378,20 @@ var $renderer = $game.$renderer = {
 				tileData.destY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
 				$game.TILE_SIZE
-				);
+			);
 		}
 	},
 
 	//draw a foreground tile to the canvas
 	drawForegroundTile: function(tileData) {
 		var srcX, srcY;
+
+		var tilesheetIndex = tileData.colored ? 1 : 0;
 		if(tileData.f1 > -1) {
 			srcX = tileData.f1 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f1 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -395,7 +406,7 @@ var $renderer = $game.$renderer = {
 			srcX = tileData.f2 % _tilesheetWidth;
 			srcY = Math.floor(tileData.f2 / _tilesheetWidth);
 			_foregroundContext.drawImage(
-				_tilesheetCanvas,
+				_tilesheetCanvas[tilesheetIndex],
 				srcX * $game.TILE_SIZE,
 				srcY * $game.TILE_SIZE,
 				$game.TILE_SIZE,
@@ -409,102 +420,94 @@ var $renderer = $game.$renderer = {
 
 	},
 
-	//draw acessory items to a player
-	drawAccessories: function(srcX,destX,destY, level, color, client) {
-		if(client) {
-			//this will add your stuff to the gray player (for seed mode) as well
-			_offscreenCharacterContext[0].drawImage(
-				_tilesheets[level],
-				srcX,
+	//create a canvas for each active player
+	createCanvasForPlayer: function(id, suit) {
+		//if it exists, clear it
+		if(_offscreenPlayersContext[id]) {
+			_offscreenPlayersContext[id].clearRect(0,0,_skinSuitWidth,_skinSuitHeight);
+		} else {
+			_offscreenPlayersCanvas[id] = document.createElement('canvas');
+			_offscreenPlayersCanvas[id].setAttribute('width', _skinSuitWidth);
+			_offscreenPlayersCanvas[id].setAttribute('height', _skinSuitHeight);
+			_offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
+		}
+		var skinSuit = suit;
+		if(!skinSuit) {
+			skinSuit = $game.$player.getSkinSuit();
+		}
+		//draw the head, torso, and legs
+		var h = $game.TILE_SIZE * 2,
+			numRows = Math.floor(_skinSuitHeight / h);
+
+		var r = 0;
+		//draw all the heads from this spritesheet
+		var headHeight = 30,
+			torsoHeight = 15,
+			legsHeight = 19;
+
+
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.head],
 				0,
-				32,
-				64,
-				destX,
-				destY,
-				32,
-				64
+				r * h,
+				_skinSuitWidth,
+				headHeight,
+				0,
+				r * h,
+				_skinSuitWidth,
+				headHeight
 			);
 		}
-		_offscreenCharacterContext[color].drawImage(
-			_tilesheets[level],
-			srcX,
-			0,
-			32,
-			64,
-			destX,
-			destY,
-			32,
-			64
-		);
-	},
-
-	//draw a player on the backup canvas
-	playerToCanvas: function(lvl, color, client) {
-		//hack to draw right accessories
-		lvl = lvl < 4 ? lvl : 3;
-		//MAKE  SHIT MORE EFFICIENT
-		var h = 64,
-			w = 32,
-			level = lvl + 7;
-
-		//clear and redraw then add accessories
-		_offscreenCharacterContext[color].clearRect(
-			0,
-			0,
-			_playerImages[color].width,
-			_playerImages[color].height
-		);
-		_offscreenCharacterContext[color].drawImage(
-			_playerImages[color],
-			0,
-			0
-		);
-		//+7 gets us to the RIGHT sheet in the array
-		if(lvl > 0) {
-			//go thru each level
-			for(var curLevel = 7; curLevel < level; curLevel += 1) {
-				//go through each accessory image, put it where approp. (there are 5)
-				var j = 0;
-				for (var i = 0; i < 5; i += 1) {
-					var x = w * i;
-					//0 - forward / down
-					if(i === 0) {
-						$renderer.drawAccessories(x,0,0,curLevel, color, client);
-						for(j = 0; j < 4; j += 1) {
-							$renderer.drawAccessories(x,w * j, h * 3,curLevel, color, client);
-						}
-					}
-					//1 - idle
-					else if(i === 1) {
-						$renderer.drawAccessories(x,w,0,curLevel, color, client);
-					}
-					//2 - left
-					else if(i === 2) {
-						for(j = 0; j < 4; j += 1) {
-							$renderer.drawAccessories(x, w * j, h * 1,curLevel, color, client);
-						}
-					}
-					//3 - right
-					else if(i === 3) {
-						for(j = 0; j < 4; j += 1) {
-							$renderer.drawAccessories(x, w * j, h * 2,curLevel, color, client);
-						}
-					}
-					//4 - up
-					else {
-						for(j = 0; j < 4; j += 1) {
-							$renderer.drawAccessories(x, w * j, h * 4,curLevel, color, client);
-						}
-					}
-				}
-			}
+		//draw all the torso from this spritesheet
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.torso],
+				0,
+				r * h + headHeight,
+				_skinSuitWidth,
+				torsoHeight,
+				0,
+				r * h + headHeight,
+				_skinSuitWidth,
+				torsoHeight
+			);
 		}
+		//draw all the legs from this spritesheet
+		for(r = 0; r < numRows; r++) {
+			_offscreenPlayersContext[id].drawImage(
+				_offscreenSkinSuitCanvas[skinSuit.legs],
+				0,
+				r * h + headHeight + torsoHeight,
+				_skinSuitWidth,
+				legsHeight,
+				0,
+				r * h + headHeight + torsoHeight,
+				_skinSuitWidth,
+				legsHeight
+			);
+		}
+
+				//tinting proof
+		// var theImage = _offscreenSkinSuitContext.lion.getImageData(0, 0, _skinSuitWidth, _skinSuitHeight);
+  //           pix = theImage.data;
+            
+  //       // Every four values equals 1 pixel.	
+  //       for (i = 0; i < pix.length; i += 4) {
+  //           pix[i]  = 255;
+  //           pix[i + 1]  = 255;
+  //           pix[i + 3] = 0;
+  //           // green[i + 1] = 255;
+  //           // blue[i + 2]  = pix[i + 2];
+  //           // alpha[i + 3] = pix[i + 3];
+  //       }
+  //       _offscreenSkinSuitContext.lion.putImageData(theImage, 0,0);
 	},
 
 	//draw the player from backup to real canvas
 	renderPlayer: function(info) {
 		_charactersContext.drawImage(
-			_offscreenCharacterCanvas[info.colorNum],
+			_offscreenPlayersCanvas[info.id],
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE,
@@ -520,21 +523,6 @@ var $renderer = $game.$renderer = {
 		_charactersContext.shadowOffsetY = 0;
 		_charactersContext.fillText(info.firstName,info.curX + $game.TILE_SIZE / 2, info.curY - 32);
 		_charactersContext.restore();
-	},
-
-	//draw an npc to canvas
-	renderCharacter: function(info) {
-		_charactersContext.drawImage(
-		_offscreenCharacterCanvas[info.colorNum],
-		info.srcX,
-		info.srcY,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2,
-		info.curX,
-		info.curY - $game.TILE_SIZE,
-		$game.TILE_SIZE,
-		$game.TILE_SIZE*2
-		);
 	},
 
 	//clear the character canvas
@@ -568,7 +556,7 @@ var $renderer = $game.$renderer = {
 			);
 
 		//start fresh for the offscreen every time we change ALL tiles
-		_offscreen_backgroundContext.clearRect(
+		_offscreenBackgroundContext.clearRect(
 			0,
 			0,
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
@@ -601,7 +589,7 @@ var $renderer = $game.$renderer = {
 	//draw and npc to the canvas
 	renderNpc: function (npcData) {
 		_charactersContext.drawImage(
-			_tilesheets[5],
+			_tilesheets.npcs,
 			npcData.srcX,
 			npcData.srcY,
 			$game.TILE_SIZE,
@@ -628,62 +616,43 @@ var $renderer = $game.$renderer = {
 			);
 
 			//redraw that area
-			var foreIndex = $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground-1,
-				foreIndex2 =  $game.$map.currentTiles[_prevMouseX][_prevMouseY].foreground2-1,
+		var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
+			var foreIndex = tile.foreground - 1,
+				foreIndex2 =  tile.foreground2 - 1,
+				colored = tile.colored,
 
 				foreData = {
 					f1: foreIndex,
 					f2: foreIndex2,
 					destX: _prevMouseX,
-					destY: _prevMouseY
+					destY: _prevMouseY,
+					colored: colored
 			};
 
 			$renderer.drawForegroundTile(foreData);
-
-			var col = $game.$player.getRGBA();
-
-			var srcX = 0;
+			var srcX;
 			if($game.$player.seedMode) {
-				// _foregroundContext.fillStyle = col; // seed color
-				// _foregroundContext.fillRect(
-				// 	mX,
-				// 	mY,
-				// 	$game.TILE_SIZE,
-				// 	$game.TILE_SIZE
-				// );
 				srcX  = $game.TILE_SIZE * 3;
 			}
-			//
 			else {
-			
-				//go
-				if(state == -1) {
-					// col = 'rgba(50,255,50,.5)';
-					// _foregroundContext.strokeStyle = col;
-
-				}
-				//nogo
-				else if(state === -2) {
-					// col = 'rgba(255,50,50,.5)';
-					// _foregroundContext.strokeStyle = col;
+				// var user = $game.$others.playerCard(tile.x, tile.y);
+				// console.log(tile.x, user);
+				// if(user) {
+				// 	srcX = $game.TILE_SIZE * 2;
+				// } else if(state === -1) {
+				if(state === -1) {
+					//go
+					srcX = 0;
+				} else if(state === -2) {
+					//nogo
 					srcX  = $game.TILE_SIZE;
-
-				}
-				//npc
-				else {
-					// col = 'rgba(50,50,235,.5)';
-					// _foregroundContext.strokeStyle = col;
+				} else {
+					//npc
 					srcX  = $game.TILE_SIZE * 2;
 				}
-				// _foregroundContext.strokeRect(
-				// 	mX + 2,
-				// 	mY + 2,
-				// 	$game.TILE_SIZE - 4,
-				// 	$game.TILE_SIZE - 4
-				// );
 			}
 			_foregroundContext.drawImage(
-				_tilesheets[13],
+				_tilesheets.cursors,
 				srcX,
 				0,
 				$game.TILE_SIZE,
@@ -738,7 +707,7 @@ var $renderer = $game.$renderer = {
 		// 	8
 		// );
 		_minimapPlayerContext.drawImage(
-			_tilesheets[12],
+			_tilesheets.tiny_botanist,
 			0,
 			0,
 			20,
@@ -751,8 +720,8 @@ var $renderer = $game.$renderer = {
 	},
 
 	//render a specific tile on the mini map
-	renderMiniTile: function(x, y, col) {
-		var	rgba = 'rgba('+col.r+','+col.g+','+col.b+','+col.a + ')';
+	renderMiniTile: function(x, y) {
+		var	rgba = 'rgb(124,202,176)';
 		_minimapTileContext.fillStyle = rgba;
 		_minimapTileContext.fillRect(
 			x,
@@ -786,7 +755,7 @@ var $renderer = $game.$renderer = {
 	//render the botanist on the canvas
 	renderBotanist: function(info) {
 		_charactersContext.drawImage(
-			_tilesheets[6],
+			_tilesheets.botanist,
 			info.srcX,
 			info.srcY,
 			$game.TILE_SIZE * 6,
@@ -802,7 +771,7 @@ var $renderer = $game.$renderer = {
 	renderRobot: function(info) {
 		// console.log(info.srcX, info.srcY);
 		_charactersContext.drawImage(
-			_tilesheets[10],
+			_tilesheets.robot,
 			info.srcX,
 			info.srcY,
 			64,
@@ -843,7 +812,7 @@ var $renderer = $game.$renderer = {
 				// 	$game.TILE_SIZE
 				// );
 				_backgroundContext.drawImage(
-					_tilesheets[11],
+					_tilesheets.boss_items,
 					tiles[t].item * $game.TILE_SIZE,
 					0,
 					$game.TILE_SIZE,
@@ -863,7 +832,7 @@ var $renderer = $game.$renderer = {
 				// 	$game.TILE_SIZE
 				// );
 				_backgroundContext.drawImage(
-					_tilesheets[11],
+					_tilesheets.boss_items,
 					128,
 					0,
 					$game.TILE_SIZE,
@@ -899,6 +868,136 @@ var $renderer = $game.$renderer = {
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
 			$game.VIEWPORT
 		);
+	},
+
+	renderSkinventory: function() {
+		//go thru each skinsuit, create top middle bottom for them in skinventory
+		var playerSuit = $game.$player.getSkinSuit(),
+			unlocked = playerSuit.unlocked;
+
+		for(var i = 0; i < _skinSuitNames.length; i++) {
+			//grab head and create new image
+			var name = _skinSuitNames[i],
+				bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + name + '.png';
+
+			var head = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.head').append(head);
+
+			//check if currently selected
+			if(name === playerSuit.head) {
+				head.addClass('currentPart');
+			}
+
+			var headSpan = $('.head .' + name);
+
+			var headUnlocked = false;
+			for(var h = 0; h < unlocked.head.length; h++) {
+				if(unlocked.head[h] === name) {
+					headUnlocked = true;
+					headSpan.css({
+						background: 'url(' + bg + ')'
+					});
+					break;
+				}
+			}
+			if(!headUnlocked) {
+				//show lock
+				headSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				headSpan.html('<i class="icon-lock"></i>');
+			}
+
+			headSpan.addClass('bodypart');
+
+			var torso = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.torso').append(torso);
+
+			//check if currently selected
+			if(name === playerSuit.torso) {
+				torso.addClass('currentPart');
+			}
+
+			var torsoSpan = $('.torso .' + name);
+			
+			var torsoUnlocked = false;
+			for(var t = 0; t < unlocked.torso.length; t++) {
+				if(unlocked.torso[t] === name) {
+					torsoUnlocked = true;
+					torsoSpan.css({
+						background: 'url(' + bg + ')',
+						backgroundPosition: '0 -30px'
+					});
+					break;
+				}
+			}
+			if(!torsoUnlocked) {
+				//show lock
+				torsoSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				torsoSpan.html('<i class="icon-lock"></i>');
+			}
+
+			torsoSpan.addClass('bodypart');
+
+			var legs = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			$('.legs').append(legs);
+
+			//check if currently selected
+			if(name === playerSuit.legs) {
+				legs.addClass('currentPart');
+			}
+
+			var legsSpan = $('.legs .' + name);
+			
+			var legsUnlocked = false;
+			for(var l = 0; l < unlocked.legs.length; l++) {
+				if(unlocked.legs[l] === name) {
+					legsUnlocked = true;
+					legsSpan.css({
+						background: 'url(' + bg + ')',
+						backgroundPosition: '0 -45px'
+					});
+					break;
+				}
+			}
+			if(!legsUnlocked) {
+				//show lock
+				legsSpan.html('<i class="locked icon-lock"></i>');	
+			} else {
+				legsSpan.html('<i class="icon-lock"></i>');
+			}
+
+			legsSpan.addClass('bodypart');
+		}
+	},
+
+	unlockSkinSuit: function(skinSuit) {
+		var bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skinSuit + '.png';
+
+		var head = $('.head .' + skinSuit);
+		head.find('i').removeClass('locked');
+
+
+		head.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 0'
+		});
+
+		var torso = $('.torso .' + skinSuit);
+		torso.find('i').removeClass('locked');
+
+		torso.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 -30px'
+		});
+
+		var legs = $('.legs .' + skinSuit);
+		legs.find('i').removeClass('locked');
+
+		legs.css({
+			background: 'url(' + bg + ')',
+			backgroundPosition: '0 -45px'
+		});		
 	}
 };
 

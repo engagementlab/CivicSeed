@@ -28,7 +28,6 @@ exports.actions = function(req, res, ss) {
 						profilePublic: user.profilePublic,
 						profileUnlocked: user.profileUnlocked,
 						profileSetup: user.profileSetup,
-						colorNum: user.game.colorInfo.tilesheet,
 						colorMap: user.game.colorMap,
 						email: user.email
 					};
@@ -88,7 +87,7 @@ exports.actions = function(req, res, ss) {
 						} else {
 							res(true);
 						}
-					})
+					});
 				}
 			});
 		},

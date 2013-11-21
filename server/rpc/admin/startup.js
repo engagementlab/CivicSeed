@@ -97,10 +97,6 @@ exports.actions = function(req, res, ss) {
 											y: 77,
 											inTransit: false
 										},
-										colorInfo: {
-											rgb: newColor,
-											tilesheet: i
-										},
 										resources: [],
 										resourcesDiscovered: 0,
 										inventory: [],
@@ -117,7 +113,17 @@ exports.actions = function(req, res, ss) {
 										playingTime: 0,
 										tilesColored: 0,
 										pledges: 5,
-										collaborativeChallenge: false
+										collaborativeChallenge: false,
+										skinSuit: {
+											head: 'basic',
+											torso: 'basic',
+											legs: 'basic',
+											unlocked: {
+												head: ['basic'],
+												torso: ['basic'],
+												legs: ['basic']
+											}
+										}
 									}
 								};
 								demoUsers.push(d);
@@ -166,11 +172,11 @@ exports.actions = function(req, res, ss) {
 							if(tileStateArray[i] === 0) {
 								tileStateVal = -1;
 							}
-
-							//2: this refers to the BLUE tile, means there is an NPC
-							else if(tileStateArray[i] === 2	) {
-								tileStateVal = i;
-							}
+							//THIS WILL NOW BE DONE AUTOMAGICALLY by the NPC load
+							// //2: this refers to the BLUE tile, means there is an NPC
+							// else if(tileStateArray[i] === 2	) {
+							// 	tileStateVal = i;
+							// }
 							//3: this is the pink? tile, it is the botanist
 							else if(tileStateArray[i] === 3) {
 								tileStateVal = 99999;
@@ -198,43 +204,24 @@ exports.actions = function(req, res, ss) {
 						});
 					});
 				} else if(dataType === 'colors') {
+					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Colors   * * * * * * * * * * * *   \n\n'.yellow);
 					var colors = [{
 						instanceName: 'test',
 						x: 0,
 						y: 0,
-						mapIndex: 0,
-						color: {
-							r: 255,
-							g: 0,
-							b: 0,
-							a: 0.5,
-							owner: 'nobody'
-						},
-						curColor: 'rgba(255,0,0,0.5)'
+						mapIndex: 0
 					}, {
 						instanceName: 'demo',
 						x: 0,
 						y: 0,
-						mapIndex: 0,
-						color: {
-							r: 255,
-							g: 0,
-							b: 0,
-							a: 0.5,
-							owner: 'nobody'
-						},
-						curColor: 'rgba(255,0,0,0.5)'
+						mapIndex: 0
 					}];
-					// dbActions.dropCollection('colors', function() {
-					// 	dbActions.saveDocuments(colorModel, colors, function() {
-					// 		res('Data loaded: ' + dataType);
-					// 	});
-					// });
+
 					dbActions.resetDefaultData(colorModel, function(err) {
 						if(err) {
 							apprise(err);
 						} else {
-							dbActions.saveDocuments(gameModel, colors, function() {
+							dbActions.saveDocuments(colorModel, colors, function() {
 								res('Data loaded: ' + dataType);
 							});	
 						}
@@ -253,7 +240,14 @@ exports.actions = function(req, res, ss) {
 					npcData = require(rootDir + '/data/npcs');
 					dbActions.dropCollection('npcs', function() {
 						dbActions.saveDocuments(npcModel, npcData.global, function() {
-							res('Data loaded: ' + dataType);
+							//go thru npc data, save tilestate at that tile
+							dbActions.saveNpcTilestate(tileModel, npcData.global, function(err) {
+								if(err) {
+									console.log('error saving tilestate');
+								} else {
+									res('Data loaded: ' + dataType);
+								}
+							});
 						});
 					});	
 				} else if(dataType === 'game') {

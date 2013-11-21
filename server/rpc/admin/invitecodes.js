@@ -61,10 +61,6 @@ exports.actions = function(req, res, ss) {
 								x: 64,
 								y: 77
 							},
-							colorInfo: {
-								rgb: newColor,
-								tilesheet: tilesheetNum
-							},
 							resources: [],
 							resourcesDiscovered: 0,
 							inventory: [],
@@ -81,7 +77,17 @@ exports.actions = function(req, res, ss) {
 							playingTime: 0,
 							tilesColored: 0,
 							pledges: 5,
-							collaborativeChallenge: false
+							collaborativeChallenge: false,
+							skinSuit: {
+								head: 'basic',
+								torso: 'basic',
+								legs: 'basic',
+								unlocked: {
+									head: ['basic'],
+									torso: ['basic'],
+									legs: ['basic']
+								}
+							}
 						};
 						console.log('Created user: ' + user.email);
 						user.save(function(err) {

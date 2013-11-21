@@ -18,7 +18,7 @@ var self = module.exports = {
 
 	openEmailConnection: function() {
 		smtpTransport = nodemailer.createTransport('SMTP', {
-			service: 'Gmail',
+			service: 'Mailgun',
 			auth: {
 				user: accountEmail,
 				pass: accountPassword

@@ -150,11 +150,12 @@ var self = module.exports = {
 	},
 
 	saveChanges: function(id) {
-		var npc = $('.npcs').find('.npc' + id);
+		var npc = $('.npcs').find('.npc' + id),
 			informationAreas = npc.find('.information textarea'),
 			resourceAreas = npc.find('.resource textarea'),
 			promptAreas = npc.find('.prompts textarea'),
 			smalltalkAreas = npc.find('.smalltalk textarea'),
+			skinSuitArea = npc.find('.skinSuit textarea'),
 			holding = npc.find('.information input')[0].checked,
 			questionType = npc.find('.resource input:checked').val(),
 			sprite = parseInt(npc.attr('data-sprite'),10),
@@ -179,8 +180,10 @@ var self = module.exports = {
 				level: null,
 				sprite: sprite,
 				index: null,
-				name: null
+				name: null,
+				skinSuit: null
 			};
+			
 
 		//update information
 		var x,y;
@@ -243,6 +246,12 @@ var self = module.exports = {
 				updates.dialog.smalltalk.push(val);
 			}
 		});
+
+		var skinVal = skinSuitArea.val();
+		// console.log(skinVal);
+		if(skinVal.length > 0) {
+			updates.skinSuit = skinVal;
+		}
 
 		//this means it is a new one, do not save, but add new in db
 		if(id < 0) {

@@ -187,13 +187,12 @@ $game.$map = {
 			if(loc) {
 				//if there IS a color
 				curTile = $game.$map.currentTiles[loc.x][loc.y];
-				curTile.color = bombed[b].color;
-				curTile.curColor = bombed[b].curColor;
+				curTile.colored = true;
 				$game.$renderer.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
 				$game.$renderer.renderTile(loc.x,loc.y);
 
 				if(id === $game.$player.id) {
-					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y, bombed[b].color);
+					$game.$renderer.renderMiniTile(bombed[b].x, bombed[b].y);
 				}
 			}
 		}
@@ -457,13 +456,12 @@ function _getTiles(data, callback) {
 			c = 0,
 			aMax = _nextTiles.length,
 			bMax = _nextTiles[0].length;
-		//console.log(colors, aMax, bMax);
+
 		while(c < cLength) {
 			var found = false;
 			while(!found) {
 				if(_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
-					_nextTiles[a][b].color = colors[c].color;
-					_nextTiles[a][b].curColor = colors[c].curColor;
+					_nextTiles[a][b].colored = true;
 					found = true;
 				}
 				a++;

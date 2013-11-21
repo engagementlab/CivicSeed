@@ -9,7 +9,7 @@ body, button, p, a
 	font-family $bodyFont
 
 .gameboard
-	cursor none
+	// cursor none
 	position relative
 	margin 0 auto
 	width 960px
@@ -425,6 +425,71 @@ body, button, p, a
 			i 
 				padding-right 10px
 
+.skinventory
+	cursor default
+	position absolute
+	top 15px
+	left 15px
+	width 930px
+	height 450px
+	background #efefef
+	box-shadow 2px 2px 4px 4px #333
+	padding 0
+	$borderRadius(0)
+	z-index 9999
+	display none
+	.skinContent
+		margin 10px 25px
+		h2
+			color $csBlue
+			font-size 2em
+		h3
+			color $csGreen
+			text-transform none
+		p
+			font-family $buttonFont
+		.parts
+			.part
+				position absolute
+				left 50px
+				p
+					float left
+					width 100px
+				.outer
+					cursor pointer
+					float left
+					margin-right 20px
+					padding 10px
+					border 2px solid white
+					.bodypart
+						width 32px
+						font-size 1.5em
+						color $csBlue
+						text-align center
+						i 
+							display none
+						.locked
+							display inline
+
+					&:hover
+						border 2px solid $csGreen
+				.currentPart
+					border 2px solid $csGreen
+						
+			.head
+				top 150px
+				.bodypart
+					height 30px
+					
+			.torso
+				top 215px
+				.bodypart
+					height 15px
+			.legs
+				top 265px
+				.bodypart
+					height 19px					
+
 .centerText
 	text-align center
 
@@ -546,6 +611,7 @@ body, button, p, a
 #minimapPlayer,
 #minimapTile
 	position absolute
+	cursor none
 
 #background
 	z-index 0
@@ -584,33 +650,36 @@ body, button, p, a
 	float left
 	margin-left 20px
 
-.playerHud
-	div
-		cursor pointer
+.regularGameHud
+	width 960px
+	margin-left -10px
+	.playerHud
+		div
+			cursor pointer
+			width 48px
+			height 36px
+			line-height 36px
+			margin-right 10px
+			margin-left 10px
+			background #222
+			color #dedede
+			$borderRadius(0)
+			position relative
+			text-align center
+		div:hover
+			box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+
+	.seedventory div
+		font-size 24px
+		margin 20px 0 0 10px
+		float left
 		width 48px
-		height 36px
-		line-height 36px
-		margin-right 10px
-		margin-left 10px
-		background #222
-		color #dedede
-		$borderRadius(0)
+		cursor pointer
 		position relative
-		text-align center
-	div:hover
-		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 
-.seedventory div
-	font-size 24px
-	margin 20px 0 0 10px
-	float left
-	width 48px
-	cursor pointer
-	position relative
-
-.seedventory
-	padding-left 20px
-	width 140px
+	.seedventory
+		padding-left 20px
+		width 140px
 
 .hud div
 	font-size 22px
@@ -1128,3 +1197,6 @@ p.privacyMessage
 	z-index 100
 	line-height 1.4
 	color #eee
+
+.highlightBox
+	border 4px solid $csOrange

@@ -18,14 +18,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 106,
-				g: 220,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -42,7 +34,17 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	},
 	admin: {
 		instances: ['test','demo','boss']
@@ -67,14 +69,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 106,
-				g: 220,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -91,7 +85,17 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -110,16 +114,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 20,
-			y: 20
-		},
-		colorInfo: {
-			rgb: {
-				r: 205,
-				g: 95,
-				b: 243
-			},
-			tilesheet: 11
+			x: 64,
+			y: 77
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -131,13 +127,23 @@ module.exports.global = [{
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: ['i like to do things in the community', 'i am great at communicationg', 'i play basketball','i want to share experiences'],
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -156,16 +162,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 20,
-			y: 20
-		},
-		colorInfo: {
-			rgb: {
-				r: 242,
-				g: 202,
-				b: 93
-			},
-			tilesheet: 3
+			x: 65,
+			y: 77
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -177,13 +175,23 @@ module.exports.global = [{
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: ['i am larry'],
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -202,16 +210,8 @@ module.exports.global = [{
 		instanceName: 'test',
 		currentLevel: 0,
 		position: {
-			x: 64,
+			x: 66,
 			y: 77
-		},
-		colorInfo: {
-			rgb: {
-				r: 184,
-				g: 239,
-				b: 98
-			},
-			tilesheet: 4
 		},
 		resources: [],
 		resourcesDiscovered: 0,
@@ -223,14 +223,120 @@ module.exports.global = [{
 		},
 		botanistState: 0,
 		firstTime: true,
-		resume: ['i like to volunteer', 'i want to work with the community', 'i play sports and such which has prepared me','i have cool hair'],
+		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
+}, {
+	activeSessionID: null,
+	firstName: 'Bill',
+	lastName: 'Russell',
+	school: 'UCLA',
+	password: '',
+	email: 'b',
+	role: 'actor',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: 'aodeef1qd8rjatt9',
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'test',
+		currentLevel: 0,
+		position: {
+			x: 67,
+			y: 77
+		},
+		resources: [],
+		resourcesDiscovered: 0,
+		inventory: [],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 0,
+		firstTime: true,
+		resume: [],
+		resumeFeedback: [],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5,
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
+	}
+}, {
+	activeSessionID: null,
+	firstName: 'Julius',
+	lastName: 'Erving',
+	school: 'UMass',
+	password: '',
+	email: 'e',
+	role: 'actor',
+	gameStarted: true,
+	profilePublic: false,
+	profileLink: 'f443ef1qd8rjatt9',
+	profileSetup: true,
+	profileUnlocked: false,
+	game: {
+		instanceName: 'test',
+		currentLevel: 0,
+		position: {
+			x: 67,
+			y: 77
+		},
+		resources: [],
+		resourcesDiscovered: 0,
+		inventory: [],
+		seeds: {
+			regular: 0,
+			draw: 0,
+			dropped: 0
+		},
+		botanistState: 0,
+		firstTime: true,
+		resume: [],
+		resumeFeedback: [],
+		seenRobot: false,
+		playingTime: 0,
+		tilesColored: 0,
+		pledges: 5,
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
+	}	
 }, {
 	activeSessionID: null,
 	firstName: 'Magic',
@@ -250,14 +356,6 @@ module.exports.global = [{
 		position: {
 			x: 64,
 			y: 77
-		},
-		colorInfo: {
-			rgb: {
-				r: 184,
-				g: 239,
-				b: 98
-			},
-			tilesheet: 4
 		},
 		resources: [
 			{
@@ -437,7 +535,17 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
 }, {
 	activeSessionID: null,
@@ -459,14 +567,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 206,
-				g: 120,
-				b: 230
-			},
-			tilesheet: 2
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -483,7 +583,17 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	},
 	admin: {
 		instances: []
@@ -508,14 +618,6 @@ module.exports.global = [{
 			x: 64,
 			y: 77
 		},
-		colorInfo: {
-			rgb: {
-				r: 242,
-				g: 202,
-				b: 93
-			},
-			tilesheet: 3
-		},
 		resources: [],
 		resourcesDiscovered: 0,
 		inventory: [],
@@ -532,6 +634,16 @@ module.exports.global = [{
 		playingTime: 0,
 		tilesColored: 0,
 		pledges: 5,
-		collaborativeChallenge: false
+		collaborativeChallenge: false,
+		skinSuit: {
+			head: 'basic',
+			torso: 'basic',
+			legs: 'basic',
+			unlocked: {
+				head: ['basic'],
+				torso: ['basic'],
+				legs: ['basic']
+			}
+		}
 	}
 }];

@@ -94,7 +94,7 @@ $game.$mouse = {
 					//if clicking on other player, show their info
 					var mX = $game.$map.currentTiles[_curX][_curY].x,
 						mY = $game.$map.currentTiles[_curX][_curY].y;
-					var user = $game.$others.playerCard(mX, mY);
+					var user = $game.$others.playerCard(mX, mY, true);
 
 					if(!user) {
 						//determine if the player can go to new tile

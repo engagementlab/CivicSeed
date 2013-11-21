@@ -41,6 +41,7 @@ var _curFrame = 0,
 	_tilesColored = null,
 	_pledges = null,
 	_resourcesDiscovered = null,
+	_skinSuit = null,
 
 	_drawSeeds = null;
 
@@ -98,7 +99,7 @@ $game.$player = {
 					rank: playerInfo.game.rank,
 					currentLevel: playerInfo.game.currentLevel,
 					position: playerInfo.game.position,
-					colorInfo: playerInfo.game.colorInfo
+					skinSuit: playerInfo.game.skinSuit
 				}
 			};
 			ss.rpc('game.player.tellOthers', subsetInfo);
@@ -114,15 +115,12 @@ $game.$player = {
 				prevY: _info.y * $game.TILE_SIZE,
 				kind: 'player',
 				level: $game.$player.currentLevel,
-				firstName: $game.$player.firstName
+				firstName: $game.$player.firstName,
+				id: $game.$player.id
 			};
 
 			// setup DOM selectors
 			_setDomSelectors();
-
-			// set the color of the hud to personalize it
-			var rgba = 'rgba(' + playerInfo.game.colorInfo.rgb.r + ',' + playerInfo.game.colorInfo.rgb.g + ',' + playerInfo.game.colorInfo.rgb.b + ', .6)';
-			$('.hudCount').css('background', rgba);
 
 			_updateTotalSeeds();
 			_updateRenderInfo();
@@ -165,7 +163,7 @@ $game.$player = {
 		_position = null;
 		_rgb = null;
 		_rgbString = null;
-		_playerColorNum = null;
+		_playerColorNum = 0;
 		_inventory = null;
 		_colorMap = null;
 		_resume = null;
@@ -173,7 +171,7 @@ $game.$player = {
 		_tilesColored = null;
 		_pledges = null;
 		_resourcesDiscovered = null;
-		_test = false;
+		_skinSuit = null;
 
 		_drawSeeds = null;
 
@@ -230,7 +228,7 @@ $game.$player = {
 				$('.inventoryButton').removeClass('currentButton');
 			});
 		}
-		_test = true;
+
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc.x === x && loc.y === y) {
 			return;
@@ -383,6 +381,20 @@ $game.$player = {
 			realResource.attempts += 1;
 			realResource.result = newInfo.result;
 		}
+
+		if(info.skinSuit) {
+			_skinSuit.unlocked.head.push(info.skinSuit);
+			_skinSuit.unlocked.torso.push(info.skinSuit);
+			_skinSuit.unlocked.legs.push(info.skinSuit);
+			var saveInfo = {
+				id: $game.$player.id,
+				skinSuit: _skinSuit
+			};
+			//update skinventory
+			$game.$renderer.unlockSkinSuit(info.skinSuit);
+			ss.rpc('game.player.updateGameInfo', saveInfo);
+		}
+		
 		//the answer was correct, add item to inventory
 		if(info.correct) {
 			_resourcesDiscovered += 1;
@@ -520,7 +532,7 @@ $game.$player = {
 		$game.$botanist.setBotanistState(0);
 		$game.$player.seenRobot = false;
 		_pledges = 5;
-		$game.$renderer.loadTilesheet($game.$player.currentLevel, true);
+		// $game.$renderer.loadTilesheet($game.$player.currentLevel, true);
 		//save new information to DB
 		var info = {
 			id: $game.$player.id,
@@ -542,7 +554,6 @@ $game.$player = {
 			var newLevelMsg = $game.$player.currentLevel + 1;
 			// var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
-			$game.$renderer.playerToCanvas($game.$player.currentLevel, _renderInfo.colorNum, true);
 		} else {
 			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
 			if($game.bossModeUnlocked) {
@@ -756,6 +767,10 @@ $game.$player = {
 		return _resourcesDiscovered;
 	},
 
+	getSkinSuit: function() {
+		return _skinSuit;
+	},
+
 	//get the number of seeds dropped
 	getSeedsDropped: function() {
 		return _seeds.dropped;
@@ -769,11 +784,6 @@ $game.$player = {
 	//get the quantity of seedITs made
 	getPledges: function() {
 		return _pledges;
-	},
-
-	//get the player's color as a string
-	getRGBA: function() {
-		return 'rgba('+_colorInfo.r+','+_colorInfo.g+','+_colorInfo.b+','+ 0.5 + ')';
 	},
 
 	getColorString: function() {
@@ -940,29 +950,21 @@ $game.$player = {
 	//update the running array for current tiles colored to push to DB on end of drawing
 	drawSeed: function(pos) {
 		if(_seeds.draw > 0) {
-			$game.$player.updateSeeds('draw', -1, true);
-			$graffitiNum.text(_seeds.draw);
 			var drawLocal = false;
 			if($game.$player.seedMode === 'draw') {
 				var currentTile = $game.$map.currentTiles[pos.x][pos.y],
 					index = currentTile.mapIndex,
-					stringIndex = String(index),
-					tempRGB = _rgbString + '0.3)';
+					stringIndex = String(index);
+				//add to array and color if we haven't done it
 				if(!_drawSeeds[index]) {
+					$game.$player.updateSeeds('draw', -1, true);
+					$graffitiNum.text(_seeds.draw);
 					drawLocal = true;
 					_drawSeeds[index] = {
 						x: currentTile.x,
 						y: currentTile.y,
 						mapIndex: index,
-						color:
-						{
-							r: _colorInfo.r + 10,
-							g: _colorInfo.g + 10,
-							b: _colorInfo.b + 10,
-							a: 0.3
-						},
-						instanceName: $game.$player.instanceName,
-						curColor: tempRGB
+						instanceName: $game.$player.instanceName
 					};
 					//keep track area positions
 					if(pos.x < _drawSeedArea.minX) {
@@ -977,40 +979,16 @@ $game.$player = {
 					if(pos.y > _drawSeedArea.maxY) {
 						_drawSeedArea.maxY = pos.y;
 					}
-				} else {
-					if(_drawSeeds[index].color.a < 0.5) {
-						drawLocal = true;
-						_drawSeeds[index].color.a += 0.1;
-						_drawSeeds[index].curColor = tempRGB = _rgbString + _drawSeeds[index].color.a + ')';
-					}
 				}
+				//empty so add it
 				if(drawLocal) {
 					//blend the prev. color with new color
-					var updateTile = false;
-					if(currentTile.color) {
-						if(currentTile.color.a < 0.5) {
-							updateTile = true;
-							var weightOld = 0.2,
-								weightNew = 0.8;
-							var newR = Math.floor(weightOld * currentTile.color.r + weightNew * _drawSeeds[index].color.r),
-								newG = Math.floor(weightOld * currentTile.color.g + weightNew * _drawSeeds[index].color.g),
-								newB = Math.floor(weightOld * currentTile.color.b + weightNew * _drawSeeds[index].color.b),
-								newA = Math.round((currentTile.color.a + 0.1) * 100) / 100,
-								rgbString = 'rgba(' + newR + ',' + newG + ',' + newB + ',' + newA + ')';
-							$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
-							$game.$map.currentTiles[pos.x][pos.y].color.a = newA;
-							$game.$map.currentTiles[pos.x][pos.y].curColor = rgbString;
-						}
-					} else {
-						$game.$map.currentTiles[pos.x][pos.y].color = _drawSeeds[index].color;
-						$game.$map.currentTiles[pos.x][pos.y].curColor = tempRGB;
-						updateTile = true;
-					}
-					if(updateTile) {
-						//draw over the current tiles to show player they are drawing
-						$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
-						$game.$renderer.renderTile(pos.x,pos.y);
-					}
+					//show auto
+					$game.$map.currentTiles[pos.x][pos.y].colored = true;
+
+					//draw over the current tiles to show player they are drawing
+					$game.$renderer.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
+					$game.$renderer.renderTile(pos.x,pos.y);
 				}
 			}
 		} else {
@@ -1048,10 +1026,21 @@ $game.$player = {
 	debug: function() {
 		console.log(_resources);
 	},
+
 	checkSeedLevel: function() {
 		if(_seed.draw <= 0) {
 			$game.$mouse.drawMode = false;
 		}
+	},
+
+	setSkinSuit: function(part, name) {
+		_skinSuit[part] = name;
+		var info = {
+			id: $game.$player.id,
+			skinSuit: _skinSuit
+		};
+		ss.rpc('game.player.changeSkinSuit', info);
+		$game.$renderer.createCanvasForPlayer($game.$player.id, false);
 	}
 };
 
@@ -1090,10 +1079,6 @@ function _setPlayerInformation(info) {
 	_previousSeedsDropped = _seeds.dropped;
 	_resources = _objectify(info.game.resources);
 	_position = info.game.position;
-	_colorInfo = info.game.colorInfo.rgb;
-	_rgb = 'rgb(' + info.game.colorInfo.rgb.r + ',' + info.game.colorInfo.rgb.g + ',' + info.game.colorInfo.rgb.b + ')';
-	_rgbString = 'rgba(' + (info.game.colorInfo.rgb.r + 10) + ',' + (info.game.colorInfo.rgb.g + 10) + ',' + (info.game.colorInfo.rgb.b + 10) + ',';
-	_playerColorNum = info.game.colorInfo.tilesheet;
 	_inventory = info.game.inventory;
 	_colorMap = info.game.colorMap;
 	_resume = info.game.resume;
@@ -1101,6 +1086,7 @@ function _setPlayerInformation(info) {
 	_tilesColored = info.game.tilesColored;
 	_pledges = info.game.pledges;
 	_resourcesDiscovered = info.game.resourcesDiscovered;
+	_skinSuit = info.game.skinSuit;
 
 	// hack
 	// console.log(_resources);
@@ -1137,22 +1123,11 @@ function _calculateSeeds(options) {
 		while(a < options.sz) {
 			//only add if it is in the map!
 			if(origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-				var tempA = Math.round((0.5 - ((Math.abs(a - mid) + Math.abs(b - mid)) / options.sz) * 0.3) * 100) / 100;
-				//set x,y and color info for each square
-				tempRGB = _rgbString + tempA + ')';
 				tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
 				square = {
 					x: origX + a,
 					y: origY + b,
 					mapIndex: tempIndex,
-					color:
-					{
-						r: _colorInfo.r + 10,
-						g: _colorInfo.g + 10,
-						b: _colorInfo.b + 10,
-						a: tempA
-					},
-					curColor: tempRGB,
 					instanceName: $game.$player.instanceName
 				};
 				bombed.push(square);	
@@ -1195,15 +1170,12 @@ function _sendSeedBomb(data) {
 		})
 		.show();
 
-	ss.rpc('game.player.dropSeed', data.bombed, info, function(result, bonus) {
-		_seeds.dropped += 1;
-		//increase the drop count for the player
+	ss.rpc('game.player.dropSeed', data.bombed, info, function(result) {
 		$game.$player.awaitingBomb = false;
 		$waiting.fadeOut();
 		if(result > 0) {
-			if(bonus) {
-				$game.statusUpdate({message:'collaborative blending bonus!',input:'status',screen: true,log:false});
-			}
+			_seeds.dropped += 1;
+			//increase the drop count for the player
 			//play sound clip
 			$game.$audio.playTriggerFx('seedDrop');
 			_tilesColored += result;
@@ -1239,9 +1211,6 @@ function _sendSeedBomb(data) {
 					_saveSeedsToDB();
 				}
 			}
-		}
-		else {
-			$game.statusUpdate({message:'sorry, someone beat you to that tile',input:'status',screen: true,log:false});
 		}
 	});
 }
@@ -1384,9 +1353,9 @@ function _endMove() {
 	$game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
 
 	//put the character back to normal position
-	_info.offX = 0,
+	_info.offX = 0;
 	_info.offY = 0;
-	_info.srcX = 0,
+	_info.srcX = 0;
 	_info.srcY =  0;
 	_info.prevOffX= 0;
 	_info.prevOffY= 0;

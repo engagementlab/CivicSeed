@@ -55,6 +55,7 @@ var $game = module.exports = {
 	running: false,
 	ready: false,
 	showingProgress : false,
+	showingSkinventory : false,
 	resourceCount: [],
 	graph: null,
 	masterX: null,
@@ -131,7 +132,8 @@ var $game = module.exports = {
 		$game.inTransit = false;
 		$game.running = false;
 		$game.ready = false;
-		$game.showingProgress  = false;
+		$game.showingProgress = false;
+		$game.showingSkinventory = false;
 		$game.resourceCount = [];
 		$game.graph = null;
 		$game.masterX = null;
