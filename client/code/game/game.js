@@ -6,7 +6,6 @@ window.requestAnimationFrame = (function() {
 		window.oRequestAnimationFrame ||
 		window.msRequestAnimationFrame ||
 		function(callback, element) {
-			// window.setTimeout(callback, _tickSpeed); // <-- OLD VERSION
 			var currTime = new Date().getTime();
 			var timeToCall = Math.max(0, 16 - (currTime - _lastTime));
 			var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
@@ -95,7 +94,6 @@ var $game = module.exports = {
 		$WINDOW.on('beforeunload', function() {
 			if(sessionStorage.isPlaying === 'true') {
 				var x = $game.exitGame();
-				// RUSS: what is this for???
 				return x;
 			}
 		});
@@ -104,6 +102,7 @@ var $game = module.exports = {
 
 	},
 
+	//must reset every module because init won't be called since the app was already loaded once (if they navigate to profile and back for example)
 	reInit: function() {
 		$game.resetInit();
 		$game.$map.resetInit();
@@ -122,6 +121,7 @@ var $game = module.exports = {
 		$game.$boss.resetInit();
 	},
 
+	//resets the local game vars
 	resetInit: function() {
 		_lastTime = 0;
 		_stepNumber = 0;
@@ -163,6 +163,7 @@ var $game = module.exports = {
 		});
 	},
 
+	//start the the game up by appending the dom
 	kickOffGame: function() {
 		$CONTAINER.append(JT['game-gameboard']());
 		$CONTAINER.append(JT['game-resourceStage']());
@@ -180,7 +181,7 @@ var $game = module.exports = {
 		// CAN USE: $game.$audio.stopAll();
 	},
 
-	// resume from the pause menu, start up game loop
+	// resume from the pause menu, start up game loop (currenty disabled)
 	resume: function() {
 		$('.pauseMenu').slideUp(function() {
 			$game.running = true;
@@ -372,6 +373,7 @@ var $game = module.exports = {
 		});
 	},
 
+	//startup boss level if player finished game and boss level is unlocked
 	toBossLevel: function() {
 		$game.$audio.pauseTrack();
 		$game.$renderer.clearMap();
@@ -516,7 +518,7 @@ function _setBoundaries() {
 	$game.$map.setBoundaries();
 }
 
-
+//start the game, decide if going to boss level or not
 function _startGame(ingame) {
 	if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
 		$game.$boss.init(function() {

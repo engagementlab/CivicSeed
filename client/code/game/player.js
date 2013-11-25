@@ -1,3 +1,4 @@
+//private vars for player 
 var _curFrame = 0,
 	_numFrames = 4,
 	_numSteps = 8,
@@ -45,6 +46,7 @@ var _curFrame = 0,
 
 	_drawSeeds = null;
 
+//export player functions
 $game.$player = {
 
 	firstName: null,
@@ -1027,12 +1029,14 @@ $game.$player = {
 		console.log(_resources);
 	},
 
+	//turns off draw mode if no seeds left
 	checkSeedLevel: function() {
 		if(_seed.draw <= 0) {
 			$game.$mouse.drawMode = false;
 		}
 	},
 
+	//change up the skin suit the player is wearing and save to db
 	setSkinSuit: function(part, name) {
 		_skinSuit[part] = name;
 		var info = {
@@ -1462,6 +1466,7 @@ function _gameOver() {
 	}
 }
 
+//save current seed data to db
 function _saveSeedsToDB() {
 	var info = {
 		id: $game.$player.id,
@@ -1471,6 +1476,7 @@ function _saveSeedsToDB() {
 	ss.rpc('game.player.updateGameInfo', info);
 }
 
+//turn array into object
 function _objectify(input) {
 	var result = {};
 	for(var i = 0; i < input.length; i++) {
@@ -1481,6 +1487,7 @@ function _objectify(input) {
 	return result;
 }
 
+//return boolean if a resource is held in the player's inventory
 function _resourceExists(npc) {
 	for(var i = 0; i < _inventory.length; i++) {
 		// console.log(_inventory[i].npc, npc);

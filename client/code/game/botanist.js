@@ -1,3 +1,4 @@
+//private botanist vars
 var _info = null,
 	_renderInfo = null,
 	_onScreen = false,
@@ -37,6 +38,7 @@ var _info = null,
 	$botanistContent = null,
 	$botanistAreaMessage = null;
 
+//export botanist functions
 $game.$botanist = {
 
 	index: 0,
@@ -132,10 +134,12 @@ $game.$botanist = {
 		$game.$botanist.ready= false;
 	},
 
+	//clear botanist from canvas
 	clear: function() {
 		$game.$renderer.clearBotanist(_renderInfo);
 	},
 
+	//get botanist current render data
 	getRenderInfo: function() {
 		//since the botanist is stationary, we can hard code his location
 
@@ -147,6 +151,7 @@ $game.$botanist = {
 		}
 	},
 
+	//decide how to render botanist
 	update: function() {
 		if(!$game.inTransit) {
 			if(_onScreen) {
@@ -158,6 +163,7 @@ $game.$botanist = {
 		}
 	},
 
+	//change the botanist state which determines what he shows
 	setBotanistState: function(state) {
 		if(state === 2) {
 			_renderInfo.srcY = 160;
@@ -166,6 +172,7 @@ $game.$botanist = {
 		}
 	},
 
+	//determine if botanist is on screen
 	getMaster: function() {
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 
@@ -175,10 +182,10 @@ $game.$botanist = {
 				curX = loc.x * $game.TILE_SIZE,
 				curY = loc.y * $game.TILE_SIZE;
 
-			_renderInfo.prevX = prevX,
+			_renderInfo.prevX = prevX;
 			_renderInfo.prevY = prevY;
 
-			_renderInfo.curX = curX,
+			_renderInfo.curX = curX;
 			_renderInfo.curY = curY;
 			_onScreen = true;
 		}
@@ -187,6 +194,7 @@ $game.$botanist = {
 		}
 	},
 
+	//update data for idle cycle animation
 	idle: function() {
 		_counter += 1;
 
@@ -212,6 +220,7 @@ $game.$botanist = {
 		}
 	},
 
+	//determine what to show the player when they click on the botanist
 	show: function() {
 		//decide what to show based on the player's current status
 		//if they are in a level 0-4
@@ -290,10 +299,12 @@ $game.$botanist = {
 		}
 	},
 
+	//i think this is unused	
 	showTangram: function() {
 		var file = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png';
 	},
 
+	//determine which "chat" dialog to show
 	showChat: function() {
 		$speechBubbleP.removeClass('fitBubble');
 		$game.$audio.playTriggerFx('npcBubble');
@@ -301,6 +312,7 @@ $game.$botanist = {
 		$game.$botanist.nextChatContent();
 	},
 
+	//remove chat from screen
 	hideChat: function() {
 		$speechBubble.fadeOut(function() {
 			$speechBubbleBtn.addClass('hideButton');
@@ -319,6 +331,7 @@ $game.$botanist = {
 		});
 	},
 
+	//actually add the chat content to the dom and bind some actions
 	addChatContent: function() {
 		$speechBubbleBtn.addClass('hideButton');
 		$speechBubbleNextBtn.removeClass('hideButton');
@@ -352,6 +365,7 @@ $game.$botanist = {
 		}
 	},
 
+	//toggle thru the next chat data for botanist 
 	nextChatContent: function() {
 		//show the next message if there are more in the bag
 		if(_currentMessage < _messages.length) {
@@ -360,6 +374,7 @@ $game.$botanist = {
 		}
 	},
 
+	//show the viewing tangram prompt
 	showPrompt: function(p) {
 		$speechBubble.hide();
 		$speechBubbleP.removeClass('fitBubble');
@@ -387,6 +402,7 @@ $game.$botanist = {
 		});
 	},
 
+	//show the riddle if the inventory is open and it was clicked
 	inventoryShowRiddle: function() {
 		
 		//hide the inventory if the resource is not already visible
@@ -398,6 +414,7 @@ $game.$botanist = {
 		}
 	},
 
+	//show the riddle, its basically an image
 	showRiddle: function(num) {
 		_promptNum = num;
 		_currentSlide = 0;
@@ -426,6 +443,7 @@ $game.$botanist = {
 		});
 	},
 
+	//determine which buttons to show based on what is being shown
 	addButtons: function() {
 		$('.botanistArea button').addClass('hideButton');
 
@@ -457,18 +475,21 @@ $game.$botanist = {
 		}
 	},
 
+	//advance to next slide content
 	nextSlide: function() {
 		_currentSlide += 1;
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
 	},
 
+	//go to previous slide content
 	previousSlide: function() {
 		_currentSlide -= 1;
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
 	},
 
+	//determine which content to add and add it
 	addContent: function() {
 		$('.botanistArea .speakerName').text($game.$botanist.name+': ');
 		//if _promptNum is 0, then it is the just showing the riddle no interaction
@@ -562,6 +583,7 @@ $game.$botanist = {
 		}
 	},
 
+	//hide botanist window return game functionality
 	hideResource: function() {
 		//slide up the botanist area that contains big content
 		//re-enable clicking by setting bools to false
@@ -605,6 +627,7 @@ $game.$botanist = {
 		}
 	},
 
+	//when player submits answer must verify all pieces and respond accordingly
 	submitAnswer: function() {
 		//go through and check each piece on 'the board' and see it exists within the right answer
 		//array and check the location. give feedback/next screen based on results
@@ -730,6 +753,7 @@ $game.$botanist = {
 		}
 	},
 
+	//preps the area for drag and drop puzzle mode
 	setupTangram: function() {
 		_svg = d3.select('.tangramArea').append('svg')
 			.attr('class','puzzleSvg')
@@ -743,6 +767,7 @@ $game.$botanist = {
 			.on('dragend', $game.$botanist.dropMove);
 	},
 
+	//when dragging starts from inventory must bind drop on puzzle area
 	dragStart: function(e) {
 		if($game.$botanist.isSolving) {
 
@@ -773,6 +798,7 @@ $game.$botanist = {
 		return false;
 	},
 
+	//when drop add it to puzzle area
 	drop: function(e) {
 		e.preventDefault();
 		if (e.stopPropagation) {
@@ -817,6 +843,7 @@ $game.$botanist = {
 		return false;
 	},
 
+	//this is dragging a puzzle piece on area and moving it around
 	dragMoveStart: function(d) {
 		clearTimeout(_feedbackTimeout);
 		$feedback.fadeOut('fast');
@@ -828,6 +855,7 @@ $game.$botanist = {
 			.attr('stroke-width', 3);
 	},
 
+	//make different color if over trash can
 	dragMove: function(d) {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
@@ -852,6 +880,7 @@ $game.$botanist = {
 			});
 	},
 
+	//move puzzle piece or trash it (return to inventory) on drop
 	dropMove: function(d) {
 		var x = d3.event.sourceEvent.layerX,
 			y = d3.event.sourceEvent.layerY,
@@ -877,11 +906,13 @@ $game.$botanist = {
 		}
 	},
 
+	//remove all pieces from puzzle board return to inventory
 	clearBoard: function() {
 		$('.puzzleSvg').empty();
 		$('.inventoryItem').css('opacity', 1).attr('draggable', 'true');
 	},
 
+	//when piece is moved snap to 10x10 grid
 	snapTo: function(num) {
 
 		var result = num,
@@ -898,6 +929,7 @@ $game.$botanist = {
 		return result;
 	},
 
+	//give user feedback on puzzle answer
 	feedback: function(message) {
 		$feedback
 			.text(message)

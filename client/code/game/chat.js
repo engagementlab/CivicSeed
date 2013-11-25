@@ -68,6 +68,7 @@ $game.$chat = {
 	}
 };
 
+//this places the chat centered above player, or if too big then left/right align with screen edge
 function _placeChat(sz, other) {
 	var half = sz / 2,
 		placeX = null,
