@@ -32,7 +32,7 @@
     "nconf": "~0.6.4",
     "walk": "~2.2.1",
     "ss-clientjade": "~0.0.5",
-    "jade": "~0.28.0",
+    "jade": "~1.0.0",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
     "ss-less": "~0.1.1",
     "xkcd-pwgen": "0.0.1",
