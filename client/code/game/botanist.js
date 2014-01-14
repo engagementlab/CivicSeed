@@ -568,7 +568,7 @@ $game.$botanist = {
 				var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
 				//console.log('posttangramtalk', postTangramTalk);
 				$botanistAreaMessage.text(postTangramTalk);
-				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '</p>',
+				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</p>',
 					imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
 				
 				newHTML2 += '<p class="seedChips"><img src="' + imgPath3 +'"></p>';

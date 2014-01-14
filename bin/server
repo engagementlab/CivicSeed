@@ -65,7 +65,7 @@ service.connectMongoose(app, function(databases) {
 	// // Server-side compiled templates for client
 	// ss.client.templateEngine.use(require('ss-hogan'));
 
-	ss.client.templateEngine.use(require('ss-clientjade'));
+	ss.client.templateEngine.use(require('ss-clientjade'),null,{ globals: ['CivicSeed', 'sessionStorage'] });
 
 	if(nodeEnv === 'development') {
 		service.getAndSetNetworkIp();
