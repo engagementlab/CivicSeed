@@ -79,7 +79,7 @@ body, button, p, a
 	height 450px
 	background #efefef
 	padding 0
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	$borderRadius(0)
 	z-index 9999
 	display none
@@ -121,7 +121,7 @@ body, button, p, a
 	padding 0
 	
 	$borderRadius(0)	
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	z-index 9997
 	display none
 
@@ -166,7 +166,7 @@ body, button, p, a
 	left 15px
 	width 930px
 	height 450px
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	padding 0
 	$borderRadius(0)
 	z-index 9990
@@ -399,7 +399,7 @@ body, button, p, a
 	width 930px
 	height 450px
 	background #efefef
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	padding 0
 	$borderRadius(0)
 	z-index 9999
@@ -433,7 +433,7 @@ body, button, p, a
 	width 930px
 	height 450px
 	background #efefef
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	padding 0
 	$borderRadius(0)
 	z-index 9999
@@ -543,6 +543,8 @@ body, button, p, a
 
 .resourceArea .dialog
 	width: 875px
+	padding-top 14px
+	padding-left 20px
 
 .nextButton,
 .answerButton,
@@ -577,32 +579,29 @@ body, button, p, a
 		margin 10px
 
 .speechBubble
+	display none
 	position absolute
+	z-index 9999
+	padding 10px
 	top 10px
 	left 10px
 	width 920px
-	min-height 35px
 	background #efefef
-	$borderRadius(0)
-	z-index 9999
-	display none
 	color #222
-	padding 10px
-	box-shadow 2px 2px 4px 4px #333
-
-.speechBubble p
-	margin 5px 0 0 0
-	padding 0
-	width 760px
+	$borderRadius(0)
+	box-shadow $csUIDropShadow
+	p
+		margin 0
+		padding 0
+		width 760px
+	button
+		float right
+		margin 0 6px
 
 .speakerName
 	font-size 1.2em
 	font-weight 700
 	color $csBlue
-
-.speechBubble button
-	float right
-	margin 0 10px
 
 #background,
 #foreground,
@@ -692,7 +691,7 @@ body, button, p, a
 	width 930px
 	height 450px
 	background $cloudUrl('img/bg/maze.png') #efefef
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	padding 0
 	$borderRadius(0)
 	z-index 9999
@@ -1079,20 +1078,21 @@ p.privacyMessage
 .statusUpdate
 	display none
 	position absolute
-	top 10px
-	left 10px
+	bottom 90px
+	width 100%
+	text-align center
 	font-size 16px
 	font-family $mono
-	width auto
 	height 20px
-	// background rgba(20,20,20,0.7)
-	background #555
+	// background #555
 	// background $csBlue
 	$borderRadius(0)
-	padding 5px 10px 10px 10px
 	margin 0
 	z-index 99999
 	color #eee
+	span
+		background rgba(0,0,0,0.75)
+		padding 5px 10px
 
 .npcBubble
 	position absolute
@@ -1115,7 +1115,7 @@ p.privacyMessage
 	padding 0
 	
 	$borderRadius(0)	
-	box-shadow 2px 2px 4px 4px #333
+	box-shadow $csUIDropShadow
 	z-index 9997
 	display none
 	overflow auto
