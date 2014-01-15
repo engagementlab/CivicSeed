@@ -28,7 +28,7 @@ $game.$chat = {
 
 		var len = message.length + 4,
 			fadeTime = len * 150 + 1000,
-			sz = Math.floor(len * 8) + 10;
+			sz = Math.floor(len * 8) + 20;
 		fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
 		//this was the client's message
 		if(!other) {
@@ -44,7 +44,7 @@ $game.$chat = {
 			_isChatting = true;
 		} else {
 			len = message.length + other.name.length + 2;
-			sz = Math.floor(len * 8) + 10;
+			sz = Math.floor(len * 8) + 20;
 			if(other.isChatting) {
 				$(other.chatIdSelector).text(other.name+': '+message);
 			}
@@ -72,6 +72,7 @@ $game.$chat = {
 function _placeChat(sz, other) {
 	var half = sz / 2,
 		placeX = null,
+		placeY = null,
 		position = null;
 
 	if(other) {
@@ -97,15 +98,23 @@ function _placeChat(sz, other) {
 			placeX = position.x - half + 16;
 		}
 	}
+
+  if (position.y <= 1 * $game.TILE_SIZE) {
+    placeY = $game.TILE_SIZE
+  }
+  else {
+    placeY = position.y - ($game.TILE_SIZE * 2)
+  }
+
 	if(other) {
 		$(other.chatIdSelector).css({
-			'top': position.y - 68,
+			'top': placeY,
 			'left': placeX,
 			'width': sz
 		});
 	} else {
 		$(_chatIdSelector).css({
-			'top': position.y - 68,
+			'top': placeY,
 			'left': placeX,
 			'width': sz
 		});
