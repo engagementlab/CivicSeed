@@ -36,7 +36,7 @@
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
     "ss-less": "~0.1.1",
     "xkcd-pwgen": "0.0.1",
-    "stylus": "~0.37.0",
+    "stylus": "~0.42.0",
     "bcrypt": "~0.7.6"
   },
   "devDependencies": {
