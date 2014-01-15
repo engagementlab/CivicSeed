@@ -73,7 +73,8 @@ function _placeChat(sz, other) {
 	var half = sz / 2,
 		placeX = null,
 		placeY = null,
-		position = null;
+		position = null,
+    adjustY = 0
 
 	if(other) {
 		position = other.position;
@@ -99,11 +100,16 @@ function _placeChat(sz, other) {
 		}
 	}
 
+  // Vertical position of chat bubble - based on game's tile size.
+  // To add further adjustment, edit the adjustY variable.
+  // adjustY - positive integers cause it to move up, negative moves down.
   if (position.y <= 1 * $game.TILE_SIZE) {
-    placeY = $game.TILE_SIZE
+    // Prevent bubble from appearing above the gameboard if 
+    // player is standing within the top two rows.
+    placeY = $game.TILE_SIZE - adjustY
   }
   else {
-    placeY = position.y - ($game.TILE_SIZE * 2)
+    placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
   }
 
 	if(other) {
