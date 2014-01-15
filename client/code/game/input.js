@@ -1,3 +1,5 @@
+'use strict';
+
 var $chatText,
 	$chatBox,
 	$displayBox,
@@ -141,20 +143,12 @@ var $input = $game.$input = module.exports = {
 					instanceName: $game.$player.instanceName
 				};
 			$game.$audio.playTriggerFx('chatSend');
-			if(data.msg.indexOf('beam me up, Scotty!') > -1) {
-				$game.$player.beamMeUpScotty();
-			} else if(data.msg.indexOf('kazaam') > -1) {
-				ss.rpc('game.player.collaborativeChallenge', function(err) {
-					//nothing here...
-					if(err) {
-						$game.statusUpdate({message: 'You came alone, you get no bone(us).',input:'status', screen:true, log:true});
-					}
-				});
-			} else {
-				ss.rpc('game.chat.sendMessage', data, function(r) {
-					//nothing here...
-				});
-			}
+			// Check for cheat codes
+      if ($game.$input.cheat(data.msg) === false) {
+        ss.rpc('game.chat.sendMessage', data, function(r) {
+          //nothing here...
+        });
+			} 
 			$chatText.val('');
 			return false;
 		});
@@ -449,6 +443,41 @@ var $input = $game.$input = module.exports = {
 		};
 
 	},
+
+  cheat: function (input) {
+    switch (input.toLowerCase()) {
+      case 'beam me up scotty':
+      case 'beam me up, Scotty!':   // Legacy code with punctuation
+        $game.$input._cheatActivated('Teleporting to botanist.')
+        $game.$player.beamMeUpScotty()
+        break
+      case 'show me the money':
+        $game.$input._cheatActivated('Adding 500 seeds.')
+        $game.$player.updateSeeds('regular', 500)
+        break
+      case 'kazaam':
+        $game.$input._cheatActivated('Initiating collaborative challenge.')
+        ss.rpc('game.player.collaborativeChallenge', function (err) {
+          //nothing here...
+          if (err) {
+            $game.statusUpdate({message: 'Whoops: you came alone, you get no bone(us).', input: 'status', screen: false, log: true})
+          }
+        });
+        break
+      default:
+        return false
+    }
+  },
+
+  _cheatActivated: function (message) {
+    var cheatMessage = '<span class="cheat">[Cheat code activated]</span>'
+    $game.statusUpdate({
+      message: cheatMessage + ' ' + message,
+      input:   'status',
+      screen: false,
+      log: true
+    })
+  },
 
 	resetInit: function() {
 		_helpShowing = null;
