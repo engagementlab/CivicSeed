@@ -384,17 +384,8 @@ $game.$player = {
 			realResource.result = newInfo.result;
 		}
 
-		if(info.skinSuit) {
-			_skinSuit.unlocked.head.push(info.skinSuit);
-			_skinSuit.unlocked.torso.push(info.skinSuit);
-			_skinSuit.unlocked.legs.push(info.skinSuit);
-			var saveInfo = {
-				id: $game.$player.id,
-				skinSuit: _skinSuit
-			};
-			//update skinventory
-			$game.$renderer.unlockSkinSuit(info.skinSuit);
-			ss.rpc('game.player.updateGameInfo', saveInfo);
+		if (info.skinSuit) {
+      $game.$player.updateSkinventory(info.skinSuit)
 		}
 		
 		//the answer was correct, add item to inventory
@@ -707,6 +698,29 @@ $game.$player = {
 		}
 		//update hud
 		_updateTotalSeeds();
+	},
+
+  // Update player's skin inventory ('skinventory')
+  updateSkinventory: function (skin, part) {
+    if (part) {
+      // Specify a part to unlock
+      _skinSuit.unlocked[part].push(skin)
+    }
+    else {
+      // Assume all parts of the skin is unlocked
+      _skinSuit.unlocked.head.push(skin)
+      _skinSuit.unlocked.torso.push(skin)
+      _skinSuit.unlocked.legs.push(skin)
+    }
+
+    var saveInfo = {
+      id: $game.$player.id,
+      skinSuit: _skinSuit
+    }
+    console.log(skin)
+    //update skinventory
+    $game.$renderer.unlockSkinSuit(skin);
+    ss.rpc('game.player.updateGameInfo', saveInfo);
 	},
 
 	//put new answer into the resume

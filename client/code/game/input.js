@@ -447,7 +447,7 @@ var $input = $game.$input = module.exports = {
   cheat: function (input) {
     switch (input.toLowerCase()) {
       case 'beam me up scotty':
-      case 'beam me up, Scotty!':   // Legacy code with punctuation
+      case 'beam me up, Scotty!':   // Legacy cheat with punctuation
         $game.$input._cheatActivated('Teleporting to botanist.')
         $game.$player.beamMeUpScotty()
         break
@@ -455,8 +455,20 @@ var $input = $game.$input = module.exports = {
         $game.$input._cheatActivated('Adding 500 seeds.')
         $game.$player.updateSeeds('regular', 500)
         break
+      case 'ding me':
+        $game.$input._cheatActivated('Leveling up!')
+        $game.$player.nextLevel()
+        break
+      case 'suit alors':
+        $game.$input._cheatActivated('Unlocking all suits!')
+        var allSkins = ['astronaut', 'basic', 'cactus', 'cone', 'dinosaur',
+                        'horse', 'lion', 'ninja', 'octopus', 'penguin', 'tuxedo']
+        for (var i in allSkins) {
+          $game.$player.updateSkinventory(allSkins[i])
+        }
+        break
       case 'kazaam':
-        $game.$input._cheatActivated('Initiating collaborative challenge.')
+        $game.$input._cheatActivated('Starting collaborative challenge.')
         ss.rpc('game.player.collaborativeChallenge', function (err) {
           //nothing here...
           if (err) {
