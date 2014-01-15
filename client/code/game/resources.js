@@ -300,7 +300,7 @@ $game.$resources = {
 			}
 			finalDisplay +=  '</li>' + otherAnswers + '</ul></div>';
 
-			_speak = 'Here are some recent answers by your peers: ';
+			_speak = 'Here are some recent answers by your peers.';
 		} else {
 			_speak = 'Congrats! You were the first to answer.';
 			displayAnswers += '<p>** More answers from your peers will appear shortly.  Be sure to check back. **</p>';
@@ -566,7 +566,7 @@ function _addAnsweredContent() {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
 			$game.$resources.waitingForTagline = true;
-				var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type ="text" value="" maxLength = "60"></input></p><p class="privacyMessage taglineInput">Summarize what you just learned. You\'ll need it later!</p>',
+				var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type="text" value="" maxLength="60" autofocus></input></p><p class="privacyMessage taglineInput">Summarize what you just learned. You\'ll need it later!</p>',
 				npcLevel = $game.$npc.getNpcLevel(),
 				html;
 			if(npcLevel < $game.$player.currentLevel) {
@@ -622,7 +622,7 @@ function _addRealContent() {
 				inputBox += '</form>';
 			}
 			else if(_questionType === 'open') {
-				inputBox = '<form><textarea placeholder="type your answer here..."></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';	
+				inputBox = '<form><textarea placeholder="Type your answer here..." autofocus></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';	
 			}
 			else if(_questionType === 'truefalse') {
 				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
