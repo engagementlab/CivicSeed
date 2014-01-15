@@ -3,6 +3,7 @@
 
 	"strict": false,
 	"unused": false,
+	"asi": true,
 
 	"node": true,
 	"browser": true,
