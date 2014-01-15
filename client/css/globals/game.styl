@@ -11,9 +11,10 @@ body, button, p, a
 .gameboard
 	// cursor none
 	position relative
-	margin 0 auto
+	box-sizing content-box
 	width 960px
 	height 480px
+	margin 0 auto
 	padding 0
 	$borderRadius(0)
 	border 4px solid #222
@@ -791,43 +792,41 @@ p.finalQuestion
 	padding 20px
 
 .publicAnswers
-	border 3px solid $csGray
-	background $csLightBlue
-	background #eee
-	$borderRadius(0)
-	height 320px
-	width 880px
 	position absolute
 	top 50px
 	left 20px
+	width 880px
+	height 320px
+	border 3px solid $csGray
+	background #eee
+	$borderRadius(0)
 	overflow auto
 	ul
 		margin 0
 
 .playerAnswers
-	color #222
-	list-style none
-	$borderRadius(0)
+	position relative
 	padding 5px 5px 5px 10px
 	margin 15px 15px 10px 15px
-	position relative
-	background #dedede
+	min-height 42px
+	// background #dedede
 	background $csLightGreen
-
+	color #222
+	$borderRadius(0)
+	list-style none
 	span
-		line-height 2em
 		margin-right 5px
 		color white
 		height 100%
 	p
 		font-family $buttonFont
-		width 725px
+		width 700px
 		padding 0 
-		margin 5px 0
+		margin 10px 5px
 	.publicButton, .pledgeButton, .privateButton
 		position absolute
 		right 10px
-		top 10px
+		bottom 10px
 
 .yourAnswer 
 	background #fff
@@ -1074,6 +1073,8 @@ p.privacyMessage
 		color #fff
 	p.status
 		color $csLightOrange
+		.cheat
+			color $csLightPurple
 
 .statusUpdate
 	display none
