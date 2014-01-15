@@ -18,7 +18,13 @@ window.requestAnimationFrame = (function() {
 var _stepNumber = 0,
   _stats = null,
   _badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
-  _levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked'],
+  _levelNames = [
+    'Level 1: Looking Inward',
+    'Level 2: Expanding Outward',
+    'Level 3: Working Together',
+    'Level 4: Looking Forward',
+    'Game Over: Profile Unlocked'
+  ],
   _displayTimeout = null,
   $map,
   $game_render,
@@ -59,7 +65,13 @@ var $game = module.exports = {
   graph: null,
   masterX: null,
   masterY: null,
-  playerRanks: ['novice gardener', 'apprentice gardener', 'expert gardener', 'master gardener','super master gardener'],
+  playerRanks: [
+    'Novice Gardener',
+    'Apprentice Gardener',
+    'Expert Gardener',
+    'Master Gardener',
+    'Super Master Gardener'
+  ],
   bossModeUnlocked: null,
 
   startNewAction: true,
