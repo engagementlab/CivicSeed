@@ -324,18 +324,14 @@ var $input = $game.$input = module.exports = {
 
 		//show or hide help area
 		$BODY.on('click', '.helpButton', function () {
-			_helpShowing = !_helpShowing;
-			$('.helpArea').toggle();
-			$('.helpButton').toggleClass('currentButton');
+      $input.toggleHelp()
 		});
 
 		//close help area
 		$BODY.on('click', '.helpArea a i', function (e) {
-			e.preventDefault();
-			$('.helpButton').toggleClass('currentButton');
-			$('.helpArea').hide();
-			_helpShowing = false;
-			return false;
+      e.preventDefault()
+      $input.closeHelp()
+      return false
 		});
 
 		//tooltip for HUD controls
@@ -436,13 +432,130 @@ var $input = $game.$input = module.exports = {
 			//check all the game states (if windows are open ,in transit, etc.) to begin a new action
 			// console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
 			// !$game.$player.inventoryShowing
-			if(!$game.inTransit && !$game.$player.isMoving && !$game.$resources.isShowing && !$game.showingProgress  &&  !$game.$player.seedventoryShowing && $game.running && !$game.$botanist.isChat && !_helpShowing && !_logShowing && !$game.$boss.isShowing && !$game.showingSkinventory){
-				return true;
-			}
-			return false;
+			return (
+        !$game.inTransit &&
+        !$game.$player.isMoving &&
+        !$game.$resources.isShowing &&
+        !$game.showingProgress &&
+        !$game.$player.seedventoryShowing &&
+        $game.running &&
+        !$game.$botanist.isChat &&
+        !_helpShowing &&
+        !_logShowing &&
+        !$game.$boss.isShowing &&
+        !$game.showingSkinventory
+      ) ? true : false
 		};
 
-	},
+    // Keybindings for actions
+    $BODY.keydown(function (e) {
+
+      // Allow keyboard inputs only when gameboard is active.
+      if (!startNewAction()) return
+
+      // Refuse inputs if Ctrl or Command is pressed so that the game doesn't overwrite other system/client command keys
+      // This does not cover the 'fn' or 'option'/'alt' keys (should it?)
+      if (e.ctrlKey === true || e.metaKey === true) return
+      // Refuse inputs if a form input has focus
+
+      // Attach keys to actions
+//      e.preventDefault()
+      $game.alert(e.which)
+      switch (e.which) {
+        // WASD or arrow key movement controls.
+        case 87:  // 'w' 
+        case 38:  // 'up arrow', 'numpad 2' (numlock on)
+        case 104: // 'numpad 2' (numlock off)
+        case 56:  // 'numpad 2' (numlock off/opera)
+          // Move player character up.
+          e.preventDefault()
+          $game.alert('Move up')
+          break
+        case 65:  // 'a'
+        case 37:  // 'left arrow', 'numpad 4'
+        case 100: // 'numpad 4' (numlock off)
+        case 52:  // 'numpad 4' (numlock off/opera)
+          // Move player character to the left.
+          e.preventDefault()
+          $game.alert('Move left')
+          break
+        case 83:  // 'a'
+        case 40:  // 'down arrow', 'numpad 8'
+        case 98:  // 'numpad 8' (numlock off)
+        case 50:  // 'numpad 8' (numlock off/opera)
+          // Move player character down.
+          e.preventDefault()
+          $game.alert('Move down')
+          break
+        case 68:  // 'd'
+        case 39:  // 'right arrow', 'numpad 6'
+        case 102: // 'numpad 6' (numlock off)
+        case 54:  // 'numpad 6' (numlock off/opera)
+          // Move player character to the right.
+          e.preventDefault()
+          $game.alert('Move right')
+          break
+        // Chat
+        case 84:  // 't'
+        case 13:  // 'enter'
+          // Focus chat input field.
+          $input.focusChatInput()
+          break
+        // Display overlays
+        case 73:  // 'i'
+          // Display inventory overlay.
+          $game.alert('Show inventory')
+          break
+        case 77:  // 'm'
+          // Toggles minimap.
+          $input.toggleMinimap()
+          break
+        case 67:  // 'c'
+          // Changing room
+          $game.alert('Changing room')
+          break
+        // Seedventory
+        case 80: // 'p'
+          // Progress
+          $game.alert('Progress')
+          break
+        case 72:  // 'h'
+        case 191: // 'question mark'
+          // Help
+          $input.toggleHelp()
+          break
+        // Cancels any current action and returns to default gameboard view
+        case 27:  // 'escape'
+          // Close any overlays
+          // Removes focus from chat
+          // Sets cursor to walk action
+          break
+        // Default switch, no action.
+        default:
+          break
+      }
+    })
+  },
+
+  focusChatInput: function () {
+    $chatText.focus()
+  },
+
+  toggleMinimap: function () {
+    $('#minimapPlayer').toggleClass('hide')
+  },
+
+  toggleHelp: function () {
+    _helpShowing = !_helpShowing
+    $('.helpButton').toggleClass('currentButton')
+    $('.helpArea').toggle()
+  },
+
+  closeHelp: function () {
+    _helpShowing = false
+    $('.helpButton').removeClass('currentButton')
+    $('.helpArea').hide()
+  },
 
   cheat: function (input) {
     switch (input.toLowerCase()) {
@@ -460,11 +573,9 @@ var $input = $game.$input = module.exports = {
         $game.$player.nextLevel()
         break
       case 'suit alors':
-        $game.$input._cheatActivated('Unlocking all suits!')
-        var allSkins = ['astronaut', 'basic', 'cactus', 'cone', 'dinosaur',
-                        'horse', 'lion', 'ninja', 'octopus', 'penguin', 'tuxedo']
-        for (var i in allSkins) {
-          $game.$player.updateSkinventory(allSkins[i])
+        $game.$input._cheatActivated('All suits unlocked!')
+        for (var skin in $game.playerSkins) {
+          $game.$player.updateSkinventory(skin)
         }
         break
       case 'kazaam':
@@ -472,7 +583,7 @@ var $input = $game.$input = module.exports = {
         ss.rpc('game.player.collaborativeChallenge', function (err) {
           //nothing here...
           if (err) {
-            $game.statusUpdate({message: 'Whoops: you came alone, you get no bone(us).', input: 'status', screen: false, log: true})
+            $game.log('Whoops: you came alone, you get no bone(us).')
           }
         });
         break
@@ -482,13 +593,8 @@ var $input = $game.$input = module.exports = {
   },
 
   _cheatActivated: function (message) {
-    var cheatMessage = '<span class="cheat">[Cheat code activated]</span>'
-    $game.statusUpdate({
-      message: cheatMessage + ' ' + message,
-      input:   'status',
-      screen: false,
-      log: true
-    })
+    var cheatMessage = '<span class="color-lightpurple">[Cheat code activated]</span>'
+    $game.log(cheatMessage + ' ' + message)
   },
 
 	resetInit: function() {

@@ -73,6 +73,283 @@ var $game = module.exports = {
     'Super Master Gardener'
   ],
   bossModeUnlocked: null,
+  playerSkins: {
+    'basic': {
+      'id': 'basic',
+      'name': 'Basic Look',
+      'description': 'This is you. You look great!',
+      'effect': null,
+      'modifiers': null,
+      'head': {
+        'name': 'Basic Head',
+        'description': 'Your beautiful face.',
+        'effect': null,
+        'modifiers': null
+      },
+      'torso': {
+        'name': 'Basic Body',
+        'description': 'Your heart is in here somewhere.',
+        'effect': null,
+        'modifiers': null
+      },
+      'legs': {
+        'name': 'Basic Legs',
+        'description': 'These legs are made for walking.',
+        'effect': null,
+        'modifiers': null
+      }
+    },
+    'astronaut': {
+      'id': 'astronaut',
+      'name': 'Astronaut',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Space Helmet',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Space Suit',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Space Pants',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'cactus': {
+      'id': 'cactus',
+      'name': 'Cactus',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Cactus Head',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Cactus Body',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Cactus Legs',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'cone': {
+      'id': 'cone',
+      'name': 'Ice Cream Cone',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Strawberry Scoop',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Sugar Cone Top',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Sugar Cone Bottom',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'dinosaur': {
+      'id': 'dinosaur',
+      'name': 'Dinosaur',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Dinosaur Head',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Dinosaur Body',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Dinosaur Legs',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'horse': {
+      'id': 'horse',
+      'name': 'Horse',
+      'description': '',
+      'effect': 'You walk a lot faster!',
+      'modifiers': '',
+      'head': {
+        'name': 'Horse Head',
+        'description': '',
+        'effect': 'You walk slightly faster.',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Horse Body',
+        'description': '',
+        'effect': 'You walk slightly faster.',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Horse Legs',
+        'description': '',
+        'effect': 'You walk slightly faster.',
+        'modifiers': ''
+      }
+    },
+    'lion': {
+      'id': 'lion',
+      'name': 'Lion',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Lion Head',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Lion Body',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Lion Legs',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'ninja': {
+      'id': 'ninja',
+      'name': 'Ninja',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Ninja Mask',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Ninja Gi',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Ninja Pants',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'octopus': {
+      'id': 'octopus',
+      'name': 'Octopus',
+      'description': '',
+      'effect': 'Your paint radius goes up by three.',
+      'modifiers': '',
+      'head': {
+        'name': 'Octopus Head',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Octopus Body',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Eight Legs',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
+        'modifiers': ''
+      }
+    },
+    'penguin': {
+      'id': 'penguin',
+      'name': 'Penguin',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Penguin Head',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Penguin Suit',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Penguin Bottoms',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'tuxedo': {
+      'id': 'tuxedo',
+      'name': 'Tuxedo',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Tuxedo Mask',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Tuxedo Jacket',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Tuxedo Pants',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    }
+  },
 
   startNewAction: true,
 
@@ -320,6 +597,36 @@ var $game = module.exports = {
     if (data.log) {
       $game.$log.addMessage(data);
     }
+  },
+
+  // Generic use of $game.statusUpdate() for an on-screen message only.
+  alert: function (message) {
+    $game.statusUpdate({
+      message: message,
+      input:   'status',
+      screen:  true,
+      log:     false
+    })
+  },
+
+  // Generic use of $game.statusUpdate() for a log entry only.
+  log: function (message) {
+    $game.statusUpdate({
+      message: message,
+      input:   'status',
+      screen:  false,
+      log:     true
+    })
+  },
+
+  // Generic use of $game.statusUpdate() for both log and screen message.
+  broadcast: function (message) {
+    $game.statusUpdate({
+      message: message,
+      input:   'status',
+      screen:  true,
+      log:     true
+    })
   },
 
   //check for bad language to censor it in chat
