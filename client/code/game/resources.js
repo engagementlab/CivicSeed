@@ -156,7 +156,7 @@ $game.$resources = {
 			var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
 				levelFolder = 'level' + (npcLevel + 1),
 				imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.shape + '.png';
-			_preloadedPieceImage = '<p class="tangramPieceP"><img src="' + imgPath + '" class="centerImage"></p>';
+			_preloadedPieceImage = '<div class="tangramPiece"><img src="' + imgPath + '"></div>';
 		}
 
 		$speechBubble.fadeOut(function() {
@@ -566,7 +566,7 @@ function _addAnsweredContent() {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
 			$game.$resources.waitingForTagline = true;
-				var inputBox = '<p class="centerText taglineInput"><input class="customTagline" name="tagline" type="text" value="" maxLength="60" autofocus></input></p><p class="privacyMessage taglineInput">Summarize what you just learned. You\'ll need it later!</p>',
+				var inputBox = '<div class="taglineInput"><input class="customTagline" name="tagline" type="text" value="" maxLength="60" autofocus></input></div><div class="privacyMessage taglineInput">Summarize what you just learned. You\'ll need it later!</div>',
 				npcLevel = $game.$npc.getNpcLevel(),
 				html;
 			if(npcLevel < $game.$player.currentLevel) {
@@ -626,12 +626,12 @@ function _addRealContent() {
 			}
 			else if(_questionType === 'truefalse') {
 				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';
-				inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="true">true</input>' +
-							'<br><input name="resourceMultipleChoice" type ="radio" value="false">false</input>';
+				inputBox = '<form><input name="resourceMultipleChoice" type="radio" id="true" value="true"><label for="true">true</label>' +
+							'<br><input name="resourceMultipleChoice" type="radio" id="false" value="false"><label for="false">false</label>';
 			}
 			else if(_questionType === 'yesno') {
-				inputBox = '<form><input name="resourceMultipleChoice" type ="radio" value="yes">yes</input>' +
-							'<br><input name="resourceMultipleChoice" type ="radio" value="no">no</input>';
+				inputBox = '<form><input name="resourceMultipleChoice" type="radio" id="yes" value="yes"><label for="yes">yes</label>' +
+							'<br><input name="resourceMultipleChoice" type="radio" id="no" value="no"><label for="no">no</label>';
 			}
 			$resourceContent.html(finalQuestion + inputBox);
 			if(_temporaryAnswer.length > 0 && _questionType === 'open') {
