@@ -9,7 +9,7 @@
 		p
 			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
 		p loading
-	.resourceArea
+	.resourceArea.gameboardOverlay
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
 		p.dialog
@@ -30,7 +30,7 @@
 			p You should create a custom tagline!
 		.feedback
 
-	div.botanistArea
+	div.botanistArea.gameboardOverlay
 		p.dialog
 			span.speakerName
 			span.message
@@ -47,7 +47,7 @@
 		
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
-	div.progressArea.patternBg2
+	div.progressArea.gameboardOverlay.patternBg2
 		h2 Progress
 		div.personalInfo
 			.levelImages
@@ -92,7 +92,7 @@
 			.displayMyAnswers
 			
 		
-	div.helpArea
+	div.helpArea.gameboardOverlay
 		h2 How To Play
 		.helpContent
 			p The goal of the game is to fully color return color to the world, which starts in grayscale. To do this, you must explore, talk to the Calliopeans you see, answer their questions, plant seeds, and find research to complete new seed recipes.
@@ -156,14 +156,14 @@
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
 
-	div.bossArea.patternBg2
+	div.bossArea.gameboardOverlay.patternBg2
 		.content
 		p.buttons
 			button.bossButton.btn.btn-success(type='button') Next
 
-	div.skinventory
+	div.skinventory.gameboardOverlay
 		.skinContent
-			h2 CHANGING ROOM
+			h2 Changing Room
 			h3 Customize your suit! Mix and match different sections to create your look.  Unlock more by talking to more characters in the world.
 			.parts
 				.head.part(data-part='head')

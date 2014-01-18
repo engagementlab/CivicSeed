@@ -56,21 +56,22 @@ body, button, p, a
 .resourceStage
 	display none
 
-.botanistArea
+.gameboardOverlay
+	display none
 	position absolute
 	top 15px
 	left 15px
 	width 930px
 	height 450px
-	padding 20px 50px 20px 20px
+	z-index 9999
+	padding 20px
+	background #efefef
 	box-shadow $csUIDropShadow
 	$borderRadius(0)	
-	z-index 9997
-	display none
 
+.botanistArea
 	.seedChips
 		text-align center
-
 	.tangramOutline
 		// Styles obsoleted
 		// Note that it's possible this needs to come back if needed for the puzzle portion.
@@ -100,17 +101,6 @@ body, button, p, a
 			color #eee
 
 .resourceArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	background #efefef
-	padding 20px 20px
-	box-shadow $csUIDropShadow
-	$borderRadius(0)
-	z-index 9999
-	display none
 	.feedback
 		display none
 		width 320px
@@ -196,58 +186,22 @@ body, button, p, a
 		background $csLightBlue
 
 
-.patternBg1
-	background $cloudUrl('img/bg/grey.png') #efefef
-
-.patternBg2
-	background $cloudUrl('img/bg/grey.png') #efefef
-
-.patternBg3
-	background $cloudUrl('img/bg/tri.png') #efefef
-
-.megaRiddle
-	width 780px
-	margin-left 20px
-	max-height 343px
-	overflow auto
-	$borderRadius(0)
-	border 3px solid $csGray
-	background #eee
-
-
-.newDislpay
-	background $csLightOrange
-
-
 .progressArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	box-shadow $csUIDropShadow
-	padding 0
-	$borderRadius(0)
-	z-index 9990
-	display none
 	h2
-		width 230px
-		padding 0
-		margin 20px 0 20px 25px
 		color $csGreen
 		font-size 3.5em
-		letter-spacing 3px
 	h3
 		margin-left 40px
 		color $csBlue
 	.personalInfo
 		position absolute
-		background $csGray
-		width 260px
-		height 308px
-		margin 0 0 0 25px
+		left 20px
+		bottom 20px
+		width 280px
+		height 330px
 		padding 10px
 		// border 3px solid $csLightOrange
+		background $csGray
 		color white
 		.levelImages img
 			margin 7px
@@ -280,8 +234,9 @@ body, button, p, a
 
 	.tabbable
 		position absolute
-		top 35px
-		left 327px
+		// Hack
+		bottom 42px
+		left 325px
 		width 310px
 		height 360px
 		margin 0
@@ -311,7 +266,6 @@ body, button, p, a
 				background $csOrange
 				border 0
 		.tab-content
-			border-radius 0 0 5px 5px
 			p
 				color #fff
 				position absolute
@@ -359,11 +313,10 @@ body, button, p, a
 			left 10px
 	.topSeeders
 		position absolute
-		top 85px
-		left 700px
-		width 200px
+		bottom 20px
+		right 20px
+		width 250px
 		height 330px
-		$borderRadius(0)
 		background $csLightGreen
 		color #333
 		overflow auto
@@ -374,19 +327,19 @@ body, button, p, a
 			padding 5px 0 5px 0
 			background $csGreen
 			$borderRadius(0) 5px 0 0
-	.topSeeders ol
-		padding-left 15px
-		li
+		ol
+			padding-left 15px
+			li
+				font-family $buttonFont
+				font-size .8em
+		.yourSeeds
 			font-family $buttonFont
-			font-size .8em
-	p.yourSeeds
-		font-family $buttonFont
-		color $csGreen
-		background none
-		border none
-		padding 0px
-		bottom 0
-		margin 10px 0 0 0px
+			color $csGreen
+			background none
+			border none
+			padding 0px
+			bottom 0
+			margin 10px 0 0 0px
 
 	.collectedResources
 		width 930px
@@ -452,17 +405,6 @@ body, button, p, a
 		// 	background $csLightGreen
 
 .helpArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	background #efefef
-	box-shadow $csUIDropShadow
-	padding 0
-	$borderRadius(0)
-	z-index 9999
-	display none
 	h2
 		color $csBlue
 		margin 10px 25px
@@ -485,18 +427,7 @@ body, button, p, a
 				padding-right 10px
 
 .skinventory
-	cursor default
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	background #efefef
-	box-shadow $csUIDropShadow
-	padding 0
-	$borderRadius(0)
-	z-index 9999
-	display none
+	// cursor default
 	.skinContent
 		margin 10px 25px
 		h2
@@ -548,6 +479,32 @@ body, button, p, a
 				top 265px
 				.bodypart
 					height 19px
+
+// END LARGE OVERLAYS
+
+
+.patternBg1
+	background-image $cloudUrl('img/bg/grey.png')
+
+.patternBg2
+	background-image $cloudUrl('img/bg/grey.png')
+
+.patternBg3
+	background-image $cloudUrl('img/bg/tri.png')
+
+.megaRiddle
+	width 780px
+	margin-left 20px
+	max-height 343px
+	overflow auto
+	$borderRadius(0)
+	border 3px solid $csGray
+	background #eee
+
+
+.newDislpay
+	background $csLightOrange
+
 
 .playerChat
 	position absolute
@@ -842,9 +799,6 @@ textarea
 	position absolute
 	bottom 10px
 	right 6px
-
-.progressArea > .tabbable
-	margin-left 20px
 
 .inventoryItem.puzzle0,
 .inventoryItem.puzzle1,
