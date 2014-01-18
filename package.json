@@ -2,7 +2,8 @@
   "name": "CivicSeed-testing",
   "authors": [
     "Robert Hall <@americanyak>",
-    "Russell Goldenberg <@russellgoldenberg>"
+    "Russell Goldenberg <@russellgoldenberg>",
+    "Lou Huang <@louh>"
   ],
   "description": "Social gaming for civic training",
   "version": "0.0.8-7",
@@ -16,7 +17,7 @@
   "main": "./bin/server",
   "repository": {
     "type": "git",
-    "url": "git://github.com/americanyak/CivicSeed.git"
+    "url": "git://github.com/engagementgamelab/CivicSeed.git"
   },
   "engines": {
     "node": ">= 0.10.2"
@@ -37,7 +38,8 @@
     "ss-less": "~0.1.1",
     "xkcd-pwgen": "0.0.1",
     "stylus": "~0.42.0",
-    "bcrypt": "~0.7.6"
+    "bcrypt": "~0.7.6",
+    "less-middleware": "~0.1.14"
   },
   "devDependencies": {
     "mocha": "*",
