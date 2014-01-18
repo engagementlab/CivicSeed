@@ -2,9 +2,9 @@
 	.navbar-inner
 		.container-fluid.navPadding
 			a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-				span.icon-bar
-				span.icon-bar
-				span.icon-bar
+				span.fa.fa-bar
+				span.fa.fa-bar
+				span.fa.fa-bar
 			
 			a.brand(href='/')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/other/logo.jpg')
@@ -14,7 +14,7 @@
 			- if(sessionStorage.userFirstName)
 				.btn-group.pull-right.tempFixMargin
 					a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
-						i.icon-user
+						i.fa.fa-user
 							span &nbsp;#{sessionStorage.userFirstName}&nbsp;
 						span.caret
 					ul.dropdown-menu

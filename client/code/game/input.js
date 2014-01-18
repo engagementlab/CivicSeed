@@ -315,10 +315,10 @@ var $input = $game.$input = module.exports = {
 		$BODY.on('click', '.muteButton', function () {
 			var musicOff = $game.$audio.toggleMute();
 			if(musicOff) {
-				$('.muteButton i').removeClass('icon-volume-up').addClass('icon-volume-off');
+				$('.muteButton i').removeClass('fa fa-volume-up').addClass('fa fa-volume-off');
 			}
 			else {
-				$('.muteButton i').removeClass('icon-volume-off').addClass('icon-volume-up');
+				$('.muteButton i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up');
 			}
 		});
 

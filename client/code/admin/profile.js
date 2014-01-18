@@ -33,12 +33,12 @@ var self = module.exports = {
 				profilePublic = 'true';
 				changeTo = true;
 				newText = 'your profile is public';
-				newClass = 'icon-unlock icon-4x';
+				newClass = 'fa fa-unlock-alt fa-4x';
 			} else {
 				profilePublic = 'false';
 				changeTo = false;
 				newText = 'your profile is private';
-				newClass = 'icon-lock icon-4x';
+				newClass = 'fa fa-lock fa-4x';
 			}
 			//save the change to the user info
 

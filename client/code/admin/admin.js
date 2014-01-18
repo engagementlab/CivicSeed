@@ -264,11 +264,11 @@ var self = module.exports = {
 				html += '<div class="answer"><p>A: ' + npc.answers[0] + '</p><div class="extras">';
 				if(npc.madePublic) {
 					//put unlocked icon
-					html += '<i class="icon-unlock icon-large"></i>';
+					html += '<i class="fa fa-unlock-alt fa-lg"></i>';
 				}
 				if(npc.seeded) {
 					//thumbs up icon with number
-					html += '<i class="icon-thumbs-up icon-large"></i> ' + npc.seeded.length;
+					html += '<i class="fa fa-thumbs-up fa-lg"></i> ' + npc.seeded.length;
 				}
 				html += '</div></div>';
 			}

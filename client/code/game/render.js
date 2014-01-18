@@ -902,9 +902,9 @@ var $renderer = $game.$renderer = {
 			}
 			if(!headUnlocked) {
 				//show lock
-				headSpan.html('<i class="locked icon-lock"></i>');	
+				headSpan.html('<i class="locked fa fa-lock"></i>');	
 			} else {
-				headSpan.html('<i class="icon-lock"></i>');
+				headSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			headSpan.addClass('bodypart');
@@ -932,9 +932,9 @@ var $renderer = $game.$renderer = {
 			}
 			if(!torsoUnlocked) {
 				//show lock
-				torsoSpan.html('<i class="locked icon-lock"></i>');	
+				torsoSpan.html('<i class="locked fa fa-lock"></i>');	
 			} else {
-				torsoSpan.html('<i class="icon-lock"></i>');
+				torsoSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			torsoSpan.addClass('bodypart');
@@ -962,9 +962,9 @@ var $renderer = $game.$renderer = {
 			}
 			if(!legsUnlocked) {
 				//show lock
-				legsSpan.html('<i class="locked icon-lock"></i>');	
+				legsSpan.html('<i class="locked fa fa-lock"></i>');	
 			} else {
-				legsSpan.html('<i class="icon-lock"></i>');
+				legsSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			legsSpan.addClass('bodypart');

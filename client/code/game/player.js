@@ -625,7 +625,7 @@ $game.$player = {
 			ss.rpc('game.npc.makeResponsePublic', info, function(res) {
 				//take away the make public and replcae with eye?
 				$('.publicButton').remove();
-				$('.yourAnswer').append('<i class="icon-unlock privateButton icon-large" data-npc="'+ npcId +'"></i>');
+				$('.yourAnswer').append('<button class="btn btn-info privateButton" data-npc="'+ npcId +'">Make Private <i class="fa fa-unlock-alt fa-lg"></i></button>');
 				setTimeout(function() {
 					$game.$player.displayNpcComments();
 				}, 250);
@@ -646,7 +646,7 @@ $game.$player = {
 			};
 			ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
 				//take away the make public and replcae with eye?
-				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public</button>');
+				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public <i class="fa fa-lock fa-lg"></i></button>');
 				$('.privateButton').remove();
 				//hack to make sure it updates...
 				setTimeout(function() {
@@ -717,7 +717,6 @@ $game.$player = {
       id: $game.$player.id,
       skinSuit: _skinSuit
     }
-    console.log(skin)
     //update skinventory
     $game.$renderer.unlockSkinSuit(skin);
     ss.rpc('game.player.updateGameInfo', saveInfo);
@@ -1119,6 +1118,7 @@ function _setPlayerInformation(info) {
 	$game.$player.firstTime = info.game.firstTime;
 	$game.$player.instanceName = info.game.instanceName;
 	$game.$player.seenRobot = info.game.seenRobot;
+	$game.$player.isMuted = info.game.isMuted
 }
 
 //figure out what color to make which tiles when a seed is dropped

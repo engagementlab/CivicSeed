@@ -293,10 +293,9 @@ $game.$resources = {
 			finalDisplay += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
 			
 			if(!yoursPublic) {
-				// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
-				finalDisplay += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public <i class="icon-lock icon-large"></i></button>';
+				finalDisplay += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public <i class="fa fa-lock fa-lg"></i></button>';
 			} else {
-				finalDisplay += '<button class="btn btn-info privateButton" data-npc="'+ _curResource.index +'">Hide <i class="icon-unlock icon-large"></i></button>';
+				finalDisplay += '<button class="btn btn-info privateButton" data-npc="'+ _curResource.index +'">Make Private <i class="fa fa-unlock-alt fa-lg"></i></button>';
 			}
 			finalDisplay +=  '</li>' + otherAnswers + '</ul></div>';
 
