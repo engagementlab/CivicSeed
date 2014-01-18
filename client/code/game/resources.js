@@ -294,9 +294,9 @@ $game.$resources = {
 			
 			if(!yoursPublic) {
 				// displayAnswers += '<i class="icon-unlock publicButton icon-large"></i>';
-				finalDisplay += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public</button>';
+				finalDisplay += '<button class="btn btn-info publicButton" data-npc="'+ _curResource.index +'">Make Public <i class="icon-lock icon-large"></i></button>';
 			} else {
-				finalDisplay += '<i class="icon-unlock privateButton icon-large" data-npc="'+ _curResource.index +'"></i>';
+				finalDisplay += '<button class="btn btn-info privateButton" data-npc="'+ _curResource.index +'">Hide <i class="icon-unlock icon-large"></i></button>';
 			}
 			finalDisplay +=  '</li>' + otherAnswers + '</ul></div>';
 
@@ -617,7 +617,7 @@ function _addRealContent() {
 				var numOptions = _curResource.possibleAnswers.length;
 				inputBox = '<form>';
 				for(var i =0; i<numOptions; i++) {
-					inputBox+='<input name="resourceMultipleChoice" type ="radio" value="' + _curResource.possibleAnswers[i] + '"> ' + _curResource.possibleAnswers[i] + '</input><br>';
+					inputBox+='<input name="resourceMultipleChoice" type ="radio" id="answer_' + i + '" value="' + _curResource.possibleAnswers[i] + '"><label for="answer_'+ i +'">' + _curResource.possibleAnswers[i] + '</label><br>';
 				}
 				inputBox += '</form>';
 			}

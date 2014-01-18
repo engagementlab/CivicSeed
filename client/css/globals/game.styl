@@ -56,6 +56,49 @@ body, button, p, a
 .resourceStage
 	display none
 
+.botanistArea
+	position absolute
+	top 15px
+	left 15px
+	width 930px
+	height 450px
+	padding 20px 50px 20px 20px
+	box-shadow $csUIDropShadow
+	$borderRadius(0)	
+	z-index 9997
+	display none
+
+	.seedChips
+		text-align center
+
+	.tangramOutline
+		// Styles obsoleted
+		// Note that it's possible this needs to come back if needed for the puzzle portion.
+		// position absolute
+		// z-index 0
+		// top 0px
+		// left 0px
+	.tangramArea
+		height 360px
+		padding 0
+		z-index 9998
+		display none
+		.feedback
+			// Similar to the .check style.
+			width 320px
+			height auto
+			position absolute
+			text-align left
+			font-size 1.2em
+			padding 10px
+			top 150px
+			left 310px
+			$borderRadius(0)
+			background $csPurple
+			display none
+			z-index 9999
+			color #eee
+
 .resourceArea
 	position absolute
 	top 15px
@@ -63,7 +106,7 @@ body, button, p, a
 	width 930px
 	height 450px
 	background #efefef
-	padding 20px 50px 20px 20px
+	padding 20px 20px
 	box-shadow $csUIDropShadow
 	$borderRadius(0)
 	z-index 9999
@@ -117,7 +160,45 @@ body, button, p, a
 		color $csOrange
 
 	.publicAnswers
-		// Might move this here.
+		min-height 320px
+		padding 16px
+		border 3px solid $csGray
+		background #eee
+		$borderRadius(0)
+		overflow auto
+		ul
+			margin 0
+
+	.playerAnswers
+		position relative
+		padding 5px 5px 5px 10px
+		margin 10px 0
+		min-height 42px
+		// background #dedede
+		background $csLightGreen
+		color #222
+		$borderRadius(0)
+		list-style none
+		span
+			margin-right 5px
+			color white
+			height 100%
+		p
+			font-family $buttonFont
+			margin 10px 5px
+		button
+			position absolute
+			right 10px
+			bottom 10px
+			i
+				// Font Awesome icons
+				margin-right -4px
+				display inline-block
+
+	.yourAnswer 
+		background #fff
+		background $csLightBlue
+
 
 .patternBg1
 	background $cloudUrl('img/bg/grey.png') #efefef
@@ -137,53 +218,10 @@ body, button, p, a
 	border 3px solid $csGray
 	background #eee
 
-.botanistArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	padding 0
-	
-	$borderRadius(0)	
-	box-shadow $csUIDropShadow
-	z-index 9997
-	display none
-
-	textarea
-		margin 20px
-	 .dialog
-		width 870px
-
-	.seedChips
-		text-align center
 
 .newDislpay
 	background $csLightOrange
 
-.tangramArea
-	position absolute
-	top 0px
-	left 0px
-	width 930px
-	height 380px
-	padding 0
-	z-index 9998
-	display none
-	.feedback
-		width 320px
-		height auto
-		position absolute
-		text-align left
-		font-size 1.2em
-		padding 10px
-		top 150px
-		left 310px
-		$borderRadius(0)
-		background $csPurple
-		display none
-		z-index 9999
-		color #eee
 
 .progressArea
 	position absolute
@@ -595,15 +633,15 @@ body, button, p, a
 
 .speechBubble
 	display none
-	position absolute
 	z-index 9999
-	padding 14px
-	top 10px
-	left 10px
+	position absolute
+	top 20px
+	left 20px
 	width 920px
+	padding 14px
 	background #efefef
 	color #222
-	$borderRadius(0)
+	$borderRadius(0px)
 	box-shadow $csUIDropShadow
 	p
 		margin 0
@@ -794,52 +832,8 @@ textarea
 .activePlayers > p
 	right 10px
 
-.tangramOutline
-	position absolute
-	z-index 0
-	top 0px
-	left 0px
-
 .botanistContent form
 	padding 20px
-
-.publicAnswers
-	min-height 320px
-	padding 20px
-	border 3px solid $csGray
-	background #eee
-	$borderRadius(0)
-	overflow auto
-	ul
-		margin 0
-
-.playerAnswers
-	position relative
-	padding 5px 5px 5px 10px
-	margin 10px 0
-	min-height 42px
-	// background #dedede
-	background $csLightGreen
-	color #222
-	$borderRadius(0)
-	list-style none
-	span
-		margin-right 5px
-		color white
-		height 100%
-	p
-		font-family $buttonFont
-		width 700px
-		padding 0 
-		margin 10px 5px
-	.publicButton, .pledgeButton, .privateButton
-		position absolute
-		right 10px
-		bottom 10px
-
-.yourAnswer 
-	background #fff
-	background $csLightBlue
 
 .waitingForSeed
 	width 32px
@@ -850,8 +844,8 @@ textarea
 
 .buttonCorner
 	position absolute
-	bottom 14px
-	right 8px
+	bottom 10px
+	right 6px
 
 .progressArea > .tabbable
 	margin-left 20px
@@ -935,6 +929,7 @@ div.currentButton
 
 .resourceContentBody
 	margin-top -12px    // This position hack allows it to overwrite a contentless p.dialog with a bottom 12px margin.
+	margin-right 30px  // And not overlap the X button
 	height 360px
 	padding 20px
 	border 3px solid $csGray
