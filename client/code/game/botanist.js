@@ -693,7 +693,7 @@ $game.$botanist = {
 			if(allTangrams.length === 0) {
 				correct = false;
 				_paintbrushSeedFactor -= 1;
-				message = 'at least TRY to solve it...';
+				message = 'At least TRY to solve it!';
 			}
 			else if(wrongOne) {
 				correct= false;
