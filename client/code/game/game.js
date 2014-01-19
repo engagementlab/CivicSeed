@@ -573,7 +573,7 @@ var $game = module.exports = {
     //display everthing
     $('.displayPercent .progress .bar').css('width', percentString);
     $('.displayMyAnswers').empty().append(allAnswers);
-    $('.displayTime').html('<i class="fa fa-time fa-lg"></i> ' + displayTime);
+    $('.displayTime').html('<i class="fa fa-clock-o fa-lg"></i> ' + displayTime);
     //$('.displayPercent').text(percentString);
     $('.topSeeders').empty().append(topPlayers);
     $('.numCollected').text(numItems + ' / 42');

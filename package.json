@@ -38,8 +38,7 @@
     "ss-less": "~0.1.1",
     "xkcd-pwgen": "0.0.1",
     "stylus": "~0.42.0",
-    "bcrypt": "~0.7.6",
-    "less-middleware": "~0.1.14"
+    "bcrypt": "~0.7.6"
   },
   "devDependencies": {
     "mocha": "*",
