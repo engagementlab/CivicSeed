@@ -313,13 +313,12 @@ var $input = $game.$input = module.exports = {
 
 		//toggle audio on/off
 		$BODY.on('click', '.muteButton', function () {
-			var musicOff = $game.$audio.toggleMute();
-			if(musicOff) {
-				$('.muteButton i').removeClass('fa fa-volume-up').addClass('fa fa-volume-off');
-			}
-			else {
-				$('.muteButton i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up');
-			}
+      if($game.$audio.toggleMute() === true) {
+        $input.muteAudio()
+      }
+      else {
+        $input.unmuteAudio()
+      }
 		});
 
 		//show or hide help area
@@ -555,6 +554,14 @@ var $input = $game.$input = module.exports = {
     _helpShowing = false
     $('.helpButton').removeClass('currentButton')
     $('.helpArea').hide()
+  },
+
+  muteAudio: function () {
+    $('.muteButton i').removeClass('fa fa-volume-up').addClass('fa fa-volume-off')
+  },
+
+  unmuteAudio: function () {
+    $('.muteButton i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
   },
 
   cheat: function (input) {

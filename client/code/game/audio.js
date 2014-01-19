@@ -47,12 +47,24 @@ var _soundtracks = [],
 var $audio = $game.$audio = {
 
 	ready: false,
-	isMuted: false,
+	isMute: false,
+  config: {
+    soundtrackVolume:        0.2,
+    environmentLoopFxVolume: 0.1,
+    environmentOnceFxVolume: 0.3,
+    triggerFxVolume:         0.4
+  },
 
 	init: function(callback) {
 		if(CivicSeed.ENVIRONMENT !== 'development') {
 			_extension = CivicSeed.version;
 		}
+
+    $audio.isMute = $game.$player.isMuted
+    if ($audio.isMute) {
+      $game.$input.muteAudio()
+    }
+
 		var position = $game.$player.getPosition();
 		var firstTrack = $audio.whichTrack(position.x, position.y);
 		if(firstTrack === -1) {
@@ -87,7 +99,7 @@ var $audio = $game.$audio = {
 		_currentPos = null;
 
 		$game.$audio.ready= false;
-		$game.$audio.isMuted= false;
+		$game.$audio.isMute = $game.$player.isMuted
 	},
 
 	loadTrack: function(num) {
@@ -102,17 +114,17 @@ var $audio = $game.$audio = {
 			ogg += Math.round(Math.random(1) * 1000000000);
 		}
 
-		var autoplay = true;
-		if($game.$player.currentLevel > 3 && $game.bossModeUnlocked) {
-			autoplay = false;
-		}
+    var autoplay = true
+    if (($game.$player.currentLevel > 3 && $game.bossModeUnlocked) || $audio.isMute) {
+      autoplay = false
+    }
 
 		_soundtracks[num] = new Howl({
 			urls: [mp3, ogg],
 			autoplay: autoplay,
 			loop: true,
-			volume: 0.2,
-			buffer: true
+			volume: $audio.config.soundtrackVolume,
+      buffer: true
 		});
 		//this goes thru all the tracks, and skips num since its preloaded
 		$audio.loadOtherTrack(0, num);
@@ -181,7 +193,7 @@ var $audio = $game.$audio = {
 				pieceDrop: [16000, 200],
 				robot: [17000, 2800]
 			},
-			volume: 0.4,
+			volume: $audio.config.triggerFxVolume,
 			onload: function() {
 				$audio.loadEnvironmentLoopFx();
 			}
@@ -210,7 +222,7 @@ var $audio = $game.$audio = {
 			onend: function() {
 				$audio.checkLoopExit();
 			},
-			volume: 0.1,
+			volume: $audio.config.environmentLoopFxVolume,
 			onload: function() {
 				$audio.loadEnvironmentOnceFx();
 			}
@@ -248,8 +260,8 @@ var $audio = $game.$audio = {
 				chatter: [43000, 5500],
 				forest3: [49000, 2700]
 			},
-			volume: 0.3,
-			onend: function() {
+			volume: $audio.config.environmentOnceFxVolume,
+      onend: function() {
 			},
 			onload: function() {
 				$audio.ready = true;
@@ -258,18 +270,24 @@ var $audio = $game.$audio = {
 	},
 
 	playTriggerFx: function(fx) {
-		_triggerFx.play(fx);
+    if (!$audio.isMute) {
+      _triggerFx.play(fx);
+    }
 	},
 
 	playEnvironmentLoopFx: function(fx) {
-		_environmentLoopFx.play(fx);
+    if (!$audio.isMute) {
+      _environmentLoopFx.play(fx);
+    }
 	},
 
 	playEnvironmentOnceFx: function(fx) {
-		var ranDelay = Math.random() * 2000;
-		setTimeout(function() {
-			_environmentOnceFx.play(fx);
-		}, ranDelay);
+    var ranDelay = Math.random() * 2000;
+    setTimeout(function() {
+      if (!$audio.isMute) {
+        _environmentOnceFx.play(fx);
+      }
+    }, ranDelay);
 	},
 
 	update: function(posX, posY) {
@@ -422,36 +440,51 @@ var $audio = $game.$audio = {
 		return trackRegion;
 	},
 
-	toggleMute: function() {
-		$audio.isMute = $audio.isMute ? false: true;
-		if($audio.isMute) {
-			//_soundtracks[_currentTrack].volume(0);
-			_soundtracks[_currentTrack].pause();
-			_environmentLoopFx.volume(0);
-			_environmentOnceFx.volume(0);
-			_triggerFx.volume(0);
-		}
-		else {
-			_soundtracks[_currentTrack].play();
-			_soundtracks[_currentTrack].volume(0.2);
-			_environmentLoopFx.volume(0.1);
-			_environmentOnceFx.volume(0.3);
-			_triggerFx.volume(0.4);
-		}
-		return $audio.isMute;
-	},
+  toggleMute: function() {
+    $audio.isMute = !$audio.isMute
+
+    if($audio.isMute) {
+      $audio.mute()
+    }
+    else {
+      $audio.unmute()
+    }
+
+    // Save volume state to player profile
+    $game.$player.isMuted = $audio.isMute
+    ss.rpc('game.player.updateGameInfo', {
+      id: $game.$player.id,
+      isMuted: $game.$player.isMuted
+    })
+
+    return $audio.isMute
+  },
+
+  mute: function () {
+    _soundtracks[_currentTrack].pause()
+    _environmentLoopFx.mute()
+    _environmentOnceFx.volume(0)
+    _triggerFx.volume(0)
+  },
+
+  unmute: function () {
+    _soundtracks[_currentTrack].play()
+    _environmentLoopFx.unmute()
+    _environmentOnceFx.volume($audio.config.environmentOnceFxVolume)
+    _triggerFx.volume($audio.config.triggerFxVolume)
+  },
 
 	fadeLow: function() {
 		if(!$audio.isMute) {
-			_soundtracks[_currentTrack].volume(0.05);
-			_environmentLoopFx.volume(0.03);
+			_soundtracks[_currentTrack].volume($audio.config.soundtrackVolume * 0.25);
+			_environmentLoopFx.volume($audio.config.environmentLoopFxVolume * 0.15);
 		}
 	},
 
 	fadeHi: function() {
 		if(!$audio.isMute) {
-			_soundtracks[_currentTrack].volume(0.2);
-			_environmentLoopFx.volume(0.2);
+			_soundtracks[_currentTrack].volume($audio.config.soundtrackVolume);
+			_environmentLoopFx.volume($audio.config.environmentLoopFxVolume);
 		}
 	},
 

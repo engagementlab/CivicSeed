@@ -51,6 +51,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			}],
 			seenRobot: Boolean,
 			playingTime: Number,
+			isMuted: Boolean,
 			tilesColored: Number,
 			pledges: Number,
 			collaborativeChallenge: Boolean,
