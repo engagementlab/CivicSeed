@@ -9,13 +9,12 @@
 			a.brand(href='/')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/other/logo.jpg')
 				| Civic Seed
-				
 
 			- if(sessionStorage.userFirstName)
-				.btn-group.pull-right.tempFixMargin
+				.btn-group.pull-right
 					a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
 						i.fa.fa-user
-							span &nbsp;#{sessionStorage.userFirstName}&nbsp;
+						span.username #{sessionStorage.userFirstName}
 						span.caret
 					ul.dropdown-menu
 						//- li: a(href='/profiles') Profiles
@@ -33,8 +32,7 @@
 					li: a(href='/') Home
 					li: a(href='/about') About 
 					li: a(href='/profiles') Profiles 
-					li: a(href='/contact', style='border:none;') Contact Us
-
+					li: a(href='/contact') Contact Us
 					- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
 						li: a(href='/admin') Admin Console
 	.zag

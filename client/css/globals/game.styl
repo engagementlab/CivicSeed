@@ -22,10 +22,6 @@ p, li, button, a
 	background #eee
 	color #333
 	-webkit-touch-callout none
-	-webkit-user-select none
-	-khtml-user-select none
-	-moz-user-select none
-	-ms-user-select none
 	user-select none
 	// cursor: url(http://placehold.it/32x32.png), auto;
 	ul, ol
@@ -85,6 +81,7 @@ p, li, button, a
 	border 3px solid $csGray
 	background-color #eee
 	$borderRadius(0)
+	user-select text
 
 .botanistArea
 	z-index 9990
@@ -188,6 +185,7 @@ p, li, button, a
 			right 10px
 			bottom 10px
 	.yourAnswer 
+		user-select text
 		background $csLightBlue
 
 
@@ -589,10 +587,6 @@ p, li, button, a
 .hud
 	margin-top 20px
 	-webkit-touch-callout none
-	-webkit-user-select none
-	-khtml-user-select none
-	-moz-user-select none
-	-ms-user-select none
 	user-select none
 
 .debug p
@@ -825,6 +819,7 @@ div.currentButton
 	$borderRadius(0)
 	overflow auto
 	color #eee
+	user-select text
 	h1, h2, h3, h4, h5, h6
 		// Allow all size headers to be used in resource text
 		// Verify line-height issues with these.
