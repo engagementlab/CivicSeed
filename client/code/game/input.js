@@ -412,14 +412,11 @@ var $input = $game.$input = module.exports = {
 
       // Allow keyboard inputs only when gameboard is active.
       if (!startNewAction()) return
-
       if (!acceptKeyInput()) return
 
       // Refuse inputs if Ctrl or Command is pressed so that the game doesn't overwrite other system/client command keys
       // This does not cover Mac's fn' key
       if (e.ctrlKey === true || e.metaKey === true || e.altKey === true) return
-
-      // Refuse inputs if a form input has focus
 
       // Attach keys to actions
       switch (e.which) {
@@ -615,12 +612,17 @@ var $input = $game.$input = module.exports = {
         $game.$player.beamMeUpScotty()
         break
       case 'show me the money':
-        $game.$input._cheatActivated('Adding 500 seeds.')
-        $game.$player.addSeeds('regular', 500)
+        $game.$input._cheatActivated('Adding 200 seeds.')
+        $game.$player.addSeeds('regular', 200)
+        break
+      case 'like one of your french girls':
+        $game.$input._cheatActivated('Adding 200 paint seeds.')
+        $game.$player.addSeeds('draw', 200)
         break
       case 'loki':
         $game.$input._cheatActivated('Debug seed amount.')
-        $game.$player.setSeeds('regular', 1)
+        $game.$player.setSeeds('regular', 0)
+        $game.$player.setSeeds('draw', 3)
         break
       case 'ding me':
         $game.$input._cheatActivated('Leveling up!')

@@ -1,3 +1,5 @@
+'use strict';
+
 var _soundtracks = [],
 	_triggerFx = null,
 	_environmentLoopFx = null,

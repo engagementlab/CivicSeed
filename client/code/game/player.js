@@ -46,7 +46,8 @@ var _curFrame = 0,
 	_resourcesDiscovered = null,
 	_skinSuit = null,
 
-	_drawSeeds = null;
+	_drawSeeds = null,
+  _drawSeedArea = {};
 
 //export player functions
 var $player = $game.$player = {
@@ -683,24 +684,24 @@ var $player = $game.$player = {
 		return false;
 	},
 
-	//change seed count for specific seed
-	updateSeeds: function(kind, quantity, skip) {
-		_seeds[kind] += quantity;
-		//save to DB
-		var info = {
-			id: $game.$player.id,
-			seeds: _seeds
-		};
-		if(!skip) {
-			ss.rpc('game.player.updateGameInfo', info);
-		}
-		//update hud
-		_updateTotalSeeds();
-	},
-
-  // Alias for updateSeeds
+  // Add seeds to a specific type of seed
   addSeeds: function (kind, quantity, skip) {
-    $player.updateSeeds(kind, quantity, skip)
+    _seeds[kind] += quantity;
+    //save to DB
+    var info = {
+      id: $game.$player.id,
+      seeds: _seeds
+    };
+    if(!skip) {
+      ss.rpc('game.player.updateGameInfo', info);
+    }
+    //update hud
+    _updateTotalSeeds();
+  },
+
+  // Alias for addSeeds
+  updateSeeds: function(kind, quantity, skip) {
+    $player.addSeeds(kind, quantity, skip)
   },
 
   // Set seeds to a specific amount
@@ -870,8 +871,8 @@ var $player = $game.$player = {
 
 	//when another player pledges a seed, make the update in your local resources
 	updateResource: function(data) {
-		if(resources[data.npc]) {
-			resources[data.npc].seeded.push(data.pledger);
+		if(_resources[data.npc]) {
+			_resources[data.npc].seeded.push(data.pledger);
 		}
 	},
 
@@ -929,7 +930,7 @@ var $player = $game.$player = {
 				} else {
 					num = '*';
 				}
-				bubble = $('<p class="npcBubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
+				var bubble = $('<p class="npcBubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
 				$gameboard.append(bubble);
 				$('#' + npcId).css({
 					top: npcInfo.y - 68,

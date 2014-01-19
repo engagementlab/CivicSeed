@@ -577,9 +577,12 @@ var $game = module.exports = {
     //$('.displayPercent').text(percentString);
     $('.topSeeders').empty().append(topPlayers);
     $('.numCollected').text(numItems + ' / 42');
-    $('.progressArea').fadeIn(function() {
+
+    /*
+    $('.progressArea').show(function() {
       $game.showingProgress = true;
     });
+    */
   },
 
   //shows message in the display box that only lasts specific time
