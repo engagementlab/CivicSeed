@@ -63,6 +63,7 @@ var $audio = $game.$audio = {
     $audio.isMute = $game.$player.isMuted
     if ($audio.isMute) {
       $game.$input.muteAudio()
+      $game.$audio.mute()
     }
 
 		var position = $game.$player.getPosition();
@@ -115,7 +116,7 @@ var $audio = $game.$audio = {
 		}
 
     var autoplay = true
-    if (($game.$player.currentLevel > 3 && $game.bossModeUnlocked) || $audio.isMute) {
+    if ($game.$player.currentLevel > 3 && $game.bossModeUnlocked) {
       autoplay = false
     }
 
@@ -270,23 +271,17 @@ var $audio = $game.$audio = {
 	},
 
 	playTriggerFx: function(fx) {
-    if (!$audio.isMute) {
-      _triggerFx.play(fx);
-    }
+    _triggerFx.play(fx);
 	},
 
 	playEnvironmentLoopFx: function(fx) {
-    if (!$audio.isMute) {
-      _environmentLoopFx.play(fx);
-    }
+    _environmentLoopFx.play(fx);
 	},
 
 	playEnvironmentOnceFx: function(fx) {
     var ranDelay = Math.random() * 2000;
     setTimeout(function() {
-      if (!$audio.isMute) {
-        _environmentOnceFx.play(fx);
-      }
+      _environmentOnceFx.play(fx);
     }, ranDelay);
 	},
 
@@ -384,15 +379,13 @@ var $audio = $game.$audio = {
 		_prevTrack = _currentTrack;
 		_currentTrack = swap;
 		if(_prevTrack !== _currentTrack) {
-			if(!$audio.isMute) {
-				_midTransition = true;
-				_soundtracks[_prevTrack].fadeOut(0, 1000, function() {
-					_soundtracks[_prevTrack].pause();
-				});
-				_soundtracks[_currentTrack].fadeIn(0.2, 3000, function(swap) {
-					_midTransition = false;
-				});
-			}
+			_midTransition = true;
+			_soundtracks[_prevTrack].fadeOut(0, 1000, function() {
+				_soundtracks[_prevTrack].pause();
+			});
+			_soundtracks[_currentTrack].fadeIn(0.2, 3000, function(swap) {
+				_midTransition = false;
+			});
 		}
 	},
 
@@ -461,17 +454,11 @@ var $audio = $game.$audio = {
   },
 
   mute: function () {
-    _soundtracks[_currentTrack].pause()
-    _environmentLoopFx.mute()
-    _environmentOnceFx.volume(0)
-    _triggerFx.volume(0)
+    Howler.mute()
   },
 
   unmute: function () {
-    _soundtracks[_currentTrack].play()
-    _environmentLoopFx.unmute()
-    _environmentOnceFx.volume($audio.config.environmentOnceFxVolume)
-    _triggerFx.volume($audio.config.triggerFxVolume)
+    Howler.unmute()
   },
 
 	fadeLow: function() {
