@@ -1,3 +1,5 @@
+'use strict';
+
 //private vars for player 
 var _curFrame = 0,
 	_numFrames = 4,
@@ -47,7 +49,7 @@ var _curFrame = 0,
 	_drawSeeds = null;
 
 //export player functions
-$game.$player = {
+var $player = $game.$player = {
 
 	firstName: null,
 	id: null,
@@ -224,12 +226,8 @@ $game.$player = {
 
 	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
 	beginMove: function(x, y) {
-		if($game.$player.inventoryShowing) {
-			$('.inventory').slideUp(function() {
-				$game.$player.inventoryShowing = false;
-				$('.inventoryButton').removeClass('currentButton');
-			});
-		}
+		// Clear HUD
+		if ($game.$player.inventoryShowing) $game.$input.closeInventory()
 
 		var loc = $game.$map.masterToLocal(_info.x, _info.y);
 		if(loc.x === x && loc.y === y) {
@@ -699,6 +697,25 @@ $game.$player = {
 		//update hud
 		_updateTotalSeeds();
 	},
+
+  // Alias for updateSeeds
+  addSeeds: function (kind, quantity, skip) {
+    $player.updateSeeds(kind, quantity, skip)
+  },
+
+  // Set seeds to a specific amount
+  setSeeds: function (kind, quantity, skip) {
+    _seeds[kind] = quantity;
+    //save to DB
+    if(!skip) {
+      ss.rpc('game.player.updateGameInfo', {
+        id: $game.$player.id,
+        seeds: _seeds
+      })
+    }
+    //update hud
+    _updateTotalSeeds();
+  },
 
   // Update player's skin inventory ('skinventory')
   updateSkinventory: function (skin, part) {
@@ -1243,22 +1260,21 @@ function _updateTotalSeeds() {
 
 // calculate new render information based on the player's position
 function _updateRenderInfo() {
-	// get local render information. update if appropriate.
-	var loc = $game.$map.masterToLocal(_info.x, _info.y);
-	if(loc) {
-		var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS;
-		prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS;
-		curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS;
-		curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS;
+  // get local render information. update if appropriate.
+  var loc = $game.$map.masterToLocal(_info.x, _info.y);
+  if(loc) {
+    var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS,
+        prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS,
+        curX  = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS,
+        curY  = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS
 
-		_renderInfo.prevX = prevX,
-		_renderInfo.prevY = prevY,
-
-		_renderInfo.srcX = _info.srcX,
-		_renderInfo.srcY = _info.srcY,
-		_renderInfo.curX = curX,
-		_renderInfo.curY = curY;
-	}
+    _renderInfo.prevX = prevX
+    _renderInfo.prevY = prevY
+    _renderInfo.srcX  = _info.srcX
+    _renderInfo.srcY  = _info.srcY
+    _renderInfo.curX  = curX
+    _renderInfo.curY  = curY
+  }
 }
 
 //figure out how much to move the player during a walk and wait frame to show
