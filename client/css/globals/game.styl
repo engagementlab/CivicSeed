@@ -5,8 +5,8 @@
 	font-weight normal
 	font-style normal
 
-body, button, p, a
-	font-family $bodyFont
+p, li, button, a
+	font-family $buttonFont
 
 .gameboard
 	// cursor none
@@ -66,10 +66,28 @@ body, button, p, a
 	z-index 9999
 	padding 20px
 	background #efefef
+	background-image $cloudUrl('img/bg/grey.png')
 	box-shadow $csUIDropShadow
-	$borderRadius(0)	
+	$borderRadius(0)
+	h2
+		color $csBlue
+		font-size 2em
+	h3
+		color $csGreen
+	p
+		font-family $buttonFont
+
+.overlayContent
+	min-height 320px
+	max-height 340px
+	padding 16px
+	overflow auto
+	border 3px solid $csGray
+	background-color #eee
+	$borderRadius(0)
 
 .botanistArea
+	z-index 9990
 	.seedChips
 		text-align center
 	.tangramOutline
@@ -130,8 +148,6 @@ body, button, p, a
 			display inline-block
 
 .resourceContent
-	max-height 340px
-	overflow auto
 	.tangramPiece
 		img
 			// display block
@@ -150,21 +166,14 @@ body, button, p, a
 		color $csOrange
 
 	.publicAnswers
-		min-height 320px
-		padding 16px
-		border 3px solid $csGray
-		background #eee
-		$borderRadius(0)
-		overflow auto
 		ul
 			margin 0
 
 	.playerAnswers
 		position relative
-		padding 5px 5px 5px 10px
+		padding 14px 140px 5px 14px
 		margin 10px 0
 		min-height 42px
-		// background #dedede
 		background $csLightGreen
 		color #222
 		$borderRadius(0)
@@ -172,17 +181,13 @@ body, button, p, a
 		span
 			margin-right 5px
 			color white
-			height 100%
 		p
 			font-family $buttonFont
-			margin 10px 5px
 		button
 			position absolute
 			right 10px
 			bottom 10px
-
 	.yourAnswer 
-		background #fff
 		background $csLightBlue
 
 
@@ -190,9 +195,6 @@ body, button, p, a
 	h2
 		color $csGreen
 		font-size 3.5em
-	h3
-		margin-left 40px
-		color $csBlue
 	.personalInfo
 		position absolute
 		left 20px
@@ -341,150 +343,89 @@ body, button, p, a
 			bottom 0
 			margin 10px 0 0 0px
 
-	.collectedResources
-		width 930px
-		height 450px
-		$borderRadius(0)
+.collectedResources
+	box-shadow none
+	.backToProgress
 		position absolute
-		top 0
-		left 0
-		display none
-		h2
-			font-size 2em
-			letter-spacing 2px
-			margin 0
-			padding 20px
-			width 300px
-		.backToProgress
-			position absolute
-			bottom 20px
-			left 20px
-		.displayMyAnswers
-			border 3px solid $csGray
-			background $csLightBlue
-			background #eee
-			$borderRadius(0)
-			height 300px
-			width 880px
-			position absolute
-			top 70px
-			left 20px
-			overflow auto
-			.theQuestion
-				font-size 1.1em
-				padding 10px 10px 5px 10px
-			.theAnswer
-				position relative
-				margin 0 10px 15px 10px
+		bottom 20px
+		left 20px
+	.displayMyAnswers
+		height 320px
+		.theQuestion
+			font-size 1.1em
+		.theAnswer
+			position relative
+			margin 15px 0
+			font-family $buttonFont
+			background $csLightGreen
+			.seededCount
+				position absolute
+				top 6px
+				right 6px
 				font-family $buttonFont
-				background $csLightGreen
-				$borderRadius(0)
-				.seededCount
-					position absolute
-					top 6px
-					right 6px
-					font-family $buttonFont
-					background $csPurple
-					padding 3px
-					border-radius 4px
-					line-height 1
-					color #fff
-				.answerText
-					width 780px
-					padding 5px 10px
-					
-			
-		// .playerAnswers
-		// 	color #222
-		// 	list-style none
-		// 	$borderRadius(0)
-		// 	padding 5px 5px 5px 10px
-		// 	margin 15px 15px 10px 15px
-		// 	position relative
-		// 	background #dedede
-		// 	background $csLightGreen
-
-.helpArea
-	h2
-		color $csBlue
-		margin 10px 25px
-		font-size 2em
-	h3
-		color $csGreen
-	p
-		font-family $buttonFont
-	.helpContent
-		margin 0 20px 0 20px
-		overflow auto
-		max-height 340px
-		border 3px solid $csGray
-		$borderRadius(0)
-		padding 10px
-		li
-			line-height 2em
-			list-style none
-			i 
-				padding-right 10px
+				background $csPurple
+				padding 3px
+				border-radius 4px
+				line-height 1
+				color #fff
+			.answerText
+				width 780px
+				padding 5px 10px
+	// .playerAnswers
+	// 	color #222
+	// 	list-style none
+	// 	$borderRadius(0)
+	// 	padding 5px 5px 5px 10px
+	// 	margin 15px 15px 10px 15px
+	// 	position relative
+	// 	background #dedede
+	// 	background $csLightGreen
 
 .skinventory
-	// cursor default
-	.skinContent
-		margin 10px 25px
-		h2
-			color $csBlue
-			font-size 2em
-		h3
-			color $csGreen
-			text-transform none
-		p
-			font-family $buttonFont
-		.parts
-			.part
-				position absolute
-				left 50px
-				p
-					float left
-					width 100px
-				.outer
-					cursor pointer
-					float left
-					margin-right 20px
-					padding 10px
-					border 2px solid white
-					.bodypart
-						width 32px
-						font-size 1.5em
-						color $csBlue
-						text-align center
-						i 
-							display none
-						.locked
-							display inline
-
-					&:hover
-						border 2px solid $csGreen
-				.currentPart
+	.parts
+		.part
+			position absolute
+			left 50px
+			p
+				float left
+				width 100px
+			.outer
+				cursor pointer
+				float left
+				margin-right 20px
+				padding 10px
+				border 2px solid $csLightGray
+				background-color #f4f4f4
+				.bodypart
+					width 32px
+					font-size 1.5em
+					color $csBlue
+					text-align center
+					i 
+						display none
+					.locked
+						display inline
+				&:hover
 					border 2px solid $csGreen
-						
-			.head
-				top 150px
-				.bodypart
-					height 30px
+					background-color white
+			.currentPart
+				border 2px solid $csDarkGreen
+				background-color white
 					
-			.torso
-				top 215px
-				.bodypart
-					height 15px
-			.legs
-				top 265px
-				.bodypart
-					height 19px
+		.head
+			top 135px
+			.bodypart
+				height 30px				
+		.torso
+			top 200px
+			.bodypart
+				height 15px
+		.legs
+			top 250px
+			.bodypart
+				height 19px
 
 // END LARGE OVERLAYS
-
-
-.patternBg1
-	background-image $cloudUrl('img/bg/grey.png')
 
 .patternBg2
 	background-image $cloudUrl('img/bg/grey.png')

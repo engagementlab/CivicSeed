@@ -5,10 +5,12 @@
 	canvas#foreground(width='960px', height='480px')
 	canvas#minimapTile(width='142px', height='132px')
 	canvas#minimapPlayer(width='142px', height='132px')
+
 	.loading
 		p
 			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
 		p loading
+
 	.resourceArea.gameboardOverlay
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
@@ -30,7 +32,7 @@
 			p You should create a custom tagline!
 		.feedback
 
-	div.botanistArea.gameboardOverlay
+	.botanistArea.gameboardOverlay
 		p.dialog
 			span.speakerName
 			span.message
@@ -47,7 +49,8 @@
 		
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
-	div.progressArea.gameboardOverlay.patternBg2
+
+	.progressArea.gameboardOverlay.patternBg2
 		h2 Progress
 		div.personalInfo
 			.levelImages
@@ -86,15 +89,14 @@
 		a(href='#', style='font-size: 24px;')
 			i.fa.fa-times-circle.fa-lg
 
-		.collectedResources.patternBg3
-			h2 Your Answers
-			button.btn.backToProgress.btn-info(type='button') Back
-			.displayMyAnswers
-			
-		
-	div.helpArea.gameboardOverlay
+	.collectedResources.gameboardOverlay.patternBg3
+		h2 Your Answers
+		.displayMyAnswers.overlayContent
+		button.btn.backToProgress.btn-info(type='button') Back
+
+	.helpArea.gameboardOverlay
 		h2 How To Play
-		.helpContent
+		.helpContent.overlayContent
 			p The goal of the game is to fully color return color to the world, which starts in grayscale. To do this, you must explore, talk to the Calliopeans you see, answer their questions, plant seeds, and find research to complete new seed recipes.
 
 			h3 The Game Display
@@ -108,13 +110,13 @@
 
 			h3 The Icons
 			p The seven display icons each have unique functions.
-			ul
-				li <i class='fa fa-briefcase fa-lg'></i><b> Toolbox:</b> Open and close your inventory
-				li <i class='fa fa-leaf fa-lg'></i><b> Leaf:</b> Enter or exit seed mode
-				li <i class='fa fa-globe fa-lg'></i><b> Globe:</b> Toggle mini map off and on
-				li <i class='fa fa-desktop fa-lg'></i><b> Computer Screen:</b> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.
-				li <i class='fa fa-volume-up fa-lg'></i><b> Speaker:</b> Turn music on or off
-				li <i class='fa fa-question-sign fa-lg'></i><b> Question Mark:</b> Launch help document
+			ul.fa-ul
+				li <i class='fa-li fa fa-briefcase fa-lg'></i> <strong>Toolbox:</strong> Open and close your inventory
+				li <i class='fa-li fa fa-leaf fa-lg'></i> <strong>Leaf:</strong> Enter or exit seed mode
+				li <i class='fa-li fa fa-globe fa-lg'></i> <strong>Globe:</strong> Toggle mini map off and on
+				li <i class='fa-li fa fa-desktop fa-lg'></i> <strong>Computer Screen:</strong> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.
+				li <i class='fa-li fa fa-volume-up fa-lg'></i> <strong>Speaker:</strong> Turn music on or off
+				li <i class='fa-li fa fa-question-circle fa-lg'></i> <strong>Question Mark:</strong> Launch help document
 
 			h3 Exploring The World
 			p To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red. 
@@ -132,20 +134,14 @@
 			h3 Interacting With Other Players
 			p There are two ways you can interact with other players in the game. The first way is to chat with them. If you see another player (they'll look just like you, but in a different color) you can chat with them. To do this, click on the speech bubble icon. This transforms the status bar into a chat box. Type your message and hit the “enter” key to chat. Clicking the speech bubble icon again exits chat mode.
 
-			h3 Seed It!	
+			h3 Seed It!
 			p You can also grant bonus seeds to your fellow players. After you answer a question, you'll see all answers that have been made public. If you like another player's answer, click “Seed it!” to grant them a bonus seed. This bonus seed does not come from your supply, it's a bonus seed awarded for excellent answers. These bonus seeds are always mega seeds. You may award up to five bonus seeds to other players each level, and you may award multiple bonus seeds to one response if you feel so inclined.
 
 			h3 Completing the Recipes
-
-
 			p The Botanist's notebook contains four recipes for Paintbrush Seeds, which correspond with the four levels of the game. Each recipe also includes a special puzzle. As you explore the world and answer questions, you'll earn research pieces, in addition to seeds, which you will use to answer solve the puzzle.
-
 			p When you think you have enough research pieces to solve the puzzle, return to the Botanist. He will show you the outline of the puzzle. You can then drag pieces from your inventory onto the puzzle. The text of the recipe appears next to the puzzle. Look at the text for hints!
-
 			p As long as there are any wrong pieces on the board, you cannot solve the riddle. To remove a puzzle piece from the board, drop it into the trash. 
-
 			p When you think you've correctly solved the riddle, hit “Answer.” If you're correct, you progress to the next level, and earn some Paintbrush Seeds. For each time you answer incorrectly, you will receive less and less seeds. After you complete all four levels, the game is complete and you unlock your civic resume!
-
 
 			h3 Your Inventory
 			p Every time you answer a question correctly, you gain a research piece. You can view the pieces you've collected at any time by clicking the toolbox icon on your display. From here, you can view the resources again by clicking the puzzle pieces,
@@ -161,15 +157,14 @@
 		p.buttons
 			button.bossButton.btn.btn-success(type='button') Next
 
-	div.skinventory.gameboardOverlay
-		.skinContent
-			h2 Changing Room
-			h3 Customize your suit! Mix and match different sections to create your look.  Unlock more by talking to more characters in the world.
-			.parts
-				.head.part(data-part='head')
-				.torso.part(data-part='torso')
-				.legs.part(data-part='legs')
-			button.closeButton.btn.btn-primary(type='button') Close
+	div.skinventory.gameboardOverlay.patternBg3
+		h2 Changing Room
+		p Customize your suit! Mix and match different sections to create your look.  Unlock more by talking to more characters in the world.
+		.parts
+			.head.part(data-part='head')
+			.torso.part(data-part='torso')
+			.legs.part(data-part='legs')
+		button.closeButton.btn.btn-primary(type='button') Close
 
 	div.inventory
 		div.outlines

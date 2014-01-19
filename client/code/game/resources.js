@@ -268,7 +268,7 @@ $game.$resources = {
 		//alway show player's answer with a lock icon (make public button)
 		//if it is public, just show eye icon
 		//console.log(_curResource);
-		var finalQuestion = '<div class="publicAnswers"><p class="finalQuestion">Q: ' + _curResource.question + '</p>';
+		var finalQuestion = '<div class="publicAnswers overlayContent"><p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 			otherAnswers = '';
 			yourAnswer = $game.$player.getAnswer(_curResource.index),
 			rightOne = yourAnswer.answers.length - 1;
@@ -306,7 +306,7 @@ $game.$resources = {
 		}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);
-			$resourceContent.html(finalQuestion + finalDisplay);
+			$resourceContent.html(finalQuestion + finalDisplay).show();
 	},
 
 	//hide the resource area and decide if we need to show inventory again or not
@@ -592,7 +592,7 @@ function _addAnsweredContent() {
 		}
 		//the next slide will show them recent answers
 		else {
-			$resourceContent.empty().css('overflow','auto');
+			$resourceContent.empty().show();
 			$game.$resources.showRecentAnswers();
 		}
 	}
@@ -600,7 +600,7 @@ function _addAnsweredContent() {
 
 //adds question content or shows answers or show resource content
 function _addRealContent() {
-	$resourceContent.css('overflow', 'auto');
+	// $resourceContent.css('overflow', 'auto');
 	if(_currentSlide === _numSlides) {
 		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 		//show their answer and the question, not the form
@@ -632,7 +632,7 @@ function _addRealContent() {
 				inputBox = '<form><input name="resourceMultipleChoice" type="radio" id="yes" value="yes"><label for="yes">yes</label>' +
 							'<br><input name="resourceMultipleChoice" type="radio" id="no" value="no"><label for="no">no</label>';
 			}
-			$resourceContent.html(finalQuestion + inputBox);
+			$resourceContent.html(finalQuestion + inputBox).show();
 			if(_temporaryAnswer.length > 0 && _questionType === 'open') {
 				$('.resourceContent textarea').val(_temporaryAnswer);
 			}
@@ -640,7 +640,7 @@ function _addRealContent() {
 	}
 	else{
 		var content = $('.resourceStage .pages > section').get(_currentSlide).innerHTML;
-		$resourceContent.empty();
+		$resourceContent.empty().hide();
 		$resourceContentBody.html(content).show();
 	}
 }
