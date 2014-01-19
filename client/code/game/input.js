@@ -28,108 +28,124 @@ var $input = $game.$input = module.exports = {
 
 	init: function() {
 
-		//show / hide the seed inventory, start blinking
-		$BODY.on('click', '.seedButton', function () {
-			var goAhead = startNewAction();
-			if(goAhead) {
-				//this mean seedventory is DOWN
-				//the user clicked meaning they want to open or end seed mode
-				//END seed mode
-				if($game.$player.seedMode) {
-					$BODY.off('mousedown touchend', '.gameboard');
-					$BODY.off('mouseup touchend', '.gameboard');
-					$('.graffiti').hide();
-					$game.$mouse.drawMode = false;
-					$game.$player.seedMode = false;
-					$game.$player.seedPlanting = false;
-					$game.$player.resetRenderColor();
-					$(this).removeClass('currentButton');
-					$game.$player.saveMapImage();
-					$game.$player.saveSeeds();
-				}
-				else {
-					//open it up OR turn it on
-					$game.$player.openSeedventory();
-				}
-			}
-			else {
-				//if it is UP, then we want to clsoe it and turn it off
-				if($game.$player.seedventoryShowing) {
-					$BODY.off('mousedown touchend', '.gameboard');
-					$BODY.off('mouseup touchend', '.gameboard');
-					$game.$mouse.drawMode = false;
-					$('.seedventory').slideUp(function() {
-						$game.$player.seedventoryShowing = false;
-					});
-				}
-				else {
-					$BODY.off('mousedown touchend', '.gameboard');
-					$BODY.off('mouseup touchend', '.gameboard');
-					$game.$mouse.drawMode = false;
-					$game.$player.seedPlanting = false;
-				}
-				$('.graffiti').hide();
-				$(this).removeClass('currentButton');
-				$game.$player.saveMapImage();
-			}
-		});
+    // ************* GENERIC GAMEBOARD INTERACTION *************
 
-		//regular seed select
-		$BODY.on('click', '.regularButton', function () {
-			$game.$player.startSeeding('regular');
-		});
+    //change cursor on mouse move
+    $BODY.on('mousemove', '.gameboard', function(e) {
+      if( !$game.inTransit && $game.running){
+        var mInfo = {
+          x: e.pageX,
+          y: e.pageY,
+          offX: this.offsetLeft,
+          offY: this.offsetTop,
+          debug: false
+        };
+        $game.$mouse.updateMouse(mInfo, false);
+      }
+    });
 
-		//draw seed select
-		$BODY.on('click', '.drawButton', function () {
-			$game.$player.startSeeding('draw');
-			$BODY.on('mousedown touchstart', '.gameboard', function() {
-				$game.$player.drawFirstSeed();
-				$game.$mouse.drawMode = true;
-			});
-			$BODY.on('mouseup touchend', '.gameboard', function() {
-				$game.$mouse.drawMode = false;
-			});
-		});
+    //decide what to do based on generic mouse click
+    $BODY.on('click', '.gameboard', function (e) {
+      var goAhead = startNewAction();
+      if(goAhead) {
+          var mInfo = {
+          x: e.pageX,
+          y: e.pageY,
+          offX: this.offsetLeft,
+          offY: this.offsetTop,
+          debug: true
+        };
+        $game.$mouse.updateMouse(mInfo,true);
+      }
+    });
 
+    // ************* MENU OVERLAYS *************
+
+    // Toggle display of Changing Room (skinventory)
 		$BODY.on('click', '.skinventoryButton', function () {
-			var goAhead = startNewAction();
-			if(goAhead) {
-				$game.showingSkinventory = true;
-				$('.skinventory').show();
-			} else if($game.showingSkinventory) {
-				$('.skinventory').hide();
-				$game.showingSkinventory = false;
-			}
+      $input.toggleSkinventory()
 		});
 
-		//change cursor on mouse move
-		$BODY.on('mousemove', '.gameboard', function(e) {
-			if( !$game.inTransit && $game.running){
-				var mInfo = {
-					x: e.pageX,
-					y: e.pageY,
-					offX: this.offsetLeft,
-					offY: this.offsetTop,
-					debug: false
-				};
-				$game.$mouse.updateMouse(mInfo, false);
-			}
-		});
+    // Toggle display of Progress window
+    $BODY.on('click', '.progressButton', function () {
+      $input.toggleProgress()
+    });
 
-		//decide what to do based on generic mouse click
-		$BODY.on('click', '.gameboard', function (e) {
-			var goAhead = startNewAction();
-			if(goAhead) {
-					var mInfo = {
-					x: e.pageX,
-					y: e.pageY,
-					offX: this.offsetLeft,
-					offY: this.offsetTop,
-					debug: true
-				};
-				$game.$mouse.updateMouse(mInfo,true);
-			}
-		});
+    // Close Progress window
+    $BODY.on('click', '.progressArea a i', function (e) {
+      e.preventDefault()
+      $input.closeProgress()
+      return false
+    });
+
+    // Toggle display of Help window
+    $BODY.on('click', '.helpButton', function () {
+      $input.toggleHelp()
+    })
+
+    // Close Help window
+    $BODY.on('click', '.helpArea a i', function (e) {
+      e.preventDefault()
+      $input.closeHelp()
+      return false
+    })
+
+
+    // ************* INVENTORY OVERLAYS *************
+
+    //show / hide the inventory
+    $BODY.on('click', '.inventoryButton, .inventory button', function () {
+      var goAhead = startNewAction();
+      if(goAhead || $game.$player.inventoryShowing) {
+        $input.toggleInventory()
+      }
+      return false;
+    });
+
+    //show / hide the seed inventory, start blinking
+    $BODY.on('click', '.seedButton', function () {
+      var goAhead = startNewAction();
+      if(goAhead) {
+        $input.openSeedventory()
+      }
+      else {
+        $input.closeSeedventory()
+      }
+    });
+
+    //regular seed select
+    $BODY.on('click', '.regularButton', function () {
+      $game.$player.startSeeding('regular');
+    });
+
+    //draw seed select
+    $BODY.on('click', '.drawButton', function () {
+      $game.$player.startSeeding('draw');
+      $BODY.on('mousedown touchstart', '.gameboard', function() {
+        $game.$player.drawFirstSeed();
+        $game.$mouse.drawMode = true;
+      });
+      $BODY.on('mouseup touchend', '.gameboard', function() {
+        $game.$mouse.drawMode = false;
+      });
+    });
+
+    // ************* PROGRESS WINDOW INTERACTIONS *************
+
+    //view all player resource answers
+    $BODY.on('click', '.collectedButton', function() {
+      $('.collectedResources').show();
+    });
+
+    //go back to progress menu from player resource answers
+    $BODY.on('click', '.collectedResources .backToProgress', function() {
+      $('.collectedResources').hide();
+    });
+
+    // ************* RESOURCE WINDOW INTERACTIONS *************
+
+    // ************* OTHER GAMEBOARD HUD ELEMENTS *************
+
 
 		//send a chat message, pulled from chat field
 		$BODY.on('click', '#chatButton', function (e) {
@@ -173,28 +189,6 @@ var $input = $game.$input = module.exports = {
 
 		$BODY.on('click', '.gameLog', function() {
 			$game.$log.clearUnread();
-		});
-
-		//show / hide the inventory
-		$BODY.on('click', '.inventoryButton, .inventory button', function () {
-			var goAhead = startNewAction();
-			if(goAhead || $game.$player.inventoryShowing) {
-			// if($game.startNewAction) {
-				if($game.$player.inventoryShowing) {
-					$inventory.slideUp(function() {
-						$game.$player.inventoryShowing = false;
-						$('.inventoryButton').removeClass('currentButton');
-					});
-				}
-				else {
-					$inventory.slideDown(function() {
-						$game.$player.inventoryShowing = true;
-						$displayBoxText.text('click items to view again');
-						$('.inventoryButton').addClass('currentButton');
-					});
-				}
-			}
-			return false;
 		});
 
 		//close the resource area
@@ -281,36 +275,6 @@ var $input = $game.$input = module.exports = {
 			return false;
 		});
 
-		//close progress area
-		$BODY.on('click', '.progressArea a i', function (e) {
-			e.preventDefault();
-			$('.progressButton').removeClass('currentButton');
-			$progressArea.hide();
-			$game.showingProgress = false;
-			return false;
-		});
-
-		//toggle minimap
-		// $BODY.on('click', '.activePlayers', function () {
-		// 	$('#minimapPlayer').toggleClass('hide');
-		// });
-
-		//open or close progress area
-		$BODY.on('click', '.progressButton', function () {
-			if($game.showingProgress) {
-				$(this).toggleClass('currentButton');
-				$progressArea.hide();
-				$game.showingProgress = false;
-			}
-			else {
-				var goAhead = startNewAction();
-				if(goAhead) {
-					$(this).toggleClass('currentButton');
-					$game.showProgress();
-				}
-			}
-		});
-
 		//toggle audio on/off
 		$BODY.on('click', '.muteButton', function () {
       if($game.$audio.toggleMute() === true) {
@@ -319,18 +283,6 @@ var $input = $game.$input = module.exports = {
       else {
         $input.unmuteAudio()
       }
-		});
-
-		//show or hide help area
-		$BODY.on('click', '.helpButton', function () {
-      $input.toggleHelp()
-		});
-
-		//close help area
-		$BODY.on('click', '.helpArea a i', function (e) {
-      e.preventDefault()
-      $input.closeHelp()
-      return false
 		});
 
 		//tooltip for HUD controls
@@ -374,16 +326,6 @@ var $input = $game.$input = module.exports = {
 					$('.resourceArea .feedback').fadeOut();
 				}, 3000);
 			}
-		});
-
-		//view all player resource answers
-		$BODY.on('click', '.collectedButton', function() {
-			$('.collectedResources').show();
-		});
-
-		//go back to progress menu from player resource answers
-		$BODY.on('click', '.collectedResources .backToProgress', function() {
-			$('.collectedResources').hide();
 		});
 
 		$BODY.on('click', '.bossArea .bossButton', function () {
@@ -446,22 +388,43 @@ var $input = $game.$input = module.exports = {
       ) ? true : false
 		};
 
+    var acceptKeyInput = function () {
+      return (!$('input, textarea').is(':focus')) ? true : false
+    }
+
     // Keybindings for actions
     $BODY.keydown(function (e) {
+      // If escape is pressed, cancels  any current action and returns to default gameboard view
+      if (e.which === 27) {
+        // Close any overlays
+        $input.closeInventory()
+        $input.closeSeedventory()
+        $input.closeProgress()
+        $input.closeHelp()
+
+        // Unfocus chat input box
+        if ($chatText.is(':focus')) {
+          $chatText.blur()
+        }
+
+        // Sets cursor to walk action
+      }
 
       // Allow keyboard inputs only when gameboard is active.
       if (!startNewAction()) return
 
+      if (!acceptKeyInput()) return
+
       // Refuse inputs if Ctrl or Command is pressed so that the game doesn't overwrite other system/client command keys
-      // This does not cover the 'fn' or 'option'/'alt' keys (should it?)
-      if (e.ctrlKey === true || e.metaKey === true) return
+      // This does not cover Mac's fn' key
+      if (e.ctrlKey === true || e.metaKey === true || e.altKey === true) return
+
       // Refuse inputs if a form input has focus
 
       // Attach keys to actions
-//      e.preventDefault()
-      $game.alert(e.which)
       switch (e.which) {
-        // WASD or arrow key movement controls.
+        // **** MOVEMENT ****
+        // Each movement event has .preventDefault() to prevent it from scrolling browser window
         case 87:  // 'w' 
         case 38:  // 'up arrow', 'numpad 2' (numlock on)
         case 104: // 'numpad 2' (numlock off)
@@ -494,16 +457,20 @@ var $input = $game.$input = module.exports = {
           e.preventDefault()
           $game.alert('Move right')
           break
-        // Chat
+        // **** CHAT ****
         case 84:  // 't'
         case 13:  // 'enter'
           // Focus chat input field.
+          e.preventDefault() // prevent 't' from appearing in the input.
           $input.focusChatInput()
           break
-        // Display overlays
+        // **** DISPLAY HUD OVERLAYS & WINDOWS ****
         case 73:  // 'i'
           // Display inventory overlay.
-          $game.alert('Show inventory')
+          $input.toggleInventory()
+          break
+        case 79:  // 'o'
+          // Seedventory
           break
         case 77:  // 'm'
           // Toggles minimap.
@@ -511,25 +478,18 @@ var $input = $game.$input = module.exports = {
           break
         case 67:  // 'c'
           // Changing room
-          $game.alert('Changing room')
+          $input.toggleSkinventory()
           break
-        // Seedventory
         case 80: // 'p'
           // Progress
-          $game.alert('Progress')
+          $input.toggleProgress()
           break
         case 72:  // 'h'
         case 191: // 'question mark'
           // Help
           $input.toggleHelp()
           break
-        // Cancels any current action and returns to default gameboard view
-        case 27:  // 'escape'
-          // Close any overlays
-          // Removes focus from chat
-          // Sets cursor to walk action
-          break
-        // Default switch, no action.
+        // Default switch: all other key presses, no action.
         default:
           break
       }
@@ -542,6 +502,89 @@ var $input = $game.$input = module.exports = {
 
   toggleMinimap: function () {
     $('#minimapPlayer').toggleClass('hide')
+  },
+
+  openSeedventory: function () {
+    //this mean seedventory is DOWN
+    //the user clicked meaning they want to open or end seed mode
+    //END seed mode
+    if($game.$player.seedMode) {
+      $BODY.off('mousedown touchend', '.gameboard');
+      $BODY.off('mouseup touchend', '.gameboard');
+      $('.graffiti').hide();
+      $game.$mouse.drawMode = false;
+      $game.$player.seedMode = false;
+      $game.$player.seedPlanting = false;
+      $game.$player.resetRenderColor();
+      $(this).removeClass('currentButton');
+      $game.$player.saveMapImage();
+      $game.$player.saveSeeds();
+    }
+    else {
+      //open it up OR turn it on
+      $game.$player.openSeedventory();
+    }
+  },
+//$game.$player.seedventoryShowing
+  closeSeedventory: function () {
+    //if it is UP, then we want to clsoe it and turn it off
+    if($game.$player.seedventoryShowing) {
+      $BODY.off('mousedown touchend', '.gameboard');
+      $BODY.off('mouseup touchend', '.gameboard');
+      $game.$mouse.drawMode = false;
+      $('.seedventory').slideUp(function() {
+        $game.$player.seedventoryShowing = false;
+      });
+    }
+    else {
+      $BODY.off('mousedown touchend', '.gameboard');
+      $BODY.off('mouseup touchend', '.gameboard');
+      $game.$mouse.drawMode = false;
+      $game.$player.seedPlanting = false;
+    }
+    $('.graffiti').hide();
+    $(this).removeClass('currentButton');
+    $game.$player.saveMapImage();
+  },
+
+  toggleInventory: function () {
+    if($game.$player.inventoryShowing) {
+      $input.closeInventory()
+    }
+    else {
+      $inventory.slideDown(function() {
+        $game.$player.inventoryShowing = true;
+        $displayBoxText.text('click items to view again');
+        $('.inventoryButton').addClass('currentButton');
+      });
+    }
+  },
+
+  closeInventory: function () {
+    $inventory.slideUp(function() {
+      $game.$player.inventoryShowing = false;
+      $('.inventoryButton').removeClass('currentButton');
+    });
+  },
+
+  toggleSkinventory: function () {
+    $game.showingSkinventory = !$game.showingSkinventory
+    $('.skinventory').toggle()
+  },
+
+  toggleProgress: function () {
+    $game.showingProgress = !$game.showingProgress
+    if ($game.showingProgress) {
+      $game.showProgress()
+    }
+    $('.progressButton').toggleClass('currentButton');
+    $progressArea.toggle()
+  },
+
+  closeProgress: function () {
+    $game.showingProgress = false
+    $('.progressButton').removeClass('currentButton')
+    $progressArea.hide()
   },
 
   toggleHelp: function () {
@@ -573,7 +616,11 @@ var $input = $game.$input = module.exports = {
         break
       case 'show me the money':
         $game.$input._cheatActivated('Adding 500 seeds.')
-        $game.$player.updateSeeds('regular', 500)
+        $game.$player.addSeeds('regular', 500)
+        break
+      case 'loki':
+        $game.$input._cheatActivated('Debug seed amount.')
+        $game.$player.setSeeds('regular', 1)
         break
       case 'ding me':
         $game.$input._cheatActivated('Leveling up!')
