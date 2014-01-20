@@ -176,7 +176,7 @@ module.exports.global = [
         "dialog": {
             "prompts": [],
             "smalltalk": [
-                "My Great Grandma Turnip used to always say ”Unless you try to do something beyond what you have already mastered, you will never grow.”  I’m not sure if she meant that literally or figuratively. It also sounds like something Emerson once said, but what do I know? I‘m just a turnip.",
+                "My Great Grandma Turnip used to always say “Unless you try to do something beyond what you have already mastered, you will never grow.”  I’m not sure if she meant that literally or figuratively. It also sounds like something Emerson once said, but what do I know? I’m just a turnip.",
                 "Did you know you can chat with other players?",
                 ""
             ]
@@ -747,7 +747,7 @@ module.exports.global = [
         "dialog": {
             "prompts": [
                 "Bloop dee doop bloop! Beep boop? Oh. Sorry. You don’t speak bloopian. What I said was: Are you here to help us? If so, I think we can help you help us!",
-                "This bloopin‘ thing won‘t answer itself!",
+                "This bloopin’ thing won’t answer itself!",
                 "If you haven’t already talked to Zeebo, I bet he has some junk you could use to fix this mess!"
             ],
             "smalltalk": []
@@ -783,7 +783,7 @@ module.exports.global = [
         "dependsOn": null,
         "dialog": {
             "prompts": [
-                " On my way home yesterday I found this. Maybe it can help?",
+                "On my way home yesterday I found this. Maybe it can help?",
                 "Maybe you could try again. I take this stuff seriously you know! I won’t just give this thing to anyone.",
                 "Hope that thing helps."
             ],
@@ -899,7 +899,7 @@ module.exports.global = [
                 "C) Somerville, Worcester, and Medford",
                 "D) Grafton, Worcester, and Medford"
             ],
-            "question": "Do you remember the three communities that are considered Tufts ”host communities”?",
+        "question": "Do you remember the three communities that are considered Tufts “host communities”?",
             "questionType": "multiple",
             "shape": "correct4",
             "url": "2803"
@@ -916,7 +916,7 @@ module.exports.global = [
         "dialog": {
             "prompts": [
                 "I heard that this far off place called Medford has the Mystic River running through it. Awesome!",
-                "Aw, c‘mon man! I want to know!",
+                "Aw, c’mon man! I want to know!",
                 "Thats groovy, man. I DIG. The gnarliest thing is learning about cool places! Makes you feel, you know, all like connected."
             ],
             "smalltalk": []
@@ -1055,7 +1055,7 @@ module.exports.global = [
             "smalltalk": [
                 "Those Paintbrush Seeds are great for getting those hard to reach places!",
                 "Those Paintbrush Seeds are great for getting those hard to reach places! How many have you found?",
-                "Not that I’m not happy to see you, but shouldn‘t you be in the Forest?"
+                "Not that I’m not happy to see you, but shouldn’t you be in the Forest?"
             ]
         },
         "__v": 1
@@ -1101,9 +1101,9 @@ module.exports.global = [
         "dependsOn": null,
         "dialog": {
             "prompts": [
-                "Howdy, youngin‘. My name is ChickenBob, the chickenest bob in all of Calliope. I got this here thangy that might help stop that darn robot from doin‘ all that color swipin‘.  Help me with somethin‘ and I’ll give it to ya.",
-                "Who do you think I am, youngin‘? You gotta put two turnips into the farm before you harvest the crops, ya know? Try again.",
-                "Hey, allright! You take care now, ya hear? You see that machine,  you call up ChickenBob and he‘ll bust it up allright!"
+                "Howdy, youngin’. My name is ChickenBob, the chickenest bob in all of Calliope. I got this here thangy that might help stop that darn robot from doin’ all that color swipin’.  Help me with somethin’ and I’ll give it to ya.",
+                "Who do you think I am, youngin’? You gotta put two turnips into the farm before you harvest the crops, ya know? Try again.",
+                "Hey, allright! You take care now, ya hear? You see that machine,  you call up ChickenBob and he’ll bust it up allright!"
             ],
             "smalltalk": []
         },
@@ -1136,8 +1136,8 @@ module.exports.global = [
             "prompts": [],
             "smalltalk": [
                 "Did you know there are wacky secrets hidden around town? You need to talk to us to find them!",
-                "One day I washed up on the shore and ChickenBob gave me a home on the ranch. There are some great folks living in this place! It’s good to get to know them. I think that‘s good advice for all places!",
-                "A wise Lorax once said: ”Unless someone like you cares a whole awful lot, nothing is going to get better. It’s not.”"
+                "One day I washed up on the shore and ChickenBob gave me a home on the ranch. There are some great folks living in this place! It’s good to get to know them. I think that’s good advice for all places!",
+                "A wise Lorax once said: “Unless someone like you cares a whole awful lot, nothing is going to get better. It’s not.”"
             ]
         },
         "id": 36,
@@ -1321,7 +1321,7 @@ module.exports.global = [
         "dependsOn": null,
         "dialog": {
             "prompts": [
-                "Before I came to Calliope, I used to live in this place with other mushrooms. It was cool, until this huge spiky turtle dragon thing started wrecking everything! That’s when I found this place. I loved it here, that is until a robot stole all the color. Can’t a mushshroom get a break? I’m sick of moving, so I’ll help you stop this thing if you do something for me first.",
+                "Before I came to Calliope, I used to live in this place with other mushrooms. It was cool, until this huge spiky turtle dragon thing started wrecking everything! That’s when I found this place. I loved it here, that is until a robot stole all the color. Can’t a mushroom get a break? I’m sick of moving, so I’ll help you stop this thing if you do something for me first.",
                 "Be a star. Answer the question!",
                 "Sorry, but your other resources are probably in another castle... er... area."
             ],
