@@ -291,7 +291,7 @@ var $player = $game.$player = {
 
 	//decide what type of seed drop mechanic to do and check if they have seeds
 	dropSeed: function(options) {
-		if(options.x) {
+		if (options.x !== undefined && options.x >= 0) {
 			options.mX = $game.$map.currentTiles[options.x][options.y].x;
 			options.mY = $game.$map.currentTiles[options.x][options.y].y;	
 		}
