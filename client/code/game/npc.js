@@ -305,7 +305,7 @@ $game.$npc = {
 				} else {
 					levelPlace = 'southeast';
 				}
-				_speak = 'You should go explore the ' + levelPlace + '.';
+				_speak = 'You should go explore ' + $game.world[levelPlace].name + ', in the ' + levelPlace + '.';
 			}
 			//they have a response for past, present, future
 			else {

@@ -402,28 +402,28 @@ var $audio = $game.$audio = {
 		//check for botanist's place first
 		if(posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
 			trackRegion = 5;
-			_newPlace = 'entering the botanist\'s garden';
+			_newPlace = 'entering ' + $game.world.origin.name;
 		}
 		else {
 			//3 bottom right
 			if(diffX > 0 && diffY > 0) {
 				trackRegion = 2;
-				_newPlace = 'entering the ranch';
+				_newPlace = 'entering ' + $game.world.southeast.name;
 			}
 			//2 top right
 			else if(diffX > 0 && diffY < 0) {
 				trackRegion = 1;
-				_newPlace = 'entering the town';
+				_newPlace = 'entering ' + $game.world.northeast.name;
 			}
 			//1 top left
 			else if(diffX < 0 && diffY < 0) {
 				trackRegion = 0;
-				_newPlace = 'entering the forest';
+				_newPlace = 'entering ' + $game.world.northwest.name;
 			}
 			//4 bottom left
 			else if(diffX < 0 && diffY > 0) {
 				trackRegion = 3;
-				_newPlace = 'entering the port';
+				_newPlace = 'entering ' + $game.world.southwest.name;
 			}
 			//no man/s land
 			else {

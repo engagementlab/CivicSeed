@@ -350,6 +350,32 @@ var $game = module.exports = {
       }
     }
   },
+  world: {
+    'origin': {
+      'shortname': 'botanist’s garden',
+      'name': 'the Botanist’s Garden'
+    },
+    'northwest': {
+      'shortname': 'forest',
+      'name': 'Brightwood Forest'
+    },
+    'northeast': {
+      'shortname': 'town',
+      'name': 'Calliope Town'
+    },
+    'southeast': {
+      'shortname': 'ranch',
+      'name': 'The Ranch'
+    },
+    'southwest': {
+      'shortname': 'port',
+      'name': 'Port District'
+    },
+    'nowhere': {
+      'shortname': 'equator',
+      'name': 'No Man’s Land'
+    }
+  },
 
   startNewAction: true,
 
