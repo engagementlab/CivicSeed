@@ -674,7 +674,7 @@ module.exports.global = [
         "dialog": {
             "prompts": [
                 "Hello there! Have you ever thought about how the alphabet would sound if it was one big word? Something like “ab-keddef-gajihkel-monop-quristuv-wixyz.” My head hurts just saying that! Anyway, I found this unusual looking thing. I will give it to you, but first I have make sure you will use it properly.",
-                "You’re silly. Maybe you should say that alphabet-word outloud. Or at least answer that question for me.",
+                "You’re silly. Maybe you should say that alphabet-word out loud. Or at least answer that question for me.",
                 "You are the best! Make good use of that shape."
             ],
             "smalltalk": []
@@ -1902,7 +1902,7 @@ module.exports.global = [
     {
         "dependsOn": null,
         "id": 61,
-        "index": 10797,
+        "index": 10800,
         "isHolding": false,
         "level": 3,
         "name": "Smalls",
