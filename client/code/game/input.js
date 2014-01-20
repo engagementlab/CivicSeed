@@ -338,11 +338,11 @@ var $input = $game.$input = module.exports = {
 		});
 
 		$BODY.on('click', '.outer', function () {
-			var locked = $(this).find('i').hasClass('locked');
+			var locked = $(this).hasClass('locked');
 			if(!locked) {
 				var parent = $(this).parent();
-				$(parent).children().removeClass('currentPart');
-				$(this).addClass('currentPart');
+				$(parent).children().removeClass('equipped');
+				$(this).addClass('equipped');
 
 				var part = $(parent).attr('data-part');
 				var child = $(this).children().first(),

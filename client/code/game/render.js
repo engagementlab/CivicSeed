@@ -880,12 +880,12 @@ var $renderer = $game.$renderer = {
 			var name = _skinSuitNames[i],
 				bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + name + '.png';
 
-			var head = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			var head = $('<div class="outer locked"><div class="' + name + '" data-name="' + name + '"><i class="fa fa-lock"></i></div></div>');
 			$('.head').append(head);
 
 			//check if currently selected
 			if(name === playerSuit.head) {
-				head.addClass('currentPart');
+				head.addClass('equipped');
 			}
 
 			var headSpan = $('.head .' + name);
@@ -894,27 +894,23 @@ var $renderer = $game.$renderer = {
 			for(var h = 0; h < unlocked.head.length; h++) {
 				if(unlocked.head[h] === name) {
 					headUnlocked = true;
+					head.removeClass('locked')
 					headSpan.css({
 						background: 'url(' + bg + ')'
 					});
+					headSpan.html('')
 					break;
 				}
-			}
-			if(!headUnlocked) {
-				//show lock
-				headSpan.html('<i class="locked fa fa-lock"></i>');	
-			} else {
-				headSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			headSpan.addClass('bodypart');
 
-			var torso = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			var torso = $('<div class="outer locked"><div class="' + name + '" data-name="' + name + '"><i class="fa fa-lock"></i></div></div>');
 			$('.torso').append(torso);
 
 			//check if currently selected
 			if(name === playerSuit.torso) {
-				torso.addClass('currentPart');
+				torso.addClass('equipped');
 			}
 
 			var torsoSpan = $('.torso .' + name);
@@ -923,28 +919,24 @@ var $renderer = $game.$renderer = {
 			for(var t = 0; t < unlocked.torso.length; t++) {
 				if(unlocked.torso[t] === name) {
 					torsoUnlocked = true;
+					torso.removeClass('locked')
 					torsoSpan.css({
 						background: 'url(' + bg + ')',
 						backgroundPosition: '0 -30px'
 					});
+					torsoSpan.html('')
 					break;
 				}
-			}
-			if(!torsoUnlocked) {
-				//show lock
-				torsoSpan.html('<i class="locked fa fa-lock"></i>');	
-			} else {
-				torsoSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			torsoSpan.addClass('bodypart');
 
-			var legs = $('<div class="outer"><div class="' + name + '" data-name="' + name + '"></div></div>');
+			var legs = $('<div class="outer locked"><div class="' + name + '" data-name="' + name + '"><i class="fa fa-lock"></i></div></div>');
 			$('.legs').append(legs);
 
 			//check if currently selected
 			if(name === playerSuit.legs) {
-				legs.addClass('currentPart');
+				legs.addClass('equipped');
 			}
 
 			var legsSpan = $('.legs .' + name);
@@ -953,18 +945,14 @@ var $renderer = $game.$renderer = {
 			for(var l = 0; l < unlocked.legs.length; l++) {
 				if(unlocked.legs[l] === name) {
 					legsUnlocked = true;
+					legs.removeClass('locked')
 					legsSpan.css({
 						background: 'url(' + bg + ')',
 						backgroundPosition: '0 -45px'
 					});
+					legsSpan.html('')
 					break;
 				}
-			}
-			if(!legsUnlocked) {
-				//show lock
-				legsSpan.html('<i class="locked fa fa-lock"></i>');	
-			} else {
-				legsSpan.html('<i class="fa fa-lock"></i>');
 			}
 
 			legsSpan.addClass('bodypart');
@@ -975,8 +963,8 @@ var $renderer = $game.$renderer = {
 		var bg = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skinSuit + '.png';
 
 		var head = $('.head .' + skinSuit);
-		head.find('i').removeClass('locked');
-
+		head.parent('.outer').removeClass('locked');
+		head.find('i').remove()
 
 		head.css({
 			background: 'url(' + bg + ')',
@@ -984,7 +972,8 @@ var $renderer = $game.$renderer = {
 		});
 
 		var torso = $('.torso .' + skinSuit);
-		torso.find('i').removeClass('locked');
+		torso.parent('.outer').removeClass('locked');
+		torso.find('i').remove()
 
 		torso.css({
 			background: 'url(' + bg + ')',
@@ -992,7 +981,8 @@ var $renderer = $game.$renderer = {
 		});
 
 		var legs = $('.legs .' + skinSuit);
-		legs.find('i').removeClass('locked');
+		legs.parent('.outer').removeClass('locked');
+		legs.find('i').remove()
 
 		legs.css({
 			background: 'url(' + bg + ')',

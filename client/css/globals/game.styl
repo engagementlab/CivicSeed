@@ -70,8 +70,6 @@ p, li, button, a
 		font-size 2em
 	h3
 		color $csGreen
-	p
-		font-family $buttonFont
 
 .overlayContent
 	min-height 320px
@@ -116,6 +114,8 @@ p, li, button, a
 			color #eee
 
 .resourceArea
+	.dialog, .finalQuestion
+		padding-right 50px
 	.feedback
 		display none
 		width 320px
@@ -145,6 +145,7 @@ p, li, button, a
 			display inline-block
 
 .resourceContent
+	// font-family $bodyFont
 	.tangramPiece
 		img
 			// display block
@@ -187,6 +188,50 @@ p, li, button, a
 	.yourAnswer 
 		user-select text
 		background $csLightBlue
+
+.resourceContentBody
+	margin-top -12px    // This position hack allows it to overwrite a contentless p.dialog with a bottom 12px margin.
+	margin-right 30px  // And not overlap the X button
+	height 360px
+	padding 20px
+	border 3px solid $csGray
+	background #333
+	$borderRadius(0)
+	overflow auto
+	color #eee
+	user-select text
+	h1, h2, h3, h4, h5, h6
+		// Allow all size headers to be used in resource text
+		// Verify line-height issues with these.
+		color $csBlue
+		margin-bottom 1em
+	h2
+		// This is default. The line-height override fixes multiple line issues.
+		line-height 1.4em
+	p, blockquote, li
+		// Shouldn't have to set these properties that specifically for the parent
+		// div - something is overriding it.
+		font-family $buttonFont
+		font-size 1.1em
+	p + h2
+		margin-top 20px
+	ul
+		list-style-type square
+	li
+		margin 5px 20px
+
+	.videoResource
+		text-align center
+		background $cloudUrl('img/bg/loading.png') no-repeat center center
+		margin-top 18px     // Ideally, vertically centered. Fake it till you make it
+	.digitalStory
+		margin 150px 0 0 0  // Fake vertical centering
+		font-size 1.5em
+		text-align center
+	.lede
+		margin 60px 30px 0
+		font-size 1.5em
+		line-height 1.6em
 
 
 .progressArea
@@ -397,31 +442,35 @@ p, li, button, a
 				.bodypart
 					width 32px
 					font-size 1.5em
-					color $csBlue
 					text-align center
-					i 
-						display none
-					.locked
-						display inline
-				&:hover
+					color $csBlue
+				&:not(.locked):hover
 					border 2px solid $csGreen
 					background-color white
-			.currentPart
+			.locked
+				&:hover
+					i
+						color $csOrange
+			.equipped
 				border 2px solid $csDarkGreen
 				background-color white
-					
 		.head
 			top 135px
 			.bodypart
-				height 30px				
+				height 30px
+				line-height 30px	
 		.torso
 			top 200px
 			.bodypart
 				height 15px
+				line-height 17px
+				i  // Overrides font-awesome line-height
+					line-height inherit !important
 		.legs
 			top 250px
 			.bodypart
 				height 19px
+				line-height 19px
 
 // END LARGE OVERLAYS
 
@@ -703,8 +752,13 @@ textarea
 		background #222
 		color #dedede
 		$borderRadius(0)
-	div:hover
-		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+		&:hover
+			box-shadow 0 0 4px 2px $csOrange
+		&.highlightBox
+			box-shadow 0 0 0 4px $csOrange
+			&:hover
+				box-shadow 0 0 4px 2px $csLightOrange, 0 0 0 4px $csOrange
+
 
 .hide
 	display none
@@ -808,50 +862,6 @@ div.currentButton
 	line-height: 1.4em
 	margin 40px auto
 	// text-align center
-
-.resourceContentBody
-	margin-top -12px    // This position hack allows it to overwrite a contentless p.dialog with a bottom 12px margin.
-	margin-right 30px  // And not overlap the X button
-	height 360px
-	padding 20px
-	border 3px solid $csGray
-	background #333
-	$borderRadius(0)
-	overflow auto
-	color #eee
-	user-select text
-	h1, h2, h3, h4, h5, h6
-		// Allow all size headers to be used in resource text
-		// Verify line-height issues with these.
-		color $csBlue
-		margin-bottom 1em
-	h2
-		// This is default. The line-height override fixes multiple line issues.
-		line-height 1.4em
-	p, blockquote, li
-		// Shouldn't have to set these properties that specifically for the parent
-		// div - something is overriding it.
-		font-family $buttonFont
-		font-size 1.1em
-	p + h2
-		margin-top 20px
-	ul
-		list-style-type square
-	li
-		margin 5px 20px
-
-	.videoResource
-		text-align center
-		background $cloudUrl('img/bg/loading.png') no-repeat center center
-		margin-top 18px     // Ideally, vertically centered. Fake it till you make it
-	.digitalStory
-		margin 150px 0 0 0  // Fake vertical centering
-		font-size 1.5em
-		text-align center
-	.lede
-		margin 60px 30px 0
-		font-size 1.5em
-		line-height 1.6em
 
 p.townSite
 	font-size 1.4em
@@ -1049,6 +1059,3 @@ p.townSite
 
 .labBackground
 	background $cloudUrl('img/game/lab_bg.png') no-repeat center center 
-
-.highlightBox
-	border 4px solid $csOrange
