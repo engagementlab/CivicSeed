@@ -18,12 +18,13 @@ var _tilesheets = {},
 	_offscreenPlayersCanvas = {},
 	_offscreenPlayersContext = {},
 
-	_backgroundContext = null,
-	_foregroundContext = null,
-	_charactersContext = null,
+  _backgroundContext    = null,
+  _foregroundContext    = null,
+  _charactersContext    = null,
+  _gameboardHudContext  = null,
+  _minimapPlayerContext = null,
+  _minimapTileContext   = null,
 
-	_minimapPlayerContext = null,
-	_minimapTileContext = null,
 	_prevMouseX = 0,
 	_prevMouseY = 0,
 	_hasNpc = false,
@@ -48,12 +49,13 @@ var $renderer = $game.$renderer = {
 		_backgroundContext = document.getElementById('background').getContext('2d');
 		_foregroundContext = document.getElementById('foreground').getContext('2d');
 		_charactersContext = document.getElementById('characters').getContext('2d');
+    _gameboardHudContext = document.getElementById('gameboardHud').getContext('2d')
 
-		_charactersContext.shadowColor = '#000';
-		_charactersContext.fillStyle = '#fff';
-		_charactersContext.textAlign = 'center';
-		_charactersContext.textBaseline = 'bottom';
-		_charactersContext.font = '12pt Inconsolata, monospace';
+    _gameboardHudContext.shadowColor = '#000';
+    _gameboardHudContext.fillStyle = '#fff';
+    _gameboardHudContext.textAlign = 'center';
+    _gameboardHudContext.textBaseline = 'bottom';
+    _gameboardHudContext.font = '12pt Inconsolata, monospace';
 
 		_minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
 		_minimapTileContext = document.getElementById('minimapTile').getContext('2d');
@@ -103,12 +105,13 @@ var $renderer = $game.$renderer = {
 		_offscreenPlayersCanvas = {};
 		_offscreenPlayersContext = {};
 
-		_backgroundContext= null;
-		_foregroundContext= null;
-		_charactersContext= null;
+    _backgroundContext    = null;
+    _foregroundContext    = null;
+    _charactersContext    = null;
+    _gameboardHudContext  = null;
+    _minimapPlayerContext = null;
+    _minimapTileContext   = null;
 
-		_minimapPlayerContext = null;
-		_minimapTileContext = null;
 		_prevMouseX = 0;
 		_prevMouseY = 0;
 		_hasNpc = false;
@@ -517,12 +520,14 @@ var $renderer = $game.$renderer = {
 			$game.TILE_SIZE,
 			$game.TILE_SIZE*2
 		);
-		_charactersContext.save();
-		_charactersContext.shadowBlur = 3;
-		_charactersContext.shadowOffsetX = 0;
-		_charactersContext.shadowOffsetY = 0;
-		_charactersContext.fillText(info.firstName,info.curX + $game.TILE_SIZE / 2, info.curY - 32);
-		_charactersContext.restore();
+
+    // Display player name
+    _gameboardHudContext.save();
+    _gameboardHudContext.shadowBlur = 3;
+    _gameboardHudContext.shadowOffsetX = 0;
+    _gameboardHudContext.shadowOffsetY = 0;
+    _gameboardHudContext.fillText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
+    _gameboardHudContext.restore();
 	},
 
 	//clear the character canvas
@@ -533,6 +538,12 @@ var $renderer = $game.$renderer = {
 			$game.VIEWPORT_WIDTH * $game.TILE_SIZE,
 			$game.VIEWPORT_HEIGHT * $game.TILE_SIZE
 		);
+    _gameboardHudContext.clearRect(
+      0,
+      0,
+      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
+      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+    );
 	},
 
 	//clear a specific region on the character canvas
