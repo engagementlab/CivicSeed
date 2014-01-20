@@ -103,143 +103,123 @@ p.level3
 		margin 10px
 
 .npcs
+	h3
+		font-size 1.4em
+	label
+		color white
+	small
+		color rgba(255,255,255,0.75)
+		font-size 0.85em
+		margin-left 8px
+	input, textarea
+		border 2px solid $csGray
+		background white !important
+	input
+		&.number
+			width 65px
+			margin-right 6px
+			text-align center
+	textarea
+		padding 10px
+		height 95px
+		&.question
+			width 800px
+		&.possible, &.answer
+			width 390px
+			margin-right 20px
+	button
+		padding 10px
+		border 0
+		font-family $buttonFont
+		text-align center
+		line-height 1em
+		color white
+		background $csOrange
+		$borderRadius(3px)
+		&:hover
+			background $csLightOrange
 	.npc
 		margin 20px 0
 		color white
 		position relative
-		p
-			margin 0
-			padding 10px 0 5px 10px
-			-webkit-user-select: none;  
-			-moz-user-select: none;    
-			-ms-user-select: none;      
-			user-select: none;
-		textarea
-			resize none
-			height 80px
-			border none
-			margin 0 0 10px 10px
-		.options 
-			background $csPurple
-			padding 20px 10px
+		user-select none
+		.information, .resource, .smalltalk, .prompts, .skinSuit, .options
+			position relative
+			padding 20px
 		.information
-			background $csGray
-			padding 20px 10px
-			.bg 
+			background $csLightGray
+			color $csBlack
+			height 90px
+			.sprite
+				position absolute
 				width 64px
 				height 64px
-				position absolute
-				top 10px
-				left 20px
-				p
-					color #eee
+				top 16px
+				.sprite-controls
+					position absolute
+					top 6px
+					left 45px
 					font-size 1.5em
-					margin-left 40px
+					color $csGray
 					i 
 						cursor pointer
+						&:hover
+							color $csOrange
 			.npcName
-				margin-left 78px
-				span.regular
-					margin 0 0 0 10px
-					line-height 1.6
+				position absolute
+				left 100px
+				top 28px
+				input
+					font-size 1.4em
+					font-weight bold
+				label
+					display inline-block
+					margin 0 10px
 					font-size 1.3em
+					line-height 1.6
 					font-family $bodyFont
-				textarea
-					width 200px
-					height 26px
-					background #ccc
-					font-size 1.8em
-				input
-					margin-top -2px
-				.areaNumber
-					width 48px
-					text-align center
-				.levelNumber
-					font-size 1.2em
-					line-height 2
-					color $csLightGreen
-					margin-left 20px
-		.resource
-			textarea 
-				height 24px
-				width 240px
-			textarea.required
-				width 40px
-			textarea.question
-				width 800px
-				height 80px
-			textarea.possible, textarea.answer
-				width 390px
-			textarea.url
-				width 200px
-			.smallerFont
-				font-size .9em
-				padding-left 5px
-				color $csLightGreen
-			.questionType
-				input
-					margin 0 0 0 15px
-				span
-					color $csLightGreen
-		.smalltalk
-			background $csOrange
-			padding 10px
+					color $csBlack
 		.resource
 			background $csGreen
-			padding 10px
 			.viewResource
-				color white
-				background $csPurple
-				width 100px
-				font-family $buttonFont
-				padding 5px
-				$borderRadius(5px)
-				text-align center
 				position absolute
-				right 10px
-				cursor pointer
+				right 20px
+				width 100px
+				background $csPurple
+				&:hover
+					background lighten($csPurple, 20%)
+			.questionType
+				display inline-block
+				margin-left 20px
+				input
+					display inline-block
+				label
+					display inline-block
+					margin 0 10px 0 6px
+					color rgba(255,255,255,0.75)
+					font-size 0.85em
+		.smalltalk
+			background $csOrange
 		.prompts 
 			background $csBlue
-			padding 10px
 		.skinSuit
 			background $csLightGreen
-			textarea 
-				height 24px
-				width 240px
-			padding-bottom 20px
-		.category
-			font-size 1.4em
-		.saveChanges
-			background $csOrange
-			color white
-			font-size 1.4em
-			text-align center
-			$borderRadius(5px)
-			padding 10px
-			font-family $buttonFont
-			cursor pointer
-		.deleteNpc
-			background $csLightOrange
-			color white
-			font-size 1.4em
-			text-align center
-			$borderRadius(5px)
-			padding 10px
-			font-family $buttonFont
-			cursor pointer
-			margin 0 0 0 750px
+		.options 
+			background $csPurple
+			button
+				font-size 1.4em
+			.deleteNpc
+				position absolute
+				right 20px
 		.justSaved
 			background $csLightGreen
-	.addNpc
-		background $csGreen
-		color white
-		font-size 1.8em
-		text-align center
-		$borderRadius(5px)
-		padding 20px
-		margin 20px 0 50px 0
-		font-family $buttonFont
-		cursor pointer
+	.addDiv
+		margin 20px 0
+		button.addNpc
+			padding 20px
+			width 100%
+			font-size 1.8em
+			background $csGreen
 	
 .article
 	display none
@@ -266,19 +246,21 @@ p.level3
 
 .levelFilter
 	position fixed
-	top 150px
+	top 176px
 	left 0px
-	background rgba(100,100,100,0.5)
 	margin 0
 	padding 0
-	p 
+	background rgba(100,100,100,0.5)
+	div
 		margin 0
-		text-align right
 		padding 10px 20px
-		cursor pointer
+		border 2px solid #fff
+		text-align right
 		font-family $buttonFont
 		font-size 1.5em
 		color #fff
-		border 2px solid #fff
+		cursor pointer
 	.current
 		background $csOrange
+		&:hover
+			background $csLightOrange

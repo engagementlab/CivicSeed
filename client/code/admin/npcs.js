@@ -10,7 +10,14 @@ var self = module.exports = {
 	},
 
 	setup: function() {
-		$body.on('click', '.levelFilter p', function() {
+
+    // Intercept default browser button actions
+    $('button').on('click', function (e) {
+      e.preventDefault()
+      return false
+    })
+
+		$body.on('click', '.levelFilter div', function() {
 			var level = parseInt($(this).text(),10);
 			$(this).toggleClass('current');
 			var show = $(this).hasClass('current'),
@@ -139,7 +146,7 @@ var self = module.exports = {
 			var sprite = $(this).attr('data-sprite'),
 				locY = sprite * -64,
 				pos = '0 ' + locY + 'px',
-				info = $(this).find('.bg');
+				info = $(this).find('.sprite');
 
 				info.css({
 				'background-image': url,
@@ -151,12 +158,12 @@ var self = module.exports = {
 
 	saveChanges: function(id) {
 		var npc = $('.npcs').find('.npc' + id),
-			informationAreas = npc.find('.information textarea'),
-			resourceAreas = npc.find('.resource textarea'),
+			informationAreas = npc.find('.information textarea, .information input'),
+			resourceAreas = npc.find('.resource textarea, .resource input'),
 			promptAreas = npc.find('.prompts textarea'),
 			smalltalkAreas = npc.find('.smalltalk textarea'),
-			skinSuitArea = npc.find('.skinSuit textarea'),
-			holding = npc.find('.information input')[0].checked,
+			skinSuitArea = npc.find('.skinSuit input'),
+			holding = npc.find('.information .holding')[0].checked,
 			questionType = npc.find('.resource input:checked').val(),
 			sprite = parseInt(npc.attr('data-sprite'),10),
 			updates = {
@@ -249,7 +256,7 @@ var self = module.exports = {
 
 		var skinVal = skinSuitArea.val();
 		// console.log(skinVal);
-		if(skinVal.length > 0) {
+		if(skinVal && skinVal.length > 0) {
 			updates.skinSuit = skinVal;
 		}
 
