@@ -181,10 +181,13 @@ p, li, button, a
 			color white
 		p
 			font-family $buttonFont
-		button
+		.publicButton, .privateButton
 			position absolute
 			right 10px
 			bottom 10px
+			i
+				margin-left 4px
+				color $csDarkBlue
 	.yourAnswer 
 		user-select text
 		background $csLightBlue
@@ -869,9 +872,6 @@ p.townSite
 
 .hideLock
 	display none
-
-.privateButton
-	cursor pointer
 
 .demoProfile
 	p, li

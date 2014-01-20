@@ -292,12 +292,12 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//make your comment public
-		$BODY.on('click', '.publicButton', function() {
+		$BODY.on('click', '.publicButton button', function() {
 			$game.$player.makePublic($(this).attr('data-npc'));
 		});
 
 		//make your comment private
-		$BODY.on('click', '.privateButton', function() {
+		$BODY.on('click', '.privateButton button', function() {
 			$game.$player.makePrivate($(this).attr('data-npc'));
 		});
 

@@ -624,7 +624,7 @@ var $player = $game.$player = {
 			ss.rpc('game.npc.makeResponsePublic', info, function(res) {
 				//take away the make public and replcae with eye?
 				$('.publicButton').remove();
-				$('.yourAnswer').append('<button class="btn btn-info privateButton" data-npc="'+ npcId +'">Make Private <i class="fa fa-unlock-alt fa-lg"></i></button>');
+				$('.yourAnswer').append('<div class="privateButton"><button class="btn btn-info" data-npc="'+ npcId +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>');
 				setTimeout(function() {
 					$game.$player.displayNpcComments();
 				}, 250);
@@ -645,7 +645,7 @@ var $player = $game.$player = {
 			};
 			ss.rpc('game.npc.makeResponsePrivate', info, function(res) {
 				//take away the make public and replcae with eye?
-				$('.yourAnswer').append('<button class="btn btn-info publicButton" data-npc="'+ npcId +'">Make Public <i class="fa fa-lock fa-lg"></i></button>');
+				$('.yourAnswer').append('<div class="publicButton"><button class="btn btn-info" data-npc="'+ npcId +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>');
 				$('.privateButton').remove();
 				//hack to make sure it updates...
 				setTimeout(function() {
