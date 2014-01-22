@@ -398,9 +398,9 @@ var $input = $game.$input = module.exports = {
       if (e.which === 27) {
         // Close any overlays
         $input.closeInventory()
-        $input.closeSeedventory()
         $input.closeProgress()
         $input.closeHelp()
+        $input.endSeedMode()
 
         // Unfocus chat input box
         if ($chatText.is(':focus')) {
@@ -468,6 +468,7 @@ var $input = $game.$input = module.exports = {
           break
         case 79:  // 'o'
           // Seedventory
+          $input.toggleSeedMode()
           break
         case 77:  // 'm'
           // Toggles minimap.
@@ -501,10 +502,30 @@ var $input = $game.$input = module.exports = {
     $('#minimapPlayer').toggleClass('hide')
   },
 
+  toggleSeedMode: function () {
+    if ($game.$player.seedMode === true) {
+      $input.endSeedMode()
+    }
+    else {
+      $input.openSeedventory()
+    }
+  },
+
   openSeedventory: function () {
-    //this mean seedventory is DOWN
-    //the user clicked meaning they want to open or end seed mode
-    //END seed mode
+    // The logic for this is in another controller!
+    $game.$player.openSeedventory()
+  },
+
+  closeSeedventory: function () {
+    $('.seedventory').slideUp(function() {
+      $game.$player.seedventoryShowing = false;
+    })
+  },
+
+  endSeedMode: function () {
+    if($game.$player.seedventoryShowing) {
+      $input.closeSeedventory()
+    }
     if($game.$player.seedMode) {
       $BODY.off('mousedown touchend', '.gameboard');
       $BODY.off('mouseup touchend', '.gameboard');
@@ -514,34 +535,10 @@ var $input = $game.$input = module.exports = {
       $game.$player.seedPlanting = false;
       $game.$player.resetRenderColor();
       $(this).removeClass('currentButton');
+
       $game.$player.saveMapImage();
       $game.$player.saveSeeds();
     }
-    else {
-      //open it up OR turn it on
-      $game.$player.openSeedventory();
-    }
-  },
-//$game.$player.seedventoryShowing
-  closeSeedventory: function () {
-    //if it is UP, then we want to clsoe it and turn it off
-    if($game.$player.seedventoryShowing) {
-      $BODY.off('mousedown touchend', '.gameboard');
-      $BODY.off('mouseup touchend', '.gameboard');
-      $game.$mouse.drawMode = false;
-      $('.seedventory').slideUp(function() {
-        $game.$player.seedventoryShowing = false;
-      });
-    }
-    else {
-      $BODY.off('mousedown touchend', '.gameboard');
-      $BODY.off('mouseup touchend', '.gameboard');
-      $game.$mouse.drawMode = false;
-      $game.$player.seedPlanting = false;
-    }
-    $('.graffiti').hide();
-    $(this).removeClass('currentButton');
-    $game.$player.saveMapImage();
   },
 
   toggleInventory: function () {
@@ -549,19 +546,23 @@ var $input = $game.$input = module.exports = {
       $input.closeInventory()
     }
     else {
-      $inventory.slideDown(function() {
-        $game.$player.inventoryShowing = true;
-        $displayBoxText.text('click items to view again');
-        $('.inventoryButton').addClass('currentButton');
-      });
+      $input.openInventory()
     }
+  },
+
+  openInventory: function () {
+    $inventory.slideDown(function() {
+      $game.$player.inventoryShowing = true
+      $displayBoxText.text('click items to view again')
+      $('.inventoryButton').addClass('currentButton')
+    })
   },
 
   closeInventory: function () {
     $inventory.slideUp(function() {
-      $game.$player.inventoryShowing = false;
-      $('.inventoryButton').removeClass('currentButton');
-    });
+      $game.$player.inventoryShowing = false
+      $('.inventoryButton').removeClass('currentButton')
+    })
   },
 
   toggleSkinventory: function () {
