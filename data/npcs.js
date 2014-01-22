@@ -1085,7 +1085,7 @@ module.exports.global = [
         },
         "dialog": {
             "prompts": [
-                "Welcome to our Ranch! Its pretty cool right? Like, a cool ranch? That reminds me of my favorite snack...wait, what were we doing again? Oh yeah! Busting that color swiping robot! You might need this thing.",
+                "Welcome to our Ranch! It’s pretty cool, right? Like, a cool ranch? That reminds me of my favorite snack... wait, what were we doing again? Oh yeah! Busting that color swiping robot! You might need this thing.",
                 "Get your head out of the dirt and get on this!",
                 "Glad I could help. Make sure you talk to everyone else around the ranch. If you find a snack, hit me up."
             ],
@@ -1242,7 +1242,7 @@ module.exports.global = [
             "prompts": [],
             "smalltalk": [
                 "I think I saw the robot headed over to the port! Did you see him there??",
-                "It’s great that you came to Calliope to help us. It’s a great responsibility. You know, like Spiderman! Great power is responsibility and its important. Something like that.",
+                "It’s great that you came to Calliope to help us. It’s a great responsibility. You know, like Spiderman! Great power is responsibility and it’s important. Something like that.",
                 "It would be better for you to visit the Forest or maybe the Town first."
             ]
         },
@@ -1256,7 +1256,7 @@ module.exports.global = [
         "dependsOn": null,
         "dialog": {
             "prompts": [
-                "My name always gets me in trouble. People kept blaming me for the lack of color! Like, just because my name means “rascal” doesn’t mean I’m a bad guy! You don’t think I’m a bad guy do you? Here! I got something that will help you! That will show em!",
+                "My name always gets me in trouble. People kept blaming me for the lack of color! Like, just because my name means “rascal” doesn’t mean I’m a bad guy! You don’t think I’m a bad guy do you? Here! I got something that will help you! That will show ’em!",
                 "Well... I think you could do better. I just don’t want to give up this piece if it isn’t going to someone who will help us.",
                 "See! I told you I was a good guy! That should go to show that judging someone based on a first impression isn’t a good idea!"
             ],
@@ -1427,7 +1427,7 @@ module.exports.global = [
             "feedbackRight": "Way to take action!",
             "feedbackWrong": "",
             "possibleAnswers": [],
-            "question": "Which of the bulleted recomendations, if any, will you commit to?",
+            "question": "Which of the bulleted recommendations, if any, will you commit to?",
             "questionType": "open",
             "requiredLength": 50,
             "shape": "wrong3",

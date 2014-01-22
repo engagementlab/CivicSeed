@@ -23,7 +23,7 @@ module.exports.global = {
 		},
 		hint: ['You must go to the northeast and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back into the town of Calliope, in the northeast section of the world, and talk to some more people.']
 	}, {
-		instructions: ['To find research for the third puzzle, journey to the Ranch, located in the southeast section of the world.','Working Together, is about feflecting on intercultural, social, and socio-economic identities, along with developing practical skills and common goals.','Working together successfully is dependent on building mutual trust and understanding, developing mutually beneficial goals, and having the skills needed for project implementation.'],
+		instructions: ['To find research for the third puzzle, journey to the Ranch, located in the southeast section of the world.','Working Together, is about reflecting on intercultural, social, and socio-economic identities, along with developing practical skills and common goals.','Working together successfully is dependent on building mutual trust and understanding, developing mutually beneficial goals, and having the skills needed for project implementation.'],
 		riddle: {
 			prompts: ['Here, take a look at the next seed puzzle from my notebook.', 'I think you have the right pieces to make the paintbrush seeds! Want to try?'],
 			response: 'Great work! Now you’re ready to move to level 4.'
@@ -37,7 +37,7 @@ module.exports.global = {
 		},
 		hint: ['You must go to the southwest and talk to some people to collect the research pieces. You can see how many pieces are available by looking at the empty spaces in your inventory.', 'Hmmm... It looks like you don\'t have enough research pieces to solve the puzzle! Go back to the Port District, in the southwest section of the world, and talk to some more people.']
 	}, {
-		instructions: ['Ah the color has not yet been restored to the world. You can use your remaining seeds to help it out.', 'I will contact you when the color has returned to the world.'],
+		instructions: ['Ah, the color has not yet been restored to the world. You can use your remaining seeds to help it out.', 'I will contact you when the color has returned to the world.'],
 		riddle: {
 			prompts: ['Wanna see it?  Do you?', 'Wanna solve it? Think you are ready?'],
 			response: 'ya'

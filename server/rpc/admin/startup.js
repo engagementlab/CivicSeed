@@ -6,7 +6,7 @@ var rootDir = process.cwd(),
 	dbActions = require(rootDir + '/server/utils/database-actions'),
 	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 
-	userModel = service.useModel('user', 'preload'),
+	userModel = service.useModel('user', 'preload'),    
 	tileModel = service.useModel('tile', 'preload'),
 	colorModel = service.useModel('color', 'preload'),
 	npcModel = service.useModel('npc', 'preload'),

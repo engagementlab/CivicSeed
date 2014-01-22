@@ -149,7 +149,7 @@ $game.$map = {
 	//add a player to the minimap
 	addPlayer: function(id, x, y, col) {
 		$game.$map.miniMap[id] = {};
-		$game.$map.miniMap[id].x = x,
+		$game.$map.miniMap[id].x = x;
 		$game.$map.miniMap[id].y = y;
 		$game.$map.miniMap[id].col = col;
 		$game.$map.render();
