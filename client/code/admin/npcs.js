@@ -190,13 +190,12 @@ var self = module.exports = {
 				name: null,
 				skinSuit: null
 			};
-			
 
 		//update information
-		var x,y;
-		informationAreas.each(function(i) {
-			var area = $(this).attr('data-area'),
-				val = this.value;
+    var x,y;
+    informationAreas.each(function(i) {
+      var area = $(this).attr('data-area'),
+          val  = self._prettify(this.value);
 
 			if(area === 'name') {
 				updates.name = val;
@@ -213,7 +212,7 @@ var self = module.exports = {
 
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
-				val = this.value;
+				val =  self._prettify(this.value);
 			if(area === 'url') {
 				updates.resource.url = val;
 			} else if(area === 'shape') {
@@ -237,7 +236,7 @@ var self = module.exports = {
 
 		promptAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
-				val = this.value;
+				val = self._prettify(this.value);
 
 			if(area === 'prompt') {
 				updates.dialog.prompts.push(val);
@@ -247,7 +246,7 @@ var self = module.exports = {
 		smalltalkAreas.each(function(i) {
 
 			var area = $(this).attr('data-area'),
-				val = this.value;
+				val = self._prettify(this.value);
 
 			if(area === 'smalltalk') {
 				updates.dialog.smalltalk.push(val);
@@ -333,6 +332,23 @@ var self = module.exports = {
 				});
 			}
 		}
-	}
+	},
+
+  // Generic input prettification. This may be more useful elsewhere as well.
+  _prettify: function (input) {
+    var output = input.toString()
+
+    // Trim trailing whitespace & collapse whitespace in the interior of a string
+    output = output.trim().replace(/\s+/g, ' ')
+
+    // Replace straight quotes with curly quotes
+    output = output.replace(/"([^"]*)"/g, '“$1”')  // Replaces straight quotes around any number of non-quotation marks
+    output = output.replace(/([A-Za-z])\'([A-Za-z])/, '$1’$2')    // Replaces ' between any letter characters
+    output = output.replace(/(\s)\'([A-Za-z])/g, '$1‘$2')         // Replaces ' at the start of a word
+    output = output.replace(/([A-Za-z])\'(\s)/g, '$1’$2')         // Replaces ' at the end of a word
+    output = output.replace(/^\'/gm, '‘')                         // Replaces ' at the start of a line
+
+    return output
+  }
 
 };
