@@ -523,6 +523,25 @@ p, li, button, a
 	$borderRadius(0)
 	z-index 9999
 	display none
+	button
+		bottom 15px
+		right 15px
+
+.seedventory
+	padding-left 10px
+	font-size 24px
+	.seed
+		display inline-block
+		position relative
+		margin 20px 20px 0 10px
+		width 48px
+		cursor pointer
+		color #333             // default seed button color is empty
+		&.active
+			color #eee           // color for active seeds
+		&.selected
+			color $csOrange      // color for selected seed
+
 
 .graffiti
 	position absolute
@@ -668,18 +687,6 @@ p, li, button, a
 		div:hover
 			box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 
-	.seedventory div
-		font-size 24px
-		margin 20px 0 0 10px
-		float left
-		width 48px
-		cursor pointer
-		position relative
-
-	.seedventory
-		padding-left 20px
-		width 140px
-
 .hud div
 	font-size 22px
 	float left
@@ -702,11 +709,6 @@ p, li, button, a
 	color #222
 	font-size 2em
 	margin-top 100px
-
-.inventory button,
-.seedventory button
-	bottom 15px
-	right 15px
 
 .hideButton
 	display none
@@ -773,10 +775,11 @@ textarea
 .badge
 	position absolute
 	top -12px
-	color #333
 	padding 3px
+	border-radius 4px
 	line-height 1.2em
-	$borderRadius(0)
+	color #333
+	background-color $csLightGreen
 
 .botanistContent form
 	padding 20px
@@ -840,6 +843,7 @@ textarea
 	font-family $bodyFont
 
 div.currentButton
+	// see if this is used anywhere else but the game menu
 	background #666
 
 .check, .checkTagline

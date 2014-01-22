@@ -115,11 +115,18 @@ var $input = $game.$input = module.exports = {
 
     //regular seed select
     $BODY.on('click', '.regularButton', function () {
+      // Not particularly scalable but works so far for 2 seeds
+      $('.drawButton').removeClass('selected')
+      $('.regularButton').addClass('selected')
+
       $game.$player.startSeeding('regular');
     });
 
     //draw seed select
     $BODY.on('click', '.drawButton', function () {
+      $('.regularButton').removeClass('selected')
+      $('.drawButton').addClass('selected')
+
       $game.$player.startSeeding('draw');
       $BODY.on('mousedown touchstart', '.gameboard', function() {
         $game.$player.drawFirstSeed();
@@ -507,19 +514,12 @@ var $input = $game.$input = module.exports = {
       $input.endSeedMode()
     }
     else {
-      $input.openSeedventory()
+      $input.startSeedMode()
     }
   },
 
-  openSeedventory: function () {
-    // The logic for this is in another controller!
-    $game.$player.openSeedventory()
-  },
-
-  closeSeedventory: function () {
-    $('.seedventory').slideUp(function() {
-      $game.$player.seedventoryShowing = false;
-    })
+  startSeedMode: function () {
+    $input.openSeedventory()
   },
 
   endSeedMode: function () {
@@ -539,6 +539,19 @@ var $input = $game.$input = module.exports = {
       $game.$player.saveMapImage();
       $game.$player.saveSeeds();
     }
+  },
+
+  openSeedventory: function () {
+    // The logic for this is in another controller!
+    $game.$player.openSeedventory()
+
+    // That should be separated into startSeedMode() or openSeedventory()
+  },
+
+  closeSeedventory: function () {
+    $('.seedventory').slideUp(function() {
+      $game.$player.seedventoryShowing = false;
+    })
   },
 
   toggleInventory: function () {
@@ -634,6 +647,10 @@ var $input = $game.$input = module.exports = {
         for (var skin in $game.playerSkins) {
           $game.$player.updateSkinventory(skin)
         }
+        break
+      case 'pleasantville':
+        $game.$input._cheatActivated('Pleasantville mode active.')
+        // Doesn't actually do anything
         break
       case 'kazaam':
         $game.$input._cheatActivated('Starting collaborative challenge.')

@@ -566,11 +566,12 @@ var $player = $game.$player = {
 		//open up the inventory
 		if(_seeds.draw > 0) {
 			$('.seedventory').slideDown(function() {
-				var col0 = _seeds.regular > 0 ? '#eee': '#333',
-				col1 = _seeds.draw > 0 ? '#eee': '#333';
-
-				$('.regularButton').css('color',col0);
-				$('.drawButton').css('color',col1);
+        if (_seeds.regular > 0) {
+          $('.regularButton').addClass('active');
+        }
+        if (_seeds.draw > 0) {
+          $('.drawButton').addClass('active');
+        }
 
 				$game.$player.seedventoryShowing = true;
 				$game.statusUpdate({message:'choose a seed to plant',input:'status',screen: true,log:false});
