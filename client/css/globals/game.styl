@@ -95,13 +95,20 @@ p, li, button, a
 		// z-index 0
 		// top 0px
 		// left 0px
+	.botanistContent form
+		padding 20px
 	.tangramArea
+		// Need to position this way to allow for piece checking to work. TODO - rethink this better
+		position absolute
+		top 0
+		left 0
 		height 360px
 		padding 0
 		z-index 9998
 		display none
 		.feedback
 			// Similar to the .check style.
+			// TODO: condense
 			width 320px
 			height auto
 			position absolute
@@ -114,6 +121,16 @@ p, li, button, a
 			display none
 			z-index 9999
 			color #eee
+		.puzzleSvg
+			position absolute
+			top 0
+			left 0
+	.trash
+		opacity .5
+		position absolute
+		top 170px
+		right 0px
+
 
 .resourceArea
 	.dialog, .finalQuestion
@@ -426,9 +443,6 @@ p, li, button, a
 		.part
 			position absolute
 			left 50px
-			p
-				float left
-				width 100px
 			.outer
 				cursor pointer
 				float left
@@ -712,12 +726,6 @@ button.closeButton,
 .botanistArea .answerButton, .botanistArea .clearBoardButton, .botanistArea i
 	z-index 9999
 
-.botanistArea .trash
-	opacity .5
-	position absolute
-	top 170px
-	right 0px
-
 .chatBox input
 	width 75%
 	font-size 16px, monospace
@@ -762,9 +770,6 @@ textarea
 	line-height 1.2em
 	color #333
 	background-color $csYellow
-
-.botanistContent form
-	padding 20px
 
 .waitingForSeed
 	width 32px

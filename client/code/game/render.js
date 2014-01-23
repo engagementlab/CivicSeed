@@ -905,6 +905,11 @@ var $renderer = $game.$renderer = {
           break
         }
       }
+
+      // Bind tooltip
+      $el.bind('mouseenter', function() {
+        $(this).tooltip('show')
+      })
     }
 
     // Reset parts
@@ -948,11 +953,6 @@ var $renderer = $game.$renderer = {
     $inner.css('backgroundImage', 'url(' + bg + ')')
     $inner.find('i').remove()
     $inner.html('')
-
-    // Bind tooltip
-    $el.bind('mouseenter', function() {
-      $(this).tooltip('show')
-    })
   },
 
   renderSkinformation: function () {

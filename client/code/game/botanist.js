@@ -260,9 +260,9 @@ $game.$botanist = {
 						$game.$player.saveMapImage(true);
 					} else {
 						$('.progressButton').removeClass('highlightBox');
-						$game.$botanist.showPrompt(0);	
+						$game.$botanist.showPrompt(0);
 					}
-					
+
 				}
 			}
 			//if they have the riddle, then provide a random hint, refer them to inventory is one
@@ -279,7 +279,7 @@ $game.$botanist = {
 				$game.$botanist.showChat();
 
 			}
-			//if they have gathered the right resources, prompt to answer 
+			//if they have gathered the right resources, prompt to answer
 			else if($game.$player.botanistState === 3) {
 				$game.$botanist.showPrompt(1);
 			}
@@ -299,7 +299,7 @@ $game.$botanist = {
 		}
 	},
 
-	//i think this is unused	
+	//i think this is unused
 	showTangram: function() {
 		var file = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png';
 	},
@@ -356,7 +356,7 @@ $game.$botanist = {
 					$speechBubbleNextBtn.addClass('hideButton').unbind('click');
 					$game.$botanist.showPrompt(0);
 				}));
-			} else { 
+			} else {
 				$speechBubbleNextBtn.unbind('click').addClass('hideButton');
 				$speechBubbleCloseBtn.removeClass('hideButton').bind('click', (function () {
 					$game.$botanist.hideChat();
@@ -365,7 +365,7 @@ $game.$botanist = {
 		}
 	},
 
-	//toggle thru the next chat data for botanist 
+	//toggle thru the next chat data for botanist
 	nextChatContent: function() {
 		//show the next message if there are more in the bag
 		if(_currentMessage < _messages.length) {
@@ -404,7 +404,7 @@ $game.$botanist = {
 
 	//show the riddle if the inventory is open and it was clicked
 	inventoryShowRiddle: function() {
-		
+
 		//hide the inventory if the resource is not already visible
 		//when clicked on from inventory (this means it isn't in puzzle mode)
 		if(!$game.$botanist.isShowing) {
@@ -422,7 +422,7 @@ $game.$botanist = {
 		if(num === 1) {
 			$game.$botanist.isChat = true;
 		} else if(num === 2) {
-			_currentSlide = 2;	
+			_currentSlide = 2;
 		}
 		$game.$botanist.addContent();
 		$game.$botanist.addButtons();
@@ -524,7 +524,7 @@ $game.$botanist = {
 					//add this tangram outline to the inventory
 					$game.$player.tangramToInventory();
 					$game.$player.botanistState = 2;
-					
+
 					_saveBotanistState();
 					$game.$player.checkBotanistState();
 					$game.$botanist.setBotanistState(2);
@@ -570,7 +570,7 @@ $game.$botanist = {
 				$botanistAreaMessage.text(postTangramTalk);
 				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</p>',
 					imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
-				
+
 				newHTML2 += '<p class="seedChips"><img src="' + imgPath3 +'"></p>';
 				$botanistContent.html(newHTML2);
 			}
@@ -730,7 +730,7 @@ $game.$botanist = {
 					var numSeeds = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
 						level = $game.$player.currentLevel + 1;
 						totalSeeds = (30 + level * 4 ) + level * 4 * numSeeds;
-					
+
 					$game.$player.updateSeeds('draw', totalSeeds);
 					$game.$player.botanistState = 4;
 					_saveBotanistState();
