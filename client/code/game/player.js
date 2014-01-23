@@ -1086,7 +1086,7 @@ var $player = $game.$player = {
 
   //change up the skin suit the player is wearing and save to db
   setSkinSuit: function(name, part) {
-    if (part) {
+    if (part !== undefined) {
       _skinSuit[part] = name
     }
     else {
@@ -1100,7 +1100,8 @@ var $player = $game.$player = {
       id: $game.$player.id,
       skinSuit: _skinSuit
     })
-    $game.$renderer.createCanvasForPlayer($game.$player.id, false);
+    $game.$renderer.createCanvasForPlayer($game.$player.id, false)
+    $game.$renderer.renderSkinformation()
   }
 };
 

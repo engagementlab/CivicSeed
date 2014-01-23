@@ -76,24 +76,24 @@ var $game = module.exports = {
   playerSkins: {
     'basic': {
       'id': 'basic',
-      'name': 'Basic Look',
+      'name': 'Default Look',
       'description': 'This is you. You look great!',
       'effect': null,
       'modifiers': null,
       'head': {
-        'name': 'Basic Head',
+        'name': 'Default Head',
         'description': 'Your beautiful face.',
         'effect': null,
         'modifiers': null
       },
       'torso': {
-        'name': 'Basic Body',
+        'name': 'Default Body',
         'description': 'Your heart is in here somewhere.',
         'effect': null,
         'modifiers': null
       },
       'legs': {
-        'name': 'Basic Legs',
+        'name': 'Default Legs',
         'description': 'These legs are made for walking.',
         'effect': null,
         'modifiers': null

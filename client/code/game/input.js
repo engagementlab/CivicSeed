@@ -168,10 +168,9 @@ var $input = $game.$input = module.exports = {
     })
 
     $BODY.on('click', '.skinventory .closeButton', function (e) {
-      e.preventDefault();
-      $('.skinventory').hide();
-      $game.showingSkinventory = false;
-      return false;
+      e.preventDefault()
+      $input.closeSkinventory()
+      return false
     });
 
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
@@ -432,7 +431,7 @@ var $input = $game.$input = module.exports = {
       switch (e.which) {
         // **** MOVEMENT ****
         // Each movement event has .preventDefault() to prevent it from scrolling browser window
-        case 87:  // 'w' 
+        case 87:  // 'w'
         case 38:  // 'up arrow', 'numpad 2' (numlock on)
         case 104: // 'numpad 2' (numlock off)
         case 56:  // 'numpad 2' (numlock off/opera)
@@ -586,6 +585,11 @@ var $input = $game.$input = module.exports = {
     $('.skinventory').toggle()
   },
 
+  closeSkinventory: function () {
+    $game.showingSkinventory = false
+    $('.skinventory').hide()
+  },
+
   toggleProgress: function () {
     $game.showingProgress = !$game.showingProgress
     if ($game.showingProgress) {
@@ -656,7 +660,7 @@ var $input = $game.$input = module.exports = {
         $game.$player.resetSkinventory()
         break
       case 'pleasantville':
-        $game.$input._cheatActivated('Pleasantville mode active.')
+        $game.$input._cheatActivated('Welcome to Pleasantville!')
         // Doesn't actually do anything
         break
       case 'kazaam':

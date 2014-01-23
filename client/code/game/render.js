@@ -853,7 +853,7 @@ var $renderer = $game.$renderer = {
           tiles[t].x * $game.TILE_SIZE,
           tiles[t].y * $game.TILE_SIZE,
           $game.TILE_SIZE,
-          $game.TILE_SIZE             
+          $game.TILE_SIZE
         );
       }
     }
@@ -889,7 +889,7 @@ var $renderer = $game.$renderer = {
         skins      = $game.playerSkins
 
     function _render (skin, part) {
-      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(Item locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div></div>',
+      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div></div>',
           $part      = $('.' + part),
           $el        = $(skinHTML)
 
@@ -924,8 +924,8 @@ var $renderer = $game.$renderer = {
       _render(skins[id], 'legs')
     }
 
-    // Display inventory data
-    // ???
+    // Display skinformation
+    $renderer.renderSkinformation()
   },
 
   unlockSkinSuit: function(skin) {
@@ -940,7 +940,7 @@ var $renderer = $game.$renderer = {
 
   _renderUnlockedPart: function ($el, skin, part) {
     // skin is either the name of the skin or the skin object itself
-    // Eitehr way, we want to end up with the skin object.
+    // Either way, we want to end up with the skin object.
     if (typeof skin == 'string') {
       skin  = $game.playerSkins[skin]
     }
@@ -953,6 +953,27 @@ var $renderer = $game.$renderer = {
     $inner.css('backgroundImage', 'url(' + bg + ')')
     $inner.find('i').remove()
     $inner.html('')
+  },
+
+  renderSkinformation: function () {
+    var playerSuit = $game.$player.getSkinSuit(),
+        skins      = $game.playerSkins
+        head       = playerSuit.head,
+        torso      = playerSuit.torso,
+        legs       = playerSuit.legs,
+        content    = ''
+
+    // Display inventory data
+    // console.log(playerSuit)
+    // console.log(skins, playerSuit, skins[playerSuit])
+    if (head === torso && torso === legs) {
+      content += skins[head].name + ' — Complete outfit bonus!'
+    }
+    else {
+      content += skins[head].head.name + ', ' + skins[torso].torso.name + ', ' + skins[legs].legs.name
+    }
+
+    $('.skinformation p').text(content)
   }
 
 };
