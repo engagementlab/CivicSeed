@@ -1,6 +1,6 @@
 'use strict';
 
-//private vars for player 
+//private vars for player
 var _curFrame = 0,
 	_numFrames = 4,
 	_numSteps = 8,
@@ -293,7 +293,7 @@ var $player = $game.$player = {
 	dropSeed: function(options) {
 		if (options.x !== undefined && options.x >= 0) {
 			options.mX = $game.$map.currentTiles[options.x][options.y].x;
-			options.mY = $game.$map.currentTiles[options.x][options.y].y;	
+			options.mY = $game.$map.currentTiles[options.x][options.y].y;
 		}
 		var mode = options.mode;
 
@@ -386,7 +386,7 @@ var $player = $game.$player = {
 		if (info.skinSuit) {
       $game.$player.updateSkinventory(info.skinSuit)
 		}
-		
+
 		//the answer was correct, add item to inventory
 		if(info.correct) {
 			_resourcesDiscovered += 1;
@@ -411,7 +411,7 @@ var $player = $game.$player = {
 		}
 	},
 
-	//determines what the botanist state should be based on if the player has the right resources 
+	//determines what the botanist state should be based on if the player has the right resources
 	checkBotanistState: function() {
 		//put player to state 3 (solving) if they the RIGHT resources
 		//AND they have already seen the first 2 staes
@@ -450,9 +450,7 @@ var $player = $game.$player = {
 			//check if they have ALL pieces, of so, beam me up scotty
 			// console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
 			if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
-				var msg = 'You collected all the pieces, to the botanist!';
-				$game.statusUpdate({message: msg, input:'status', screen: true , log:false});
-				$game.inTransit = true;
+        $game.alert('You collected all the pieces, to the botanist!')
 				setTimeout(function() {
 					$game.$player.beamMeUpScotty();
 				},3000);
@@ -847,6 +845,7 @@ var $player = $game.$player = {
 
 	//transport player back to botanist's garden, magically
 	beamMeUpScotty: function(place) {
+    $game.inTransit = true;
 		//x any y are viewport coords
 		$('.beamMeUp').show();
 		_info.x = 70;
@@ -875,7 +874,7 @@ var $player = $game.$player = {
 				$('.beamMeUp').fadeOut();
 				$game.$player.displayNpcComments();
 			}, 1000);
-			
+
 			var info = {
 				id: $game.$player.id,
 				x: _info.x,
@@ -909,7 +908,7 @@ var $player = $game.$player = {
 		if($game.$player.currentLevel === npcLevel) {
 			if(!_resourceExists(resource.index)) {
 				_inventory.push({name: shapeName, npc: resource.index, tagline: tagline});
-				_addToInventory({name: shapeName, npc: resource.index, tagline: tagline});	
+				_addToInventory({name: shapeName, npc: resource.index, tagline: tagline});
 			}
 		}
 		//hack to not include demo users
@@ -971,7 +970,7 @@ var $player = $game.$player = {
 						msg = 'There are no public answers, click to make yours public';
 						if(numComments > 0) {
 							msg = 'Click to view ' + numComments + ' public answers';
-						}						
+						}
 					}
 					$game.statusUpdate({message:msg,input: 'status', screen: true, log:false});
 				});
@@ -1192,7 +1191,7 @@ function _calculateSeeds(options) {
 					mapIndex: tempIndex,
 					instanceName: $game.$player.instanceName
 				};
-				bombed.push(square);	
+				bombed.push(square);
 			}
 			a += 1;
 		}
@@ -1407,7 +1406,7 @@ function _endMove() {
 		id: $game.$player.id,
 		position: {
 			x: _info.x,
-			y: _info.y	
+			y: _info.y
 		}
 	};
 	ss.rpc('game.player.savePosition', posInfo);
