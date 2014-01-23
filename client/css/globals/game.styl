@@ -442,7 +442,7 @@ p, li, button, a
 				padding 10px
 				border 2px solid $csLightGray
 				background-color #f4f4f4
-				.bodypart
+				.inner
 					width 32px
 					font-size 1.5em
 					text-align center
@@ -453,27 +453,33 @@ p, li, button, a
 			.locked
 				&:hover
 					i
-						color $csOrange
+						color $csRed
 			.equipped
 				border 2px solid $csDarkGreen
 				background-color white
 		.head
 			top 135px
-			.bodypart
+			.inner
 				height 30px
-				line-height 30px	
+				line-height 30px
+				background-position 0 0
 		.torso
 			top 200px
-			.bodypart
+			.inner
 				height 15px
 				line-height 17px
+				background-position 0 -30px
 				i  // Overrides font-awesome line-height
 					line-height inherit !important
 		.legs
 			top 250px
-			.bodypart
+			.inner
 				height 19px
 				line-height 19px
+				background-position 0 -45px
+	.skinformation
+		position absolute
+		top 300px
 
 // END LARGE OVERLAYS
 
@@ -779,7 +785,7 @@ textarea
 	border-radius 4px
 	line-height 1.2em
 	color #333
-	background-color $csLightGreen
+	background-color $csYellow
 
 .botanistContent form
 	padding 20px

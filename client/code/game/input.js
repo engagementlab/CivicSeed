@@ -151,6 +151,29 @@ var $input = $game.$input = module.exports = {
 
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
+    // ************* SKINVENTORY WINDOW INTERACTIONS *************
+
+    $BODY.on('click', '.skinventory .outer', function () {
+      if(!$(this).hasClass('locked')) {
+        var part = $(this).parent().data('part')
+        var name = $(this).data('name')
+
+        // Set highlight class
+        $(this).parent().children().removeClass('equipped')
+        $(this).addClass('equipped')
+
+        // Set suit
+        $game.$player.setSkinSuit(name, part)
+      }
+    })
+
+    $BODY.on('click', '.skinventory .closeButton', function (e) {
+      e.preventDefault();
+      $('.skinventory').hide();
+      $game.showingSkinventory = false;
+      return false;
+    });
+
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
 
 
@@ -344,26 +367,6 @@ var $input = $game.$input = module.exports = {
 			return false;
 		});
 
-		$BODY.on('click', '.outer', function () {
-			var locked = $(this).hasClass('locked');
-			if(!locked) {
-				var parent = $(this).parent();
-				$(parent).children().removeClass('equipped');
-				$(this).addClass('equipped');
-
-				var part = $(parent).attr('data-part');
-				var child = $(this).children().first(),
-					name = $(child).attr('data-name');
-				$game.$player.setSkinSuit(part, name);
-			}
-		});
-
-		$BODY.on('click', '.skinventory .closeButton', function (e) {
-			e.preventDefault();
-			$('.skinventory').hide();
-			$game.showingSkinventory = false;
-			return false;
-		});
 		//pause menu if we want it
 		// $WINDOW.blur(function(e) {
 		// 	if(!$game.$npc.isResource) {
@@ -647,6 +650,10 @@ var $input = $game.$input = module.exports = {
         for (var skin in $game.playerSkins) {
           $game.$player.updateSkinventory(skin)
         }
+        break
+      case 'birthday suit':
+        $game.$input._cheatActivated('All suits removed!')
+        $game.$player.resetSkinventory()
         break
       case 'pleasantville':
         $game.$input._cheatActivated('Pleasantville mode active.')

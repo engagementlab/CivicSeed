@@ -99,26 +99,51 @@ var $game = module.exports = {
         'modifiers': null
       }
     },
-    'astronaut': {
-      'id': 'astronaut',
-      'name': 'Astronaut',
+    'tuxedo': {
+      'id': 'tuxedo',
+      'name': 'Tuxedo',
       'description': '',
       'effect': '',
       'modifiers': '',
       'head': {
-        'name': 'Space Helmet',
+        'name': 'Tuxedo Mask',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'torso': {
-        'name': 'Space Suit',
+        'name': 'Tuxedo Jacket',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'legs': {
-        'name': 'Space Pants',
+        'name': 'Tuxedo Pants',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      }
+    },
+    'lion': {
+      'id': 'lion',
+      'name': 'Lion',
+      'description': '',
+      'effect': '',
+      'modifiers': '',
+      'head': {
+        'name': 'Lion Head',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Lion Body',
+        'description': '',
+        'effect': '',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Lion Legs',
         'description': '',
         'effect': '',
         'modifiers': ''
@@ -174,76 +199,26 @@ var $game = module.exports = {
         'modifiers': ''
       }
     },
-    'dinosaur': {
-      'id': 'dinosaur',
-      'name': 'Dinosaur',
+    'astronaut': {
+      'id': 'astronaut',
+      'name': 'Astronaut',
       'description': '',
       'effect': '',
       'modifiers': '',
       'head': {
-        'name': 'Dinosaur Head',
+        'name': 'Space Helmet',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'torso': {
-        'name': 'Dinosaur Body',
+        'name': 'Space Suit',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'legs': {
-        'name': 'Dinosaur Legs',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'horse': {
-      'id': 'horse',
-      'name': 'Horse',
-      'description': '',
-      'effect': 'You walk a lot faster!',
-      'modifiers': '',
-      'head': {
-        'name': 'Horse Head',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Horse Body',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Horse Legs',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      }
-    },
-    'lion': {
-      'id': 'lion',
-      'name': 'Lion',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Lion Head',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Lion Body',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Lion Legs',
+        'name': 'Space Pants',
         'description': '',
         'effect': '',
         'modifiers': ''
@@ -274,28 +249,28 @@ var $game = module.exports = {
         'modifiers': ''
       }
     },
-    'octopus': {
-      'id': 'octopus',
-      'name': 'Octopus',
+    'horse': {
+      'id': 'horse',
+      'name': 'Horse',
       'description': '',
-      'effect': 'Your paint radius goes up by three.',
+      'effect': 'You walk a lot faster!',
       'modifiers': '',
       'head': {
-        'name': 'Octopus Head',
+        'name': 'Horse Head',
         'description': '',
-        'effect': 'Your paint radius goes up by one.',
+        'effect': 'You walk slightly faster.',
         'modifiers': ''
       },
       'torso': {
-        'name': 'Octopus Body',
+        'name': 'Horse Body',
         'description': '',
-        'effect': 'Your paint radius goes up by one.',
+        'effect': 'You walk slightly faster.',
         'modifiers': ''
       },
       'legs': {
-        'name': 'Eight Legs',
+        'name': 'Horse Legs',
         'description': '',
-        'effect': 'Your paint radius goes up by one.',
+        'effect': 'You walk slightly faster.',
         'modifiers': ''
       }
     },
@@ -318,34 +293,59 @@ var $game = module.exports = {
         'modifiers': ''
       },
       'legs': {
-        'name': 'Penguin Bottoms',
+        'name': 'Penguin Feet',
         'description': '',
         'effect': '',
         'modifiers': ''
       }
     },
-    'tuxedo': {
-      'id': 'tuxedo',
-      'name': 'Tuxedo',
+    'dinosaur': {
+      'id': 'dinosaur',
+      'name': 'Dinosaur',
       'description': '',
       'effect': '',
       'modifiers': '',
       'head': {
-        'name': 'Tuxedo Mask',
+        'name': 'Dinosaur Head',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'torso': {
-        'name': 'Tuxedo Jacket',
+        'name': 'Dinosaur Body',
         'description': '',
         'effect': '',
         'modifiers': ''
       },
       'legs': {
-        'name': 'Tuxedo Pants',
+        'name': 'Dinosaur Legs',
         'description': '',
         'effect': '',
+        'modifiers': ''
+      }
+    },
+    'octopus': {
+      'id': 'octopus',
+      'name': 'Octopus',
+      'description': '',
+      'effect': 'Your paint radius goes up by three.',
+      'modifiers': '',
+      'head': {
+        'name': 'Octopus Head',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
+        'modifiers': ''
+      },
+      'torso': {
+        'name': 'Octopus Body',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
+        'modifiers': ''
+      },
+      'legs': {
+        'name': 'Eight Legs',
+        'description': '',
+        'effect': 'Your paint radius goes up by one.',
         'modifiers': ''
       }
     }
@@ -442,7 +442,7 @@ var $game = module.exports = {
     _stepNumber = 0;
     _stats = null;
     _displayTimeout = null;
-  
+
     $game.currentTiles = [];
     $game.inTransit = false;
     $game.running = false;

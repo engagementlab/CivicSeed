@@ -721,7 +721,7 @@ var $player = $game.$player = {
 
   // Update player's skin inventory ('skinventory')
   updateSkinventory: function (skin, part) {
-    if (part) {
+    if (part !== undefined) {
       // Specify a part to unlock
       _skinSuit.unlocked[part].push(skin)
     }
@@ -732,14 +732,30 @@ var $player = $game.$player = {
       _skinSuit.unlocked.legs.push(skin)
     }
 
-    var saveInfo = {
+    // Update skinventory
+    $game.$renderer.unlockSkinSuit(skin)
+    ss.rpc('game.player.updateGameInfo', {
       id: $game.$player.id,
       skinSuit: _skinSuit
-    }
-    //update skinventory
-    $game.$renderer.unlockSkinSuit(skin);
-    ss.rpc('game.player.updateGameInfo', saveInfo);
-	},
+    })
+  },
+
+  // For debug purposes, reset everything but basic skin
+  resetSkinventory: function () {
+    _skinSuit.unlocked.head  = 'basic'
+    _skinSuit.unlocked.torso = 'basic'
+    _skinSuit.unlocked.legs  = 'basic'
+
+    $game.$player.setSkinSuit('basic')
+
+    $game.$renderer.renderSkinventory()
+    $game.$renderer.unlockSkinSuit('basic')
+
+    ss.rpc('game.player.updateGameInfo', {
+      id: $game.$player.id,
+      skinSuit: _skinSuit
+    })
+  },
 
 	//put new answer into the resume
 	resumeAnswer: function(answer) {
@@ -1063,21 +1079,29 @@ var $player = $game.$player = {
 
 	//turns off draw mode if no seeds left
 	checkSeedLevel: function() {
-		if(_seed.draw <= 0) {
+		if(_seeds.draw <= 0) {
 			$game.$mouse.drawMode = false;
 		}
 	},
 
-	//change up the skin suit the player is wearing and save to db
-	setSkinSuit: function(part, name) {
-		_skinSuit[part] = name;
-		var info = {
-			id: $game.$player.id,
-			skinSuit: _skinSuit
-		};
-		ss.rpc('game.player.changeSkinSuit', info);
-		$game.$renderer.createCanvasForPlayer($game.$player.id, false);
-	}
+  //change up the skin suit the player is wearing and save to db
+  setSkinSuit: function(name, part) {
+    if (part) {
+      _skinSuit[part] = name
+    }
+    else {
+      // Assume entire suit
+      _skinSuit.head  = name
+      _skinSuit.torso = name
+      _skinSuit.legs  = name
+    }
+
+    ss.rpc('game.player.changeSkinSuit', {
+      id: $game.$player.id,
+      skinSuit: _skinSuit
+    })
+    $game.$renderer.createCanvasForPlayer($game.$player.id, false);
+  }
 };
 
 /***** PRIVATE FUNCTIONS ******/
