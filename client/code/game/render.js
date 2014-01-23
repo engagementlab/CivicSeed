@@ -898,11 +898,6 @@ var $renderer = $game.$renderer = {
       // Check if currently selected
       if (skin.id === playerSuit[part]) $el.addClass('equipped')
 
-      // Bind tooltip
-      $el.bind('mouseenter', function() {
-        $(this).tooltip('show')
-      })
-
       // Check if unlocked and set display accordingly
       for(var h = 0; h < unlocked[part].length; h++) {
         if (unlocked[part][h] === skin.id) {
@@ -953,6 +948,11 @@ var $renderer = $game.$renderer = {
     $inner.css('backgroundImage', 'url(' + bg + ')')
     $inner.find('i').remove()
     $inner.html('')
+
+    // Bind tooltip
+    $el.bind('mouseenter', function() {
+      $(this).tooltip('show')
+    })
   },
 
   renderSkinformation: function () {
