@@ -33,7 +33,7 @@ p, li, button, a
 		display none
 		position absolute
 		z-index 9999
-		top 0 
+		top 0
 		left 0
 		.cutScene
 			position absolute
@@ -70,6 +70,12 @@ p, li, button, a
 		font-size 2em
 	h3
 		color $csGreen
+	a // Font-Awesome X 'close' button
+		font-size 24px
+		i
+			position absolute
+			top 12px
+			right 12px
 
 .overlayContent
 	min-height 320px
@@ -188,7 +194,7 @@ p, li, button, a
 			i
 				margin-left 4px
 				color $csDarkBlue
-	.yourAnswer 
+	.yourAnswer
 		user-select text
 		background $csLightBlue
 
@@ -258,7 +264,7 @@ p, li, button, a
 			position absolute
 			top 220px
 			left 20px
-			font-size 1.5em	
+			font-size 1.5em
 		.numCollected
 			position absolute
 			font-family $buttonFont
@@ -292,7 +298,7 @@ p, li, button, a
 		ul.nav.nav-tabs
 			margin 0
 			border 0
-			li 
+			li
 				margin 0
 				padding 0
 				width 155px
@@ -561,10 +567,10 @@ p, li, button, a
 	z-index 9999
 	font-size 24px
 	cursor pointer
-	p 
+	p
 		color white
 		padding 5px 10px 5px 10px
-		span 
+		span
 			color $csLightGreen
 			text-align right
 			float right
@@ -579,26 +585,16 @@ p, li, button, a
 
 .nextButton,
 .answerButton,
-.closeButton,
+button.closeButton,
 .saveButton
 	position absolute
-	bottom 20px
-	right 20px
+	bottom 14px
+	right 16px
 
 .backButton, .clearBoardButton
 	position absolute
 	bottom 20px
 	left 20px
-
-.resourceArea a i,
-.botanistArea a i,
-.progressArea a i,
-.collectedResources a i,
-.helpArea a i,
-.gameLog a i
-	position absolute
-	top 10px
-	right 10px
 
 .speechBubble
 	display none
@@ -837,7 +833,7 @@ textarea
 	height 480px
 	z-index 9999
 
-.hooray p 
+.hooray p
 	margin-top 100px
 	font-size 2em
 	text-align center
@@ -892,10 +888,10 @@ p.townSite
 		color #333
 	h1
 		color $csBlue
-	h2 
+	h2
 		color $csBlue
 	.demoUserPlayLink
-		margin 30px 0 30px 0 
+		margin 30px 0 30px 0
 		a
 			background $csGreen
 			padding 10px
@@ -945,7 +941,7 @@ p.townSite
 		padding 0
 		margin 2px
 		font-family $buttonFont
-		.date 
+		.date
 			color $csLightBlue
 			font-family $mono
 			font-size .8em
@@ -1001,8 +997,8 @@ p.townSite
 	width 930px
 	height 450px
 	padding 0
-	
-	$borderRadius(0)	
+
+	$borderRadius(0)
 	box-shadow $csUIDropShadow
 	z-index 9997
 	display none
@@ -1012,15 +1008,15 @@ p.townSite
 		.videoFrame
 			margin 20px 0 0 0
 			text-align center
-			background $cloudUrl('img/bg/loading.png') no-repeat center center 
-		p 
+			background $cloudUrl('img/bg/loading.png') no-repeat center center
+		p
 			padding 0 20px
 		.resumeQuestion
 			color $csPurple
 		.resumeAnswer
-			span 
+			span
 				color $csOrange
-		textarea 
+		textarea
 			margin 0 20px 20px 20px
 			height 100px
 	.buttons
@@ -1056,7 +1052,7 @@ p.townSite
 	&:hover
 		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 .bossHud
-	display none	
+	display none
 	.clock
 		color $csBlue
 		font-size 1.5em
@@ -1072,4 +1068,4 @@ p.townSite
 		float left
 
 .labBackground
-	background $cloudUrl('img/game/lab_bg.png') no-repeat center center 
+	background $cloudUrl('img/game/lab_bg.png') no-repeat center center

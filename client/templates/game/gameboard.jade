@@ -13,7 +13,7 @@
 		p loading
 
 	.resourceArea.gameboardOverlay
-		a(href='#', style='font-size: 24px;')
+		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 		p.dialog
 			span.speakerName
@@ -37,18 +37,18 @@
 		p.dialog
 			span.speakerName
 			span.message
-		
+
 		div.botanistContent
 		div.tangramArea
 			p.feedback
-			
+
 		button.nextButton.btn.btn-success(type='button') Next
 		button.backButton.btn.btn-info(type='button') Back
 		button.answerButton.btn.btn-success(type='button') Answer
 		button.closeButton.btn.btn-primary(type='button') Close
 		button.clearBoardButton.btn.btn-info(type='button') Clear Board
-		
-		a(href='#', style='font-size: 24px;')
+
+		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 
 	.progressArea.gameboardOverlay.patternBg2
@@ -63,7 +63,7 @@
 			p.resourcesCollected resources collected:
 			p.numCollected 12/40
 			button.btn.collectedButton.btn-success(type='button') View Answers
-				
+
 		.tabbable
 			ul.nav.nav-tabs
 				li.active.tabYou
@@ -76,7 +76,7 @@
 						img(src='')
 					p.displayTime
 					p.timeTitle time played
-						
+
 				.tab-pane#tab2
 					.colorMapEveryone
 						img(src='')
@@ -87,7 +87,7 @@
 
 		.topSeeders
 
-		a(href='#', style='font-size: 24px;')
+		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 
 	.collectedResources.gameboardOverlay.patternBg3
@@ -102,7 +102,7 @@
 
 			h3 The Game Display
 			p You can see and interact with the game through your display. This consists of the view screen, the Status Bar, and the Display Icons.
-			
+
 			h3 The View Screen
 			p This shows you the portion of the world you are in, along with any other characters that are in the same location. At the upper right hand corner of the map, you can see a mini map. All players, including you, appear on the mini map as little white dots. The mini-map tells you roughly where you are in the world. The large white block near the center of the mini map represents the Botanist's Garden. You must return here at the end of each level to solve the puzzle.
 
@@ -120,7 +120,7 @@
 				li <i class='fa-li fa fa-question-circle fa-lg'></i> <strong>Question Mark:</strong> Launch help document
 
 			h3 Exploring The World
-			p To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red. 
+			p To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red.
 
 			h3 Interacting With Characters and Answering Questions
 			p To interact with characters you see, click on that character. This opens up a dialogue box. Most characters will ask you a question and reward you with seeds and puzzle pieces for a right answer, but some share game pointers or offer other observations. When you answer questions correctly, you are rewarded with seeds. If the question was multiple choice, you receive fewer seeds for each wrong answer you submit, so read carefully!
@@ -141,7 +141,7 @@
 			h3 Completing the Recipes
 			p The Botanist's notebook contains four recipes for Paintbrush Seeds, which correspond with the four levels of the game. Each recipe also includes a special puzzle. As you explore the world and answer questions, you'll earn research pieces, in addition to seeds, which you will use to answer solve the puzzle.
 			p When you think you have enough research pieces to solve the puzzle, return to the Botanist. He will show you the outline of the puzzle. You can then drag pieces from your inventory onto the puzzle. The text of the recipe appears next to the puzzle. Look at the text for hints!
-			p As long as there are any wrong pieces on the board, you cannot solve the riddle. To remove a puzzle piece from the board, drop it into the trash. 
+			p As long as there are any wrong pieces on the board, you cannot solve the riddle. To remove a puzzle piece from the board, drop it into the trash.
 			p When you think you've correctly solved the riddle, hit “Answer.” If you're correct, you progress to the next level, and earn some Paintbrush Seeds. For each time you answer incorrectly, you will receive less and less seeds. After you complete all four levels, the game is complete and you unlock your civic resume!
 
 			h3 Your Inventory
@@ -149,16 +149,15 @@
 
 			h3 Your Profile: A Civic Resume
 			p After each level, you will be prompted to fill in a section of your civic resume. At the end of the game, your resume is unlocked, enabling you to use it as a public tool for civic engagement. This lets everyone know that you have completed Civic Seed, and are certified by Tufts to engage with their host communities. It also lets organizations and the people you'll work with understand you better, so your goals can be aligned.
-
-		a(href='#', style='font-size: 24px;')
+		a.closeButton(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	div.bossArea.gameboardOverlay.patternBg2
+	.bossArea.gameboardOverlay.patternBg2
 		.content
 		p.buttons
 			button.bossButton.btn.btn-success(type='button') Next
 
-	div.skinventory.gameboardOverlay.patternBg3
+	.skinventory.gameboardOverlay.patternBg3
 		h2 Changing Room
 		p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
 		.parts
@@ -168,41 +167,42 @@
 		.skinformation
 			h3 You're wearing
 			p Just the basics!
-		button.closeButton.btn.btn-primary(type='button') Close
+		a.closeButton(href='#')
+			i.fa.fa-times-circle.fa-lg
 
-	div.inventory
-		div.outlines
-		div.pieces
+	.inventory
+		.outlines
+		.pieces
 		button.closeButton.btn.btn-primary(type='button') Close
 		p.inventoryHelp click piece to view resource
 
 	p.statusUpdate
 		span
 
-	div.seedventory
+	.seedventory
 		.seed.regularButton
 			i.fa.fa-leaf.fa-lg(title='regular seed', data-placement='top')
 			span.badge.hudCount
 		.seed.drawButton
 			i.fa.fa-star.fa-lg(title='paintbrush seed', data-placement='top')
 			span.badge.hudCount
-	div.graffiti
+	.graffiti
 		p seeds left: <span></span>
-		
-	div.speechBubble
+
+	.speechBubble
 		p
 			span.speakerName
 			span.message
-		div.buttonCorner
+		.buttonCorner
 			button.nextChatButton.hideButton.btn.btn-success(type='button') Next
 			button.closeChatButton.hideButton.btn.btn-primary(type='button') Close
 			button.noButton.btn.hideButton.btn-primary(type='button') Close
 			button.yesButton.btn.hideButton.btn-success(type='button') View
-	
-	div.pauseMenu
+
+	.pauseMenu
 		p please re-focus your mind, body, and the window...
 		p
 			button.unPause.btn.btn-success(type='button') Resume Game
-	div.waitingForSeed
+	.waitingForSeed
 		img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
 	.beamMeUp
