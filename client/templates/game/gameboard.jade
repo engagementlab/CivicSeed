@@ -27,8 +27,9 @@
 		button.closeButton.btn.btn-primary(type='button') Close
 		.check
 			p Are you sure? That seems a bit skimpy...
-			button.sureButton.btn.btn-success(type='button') I'm Sure
-			button.retryButton.btn.btn-primary(type='button') I'll Add More
+			.buttons
+				button.sureButton.btn.btn-success(type='button') I'm Sure
+				button.retryButton.btn.btn-primary(type='button') I'll Add More
 		.checkTagline
 			p You should create a custom tagline!
 		.feedback
@@ -38,9 +39,10 @@
 			span.speakerName
 			span.message
 
-		div.botanistContent
-		div.tangramArea
-			p.feedback
+		.botanistContent
+		.tangramArea
+			.tangramOutline
+			.feedback
 
 		button.nextButton.btn.btn-success(type='button') Next
 		button.backButton.btn.btn-info(type='button') Back
@@ -53,7 +55,7 @@
 
 	.progressArea.gameboardOverlay.patternBg2
 		h2 Progress
-		div.personalInfo
+		.personalInfo
 			.levelImages
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').currentLevelImage
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')

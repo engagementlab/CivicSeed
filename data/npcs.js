@@ -526,7 +526,7 @@ module.exports.global = [
         },
         "dialog": {
             "prompts": [
-                "You need help finding the color right? I can help!",
+                "You need help finding the color, right? I can help!",
                 "Ah. I think you need to try again.",
                 "Am I a bird with no wings or a creature with a large nose? What do you think?"
             ],

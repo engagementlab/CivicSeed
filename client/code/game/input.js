@@ -663,6 +663,9 @@ var $input = $game.$input = module.exports = {
         $game.$input._cheatActivated('Welcome to Pleasantville!')
         // Doesn't actually do anything
         break
+      case 'brain dump':
+        console.log($game)
+        break
       case 'kazaam':
         $game.$input._cheatActivated('Starting collaborative challenge.')
         ss.rpc('game.player.collaborativeChallenge', function (err) {

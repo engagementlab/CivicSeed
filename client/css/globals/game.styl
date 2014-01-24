@@ -86,64 +86,38 @@ p, li, button, a
 
 .botanistArea
 	z-index 9990
+	&.puzzle-mode
+		height 390px
+		.tangramArea
+			top 20px
+	.dialog
+		// See also .dialog at .resourceArea
+		padding-right 50px
 	.seedChips
 		text-align center
-	.tangramOutline
-		// Styles obsoleted
-		// Note that it's possible this needs to come back if needed for the puzzle portion.
-		// position absolute
-		// z-index 0
-		// top 0px
-		// left 0px
-	.botanistContent form
-		padding 20px
 	.tangramArea
-		// Need to position this way to allow for piece checking to work. TODO - rethink this better
 		position absolute
-		top 0
+		top 40px
 		left 0
 		height 360px
 		padding 0
-		z-index 9998
+		z-index 9992
 		display none
-		.feedback
-			// Similar to the .check style.
-			// TODO: condense
-			width 320px
-			height auto
-			position absolute
-			text-align left
-			font-size 1.2em
-			padding 10px
-			top 150px
-			left 310px
-			background $csPurple
-			display none
-			z-index 9999
-			color #eee
 		.puzzleSvg
 			position absolute
 			top 0
 			left 0
-	.trash
-		opacity .5
-		position absolute
-		top 170px
-		right 0px
+		.trash
+			position absolute
+			top 170px
+			right -6px
+			&.active
+				opacity 0.5
 
 
 .resourceArea
 	.dialog, .finalQuestion
 		padding-right 50px
-	.feedback
-		display none
-		width 320px
-		position absolute
-		left 300px
-		top 150px
-		padding 10px
-		background $csPurple
-		color white
 	.finalQuestion
 		font-size 1.2em
 		color $csBlack
@@ -440,24 +414,33 @@ p, li, button, a
 
 .skinventory
 	.parts
+		margin-bottom 10px
+		text-align center
 		.part
-			position absolute
-			left 50px
+			// margin 0 auto 10px
+			margin 0 0 10px 32px
 			.outer
 				cursor pointer
 				float left
+				// bugged
+				// display inline-block
+				width 56px
+				height 100%
 				margin-right 20px
 				padding 10px
 				border 2px solid $csLightGray
 				background-color #f4f4f4
 				.inner
-					width 32px
+					width 100%
+					height 100%
 					font-size 1.5em
 					text-align center
 					color $csBlue
 				&:not(.locked):hover
 					border 2px solid $csGreen
 					background-color white
+				&:last-of-type
+					margin-right 0
 			.locked
 				&:hover
 					i
@@ -466,28 +449,22 @@ p, li, button, a
 				border 2px solid $csDarkGreen
 				background-color white
 		.head
-			top 135px
+			height 54px
 			.inner
-				height 30px
-				line-height 30px
-				background-position 0 0
+				line-height 30px                // Positioning for lock
+				background-position 0 0         // Positioning for sprite
 		.torso
-			top 200px
+			height 41px
 			.inner
-				height 15px
-				line-height 17px
-				background-position 0 -30px
+				line-height 17px                // Positioning for lock
+				background-position 0 -30px     // Positioning for sprite
 				i  // Overrides font-awesome line-height
 					line-height inherit !important
 		.legs
-			top 250px
+			height 42px
 			.inner
-				height 19px
-				line-height 19px
-				background-position 0 -45px
-	.skinformation
-		position absolute
-		top 300px
+				line-height 19px                // Positioning for lock
+				background-position 0 -45px     // Positioning for sprite
 
 // END LARGE OVERLAYS
 
@@ -589,6 +566,7 @@ button.closeButton,
 	position absolute
 	bottom 14px
 	right 16px
+	z-index 9994
 
 .backButton, .clearBoardButton
 	position absolute
@@ -833,25 +811,30 @@ div.currentButton
 	// see if this is used anywhere else but the game menu
 	background #666
 
-.check, .checkTagline
+.feedback, .check, .checkTagline
 	display none
 	position absolute
 	left 280px
 	top 140px
 	width 360px
-	height 100px
+	height auto
+	min-height 60px
 	padding 14px
 	text-align center
+	color $csLightGray
 	background $csPurple
-	p
-		color white
-	button
-		position absolute
-		bottom 14px
-	.sureButton
-		right 14px
-	.retryButton
-		left 14px
+	z-index 9999
+	.buttons
+		position relative
+		margin-top 18px
+		height 32px
+		button
+			position absolute
+		.sureButton
+			right 0px
+		.retryButton
+			left 0px
+
 
 .firstRiddle
 	width 60%

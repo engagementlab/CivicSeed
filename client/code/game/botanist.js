@@ -391,7 +391,7 @@ $game.$botanist = {
 				if(p === 1) {
 					$game.$botanist.isSolving = true;
 					$('.displayBoxText').text('drag a piece to the board to use it');
-					$botanistArea.css('height','380px');
+					$botanistArea.addClass('puzzle-mode');
 				}
 
 				$game.$botanist.showRiddle(p);
@@ -495,6 +495,7 @@ $game.$botanist = {
 		//if _promptNum is 0, then it is the just showing the riddle no interaction
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
+				$botanistContent.empty()
 				if($game.$player.botanistState > 1) {
 					$botanistAreaMessage.text('Here is the notebook page to view again.');
 				}
@@ -511,7 +512,7 @@ $game.$botanist = {
 					}
 				}
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
-				$botanistContent.html('<img src="' + imgPath + '" class="tangramOutline">');
+				$('.tangramOutline').html('<img src="' + imgPath + '">');
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
@@ -547,8 +548,8 @@ $game.$botanist = {
 				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
 					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-				var newHTML = '<img src="' + imgPath1 + '" class="tangramOutline"><img src="' + imgPath2 + '" class="trash">';
-				$botanistContent.html(newHTML);
+				var newHTML = '<img src="' + imgPath1 + '"><img src="' + imgPath2 + '" class="trash">';
+				$('.tangramOutline').html(newHTML);
 
 				//replace the tangram image in the inventory with tip
 				$('.inventoryPuzzle').hide();
@@ -595,9 +596,7 @@ $game.$botanist = {
 		$botanistArea.fadeOut(function() {
 			$game.$botanist.isShowing = false;
 			$('.botanist button').addClass('hideButton');
-			$(this)
-				.removeClass('patternBg3')
-				.css('height','450px');
+			$(this).removeClass('patternBg3').removeClass('puzzle-mode')
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
 			$game.$botanist.clearBoard();
@@ -863,12 +862,14 @@ $game.$botanist = {
 			mY = y - _dragOffY,
 			trashing = false;
 
+		// If over trash area
+		// TODO: Dynamically retrieve this area, don't hardcode the pixels
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
-			$('.trash').css('opacity',1);
+			$('.trash').addClass('active')
 			trashing = true;
 		}
 		else {
-			$('.trash').css('opacity',0.5);
+			$('.trash').removeClass('active')
 			trashing = false;
 		}
 		var trans = 'translate(' + mX  + ', ' + mY + ')';
@@ -892,12 +893,13 @@ $game.$botanist = {
 			.attr('stroke-width',0)
 			.attr('transform',trans);
 
+		// If over trash area
 		if(x > 825 && x < 890 && y > 170 && y < 300) {
 			$('.br' + d.id).remove();
 			$('.r' + d.id)
 				.css('opacity', 1)
 				.attr('draggable', 'true');
-			$('.trash').css('opacity',0.5);
+			$('.trash').removeClass('active')
 		}
 		else {
 			d3.select('.br' + d.id)

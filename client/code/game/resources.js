@@ -584,7 +584,7 @@ function _addAnsweredContent() {
 			}
 			//give them the skinsuit regardless if in prev level or not
 			if(_skinSuitReward) {
-				_speak += ' You unlocked the ' + _skinSuitReward + ' suit! Try it on or browse your other suits by clicking the changing room button below.';
+				_speak += ' You unlocked the ' + $game.playerSkins[_skinSuitReward].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.';
 			}
 			$speakerName.text(_who + ': ');
 			$resourceMessage.text(_speak);
