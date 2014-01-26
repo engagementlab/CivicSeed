@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-var rootDir = process.cwd() || '.',
-	ss = require('socketstream'),
-	express = require('express'),
-	app = exports.app = express(),
-	ssJade = require('ss-jade'),
-	ssStylus = require('ss-stylus'),
-	config = require(rootDir + '/config'),
-	port = config.get('PORT'),
-	nodeEnv = config.get('ENVIRONMENT'),
-	cloudPath = config.get('CLOUD_PATH'),
-	useRedis = config.get('USE_REDIS'),
-	service = require(rootDir + '/service'),
-	controllers = require(rootDir + '/controllers'),
-	CivicSeed = require(rootDir + '/CivicSeed'),
-	server,
-	redisConfig;
+var rootDir     = process.cwd() || '.',
+    ss          = require('socketstream'),
+    express     = require('express'),
+    app         = exports.app = express(),
+    ssJade      = require('ss-jade'),
+    ssStylus    = require('ss-stylus'),
+    config      = require(rootDir + '/config'),
+    port        = config.get('PORT'),
+    nodeEnv     = config.get('ENVIRONMENT'),
+    cloudPath   = config.get('CLOUD_PATH'),
+    useRedis    = config.get('USE_REDIS'),
+    service     = require(rootDir + '/service'),
+    controllers = require(rootDir + '/controllers'),
+    CivicSeed   = require(rootDir + '/CivicSeed'),
+    server,
+    redisConfig;
 
 console.log('\n\n     ___      _               _                       ___                       _   '.red);
 console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red);

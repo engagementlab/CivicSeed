@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 
-var nodeEnv = require('express')().get('env');
+var nodeEnv = process.env.NODE_ENV || require('express')().get('env');
 var configFilename = nodeEnv !== 'development' ? '/config_' + nodeEnv + '.json' : '/config.json';
 
 var accountHelpers = require(rootDir + '/server/utils/account-helpers');
@@ -17,6 +17,11 @@ var accountHelpers = require(rootDir + '/server/utils/account-helpers');
 nconf.argv().env().file({
 	file: process.env.configFile || rootDir + configFilename
 });
+
+if (nodeEnv === 'heroku') {
+  console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')
+  nconf.set('MONGO_URL', process.env.MONGOHQ_URL)
+}
 
 var _db;
 var _userModel;
