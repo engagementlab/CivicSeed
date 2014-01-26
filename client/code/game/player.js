@@ -409,7 +409,7 @@ var $player = $game.$player = {
 		}
 
 		if (info.skinSuit) {
-      $game.$player.updateSkinventory(info.skinSuit)
+      $game.$skins.unlockSkin(info.skinSuit)
 		}
 
 		//the answer was correct, add item to inventory
@@ -733,45 +733,6 @@ var $player = $game.$player = {
     }
     //update hud
     _updateTotalSeeds();
-  },
-
-  // Update player's skin inventory ('skinventory')
-  updateSkinventory: function (skin, part) {
-    if (part !== undefined) {
-      // Specify a part to unlock
-      _skinSuit.unlocked[part].push(skin)
-    }
-    else {
-      // Assume all parts of the skin is unlocked
-      _skinSuit.unlocked.head.push(skin)
-      _skinSuit.unlocked.torso.push(skin)
-      _skinSuit.unlocked.legs.push(skin)
-    }
-
-    // Update skinventory
-    $game.$renderer.unlockSkinSuit(skin)
-    ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
-      skinSuit: _skinSuit
-    })
-  },
-
-  // For debug purposes, reset everything but basic skin
-  resetSkinventory: function () {
-    // Reset unlocked array
-    _skinSuit.unlocked.head  = ['basic']
-    _skinSuit.unlocked.torso = ['basic']
-    _skinSuit.unlocked.legs  = ['basic']
-
-    $game.$player.setSkinSuit('basic')
-
-    $game.$renderer.renderSkinventory()
-    $game.$renderer.unlockSkinSuit('basic')
-
-    ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
-      skinSuit: _skinSuit
-    })
   },
 
 	//put new answer into the resume
@@ -1119,7 +1080,7 @@ var $player = $game.$player = {
       skinSuit: _skinSuit
     })
     $game.$renderer.createCanvasForPlayer($game.$player.id, false)
-    $game.$renderer.renderSkinformation()
+    $game.$skins.renderSkinformation()
   },
 
   getLocation: function () {

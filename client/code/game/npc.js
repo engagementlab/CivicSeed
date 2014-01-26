@@ -255,24 +255,21 @@ var $npc = $game.$npc = {
     if ($game.$player.botanistState < 2) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
-    // If there are no other interactions on screen, then show dialogue
-    else if (!$game.$resources.isShowing && !$npc.isChat) {
-      // If resource is available for the player
-      if (npc.isHolding && $game.$player.currentLevel >= npc.level) {
-        // Check if NPC's availability depends on player talking to a different NPC
-        if (npc.isLocked()) {
-          var name = $npc.getNpc(npc.dependsOn).name
-          var dialogue = 'Before I help you out, you need to go see ' + name + '. Come back when you have their resource.'
-          $npc.showSpeechBubble(npc.name, dialogue)
-        }
-        else {
-          $npc.createPrompt(npc)
-        }
+    // If resource is available for the player
+    else if (npc.isHolding && $game.$player.currentLevel >= npc.level) {
+      // Check if NPC's availability depends on player talking to a different NPC
+      if (npc.isLocked()) {
+        var name = $npc.getNpc(npc.dependsOn).name
+        var dialogue = 'Before I help you out, you need to go see ' + name + '. Come back when you have their resource.'
+        $npc.showSpeechBubble(npc.name, dialogue)
       }
-      // If no resource is available for the player, make small talk instead.
       else {
-        $npc.showSpeechBubble(npc.name, npc.getSmalltalk())
+        $npc.createPrompt(npc)
       }
+    }
+    // If no resource is available for the player, make small talk instead.
+    else {
+      $npc.showSpeechBubble(npc.name, npc.getSmalltalk())
     }
   },
 
@@ -336,7 +333,6 @@ var $npc = $game.$npc = {
     var $el = $('.speechBubble')
 
     $game.$npc.isChat = false
-    $game.$resources.isShowing = false     // TODO: Double check if this is still being set for speech bubbles
     $el.find('.yesButton').unbind('click')
     $el.find('.noButton').unbind('click')
 

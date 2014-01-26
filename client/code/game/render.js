@@ -3,7 +3,6 @@
 var _tilesheets = {},
     _currentTilesheet = null,
     _allImages = [],
-    _skinSuitNames = [],
     _tilesheetWidth = 0,
     _tilesheetHeight = 0,
     _skinSuitWidth = 0,
@@ -70,9 +69,6 @@ var $renderer = $game.$renderer = {
 
     _allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
 
-    // TODO: DEPRECATE the following variable in favor of $game.playerSkins
-    _skinSuitNames = ['basic','tuxedo','lion','cactus','cone','astronaut','ninja','horse','penguin','dinosaur','octopus'];
-
     _playerColorNum = $game.$player.getColorNum();
     _playerLevelNum = $game.$player.currentLevel;
     $renderer.loadTilesheets(0);
@@ -92,7 +88,6 @@ var $renderer = $game.$renderer = {
     _tilesheets = {};
     _currentTilesheet = null;
     _allImages = [];
-    _skinSuitNames = [];
     _tilesheetWidth = 0;
     _tilesheetHeight = 0;
     _skinSuitWidth = 0;
@@ -178,7 +173,7 @@ var $renderer = $game.$renderer = {
     // TODO
     // Proposed refactor. Doesn't work. Causes player sprites to not load. Why is this?
     // Hacky way of keeping track of skin loads
-    var total = _.keys($game.playerSkins).length,
+    var total = $game.$skins.getSkinsList().length,
         count = 0
 
     function _onSkinLoad (image, id) {
@@ -197,26 +192,27 @@ var $renderer = $game.$renderer = {
         _skinSuitWidth = image.width;
         _skinSuitHeight = image.height;
         $renderer.ready = true;
-        $renderer.renderSkinventory();
+        $game.$skins.renderSkinventory();
         $renderer.createCanvasForPlayer($game.$player.id, false);
       }
     }
 
-    for (var id in $game.playerSkins) {
+    for (var id in $skins.data) {
       var filepath = CivicSeed.CLOUD_PATH + '/img/game/skins/' + id + '.png';
 
       var image = new Image()
       image.src = filepath
       image.onload = _onSkinLoad(image, id)
 
-      if ($game.playerSkins.hasOwnProperty(id)) {
+      if ($skins.data.hasOwnProperty(id)) {
         ++count
       }
     }
     */
 
     var next = num + 1,
-        filename = _skinSuitNames[num],
+        skinsList = $game.$skins.getSkinsList(),
+        filename = skinsList[num],
         skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png';
 
     var skinSuitImage = new Image();
@@ -235,11 +231,11 @@ var $renderer = $game.$renderer = {
         0
       );
 
-      if(next === _skinSuitNames.length) {
+      if(next === skinsList.length) {
         $renderer.ready = true;
         _skinSuitWidth = skinSuitImage.width;
         _skinSuitHeight = skinSuitImage.height;
-        $renderer.renderSkinventory();
+        $game.$skins.renderSkinventory();
         $renderer.createCanvasForPlayer($game.$player.id, false);
         return;
       }
@@ -927,116 +923,6 @@ var $renderer = $game.$renderer = {
       $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
       $game.VIEWPORT
     );
-  },
-
-  renderSkinventory: function() {
-    var playerSuit = $game.$player.getSkinSuit(),
-        unlocked   = playerSuit.unlocked,
-        skins      = $game.playerSkins
-
-    function _render (skin, part) {
-      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div></div>',
-          $part      = $('.' + part),
-          $el        = $(skinHTML)
-
-      $part.append($el)
-
-      // Check if currently selected
-      if (skin.id === playerSuit[part]) $el.addClass('equipped')
-
-      // Check if unlocked and set display accordingly
-      for(var h = 0; h < unlocked[part].length; h++) {
-        if (unlocked[part][h] === skin.id) {
-          $renderer._renderUnlockedPart($el, skin, part)
-          break
-        }
-      }
-
-      // Bind tooltip
-      $el.bind('mouseenter', function() {
-        $(this).tooltip('show')
-      })
-    }
-
-    // Reset parts
-    $('.skinventory .head').empty()
-    $('.skinventory .torso').empty()
-    $('.skinventory .legs').empty()
-
-    // For each skin, create display element and render
-    for (var id in skins) {
-      _render(skins[id], 'head')
-      _render(skins[id], 'torso')
-      _render(skins[id], 'legs')
-    }
-
-    // Display skinformation
-    $renderer.renderSkinformation()
-  },
-
-  unlockSkinSuit: function(skin) {
-    // Unlock an entire skin easily
-    var head  = $('.head [data-name="' + skin + '"]')
-    var torso = $('.torso [data-name="' + skin + '"]')
-    var legs  = $('.legs [data-name="' + skin + '"]')
-    $renderer._renderUnlockedPart(head, skin, 'head')
-    $renderer._renderUnlockedPart(torso, skin, 'torso')
-    $renderer._renderUnlockedPart(legs, skin, 'legs')
-  },
-
-  _renderUnlockedPart: function ($el, skin, part) {
-    // skin is either the name of the skin or the skin object itself
-    // Either way, we want to end up with the skin object.
-    if (typeof skin == 'string') {
-      skin  = $game.playerSkins[skin]
-    }
-
-    var $inner = $el.find('.inner'),
-        bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
-
-    $el.removeClass('locked')
-    $el.attr('title', skin[part].name)
-    $inner.css('backgroundImage', 'url(' + bg + ')')
-    $inner.find('i').remove()
-    $inner.html('')
-  },
-
-  renderSkinformation: function () {
-    var playerSuit = $game.$player.getSkinSuit(),
-        skins      = $game.playerSkins,
-        head       = playerSuit.head,
-        torso      = playerSuit.torso,
-        legs       = playerSuit.legs,
-        content    = ''
-
-    function _createPartString (skin, part) {
-      var string = '<strong>' + skins[skin][part].name + '.</strong>'
-      if (skins[skin][part].description) {
-        string += ' ' + skins[skin][part].description
-      }
-      if (skins[skin][part].effect) {
-        string += ' (' + skins[skin][part].effect + ')'
-      }
-      return string
-    }
-
-    // Display inventory data
-    if (head === torso && torso === legs) {
-      // Note that the game doesn't store "full set" data, so in the case where all parts
-      // are from the same set, we look in the skins object for the data about the full outfit.
-      var suit = head
-      content += '<strong>' + skins[suit].name + '.</strong> ' + skins[suit].description
-      if (suit != 'basic') {
-        content += ' Complete outfit bonus!'
-      }
-    }
-    else {
-      content += _createPartString(head, 'head')
-      content += '<br>' + _createPartString(torso, 'torso')
-      content += '<br>' + _createPartString(legs, 'legs')
-    }
-
-    $('.skinformation p').html(content)
   }
 
 };

@@ -677,13 +677,13 @@ var $input = $game.$input = module.exports = {
         break
       case 'suit alors':
         $game.$input._cheatActivated('All suits unlocked!')
-        for (var skin in $game.playerSkins) {
-          $game.$player.updateSkinventory(skin)
+        for (var skin in $game.$skins.data) {
+          $game.$skins.unlockSkin(skin)
         }
         break
       case 'birthday suit':
         $game.$input._cheatActivated('All suits removed!')
-        $game.$player.resetSkinventory()
+        $game.$skins.resetSkinventory()
         break
       case 'pleasantville':
         $game.$input._cheatActivated('Welcome to Pleasantville!')

@@ -162,8 +162,6 @@ $game.$resources = {
 			_preloadedPieceImage = '<div class="tangramPiece"><img src="' + imgPath + '"></div>';
 		}
 
-    // This function was previously hiding the speechBubble itself - unnecessary.
-    // Resource display should be called from the hideSpeechBubble callback already.
     $game.$resources.isShowing = true
 
     //ready to show the resource now
@@ -591,7 +589,7 @@ function _addAnsweredContent() {
 			}
 			//give them the skinsuit regardless if in prev level or not
 			if(_skinSuitReward) {
-				_speak += ' You unlocked the ' + $game.playerSkins[_skinSuitReward].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.';
+				_speak += ' You unlocked the ' + $game.$skins.data[_skinSuitReward].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.';
 			}
 			$speakerName.text(_who);
 			$resourceMessage.text(_speak);
