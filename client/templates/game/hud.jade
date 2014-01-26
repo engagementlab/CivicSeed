@@ -1,31 +1,32 @@
 .container.hud
-	.row.regularGameHud
-		.span4.playerHud
-			.button.inventoryButton
+	.row.regularGameHud.hud-regular
+		.span4.hud-player
+			.hud-button.inventoryButton
 				i.fa.fa-briefcase.fa-lg(title='toggle inventory', data-placement='bottom')
 				span.badge.hudCount
-			.button.skinventoryButton
+			.hud-button.skinventoryButton
 				i.fa.fa-user.fa-lg(title='changing room', data-placement='bottom')
-			.button.seedButton
+				span.badge.hudCount.hide
+			.hud-button.seedButton
 				i.fa.fa-leaf.fa-lg(title='seeds', data-placement='bottom')
 				span.badge.hudCount
-		.span4.displayHud
+		.span4.hud-chat
 			form.form-inline.chatBox
 				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='chat with other players...')
 				button#chatButton.btn(type='submit') Chat
-		.span4.globalHud
-			.button.helpButton
-				i.fa.fa-question-circle.fa-lg(title='help', data-placement='bottom')
-			.button.muteButton
-				i.fa.fa-volume-up.fa-lg(title='toggle music', data-placement='bottom')
-			.button.progressButton
-				i.fa.fa-desktop.fa-lg(title='display progress', data-placement='bottom')
-			.button.logButton
+		.span4.hud-global
+			.hud-button.logButton
 				i.fa.fa-list.fa-lg(title='game log', data-placement='bottom')
 				span.badge.hudCount.hide
-	.row.bossHud
+			.hud-button.progressButton
+				i.fa.fa-desktop.fa-lg(title='display progress', data-placement='bottom')
+			.hud-button.muteButton
+				i.fa.fa-volume-up.fa-lg(title='toggle music', data-placement='bottom')
+			.hud-button.helpButton
+				i.fa.fa-question-circle.fa-lg(title='help', data-placement='bottom')
+	.row.bossHud.hud-boss
 		.span4
-			.regularSeedButton.bossBox
+			.hud-button.regularSeedButton.bossBox
 				i.fa.fa-leaf.fa-lg(title='seeds', data-placement='bottom')
 				span.badge.hudCount 20
 			//- .drawSeedButton.bossBox
@@ -36,7 +37,7 @@
 		.span3
 			p.score score: <span>---</span>
 		.span1
-			.muteButton.bossBox
+			.hud-button.muteButton.bossBox
 				i.fa.fa-volume-up.fa-lg(title='toggle music', data-placement='bottom')
 .gameLog
 

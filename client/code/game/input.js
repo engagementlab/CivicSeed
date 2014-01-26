@@ -106,10 +106,7 @@ var $input = $game.$input = module.exports = {
     $BODY.on('click', '.seedButton', function () {
       var goAhead = startNewAction();
       if(goAhead) {
-        $input.openSeedventory()
-      }
-      else {
-        $input.closeSeedventory()
+        $input.toggleSeedMode()
       }
     });
 
@@ -212,7 +209,7 @@ var $input = $game.$input = module.exports = {
 			// var goAhead = startNewAction();
 			// if(goAhead || _logShowing) {
 			// 	_logShowing = !_logShowing;
-			// 	$('.logButton').toggleClass('currentButton');
+			// 	$('.logButton').toggleClass('hud-button-active');
 			// 	$gameLog.fadeToggle();
 			// 	$gameLog.scrollTop($gameLog[0].scrollHeight);
 			// 	$game.$log.clearUnread();
@@ -319,7 +316,7 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//tooltip for HUD controls
-		$BODY.on('mouseenter', '.globalHud > div > i, .playerHud > div > i, .seedventory > div > i', function () {
+		$BODY.on('mouseenter', '.hud i', function () {
 			var info = $(this).attr('title');
 			$(this).tooltip('show');
 		});
@@ -538,7 +535,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleSeedMode: function () {
-    if ($game.$player.seedMode === true) {
+    if ($game.$player.seedMode !== false) {
       $input.endSeedMode()
     }
     else {
@@ -547,26 +544,26 @@ var $input = $game.$input = module.exports = {
   },
 
   startSeedMode: function () {
+    $game.$player.seedMode = true
+    $('.hud .seedButton').addClass('hud-button-active')
     $input.openSeedventory()
   },
 
   endSeedMode: function () {
+    $game.$player.seedMode = false
     if($game.$player.seedventoryShowing) {
       $input.closeSeedventory()
     }
-    if($game.$player.seedMode) {
-      $BODY.off('mousedown touchend', '.gameboard');
-      $BODY.off('mouseup touchend', '.gameboard');
-      $('.graffiti').hide();
-      $game.$mouse.drawMode = false;
-      $game.$player.seedMode = false;
-      $game.$player.seedPlanting = false;
-      $game.$player.resetRenderColor();
-      $(this).removeClass('currentButton');
+    $BODY.off('mousedown touchend', '.gameboard');
+    $BODY.off('mouseup touchend', '.gameboard');
+    $('.graffiti').hide();
+    $game.$mouse.drawMode = false;
+    $game.$player.seedPlanting = false;
+    $game.$player.resetRenderColor();
+    $('.hud .seedButton').removeClass('hud-button-active')
 
-      $game.$player.saveMapImage();
-      $game.$player.saveSeeds();
-    }
+    $game.$player.saveMapImage();
+    $game.$player.saveSeeds();
   },
 
   openSeedventory: function () {
@@ -592,27 +589,29 @@ var $input = $game.$input = module.exports = {
   },
 
   openInventory: function () {
-    $inventory.slideDown(function() {
-      $game.$player.inventoryShowing = true
+    $('.inventoryButton').addClass('hud-button-active')
+    $game.$player.inventoryShowing = true
+    $inventory.slideDown(function () {
       $displayBoxText.text('click items to view again')
-      $('.inventoryButton').addClass('currentButton')
     })
   },
 
   closeInventory: function () {
-    $inventory.slideUp(function() {
+    $inventory.slideUp(function () {
       $game.$player.inventoryShowing = false
-      $('.inventoryButton').removeClass('currentButton')
+      $('.inventoryButton').removeClass('hud-button-active')
     })
   },
 
   toggleSkinventory: function () {
     $game.showingSkinventory = !$game.showingSkinventory
+    $('.skinventoryButton').toggleClass('hud-button-active')
     $('.skinventory').toggle()
   },
 
   closeSkinventory: function () {
     $game.showingSkinventory = false
+    $('.skinventoryButton').removeClass('hud-button-active')
     $('.skinventory').hide()
   },
 
@@ -621,25 +620,25 @@ var $input = $game.$input = module.exports = {
     if ($game.showingProgress) {
       $game.showProgress()
     }
-    $('.progressButton').toggleClass('currentButton');
+    $('.progressButton').toggleClass('hud-button-active')
     $progressArea.toggle()
   },
 
   closeProgress: function () {
     $game.showingProgress = false
-    $('.progressButton').removeClass('currentButton')
+    $('.progressButton').removeClass('hud-button-active')
     $progressArea.hide()
   },
 
   toggleHelp: function () {
     _helpShowing = !_helpShowing
-    $('.helpButton').toggleClass('currentButton')
+    $('.helpButton').toggleClass('hud-button-active')
     $('.helpArea').toggle()
   },
 
   closeHelp: function () {
     _helpShowing = false
-    $('.helpButton').removeClass('currentButton')
+    $('.helpButton').removeClass('hud-button-active')
     $('.helpArea').hide()
   },
 

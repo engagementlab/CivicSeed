@@ -641,45 +641,51 @@
 	z-index 5
 	right 0px
 
-.hud
-	margin-top 20px
-	-webkit-touch-callout none
-	user-select none
-
 .debug p
 	float left
 	margin-left 20px
 
 .hud
-	.button
+	margin-top 20px
+	margin-bottom 4px
+	-webkit-touch-callout none
+	user-select none
+	.hud-button
 		position relative
+		display inline-block
 		width 48px
-		height 36px
-		font-size 22px
+		height 48px
+		margin 0 10px
+		padding-left 1px
+		font-size 20px
 		text-align center
-		line-height 36px
-		background $csBlack
-		color $csLightGray
+		line-height 48px
+		color $csDarkBlue
+		background-color #f1f1f1
+		box-shadow 0 0 0 4px $csLightGray
+		border-radius 50%
 		cursor pointer
 		&:hover
-			box-shadow 0 0 4px 2px $csOrange
+			box-shadow 0 0 0 4px $csLightGreen
+			background-color white
+			color $csOrange
 		&.highlight
 			box-shadow 0 0 0 4px $csOrange
-			&:hover
-				box-shadow 0 0 4px 2px $csLightOrange, 0 0 0 4px $csOrange
-	.regularGameHud
-		width 960px
+	.hud-button-active
+		background white
+		box-shadow 0 0 0 4px $csGreen
+	.hud-regular
 		margin-left -10px
-		.playerHud
-			div
-				float left
-				margin-right 10px
-				margin-left 10px
-		.globalHud
-			margin-left 20px
-			div
-				margin-left 20px
-				float right
+		.hud-global
+			text-align right
+		.hud-chat
+			padding-top 8px
+			input
+				border 2px solid $csLightGray
+				background white
+				&:focus
+					border 2px solid $csGreen
+					box-shadow none
 
 .pauseMenu
 	position absolute
@@ -733,6 +739,7 @@ textarea
 	display none
 
 .badge
+	// Used only on buttons on HUD and seedventory
 	position absolute
 	top -12px
 	padding 3px
@@ -798,10 +805,6 @@ textarea
 
 .message
 	font-family $bodyFont
-
-div.currentButton
-	// see if this is used anywhere else but the game menu
-	background #666
 
 .feedback, .check
 	display none

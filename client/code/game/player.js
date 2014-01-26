@@ -595,21 +595,23 @@ var $player = $game.$player = {
         }
 
 				$game.$player.seedventoryShowing = true;
-				$game.statusUpdate({message:'choose a seed to plant',input:'status',screen: true,log:false});
-				$('.seedButton').addClass('currentButton');
+        $game.alert('choose a seed to plant')
+				// $('.seedButton').addClass('hud-button-active');
 			});
 		}
 		//start seed mode on 0
 		else {
-			$('.seedButton').addClass('currentButton');
+			// $('.seedButton').addClass('hud-button-active');
 			if(_seeds.regular > 0) {
 				$game.$player.seedPlanting = true;
 				$game.$player.seedMode = 'regular';
-				$game.statusUpdate({message:'click any tile to drop some color',input:'status',screen: true,log:false});
+				$game.alert('click any tile to drop some color')
 			}
 			else {
-				$('.seedButton').removeClass('currentButton');
-				$game.statusUpdate({message:'you have no seeds',input:'status',screen: true,log:false});
+        // No seeds, cancel out of seed mode.
+        $player.seedMode = false
+        $('.seedButton').removeClass('hud-button-active')
+        $game.alert('you have no seeds')
 			}
 		}
 	},
@@ -1235,7 +1237,7 @@ function _sendSeedBomb(data) {
 					_renderInfo.colorNum = _playerColorNum;
 					$game.$player.seedPlanting = false;
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
-					$('.seedButton').removeClass('currentButton');
+					$('.seedButton').removeClass('hud-button-active');
 					$game.$player.saveMapImage(true);
 					//TODO: save seed values to DB
 					_saveSeedsToDB();
@@ -1251,7 +1253,7 @@ function _sendSeedBomb(data) {
 					$game.$player.seedPlanting = false;
 					$graffiti.hide();
 					$game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
-					$('.seedButton').removeClass('currentButton');
+					$('.seedButton').removeClass('hud-button-active');
 					$game.$player.saveMapImage(true);
 					//TODO: save seed values to DB
 					_saveSeedsToDB();

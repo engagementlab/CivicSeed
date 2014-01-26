@@ -599,7 +599,7 @@ var $botanist = $game.$botanist = {
 
 			//if they just beat a level, then show progreess
 			if($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
-				$('.progressButton').toggleClass('currentButton');
+				$('.progressButton').toggleClass('hud-button-active');
 				$game.showProgress();
 			}
 		});

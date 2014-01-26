@@ -120,7 +120,7 @@ $game.$boss = {
 					_seedMode = 0;
 					$game.$player.seedMode = false;
 					$game.$player.resetRenderColor();
-					$('.bossHud .regularSeedButton').removeClass('currentButton');
+					$('.bossHud .regularSeedButton').removeClass('hud-button-active');
 					//check if they fail
 					_checkFail();
 				}
@@ -437,7 +437,7 @@ function _checkWin() {
 
 //show stuff if they don't beat the level
 function _fail() {
-	$('.bossHud .regularSeedButton').removeClass('currentButton');
+	$('.bossHud .regularSeedButton').removeClass('hud-button-active');
 	$game.$player.seedMode = false;
 	$game.$player.resetRenderColor();
 	_pause = true;
@@ -450,18 +450,18 @@ function _fail() {
 function _setupHud() {
 	$BODY.on('click','.bossHud .regularSeedButton', function() {
 		if(_seedMode === 0 && _numRegularSeeds > 0) {
-			$(this).addClass('currentButton');
+			$(this).addClass('hud-button-active');
 			_seedMode = 1;
 			$game.$player.seedMode = true;
 		} else if(_seedMode === 1) {
-			$(this).removeClass('currentButton');
+			$(this).removeClass('hud-button-active');
 			_seedMode = 0;
 			$game.$player.seedMode = false;
 			$game.$player.resetRenderColor();
 		} else if(_seedMode === 2) {
 			if(_numRegularSeeds > 0) {
-				$(this).addClass('currentButton');
-				$('.bossHud .drawSeedButton').removeClass('currentButton');
+				$(this).addClass('hud-button-active');
+				$('.bossHud .drawSeedButton').removeClass('hud-button-active');
 				_seedMode = 1;
 			} else {
 				$game.statusUpdate({message:'you have no more seeds!',input:'status',screen: true,log:false});
@@ -473,17 +473,17 @@ function _setupHud() {
 
 	$BODY.on('click','.bossHud .drawSeedButton', function() {
 		if(_seedMode === 0) {
-			$(this).addClass('currentButton');
+			$(this).addClass('hud-button-active');
 			_seedMode = 2;
 			$game.$player.seedMode = true;
 		} else if(_seedMode === 1) {
-			$(this).addClass('currentButton');
-			$('.bossHud .regularSeedButton').removeClass('currentButton');
+			$(this).addClass('hud-button-active');
+			$('.bossHud .regularSeedButton').removeClass('hud-button-active');
 			_seedMode = 2;
 			$game.$player.seedMode = false;
 			$game.$player.resetRenderColor();
 		} else {
-			$(this).removeClass('currentButton');
+			$(this).removeClass('hud-button-active');
 			_seedMode = 0;
 		}
 	});
