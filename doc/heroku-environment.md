@@ -2,7 +2,7 @@
 
 A Heroku development environment is handy because they're free and easy to set up, and we can have multiple servers to test different multiplayer instances if we wish. Here is how you set it up. (We'll assume you already have a Heroku account with any SSH keys uploaded and command line tools installed.)
 
-1. Create an app, either through the site or command line `heroku heroku apps:create civicseed-dev`. The app name can be something of your choosing.
+1. Create an app, either through the site or command line `heroku apps:create civicseed-dev`. The app name can be something of your choosing.
 2. Make sure Heroku is properly set as a Git remote for the Civic Seed repository so that we can push to it later.
 3. Install add-ons. We'll use [MongoHQ](https://addons.heroku.com/mongohq) and [Redis To Go](https://addons.heroku.com/redistogo). Both have free tiers which will be enough for testing purposes.
 `heroku addons:add mongohq`
