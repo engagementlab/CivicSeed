@@ -103,7 +103,7 @@ $game.$mouse = {
 						if(state === -1 && !$game.$player.pathfinding) {
 							$game.$player.beginMove(_curX,_curY);
 							if($game.$npc.isChat) {
-								$game.$npc.hideChat();
+								$game.$npc.hideSpeechBubble();
 							}
 							if($game.$botanist.isChat) {
 								$game.$botanist.hideChat();
@@ -113,7 +113,7 @@ $game.$mouse = {
 						else if(state >= 0 ) {
 							if(state !== $game.$botanist.index && !$game.$player.pathfinding) {
 								if($game.$npc.isChat) {
-									$game.$npc.hideChat();
+									$game.$npc.hideSpeechBubble();
 								}
 								$game.$npc.selectNpc(state);
 								//move top bottom left of NPC
@@ -121,7 +121,7 @@ $game.$mouse = {
 							}
 							else {
 								//show botanist stuff cuz you clicked him!
-								$('.speechBubble button').addClass('hideButton');
+								$('.speechBubble button').hide();
 								$game.$botanist.show();
 							}
 						}

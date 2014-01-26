@@ -226,14 +226,15 @@ var $player = $game.$player = {
 	},
 
 	//start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
-	beginMove: function(x, y) {
-		// Clear HUD
+	beginMove: function (x, y) {
+		// Clear hud
 		if ($game.$player.inventoryShowing) $game.$input.closeInventory()
 
-		var loc = $game.$map.masterToLocal(_info.x, _info.y);
+		var loc = $player.getLocation()
+    /*  Removing this prevents function from exiting if player stays in the same spot, which helps for reactivating NPCs.
 		if(loc.x === x && loc.y === y) {
 			return;
-		}
+		}*/
 		$game.$player.pathfinding = true;
 		_info.offX = 0;
 		_info.offY = 0;
@@ -276,6 +277,30 @@ var $player = $game.$player = {
 			});
 		}
 	},
+
+  moveUp: function () {
+    var location = $player.getLocation()
+    $game.$player.beginMove(location.x, location.y - 1)
+    // $game.alert('Move up')
+  },
+
+  moveDown: function () {
+    var location = $player.getLocation()
+    $game.$player.beginMove(location.x, location.y + 1)
+    // $game.alert('Move down')
+  },
+
+  moveLeft: function () {
+    var location = $player.getLocation()
+    $game.$player.beginMove(location.x - 1, location.y)
+    // $game.alert('Move left')
+  },
+
+  moveRight: function () {
+    var location = $player.getLocation()
+    $game.$player.beginMove(location.x + 1, location.y)
+    // $game.alert('Move right')
+  },
 
 	//moves the player as the viewport transitions
 	slide: function(slideX, slideY) {
@@ -458,12 +483,10 @@ var $player = $game.$player = {
 		}
 	},
 
-	//gets player answer for specific resource
-	getAnswer: function(id) {
-		if( _resources[id]) {
-			return _resources[id];
-		}
-	},
+  // Gets player's answer for specific resource
+  getAnswer: function (id) {
+    return _resources[id]
+  },
 
 	//this happens on load to put all items from DB -> inventory
 	fillInventory: function() {
@@ -674,13 +697,8 @@ var $player = $game.$player = {
 	},
 
 	//see if the player has the specific resource already
-	checkForResource: function(id) {
-		// console.log(id);
-		// console.log(_resources);
-		if(_resources[id]) {
-			return true;
-		}
-		return false;
+	checkForResource: function (id) {
+    return (_resources[id]) ? true : false
 	},
 
   // Add seeds to a specific type of seed
@@ -740,9 +758,10 @@ var $player = $game.$player = {
 
   // For debug purposes, reset everything but basic skin
   resetSkinventory: function () {
-    _skinSuit.unlocked.head  = 'basic'
-    _skinSuit.unlocked.torso = 'basic'
-    _skinSuit.unlocked.legs  = 'basic'
+    // Reset unlocked array
+    _skinSuit.unlocked.head  = ['basic']
+    _skinSuit.unlocked.torso = ['basic']
+    _skinSuit.unlocked.legs  = ['basic']
 
     $game.$player.setSkinSuit('basic')
 
@@ -1101,7 +1120,12 @@ var $player = $game.$player = {
     })
     $game.$renderer.createCanvasForPlayer($game.$player.id, false)
     $game.$renderer.renderSkinformation()
+  },
+
+  getLocation: function () {
+    return $game.$map.masterToLocal(_info.x, _info.y)
   }
+
 };
 
 /***** PRIVATE FUNCTIONS ******/
@@ -1385,7 +1409,7 @@ function _move() {
 				_curFrame = 0;
 			}
 		}
-		_info.srcX = _curFrame * $game.TILE_SIZE,
+		_info.srcX = _curFrame * $game.TILE_SIZE;
 		_info.srcY = _direction * $game.TILE_SIZE*2;
 	}
 }
@@ -1435,9 +1459,9 @@ function _endMove() {
 	}
 	else {
 		//trigger npc to popup _info and stuff
-		if($game.$player.npcOnDeck) {
-			$game.$player.npcOnDeck = false;
-			$game.$npc.show();
+		if ($game.$player.npcOnDeck) {
+      var index = $game.$player.npcOnDeck
+      $game.$npc.activate(index)
 		}
 	}
 }

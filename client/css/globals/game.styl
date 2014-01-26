@@ -5,9 +5,6 @@
 	font-weight normal
 	font-style normal
 
-p, li, button, a
-	font-family $buttonFont
-
 .gameboard
 	// cursor none
 	position relative
@@ -22,11 +19,9 @@ p, li, button, a
 	color #333
 	-webkit-touch-callout none
 	user-select none
-	// cursor: url(http://placehold.it/32x32.png), auto;
-	ul, ol
-		font-size 16px
+	cursor default
 	.cutSceneBg
-		background black;
+		background black
 		width 960px
 		height 480px
 		display none
@@ -74,6 +69,21 @@ p, li, button, a
 			position absolute
 			top 12px
 			right 12px
+	.buttons
+		position absolute
+		z-index 9994
+		bottom 20px
+		left 0
+		width 100%
+		height 30px
+		.left
+			position absolute
+			left 20px
+		.right
+			position absolute
+			right 20px
+		button
+			display none
 
 .overlayContent
 	min-height 320px
@@ -83,6 +93,7 @@ p, li, button, a
 	border 3px solid $csGray
 	background-color #eee
 	user-select text
+	cursor text
 
 .botanistArea
 	z-index 9990
@@ -94,6 +105,7 @@ p, li, button, a
 		// See also .dialog at .resourceArea
 		padding-right 50px
 	.seedChips
+		margin-top 30px
 		text-align center
 	.tangramArea
 		position absolute
@@ -107,6 +119,8 @@ p, li, button, a
 			position absolute
 			top 0
 			left 0
+			width 930px
+			height 380px
 		.trash
 			position absolute
 			top 170px
@@ -172,7 +186,7 @@ p, li, button, a
 			color white
 		p
 			font-family $buttonFont
-		.publicButton, .privateButton
+		.publicButton, .privateButton, .pledgeButton
 			position absolute
 			right 10px
 			bottom 10px
@@ -181,10 +195,10 @@ p, li, button, a
 				color $csDarkBlue
 	.yourAnswer
 		user-select text
+		cursor text
 		background $csLightBlue
 
 .resourceContentBody
-	margin-top -12px    // This position hack allows it to overwrite a contentless p.dialog with a bottom 12px margin.
 	margin-right 30px  // And not overlap the X button
 	height 360px
 	padding 20px
@@ -193,6 +207,7 @@ p, li, button, a
 	overflow auto
 	color #eee
 	user-select text
+	cursor text
 	h1, h2, h3, h4, h5, h6
 		// Allow all size headers to be used in resource text
 		// Verify line-height issues with these.
@@ -412,6 +427,14 @@ p, li, button, a
 	// 	background #dedede
 	// 	background $csLightGreen
 
+.dialog     // Consider making a generic set of styles for all .dialogs (.resourceContent, .botanistContent, .speechBubble)
+	.speakerName
+		font-size 1.2em
+		font-weight 700
+		color $csBlue
+		&::after
+			content ': '
+
 .skinventory
 	.parts
 		margin-bottom 10px
@@ -513,6 +536,7 @@ p, li, button, a
 	z-index 9999
 	display none
 	button
+		position absolute
 		bottom 15px
 		right 15px
 
@@ -559,20 +583,6 @@ p, li, button, a
 	height 99%
 	width 100%
 
-.nextButton,
-.answerButton,
-button.closeButton,
-.saveButton
-	position absolute
-	bottom 14px
-	right 16px
-	z-index 9994
-
-.backButton, .clearBoardButton
-	position absolute
-	bottom 20px
-	left 20px
-
 .speechBubble
 	display none
 	z-index 9999
@@ -588,17 +598,13 @@ button.closeButton,
 		margin 0
 		padding 0
 		width 760px
-	p.fitBubble
-		width 900px
+		&.fitBubble, &.fit
+			width 900px
 	button
+		display none
 		float right
 		margin 0 6px
 
-
-.speakerName
-	font-size 1.2em
-	font-weight 700
-	color $csBlue
 
 #background,
 #foreground,
@@ -645,27 +651,36 @@ button.closeButton,
 	float left
 	margin-left 20px
 
-.regularGameHud
-	width 960px
-	margin-left -10px
-	.playerHud
-		div
-			cursor pointer
-			width 48px
-			height 36px
-			line-height 36px
-			margin-right 10px
-			margin-left 10px
-			background #222
-			color #dedede
-			position relative
-			text-align center
-		div:hover
-			box-shadow 0 0 2px 2px rgba(0,0,0,.5)
-
-.hud div
-	font-size 22px
-	float left
+.hud
+	.button
+		position relative
+		width 48px
+		height 36px
+		font-size 22px
+		text-align center
+		line-height 36px
+		background $csBlack
+		color $csLightGray
+		cursor pointer
+		&:hover
+			box-shadow 0 0 4px 2px $csOrange
+		&.highlight
+			box-shadow 0 0 0 4px $csOrange
+			&:hover
+				box-shadow 0 0 4px 2px $csLightOrange, 0 0 0 4px $csOrange
+	.regularGameHud
+		width 960px
+		margin-left -10px
+		.playerHud
+			div
+				float left
+				margin-right 10px
+				margin-left 10px
+		.globalHud
+			margin-left 20px
+			div
+				margin-left 20px
+				float right
 
 .pauseMenu
 	position absolute
@@ -684,9 +699,6 @@ button.closeButton,
 	color #222
 	font-size 2em
 	margin-top 100px
-
-.hideButton
-	display none
 
 #chatButton
 	margin-left 10px
@@ -716,25 +728,6 @@ textarea
 	max-height 200px
 	resize none
 
-.globalHud
-	margin-left 20px
-	div
-		width 48px
-		height 36px
-		margin-left 20px
-		cursor pointer
-		position relative
-		float right
-		line-height 36px
-		text-align center
-		background #222
-		color #dedede
-		&:hover
-			box-shadow 0 0 4px 2px $csOrange
-		&.highlightBox
-			box-shadow 0 0 0 4px $csOrange
-			&:hover
-				box-shadow 0 0 4px 2px $csLightOrange, 0 0 0 4px $csOrange
 
 
 .hide
@@ -811,7 +804,7 @@ div.currentButton
 	// see if this is used anywhere else but the game menu
 	background #666
 
-.feedback, .check, .checkTagline
+.feedback, .check
 	display none
 	position absolute
 	left 280px
@@ -826,13 +819,16 @@ div.currentButton
 	z-index 9999
 	.buttons
 		position relative
-		margin-top 18px
+		margin-top 30px
+		margin-bottom -20px
 		height 32px
 		button
+			margin 0 auto
+		.right
 			position absolute
-		.sureButton
 			right 0px
-		.retryButton
+		.left
+			position absolute
 			left 0px
 
 
@@ -984,7 +980,7 @@ p.townSite
 	.buttons
 		text-align center
 		padding 10px
-	p.dialog
+	p.dialog   // TODO: Deprecrate in favor of generic .dialog style?
 		padding-top 10px
 		span
 			font-size 1.1em

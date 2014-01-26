@@ -1,12 +1,12 @@
 .container.hud
 	.row.regularGameHud
 		.span4.playerHud
-			.inventoryButton
+			.button.inventoryButton
 				i.fa.fa-briefcase.fa-lg(title='toggle inventory', data-placement='bottom')
 				span.badge.hudCount
-			.skinventoryButton
+			.button.skinventoryButton
 				i.fa.fa-user.fa-lg(title='changing room', data-placement='bottom')
-			.seedButton
+			.button.seedButton
 				i.fa.fa-leaf.fa-lg(title='seeds', data-placement='bottom')
 				span.badge.hudCount
 		.span4.displayHud
@@ -14,13 +14,13 @@
 				input#chatText.input-xlarge(type='text', maxlength='90', placeholder='chat with other players...')
 				button#chatButton.btn(type='submit') Chat
 		.span4.globalHud
-			.helpButton
+			.button.helpButton
 				i.fa.fa-question-circle.fa-lg(title='help', data-placement='bottom')
-			.muteButton
+			.button.muteButton
 				i.fa.fa-volume-up.fa-lg(title='toggle music', data-placement='bottom')
-			.progressButton
+			.button.progressButton
 				i.fa.fa-desktop.fa-lg(title='display progress', data-placement='bottom')
-			.logButton
+			.button.logButton
 				i.fa.fa-list.fa-lg(title='game log', data-placement='bottom')
 				span.badge.hudCount.hide
 	.row.bossHud

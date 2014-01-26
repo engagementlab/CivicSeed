@@ -1,36 +1,39 @@
+'use strict';
+
 var _tilesheets = {},
-  _allImages = [],
-  _skinSuitNames = [],
-  _tilesheetWidth = 0,
-  _tilesheetHeight = 0,
-  _skinSuitWidth = 0,
-  _skinSuitHeight = 0,
+    _currentTilesheet = null,
+    _allImages = [],
+    _skinSuitNames = [],
+    _tilesheetWidth = 0,
+    _tilesheetHeight = 0,
+    _skinSuitWidth = 0,
+    _skinSuitHeight = 0,
 
-  _tilesheetCanvas = [],
-  _tilesheetContext = [],
+    _tilesheetCanvas = [],
+    _tilesheetContext = [],
 
-  _offscreenBackgroundCanvas = null,
-  _offscreenBackgroundContext = null,
+    _offscreenBackgroundCanvas = null,
+    _offscreenBackgroundContext = null,
 
-  _offscreenSkinSuitCanvas = {},
-  _offscreenSkinSuitContext = {},
+    _offscreenSkinSuitCanvas = {},
+    _offscreenSkinSuitContext = {},
 
-  _offscreenPlayersCanvas = {},
-  _offscreenPlayersContext = {},
+    _offscreenPlayersCanvas = {},
+    _offscreenPlayersContext = {},
 
-  _backgroundContext    = null,
-  _foregroundContext    = null,
-  _charactersContext    = null,
-  _gameboardHudContext  = null,
-  _minimapPlayerContext = null,
-  _minimapTileContext   = null,
+    _backgroundContext    = null,
+    _foregroundContext    = null,
+    _charactersContext    = null,
+    _gameboardHudContext  = null,
+    _minimapPlayerContext = null,
+    _minimapTileContext   = null,
 
-  _prevMouseX = 0,
-  _prevMouseY = 0,
-  _hasNpc = false,
-  _wasNpc = false,
-  _playerColorNum = 0,
-  _playerLevelNum = 0;
+    _prevMouseX = 0,
+    _prevMouseY = 0,
+    _hasNpc = false,
+    _wasNpc = false,
+    _playerColorNum = 0,
+    _playerLevelNum = 0;
 
 var $renderer = $game.$renderer = {
 
@@ -133,7 +136,7 @@ var $renderer = $game.$renderer = {
     _tilesheets[filename].onload = function() {
       var next = num + 1;
       if(num === _allImages.length - 1) {
-        $renderer.loadSkinSuitImages(0);
+        $renderer.loadSkinSuitImages();
       }
       else {
         //if they are the world ones, do render them to canvas
@@ -169,11 +172,53 @@ var $renderer = $game.$renderer = {
   },
 
   //load all player images
-  loadSkinSuitImages: function(num) {
+  loadSkinSuitImages: function (num) {
+    if (num === undefined) num = 0
+      /*
+    // TODO
+    // Proposed refactor. Doesn't work. Causes player sprites to not load. Why is this?
+    // Hacky way of keeping track of skin loads
+    var total = _.keys($game.playerSkins).length,
+        count = 0
+
+    function _onSkinLoad (image, id) {
+      _offscreenSkinSuitCanvas[id] = document.createElement('canvas');
+      _offscreenSkinSuitCanvas[id].setAttribute('width', image.width);
+      _offscreenSkinSuitCanvas[id].setAttribute('height', image.height);
+      _offscreenSkinSuitContext[id] = _offscreenSkinSuitCanvas[id].getContext('2d');
+
+      _offscreenSkinSuitContext[id].drawImage(
+        image,
+        0,
+        0
+      );
+
+      if ((count + 1) === total) {
+        _skinSuitWidth = image.width;
+        _skinSuitHeight = image.height;
+        $renderer.ready = true;
+        $renderer.renderSkinventory();
+        $renderer.createCanvasForPlayer($game.$player.id, false);
+      }
+    }
+
+    for (var id in $game.playerSkins) {
+      var filepath = CivicSeed.CLOUD_PATH + '/img/game/skins/' + id + '.png';
+
+      var image = new Image()
+      image.src = filepath
+      image.onload = _onSkinLoad(image, id)
+
+      if ($game.playerSkins.hasOwnProperty(id)) {
+        ++count
+      }
+    }
+    */
+
     var next = num + 1,
-      filename = _skinSuitNames[num],
-      skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + filename + '.png';
-    
+        filename = _skinSuitNames[num],
+        skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png';
+
     var skinSuitImage = new Image();
     skinSuitImage.src = skinSuitFile;
 
@@ -202,6 +247,7 @@ var $renderer = $game.$renderer = {
         $renderer.loadSkinSuitImages(next);
       }
     };
+
   },
 
   //render a frame on every tick, clear canvases and draw updated content
@@ -946,7 +992,7 @@ var $renderer = $game.$renderer = {
     }
 
     var $inner = $el.find('.inner'),
-        bg     = CivicSeed.CLOUD_PATH + '/img/game/skinSuits/' + skin.id + '.png'
+        bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
 
     $el.removeClass('locked')
     $el.attr('title', skin[part].name)
@@ -957,23 +1003,40 @@ var $renderer = $game.$renderer = {
 
   renderSkinformation: function () {
     var playerSuit = $game.$player.getSkinSuit(),
-        skins      = $game.playerSkins
+        skins      = $game.playerSkins,
         head       = playerSuit.head,
         torso      = playerSuit.torso,
         legs       = playerSuit.legs,
         content    = ''
 
-    // Display inventory data
-    // console.log(playerSuit)
-    // console.log(skins, playerSuit, skins[playerSuit])
-    if (head === torso && torso === legs) {
-      content += skins[head].name + ' — Complete outfit bonus!'
-    }
-    else {
-      content += skins[head].head.name + ', ' + skins[torso].torso.name + ', ' + skins[legs].legs.name
+    function _createPartString (skin, part) {
+      var string = '<strong>' + skins[skin][part].name + '.</strong>'
+      if (skins[skin][part].description) {
+        string += ' ' + skins[skin][part].description
+      }
+      if (skins[skin][part].effect) {
+        string += ' (' + skins[skin][part].effect + ')'
+      }
+      return string
     }
 
-    $('.skinformation p').text(content)
+    // Display inventory data
+    if (head === torso && torso === legs) {
+      // Note that the game doesn't store "full set" data, so in the case where all parts
+      // are from the same set, we look in the skins object for the data about the full outfit.
+      var suit = head
+      content += '<strong>' + skins[suit].name + '.</strong> ' + skins[suit].description
+      if (suit != 'basic') {
+        content += ' Complete outfit bonus!'
+      }
+    }
+    else {
+      content += _createPartString(head, 'head')
+      content += '<br>' + _createPartString(torso, 'torso')
+      content += '<br>' + _createPartString(legs, 'legs')
+    }
+
+    $('.skinformation p').html(content)
   }
 
 };

@@ -1,3 +1,5 @@
+'use strict';
+
 //private botanist vars
 var _info = null,
 	_renderInfo = null,
@@ -39,7 +41,7 @@ var _info = null,
 	$botanistAreaMessage = null;
 
 //export botanist functions
-$game.$botanist = {
+var $botanist = $game.$botanist = {
 
 	index: 0,
 	numSteps: 64,
@@ -222,6 +224,12 @@ $game.$botanist = {
 
 	//determine what to show the player when they click on the botanist
 	show: function() {
+
+    // Walk to botanist
+    // Hacky. Player moves during game speech.
+    var location = $game.$map.masterToLocal(71, 74)   // An arbitrary location by the Botanist
+    $game.$player.beginMove(location.x, location.y)
+
 		//decide what to show based on the player's current status
 		//if they are in a level 0-4
 		if($game.$player.currentLevel < 5) {
@@ -238,28 +246,23 @@ $game.$botanist = {
 				//make sure they have planted a seed in level 1
 				if($game.$player.currentLevel === 0 && dropped < 1) {
 					//make them plant first seed
-					_speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
+					var _speak =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.';
 
-					$speakerName.text($game.$botanist.name+': ');
-					$message.text(_speak);
-					$speechBubble.fadeIn(function() {
-						setTimeout(function() {
-							$game.$botanist.hideChat();
-						}, 3000);
-					});
+          $game.$npc.showSpeechBubble($game.$botanist.name, _speak)
 				}
 				else {
 					//ugly hack so we see Second set of instructions in level 0
 					if(!_firstTime && $game.$player.currentLevel === 0) {
-						$('.seedButton').removeClass('highlightBox');
+            // Player has completed seed tutorial
 						_messages = $game.$botanist.dialog[$game.$player.currentLevel].instructions2;
 						_currentMessage = 0;
 						_firstTime = true;
-						$('.progressButton').addClass('highlightBox');
+            // Player now does progress window tutorial.
+						$game.highlightUI('.progressButton')
 						$game.$botanist.showChat();
 						$game.$player.saveMapImage(true);
 					} else {
-						$('.progressButton').removeClass('highlightBox');
+						// This happens when player has finished progress tutorial.
 						$game.$botanist.showPrompt(0);
 					}
 
@@ -306,8 +309,9 @@ $game.$botanist = {
 
 	//determine which "chat" dialog to show
 	showChat: function() {
-		$speechBubbleP.removeClass('fitBubble');
-		$game.$audio.playTriggerFx('npcBubble');
+    // $game.$npc.showSpeechBubble()
+		//$speechBubbleP.removeClass('fitBubble');
+		//$game.$audio.playTriggerFx('npcBubble');
 		$game.$botanist.isChat = true;
 		$game.$botanist.nextChatContent();
 	},
@@ -315,16 +319,18 @@ $game.$botanist = {
 	//remove chat from screen
 	hideChat: function() {
 		$speechBubble.fadeOut(function() {
-			$speechBubbleBtn.addClass('hideButton');
+			$speechBubbleBtn.hide();
 			$speechBubbleCloseBtn.unbind('click');
+
 			$game.$botanist.isChat = false;
 			//save that the player has looked at the instructions
 			if($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
 				$game.$player.botanistState = 1;
 				_saveBotanistState();
+
 				if($game.$player.currentLevel === 0) {
 					//highlight the seed button
-					$('.seedButton').addClass('highlightBox');
+          $game.highlightUI('.seedButton')
 					$game.$player.updateSeeds('regular', 1);
 				}
 			}
@@ -333,9 +339,9 @@ $game.$botanist = {
 
 	//actually add the chat content to the dom and bind some actions
 	addChatContent: function() {
-		$speechBubbleBtn.addClass('hideButton');
-		$speechBubbleNextBtn.removeClass('hideButton');
-		$speakerName.text($game.$botanist.name+': ');
+		$speechBubbleBtn.hide();
+		$speechBubbleNextBtn.show();
+		$speakerName.text($game.$botanist.name);
 		$message.text(_messages[_currentMessage]);
 
 		//first item, then drop
@@ -353,12 +359,12 @@ $game.$botanist = {
 				$speechBubbleNextBtn.bind('click', (function () {
 					$game.$player.botanistState = 1;
 					_saveBotanistState();
-					$speechBubbleNextBtn.addClass('hideButton').unbind('click');
+					$speechBubbleNextBtn.hide().unbind('click');
 					$game.$botanist.showPrompt(0);
 				}));
 			} else {
-				$speechBubbleNextBtn.unbind('click').addClass('hideButton');
-				$speechBubbleCloseBtn.removeClass('hideButton').bind('click', (function () {
+				$speechBubbleNextBtn.unbind('click').hide();
+				$speechBubbleCloseBtn.show().bind('click', (function () {
 					$game.$botanist.hideChat();
 				}));
 			}
@@ -375,31 +381,19 @@ $game.$botanist = {
 	},
 
 	//show the viewing tangram prompt
-	showPrompt: function(p) {
-		$speechBubble.hide();
-		$speechBubbleP.removeClass('fitBubble');
-		$game.$audio.playTriggerFx('npcBubble');
+	showPrompt: function (prompt) {
 		$game.$botanist.isChat = true;
-		_speak =  $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[p];
 
-		$speakerName.text($game.$botanist.name+': ');
-		$message.text(_speak);
-		$('.speechBubble .buttonCorner .yesButton').removeClass('hideButton');
-		$('.speechBubble .buttonCorner .noButton').removeClass('hideButton');
-		$speechBubble.fadeIn(function() {
-			$('.speechBubble .yesButton').bind('click', (function () {
-				if(p === 1) {
-					$game.$botanist.isSolving = true;
-					$('.displayBoxText').text('drag a piece to the board to use it');
-					$botanistArea.addClass('puzzle-mode');
-				}
+		var dialogue = $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[prompt];
 
-				$game.$botanist.showRiddle(p);
-			}));
-			$('.speechBubble .noButton').bind('click', (function () {
-				$game.$botanist.hideChat();
-			}));
-		});
+    $game.$npc.showSpeechBubble($game.$botanist.name, dialogue, function () {
+      if(prompt === 1) {
+        $game.$botanist.isSolving = true;
+        $('.displayBoxText').text('drag a piece to the board to use it');
+        $botanistArea.addClass('puzzle-mode');
+      }
+      $game.$botanist.showRiddle(prompt);
+    }, $botanist.hideChat)
 	},
 
 	//show the riddle if the inventory is open and it was clicked
@@ -428,7 +422,7 @@ $game.$botanist = {
 		$game.$botanist.addButtons();
 
 		$speechBubble.fadeOut(function() {
-			$speechBubbleBtn.addClass('hideButton');
+			$speechBubbleBtn.hide();
 			$('.speechBubble .yesButton').unbind('click');
 			$('.speechBubble .noButton').unbind('click');
 
@@ -445,32 +439,32 @@ $game.$botanist = {
 
 	//determine which buttons to show based on what is being shown
 	addButtons: function() {
-		$('.botanistArea button').addClass('hideButton');
+		$('.botanistArea button').hide();
 
 		//no buttons except close
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
 				if($game.$player.firstTime) {
-					$('.botanistArea .nextButton').removeClass('hideButton');
+					$('.botanistArea .nextButton').show();
 				} else {
-					$('.botanistArea .closeButton').removeClass('hideButton');
+					$('.botanistArea .closeButton').show();
 				}
 			}
 			else {
-				$('.botanistArea .closeButton').removeClass('hideButton');
+				$('.botanistArea .closeButton').show();
 			}
 		}
 		else {
 			if(_currentSlide === 0) {
-				$('.botanistArea .answerButton').removeClass('hideButton');
-				$('.botanistArea .clearBoardButton').removeClass('hideButton');
+				$('.botanistArea .answerButton').show();
+				$('.botanistArea .clearBoardButton').show();
 			}
 			else if(_currentSlide === 1) {
-				$('.botanistArea .nextButton').removeClass('hideButton');
+				$('.botanistArea .nextButton').show();
 			}
 			else {
-				$('.botanistArea .answerButton').removeClass('hideButton');
-				//$('.botanistArea .clearBoardButton').removeClass('hideButton');
+				$('.botanistArea .answerButton').show();
+				//$('.botanistArea .clearBoardButton').show();
 			}
 		}
 	},
@@ -491,7 +485,7 @@ $game.$botanist = {
 
 	//determine which content to add and add it
 	addContent: function() {
-		$('.botanistArea .speakerName').text($game.$botanist.name+': ');
+		$('.botanistArea .speakerName').text($game.$botanist.name);
 		//if _promptNum is 0, then it is the just showing the riddle no interaction
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
@@ -500,7 +494,7 @@ $game.$botanist = {
 					$botanistAreaMessage.text('Here is the notebook page to view again.');
 				}
 				else {
-					$botanistAreaMessage.text('Here is the page. You will be able to view it at anytime in your inventory.');
+					$botanistAreaMessage.text('Here is the page. You will be able to view it at any time in your inventory.');
 
 					if($game.$player.currentLevel > 0) {
 						//add this tangram outline to the inventory
@@ -513,6 +507,7 @@ $game.$botanist = {
 				}
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
 				$('.tangramOutline').html('<img src="' + imgPath + '">');
+				$('.tangramArea').show()
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
@@ -538,7 +533,7 @@ $game.$botanist = {
 		//they are solving it, so riddle interface and stuff
 		else {
 			if(_currentSlide === 0) {
-				$inventoryBtn.addClass('hideButton');
+				$inventoryBtn.hide();
 				$inventory.slideDown(function() {
 					$game.$player.inventoryShowing = false;
 					//set the inventory items to draggable in case they were off
@@ -547,7 +542,7 @@ $game.$botanist = {
 				//$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
 				$botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.');
 				var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
-					imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+            imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
 				var newHTML = '<img src="' + imgPath1 + '"><img src="' + imgPath2 + '" class="trash">';
 				$('.tangramOutline').html(newHTML);
 
@@ -562,7 +557,7 @@ $game.$botanist = {
 				});
 				$inventory.slideUp(function() {
 					$game.$player.inventoryShowing = false;
-					$inventoryBtn.removeClass('hideButton');
+					$inventoryBtn.show();
 					$inventoryItem.remove();
 				});
 
@@ -572,7 +567,7 @@ $game.$botanist = {
 				var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</p>',
 					imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
 
-				newHTML2 += '<p class="seedChips"><img src="' + imgPath3 +'"></p>';
+				newHTML2 += '<div class="seedChips"><img src="' + imgPath3 +'"></div>';
 				$botanistContent.html(newHTML2);
 			}
 			else {
@@ -595,7 +590,7 @@ $game.$botanist = {
 		$tangramArea.hide();
 		$botanistArea.fadeOut(function() {
 			$game.$botanist.isShowing = false;
-			$('.botanist button').addClass('hideButton');
+			$('.botanist button').hide();
 			$(this).removeClass('patternBg3').removeClass('puzzle-mode')
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
@@ -619,7 +614,7 @@ $game.$botanist = {
 		else {
 			$inventory.slideUp(function() {
 				$game.$player.inventoryShowing = false;
-				$inventoryBtn.removeClass('hideButton');
+				$inventoryBtn.show();
 				$('.inventoryPuzzle').show();
 				$('.inventoryHelp').hide();
 			});
@@ -756,8 +751,6 @@ $game.$botanist = {
 	setupTangram: function() {
 		_svg = d3.select('.tangramArea').append('svg')
 			.attr('class','puzzleSvg')
-			.attr('width','930px')
-			.attr('height','380px');
 
 		_drag = d3.behavior.drag()
 			.origin(Object)
@@ -844,7 +837,7 @@ $game.$botanist = {
 
 	//this is dragging a puzzle piece on area and moving it around
 	dragMoveStart: function(d) {
-		clearTimeout(_feedbackTimeout);
+  		clearTimeout(_feedbackTimeout);
 		$feedback.fadeOut('fast');
 
 		_dragOffX = d3.mouse(this)[0],

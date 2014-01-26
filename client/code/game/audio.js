@@ -455,6 +455,7 @@ var $audio = $game.$audio = {
     return $audio.isMute
   },
 
+  // Mute and unmute wrappers for Howler
   mute: function () {
     Howler.mute()
   },

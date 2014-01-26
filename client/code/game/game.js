@@ -177,7 +177,7 @@ var $game = module.exports = {
     'cone': {
       'id': 'cone',
       'name': 'Ice Cream Cone',
-      'description': '',
+      'description': 'You look delicious.',
       'effect': '',
       'modifiers': '',
       'head': {
@@ -202,7 +202,7 @@ var $game = module.exports = {
     'astronaut': {
       'id': 'astronaut',
       'name': 'Astronaut',
-      'description': '',
+      'description': 'This allows you to explore in space.',
       'effect': '',
       'modifiers': '',
       'head': {
@@ -227,7 +227,7 @@ var $game = module.exports = {
     'ninja': {
       'id': 'ninja',
       'name': 'Ninja',
-      'description': '',
+      'description': 'A shady ninja costume.',
       'effect': '',
       'modifiers': '',
       'head': {
@@ -252,7 +252,7 @@ var $game = module.exports = {
     'horse': {
       'id': 'horse',
       'name': 'Horse',
-      'description': '',
+      'description': 'You’re a horse!',
       'effect': 'You walk a lot faster!',
       'modifiers': '',
       'head': {
@@ -656,6 +656,18 @@ var $game = module.exports = {
       screen:  true,
       log:     true
     })
+  },
+
+  debug: function (message) {
+    console.error('CIVIC SEED DEBUG MESSAGE: ' + message)
+  },
+
+  highlightUI: function (target) {
+    $(target).addClass('highlight')
+  },
+
+  unhighlightUI: function (target) {
+    $(target).removeClass('highlight')
   },
 
   //check for bad language to censor it in chat

@@ -20,18 +20,27 @@
 			span.message
 		.resourceContent
 		.resourceContentBody
-		button.nextButton.btn.btn-success(type='button') Next
-		button.saveButton.btn.btn-success(type='button') Save
-		button.backButton.btn.btn-info(type='button') Back
-		button.answerButton.btn.btn-success(type='button') Answer
-		button.closeButton.btn.btn-primary(type='button') Close
-		.check
+		.buttons
+			.left
+				button.backButton.btn.btn-info(type='button') Back
+			.right
+				button.nextButton.btn.btn-success(type='button') Next
+				button.saveButton.btn.btn-success(type='button') Save
+				button.answerButton.btn.btn-success(type='button') Answer
+				button.closeButton.btn.btn-primary(type='button') Close
+		.check.confirm-skimpy
 			p Are you sure? That seems a bit skimpy...
 			.buttons
-				button.sureButton.btn.btn-success(type='button') I'm Sure
-				button.retryButton.btn.btn-primary(type='button') I'll Add More
-		.checkTagline
+				button.sureButton.right.btn.btn-success(type='button') I'm Sure
+				button.retryButton.left.btn.btn-primary(type='button') I'll Add More
+		.check.message-empty
+			p Please answer the question!
+			.buttons
+				button.retryButton.btn.btn-primary(type='button') Okay
+		.check.message-tagline
 			p You should create a custom tagline!
+			.buttons
+				button.retryButton.btn.btn-primary(type='button') Okay
 		.feedback
 
 	.botanistArea.gameboardOverlay
@@ -43,12 +52,14 @@
 		.tangramArea
 			.tangramOutline
 			.feedback
-
-		button.nextButton.btn.btn-success(type='button') Next
-		button.backButton.btn.btn-info(type='button') Back
-		button.answerButton.btn.btn-success(type='button') Answer
-		button.closeButton.btn.btn-primary(type='button') Close
-		button.clearBoardButton.btn.btn-info(type='button') Clear Board
+		.buttons
+			.left
+				button.backButton.btn.btn-info(type='button') Back
+				button.clearBoardButton.btn.btn-info(type='button') Clear Board
+			.right
+				button.nextButton.btn.btn-success(type='button') Next
+				button.answerButton.btn.btn-success(type='button') Answer
+				button.closeButton.btn.btn-primary(type='button') Close
 
 		a(href='#')
 			i.fa.fa-times-circle.fa-lg
@@ -192,14 +203,14 @@
 		p seeds left: <span></span>
 
 	.speechBubble
-		p
+		p.dialog
 			span.speakerName
 			span.message
 		.buttonCorner
-			button.nextChatButton.hideButton.btn.btn-success(type='button') Next
-			button.closeChatButton.hideButton.btn.btn-primary(type='button') Close
-			button.noButton.btn.hideButton.btn-primary(type='button') Close
-			button.yesButton.btn.hideButton.btn-success(type='button') View
+			button.nextChatButton.btn.btn-success(type='button') Next
+			button.closeChatButton.btn.btn-primary(type='button') Close
+			button.noButton.btn.btn-primary(type='button') Close
+			button.yesButton.btn.btn-success(type='button') View
 
 	.pauseMenu
 		p please re-focus your mind, body, and the window...

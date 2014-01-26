@@ -175,6 +175,10 @@ var $input = $game.$input = module.exports = {
 
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
 
+    $BODY.on('click', '.speechBubble', function (e) {
+      // Prevent clicking on speech bubble from interacting with gameboard below
+      e.stopImmediatePropagation()
+    })
 
 		//send a chat message, pulled from chat field
 		$BODY.on('click', '#chatButton', function (e) {
@@ -251,7 +255,7 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//submit answer in resource
-		$BODY.on('click', '.resourceArea .answerButton, .resourceArea .sureButton', function (e) {
+		$BODY.on('click', '.resourceArea .answerButton', function (e) {
 			e.preventDefault();
 			$('.check').hide();
 			$game.$resources.submitAnswer();
@@ -269,7 +273,7 @@ var $input = $game.$input = module.exports = {
 		//cancel submit in resource
 		$BODY.on('click', '.resourceArea .retryButton', function (e) {
 			e.preventDefault();
-			$('.check').fadeOut();
+			$('.check').fadeOut(100);
 			return false;
 		});
 
@@ -331,7 +335,7 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//pledge a seed to a comment
-		$BODY.on('click', '.pledgeButton', function() {
+		$BODY.on('click', '.pledgeButton button', function() {
 			var info = {
 				id: $(this).attr('data-player'),
 				pledger: $game.$player.firstName,
@@ -365,6 +369,11 @@ var $input = $game.$input = module.exports = {
 			e.preventDefault();
 			return false;
 		});
+
+    // When player clicks a highlighted HUD button, remove the highlight
+    $BODY.on('click', '.hud .highlight', function () {
+      $game.unhighlightUI(this)
+    })
 
 		//pause menu if we want it
 		// $WINDOW.blur(function(e) {
@@ -437,7 +446,7 @@ var $input = $game.$input = module.exports = {
         case 56:  // 'numpad 2' (numlock off/opera)
           // Move player character up.
           e.preventDefault()
-          $game.alert('Move up')
+          $input.moveUp()
           break
         case 65:  // 'a'
         case 37:  // 'left arrow', 'numpad 4'
@@ -445,7 +454,7 @@ var $input = $game.$input = module.exports = {
         case 52:  // 'numpad 4' (numlock off/opera)
           // Move player character to the left.
           e.preventDefault()
-          $game.alert('Move left')
+          $input.moveLeft()
           break
         case 83:  // 'a'
         case 40:  // 'down arrow', 'numpad 8'
@@ -453,7 +462,7 @@ var $input = $game.$input = module.exports = {
         case 50:  // 'numpad 8' (numlock off/opera)
           // Move player character down.
           e.preventDefault()
-          $game.alert('Move down')
+          $input.moveDown()
           break
         case 68:  // 'd'
         case 39:  // 'right arrow', 'numpad 6'
@@ -461,7 +470,7 @@ var $input = $game.$input = module.exports = {
         case 54:  // 'numpad 6' (numlock off/opera)
           // Move player character to the right.
           e.preventDefault()
-          $game.alert('Move right')
+          $input.moveRight()
           break
         // **** CHAT ****
         case 84:  // 't'
@@ -501,6 +510,23 @@ var $input = $game.$input = module.exports = {
           break
       }
     })
+  },
+
+  // Wrapper functions for inputs and interactions
+  moveUp: function () {
+    $game.$player.moveUp()
+  },
+
+  moveDown: function () {
+    $game.$player.moveDown()
+  },
+
+  moveLeft: function () {
+    $game.$player.moveLeft()
+  },
+
+  moveRight: function () {
+    $game.$player.moveRight()
   },
 
   focusChatInput: function () {
