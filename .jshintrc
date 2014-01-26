@@ -14,6 +14,8 @@
 		"JT": true,
 		"CivicSeed": true,
 		"Davis": true,
+		"Howler": true,
+		"d3": true,
 		"$WINDOW": true,
 		"$HTML": true,
 		"$BODY": true,
