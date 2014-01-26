@@ -63,12 +63,12 @@
 		font-size 2em
 	h3
 		color $csGreen
-	a // Font-Awesome X 'close' button
-		font-size 24px
-		i
+	a
+		i.fa // Font-Awesome X 'close' button
 			position absolute
 			top 12px
 			right 12px
+			font-size 36px
 	.buttons
 		position absolute
 		z-index 9994
@@ -212,7 +212,7 @@
 		// Allow all size headers to be used in resource text
 		// Verify line-height issues with these.
 		color $csBlue
-		margin-bottom 1em
+		margin-bottom 0.5em
 	h2
 		// This is default. The line-height override fixes multiple line issues.
 		line-height 1.4em
@@ -221,13 +221,12 @@
 		// div - something is overriding it.
 		font-family $buttonFont
 		font-size 1.1em
-	p + h2
-		margin-top 20px
+	p + h2, ul + h2, blockquote + h2
+		margin-top 0.75em
 	ul
 		list-style-type square
 	li
 		margin 5px 20px
-
 	.videoResource
 		text-align center
 		background $cloudUrl('img/bg/loading.png') no-repeat center center
@@ -237,9 +236,10 @@
 		font-size 1.5em
 		text-align center
 	.lede
-		margin 60px 30px 0
+		margin 90px 60px 0
 		font-size 1.5em
-		line-height 1.6em
+		line-height 1.4em
+		text-align center
 
 
 .progressArea
@@ -816,6 +816,7 @@ div.currentButton
 	text-align center
 	color $csLightGray
 	background $csPurple
+	box-shadow $csUIDropShadow
 	z-index 9999
 	.buttons
 		position relative

@@ -216,10 +216,10 @@ var $npc = $game.$npc = {
               place = 'northeast'
               break
             case 2:
-              place = 'southwest'
+              place = 'southeast'
               break
             case 3:
-              place = 'southeast'
+              place = 'southwest'
               break
           }
           dialog = 'You should go explore ' + $game.world[place].name + ', in the ' + place + '.'

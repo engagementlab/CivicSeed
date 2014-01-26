@@ -369,7 +369,7 @@ var $game = module.exports = {
     },
     'southwest': {
       'shortname': 'port',
-      'name': 'Port District'
+      'name': 'the Port District'
     },
     'nowhere': {
       'shortname': 'equator',
