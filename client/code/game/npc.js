@@ -290,7 +290,7 @@ var $npc = $game.$npc = {
       // Yes it is.
       hasPrompt = true
       clearTimeout($game.$npc.hideTimer)  // Prevent any loose timers from ever accidentally killing the prompt (does this happen?)
-      $el.find('p').removeClass('fit')
+      $el.find('.dialog').addClass('fit')
 
       // prompt is a callback function that is executed when player clicks the Yes button.
       // Currently assuming that all prompt responses will result in closing the speech bubble
@@ -305,8 +305,9 @@ var $npc = $game.$npc = {
         $game.$npc.hideSpeechBubble(callback)
       }).show()
     } else {
-      // No it is not.
-      $el.find('p').addClass('fit')
+      // No it is not. Clear any residue of prompt detritus before showing.
+      $el.find('.dialog').removeClass('fit')
+      $el.find('button').hide()
     }
 
     // Display the dialog
@@ -336,10 +337,7 @@ var $npc = $game.$npc = {
     $el.find('.yesButton').unbind('click')
     $el.find('.noButton').unbind('click')
 
-    // Clear and reset the speech bubble
     $el.fadeOut(function () {
-      $el.find('p').removeClass('fit')
-      $el.find('button').hide()
       if (typeof callback === 'function') {
         // Callback function after speech bubble is hidden.
         callback()

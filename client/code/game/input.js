@@ -368,7 +368,7 @@ var $input = $game.$input = module.exports = {
 		});
 
     // When player clicks a highlighted HUD button, remove the highlight
-    $BODY.on('click', '.hud .highlight', function () {
+    $BODY.on('click', '.hud-button-highlight', function () {
       $game.unhighlightUI(this)
     })
 
