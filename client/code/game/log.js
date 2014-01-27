@@ -1,11 +1,12 @@
+'use strict';
+
 var $gameLog,
-	$hudCount,
+    _unread,
+    _maxItems = 50,
+    _numItems = 0;
 
-	_unread,
-	_maxItems = 50,
-	_numItems = 0;
+var $log = $game.$log = {
 
-$game.$log = {
 	ready: false,
 
 	init: function(callback) {
@@ -34,7 +35,9 @@ $game.$log = {
 				hudText = '10+';
 				$game.statusUpdate({message: 'There are new messages in your game log below', input: 'status', log: false, screen: true});
 			}
-			$hudCount.text(hudText).removeClass('hide');
+
+      $game.setBadgeCount('.logButton', hudText)
+
 			var	date = Date(),
 				displayDate = date.substring(0,10) + date.substring(15,24),
 				html;
@@ -52,17 +55,15 @@ $game.$log = {
 			// $gameLog.scrollTop($gameLog[0].scrollHeight);
 			// $gameLog.scrollTop(0);
 		}
-		
+
 	},
 
 	clearUnread: function() {
-		$hudCount.text(_unread).addClass('hide');
+    $game.setBadgeCount('.logButton', 0)
 		_unread = 0;
-		$hudCount.text(_unread);
 	}
 };
 
 function _setupDomSelectors() {
 	$gameLog = $('.gameLog');
-	$hudCount = $('.logButton .hudCount');
 }

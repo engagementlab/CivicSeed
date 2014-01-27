@@ -607,6 +607,11 @@ var $input = $game.$input = module.exports = {
     $game.showingSkinventory = !$game.showingSkinventory
     $('.skinventoryButton').toggleClass('hud-button-active')
     $('.skinventory').toggle()
+
+    // Resets badge count - lame that it happens here
+    if ($game.showingSkinventory === true) {
+      $game.setBadgeCount('.skinventoryButton', 0)
+    }
   },
 
   closeSkinventory: function () {

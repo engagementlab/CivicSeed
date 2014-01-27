@@ -16,15 +16,10 @@ var _curFrame = 0,
 
 	_numRequired = [4,5,6,5],
 
-	$seedHudCount = null,
-	$regularHudCount = null,
-	$drawHudCount = null,
-	$specialHudCount = null,
 	_previousSeedsDropped = null,
 
 	$waiting = null,
 	$gameboard = null,
-	$inventoryBtn = null,
 	$inventory = null,
 	$graffiti = null,
 	$graffitiNum = null,
@@ -148,15 +143,10 @@ var $player = $game.$player = {
 		_info = null;
 		_renderInfo = null;
 
-		$seedHudCount = null;
-		$regularHudCount = null;
-		$drawHudCount = null;
-		$specialHudCount = null;
 		_previousSeedsDropped = null;
 
 		$waiting = null;
 		$gameboard = null;
-		$inventoryBtn = null;
 		$inventory = null;
 		$graffiti = null;
 		$graffitiNum = null;
@@ -493,7 +483,8 @@ var $player = $game.$player = {
 		if($game.$player.currentLevel < 4) {
 			var l = _inventory.length,
 				cur = 0;
-			$inventoryBtn.text(l);
+
+			$game.setBadgeCount('.inventoryButton', l)
 
 			while(cur < l) {
 				_addToInventory(_inventory[cur]);
@@ -524,7 +515,7 @@ var $player = $game.$player = {
 	emptyInventory: function() {
 		_inventory = [];
 		$('.inventoryItem').remove();
-		$inventoryBtn.text('0');
+		$game.setBadgeCount('.inventoryButton', 0)
 	},
 
 	//make the bounding box for each possible resource in inventory
@@ -1108,12 +1099,8 @@ function _saveResourceToDB(resource) {
 //setup all the dom elements for reuse
 function _setDomSelectors() {
 	//set variables for dom selectors
-	$seedHudCount = $('.seedButton .hudCount');
-	$regularHudCount = $('.regularButton .hudCount');
-	$drawHudCount = $('.drawButton .hudCount');
 	$waiting = $('.waitingForSeed');
 	$gameboard = $('.gameboard');
-	$inventoryBtn = $('.inventoryButton > .hudCount');
 	$inventory = $('.inventory > .pieces');
 	$graffiti = $('.graffiti');
 	$graffitiNum = $('.graffiti p span');
@@ -1265,10 +1252,11 @@ function _sendSeedBomb(data) {
 
 //update seed counts
 function _updateTotalSeeds() {
-	_totalSeeds = _seeds.regular + _seeds.draw;
-	$seedHudCount.text(_totalSeeds);
-	$regularHudCount.text(_seeds.regular);
-	$drawHudCount.text(_seeds.draw);
+  _totalSeeds = _seeds.regular + _seeds.draw;
+
+  $game.setBadgeCount('.seedButton', _totalSeeds)
+  $game.setBadgeCount('.regularButton', _seeds.regular)
+  $game.setBadgeCount('.drawButton', _seeds.draw)
 }
 
 // calculate new render information based on the player's position
@@ -1475,7 +1463,8 @@ function _addToInventory(data) {
 		//var info = $(this).attr('title');
 		$(this).tooltip('show');
 	});
-	$inventoryBtn.text(_inventory.length);
+
+	$game.setBadgeCount('.inventoryButton', _inventory.length)
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)

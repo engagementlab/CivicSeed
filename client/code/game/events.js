@@ -1,9 +1,9 @@
-var $progressHudCount;
+'use strict';
 
-var $events = module.exports = {
+var $events = $game.$events = module.exports = {
 
 	registerVariables: function() {
-		$progressHudCount = $('.progressButton .hudCount');
+		// Blank
 	},
 
 	init: function() {
@@ -50,11 +50,11 @@ var $events = module.exports = {
 			//put in log for everyone
 			data.input = 'chat';
 			if($game.$player.firstName === data.name) {
-				$game.$chat.message(data);	
+				$game.$chat.message(data);
 			} else {
 				$game.$others.message(data);
 			}
-			
+
 		});
 
 		ss.event.on('ss-statusUpdate', function(data, chan) {
@@ -114,7 +114,7 @@ var $events = module.exports = {
 					$game.statusUpdate({message: 'Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.',input:'status', screen:true, log:true});
 					$game.$player.updateSeeds('draw', info.seeds, true);
 					break;
-				}	
+				}
 			}
 		});
 

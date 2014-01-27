@@ -388,11 +388,34 @@ var $game = module.exports = {
   },
 
   highlightUI: function (target) {
-    $(target).addClass('highlight')
+    $(target).addClass('hud-button-highlight')
   },
 
   unhighlightUI: function (target) {
-    $(target).removeClass('highlight')
+    $(target).removeClass('hud-button-highlight')
+  },
+
+  getBadgeCount: function (target) {
+    return window.parseInt($(target).find('.badge').text()) || 0
+  },
+
+  setBadgeCount: function (target, quantity) {
+    var badge = $(target).find('.badge')
+    badge.text(quantity)
+
+    // Hide or show badge depending on quantity
+    // This can be overridden in the layout with a class of always-show, which will never hide.
+    if (quantity > 0 || badge.hasClass('always-show')) {
+      badge.show()
+    }
+    else if (quantity <= 0 && !badge.hasClass('always-show')) {
+      badge.hide()
+    }
+  },
+
+  addBadgeCount: function (target, quantity) {
+    var number = this.getBadgeCount() + quantity
+    this.setBadgeCount(target, number)
   },
 
   //check for bad language to censor it in chat
@@ -580,7 +603,7 @@ function _loadExtra() {
 
   //update text in HUD
   // var percentString = _stats.percent + '%';
-  // $('.progressButton .hudCount').text(percentString);
+  // $('.progressButton .badge').text(percentString);
 
   //init chat rpc
   ss.rpc('game.chat.init');

@@ -304,17 +304,29 @@ var $skins = $game.$skins = {
     if (part !== undefined) {
       // Specify a part to unlock
       playerSkin.unlocked[part].push(skin)
+      $game.addBadgeCount('.skinventoryButton', 1)
     }
     else {
       // Assume all parts of the skin is unlocked
       playerSkin.unlocked.head.push(skin)
       playerSkin.unlocked.torso.push(skin)
       playerSkin.unlocked.legs.push(skin)
+      $game.addBadgeCount('.skinventoryButton', 3)
     }
 
     // Update skinventory
     $skins.updateSkinventory(skin)
     _updatePlayer(playerSkin)
+  },
+
+  updateSkinventory: function (skin) {
+    // Unlock an entire skin easily
+    var head  = $('.head [data-name="' + skin + '"]')
+    var torso = $('.torso [data-name="' + skin + '"]')
+    var legs  = $('.legs [data-name="' + skin + '"]')
+    _renderUnlockedPart(head, skin, 'head')
+    _renderUnlockedPart(torso, skin, 'torso')
+    _renderUnlockedPart(legs, skin, 'legs')
   },
 
   // For debug purposes, reset everything but basic skin
@@ -376,16 +388,6 @@ var $skins = $game.$skins = {
 
     // Display skinformation
     $skins.renderSkinformation()
-  },
-
-  updateSkinventory: function (skin) {
-    // Unlock an entire skin easily
-    var head  = $('.head [data-name="' + skin + '"]')
-    var torso = $('.torso [data-name="' + skin + '"]')
-    var legs  = $('.legs [data-name="' + skin + '"]')
-    _renderUnlockedPart(head, skin, 'head')
-    _renderUnlockedPart(torso, skin, 'torso')
-    _renderUnlockedPart(legs, skin, 'legs')
   },
 
   renderSkinformation: function () {

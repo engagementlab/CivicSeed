@@ -656,11 +656,9 @@
 		width 48px
 		height 48px
 		margin 0 10px
-		padding-left 1px
 		font-size 20px
 		text-align center
 		line-height 48px
-		color $csDarkBlue
 		background-color #f1f1f1
 		box-shadow 0 0 0 4px $csLightGray
 		border-radius 50%
@@ -669,8 +667,13 @@
 			box-shadow 0 0 0 4px $csLightGreen
 			background-color white
 			color $csOrange
-		&.highlight
-			box-shadow 0 0 0 4px $csOrange
+		a
+			display block
+			height 100%
+			width 100%
+			color $csDarkBlue
+	.hud-button-hilite
+		box-shadow 0 0 0 4px $csOrange
 	.hud-button-active
 		background white
 		box-shadow 0 0 0 4px $csGreen
@@ -733,15 +736,15 @@ textarea
 	max-height 200px
 	resize none
 
-
-
 .hide
 	display none
 
 .badge
 	// Used only on buttons on HUD and seedventory
+	display none
 	position absolute
 	top -12px
+	right -4px
 	padding 3px
 	border-radius 4px
 	line-height 1.2em

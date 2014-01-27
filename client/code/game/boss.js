@@ -113,7 +113,7 @@ $game.$boss = {
 			if(_seedMode === 1) {
 				_numRegularSeeds--;
 				$game.$audio.playTriggerFx('seedDrop');
-				$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
+				$('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
 				_renderTiles(pos);
 				if(_numRegularSeeds <= 0) {
 					//TODO: out of regular seeds display
@@ -126,7 +126,7 @@ $game.$boss = {
 				}
 			} else if(_seedMode === 2) {
 				_numDrawSeeds--;
-				$('.bossHud .drawSeedButton .hudCount').text(_numDrawSeeds);
+				$('.bossHud .drawSeedButton .badge').text(_numDrawSeeds);
 				if(_numDrawSeeds <= 0) {
 					//TODO: out of regular seeds display
 					_seedMode = 0;
@@ -163,7 +163,7 @@ function _setDomSelectors() {
 	$bossAreaContent = $('.bossArea .content');
 	$buttons = $('.bossArea .buttons');
 	$seedButton = $('.bossHud .seedButton');
-	$seedButtonCount = $('.bossHud .seedButton .hudCount');
+	$seedButtonCount = $('.bossHud .seedButton .badge');
 	$clock = $('.bossHud .clock');
 	$score = $('.bossHud .score span');
 }
@@ -371,7 +371,7 @@ function _beginGame() {
     _seedMode = 0;
     _canPlace = true;
     _placeCharger();
-    $('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
+    $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
     //trigger boss music!
     $game.$audio.switchTrack(7);
@@ -591,7 +591,7 @@ function _activateItem(data) {
 			//extra seeds
 			$game.statusUpdate({message:'bonus seeds!',input:'status',screen: true,log:false});
 			_numRegularSeeds += 3;
-			$('.bossHud .regularSeedButton .hudCount').text(_numRegularSeeds);
+			$('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
 			$game.$renderer.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
 		}
 	}
