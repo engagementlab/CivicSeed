@@ -18,7 +18,7 @@ var self = module.exports = {
 			$CONTAINER.append(JT['admin-startup']({
 				title: 'Startup',
 				bodyClass: 'admin startup',
-				nodeEnv: 'nodeEnv',
+				environment: CivicSeed.ENVIRONMENT,
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));
