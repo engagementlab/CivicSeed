@@ -34,13 +34,13 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
 		"USE_REDIS": true,
 		"REDIS_HOST": "sample.redis.host.com",
 		"REDIS_PORT": 6379,
-		"REDIS_PW": "password.goes.here",
 		"REDIS_DB": "civicseed",
 		"MONGO_URL": "mongodb://sample-user@sample.mongodb.host.com:10099/civicseed",
 		"ACCOUNT_EMAIL": "accounts@civicseed.org",
-		"ACCOUNT_PW": "password.goes.here",
 		"CLOUD_PATH": "http://sample.cloud.path.com"
 	}
+
+Authentication credentials should not be stored in configuration files because this poses a security risk. Set `REDIS_PW` and `ACCOUNT_PW` as environment variables.
 
 #### Account Emails
 
