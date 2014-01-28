@@ -324,9 +324,9 @@ var $skins = $game.$skins = {
     var head  = $('.head [data-name="' + skin + '"]')
     var torso = $('.torso [data-name="' + skin + '"]')
     var legs  = $('.legs [data-name="' + skin + '"]')
-    _renderUnlockedPart(head, skin, 'head')
-    _renderUnlockedPart(torso, skin, 'torso')
-    _renderUnlockedPart(legs, skin, 'legs')
+    _renderUnlockedPart(head, skin, 'head', true)
+    _renderUnlockedPart(torso, skin, 'torso', true)
+    _renderUnlockedPart(legs, skin, 'legs', true)
   },
 
   // For debug purposes, reset everything but basic skin
@@ -351,7 +351,7 @@ var $skins = $game.$skins = {
         skins      = $skins.data
 
     function _render (skin, part) {
-      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div></div>',
+      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
           $part      = $('.' + part),
           $el        = $(skinHTML)
 
@@ -361,16 +361,19 @@ var $skins = $game.$skins = {
       if (skin.id === playerSkin[part]) $el.addClass('equipped')
 
       // Check if unlocked and set display accordingly
-      for(var h = 0; h < unlocked[part].length; h++) {
+      for (var h = 0; h < unlocked[part].length; h++) {
         if (unlocked[part][h] === skin.id) {
           _renderUnlockedPart($el, skin, part)
           break
         }
       }
 
-      // Bind tooltip
+      // Bind actions
       $el.bind('mouseenter', function () {
         $(this).tooltip('show')
+      })
+      $el.bind('click', function () {
+        $(this).find('.badge-new:visible').hide()
       })
     }
 
@@ -435,7 +438,7 @@ var $skins = $game.$skins = {
 /***** PRIVATE FUNCTIONS ******/
 
 
-function _renderUnlockedPart ($el, skin, part) {
+function _renderUnlockedPart ($el, skin, part, isNew) {
   // skin is either the name of the skin or the skin object itself
   // Either way, we want to end up with the skin object.
   if (typeof skin == 'string') {
@@ -450,6 +453,9 @@ function _renderUnlockedPart ($el, skin, part) {
   $inner.css('backgroundImage', 'url(' + bg + ')')
   $inner.find('i').remove()
   $inner.html('')
+  if (isNew === true) {
+    $el.find('.badge-new').show()
+  }
 }
 
 function _updatePlayer (playerSkin) {

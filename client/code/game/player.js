@@ -407,7 +407,7 @@ var $player = $game.$player = {
 			_resourcesDiscovered += 1;
 			var rawAttempts = 6 - realResource.attempts,
 				numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
-			$game.$player.updateSeeds('regular', numToAdd);
+			$game.$player.addSeeds('regular', numToAdd);
 			return numToAdd;
 		}
 	},
@@ -587,12 +587,10 @@ var $player = $game.$player = {
 
 				$game.$player.seedventoryShowing = true;
         $game.alert('choose a seed to plant')
-				// $('.seedButton').addClass('hud-button-active');
 			});
 		}
 		//start seed mode on 0
 		else {
-			// $('.seedButton').addClass('hud-button-active');
 			if(_seeds.regular > 0) {
 				$game.$player.seedPlanting = true;
 				$game.$player.seedMode = 'regular';
@@ -600,9 +598,8 @@ var $player = $game.$player = {
 			}
 			else {
         // No seeds, cancel out of seed mode.
-        $player.seedMode = false
-        $('.seedButton').removeClass('hud-button-active')
         $game.alert('you have no seeds')
+        $game.$input.endSeedMode()
 			}
 		}
 	},
@@ -694,38 +691,31 @@ var $player = $game.$player = {
     return (_resources[id]) ? true : false
 	},
 
-  // Add seeds to a specific type of seed
-  addSeeds: function (kind, quantity, skip) {
-    _seeds[kind] += quantity;
-    //save to DB
-    var info = {
-      id: $game.$player.id,
-      seeds: _seeds
-    };
-    if(!skip) {
-      ss.rpc('game.player.updateGameInfo', info);
-    }
-    //update hud
-    _updateTotalSeeds();
-  },
-
-  // Alias for addSeeds
-  updateSeeds: function(kind, quantity, skip) {
-    $player.addSeeds(kind, quantity, skip)
-  },
-
   // Set seeds to a specific amount
   setSeeds: function (kind, quantity, skip) {
     _seeds[kind] = quantity;
-    //save to DB
-    if(!skip) {
+    // Save to DB
+    if (!skip) {
       ss.rpc('game.player.updateGameInfo', {
         id: $game.$player.id,
         seeds: _seeds
       })
     }
+
     //update hud
     _updateTotalSeeds();
+  },
+
+  // Add seeds to a specific type of seed
+  addSeeds: function (kind, quantity, skip) {
+    var total = _seeds[kind] + quantity
+    $player.setSeeds(kind, total, skip)
+  },
+
+  // Alias for addSeeds
+  updateSeeds: function (kind, quantity, skip) {
+    $game.debug('$player.updateSeeds() is deprecated, please use $player.addSeeds() or .setSeeds().')
+    $player.addSeeds(kind, quantity, skip)
   },
 
 	//put new answer into the resume
@@ -1217,7 +1207,7 @@ function _sendSeedBomb(data) {
 			//update seed count in HUD
 			// console.log(data.kind, _seeds.draw);
 			if(data.kind === 'regular') {
-				$game.$player.updateSeeds('regular', -1);
+				$game.$player.addSeeds('regular', -1);
 				//bounce outta seed options.mode
 				if(_seeds.regular === 0) {
 					$game.$player.seedMode = false;
@@ -1231,7 +1221,7 @@ function _sendSeedBomb(data) {
 				}
 			}
 			else {
-				$game.$player.updateSeeds('draw', 0);
+				$game.$player.addSeeds('draw', 0);
 				if(_seeds.draw === 0) {
 					$game.$mouse.drawMode = false;
 					$BODY.off('mousedown touchstart', '.gameboard');

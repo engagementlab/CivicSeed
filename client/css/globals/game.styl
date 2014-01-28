@@ -440,26 +440,36 @@
 		text-align center
 		.part
 			// margin 0 auto 10px
-			margin 0 0 10px 32px
+			margin 0 0 10px 14px
 			.outer
 				cursor pointer
 				float left
+				position relative
 				// bugged
 				// display inline-block
-				width 56px
+				width 60px
 				height 100%
 				margin-right 20px
 				padding 10px
-				border 2px solid $csLightGray
+				border 3px solid $csLightGray
 				background-color #f4f4f4
+				.badge-new
+					display none
+					position absolute
+					top -8px
+					right -8px
+					font-size 18px
+					color $csYellow
 				.inner
 					width 100%
 					height 100%
 					font-size 1.5em
 					text-align center
 					color $csBlue
+					i  // Overrides font-awesome line-height
+						line-height inherit !important
 				&:not(.locked):hover
-					border 2px solid $csGreen
+					border 3px solid $csGreen
 					background-color white
 				&:last-of-type
 					margin-right 0
@@ -468,7 +478,7 @@
 					i
 						color $csRed
 			.equipped
-				border 2px solid $csDarkGreen
+				border 3px solid $csDarkGreen
 				background-color white
 		.head
 			height 54px
@@ -476,16 +486,14 @@
 				line-height 30px                // Positioning for lock
 				background-position 0 0         // Positioning for sprite
 		.torso
-			height 41px
+			height 42px
 			.inner
-				line-height 17px                // Positioning for lock
+				line-height 18px                // Positioning for lock
 				background-position 0 -30px     // Positioning for sprite
-				i  // Overrides font-awesome line-height
-					line-height inherit !important
 		.legs
 			height 42px
 			.inner
-				line-height 19px                // Positioning for lock
+				line-height 18px                // Positioning for lock
 				background-position 0 -45px     // Positioning for sprite
 
 // END LARGE OVERLAYS
