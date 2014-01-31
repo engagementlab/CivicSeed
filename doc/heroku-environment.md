@@ -11,7 +11,7 @@ A Heroku development environment is handy because they're free and easy to set u
 5. Set other environment variables needed for Civic Seed.
 `heroku config:set NODE_ENV=heroku` (The server script will check this to see if we are in a Heroku environment.)
 `heroku config:set CLOUD_PATH=''` (That's a blank entry)
-Also set `REDIS_PW` and `ACCOUNT_PW` if needed.
+Also set `ACCOUNT_PW` if needed. You should not need to set the `REDIS_PW` environment variable since it will be parsed from Redis To Go's `REDISTOGO_URL` environment variable.
 6. [Enable websockets on Heroku](https://devcenter.heroku.com/articles/heroku-labs-websockets). Be sure to include the app name you set in step 1.
 `heroku labs:enable websockets -a civicseed-dev`
 7. Push the repository to Heroku with `git push heroku master`.

@@ -16,6 +16,7 @@
 		"Davis": true,
 		"Howler": true,
 		"d3": true,
+		"_": true,
 		"$WINDOW": true,
 		"$HTML": true,
 		"$BODY": true,
