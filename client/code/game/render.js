@@ -38,6 +38,19 @@ var $renderer = $game.$renderer = {
 
   ready: false,
 
+  colors: {
+    // Match with game.styl
+    black : 'rgb(34,34,34)',
+    white:  'rgb(255,255,255)',
+    gray:   'rgb(153,153,153)',
+    purple: 'rgb(55,59,109)',
+    orange: 'rgb(255,180,124)',
+    green:  'rgb(167,228,149)',
+    blue:   'rgb(121,204,206)',
+    yellow: 'rgb(247,215,61)',
+    red:    'rgb(249,79,51)'
+  },
+
   // Set up all rendering contexts and load images
   init: function (callback) {
 
@@ -47,45 +60,18 @@ var $renderer = $game.$renderer = {
       $game.PIXEL_RATIO = window.devicePixelRatio
     }
 
-    function _createCanvas (elementId, width, height) {
-      var el    = document.createElement('canvas')
-      el.id     = elementId
-      // Width and height, if not provided, is equal to gameboard dimensions.
-      el.width  = width  || $game.VIEWPORT_WIDTH  * $game.TILE_SIZE
-      el.height = height || $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-      return _initCanvas(el)
-    }
-
-    function _initCanvas (element) {
-      var el      = (typeof element === 'object') ? element : document.getElementById(element),
-          context = el.getContext('2d'),
-          width   = el.width,
-          height  = el.height
-
-      // Scale interface display for higher-pixel-density screens
-      if ($game.PIXEL_RATIO > 1) {
-          $(el).attr('width',  width  * $game.PIXEL_RATIO)
-          $(el).attr('height', height * $game.PIXEL_RATIO)
-          $(el).css('width',   width)
-          $(el).css('height',  height)
-          context.scale($game.PIXEL_RATIO, $game.PIXEL_RATIO)
-      }
-
-      return context
-    }
-
     // Create offscreen canvases for optimized rendering
-    _offscreenBackgroundContext = _createCanvas('offscreenBackground')
+    _offscreenBackgroundContext = this._createCanvas('offscreenBackground')
 
     // Access the canvases for rendering
     // Tiles are currently unscaled because scaling it causes some artifacting
     _backgroundContext    = document.getElementById('background').getContext('2d')
     //_backgroundContext = _initCanvas('background')
     _foregroundContext    = document.getElementById('foreground').getContext('2d')
-    _charactersContext    = _initCanvas('characters')
-    _interfaceContext     = _initCanvas('interface')
-    _minimapPlayerContext = _initCanvas('minimapPlayer')
-    _minimapTileContext   = _initCanvas('minimapTile')
+    _charactersContext    = this._initCanvas('characters')
+    _interfaceContext     = this._initCanvas('interface')
+    _minimapPlayerContext = this._initCanvas('minimapPlayer')
+    _minimapTileContext   = this._initCanvas('minimapTile')
 
     // Interface canvas - style for player names
     _interfaceContext.shadowColor  = '#000'
@@ -761,8 +747,8 @@ var $renderer = $game.$renderer = {
 
   //render a player to the mini map
   renderMiniPlayer: function(player) {
-    //draw player
-    _minimapPlayerContext.fillStyle = player.col;
+    //_minimapPlayerContext.fillStyle = player.col;
+    _minimapPlayerContext.fillStyle = this.colors.white
     _minimapPlayerContext.fillRect(
       player.x,
       player.y,
@@ -773,7 +759,7 @@ var $renderer = $game.$renderer = {
 
   //render the botanist and dividing lines on the mini map
   renderMiniMapConstants: function() {
-    _minimapPlayerContext.fillStyle = 'rgb(150,150,150)';
+    _minimapPlayerContext.fillStyle = this.colors.gray
     _minimapPlayerContext.fillRect(
       0,
       72,
@@ -816,7 +802,22 @@ var $renderer = $game.$renderer = {
       1,
       1
     );
+  },
 
+  pingMinimap: function (x, y) {
+    var context = this._createCanvas('minimap-ping', 142, 132, true, {
+      right: '0',
+      zIndex: '6'
+    })
+    context.fillStyle = this.colors.red
+    // TODO: Incomplete
+    context.fillRect(
+      x,
+      y,
+      20,
+      20
+    );
+    $('#minimap-ping').remove()
   },
 
   //clear the botanist from the canvas
@@ -955,6 +956,40 @@ var $renderer = $game.$renderer = {
       $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
       $game.VIEWPORT
     );
-  }
+  },
 
+  _createCanvas: function  (elementId, width, height, onDom, styles) {
+    var el    = document.createElement('canvas')
+    el.id     = elementId
+    // Width and height, if not provided, is equal to gameboard dimensions.
+    el.width  = width  || $game.VIEWPORT_WIDTH  * $game.TILE_SIZE
+    el.height = height || $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+
+    if (onDom === true) {
+      _.each(styles, function (value, key) {
+        el.style[key] = value
+      })
+      $('.gameboard').append(el)
+    }
+
+    return this._initCanvas(el)
+  },
+
+  _initCanvas: function (element) {
+    var el      = (typeof element === 'object') ? element : document.getElementById(element),
+        context = el.getContext('2d'),
+        width   = el.width,
+        height  = el.height
+
+    // Scale interface display for higher-pixel-density screens
+    if ($game.PIXEL_RATIO > 1) {
+        $(el).attr('width',  width  * $game.PIXEL_RATIO)
+        $(el).attr('height', height * $game.PIXEL_RATIO)
+        $(el).css('width',   width)
+        $(el).css('height',  height)
+        context.scale($game.PIXEL_RATIO, $game.PIXEL_RATIO)
+    }
+
+    return context
+  }
 };

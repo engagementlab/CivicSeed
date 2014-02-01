@@ -649,7 +649,7 @@ function _startGame(ingame) {
         $game.$player.displayNpcComments();
         if ($game.$player.firstTime) {
           $game.alert('Welcome to Civic Seed!')
-          $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 5000)
+          $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
         }
         if ($game.$player.botanistState === 0) {
           $game.$botanist.nudgePlayer()

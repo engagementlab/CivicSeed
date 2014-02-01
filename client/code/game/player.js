@@ -564,6 +564,7 @@ var $player = $game.$player = {
 	openSeedventory: function() {
 		//open up the inventory
 		if(_seeds.draw > 0) {
+      $game.alert('choose a seed to plant')
 			$('.seedventory').slideDown(function() {
         if (_seeds.regular > 0) {
           $('.regularButton').addClass('active');
@@ -573,7 +574,6 @@ var $player = $game.$player = {
         }
 
 				$game.$player.seedventoryShowing = true;
-        $game.alert('choose a seed to plant')
 			});
 		}
 		//start seed mode on 0

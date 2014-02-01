@@ -584,13 +584,12 @@ var $input = $game.$input = module.exports = {
   },
 
   openInventory: function () {
-    $('.inventoryButton').addClass('hud-button-active')
     $game.$player.inventoryShowing = true
-    $inventory.slideDown(function () {
-      if ($game.$player.getInventoryLength() > 0) {
-        $game.alert('click items to view again')
-      }
-    })
+    $('.inventoryButton').addClass('hud-button-active')
+    if ($game.$player.getInventoryLength() > 0) {
+      $game.alert('click items to view again')
+    }
+    $inventory.slideDown(200)
   },
 
   closeInventory: function () {

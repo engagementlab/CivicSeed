@@ -288,9 +288,16 @@ var $botanist = $game.$botanist = {
   },
 
   nudgePlayer: function () {
-    $botanist._nudgePlayerInterval = setInterval(function () {
+    // First iteration
+    _nudge()
+
+    // Set up a recurring timer, which is cleared when player talks to the botanist.
+    $botanist._nudgePlayerInterval = setInterval(_nudge, 16000)
+
+    function _nudge() {
       $game.alert('Talk to the botanist')
-    }, 16000)
+      $game.$renderer.pingMinimap(70, 71)
+    }
   },
 
   // Wrapper for $npc.showSpeechBubble()
