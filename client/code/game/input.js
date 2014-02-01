@@ -303,12 +303,7 @@ var $input = $game.$input = module.exports = {
 
 		//toggle audio on/off
 		$BODY.on('click', '.muteButton', function () {
-      if($game.$audio.toggleMute() === true) {
-        $input.muteAudio()
-      }
-      else {
-        $input.unmuteAudio()
-      }
+      $input.toggleMute()
 		});
 
 		//tooltip for HUD controls
@@ -489,9 +484,13 @@ var $input = $game.$input = module.exports = {
           // Changing room
           $input.toggleSkinventory()
           break
-        case 80: // 'p'
+        case 80:  // 'p'
           // Progress
           $input.toggleProgress()
+          break
+        case 86:  // 'v'
+          // Mute audio
+          $input.toggleMute()
           break
         case 72:  // 'h'
         case 191: // 'question mark'
@@ -643,6 +642,10 @@ var $input = $game.$input = module.exports = {
     _helpShowing = false
     $('.helpButton').removeClass('hud-button-active')
     $('.helpArea').hide()
+  },
+
+  toggleMute: function () {
+    return ($game.$audio.toggleMute() === true) ? $input.muteAudio() : $input.unmuteAudio()
   },
 
   muteAudio: function () {
