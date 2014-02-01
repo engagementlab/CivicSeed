@@ -87,7 +87,7 @@ var $events = $game.$events = module.exports = {
 		ss.event.on('ss-seedPledged', function(data, chan) {
 			if($game.$player.id === data.id) {
 				$game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have some seeds.',input:'status',screen: true,log:true});
-				$game.$player.updateSeeds('regular', 3);
+				$game.$player.addSeeds('regular', 3);
 				$game.$player.updateResource(data);
 			}
 		});
@@ -112,7 +112,7 @@ var $events = $game.$events = module.exports = {
 				if(info.players[i] === $game.$player.id) {
 					//TODO add seeds
 					$game.statusUpdate({message: 'Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.',input:'status', screen:true, log:true});
-					$game.$player.updateSeeds('draw', info.seeds, true);
+					$game.$player.addSeeds('draw', info.seeds);
 					break;
 				}
 			}

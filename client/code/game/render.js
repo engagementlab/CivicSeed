@@ -23,7 +23,7 @@ var _tilesheets = {},
     _backgroundContext    = null,
     _foregroundContext    = null,
     _charactersContext    = null,
-    _gameboardHudContext  = null,
+    _interfaceContext     = null,
     _minimapPlayerContext = null,
     _minimapTileContext   = null,
 
@@ -38,36 +38,68 @@ var $renderer = $game.$renderer = {
 
   ready: false,
 
-  // setup all rendering contexts then load images
-  init: function(callback) {
-    // create offscreen canvases for optimized rendering
-    _offscreenBackgroundCanvas = document.createElement('canvas');
-    _offscreenBackgroundCanvas.setAttribute('width', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-    _offscreenBackgroundCanvas.setAttribute('height', $game.VIEWPORT_WIDTH * $game.TILE_SIZE);
-    // offscreen contexts
-    _offscreenBackgroundContext = _offscreenBackgroundCanvas.getContext('2d');
+  // Set up all rendering contexts and load images
+  init: function (callback) {
 
-    // access the canvases for rendering
-    _backgroundContext = document.getElementById('background').getContext('2d');
-    _foregroundContext = document.getElementById('foreground').getContext('2d');
-    _charactersContext = document.getElementById('characters').getContext('2d');
-    _gameboardHudContext = document.getElementById('gameboardHud').getContext('2d')
+    // Optimize display for higher-pixel-density screens (e.g. Retina)
+    if (window.devicePixelRatio) {
+      console.log('Pixel density is = ' + window.devicePixelRatio)
+      $game.PIXEL_RATIO = window.devicePixelRatio
+    }
 
-    _gameboardHudContext.shadowColor = '#000';
-    _gameboardHudContext.fillStyle = '#fff';
-    _gameboardHudContext.textAlign = 'center';
-    _gameboardHudContext.textBaseline = 'bottom';
-    _gameboardHudContext.font = '12pt Inconsolata, monospace';
+    function _createCanvas (elementId, width, height) {
+      var el    = document.createElement('canvas')
+      el.id     = elementId
+      // Width and height, if not provided, is equal to gameboard dimensions.
+      el.width  = width  || $game.VIEWPORT_WIDTH  * $game.TILE_SIZE
+      el.height = height || $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+      return _initCanvas(el)
+    }
 
-    _minimapPlayerContext = document.getElementById('minimapPlayer').getContext('2d');
-    _minimapTileContext = document.getElementById('minimapTile').getContext('2d');
+    function _initCanvas (element) {
+      var el      = (typeof element === 'object') ? element : document.getElementById(element),
+          context = el.getContext('2d'),
+          width   = el.width,
+          height  = el.height
+
+      // Scale interface display for higher-pixel-density screens
+      if ($game.PIXEL_RATIO > 1) {
+          $(el).attr('width',  width  * $game.PIXEL_RATIO)
+          $(el).attr('height', height * $game.PIXEL_RATIO)
+          $(el).css('width',   width)
+          $(el).css('height',  height)
+          context.scale($game.PIXEL_RATIO, $game.PIXEL_RATIO)
+      }
+
+      return context
+    }
+
+    // Create offscreen canvases for optimized rendering
+    _offscreenBackgroundContext = _createCanvas('offscreenBackground')
+
+    // Access the canvases for rendering
+    // Tiles are currently unscaled because scaling it causes some artifacting
+    _backgroundContext    = document.getElementById('background').getContext('2d')
+    //_backgroundContext = _initCanvas('background')
+    _foregroundContext    = document.getElementById('foreground').getContext('2d')
+    _charactersContext    = _initCanvas('characters')
+    _interfaceContext     = _initCanvas('interface')
+    _minimapPlayerContext = _initCanvas('minimapPlayer')
+    _minimapTileContext   = _initCanvas('minimapTile')
+
+    // Interface canvas - style for player names
+    _interfaceContext.shadowColor  = '#000'
+    _interfaceContext.fillStyle    = '#fff'
+    _interfaceContext.textAlign    = 'center'
+    _interfaceContext.textBaseline = 'bottom'
+    _interfaceContext.font         = '12pt Inconsolata, monospace'
 
     // set stroke stuff for mouse
     _foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Green default
     _foregroundContext.lineWidth = 4;
     _foregroundContext.save();
 
-    _allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist','cursors'];
+    _allImages = ['tilesheet_gray', 'tilesheet_color', 'npcs', 'botanist', 'robot', 'boss_items', 'tiny_botanist', 'cursors']
 
     _playerColorNum = $game.$player.getColorNum();
     _playerLevelNum = $game.$player.currentLevel;
@@ -105,12 +137,12 @@ var $renderer = $game.$renderer = {
     _offscreenPlayersCanvas = {};
     _offscreenPlayersContext = {};
 
-    _backgroundContext    = null;
-    _foregroundContext    = null;
-    _charactersContext    = null;
-    _gameboardHudContext  = null;
-    _minimapPlayerContext = null;
-    _minimapTileContext   = null;
+    _backgroundContext    = null
+    _foregroundContext    = null
+    _charactersContext    = null
+    _interfaceContext     = null
+    _minimapPlayerContext = null
+    _minimapTileContext   = null
 
     _prevMouseX = 0;
     _prevMouseY = 0;
@@ -538,8 +570,8 @@ var $renderer = $game.$renderer = {
         //tinting proof
     // var theImage = _offscreenSkinSuitContext.lion.getImageData(0, 0, _skinSuitWidth, _skinSuitHeight);
   //           pix = theImage.data;
-            
-  //       // Every four values equals 1 pixel. 
+
+  //       // Every four values equals 1 pixel.
   //       for (i = 0; i < pix.length; i += 4) {
   //           pix[i]  = 255;
   //           pix[i + 1]  = 255;
@@ -566,12 +598,12 @@ var $renderer = $game.$renderer = {
     );
 
     // Display player name
-    _gameboardHudContext.save();
-    _gameboardHudContext.shadowBlur = 3;
-    _gameboardHudContext.shadowOffsetX = 0;
-    _gameboardHudContext.shadowOffsetY = 0;
-    _gameboardHudContext.fillText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
-    _gameboardHudContext.restore();
+    _interfaceContext.save();
+    _interfaceContext.shadowBlur = 3;
+    _interfaceContext.shadowOffsetX = 0;
+    _interfaceContext.shadowOffsetY = 0;
+    _interfaceContext.fillText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
+    _interfaceContext.restore();
   },
 
   //clear the character canvas
@@ -582,7 +614,7 @@ var $renderer = $game.$renderer = {
       $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
       $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
     );
-    _gameboardHudContext.clearRect(
+    _interfaceContext.clearRect(
       0,
       0,
       $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
@@ -784,7 +816,7 @@ var $renderer = $game.$renderer = {
       1,
       1
     );
-    
+
   },
 
   //clear the botanist from the canvas
@@ -875,7 +907,7 @@ var $renderer = $game.$renderer = {
           tiles[t].x * $game.TILE_SIZE,
           tiles[t].y * $game.TILE_SIZE,
           $game.TILE_SIZE,
-          $game.TILE_SIZE             
+          $game.TILE_SIZE
         );
       }
       if(tiles[t].charger > -1) {

@@ -274,58 +274,123 @@ var $npc = $game.$npc = {
   },
 
   // Show an NPC's speech bubble
-  showSpeechBubble: function (speaker, text, prompt, callback) {
+  showSpeechBubble: function (speaker, messages, prompt, callback) {
     var $el           = $('.speechBubble'),
-        fadeOutDelay  = text.length * 40,
-        hasPrompt     = false
+        hasPrompt     = false,
+        isMultiline   = false,
+        text          = null
 
     // Set global chat state
-    $game.$npc.isChat = true
+    $npc.isChat = true
 
-    // Sound effect
+    // Play sound effect
     $game.$audio.playTriggerFx('npcBubble')
 
-    // Is this speech bubble a prompt?
-    if (typeof prompt === 'function') {
-      // Yes it is.
+    // Set up message
+    $el.find('.speakerName').text(speaker)
+    $el.find('.dialog').show()        // This is sometimes hidden - who hides it?
+
+    // Clear any residue of interaction detritus
+    $el.find('.dialog').removeClass('fit')
+    $el.find('button').hide()
+
+    if (_.isArray(messages)) {
+      // An array of strings is acceptable as for messages.
+      // This would create 'next' buttons until the full array of messages have been displayed.
+      // If a prompt is provided, the prompt will always be on the last message.
+      // Callbacks are not performed until the player clicks 'Close' of the speech bubble.
+      // Sometimes it's useful to provide a single-item array if you want a user to acknowledge
+      // a speech bubble and the game to provide additional actions.
+      isMultiline = true
+      _showMultiline(0)
+    }
+    else {
+      // Assume that messages is a string.
+      text = messages
+      $el.find('.message').text(text)
+    }
+
+    // If it has a prompt, set up prompt.
+    if (typeof prompt === 'function' && isMultiline === false) {
       hasPrompt = true
-      clearTimeout($game.$npc.hideTimer)  // Prevent any loose timers from ever accidentally killing the prompt (does this happen?)
+      _setupPrompt()
+    }
+
+    // If neither array nor prompt
+    if (!isMultiline && !hasPrompt) {
+      // Set up callback function
+      if (typeof callback === 'function') _storeCallback()
+    }
+
+    // Display the speech bubble
+    $el.fadeIn(function () {
+      // If no prompt, the dialog box should fade on its own after some time.
+      // The timer is set by the length of the message, but no less than 2 seconds at minimum.
+      if (!isMultiline && !hasPrompt) {
+        var hideTimer = text.length * 40
+        if (hideTimer < 2000) hideTimer = 2000
+        $npc.hideTimer = setTimeout($npc.hideSpeechBubble, hideTimer)
+      }
+    })
+
+    // Utility functions for showSpeechBubble()
+    function _showMultiline (index) {
+      $el.find('.dialog').addClass('fit')
+
+      text = messages[index]
+      $el.find('.message').text(text)
+
+      if (index < messages.length - 1) {
+        // Intermediary messages
+        $el.find('.nextButton').unbind('click').bind('click', function (e) {
+          e.stopImmediatePropagation()
+          _showMultiline(index + 1)
+        }).show()
+      }
+      else {
+        // Last message
+        $el.find('.nextButton').unbind('click').hide()
+        if (hasPrompt === true) {
+          _setupPrompt()
+        }
+        else {
+          $el.find('.closeButton').bind('click', function (e) {
+            e.stopImmediatePropagation()
+            $npc.hideSpeechBubble(callback)
+          }).show()
+        }
+      }
+    }
+
+    function _setupPrompt () {
       $el.find('.dialog').addClass('fit')
 
       // prompt is a callback function that is executed when player clicks the Yes button.
-      // Currently assuming that all prompt responses will result in closing the speech bubble
+      // Currently assuming that all prompt responses automatically closes the speech bubble
+      // rather than lead to next line of conversation.
       $el.find('.yesButton').bind('click', function (e) {
         e.stopImmediatePropagation()
-        $game.$npc.hideSpeechBubble(prompt)
+        $npc.hideSpeechBubble(prompt)
       }).show()
 
-      // callback is an optional callback function passed to the No/Close button for later execution
+      // Close prompt
       $el.find('.noButton').bind('click', function (e) {
         e.stopImmediatePropagation()
-        $game.$npc.hideSpeechBubble(callback)
+        $npc.hideSpeechBubble(callback)
       }).show()
-    } else {
-      // No it is not. Clear any residue of prompt detritus before showing.
-      $el.find('.dialog').removeClass('fit')
-      $el.find('button').hide()
     }
 
-    // Display the dialog
-    $el.find('.speakerName').text(speaker)
-    $el.find('.message').text(text)
-    $el.find('.dialog').show()        // This is sometimes hidden - who hides it?
-    $el.fadeIn(function () {
-      // If no prompt, the dialog box should fade on its own after some time.
-      if (hasPrompt === false) {
-        $game.$npc.hideTimer = setTimeout($game.$npc.hideSpeechBubble, fadeOutDelay)
-      }
-    })
-  },
+    function _storeCallback () {
+      // Binds callback to a hidden button element so that it is called on hide
+      var button = document.createElement('button')
+      button.id = 'callback-button'
+      $(button).bind('click', function (e) {
+        e.preventDefault()
+        callback()
+      })
+      $el.find('.buttonCorner').append($(button))
+    }
 
-  // Placeholder alias for this function
-  hideChat: function () {
-    $game.debug('$npc.hideChat() is deprecated, use $npc.hideSpeechBubble() instead.')
-    $npc.hideSpeechBubble()
   },
 
   // Hide an NPC's chat bubble
@@ -334,13 +399,20 @@ var $npc = $game.$npc = {
     var $el = $('.speechBubble')
 
     $game.$npc.isChat = false
+    $el.find('.nextButton').unbind('click')
+    $el.find('.closeButton').unbind('click')
     $el.find('.yesButton').unbind('click')
     $el.find('.noButton').unbind('click')
 
     $el.fadeOut(function () {
-      if (typeof callback === 'function') {
-        // Callback function after speech bubble is hidden.
-        callback()
+      // Execute a callback function passed to this method
+      if (typeof callback === 'function') callback()
+
+      // Execute a callback function bound to the speech bubble DOM
+      var $storedCallback = $el.find('.callback-button')
+      if ($storedCallback.length > 0) {
+        $storedCallback.triggerHandler('click')
+        $storedCallback.remove()
       }
     })
   },

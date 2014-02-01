@@ -53,6 +53,7 @@ var $game = module.exports = {
   TOTAL_HEIGHT: 132,
   TILE_SIZE: 32,
   STEP_PIXELS: 4,
+  PIXEL_RATIO: 1,
 
   //GLOBAL GAME VARS
   currentTiles: [],
@@ -311,7 +312,7 @@ var $game = module.exports = {
     var displayLevel = $game.$player.currentLevel + 1,
       topPlayers = '<p>top seeders:</p><ol>';
     for(var i = 0; i < _stats.leaderboard.length; i++) {
-      topPlayers += '<li>' + _stats.leaderboard[i].name + ' -- ' + _stats.leaderboard[i].count + '</li>';
+      topPlayers += '<li>' + _stats.leaderboard[i].name + ' &mdash; ' + _stats.leaderboard[i].count + '</li>';
     }
     topPlayers += '</ol>';
     topPlayers += '<p class="yourSeeds">You (' + tilesColored + ')</p>';
@@ -322,8 +323,10 @@ var $game = module.exports = {
     var numItems = $game.$player.getResourcesDiscovered();
 
     //display everthing
-    $('.displayPercent .progress .bar').css('width', percentString);
-    $('.displayMyAnswers').empty().append(allAnswers);
+    $('.displayPercent .progress .bar').css('width', percentString)
+    if (allAnswers) {
+      $('.displayMyAnswers').empty().append(allAnswers)
+    }
     $('.displayTime').html('<i class="fa fa-clock-o fa-lg"></i> ' + displayTime);
     //$('.displayPercent').text(percentString);
     $('.topSeeders').empty().append(topPlayers);
@@ -336,24 +339,24 @@ var $game = module.exports = {
     */
   },
 
-  //shows message in the display box that only lasts specific time
+  // Shows a message in either an on-screen display, in the chat log, or both
   statusUpdate: function (data) {
     if (data.screen) {
-      $('.statusUpdate span').text(data.message);
-      $('.statusUpdate').show();
-      clearTimeout(_displayTimeout);
+      $('.statusUpdate span').text(data.message)
+      $('.statusUpdate').fadeIn(100)
+      clearTimeout(_displayTimeout)
       var len      = data.message.length,
-          fadeTime = len * 100 + 500;
+          fadeTime = len * 100 + 500
       _displayTimeout = setTimeout(function() {
-        $('.statusUpdate').fadeOut();
-      }, fadeTime);
+        $('.statusUpdate').fadeOut(150)
+      }, fadeTime)
     }
     if (data.log) {
-      $game.$log.addMessage(data);
+      $game.$log.addMessage(data)
     }
   },
 
-  // Generic use of $game.statusUpdate() for an on-screen message only.
+  // Use $game.statusUpdate() to display an on-screen message only.
   alert: function (message) {
     $game.statusUpdate({
       message: message,
@@ -363,7 +366,7 @@ var $game = module.exports = {
     })
   },
 
-  // Generic use of $game.statusUpdate() for a log entry only.
+  // Use $game.statusUpdate() to display a log entry only.
   log: function (message) {
     $game.statusUpdate({
       message: message,
@@ -373,7 +376,7 @@ var $game = module.exports = {
     })
   },
 
-  // Generic use of $game.statusUpdate() for both log and screen message.
+  // Use $game.statusUpdate() to display both both log and on-screen message.
   broadcast: function (message) {
     $game.statusUpdate({
       message: message,
@@ -388,6 +391,7 @@ var $game = module.exports = {
   },
 
   highlightUI: function (target) {
+    $('.hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
     $(target).addClass('hud-button-highlight')
   },
 
@@ -414,7 +418,7 @@ var $game = module.exports = {
   },
 
   addBadgeCount: function (target, quantity) {
-    var number = this.getBadgeCount() + quantity
+    var number = this.getBadgeCount(target) + quantity
     this.setBadgeCount(target, number)
   },
 
@@ -643,6 +647,13 @@ function _startGame(ingame) {
         $game.$renderer.renderAllTiles();
         $game.tick();
         $game.$player.displayNpcComments();
+        if ($game.$player.firstTime) {
+          $game.alert('Welcome to Civic Seed!')
+          $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 5000)
+        }
+        if ($game.$player.botanistState === 0) {
+          $game.$botanist.nudgePlayer()
+        }
       });
     }
   });

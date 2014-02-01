@@ -271,25 +271,21 @@ var $player = $game.$player = {
   moveUp: function () {
     var location = $player.getLocation()
     $game.$player.beginMove(location.x, location.y - 1)
-    // $game.alert('Move up')
   },
 
   moveDown: function () {
     var location = $player.getLocation()
     $game.$player.beginMove(location.x, location.y + 1)
-    // $game.alert('Move down')
   },
 
   moveLeft: function () {
     var location = $player.getLocation()
     $game.$player.beginMove(location.x - 1, location.y)
-    // $game.alert('Move left')
   },
 
   moveRight: function () {
     var location = $player.getLocation()
     $game.$player.beginMove(location.x + 1, location.y)
-    // $game.alert('Move right')
   },
 
 	//moves the player as the viewport transitions
@@ -454,8 +450,7 @@ var $player = $game.$player = {
 				}
 			}
 			//if we made it here, that means you have all pieces
-			$game.$player.botanistState = 3;
-			$game.$botanist.setBotanistState(3);
+			$game.$botanist.setState(3);
 
 			var info = {
 				id: $game.$player.id,
@@ -478,29 +473,23 @@ var $player = $game.$player = {
     return _resources[id]
   },
 
-	//this happens on load to put all items from DB -> inventory
-	fillInventory: function() {
-		if($game.$player.currentLevel < 4) {
-			var l = _inventory.length,
-				cur = 0;
+  // this happens on load to put all items from DB -> inventory
+  fillInventory: function () {
+    if ($player.currentLevel < 4) {
+      var inventory = $player.getInventory()
 
-			$game.setBadgeCount('.inventoryButton', l)
+      $game.setBadgeCount('.inventoryButton', inventory.length)
 
-			while(cur < l) {
-				_addToInventory(_inventory[cur]);
-				cur++;
-			}
-			//if the player has gotten the riddle, put the tangram in the inventory + bind actions
-			if($game.$player.botanistState > 1) {
-				$game.$player.tangramToInventory();
-			}
-		}
-	},
+      for (var i = 0; i < inventory.length; i++) {
+        _addToInventory(inventory[i])
+      }
 
-	//clear all items from the inventory
-	clearInventory: function() {
-		$('.inventoryItem').remove();
-	},
+      // If the player has gotten the riddle, put the tangram in the inventory + bind actions
+      if ($player.botanistState > 1) {
+        $player.tangramToInventory();
+      }
+    }
+  },
 
 	//put the tangram image in the inventory
 	tangramToInventory: function() {
@@ -511,12 +500,12 @@ var $player = $game.$player = {
 		$('.'+ gFile).bind('click', $game.$botanist.inventoryShowRiddle);
 	},
 
-	//empty everything  from inventory
-	emptyInventory: function() {
-		_inventory = [];
-		$('.inventoryItem').remove();
-		$game.setBadgeCount('.inventoryButton', 0)
-	},
+  // Empty everything from inventory
+  emptyInventory: function() {
+    _inventory = [];
+    $('.inventoryItem').remove();
+    $game.setBadgeCount('.inventoryButton', 0)
+  },
 
 	//make the bounding box for each possible resource in inventory
 	createInventoryOutlines: function() {
@@ -532,25 +521,25 @@ var $player = $game.$player = {
 	//reset items and prepare other entities for fresh level
 	nextLevel: function() {
 		$game.$player.currentLevel += 1;
-		$game.$player.botanistState = 0;
-		$game.$botanist.setBotanistState(0);
 		$game.$player.seenRobot = false;
+    $game.$botanist.setState(0);
 		_pledges = 5;
 		// $game.$renderer.loadTilesheet($game.$player.currentLevel, true);
+
 		//save new information to DB
-		var info = {
-			id: $game.$player.id,
-			botanistState: $game.$player.botanistState,
-			seenRobot: $game.$player.seenRobot,
-			pledges: _pledges,
-			inventory: [],
-			currentLevel: $game.$player.currentLevel
-		};
-		ss.rpc('game.player.updateGameInfo', info);
-		var msg = 'Congrats! You have completed level ' + $game.$player.currentLevel + '!';
-		if($game.$player.currentLevel < 4) {
-			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
-			$game.statusUpdate({message:'talk to the botanist',input:'status',screen: true,log:false});
+		ss.rpc('game.player.updateGameInfo', {
+      id:            $game.$player.id,
+      botanistState: $game.$player.botanistState,
+      seenRobot:     $game.$player.seenRobot,
+      pledges:       _pledges,
+      inventory:     [],
+      currentLevel:  $game.$player.currentLevel
+    })
+
+    $game.log('Congrats! You have completed level ' + $game.$player.currentLevel + '!')
+
+		if ($game.$player.currentLevel < 4) {
+      $game.$botanist.nudgePlayer()
 			$game.$robot.setPosition();
 			_renderInfo.level = $game.$player.currentLevel;
 			$game.$player.createInventoryOutlines();
@@ -558,20 +547,18 @@ var $player = $game.$player = {
 			var newLevelMsg = $game.$player.currentLevel + 1;
 			// var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
 			ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
-		} else {
-			$game.statusUpdate({message: msg, input:'status', screen: false , log:true});
-			if($game.bossModeUnlocked) {
-				$game.toBossLevel();
-			}
+		}
+    else if ($game.bossModeUnlocked) {
+			$game.toBossLevel();
 		}
 	},
 
-	//return the calculation of how long they have been playing for (total)
-	getPlayingTime: function() {
-		var currentTime = new Date().getTime() / 1000,
-			totalTime = Math.round((currentTime - _startTime) + _playingTime);
-		return totalTime;
-	},
+  //return the calculation of how long they have been playing for (total)
+  getPlayingTime: function () {
+    var currentTime = new Date().getTime() / 1000,
+        totalTime   = Math.round((currentTime - _startTime) + _playingTime)
+    return totalTime
+  },
 
 	//reveals the seed menu to choose which seed they want to use
 	openSeedventory: function() {
@@ -667,55 +654,51 @@ var $player = $game.$player = {
 		}
 	},
 
-	//get ALL answers for all open questions for this player
-	compileAnswers: function() {
-		var html = '';
-			$.each(_resources, function(index, resource) {
-				if(resource.questionType === 'open') {
-					var answer = resource.answers[resource.answers.length - 1],
-						question = $game.$resources.getQuestion(index),
-						seededCount = resource.seeded.length;
+  // Get ALL answers for all open questions for this player
+  compileAnswers: function () {
+    var html = ''
 
-					html += '<p class="theQuestion">Q: ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>';
-					if(seededCount > 0) {
-						html += '<p class="seededCount">' + seededCount + ' likes</p>';
-					}
-					html += '</div>';
-				}
-			});
-		return html;
-	},
+    $.each(_resources, function (index, resource) {
+      if (resource.questionType === 'open') {
+        var answer      = resource.answers[resource.answers.length - 1],
+            question    = $game.$resources.getQuestion(index),
+            seededCount = resource.seeded.length
 
-	//see if the player has the specific resource already
+        html += '<p class="theQuestion"><strong>Q:</strong> ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>'
+        if (seededCount > 0) {
+          html += '<p class="seededCount">' + seededCount + ' likes</p>'
+        }
+        html += '</div>'
+      }
+    })
+
+    return html
+  },
+
+	// See if the player has the specific resource already
 	checkForResource: function (id) {
     return (_resources[id]) ? true : false
 	},
 
   // Set seeds to a specific amount
-  setSeeds: function (kind, quantity, skip) {
+  setSeeds: function (kind, quantity) {
     _seeds[kind] = quantity;
+
     // Save to DB
-    if (!skip) {
-      ss.rpc('game.player.updateGameInfo', {
-        id: $game.$player.id,
-        seeds: _seeds
-      })
-    }
+    ss.rpc('game.player.updateGameInfo', {
+      id: $game.$player.id,
+      seeds: _seeds
+    })
 
     //update hud
     _updateTotalSeeds();
   },
 
   // Add seeds to a specific type of seed
-  addSeeds: function (kind, quantity, skip) {
+  addSeeds: function (kind, quantity) {
+    // TODO: Use getSeeds() instead of a global.
     var total = _seeds[kind] + quantity
-    $player.setSeeds(kind, total, skip)
-  },
-
-  // Alias for addSeeds
-  updateSeeds: function (kind, quantity, skip) {
-    $game.debug('$player.updateSeeds() is deprecated, please use $player.addSeeds() or .setSeeds().')
-    $player.addSeeds(kind, quantity, skip)
+    $player.setSeeds(kind, total)
   },
 
 	//put new answer into the resume
@@ -788,9 +771,14 @@ var $player = $game.$player = {
 	},
 
 	//get the quantity of items in the player's inventory
-	getInventoryLength: function() {
-		return _inventory.length;
+	getInventoryLength: function () {
+		return _inventory.length
 	},
+
+  // Gets a specific item at index or all items in inventory
+  getInventory: function (index) {
+    return (index !== undefined) ? _inventory[index] : _inventory
+  },
 
 	//get the quantity of seedITs made
 	getPledges: function() {
@@ -969,7 +957,7 @@ var $player = $game.$player = {
 					stringIndex = String(index);
 				//add to array and color if we haven't done it
 				if(!_drawSeeds[index]) {
-					$game.$player.updateSeeds('draw', -1, true);
+					$game.$player.addSeeds('draw', -1);
 					$graffitiNum.text(_seeds.draw);
 					drawLocal = true;
 					_drawSeeds[index] = {
@@ -1454,7 +1442,7 @@ function _addToInventory(data) {
 		$(this).tooltip('show');
 	});
 
-	$game.setBadgeCount('.inventoryButton', _inventory.length)
+	$game.setBadgeCount('.inventoryButton', $player.getInventoryLength())
 
 	//bind click and drag functions, pass npc #
 	$('img.inventoryItem.'+ className)

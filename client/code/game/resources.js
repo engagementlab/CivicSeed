@@ -532,7 +532,8 @@ $game.$resources = {
 				$game.$resources.hideResource();
 			}
 		} else {
-			$('.check.message-tagline').show().delay(2000).fadeOut();
+			$('.resourceArea .customTagline').focus()
+			$('.check.message-tagline').show().delay(1600).fadeOut(200)
 		}
 	},
 

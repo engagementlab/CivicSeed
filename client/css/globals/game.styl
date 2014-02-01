@@ -419,7 +419,6 @@
 	// .playerAnswers
 	// 	color #222
 	// 	list-style none
-	// 	$borderRadius(0)
 	// 	padding 5px 5px 5px 10px
 	// 	margin 15px 15px 10px 15px
 	// 	position relative
@@ -447,7 +446,7 @@
 				position relative
 				// bugged
 				// display inline-block
-				width 60px
+				width 58px
 				height 100%
 				margin-right 20px
 				padding 10px
@@ -461,7 +460,7 @@
 					font-size 18px
 					color $csYellow
 				.inner
-					width 100%
+					width 32px   // Lock in at width of sprite
 					height 100%
 					font-size 1.5em
 					text-align center
@@ -616,7 +615,7 @@
 #foreground,
 #characters,
 #npcs,
-#gameboardHud,
+#interface,
 #minimapPlayer,
 #minimapTile
 	position absolute
@@ -634,7 +633,7 @@
 #foreground
 	z-index 3
 
-#gameboardHud
+#interface
 	z-index 4
 
 #minimapTile
@@ -1039,3 +1038,9 @@ p.townSite
 
 .labBackground
 	background $cloudUrl('img/game/lab_bg.png') no-repeat center center
+
+.tooltip
+	font-family $buttonFont
+	font-size 13px
+
+

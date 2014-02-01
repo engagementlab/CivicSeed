@@ -2,9 +2,7 @@
 
 var $chatText,
 	$chatBox,
-	$displayBox,
 	$inventory,
-	$displayBoxText,
 	$progressArea,
 	$gameLog,
 	_helpShowing,
@@ -16,9 +14,7 @@ var $input = $game.$input = module.exports = {
 	registerVariables: function() {
 		$chatText = $('#chatText');
 		$chatBox = $('.chatBox');
-		$displayBox = $('.displayBox');
 		$inventory = $('.inventory');
-		$displayBoxText = $('.displayBoxText');
 		$progressArea = $('.progressArea');
 		$gameLog = $('.gameLog');
 		_helpShowing = false;
@@ -316,7 +312,7 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//tooltip for HUD controls
-		$BODY.on('mouseenter', '.hud i', function () {
+		$BODY.on('mouseenter', '.hud-button a', function () {
 			var info = $(this).attr('title');
 			$(this).tooltip('show');
 		});
@@ -481,7 +477,7 @@ var $input = $game.$input = module.exports = {
           // Display inventory overlay.
           $input.toggleInventory()
           break
-        case 79:  // 'o'
+        case 69:  // 'e'
           // Seedventory
           $input.toggleSeedMode()
           break
@@ -592,7 +588,9 @@ var $input = $game.$input = module.exports = {
     $('.inventoryButton').addClass('hud-button-active')
     $game.$player.inventoryShowing = true
     $inventory.slideDown(function () {
-      $displayBoxText.text('click items to view again')
+      if ($game.$player.getInventoryLength() > 0) {
+        $game.alert('click items to view again')
+      }
     })
   },
 

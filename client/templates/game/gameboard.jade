@@ -3,7 +3,7 @@
 	//- canvas#npcs(width='960px', height='480px')
 	canvas#characters(width='960px', height='480px')
 	canvas#foreground(width='960px', height='480px')
-	canvas#gameboardHud(width='960px', height='480px')
+	canvas#interface(width='960px', height='480px')
 	canvas#minimapTile(width='142px', height='132px')
 	canvas#minimapPlayer(width='142px', height='132px')
 
@@ -105,7 +105,7 @@
 
 	.collectedResources.gameboardOverlay.patternBg3
 		h2 Your Answers
-		.displayMyAnswers.overlayContent
+		.displayMyAnswers.overlayContent You haven't collected any resources yet.
 		button.btn.backToProgress.btn-info(type='button') Back
 
 	.helpArea.gameboardOverlay
@@ -123,14 +123,15 @@
 			p Beneath the view screen, you can see the status bar. This tells you useful information, like what level you're on, when you've entered a new area of the world, and when other players interact with you. The Status Bar can be converted into a chat box by clicking the speech bubble icon in the display.
 
 			h3 The Icons
-			p The seven display icons each have unique functions.
+			p The seven display icons each have unique functions. You can activate them by clicking the icon or by pressing the associated keyboard shortcut.
 			ul.fa-ul
-				li <i class='fa-li fa fa-briefcase fa-lg'></i> <strong>Toolbox:</strong> Open and close your inventory
-				li <i class='fa-li fa fa-leaf fa-lg'></i> <strong>Leaf:</strong> Enter or exit seed mode
-				li <i class='fa-li fa fa-globe fa-lg'></i> <strong>Globe:</strong> Toggle mini map off and on
-				li <i class='fa-li fa fa-desktop fa-lg'></i> <strong>Computer Screen:</strong> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.
-				li <i class='fa-li fa fa-volume-up fa-lg'></i> <strong>Speaker:</strong> Turn music on or off
-				li <i class='fa-li fa fa-question-circle fa-lg'></i> <strong>Question Mark:</strong> Launch help document
+				li <i class='fa-li fa fa-briefcase fa-lg'></i> <strong><u>I</u>nventory:</strong> Open and close your inventory
+				li <i class='fa-li fa fa-user fa-lg'></i> <strong><u>C</u>hanging room:</strong> Enter or exit seed mode
+				li <i class='fa-li fa fa-leaf fa-lg'></i> <strong>S<u>e</u>ed:</strong> Enter or exit seed mode
+				// li <i class='fa-li fa fa-globe fa-lg'></i> <strong>Globe:</strong> Toggle mini map off and on
+				li <i class='fa-li fa fa-desktop fa-lg'></i> <strong><u>P</u>rogress:</strong> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.
+				li <i class='fa-li fa fa-volume-up fa-lg'></i> <strong>Volume:</strong> Turn music on or off
+				li <i class='fa-li fa fa-question-circle fa-lg'></i> <strong><u>H</u>elp:</strong> Launch help document
 
 			h3 Exploring The World
 			p To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red.
@@ -207,8 +208,8 @@
 			span.speakerName
 			span.message
 		.buttonCorner
-			button.nextChatButton.btn.btn-success(type='button') Next
-			button.closeChatButton.btn.btn-primary(type='button') Close
+			button.nextButton.btn.btn-success(type='button') Next
+			button.closeButton.btn.btn-primary(type='button') Okay
 			button.noButton.btn.btn-primary(type='button') Close
 			button.yesButton.btn.btn-success(type='button') View
 

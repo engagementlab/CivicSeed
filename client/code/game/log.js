@@ -13,7 +13,7 @@ var $log = $game.$log = {
 		_setupDomSelectors();
 		$game.$log.clearUnread();
 		$game.$log.ready = true;
-		$game.statusUpdate({message: 'Welcome to Civic Seed', input: 'status', log: true, screen: false});
+		$game.log('Welcome to Civic Seed')
 		callback();
 	},
 
@@ -33,7 +33,7 @@ var $log = $game.$log = {
 			var hudText = _unread;
 			if(_unread > 10) {
 				hudText = '10+';
-				$game.statusUpdate({message: 'There are new messages in your game log below', input: 'status', log: false, screen: true});
+				$game.alert('There are new messages in your game log below');
 			}
 
       $game.setBadgeCount('.logButton', hudText)

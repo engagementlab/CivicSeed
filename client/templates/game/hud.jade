@@ -2,16 +2,16 @@
 	.row.regularGameHud.hud-regular
 		.span4.hud-player
 			.hud-button.inventoryButton
-				a
-					i.fa.fa-briefcase.fa-lg(title='inventory', data-placement='bottom')
-				span.badge.always-show
+				a(title='(I)nventory', data-placement='top')
+					i.fa.fa-briefcase.fa-lg
+				span.badge
 			.hud-button.skinventoryButton
-				a
-					i.fa.fa-user.fa-lg(title='changing room', data-placement='bottom')
+				a(title='(C)hanging room', data-placement='top')
+					i.fa.fa-user.fa-lg
 				span.badge
 			.hud-button.seedButton
-				a
-					i.fa.fa-leaf.fa-lg(title='seeds', data-placement='bottom')
+				a(title='S(e)eds', data-placement='top')
+					i.fa.fa-leaf.fa-lg
 				span.badge.always-show
 		.span4.hud-chat
 			form.form-inline.chatBox
@@ -19,25 +19,26 @@
 				button#chatButton.btn(type='submit') Chat
 		.span4.hud-global
 			.hud-button.logButton
-				a
-					i.fa.fa-list.fa-lg(title='game log', data-placement='bottom')
+				a(title='game log', data-placement='top')
+					i.fa.fa-list.fa-lg
 				span.badge
 			.hud-button.progressButton
-				a
-					i.fa.fa-desktop.fa-lg(title='progress', data-placement='bottom')
+				a(title='(P)rogress', data-placement='top')
+					i.fa.fa-desktop.fa-lg
 			.hud-button.muteButton
-				a
-					i.fa.fa-volume-up.fa-lg(title='music', data-placement='bottom')
+				a(title='Music', data-placement='top')
+					i.fa.fa-volume-up.fa-lg
 			.hud-button.helpButton
-				a
-					i.fa.fa-question-circle.fa-lg(title='help', data-placement='bottom')
+				a(title='(H)elp', data-placement='top')
+					i.fa.fa-question-circle.fa-lg
 	.row.bossHud.hud-boss
 		.span4
 			.hud-button.regularSeedButton.bossBox
-				i.fa.fa-leaf.fa-lg(title='seeds', data-placement='bottom')
+				a(title='seeds', data-placement='top')
+					i.fa.fa-leaf.fa-lg
 				span.badge 20
 			//- .drawSeedButton.bossBox
-			//- 	i.fa.fa-star.fa-lg(title='seeds', data-placement='bottom')
+			//- 	i.fa.fa-star.fa-lg(title='seeds', data-placement='top')
 			//- 	span.badge 20
 		.span4
 			p.clock 90
@@ -45,6 +46,7 @@
 			p.score score: <span>---</span>
 		.span1
 			.hud-button.muteButton.bossBox
-				i.fa.fa-volume-up.fa-lg(title='music', data-placement='bottom')
+				a(title='music', data-placement='top')
+					i.fa.fa-volume-up.fa-lg
 .gameLog
 
