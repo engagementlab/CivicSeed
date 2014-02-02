@@ -221,7 +221,7 @@ var $input = $game.$input = module.exports = {
 		$BODY.on('click', '.resourceArea a i, .resourceArea .closeButton', function (e) {
 			e.preventDefault();
 			if(!$game.$resources.waitingForTagline) {
-				$('.check').hide();
+        $game.$resources.hideCheckMessage()
 				$game.$resources.hideResource();
 			} else {
 				$('.checkTagline').show().delay(2000).fadeOut();
@@ -231,26 +231,23 @@ var $input = $game.$input = module.exports = {
 
 		//advance the content in resource to next page
 		$BODY.on('click', '.resourceArea .nextButton', function () {
-			$('.check').hide();
 			$game.$resources.nextSlide();
 		});
 
 		//previous page of content in resource
 		$BODY.on('click', '.resourceArea .backButton', function () {
-			$('.check').hide();
 			$game.$resources.previousSlide();
 		});
 
 		//previous page of content in resource
 		$BODY.on('click', '.resourceArea .saveButton', function () {
-			var tagline = $('.customTagline').val();
+			var tagline = $.trim($('.tagline-input input').val())
 			$game.$resources.saveTagline(tagline);
 		});
 
 		//submit answer in resource
 		$BODY.on('click', '.resourceArea .answerButton', function (e) {
 			e.preventDefault();
-			$('.check').hide();
 			$game.$resources.submitAnswer();
 			return false;
 		});
@@ -258,7 +255,7 @@ var $input = $game.$input = module.exports = {
 		//acknowledge prompt that your answer is skimpy in resource
 		$BODY.on('click', '.resourceArea .sureButton', function (e) {
 			e.preventDefault();
-			$('.check').hide();
+      $game.$resources.hideCheckMessage()
 			$game.$resources.submitAnswer(true);
 			return false;
 		});
@@ -266,7 +263,7 @@ var $input = $game.$input = module.exports = {
 		//cancel submit in resource
 		$BODY.on('click', '.resourceArea .retryButton', function (e) {
 			e.preventDefault();
-			$('.check').fadeOut(100);
+      $game.$resources.hideCheckMessage()
 			return false;
 		});
 

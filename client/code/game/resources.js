@@ -36,7 +36,7 @@ var _resources = [],
 	_publicAnswers = null,
 	_preloadedPieceImage = null;
 
-$game.$resources = {
+var $resources = $game.$resources = {
 
 	isShowing: false,
 	ready: false,
@@ -303,12 +303,13 @@ $game.$resources = {
 			_speak = 'Congrats! You were the first to answer.';
 			displayAnswers += '<p>** More answers from your peers will appear shortly.  Be sure to check back. **</p>';
 		}
-			$speakerName.text(_who);
-			$resourceMessage.text(_speak);
-			if (_speak) {
-				$('.dialog').show()
-			}
-			$resourceContent.html(finalQuestion + finalDisplay).show();
+    $('tagline-input').hide()
+		$speakerName.text(_who);
+		$resourceMessage.text(_speak);
+		if (_speak) {
+			$('.dialog').show()
+		}
+		$resourceContent.html(finalQuestion + finalDisplay).show();
 	},
 
 	//hide the resource area and decide if we need to show inventory again or not
@@ -379,7 +380,7 @@ $game.$resources = {
 		if(_questionType === 'open') {
 			response = $.trim($('.resourceContent textarea').val());
       if (response.length === 0) {
-        $game.$resources.popupEmpty()
+        $resources.showCheckMessage('Please answer the question!')
         return false
       }
 			else if (_curResource.requiredLength && response.length < _curResource.requiredLength && !bypass) {
@@ -430,6 +431,10 @@ $game.$resources = {
 				instanceName: $game.$player.instanceName,
 				questionType: _curResource.questionType
 			};
+
+      // TODO: This is not ideal. Multiple "pages" should be shown rather than
+      // individual pieces of each page.
+			$('.resourceArea .tagline-input').show()
 		}
 		else {
 			var wrongInfo = {
@@ -498,14 +503,30 @@ $game.$resources = {
 
 	// Trigger a popup if answer was too short
 	popupCheck: function () {
-		$('.check.confirm-skimpy button').show()
-		$('.check.confirm-skimpy').show()
+    var $el = $('.resourceArea .check')
+    $el.find('.check-dialog').hide()
+    $el.find('.confirm-skimpy').show()
+    $el.find('button').show()
+    $el.fadeIn(200)
 	},
 
-  // Trigger a popup if answer is empty
-  popupEmpty: function () {
-    $('.check.message-empty button').show()
-    $('.check.message-empty').show()
+	// Display messages on checking user input
+	showCheckMessage: function (message) {
+    var $el = $('.resourceArea .check')
+
+    $el.find('.check-dialog').hide()
+    $el.find('.message-feedback').show()
+
+    $el.find('.feedback').text(message)
+    $el.find('button').bind('click', $resources.hideCheckMessage).show()
+    $el.fadeIn(200)
+	},
+
+  hideCheckMessage: function () {
+    var $el = $('.resourceArea .check')
+    if ($el.is(':visible')) {
+      $el.fadeOut(200)
+    }
   },
 
 	//get the question for a resource
@@ -519,7 +540,7 @@ $game.$resources = {
 	},
 
 	//decide what to do if we save custom tagline
-	saveTagline: function(tagline) {
+	saveTagline: function (tagline) {
 		if(tagline.length > 0) {
 			$game.$player.setTagline(tagline);
 			$game.$resources.waitingForTagline = false;
@@ -531,9 +552,10 @@ $game.$resources = {
 			} else {
 				$game.$resources.hideResource();
 			}
-		} else {
-			$('.resourceArea .customTagline').focus()
-			$('.check.message-tagline').show().delay(1600).fadeOut(200)
+		}
+    else {
+			$('.tagline-input input').focus()
+      $resources.showCheckMessage('You should create a custom tagline!')
 		}
 	},
 
@@ -571,22 +593,21 @@ function _addAnsweredContent() {
 		//first, congrats and show them the tangram piece
 		if(_currentSlide === _numSlides + 1) {
 			$game.$resources.waitingForTagline = true;
-				var inputBox = '<div class="taglineInput"><input class="customTagline" name="tagline" type="text" value="" maxLength="60" autofocus></input></div><div class="privacyMessage taglineInput">Summarize what you just learned. You\'ll need it later!</div>',
-				npcLevel = $game.$npc.getNpcLevel(),
-				html;
+			var	npcLevel = $game.$npc.getNpcLevel()
+
 			if(npcLevel < $game.$player.currentLevel) {
 				_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
-				html = inputBox;
-				$resourceContent.empty().html(html).css('overflow','auto');
+				$('tagline-input').show()
+				$resourceContent.empty().css('overflow','auto');
 			}
+
 			else {
 				_speak = _feedbackRight + ' Here, take this puzzle piece, and ' + _numSeedsToAdd + ' seeds!';
 				//show image on screen
 				//get path from db, make svg with that
 				$game.$audio.playTriggerFx('resourceRight');
 
-				html = _preloadedPieceImage + inputBox;
-				$resourceContent.empty().html(html).css('overflow', 'hidden');
+				$resourceContent.empty().html(_preloadedPieceImage).css('overflow', 'hidden');
 			}
 			//give them the skinsuit regardless if in prev level or not
 			if(_skinSuitReward) {
@@ -628,7 +649,7 @@ function _addRealContent() {
 				inputBox += '</form>';
 			}
 			else if(_questionType === 'open') {
-				inputBox = '<form><textarea placeholder="Type your answer here..." autofocus></textarea></form><p class="privacyMessage">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
+				inputBox = '<form><textarea placeholder="Type your answer here..." autofocus></textarea></form><p class="privacy-message">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
 			}
 			else if(_questionType === 'truefalse') {
 				//inputBox = '<form><input type="submit" value="true"><input type="submit" value="false"></form>';

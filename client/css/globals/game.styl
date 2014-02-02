@@ -84,6 +84,42 @@
 			right 20px
 		button
 			display none
+	.check
+		display none
+		position absolute
+		top 0
+		left 0
+		width 100%
+		height 100%
+		background-color rgba(255,255,255,0.75)
+		z-index 10000
+		.check-dialog
+			position absolute
+			left 280px
+			top 140px
+			width 360px
+			height auto
+			min-height 60px
+			padding 14px
+			text-align center
+			color $csLightGray
+			background $csPurple
+			box-shadow $csUIDropShadow
+			.buttons
+				position relative
+				margin-top 30px
+				margin-bottom -20px
+				height 32px
+				button
+					margin 0 auto
+				.right
+					position absolute
+					right 0px
+				.left
+					position absolute
+					left 0px
+		.check-skimpy
+			display none
 
 .overlayContent
 	min-height 320px
@@ -127,6 +163,9 @@
 			right -6px
 			&.active
 				opacity 0.5
+	textarea
+		max-height 300px
+		height 300px
 
 
 .resourceArea
@@ -149,6 +188,17 @@
 		label
 			// Overrides display: block elsewhere (bootstrap?)
 			display inline-block
+	.tagline-input
+		display none
+		position absolute
+		left 0
+		bottom 50px
+		width 100%
+		text-align center
+		input
+			width 400px
+	.privacy-message
+		color $csOrange
 
 .resourceContent
 	// font-family $bodyFont
@@ -160,14 +210,6 @@
 			// very wide and manually positioned on the image
 			margin-left 45px
 			height 250px
-	.taglineInput
-		// Occurs only with .privacyMessage?
-		text-align center
-		input
-			width 400px
-	.privacyMessage
-		color $csOrange
-
 	.publicAnswers
 		ul
 			margin 0
@@ -618,9 +660,6 @@ canvas
 #background
 	z-index 0
 
-#npcs
-	z-index 1
-
 #characters
 	z-index 2
 
@@ -808,34 +847,6 @@ textarea
 
 .message
 	font-family $bodyFont
-
-.feedback, .check
-	display none
-	position absolute
-	left 280px
-	top 140px
-	width 360px
-	height auto
-	min-height 60px
-	padding 14px
-	text-align center
-	color $csLightGray
-	background $csPurple
-	box-shadow $csUIDropShadow
-	z-index 9999
-	.buttons
-		position relative
-		margin-top 30px
-		margin-bottom -20px
-		height 32px
-		button
-			margin 0 auto
-		.right
-			position absolute
-			right 0px
-		.left
-			position absolute
-			left 0px
 
 
 .firstRiddle

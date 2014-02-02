@@ -15,14 +15,12 @@ var _info = null,
 	_counter = 0,
 	_dragOffX = 0,
 	_dragOffY = 0,
-	_feedbackTimeout = null,
 	_svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
 	_paintbrushSeedFactor = 5,
 	_levelQuestion = ['What motivates you to civically engage? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!', 'What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your civic engagement to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
 	_firstTime = false,
 
 	$botanistArea = null,
-	$feedback = null,
 	$inventoryItem = null,
 	$tangramArea = null,
 	$botanistTextArea = null,
@@ -98,11 +96,9 @@ var $botanist = $game.$botanist = {
 		_counter = 0;
 		_dragOffX = 0;
 		_dragOffY = 0;
-		_feedbackTimeout = null;
 		_firstTime = false;
 
 		$botanistArea = null;
-		$feedback = null;
 		$inventoryItem = null;
 		$tangramArea = null;
 		$botanistTextArea = null;
@@ -267,11 +263,11 @@ var $botanist = $game.$botanist = {
           })
         }
         break
-      // 1 = Player has looked at the instructions / tutorial, and has the puzzle piece for that level.
+      // 1 = Player has looked at the instructions / tutorial, and needs to obtain the puzzle piece for that level.
       case 1:
         $game.$botanist.showPrompt(0)
         break
-      // 2 = Player has the puzzle and is currently collecting resources.
+      // 2 = Player has obtained tangram puzzle and is currently collecting resources.
       case 2:
         var hintIndex = ($game.$player.getInventoryLength() > 0) ? 1 : 0
         $botanist.chat($botanist.dialog[level].hint[hintIndex])
@@ -461,22 +457,24 @@ var $botanist = $game.$botanist = {
 		//if _promptNum is 0, then it is the just showing the riddle no interaction
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
+
 				$botanistContent.empty()
+
 				if($botanist.getState() > 1) {
 					$botanistAreaMessage.text('Here is the notebook page to view again.');
 				}
 				else {
 					$botanistAreaMessage.text('Here is the page. You will be able to view it at any time in your inventory.');
 
-					if($game.$player.currentLevel > 0) {
-						//add this tangram outline to the inventory
-						$game.$player.tangramToInventory();
-            $botanist.setState(2);
-					}
+					//add this tangram outline to the inventory
+					$game.$player.tangramToInventory();
+          $botanist.setState(2);
 				}
+
 				var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
 				$('.tangramOutline').html('<img src="' + imgPath + '">');
 				$('.tangramArea').show()
+
 			}
 			else {
 				if($game.$player.currentLevel === 0) {
@@ -709,11 +707,17 @@ var $botanist = $game.$botanist = {
 		}
 		else {
 			_paintbrushSeedFactor = 5;
-			var portAnswer = $('.botanistContent textarea').val();
-			$game.$player.resumeAnswer(portAnswer);
-			$game.$player.nextLevel();
-			$game.$botanist.hideResource();
-			//upload the user's answer to the DB
+			var portAnswer = $.trim($('.botanistContent textarea').val());
+
+      if (portAnswer.length === 0) {
+        this.feedback('Please answer the question!')
+      }
+      else {
+        $game.$player.resumeAnswer(portAnswer);
+        $game.$player.nextLevel();
+        $game.$botanist.hideResource();
+        //upload the user's answer to the DB
+      }
 		}
 	},
 
@@ -807,8 +811,7 @@ var $botanist = $game.$botanist = {
 
 	//this is dragging a puzzle piece on area and moving it around
 	dragMoveStart: function(d) {
-  		clearTimeout(_feedbackTimeout);
-		$feedback.fadeOut('fast');
+		$botanist.hideFeedback()
 
 		_dragOffX = d3.mouse(this)[0],
 		_dragOffY = d3.mouse(this)[1],
@@ -895,15 +898,20 @@ var $botanist = $game.$botanist = {
 	},
 
 	//give user feedback on puzzle answer
-	feedback: function(message) {
-		$feedback
-			.text(message)
-			.fadeIn();
+	feedback: function (message) {
+    var $el = $('.botanistArea .check')
 
-		_feedbackTimeout = setTimeout(function() {
-			$feedback.fadeOut();
-		},4500);
+    $el.find('.feedback').text(message)
+    $el.find('button').bind('click', $botanist.hideFeedback).show()
+    $el.fadeIn(200)
 	},
+
+  hideFeedback: function () {
+    var $el = $('.botanistArea .check')
+    if ($el.is(':visible')) {
+      $el.fadeOut(200)
+    }
+  },
 
 	//return level question for resume
 	getLevelQuestion: function(level) {
@@ -917,7 +925,6 @@ var $botanist = $game.$botanist = {
 
 function _setDomSelectors() {
 	$botanistArea = $('.botanistArea');
-	$feedback = $('.feedback');
 	$inventoryItem = $('.inventoryItem');
 	$tangramArea = $('.tangramArea');
 	$botanistTextArea = $('.botanistContent textarea');

@@ -252,15 +252,14 @@ var $npc = $game.$npc = {
     $game.$player.npcOnDeck = false
 
     // NPC interaction to display if the player has not finished speaking with Botanist
-    if ($game.$player.botanistState < 2) {
+    if ($game.$botanist.getState() < 2) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
     // If resource is available for the player
     else if (npc.isHolding && $game.$player.currentLevel >= npc.level) {
       // Check if NPC's availability depends on player talking to a different NPC
       if (npc.isLocked()) {
-        var name = $npc.getNpc(npc.dependsOn).name
-        var dialogue = 'Before I help you out, you need to go see ' + name + '. Come back when you have their resource.'
+        var dialogue = 'Before I help you out, you need to go see ' + $npc.getNpc(npc.dependsOn).name + '. Come back when you have their resource.'
         $npc.showSpeechBubble(npc.name, dialogue)
       }
       else {
