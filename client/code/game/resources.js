@@ -12,21 +12,11 @@ var _resources = [],
 	_inventory = false,
 	_temporaryAnswer = '',
 
-	$resourceStage = null,
-	$speechBubble = null,
-	$inventory = null,
 	$resourceArea = null,
-	$speechButton = null,
-	$resourceButton = null,
 	$speakerName = null,
 	$resourceMessage = null,
 	$resourceContent = null,
 	$resourceContentBody = null,
-	$nextButton = null,
-	$closeButton = null,
-	$backButton = null,
-	$answerButton = null,
-  $saveButton = null,
 
 	_numSeedsToAdd = 0,
 	_questionType = null,
@@ -84,20 +74,11 @@ var $resources = $game.$resources = {
 		_revisiting = false;
 		_inventory = false;
 
-		$resourceStage = null;
-		$speechBubble = null;
-		$inventory = null;
 		$resourceArea = null;
-		$speechButton = null;
-		$resourceButton = null;
 		$speakerName = null;
 		$resourceMessage = null;
 		$resourceContent = null;
 		$resourceContentBody = null;
-		$nextButton = null;
-		$closeButton = null;
-		$backButton = null;
-		$answerButton = null;
 
 		_numSeedsToAdd = 0;
 		_questionType = null;
@@ -111,75 +92,115 @@ var $resources = $game.$resources = {
 		$game.$resources.waitingForTagline= false;
 	},
 
-	//called when player clicks on resource from inventory to simulate clicking the NPC
-	beginResource: function(npc, answers) {
-		var nombre = $game.$npc.getName(npc);
-		$game.$resources.loadResource(nombre, npc, true, answers);
-		if(!answers) {
-			_inventory = true;
-		}
-		$game.$resources.isShowing = true;
-	},
+  debug: function () { // TODO: REMOVE
+    console.log(_resources)
+  },
 
-	//preloads the resource into the staging area (not visible) and sets question and stuff
-	loadResource: function (who, index, revisit, answers) {
-		_who = who;
-		_answered = answers;
-		_correctAnswer = answers;
-		_currentSlide = 0;
-		_temporaryAnswer = '';
+  // Called when player views a resource from inventory
+  examineResource: function (index) {
+    // Hides inventory, shows resource, and passes a callback function to re-open the
+    // inventory once player exits the resource.
+    $game.$input.closeInventory(function () {
+      $resources.showResource(index, function () {
+        $game.$input.openInventory()
+        // $game.$player.inventoryShowing = ($game.$botanist.isSolving) ? false : true
+      })
+    })
+  },
 
-		$resourceStage.empty();
-		var stringId = String(index);
-		_curResource = _resources[stringId];
-		_questionType = _curResource.questionType;
-		_feedbackRight = _curResource.feedbackRight;
-		_skinSuitReward = _curResource.skinSuit;
+  // Activated when clicking on something that is specific to viewing answers
+  examineAnswers: function (index) {
+    $resources.showResponses(index)
+  },
 
-		var npcLevel = $game.$npc.getNpcLevel(index);
-		if(npcLevel <= $game.$player.currentLevel) {
-			var url = '/articles/' + _curResource.url + '.html';
-			$resourceStage.empty().load(url,function() {
-				_numSlides = $('.resourceStage .pages > section').length;
-				$game.$resources.showResource(revisit);
-			});
-		}
-	},
+  // Preloads the resource into the staging area
+  loadResource: function (resource, callback) {
+    var url = CivicSeed.CLOUD_PATH + '/articles/' + resource.url + '.html'
+    $('#resource-stage').empty().load(url, callback)
+  },
 
-	//decide how to display resource on screen depending on state of player (if returning)
-	showResource: function (revisit) {
+  //decide how to display resource on screen depending on state of player (if returning)
+  showResource: function (index, callback) {
+    var el          = document.getElementById('resource-area'),
+        npc         = $game.$npc.getNpc(index),
+        npcLevel    = $game.$npc.getLevel(index),
+        playerLevel = $game.$player.getLevel(),
+        revisit     = $game.$player.getPrompt(index),    // 2 = revisiting?
+        resource    = _resources[index]
+
+    console.log('showResource() ', index, resource)
+
+    // If NPC's level is higher than player's level, let's get out of here.
+    /*
+    if (npcLevel > playerLevel) {
+      $game.debug('Aborting resource display because the NPC level of this resource (' + npcLevel + ') is higher than the player’s current level (' + playerLevel + ')')
+      return false
+    }
+    */
+
+    // Load resource content, then display.
+    // $resources.isShowing = true
+    $resources.loadResource(resource, function () {
+      var slides    = $('#resource-stage .pages > section').length,
+          folder    = 'level' + npcLevel,
+          imagePath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + folder + '/' + resource.shape + '.png'
+
+      $game.$audio.playTriggerFx('windowShow')
+      $game.$audio.fadeLow()
+
+      el.querySelector('.tangram').innerHTML = '<img src="' + imagePath + '">'
+
+      //ready to show the resource now
+      el.querySelector('.resource-content, .resource-article, .resource-question, .resource-responses').style.display = 'none'
+      $resources.addContent(index);
+      $resources.addButtons();
+
+      $(el).fadeIn(300)
+    })
+    /*
+    _who = who;
+    _answered = answers;
+    _correctAnswer = answers;
+    _currentSlide = 0;
+    _temporaryAnswer = '';
+
+    var stringId = String(index);
+    _curResource = _resources[stringId];
+    _questionType = _curResource.questionType;
+    _feedbackRight = _curResource.feedbackRight;
+    _skinSuitReward = _curResource.skinSuit;
+    */
+
 		//revisiting means the already answered it and just see resource not question form
+    /*
 		_revisiting = revisit;
 		if(_answered) {
 			_correctAnswer = true;
 			_currentSlide = _numSlides + 2;
-		} else if(_revisiting) {
+		}
+    else if(_revisiting) {
 			_correctAnswer = false;
-		} else {
+		}
+    else {
 			var npcLevel = $game.$npc.getNpcLevel(_curResource.index),
 				levelFolder = 'level' + (npcLevel + 1),
 				imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/' + _curResource.shape + '.png';
 			_preloadedPieceImage = '<div class="tangramPiece"><img src="' + imgPath + '"></div>';
 		}
-
-    $game.$resources.isShowing = true
-
-    //ready to show the resource now
-    $('.resourceArea .dialog > span, .resourceArea .resourceContent').empty();
-    $game.$resources.addContent();
-    $game.$resources.addButtons();
-    $inventory.fadeOut(function() {
-      $game.$player.inventoryShowing = false;
-      $resourceArea.addClass('patternBg1');
-      $resourceArea.fadeIn();
-      $game.$audio.playTriggerFx('windowShow');
-    });
-
-		$game.$audio.fadeLow();
+    */
 	},
 
 	//figure out which buttons to show based on what they are looking at
 	addButtons: function() {
+
+    // TEMPORARY: Put all old button references here, the only place where it's used
+    var $resourceButton = $('#resource-area button'),
+        $nextButton = $('#resource-area .nextButton'),
+        $closeButton = $('#resource-area .closeButton'),
+        $backButton = $('#resource-area .backButton'),
+        $answerButton = $('#resource-area .answerButton'),
+        $saveButton = $('#resource-area .saveButton');
+
 		//hide all buttons by default
 		$resourceButton.hide();
 		//they answered the question
@@ -247,79 +268,96 @@ var $resources = $game.$resources = {
 	},
 
 	//clear the display and decide what to show on screen
-	addContent: function() {
-		$speakerName.empty();
-		$resourceMessage.empty();
-		$resourceContentBody.empty().hide();
-		$resourceContent.empty();
+	addContent: function (index) {
 		//if they answered the question...
 		if(_answered) {
 			_addAnsweredContent();
 		}
 		else {
-			_addRealContent();
+			_addRealContent(index);
 		}
 	},
 
-	//show all other players recent answers and your own answer
-	//include options to make public or not
-	showRecentAnswers: function() {
-		//alway show player's answer with a lock icon (make public button)
-		//if it is public, just show eye icon
-		//console.log(_curResource);
-    var finalQuestion = '<div class="publicAnswers overlayContent"><p class="finalQuestion">Q: ' + _curResource.question + '</p>',
-        otherAnswers = '',
-        yourAnswer = $game.$player.getAnswer(_curResource.index),
-        rightOne = yourAnswer.answers.length - 1
+  getSlideContent: function (index, slide) {
+    // Here's how slides go
+    // 0 to article.(length - 1) = article's pages
+    // article.length = The test question
+    //   if unanswered, display the answer form.
+    //   if answered, display player's answer and all public answers.
+    // article.(length + 1) = If previous slide was the answer form, this is congrats!
+  },
 
-		if(_curResource.playerAnswers) {
-			var recentAnswers = _curResource.playerAnswers,
-				spot = recentAnswers.length,
-				yoursPublic;
+  // Show other players answers and your own
+  showResponses: function (index) {
+    var overlay        = document.getElementById('resource-area'),
+        el             = overlay.querySelector('.resource-responses'),
+        resource       = _resources[index],
+        npc            = $game.$npc.getNpc(index),
+        playerResource = $game.$player.getAnswer(index),
+        playerPublic   = false,
+        responsesHTML  = '',
+        playerHTML     = '',
+        dialogue       = ''
 
-			while(--spot > -1) {
-				//double check
-				if(recentAnswers[spot].madePublic && recentAnswers[spot].id != $game.$player.id) {
-					otherAnswers += '<li class="playerAnswers"><p><span>' + recentAnswers[spot].name + ': </span>' + recentAnswers[spot].answer + '</p><div class="pledgeButton"><button class="btn btn-success" data-npc="' + _curResource.index + '" data-player="'+ recentAnswers[spot].id +'">Seed It!</button></div></li>';
-				} else if(recentAnswers[spot].madePublic && recentAnswers[spot].id === $game.$player.id) {
-					yoursPublic = true;
-				}
-			}
+    // Process public responses (we do not have access to non-public responses here)
+    for (var i = 0; i < resource.playerAnswers.length; i++) {
+      var thisAnswer = resource.playerAnswers[i]
+      if (thisAnswer.id === $game.$player.id) {
+        // If yours is public, remember this for later
+        playerPublic = true
+      }
+      else {
+        // Create HTML snippet of all other players' public responses
+        responsesHTML+= '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledgeButton"><button class="btn btn-success" data-npc="' + resource.index + '" data-player="'+ thisAnswer.id +'">Seed It!</button></div></li>';
+      }
+    }
 
-			//add in the player's answer with the appropriate button
-			var finalDisplay = '<ul>';
+    // Determine what NPC says for status
+    if (responsesHTML !== '') {
+      dialogue = 'Here are some recent answers by your peers.'
+    }
+    else {
+      dialogue = 'Your answer is shown below, but other players have not made their answers public.'
+      responsesHTML= '<li class="response"><p>More answers from your peers will appear shortly.  Be sure to check back.</p></li>'
+    }
 
-			finalDisplay += '<li class="playerAnswers yourAnswer"><p><span>' + 'You said' + ': </span>' + yourAnswer.answers[rightOne] + '</p>';
+    //add in the player's answer with the appropriate button
+    // TODO: Make a better templating system for all of this
+    playerHTML += '<li class="response your-response"><p><span>' + 'You said' + ': </span>' + playerResource.answers[playerResource.answers.length - 1] + '</p>'
+    if (!playerPublic) {
+      playerHTML += '<div class="publicButton"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
+    }
+    else {
+      playerHTML += '<div class="privateButton"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
+    }
+    playerHTML += '</li>'
 
-			if(!yoursPublic) {
-				finalDisplay += '<div class="publicButton"><button class="btn btn-info" data-npc="'+ _curResource.index +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>';
-			} else {
-				finalDisplay += '<div class="privateButton"><button class="btn btn-info" data-npc="'+ _curResource.index +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>';
-			}
-			finalDisplay +=  '</li>' + otherAnswers + '</ul></div>';
+    el.querySelector('.question').innerHTML = 'Q: ' + resource.question
+    el.querySelector('.content-box ul').innerHTML = playerHTML + responsesHTML
+    el.querySelector('.speaker').textContent = npc.name
+    el.querySelector('.message').textContent = dialogue
 
-			_speak = 'Here are some recent answers by your peers.';
-		} else {
-			_speak = 'Congrats! You were the first to answer.';
-			displayAnswers += '<p>** More answers from your peers will appear shortly.  Be sure to check back. **</p>';
-		}
-    $('tagline-input').hide()
-		$speakerName.text(_who);
-		$resourceMessage.text(_speak);
-		if (_speak) {
-			$('.dialog').show()
-		}
-		$resourceContent.html(finalQuestion + finalDisplay).show();
-	},
+    // TODO: Move display logic elsewhere
+    el.style.display = 'block'
+    overlay.querySelector('.resource-content, .resource-article, .resource-question').style.display = 'none'
+    if ($(overlay).is(':hidden')) {
+      $resources.isShowing = true
+      $(overlay).fadeIn()
+    }
+  },
 
-	//hide the resource area and decide if we need to show inventory again or not
-	hideResource: function() {
-		$resourceArea.fadeOut(function() {
-			$game.$resources.isShowing = false;
-			$resourceButton.show()
-			$resourceArea.removeClass('patternBg1');
-		});
+  //hide the resource area and decide if we need to show inventory again or not
+  hideResource: function (callback) {
+    var el = document.getElementById('resource-area')
 
+    $(el).fadeOut(function () {
+      $resources.isShowing = false
+      $game.$audio.fadeHi()
+      if (typeof callback === 'function') {
+        callback()
+      }
+    })
+    /* This should be something callbacks should employ.
 		//if the resource was being displayed from the inventory, keep it up.
 		if(_inventory) {
 			$inventory.fadeIn(function() {
@@ -334,7 +372,7 @@ var $resources = $game.$resources = {
 		} else {
 			$game.$player.checkBotanistState();
 		}
-		$game.$audio.fadeHi();
+    */
 	},
 
 	//go back a slide in the resource (hack to go back 2 since next slide advances one)
@@ -348,28 +386,10 @@ var $resources = $game.$resources = {
 	},
 
 	//advance to the next slide in a resource
-	nextSlide: function() {
+	nextSlide: function (slide) {
 		_currentSlide += 1;
-    //if its answered, determine if we need to show npc chat style instead
-		if(_answered) {
-			//if they got it wrong
-			if(!_correctAnswer) {
-				_speak = _curResource.feedbackWrong;
-				$game.$audio.playTriggerFx('resourceWrong');
-				//hide resource
-				$game.$resources.hideResource();
-				$game.$npc.showSpeechBubble(_who, _speak)
-			}
-			else {
-        // If answered, and correct
-				$game.$resources.addContent();
-				$game.$resources.addButtons();
-			}
-		}
-		else {
-			$game.$resources.addContent();
-			$game.$resources.addButtons();
-		}
+    $game.$resources.addContent();
+    $game.$resources.addButtons();
 	},
 
 	//figure out if the player made the correct response or not, if we bypass it means they clicked okay on the prompt for it being too short
@@ -431,10 +451,6 @@ var $resources = $game.$resources = {
 				instanceName: $game.$player.instanceName,
 				questionType: _curResource.questionType
 			};
-
-      // TODO: This is not ideal. Multiple "pages" should be shown rather than
-      // individual pieces of each page.
-			$('.resourceArea .tagline-input').show()
 		}
 		else {
 			var wrongInfo = {
@@ -447,7 +463,21 @@ var $resources = $game.$resources = {
 			_numSeedsToAdd = $game.$player.answerResource(wrongInfo);
 		}
 		_answered = true;
-		$game.$resources.nextSlide();
+
+    if (_answered && _correctAnswer) {
+      // If the answer is correct, there's more slides to go.
+      $game.$resources.nextSlide();
+    }
+    else if (!_correctAnswer) {
+      // If the answer is wrong, exit out. We're done here.
+      _speak = _curResource.feedbackWrong;
+
+      $resources.hideResource(function callback() {
+        $game.$audio.playTriggerFx('resourceWrong')
+        $game.$npc.showSpeechBubble(_who, _speak)
+      })
+    }
+
 	},
 
 	//get the shape svg info for a specific resource
@@ -474,13 +504,7 @@ var $resources = $game.$resources = {
 		var stringId = String(data.npc);
 		_resources[stringId].playerAnswers.push(data);
 		//update the npc bubbles on screen
-		var npcs = $game.$npc.getOnScreenNpcs();
-		for (var n = 0; n < npcs.length; n++) {
-			if(stringId == npcs[n]) {
-				$game.$player.displayNpcComments();
-				break;
-			}
-		}
+    $game.$player.displayNpcComments()
 	},
 
 	//moreve an answer (this means they made it private and it was previously public)
@@ -499,11 +523,13 @@ var $resources = $game.$resources = {
 				found = true;
 			}
 		}
+
+    $game.$player.displayNpcComments()
 	},
 
 	// Trigger a popup if answer was too short
 	popupCheck: function () {
-    var $el = $('.resourceArea .check')
+    var $el = $('#resource-area .check')
     $el.find('.check-dialog').hide()
     $el.find('.confirm-skimpy').show()
     $el.find('button').show()
@@ -512,7 +538,7 @@ var $resources = $game.$resources = {
 
 	// Display messages on checking user input
 	showCheckMessage: function (message) {
-    var $el = $('.resourceArea .check')
+    var $el = $('#resource-area .check')
 
     $el.find('.check-dialog').hide()
     $el.find('.message-feedback').show()
@@ -523,7 +549,7 @@ var $resources = $game.$resources = {
 	},
 
   hideCheckMessage: function () {
-    var $el = $('.resourceArea .check')
+    var $el = $('#resource-area .check')
     if ($el.is(':visible')) {
       $el.fadeOut(200)
     }
@@ -541,7 +567,7 @@ var $resources = $game.$resources = {
 
 	//decide what to do if we save custom tagline
 	saveTagline: function (tagline) {
-		if(tagline.length > 0) {
+		if (tagline.length > 0) {
 			$game.$player.setTagline(tagline);
 			$game.$resources.waitingForTagline = false;
 
@@ -569,21 +595,11 @@ var $resources = $game.$resources = {
 
 //reuse for doms
 function _setDomSelectors() {
-	$resourceStage = $('.resourceStage');
-	$speechBubble = $('.speechBubble');
-	$inventory = $('.inventory');
-	$resourceArea = $('.resourceArea');
-	$speechButton = $('.speechBubble button');
-	$resourceButton = $('.resourceArea button');
-	$speakerName = $('.resourceArea .speakerName');
-	$resourceMessage = $('.resourceArea .message');
+	$resourceArea = $('#resource-area');
+	$speakerName = $('#resource-area .speakerName');
+	$resourceMessage = $('#resource-area .message');
 	$resourceContent = $('.resourceContent');
 	$resourceContentBody = $('.resourceContentBody');
-	$nextButton = $('.resourceArea .nextButton');
-	$closeButton = $('.resourceArea .closeButton');
-	$backButton = $('.resourceArea  .backButton');
-	$answerButton = $('.resourceArea  .answerButton');
-	$saveButton = $('.resourceArea  .saveButton');
 }
 
 //adding content if they answered the resource to show
@@ -597,7 +613,7 @@ function _addAnsweredContent() {
 
 			if(npcLevel < $game.$player.currentLevel) {
 				_speak = _feedbackRight + ' Here, take ' + _numSeedsToAdd + ' seeds!';
-				$('tagline-input').show()
+				$('.tagline-input').show()
 				$resourceContent.empty().css('overflow','auto');
 			}
 
@@ -615,25 +631,46 @@ function _addAnsweredContent() {
 			}
 			$speakerName.text(_who);
 			$resourceMessage.text(_speak);
-      $('.resourceArea .dialog').show()
+      $('#resource-area .dialog').show()
 			//give them input box for custom tagline
 		}
 		//the next slide will show them recent answers
 		else {
 			$resourceContent.empty().show();
-			$game.$resources.showRecentAnswers();
+			$resources.showResponses();
 		}
 	}
 }
 
 //adds question content or shows answers or show resource content
-function _addRealContent() {
+function _addRealContent (index) {
+  var $el         = $('#resource-area'),
+      npc         = $game.$npc.getNpc(index),
+      npcLevel    = $game.$npc.getLevel(index),
+      playerLevel = $game.$player.getLevel(),
+      revisit     = $game.$player.getPrompt(index),    // 2 = revisiting?
+      resource    = _resources[index]
+
+  var $article = $('#resource-stage .pages > section'),
+      slides   = $article.length
+
+  console.log('_currentSlide: ', _currentSlide)
+  console.log('resource: ', resource, index)
+
+  if (_currentSlide === slides) {
+    // the _currentSlide is equal to the number of slides, that is, time to display
+    // the resource's test question.
+    var $content = $el.find('.resource-question')
+    $content.find('.question').text(resource.question)
+    $el.show()
+  }
+
 	// $resourceContent.css('overflow', 'auto');
-	if(_currentSlide === _numSlides) {
-		var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
+	if(_currentSlide === slides) {
+		// var finalQuestion = '<p class="finalQuestion">Q: ' + _curResource.question + '</p>';
 		//show their answer and the question, not the form
 		if(_revisiting) {
-			$game.$resources.showRecentAnswers();
+			$game.$resources.showResponses();
 		}
 		else {
 			// _speak = _curResource.prompt;
@@ -666,11 +703,11 @@ function _addRealContent() {
 			}
 		}
 	}
-	else{
-		var content = $('.resourceStage .pages > section').get(_currentSlide).innerHTML;
-		$resourceContent.empty().hide();
-		$('.dialog').hide()
-		$resourceContentBody.html(content).show();
+	else {
+    // Show contents of article
+		var page = $article.get(_currentSlide).innerHTML
+    $('.resource-content').hide()
+    $('.resource-article').html(page).show()
 	}
 }
 

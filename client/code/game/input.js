@@ -144,6 +144,57 @@ var $input = $game.$input = module.exports = {
 
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
+    //close the resource area
+    $BODY.on('click', '#resource-area a.close-overlay, #resource-area .closeButton', function (e) {
+      e.preventDefault()
+      if(!$game.$resources.waitingForTagline) {
+        $game.$resources.hideCheckMessage()
+        $game.$resources.hideResource()
+      } else {
+        // TODO: Keep this out of here?
+        $game.$resources.showCheckMessage('You should create a custom tagline!')
+      }
+      return false;
+    });
+
+    //advance the content in resource to next page
+    $BODY.on('click', '#resource-area .nextButton', function () {
+      $game.$resources.nextSlide();
+    });
+
+    //previous page of content in resource
+    $BODY.on('click', '#resource-area .backButton', function () {
+      $game.$resources.previousSlide();
+    });
+
+    //previous page of content in resource
+    $BODY.on('click', '#resource-area .saveButton', function () {
+      var tagline = $.trim($('.tagline-input input').val())
+      $game.$resources.saveTagline(tagline);
+    });
+
+    //submit answer in resource
+    $BODY.on('click', '#resource-area .answerButton', function (e) {
+      e.preventDefault();
+      $game.$resources.submitAnswer();
+      return false;
+    });
+
+    //acknowledge prompt that your answer is skimpy in resource
+    $BODY.on('click', '#resource-area .sureButton', function (e) {
+      e.preventDefault();
+      $game.$resources.hideCheckMessage()
+      $game.$resources.submitAnswer(true);
+      return false;
+    });
+
+    //cancel submit in resource
+    $BODY.on('click', '#resource-area .retryButton', function (e) {
+      e.preventDefault();
+      $game.$resources.hideCheckMessage()
+      return false;
+    });
+
     // ************* SKINVENTORY WINDOW INTERACTIONS *************
 
     $BODY.on('click', '.skinventory .outer', function () {
@@ -217,55 +268,6 @@ var $input = $game.$input = module.exports = {
 			$game.$log.clearUnread();
 		});
 
-		//close the resource area
-		$BODY.on('click', '.resourceArea a i, .resourceArea .closeButton', function (e) {
-			e.preventDefault();
-			if(!$game.$resources.waitingForTagline) {
-        $game.$resources.hideCheckMessage()
-				$game.$resources.hideResource();
-			} else {
-				$('.checkTagline').show().delay(2000).fadeOut();
-			}
-			return false;
-		});
-
-		//advance the content in resource to next page
-		$BODY.on('click', '.resourceArea .nextButton', function () {
-			$game.$resources.nextSlide();
-		});
-
-		//previous page of content in resource
-		$BODY.on('click', '.resourceArea .backButton', function () {
-			$game.$resources.previousSlide();
-		});
-
-		//previous page of content in resource
-		$BODY.on('click', '.resourceArea .saveButton', function () {
-			var tagline = $.trim($('.tagline-input input').val())
-			$game.$resources.saveTagline(tagline);
-		});
-
-		//submit answer in resource
-		$BODY.on('click', '.resourceArea .answerButton', function (e) {
-			e.preventDefault();
-			$game.$resources.submitAnswer();
-			return false;
-		});
-
-		//acknowledge prompt that your answer is skimpy in resource
-		$BODY.on('click', '.resourceArea .sureButton', function (e) {
-			e.preventDefault();
-      $game.$resources.hideCheckMessage()
-			$game.$resources.submitAnswer(true);
-			return false;
-		});
-
-		//cancel submit in resource
-		$BODY.on('click', '.resourceArea .retryButton', function (e) {
-			e.preventDefault();
-      $game.$resources.hideCheckMessage()
-			return false;
-		});
 
 		//close botanist window
 		$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
@@ -311,12 +313,22 @@ var $input = $game.$input = module.exports = {
 
 		//make your comment public
 		$BODY.on('click', '.publicButton button', function() {
-			$game.$player.makePublic($(this).attr('data-npc'));
+			$game.$player.makePublic($(this).attr('data-npc'))
+      // Toggle state of button
+      // TODO: place this presentation logic elsewhere
+      $(this).parent().removeClass('publicButton').addClass('privateButton')
+      $(this).parent().find('i').removeClass('fa-lock').addClass('fa-unlock-alt')
+      $(this).text('Make Private')
 		});
 
 		//make your comment private
 		$BODY.on('click', '.privateButton button', function() {
-			$game.$player.makePrivate($(this).attr('data-npc'));
+			$game.$player.makePrivate($(this).attr('data-npc'))
+      // Toggle state of button
+      // TODO: place this presentation logic elsewhere
+      $(this).parent().removeClass('privateButton').addClass('publicButton')
+      $(this).parent().find('i').removeClass('fa-unlock-alt').addClass('fa-lock')
+      $(this).text('Make Public')
 		});
 
 		//pledge a seed to a comment
@@ -331,17 +343,17 @@ var $input = $game.$input = module.exports = {
 				ss.rpc('game.player.pledgeSeed', info, function(r) {
 					$game.$player.updatePledges(-1);
 					clearTimeout(_pledgeFeedbackTimeout);
-					$('.resourceArea .feedback').text('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.').show();
+					$('#resource-area .feedback').text('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.').show();
 					_pledgeFeedbackTimeout = setTimeout(function() {
-						$('.resourceArea .feedback').fadeOut();
+						$('#resource-area .feedback').fadeOut();
 					}, 3000);
 				});
 			}
 			else {
 				clearTimeout(_pledgeFeedbackTimeout);
-				$('.resourceArea .feedback').text('You cannot seed any more answers this level.').show();
+				$('#resource-area .feedback').text('You cannot seed any more answers this level.').show();
 				_pledgeFeedbackTimeout = setTimeout(function() {
-					$('.resourceArea .feedback').fadeOut();
+					$('#resource-area .feedback').fadeOut();
 				}, 3000);
 			}
 		});
@@ -580,19 +592,20 @@ var $input = $game.$input = module.exports = {
     }
   },
 
-  openInventory: function () {
+  openInventory: function (callback) {
     $game.$player.inventoryShowing = true
     $('.inventoryButton').addClass('hud-button-active')
     if ($game.$player.getInventoryLength() > 0) {
       $game.alert('click items to view again')
     }
-    $inventory.slideDown(200)
+    $inventory.slideDown(300, callback)
   },
 
-  closeInventory: function () {
-    $inventory.slideUp(function () {
+  closeInventory: function (callback) {
+    $inventory.slideUp(300, function () {
       $game.$player.inventoryShowing = false
       $('.inventoryButton').removeClass('hud-button-active')
+      if (typeof callback === 'function') callback()
     })
   },
 

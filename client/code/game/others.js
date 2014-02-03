@@ -24,7 +24,7 @@ $game.$others = {
 		//check if player is on our screen (or near it....)
 		//don't add it if its yourself
 		if(player._id != $game.$player.id) {
-			
+
 			//set inview if nearby
 			var newbie = $game.$others.createOther(player);
 			_onScreenPlayers[newbie.id] = newbie;
@@ -302,7 +302,7 @@ $game.$others = {
 					if(otherPlayer.currentStep === 1) {
 						otherPlayer.currentStepIncX = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX - otherPlayer.info.x;
 						otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.info.y;
-						
+
 						//set the previous offsets to 0 because the last visit
 						//was the actual rounded master
 						otherPlayer.info.prevOffX = 0;
@@ -413,7 +413,7 @@ $game.$others = {
 		});
 		return all;
 	},
-	
+
 	sendMoveInfo: function(moves, id) {
 		if(_onScreenPlayers[id]) {
 			_onScreenPlayers[id].beginMove(moves);

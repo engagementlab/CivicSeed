@@ -66,16 +66,20 @@ input, .input, textarea
 	border 0 none
 	&:hover
 		color white
+		box-shadow 0 0 0 3px $csLightGray
 
 h1, h2, h3, h4, h5, h6
 	font-family $bodyFont
 
 p
-	font-family $bodyFont
+	font-family inherit
 
 a, button, i, span
 	font-family $buttonFont
 	font-weight 300
+
+button
+	outline none !important
 
 a:hover
 	text-decoration none

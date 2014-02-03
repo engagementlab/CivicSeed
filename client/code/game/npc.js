@@ -77,11 +77,6 @@ var $npc = $game.$npc = {
     return all;
   },
 
-  //get a specific name of npc
-  getName: function (index) {
-    return _allNpcs[index].name
-  },
-
   //create an npc with all its data bound to it
   createNpc: function (npc) {
 
@@ -427,8 +422,7 @@ var $npc = $game.$npc = {
     }
 
     $npc.showSpeechBubble(npc.name, dialogue, function () {
-      var revisit = (promptIndex >= 2) ? true : false
-      $game.$resources.loadResource(npc.name, npc.index, revisit)
+      $game.$resources.showResource(npc.index)
     })
   },
 
@@ -463,19 +457,33 @@ var $npc = $game.$npc = {
     return npc
   },
 
-  //figure out what level specific npc is in
-  getNpcLevel: function (index) {
+  // Get NPC's level.
+  getLevel: function (index) {
+    // This differs from refering to the .level property of the NPC since this returns
+    // actual level (+1)
     if (index) {
-      return $npc.getNpc(index).level
-    } else {
-      $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
-      return _curNpc.level;
+      return $npc.getNpc(index).level + 1
     }
+    else {
+      $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
+      return _curNpc.level + 1
+    }
+  },
+
+  // Alias for $npc.getLevel()
+  getNpcLevel: function (index) {
+    $game.debug('$npc.getNpcLevel() is deprecated. Use $npc.getLevel() instead.')
+    $npc.getLevel(index)
   },
 
   //get all npc data
   getNpcData: function () {
     return _allNpcs;
+  },
+
+  //get a specific name of npc
+  getName: function (index) {
+    return _allNpcs[index].name
   },
 
   getOnScreenNpcs: function() {

@@ -394,13 +394,11 @@ var $botanist = $game.$botanist = {
 		$game.$botanist.addButtons();
 
 		$game.$npc.hideSpeechBubble(function () {
-			$botanistArea
-				.addClass('patternBg3')
-				.fadeIn(function() {
-					$game.$botanist.isShowing = true;
-					if(_currentSlide === 0 && !$game.$player.firstTime) {
-						$tangramArea.show();
-					}
+			$botanistArea.fadeIn(function() {
+				$game.$botanist.isShowing = true;
+				if(_currentSlide === 0 && !$game.$player.firstTime) {
+					$tangramArea.show();
+				}
 			});
 		});
 	},
@@ -560,7 +558,7 @@ var $botanist = $game.$botanist = {
 		$botanistArea.fadeOut(function() {
 			$game.$botanist.isShowing = false;
 			$('.botanist button').hide();
-			$(this).removeClass('patternBg3').removeClass('puzzle-mode')
+			$(this).removeClass('puzzle-mode')
 			$game.$botanist.isChat = false;
 			$game.$botanist.isSolving = false;
 			$game.$botanist.clearBoard();

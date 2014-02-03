@@ -341,14 +341,16 @@ var $game = module.exports = {
 
   // Shows a message in either an on-screen display, in the chat log, or both
   statusUpdate: function (data) {
+    var $el = $('.status-update')
+
     if (data.screen) {
-      $('.statusUpdate span').text(data.message)
-      $('.statusUpdate').fadeIn(100)
+      $el.find('span').text(data.message)
+      $el.fadeIn(100)
       clearTimeout(_displayTimeout)
       var len      = data.message.length,
           fadeTime = len * 100 + 500
       _displayTimeout = setTimeout(function() {
-        $('.statusUpdate').fadeOut(150)
+        $el.fadeOut(150)
       }, fadeTime)
     }
     if (data.log) {
@@ -651,7 +653,7 @@ function _startGame(ingame) {
           $game.alert('Welcome to Civic Seed!')
           $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
         }
-        if ($game.$player.botanistState === 0) {
+        else if ($game.$player.botanistState === 0) {
           $game.$botanist.nudgePlayer()
         }
       });
