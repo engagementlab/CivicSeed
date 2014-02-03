@@ -596,8 +596,10 @@ function _loadLog() {
 //this is all the other stuff that needs to happen once everything is loaded
 function _loadExtra() {
   //fill player inventory and creat outlines
-  $game.$player.fillInventory();
-  $game.$player.createInventoryOutlines();
+  if($game.$player.currentLevel < 4) {
+    $game.$player.fillInventory();
+    $game.$player.createInventoryOutlines();
+  }
 
   //make players color map
   var src = $game.$player.getColorMap();

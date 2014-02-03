@@ -244,7 +244,7 @@ exports.actions = function(req, res, ss) {
 				problemHTML += '<p>User: ' + email + '</p>';
 				problemHTML += '<p>Problem: ' + problem + '</p>';
 				emailUtil.openEmailConnection();
-				emailUtil.sendEmail('User submitted issue', problemHTML, 'russellgoldenberg@gmail.com');
+				emailUtil.sendEmail('User submitted issue', problemHTML, 'saikofish@gmail.com');
 				// TODO: close connection on *** CALLBACK ***
 				emailUtil.closeEmailConnection();
 				res(true);

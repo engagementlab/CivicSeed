@@ -145,7 +145,7 @@ var $input = $game.$input = module.exports = {
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
     //close the resource area
-    $BODY.on('click', '#resource-area a.close-overlay, #resource-area .closeButton', function (e) {
+    $BODY.on('click', '#resource-area a.close-overlay, #resource-area .close-button', function (e) {
       e.preventDefault()
       if(!$game.$resources.waitingForTagline) {
         $game.$resources.hideCheckMessage()
@@ -158,30 +158,30 @@ var $input = $game.$input = module.exports = {
     });
 
     //advance the content in resource to next page
-    $BODY.on('click', '#resource-area .nextButton', function () {
+    $BODY.on('click', '#resource-area .next-button', function () {
       $game.$resources.nextSlide();
     });
 
     //previous page of content in resource
-    $BODY.on('click', '#resource-area .backButton', function () {
+    $BODY.on('click', '#resource-area .back-button', function () {
       $game.$resources.previousSlide();
     });
 
     //previous page of content in resource
-    $BODY.on('click', '#resource-area .saveButton', function () {
+    $BODY.on('click', '#resource-area .save-button', function () {
       var tagline = $.trim($('.tagline-input input').val())
       $game.$resources.saveTagline(tagline);
     });
 
     //submit answer in resource
-    $BODY.on('click', '#resource-area .answerButton', function (e) {
+    $BODY.on('click', '#resource-area .answer-button', function (e) {
       e.preventDefault();
       $game.$resources.submitAnswer();
       return false;
     });
 
     //acknowledge prompt that your answer is skimpy in resource
-    $BODY.on('click', '#resource-area .sureButton', function (e) {
+    $BODY.on('click', '#resource-area .sure-button', function (e) {
       e.preventDefault();
       $game.$resources.hideCheckMessage()
       $game.$resources.submitAnswer(true);
@@ -189,7 +189,7 @@ var $input = $game.$input = module.exports = {
     });
 
     //cancel submit in resource
-    $BODY.on('click', '#resource-area .retryButton', function (e) {
+    $BODY.on('click', '#resource-area .retry-button', function (e) {
       e.preventDefault();
       $game.$resources.hideCheckMessage()
       return false;
@@ -219,8 +219,8 @@ var $input = $game.$input = module.exports = {
 
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
 
-    $BODY.on('click', '.speechBubble', function (e) {
-      // Prevent clicking on speech bubble from interacting with gameboard below
+    $BODY.on('click', '.speechBubble, .inventory', function (e) {
+      // Prevent clicking on interface elements from interacting with gameboard below
       e.stopImmediatePropagation()
     })
 
@@ -312,27 +312,27 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//make your comment public
-		$BODY.on('click', '.publicButton button', function() {
+		$BODY.on('click', '.public-button button', function() {
 			$game.$player.makePublic($(this).attr('data-npc'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
-      $(this).parent().removeClass('publicButton').addClass('privateButton')
+      $(this).parent().removeClass('public-button').addClass('private-button')
       $(this).parent().find('i').removeClass('fa-lock').addClass('fa-unlock-alt')
       $(this).text('Make Private')
 		});
 
 		//make your comment private
-		$BODY.on('click', '.privateButton button', function() {
+		$BODY.on('click', '.private-button button', function() {
 			$game.$player.makePrivate($(this).attr('data-npc'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
-      $(this).parent().removeClass('privateButton').addClass('publicButton')
+      $(this).parent().removeClass('private-button').addClass('public-button')
       $(this).parent().find('i').removeClass('fa-unlock-alt').addClass('fa-lock')
       $(this).text('Make Public')
 		});
 
 		//pledge a seed to a comment
-		$BODY.on('click', '.pledgeButton button', function() {
+		$BODY.on('click', '.pledge-button button', function() {
 			var info = {
 				id: $(this).attr('data-player'),
 				pledger: $game.$player.firstName,

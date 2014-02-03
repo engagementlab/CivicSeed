@@ -336,7 +336,7 @@ module.exports.global = [{
 				legs: ['basic']
 			}
 		}
-	}	
+	}
 }, {
 	activeSessionID: null,
 	firstName: 'Magic',
@@ -473,52 +473,52 @@ module.exports.global = [{
 		inventory: [
 			{
 				name: 'correct4',
-				tagline : 'god this sucks.',			
+				tagline : 'god this sucks.',
 				npc: 8986
 			},
 			{
 				name: 'wrong6',
-				tagline : 'square',			
+				tagline : 'square',
 				npc: 9536
 			},
 			{
 				name: 'wrong3',
-				tagline : 'hey billy bo what is shaking baby',			
+				tagline : 'hey billy bo what is shaking baby',
 				npc: 8542
 			},
 			{
 				name: 'correct2',
-				tagline : 'wicked narly',			
+				tagline : 'wicked narly',
 				npc: 6265
 			},
 			{
 				name: 'wrong2',
-				tagline : 'arm',			
+				tagline : 'arm',
 				npc: 4693
 			},
 			{
 				name: 'wrong1',
-				tagline : 'diamnond',			
+				tagline : 'diamnond',
 				npc: 4284
 			},
 			{
 				name: 'correct1',
-				tagline : 'rect',			
+				tagline : 'rect',
 				npc: 2569
 			},
 			{
 				name: 'wrong4',
-				tagline : 'whh',			
+				tagline : 'whh',
 				npc: 1608
 			},
 			{
 				name: 'correct3',
-				tagline : 'reree',			
+				tagline : 'reree',
 				npc: 2176
 			},
 			{
 				name: 'wrong5',
-				tagline : 'sdwdewd',			
+				tagline : 'sdwdewd',
 				npc: 4876
 			}
 		],

@@ -176,6 +176,11 @@ var $npc = $game.$npc = {
         $game.$renderer.clearCharacter(npcObject.renderInfo);
       },
 
+      // Returns actual numerical value of level
+      getLevel: function () {
+        return this.level + 1
+      },
+
       //get the render information to draw it
       getRenderInfo: function() {
         if(npcObject.onScreen) {
@@ -247,11 +252,14 @@ var $npc = $game.$npc = {
     $game.$player.npcOnDeck = false
 
     // NPC interaction to display if the player has not finished speaking with Botanist
-    if ($game.$botanist.getState() < 2) {
+    if ($game.$botanist.getState() === 0 && $game.$player.getLevel() === 1 && $game.$botanist.tutorialState === 0) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
+    else if ($game.$botanist.getState() < 2 ) {
+      $npc.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
+    }
     // If resource is available for the player
-    else if (npc.isHolding && $game.$player.currentLevel >= npc.level) {
+    else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
       // Check if NPC's availability depends on player talking to a different NPC
       if (npc.isLocked()) {
         var dialogue = 'Before I help you out, you need to go see ' + $npc.getNpc(npc.dependsOn).name + '. Come back when you have their resource.'
@@ -378,11 +386,16 @@ var $npc = $game.$npc = {
       // Binds callback to a hidden button element so that it is called on hide
       var button = document.createElement('button')
       button.id = 'callback-button'
-      $(button).bind('click', function (e) {
+      button.addEventListener('click', _onClose)
+
+      $el.querySelector('.buttonCorner').appendChild(button)
+
+      function _onClose(e) {
+        /*jshint validthis: true */
         e.preventDefault()
         callback()
-      })
-      $el.find('.buttonCorner').append($(button))
+        this.removeEventListener('click', _onClose)
+      }
     }
 
   },
@@ -462,7 +475,7 @@ var $npc = $game.$npc = {
     // This differs from refering to the .level property of the NPC since this returns
     // actual level (+1)
     if (index) {
-      return $npc.getNpc(index).level + 1
+      return $npc.getNpc(index).getLevel()
     }
     else {
       $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
@@ -472,7 +485,7 @@ var $npc = $game.$npc = {
 
   // Alias for $npc.getLevel()
   getNpcLevel: function (index) {
-    $game.debug('$npc.getNpcLevel() is deprecated. Use $npc.getLevel() instead.')
+    $game.debug('$npc.getNpcLevel() is deprecated. Use $npc.getLevel() or npc.getLevel() (on NPC object) instead.')
     $npc.getLevel(index)
   },
 

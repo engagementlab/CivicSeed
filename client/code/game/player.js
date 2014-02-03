@@ -475,19 +475,17 @@ var $player = $game.$player = {
 
   // this happens on load to put all items from DB -> inventory
   fillInventory: function () {
-    if ($player.currentLevel < 4) {
-      var inventory = $player.getInventory()
+    var inventory = $player.getInventory()
 
-      $game.setBadgeCount('.inventoryButton', inventory.length)
+    $game.setBadgeCount('.inventoryButton', inventory.length)
 
-      for (var i = 0; i < inventory.length; i++) {
-        _addToInventory(inventory[i])
-      }
+    for (var i = 0; i < inventory.length; i++) {
+      _addToInventory(inventory[i])
+    }
 
-      // If the player has gotten the riddle, put the tangram in the inventory + bind actions
-      if ($player.botanistState > 1) {
-        $player.tangramToInventory();
-      }
+    // If the player has gotten the riddle, put the tangram in the inventory + bind actions
+    if ($player.botanistState > 1) {
+      $player.tangramToInventory();
     }
   },
 
@@ -509,12 +507,10 @@ var $player = $game.$player = {
 
   //make the bounding box for each possible resource in inventory
   createInventoryOutlines: function() {
-    if($game.$player.currentLevel < 4) {
-      var io = $('.inventory > .outlines');
-      io.empty();
-      for(var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i +=1) {
-        io.append('<div class="inventoryOutline"></div>');
-      }
+    var io = $('.inventory > .outlines');
+    io.empty();
+    for(var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i +=1) {
+      io.append('<div class="inventoryOutline"></div>');
     }
   },
 
@@ -897,7 +893,7 @@ var $player = $game.$player = {
         if(_resources[npcs[n]].questionType === 'open') {
           $('#' + npcId).bind('click', function() {
             var npc = $(this).attr('data-npc');
-            $game.$resources.examineAnswers(npc)
+            $game.$resources.examineResponses(npc)
           });
         }
 

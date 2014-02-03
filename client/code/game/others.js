@@ -86,7 +86,6 @@ $game.$others = {
 
 	playerCard: function(x, y, show) {
 		$.each(_onScreenPlayers, function(key, player) {
-			console.log(player.info.x);
 			if(player.info.x === x && player.info.y === y) {
 				if(show) {
 					player.showPlayerCard();

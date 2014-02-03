@@ -14,6 +14,10 @@
 	#resource-area.gameboard-overlay
 		a.close-overlay(href='#')
 			i.fa.fa-times-circle.fa-lg
+		.resource-article
+		.resource-question
+			.dialog.question
+			form
 		.resource-content
 			.dialog
 				span.speaker
@@ -22,10 +26,6 @@
 			.tagline-input
 				input(name='tagline', type='text', value='', maxLength='60', autofocus)
 				.privacy-message Summarize what you just learned. You’ll need it later!
-		.resource-article
-		.resource-question
-			.dialog.question
-			form
 		.resource-responses
 			.dialog
 				span.speaker
@@ -35,18 +35,18 @@
 				ul.responses
 		.buttons
 			.left
-				button.backButton.btn.btn-info(type='button') Back
+				button.back-button.btn.btn-info(type='button') Back
 			.right
-				button.nextButton.btn.btn-success(type='button') Next
-				button.saveButton.btn.btn-success(type='button') Save
-				button.answerButton.btn.btn-success(type='button') Answer
-				button.closeButton.btn.btn-primary(type='button') Close
+				button.next-button.btn.btn-success(type='button') Next
+				button.save-button.btn.btn-success(type='button') Save
+				button.answer-button.btn.btn-success(type='button') Answer
+				button.close-button.btn.btn-primary(type='button') Close
 		.check
 			.check-dialog.confirm-skimpy
 				p Are you sure? That seems a bit skimpy...
 				.buttons
-					button.sureButton.right.btn.btn-success(type='button') I'm Sure
-					button.retryButton.left.btn.btn-primary(type='button') I'll Add More
+					button.sure-button.right.btn.btn-success(type='button') I'm Sure
+					button.retry-button.left.btn.btn-primary(type='button') I'll Add More
 			.check-dialog.message-feedback
 				p.feedback
 				.buttons
