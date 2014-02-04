@@ -1,11 +1,10 @@
 {
-	"NAME": "Civic Seed",
-	"PORT": 3000,
-	"USE_REDIS": true,
-	"REDIS_HOST": "localhost",
-	"REDIS_PORT": 6379,
-	"REDIS_DB": "civic_dev_db",
-	"MONGO_URL": "mongodb://localhost/civic_dev_db",
-	"ACCOUNT_EMAIL": "postmaster@sandbox862.mailgun.org",
-	"CLOUD_PATH": ""
+  "NAME": "Civic Seed",
+  "PORT": 3000,
+  "USE_REDIS": true,
+  "REDIS_HOST": "localhost",
+  "REDIS_PORT": 6379,
+  "REDIS_DB": "civic_dev_db",
+  "MONGO_URL": "mongodb://localhost/civic_dev_db",
+  "CLOUD_PATH": ""
 }

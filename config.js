@@ -18,8 +18,10 @@ nconf.set('VERSION', json.version);
 nconf.set('ENVIRONMENT', nodeEnv);
 
 // Get authentication credentials stored as environment variables.
-nconf.set('ACCOUNT_PW', process.env.ACCOUNT_PW || '')
-nconf.set('REDIS_PW', process.env.REDIS_PW || '')
+nconf.set('EMAIL_USER', process.env.EMAIL_USER || '')
+nconf.set('EMAIL_PW',   process.env.EMAIL_PW   || '')
+nconf.set('EMAIL_TO',   process.env.EMAIL_TO   || '')
+nconf.set('REDIS_PW',   process.env.REDIS_PW   || '')
 
 if (nodeEnv === 'heroku') {
   console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')

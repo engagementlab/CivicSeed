@@ -1,18 +1,18 @@
-var rootDir = process.cwd(),
-	nodemailer = require('nodemailer'),
-	config = require(rootDir + '/config'),
-	accountName = config.get('NAME'),
-	accountEmail = config.get('ACCOUNT_EMAIL'),
-	accountPassword = config.get('ACCOUNT_PW'),
-	smtpTransport,
-	mailOptions = {
-		from: accountName + ' <' + accountEmail + '>',
-		replyTo: accountEmail,
-		to: '',
-		subject: '',
-		html: '',
-		generateTextFromHTML: true
-	};
+var rootDir       = process.cwd(),
+    nodemailer    = require('nodemailer'),
+    config        = require(rootDir + '/config'),
+    accountName   = config.get('NAME'),
+    emailUser     = config.get('EMAIL_USER'),
+    emailPassword = config.get('EMAIL_PW'),
+    smtpTransport,
+    mailOptions   = {
+      from: accountName + ' <' + emailUser + '>',
+      replyTo: emailUser,
+      to: '',
+      subject: '',
+      html: '',
+      generateTextFromHTML: true
+    }
 
 var self = module.exports = {
 
@@ -20,8 +20,8 @@ var self = module.exports = {
 		smtpTransport = nodemailer.createTransport('SMTP', {
 			service: 'Mailgun',
 			auth: {
-				user: accountEmail,
-				pass: accountPassword
+				user: emailUser,
+				pass: emailPassword
 			}
 		});
 	},
@@ -42,12 +42,7 @@ var self = module.exports = {
 	closeEmailConnection: function() {
 		smtpTransport.close();
 	}
-
 };
-
-
-
-
 
 
 // mailPassword = require('./password.js'),
@@ -59,12 +54,12 @@ var self = module.exports = {
 //     from: "codenberg@gmail.com", // sender address
 //     to: whom, // list of receivers
 //     subject: "Forgot Something?", // Subject line
-//     html: "<h2>You Dummy!</h2><p>You forgot your password huh? Well, <a href='tbd'>go here</a> to reset it.</p>" 
+//     html: "<h2>You Dummy!</h2><p>You forgot your password huh? Well, <a href='tbd'>go here</a> to reset it.</p>"
 //     }
 //     transport.sendMail(passOptions, function(error, response){
 //         if(error){
 //             console.log(error);
-//             return callback(true,null); 
+//             return callback(true,null);
 //         }
 //         else{
 //             console.log("Message sent: " + response.message);
@@ -75,4 +70,3 @@ var self = module.exports = {
 //         smtpTransport.close(); // shut down the connection pool, no more messages
 //     });
 // }
-
