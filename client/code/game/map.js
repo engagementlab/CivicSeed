@@ -1,3 +1,5 @@
+'use strict';
+
 var _nextTiles = null,
 	_gridTiles = null,
 	_graph = null,
@@ -13,7 +15,7 @@ var _nextTiles = null,
 	_topEdge = 0,
 	_bottomEdge = 0;
 
-$game.$map = {
+var $map = $game.$map = {
 
 	coloredTiles: [],
 	growingSeed: false,
