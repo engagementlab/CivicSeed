@@ -4,6 +4,7 @@ var rootDir       = process.cwd(),
     accountName   = config.get('NAME'),
     emailUser     = config.get('EMAIL_USER'),
     emailPassword = config.get('EMAIL_PW'),
+    emailService  = config.get('EMAIL_SERVICE'),
     smtpTransport,
     mailOptions   = {
       from: accountName + ' <' + emailUser + '>',
@@ -18,7 +19,7 @@ var self = module.exports = {
 
 	openEmailConnection: function() {
 		smtpTransport = nodemailer.createTransport('SMTP', {
-			service: 'Mailgun',
+			service: emailService,
 			auth: {
 				user: emailUser,
 				pass: emailPassword

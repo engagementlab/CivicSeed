@@ -6,5 +6,6 @@
   "REDIS_PORT": 6379,
   "REDIS_DB": "civic_dev_db",
   "MONGO_URL": "mongodb://localhost/civic_dev_db",
+  "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "http://s3.amazonaws.com/civicseed"
 }

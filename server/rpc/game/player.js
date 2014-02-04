@@ -382,6 +382,7 @@ exports.actions = function(req, res, ss) {
 		},
 
 		getRandomResumes: function(info) {
+			console.log('getRandomResumes() called: ' + info)
 			_userModel
 				.where('role').equals('actor')
 				.where('game.instanceName').equals(info.instanceName)
@@ -390,6 +391,13 @@ exports.actions = function(req, res, ss) {
 					if(err) {
 						console.log(err);
 					} else if(results) {
+						console.log('Returning: ' + results)
+/*
+						results = [{
+							id: 0,
+							game: 'test'
+						}]
+					*/
 						res(results);
 					}
 				});
