@@ -17,38 +17,38 @@ var rootDir       = process.cwd(),
 
 var self = module.exports = {
 
-	openEmailConnection: function() {
-		smtpTransport = nodemailer.createTransport('SMTP', {
-			service: emailService,
-			auth: {
-				user: emailUser,
-				pass: emailPassword
-			}
-		});
-	},
+  openEmailConnection: function () {
+    smtpTransport = nodemailer.createTransport('SMTP', {
+      service: emailService,
+      auth: {
+        user: emailUser,
+        pass: emailPassword
+      }
+    })
+  },
 
-	sendEmail: function(subject, html, email) {
-		mailOptions.subject = subject;
-		mailOptions.html = html;
-		mailOptions.to = email;
-		smtpTransport.sendMail(mailOptions, function(err, response) {
-			if(err) {
-				console.log('ERROR sending email to ' + email + '!', err);
-			} else {
-				console.log('Message sent to : ' + response.message);
-			}
-		});
-	},
+  sendEmail: function (subject, html, email) {
+    mailOptions.subject = subject
+    mailOptions.html    = html
+    mailOptions.to      = email
+    smtpTransport.sendMail(mailOptions, function (err, response) {
+      if (err) {
+        console.error('ERROR sending email to ' + email + ' via ' + emailService + '!', err)
+      }
+      else {
+        console.log('Message sent to ' + email + ' via ' + emailService +': ' + response.message)
+      }
+    })
+  },
 
-	closeEmailConnection: function() {
-		smtpTransport.close();
-	}
-};
+  closeEmailConnection: function () {
+    smtpTransport.close()
+  }
 
+}
 
 // mailPassword = require('./password.js'),
 // super_secret = mailPassword.gmail,
-
 
 // exports.sendPassword = function(whom,it,callback){
 //     var passOptions = {
