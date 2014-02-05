@@ -43,10 +43,7 @@
 	text-align center
 	color #222
 
-.resourceStage
-	display none
-
-.gameboardOverlay
+.gameboard-overlay
 	display none
 	position absolute
 	top 15px
@@ -63,12 +60,14 @@
 		font-size 2em
 	h3
 		color $csGreen
-	a
+	a, .close-overlay
 		i.fa // Font-Awesome X 'close' button
 			position absolute
 			top 12px
 			right 12px
 			font-size 36px
+	&.background-3
+		background-image $cloudUrl('img/bg/tri.png')
 	.buttons
 		position absolute
 		z-index 9994
@@ -76,14 +75,19 @@
 		left 0
 		width 100%
 		height 30px
+		button
+			display inline-block
+			margin 0 auto
 		.left
 			position absolute
 			left 20px
+			button
+				margin 0 10px 0 0
 		.right
 			position absolute
 			right 20px
-		button
-			display none
+			button
+				margin 0 0 0 16px
 	.check
 		display none
 		position absolute
@@ -121,7 +125,7 @@
 		.check-skimpy
 			display none
 
-.overlayContent
+.content-box
 	min-height 320px
 	max-height 340px
 	padding 16px
@@ -167,16 +171,109 @@
 		max-height 300px
 		height 300px
 
-
-.resourceArea
-	.dialog, .finalQuestion
+#resource-area
+	.resource-content
+		display none
+		.tangram
+			img
+				margin-left 45px
+				height 250px
+		.tagline-input
+			position absolute
+			left 0
+			bottom 50px
+			width 100%
+			text-align center
+			input
+				width 400px
+	.resource-responses
+		display none
+		ul
+			font-family $buttonFont
+			margin 0
+			li.response
+				position relative
+				padding 14px 140px 5px 14px
+				margin 10px 0
+				min-height 42px
+				background $csLightGreen
+				color #222
+				list-style none
+				span
+					margin-right 5px
+					color white
+				p
+					// Prevent extremely long words from breaking the box.
+					overflow hidden
+					text-overflow ellipsis
+				.public-button, .private-button, .pledge-button
+					position absolute
+					right 10px
+					bottom 10px
+					i.fa
+						margin-left 6px
+						color $csDarkBlue
+				&.response-notice
+					background: $csLightGray
+			li.your-response
+				user-select text
+				cursor text
+				background $csLightBlue
+	.dialog
 		padding-right 50px
-	.finalQuestion
+		margin-bottom 20px
+	.question
 		font-size 1.2em
 		color $csBlack
-
-	form
-		margin 20px 0 0
+	.privacy-message
+		color $csOrange
+	.resource-article
+		display none
+		margin-right 30px  // And not overlap the X button
+		height 360px
+		padding 20px
+		border 3px solid $csGray
+		background #333
+		overflow auto
+		color #eee
+		user-select text
+		cursor text
+		h1, h2, h3, h4, h5, h6
+			// Allow all size headers to be used in resource text
+			// Verify line-height issues with these.
+			color $csBlue
+			margin-bottom 0.5em
+		h2
+			// This is default. The line-height override fixes multiple line issues.
+			line-height 1.4em
+		p, blockquote, li
+			// Shouldn't have to set these properties that specifically for the parent
+			// div - something is overriding it.
+			font-family $buttonFont
+			font-size 1.1em
+		p + h2, ul + h2, blockquote + h2
+			margin-top 0.75em
+		ul
+			list-style-type square
+		li
+			margin 5px 20px
+		.videoResource
+			text-align center
+			background $cloudUrl('img/bg/loading.png') no-repeat center center
+			margin-top 18px     // Ideally, vertically centered. Fake it till you make it
+		.digitalStory
+			margin 150px 0 0 0  // Fake vertical centering
+			font-size 1.5em
+			text-align center
+		.lede
+			margin 90px 60px 0
+			font-size 1.5em
+			line-height 1.4em
+			text-align center
+	.resource-question
+		display none
+		form
+			margin 20px 0 0
 		textarea
 			width 100%
 			min-height 200px
@@ -188,100 +285,9 @@
 		label
 			// Overrides display: block elsewhere (bootstrap?)
 			display inline-block
-	.tagline-input
-		display none
-		position absolute
-		left 0
-		bottom 50px
-		width 100%
-		text-align center
-		input
-			width 400px
-	.privacy-message
-		color $csOrange
 
-.resourceContent
-	// font-family $bodyFont
-	.tangramPiece
-		img
-			// display block
-			// margin 0 auto
-			// Should be centered - but have to fake it because tangram pieces are
-			// very wide and manually positioned on the image
-			margin-left 45px
-			height 250px
-	.publicAnswers
-		ul
-			margin 0
-
-	.playerAnswers
-		position relative
-		padding 14px 140px 5px 14px
-		margin 10px 0
-		min-height 42px
-		background $csLightGreen
-		color #222
-		list-style none
-		span
-			margin-right 5px
-			color white
-		p
-			font-family $buttonFont
-		.publicButton, .privateButton, .pledgeButton
-			position absolute
-			right 10px
-			bottom 10px
-			i
-				margin-left 4px
-				color $csDarkBlue
-	.yourAnswer
-		user-select text
-		cursor text
-		background $csLightBlue
-
-.resourceContentBody
-	margin-right 30px  // And not overlap the X button
-	height 360px
-	padding 20px
-	border 3px solid $csGray
-	background #333
-	overflow auto
-	color #eee
-	user-select text
-	cursor text
-	h1, h2, h3, h4, h5, h6
-		// Allow all size headers to be used in resource text
-		// Verify line-height issues with these.
-		color $csBlue
-		margin-bottom 0.5em
-	h2
-		// This is default. The line-height override fixes multiple line issues.
-		line-height 1.4em
-	p, blockquote, li
-		// Shouldn't have to set these properties that specifically for the parent
-		// div - something is overriding it.
-		font-family $buttonFont
-		font-size 1.1em
-	p + h2, ul + h2, blockquote + h2
-		margin-top 0.75em
-	ul
-		list-style-type square
-	li
-		margin 5px 20px
-	.videoResource
-		text-align center
-		background $cloudUrl('img/bg/loading.png') no-repeat center center
-		margin-top 18px     // Ideally, vertically centered. Fake it till you make it
-	.digitalStory
-		margin 150px 0 0 0  // Fake vertical centering
-		font-size 1.5em
-		text-align center
-	.lede
-		margin 90px 60px 0
-		font-size 1.5em
-		line-height 1.4em
-		text-align center
-
+#resource-stage
+	display none
 
 .progressArea
 	h2
@@ -468,7 +474,7 @@
 	// 	background $csLightGreen
 
 .dialog     // Consider making a generic set of styles for all .dialogs (.resourceContent, .botanistContent, .speechBubble)
-	.speakerName
+	.speakerName, .speaker
 		font-size 1.2em
 		font-weight 700
 		color $csBlue
@@ -539,12 +545,6 @@
 				background-position 0 -45px     // Positioning for sprite
 
 // END LARGE OVERLAYS
-
-.patternBg2
-	background-image $cloudUrl('img/bg/grey.png')
-
-.patternBg3
-	background-image $cloudUrl('img/bg/tri.png')
 
 .megaRiddle
 	width 780px
@@ -932,7 +932,7 @@ p.townSite
 	p.status
 		color $csLightOrange
 
-.statusUpdate
+.status-update
 	display none
 	position absolute
 	bottom 90px
@@ -941,8 +941,6 @@ p.townSite
 	font-size 16px
 	font-family $mono
 	height 20px
-	// background #555
-	// background $csBlue
 	margin 0
 	z-index 99999
 	color #eee
@@ -968,17 +966,8 @@ p.townSite
 	color $csLightPurple
 
 .bossArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	padding 0
-	box-shadow $csUIDropShadow
 	z-index 9997
 	display none
-	overflow auto
-
 	.content
 		.videoFrame
 			margin 20px 0 0 0
@@ -994,9 +983,6 @@ p.townSite
 		textarea
 			margin 0 20px 20px 20px
 			height 100px
-	.buttons
-		text-align center
-		padding 10px
 	p.dialog   // TODO: Deprecrate in favor of generic .dialog style?
 		padding-top 10px
 		span

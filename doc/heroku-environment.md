@@ -9,16 +9,18 @@ A Heroku development environment is handy because they're free and easy to set u
 `heroku addons:add redistogo`
 4. You can verify that the add-ons are installed by typing `heroku config`. You should see two environment variables set, `MONGOHQ_URL` and `REDISTOGO_URL`.
 5. Set other environment variables needed for Civic Seed.
-`heroku config:set NODE_ENV=heroku` (The server script will check this to see if we are in a Heroku environment.)
-`heroku config:set CLOUD_PATH=''` (That's a blank entry)
-Also set `ACCOUNT_PW` if needed. You should not need to set the `REDIS_PW` environment variable since it will be parsed from Redis To Go's `REDISTOGO_URL` environment variable.
+* `heroku config:set NODE_ENV=heroku` (The server script will check this to see if we are in a Heroku environment.)
+* `heroku config:set CLOUD_PATH=''` (That's a blank entry)
+* `heroku config:set EMAIL_USER='postmaster@sandbox###.mailgun.org'` (This is the auth user for the email service used, default is Mailgun.)
+* `heroku config:set EMAIL_PW='password'` (Password for to auth email service)
+* `heroku config:set EMAIL_TO='email@domain.com'` (E-mail address to send feedback and forms to)
+You should not need to set the `REDIS_PW` environment variable on Heroku since it will be parsed from Redis To Go's `REDISTOGO_URL` environment variable.
 6. [Enable websockets on Heroku](https://devcenter.heroku.com/articles/heroku-labs-websockets). Be sure to include the app name you set in step 1.
 `heroku labs:enable websockets -a civicseed-dev`
 7. Push the repository to Heroku with `git push heroku master`.
-8. To run the first boot of the server, we need to run `node test/boot` through Foreman, like so. `foreman run node test/boot`. You should receive log messages from heroku stating that the superuser admin has been saved to MongoDB.
+8. To run the first boot of the server, we need to run `node test/boot` through Foreman, like so. `heroku run node test/boot`. You should receive log messages from heroku stating that the superuser admin has been saved to MongoDB.
 9. Now you should be able to go to `http://civicseed-dev.herokuapp.com/` (or whatever the app name is), log in as superuser, and complete the rest of the data initialization.
 
 ### Resetting everything
 
 To reset everything, you should go back to step 7 (if necessary) and re-do the boot process in step 8.
-

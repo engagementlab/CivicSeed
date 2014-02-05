@@ -11,37 +11,48 @@
 			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
 		p loading
 
-	.resourceArea.gameboardOverlay
-		a(href='#')
+	#resource-area.gameboard-overlay
+		a.close-overlay(href='#')
 			i.fa.fa-times-circle.fa-lg
-		p.dialog
-			span.speakerName
-			span.message
-		.resourceContent
-		.resourceContentBody
-		.tagline-input
-			input(name='tagline', type='text', value='', maxLength='60', autofocus)
-			.privacy-message Summarize what you just learned. You’ll need it later!
+		.resource-article
+		.resource-question
+			.dialog.question
+			form
+		.resource-content
+			.dialog
+				span.speaker
+				span.message
+			.tangram
+			.tagline-input
+				input(name='tagline', type='text', value='', placeholder='Enter a tagline...', maxLength='60', autofocus)
+				.privacy-message Summarize what you just learned. You’ll need it later!
+		.resource-responses
+			.dialog
+				span.speaker
+				span.message
+			.responses.content-box
+				p.question
+				ul.responses
 		.buttons
 			.left
-				button.backButton.btn.btn-info(type='button') Back
+				button.back-button.btn.btn-info(type='button') Back
 			.right
-				button.nextButton.btn.btn-success(type='button') Next
-				button.saveButton.btn.btn-success(type='button') Save
-				button.answerButton.btn.btn-success(type='button') Answer
-				button.closeButton.btn.btn-primary(type='button') Close
+				button.next-button.btn.btn-success(type='button') Next
+				button.answer-button.btn.btn-success(type='button') Answer
+				button.save-button.btn.btn-success(type='button') Save
+				button.close-button.btn.btn-primary(type='button') Close
 		.check
 			.check-dialog.confirm-skimpy
 				p Are you sure? That seems a bit skimpy...
 				.buttons
-					button.sureButton.right.btn.btn-success(type='button') I'm Sure
-					button.retryButton.left.btn.btn-primary(type='button') I'll Add More
+					button.sure-button.right.btn.btn-success(type='button') I'm Sure
+					button.retry-button.left.btn.btn-primary(type='button') I'll Add More
 			.check-dialog.message-feedback
 				p.feedback
 				.buttons
 					button.btn.btn-primary(type='button') Okay
 
-	.botanistArea.gameboardOverlay
+	.botanistArea.gameboard-overlay.background-3
 		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 		p.dialog
@@ -64,7 +75,7 @@
 				.buttons
 					button.retryButton.btn.btn-primary(type='button') Okay
 
-	.progressArea.gameboardOverlay.patternBg2
+	.progressArea.gameboard-overlay
 		h2 Progress
 		.personalInfo
 			.levelImages
@@ -103,24 +114,24 @@
 		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	.collectedResources.gameboardOverlay.patternBg3
+	.collectedResources.gameboard-overlay.background-3
 		h2 Your Answers
-		.displayMyAnswers.overlayContent You haven't collected any resources yet.
+		.displayMyAnswers.content-box You haven't collected any resources yet.
 		button.btn.backToProgress.btn-info(type='button') Back
 
-	.helpArea.gameboardOverlay
+	.helpArea.gameboard-overlay
 		h2 How To Play
-		.helpContent.overlayContent
+		.helpContent.content-box
 			include help
 		a.closeButton(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	.bossArea.gameboardOverlay.patternBg2
+	.bossArea.gameboard-overlay
 		.content
 		p.buttons
 			button.bossButton.btn.btn-success(type='button') Next
 
-	.skinventory.gameboardOverlay.patternBg3
+	.skinventory.gameboard-overlay.background-3
 		h2 Changing Room
 		p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
 		.parts
@@ -139,7 +150,7 @@
 		button.closeButton.btn.btn-primary(type='button') Close
 		p.inventoryHelp click piece to view resource
 
-	p.statusUpdate
+	.status-update
 		span
 
 	.seedventory

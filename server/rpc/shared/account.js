@@ -1,14 +1,16 @@
-var rootDir = process.cwd(),
-	bcrypt = require('bcrypt'),
-	xkcd = require('xkcd-pwgen'),
-	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-	emailUtil = require(rootDir + '/server/utils/email'),
-	service = require(rootDir + '/service'),
-	UserModel = service.useModel('user'),
-	GameModel = service.useModel('game'),
-	_countdown = 10,
-	singleHtml,
-	dbHelper = null;
+var rootDir        = process.cwd(),
+    bcrypt         = require('bcrypt'),
+    xkcd           = require('xkcd-pwgen'),
+    config         = require(rootDir + '/config'),
+    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
+    emailUtil      = require(rootDir + '/server/utils/email'),
+    service        = require(rootDir + '/service'),
+    UserModel      = service.useModel('user'),
+    GameModel      = service.useModel('game'),
+    emailTo        = config.get('EMAIL_TO'),
+    _countdown     = 10,
+    singleHtml,
+    dbHelper       = null;
 
 var html = '<h2>Password reminder for #{firstName}</h2>';
 	html += '<p style="color:red;">Someone is requesting access to your account. ';
@@ -216,7 +218,7 @@ exports.actions = function(req, res, ss) {
 		remindMeMyPassword: function(email) {
 			UserModel.findOne({ email: email } , function(err, user) {
 				if(!err && user) {
-					
+
 					//TODO THIS AUTO RESETS without creds!!
 					var password = xkcd.generatePassword();
 					accountHelpers.hashPassword(password, function(hashedPassword) {
@@ -239,16 +241,16 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
-		sendProblem: function(email, problem) {
-			var problemHTML = '<h2>BUG! ahhhhh!</h2>';
-				problemHTML += '<p>User: ' + email + '</p>';
-				problemHTML += '<p>Problem: ' + problem + '</p>';
-				emailUtil.openEmailConnection();
-				emailUtil.sendEmail('User submitted issue', problemHTML, 'russellgoldenberg@gmail.com');
-				// TODO: close connection on *** CALLBACK ***
-				emailUtil.closeEmailConnection();
-				res(true);
-		},
+    sendProblem: function (email, problem) {
+      var problemHTML  = '<h2>BUG! ahhhhh!</h2>';
+          problemHTML += '<p>User: ' + email + '</p>';
+          problemHTML += '<p>Problem: ' + problem + '</p>';
+      emailUtil.openEmailConnection();
+      emailUtil.sendEmail('User submitted issue', problemHTML, emailTo);
+      // TODO: close connection on *** CALLBACK ***
+      emailUtil.closeEmailConnection();
+      res(true);
+    },
 
 		changeInfo: function(info) {
 			UserModel.findOne({ email: req.session.email } , function(err, user) {

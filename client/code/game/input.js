@@ -6,8 +6,7 @@ var $chatText,
 	$progressArea,
 	$gameLog,
 	_helpShowing,
-	_logShowing,
-	_pledgeFeedbackTimeout;
+	_logShowing
 
 var $input = $game.$input = module.exports = {
 
@@ -19,7 +18,6 @@ var $input = $game.$input = module.exports = {
 		$gameLog = $('.gameLog');
 		_helpShowing = false;
 		_logShowing = false;
-		_pledgeFeedbackTimeout = null;
 	},
 
 	init: function() {
@@ -144,6 +142,13 @@ var $input = $game.$input = module.exports = {
 
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
+    //close the resource area
+    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
+      e.preventDefault()
+      $game.$resources.hideResource()
+      return false;
+    });
+
     // ************* SKINVENTORY WINDOW INTERACTIONS *************
 
     $BODY.on('click', '.skinventory .outer', function () {
@@ -168,8 +173,8 @@ var $input = $game.$input = module.exports = {
 
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
 
-    $BODY.on('click', '.speechBubble', function (e) {
-      // Prevent clicking on speech bubble from interacting with gameboard below
+    $BODY.on('click', '.speechBubble, .inventory', function (e) {
+      // Prevent clicking on interface elements from interacting with gameboard below
       e.stopImmediatePropagation()
     })
 
@@ -217,55 +222,6 @@ var $input = $game.$input = module.exports = {
 			$game.$log.clearUnread();
 		});
 
-		//close the resource area
-		$BODY.on('click', '.resourceArea a i, .resourceArea .closeButton', function (e) {
-			e.preventDefault();
-			if(!$game.$resources.waitingForTagline) {
-        $game.$resources.hideCheckMessage()
-				$game.$resources.hideResource();
-			} else {
-				$('.checkTagline').show().delay(2000).fadeOut();
-			}
-			return false;
-		});
-
-		//advance the content in resource to next page
-		$BODY.on('click', '.resourceArea .nextButton', function () {
-			$game.$resources.nextSlide();
-		});
-
-		//previous page of content in resource
-		$BODY.on('click', '.resourceArea .backButton', function () {
-			$game.$resources.previousSlide();
-		});
-
-		//previous page of content in resource
-		$BODY.on('click', '.resourceArea .saveButton', function () {
-			var tagline = $.trim($('.tagline-input input').val())
-			$game.$resources.saveTagline(tagline);
-		});
-
-		//submit answer in resource
-		$BODY.on('click', '.resourceArea .answerButton', function (e) {
-			e.preventDefault();
-			$game.$resources.submitAnswer();
-			return false;
-		});
-
-		//acknowledge prompt that your answer is skimpy in resource
-		$BODY.on('click', '.resourceArea .sureButton', function (e) {
-			e.preventDefault();
-      $game.$resources.hideCheckMessage()
-			$game.$resources.submitAnswer(true);
-			return false;
-		});
-
-		//cancel submit in resource
-		$BODY.on('click', '.resourceArea .retryButton', function (e) {
-			e.preventDefault();
-      $game.$resources.hideCheckMessage()
-			return false;
-		});
 
 		//close botanist window
 		$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
@@ -310,17 +266,27 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//make your comment public
-		$BODY.on('click', '.publicButton button', function() {
-			$game.$player.makePublic($(this).attr('data-npc'));
+		$BODY.on('click', '.public-button button', function() {
+			$game.$player.makePublic($(this).attr('data-npc'))
+      // Toggle state of button
+      // TODO: place this presentation logic elsewhere
+      $(this).parent().removeClass('public-button').addClass('private-button')
+      $(this).parent().find('i').removeClass('fa-lock').addClass('fa-unlock-alt')
+      $(this).text('Make Private')
 		});
 
 		//make your comment private
-		$BODY.on('click', '.privateButton button', function() {
-			$game.$player.makePrivate($(this).attr('data-npc'));
+		$BODY.on('click', '.private-button button', function() {
+			$game.$player.makePrivate($(this).attr('data-npc'))
+      // Toggle state of button
+      // TODO: place this presentation logic elsewhere
+      $(this).parent().removeClass('private-button').addClass('public-button')
+      $(this).parent().find('i').removeClass('fa-unlock-alt').addClass('fa-lock')
+      $(this).text('Make Public')
 		});
 
 		//pledge a seed to a comment
-		$BODY.on('click', '.pledgeButton button', function() {
+		$BODY.on('click', '.pledge-button button', function() {
 			var info = {
 				id: $(this).attr('data-player'),
 				pledger: $game.$player.firstName,
@@ -330,19 +296,11 @@ var $input = $game.$input = module.exports = {
 			if(pledges > 0) {
 				ss.rpc('game.player.pledgeSeed', info, function(r) {
 					$game.$player.updatePledges(-1);
-					clearTimeout(_pledgeFeedbackTimeout);
-					$('.resourceArea .feedback').text('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.').show();
-					_pledgeFeedbackTimeout = setTimeout(function() {
-						$('.resourceArea .feedback').fadeOut();
-					}, 3000);
+          $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
 				});
 			}
 			else {
-				clearTimeout(_pledgeFeedbackTimeout);
-				$('.resourceArea .feedback').text('You cannot seed any more answers this level.').show();
-				_pledgeFeedbackTimeout = setTimeout(function() {
-					$('.resourceArea .feedback').fadeOut();
-				}, 3000);
+        $game.$resources.showCheckMessage('You cannot seed any more answers this level.')
 			}
 		});
 
@@ -580,19 +538,20 @@ var $input = $game.$input = module.exports = {
     }
   },
 
-  openInventory: function () {
+  openInventory: function (callback) {
     $game.$player.inventoryShowing = true
     $('.inventoryButton').addClass('hud-button-active')
     if ($game.$player.getInventoryLength() > 0) {
       $game.alert('click items to view again')
     }
-    $inventory.slideDown(200)
+    $inventory.slideDown(300, callback)
   },
 
-  closeInventory: function () {
-    $inventory.slideUp(function () {
+  closeInventory: function (callback) {
+    $inventory.slideUp(300, function () {
       $game.$player.inventoryShowing = false
       $('.inventoryButton').removeClass('hud-button-active')
+      if (typeof callback === 'function') callback()
     })
   },
 
@@ -688,10 +647,9 @@ var $input = $game.$input = module.exports = {
         break
       case 'pleasantville':
         $game.$input._cheatActivated('Welcome to Pleasantville!')
-        // Doesn't actually do anything
-        break
-      case 'brain dump':
-        console.log($game)
+        $game.bossModeUnlocked = true
+        $game.$player.currentLevel = 4
+        $game.$boss.init()
         break
       case 'kazaam':
         $game.$input._cheatActivated('Starting collaborative challenge.')
@@ -715,7 +673,6 @@ var $input = $game.$input = module.exports = {
 	resetInit: function() {
 		_helpShowing = null;
 		_logShowing = null;
-		_pledgeFeedbackTimeout = null;
 	}
 
 };

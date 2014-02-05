@@ -369,10 +369,10 @@ var $skins = $game.$skins = {
       }
 
       // Bind actions
-      $el.bind('mouseenter', function () {
+      $el.on('mouseenter', function () {
         $(this).tooltip('show')
       })
-      $el.bind('click', function () {
+      $el.on('click', function () {
         $(this).find('.badge-new:visible').hide()
       })
     }

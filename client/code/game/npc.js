@@ -77,11 +77,6 @@ var $npc = $game.$npc = {
     return all;
   },
 
-  //get a specific name of npc
-  getName: function (index) {
-    return _allNpcs[index].name
-  },
-
   //create an npc with all its data bound to it
   createNpc: function (npc) {
 
@@ -181,6 +176,11 @@ var $npc = $game.$npc = {
         $game.$renderer.clearCharacter(npcObject.renderInfo);
       },
 
+      // Returns actual numerical value of level
+      getLevel: function () {
+        return this.level + 1
+      },
+
       //get the render information to draw it
       getRenderInfo: function() {
         if(npcObject.onScreen) {
@@ -252,11 +252,14 @@ var $npc = $game.$npc = {
     $game.$player.npcOnDeck = false
 
     // NPC interaction to display if the player has not finished speaking with Botanist
-    if ($game.$botanist.getState() < 2) {
+    if ($game.$botanist.getState() === 0 && $game.$player.getLevel() === 1 && $game.$botanist.tutorialState === 0) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
+    else if ($game.$botanist.getState() < 2 ) {
+      $npc.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
+    }
     // If resource is available for the player
-    else if (npc.isHolding && $game.$player.currentLevel >= npc.level) {
+    else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
       // Check if NPC's availability depends on player talking to a different NPC
       if (npc.isLocked()) {
         var dialogue = 'Before I help you out, you need to go see ' + $npc.getNpc(npc.dependsOn).name + '. Come back when you have their resource.'
@@ -322,11 +325,11 @@ var $npc = $game.$npc = {
     }
 
     // Display the speech bubble
-    $el.fadeIn(function () {
+    $el.fadeIn(300, function () {
       // If no prompt, the dialog box should fade on its own after some time.
       // The timer is set by the length of the message, but no less than 2 seconds at minimum.
       if (!isMultiline && !hasPrompt) {
-        var hideTimer = text.length * 40
+        var hideTimer = text.length * 50
         if (hideTimer < 2000) hideTimer = 2000
         $npc.hideTimer = setTimeout($npc.hideSpeechBubble, hideTimer)
       }
@@ -341,19 +344,19 @@ var $npc = $game.$npc = {
 
       if (index < messages.length - 1) {
         // Intermediary messages
-        $el.find('.nextButton').unbind('click').bind('click', function (e) {
+        $el.find('.nextButton').off('click').on('click', function (e) {
           e.stopImmediatePropagation()
           _showMultiline(index + 1)
         }).show()
       }
       else {
         // Last message
-        $el.find('.nextButton').unbind('click').hide()
+        $el.find('.nextButton').off('click').hide()
         if (hasPrompt === true) {
           _setupPrompt()
         }
         else {
-          $el.find('.closeButton').bind('click', function (e) {
+          $el.find('.closeButton').on('click', function (e) {
             e.stopImmediatePropagation()
             $npc.hideSpeechBubble(callback)
           }).show()
@@ -367,13 +370,13 @@ var $npc = $game.$npc = {
       // prompt is a callback function that is executed when player clicks the Yes button.
       // Currently assuming that all prompt responses automatically closes the speech bubble
       // rather than lead to next line of conversation.
-      $el.find('.yesButton').bind('click', function (e) {
+      $el.find('.yesButton').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(prompt)
       }).show()
 
       // Close prompt
-      $el.find('.noButton').bind('click', function (e) {
+      $el.find('.noButton').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(callback)
       }).show()
@@ -383,11 +386,13 @@ var $npc = $game.$npc = {
       // Binds callback to a hidden button element so that it is called on hide
       var button = document.createElement('button')
       button.id = 'callback-button'
-      $(button).bind('click', function (e) {
+      button.addEventListener('click', function _onClose (e) {
         e.preventDefault()
         callback()
+        button.removeEventListener('click', _onClose)
       })
-      $el.find('.buttonCorner').append($(button))
+
+      $el.querySelector('.buttonCorner').appendChild(button)
     }
 
   },
@@ -398,12 +403,12 @@ var $npc = $game.$npc = {
     var $el = $('.speechBubble')
 
     $game.$npc.isChat = false
-    $el.find('.nextButton').unbind('click')
-    $el.find('.closeButton').unbind('click')
-    $el.find('.yesButton').unbind('click')
-    $el.find('.noButton').unbind('click')
+    $el.find('.nextButton').off('click')
+    $el.find('.closeButton').off('click')
+    $el.find('.yesButton').off('click')
+    $el.find('.noButton').off('click')
 
-    $el.fadeOut(function () {
+    $el.fadeOut(300, function () {
       // Execute a callback function passed to this method
       if (typeof callback === 'function') callback()
 
@@ -427,8 +432,7 @@ var $npc = $game.$npc = {
     }
 
     $npc.showSpeechBubble(npc.name, dialogue, function () {
-      var revisit = (promptIndex >= 2) ? true : false
-      $game.$resources.loadResource(npc.name, npc.index, revisit)
+      $game.$resources.showResource(npc.index)
     })
   },
 
@@ -463,19 +467,33 @@ var $npc = $game.$npc = {
     return npc
   },
 
-  //figure out what level specific npc is in
-  getNpcLevel: function (index) {
+  // Get NPC's level.
+  getLevel: function (index) {
+    // This differs from refering to the .level property of the NPC since this returns
+    // actual level (+1)
     if (index) {
-      return $npc.getNpc(index).level
-    } else {
-      $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
-      return _curNpc.level;
+      return $npc.getNpc(index).getLevel()
     }
+    else {
+      $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
+      return _curNpc.level + 1
+    }
+  },
+
+  // Alias for $npc.getLevel()
+  getNpcLevel: function (index) {
+    $game.debug('$npc.getNpcLevel() is deprecated. Use $npc.getLevel() or npc.getLevel() (on NPC object) instead.')
+    $npc.getLevel(index)
   },
 
   //get all npc data
   getNpcData: function () {
     return _allNpcs;
+  },
+
+  //get a specific name of npc
+  getName: function (index) {
+    return _allNpcs[index].name
   },
 
   getOnScreenNpcs: function() {

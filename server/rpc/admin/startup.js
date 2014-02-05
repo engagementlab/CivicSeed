@@ -6,7 +6,7 @@ var rootDir = process.cwd(),
 	dbActions = require(rootDir + '/server/utils/database-actions'),
 	accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 
-	userModel = service.useModel('user', 'preload'),    
+	userModel = service.useModel('user', 'preload'),
 	tileModel = service.useModel('tile', 'preload'),
 	colorModel = service.useModel('color', 'preload'),
 	npcModel = service.useModel('npc', 'preload'),
@@ -134,13 +134,15 @@ exports.actions = function(req, res, ss) {
 								res('Data loaded: ' + dataType);
 							});
 						}
-					}; 
+					};
 					hashUserData(0);
 				} else if(dataType === 'tiles') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
-					tileData = require(rootDir + '/data/tiles');
+					// tileData = require(rootDir + '/data/tiles');
+					tileData = require(rootDir + '/data/tiles.json')
 					dbActions.dropCollection('tiles', function() {
 						var i,
+						/*
 						tileObject = tileData.global,
 						backgroundArray = tileObject.backgroundArray,
 						background2Array = tileObject.background2Array,
@@ -148,6 +150,14 @@ exports.actions = function(req, res, ss) {
 						foregroundArray = tileObject.foregroundArray,
 						foreground2Array = tileObject.foreground2Array,
 						tileStateArray = tileObject.tileStateArray,
+						*/
+						tileObject = tileData,
+						backgroundArray = tileObject.layers[0].data,
+						background2Array = tileObject.layers[2].data,
+						background3Array = tileObject.layers[3].data,
+						foregroundArray = tileObject.layers[4].data,
+						foreground2Array = tileObject.layers[5].data,
+						tileStateArray = tileObject.layers[6].data,
 						numberOfTiles = backgroundArray.length,
 						mapTilesWidth = 142,
 						mapTilesHeight = 132,
@@ -223,10 +233,10 @@ exports.actions = function(req, res, ss) {
 						} else {
 							dbActions.saveDocuments(colorModel, colors, function() {
 								res('Data loaded: ' + dataType);
-							});	
+							});
 						}
 					});
-				
+
 				} else if(dataType === 'botanist') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Botanist   * * * * * * * * * * * *   \n\n'.yellow);
 					botanistData = require(rootDir + '/data/botanist');
@@ -249,7 +259,7 @@ exports.actions = function(req, res, ss) {
 								}
 							});
 						});
-					});	
+					});
 				} else if(dataType === 'game') {
 					console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
 					gameData = require(rootDir + '/data/game');
@@ -264,7 +274,7 @@ exports.actions = function(req, res, ss) {
 						} else {
 							dbActions.saveDocuments(gameModel, gameData.global, function() {
 								res('Data loaded: ' + dataType);
-							});	
+							});
 						}
 					});
 				// } else if(dataType === 'resources') {
