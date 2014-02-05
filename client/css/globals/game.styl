@@ -75,14 +75,19 @@
 		left 0
 		width 100%
 		height 30px
+		button
+			display inline-block
+			margin 0 auto
 		.left
 			position absolute
 			left 20px
+			button
+				margin 0 10px 0 0
 		.right
 			position absolute
 			right 20px
-		button
-			display none
+			button
+				margin 0 0 0 16px
 	.check
 		display none
 		position absolute
@@ -168,10 +173,19 @@
 
 #resource-area
 	.resource-content
+		display none
 		.tangram
 			img
 				margin-left 45px
 				height 250px
+		.tagline-input
+			position absolute
+			left 0
+			bottom 50px
+			width 100%
+			text-align center
+			input
+				width 400px
 	.resource-responses
 		display none
 		ul
@@ -207,15 +221,6 @@
 	.question
 		font-size 1.2em
 		color $csBlack
-	.tagline-input
-		display none
-		position absolute
-		left 0
-		bottom 50px
-		width 100%
-		text-align center
-		input
-			width 400px
 	.privacy-message
 		color $csOrange
 	.resource-article
@@ -957,17 +962,8 @@ p.townSite
 	color $csLightPurple
 
 .bossArea
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	padding 0
-	box-shadow $csUIDropShadow
 	z-index 9997
 	display none
-	overflow auto
-
 	.content
 		.videoFrame
 			margin 20px 0 0 0
@@ -983,11 +979,6 @@ p.townSite
 		textarea
 			margin 0 20px 20px 20px
 			height 100px
-	.buttons
-		text-align center
-		padding 10px
-		button
-			display block
 	p.dialog   // TODO: Deprecrate in favor of generic .dialog style?
 		padding-top 10px
 		span

@@ -325,11 +325,11 @@ var $npc = $game.$npc = {
     }
 
     // Display the speech bubble
-    $el.fadeIn(function () {
+    $el.fadeIn(300, function () {
       // If no prompt, the dialog box should fade on its own after some time.
       // The timer is set by the length of the message, but no less than 2 seconds at minimum.
       if (!isMultiline && !hasPrompt) {
-        var hideTimer = text.length * 40
+        var hideTimer = text.length * 50
         if (hideTimer < 2000) hideTimer = 2000
         $npc.hideTimer = setTimeout($npc.hideSpeechBubble, hideTimer)
       }
@@ -386,16 +386,13 @@ var $npc = $game.$npc = {
       // Binds callback to a hidden button element so that it is called on hide
       var button = document.createElement('button')
       button.id = 'callback-button'
-      button.addEventListener('click', _onClose)
-
-      $el.querySelector('.buttonCorner').appendChild(button)
-
-      function _onClose(e) {
-        /*jshint validthis: true */
+      button.addEventListener('click', function _onClose (e) {
         e.preventDefault()
         callback()
-        this.removeEventListener('click', _onClose)
-      }
+        button.removeEventListener('click', _onClose)
+      })
+
+      $el.querySelector('.buttonCorner').appendChild(button)
     }
 
   },
@@ -411,7 +408,7 @@ var $npc = $game.$npc = {
     $el.find('.yesButton').unbind('click')
     $el.find('.noButton').unbind('click')
 
-    $el.fadeOut(function () {
+    $el.fadeOut(300, function () {
       // Execute a callback function passed to this method
       if (typeof callback === 'function') callback()
 

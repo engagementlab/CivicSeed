@@ -147,52 +147,14 @@ var $input = $game.$input = module.exports = {
     //close the resource area
     $BODY.on('click', '#resource-area a.close-overlay, #resource-area .close-button', function (e) {
       e.preventDefault()
-      if(!$game.$resources.waitingForTagline) {
-        $game.$resources.hideCheckMessage()
-        $game.$resources.hideResource()
-      } else {
-        // TODO: Keep this out of here?
-        $game.$resources.showCheckMessage('You should create a custom tagline!')
-      }
+      $game.$resources.hideResource()
       return false;
-    });
-
-    //advance the content in resource to next page
-    $BODY.on('click', '#resource-area .next-button', function () {
-      $game.$resources.nextSlide();
-    });
-
-    //previous page of content in resource
-    $BODY.on('click', '#resource-area .back-button', function () {
-      $game.$resources.previousSlide();
     });
 
     //previous page of content in resource
     $BODY.on('click', '#resource-area .save-button', function () {
       var tagline = $.trim($('.tagline-input input').val())
       $game.$resources.saveTagline(tagline);
-    });
-
-    //submit answer in resource
-    $BODY.on('click', '#resource-area .answer-button', function (e) {
-      e.preventDefault();
-      $game.$resources.submitAnswer();
-      return false;
-    });
-
-    //acknowledge prompt that your answer is skimpy in resource
-    $BODY.on('click', '#resource-area .sure-button', function (e) {
-      e.preventDefault();
-      $game.$resources.hideCheckMessage()
-      $game.$resources.submitAnswer(true);
-      return false;
-    });
-
-    //cancel submit in resource
-    $BODY.on('click', '#resource-area .retry-button', function (e) {
-      e.preventDefault();
-      $game.$resources.hideCheckMessage()
-      return false;
     });
 
     // ************* SKINVENTORY WINDOW INTERACTIONS *************
