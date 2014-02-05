@@ -421,6 +421,7 @@ var _resource = {
       case 3:
         _resource.loadRewards(resource)
         overlay.querySelector('.resource-content').style.display = 'block'
+        overlay.querySelector('.tagline-input input').focus()
 
         if (resource.questionType === 'open') {
           _addButton('save', 4)
@@ -444,7 +445,12 @@ var _resource = {
       // Generic error for debugging.
       default:
         $resources.hideResource(function callback() {
-          $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist.'])
+          $game.debug('Error Code 4992 dump!')
+          console.log(index)
+          console.log(resource)
+          console.log(section)
+          console.log(slide)
+          $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
         })
         break
     }
@@ -585,7 +591,7 @@ var _resource = {
       _resource.submitAnswer(resource, true)
 
       var slides = $('#resource-stage .pages > section').length
-      _resource.addContent(resource.index, slides + 2)
+      _resource.addContent(resource.index, 3)
     }).show()
     // [2] Else, close and retry
     $el.find('.retry-button').bind('click', function () {
