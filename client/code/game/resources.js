@@ -430,16 +430,14 @@ var _resource = {
   // Clear the display and decide what to show on screen
   addContent: function (index, slide) {
     var overlay     = document.getElementById('resource-area'),
-        npc         = $game.$npc.getNpc(index),
-        npcLevel    = npc.getLevel(),
         playerLevel = $game.$player.getLevel(),
-        revisiting  = ($game.$player.getPrompt(index) === 2) ? true : false,
+        answer      = $game.$player.getAnswer(index),
+        isAnswered  = (answer) ? true : false,
+        isRevisit   = (answer && answer.result) ? true : false,
         resource    = _resources[index]
 
     var $article    = $('#resource-stage .pages > section'),
         slides      = $article.length
-
-    console.log('add content:', slide)
 
     // Reset all resource slides and buttons to a hidden & clean state.
     _resource.resetSlides()
@@ -454,8 +452,19 @@ var _resource = {
       var page = $article.get(slide - 1).innerHTML
       $('.resource-article').html(page).show()
 
-      // Always add a next button; add a back button if it's not the first slide.
-      _addButton('next', slide + 1)
+      // Logic for adding buttons
+      // Always add a next button if there is more article to show
+      if (slide < slides) _addButton('next', slide + 1)
+      // On the last article slide, we must test for certain conditions
+      else if (slide === slides) {
+        // If open-ended question and is answered, go straight to responses
+        if (isRevisit && resource.questionType === 'open') _addButton('next', slide + 3)
+        // If question was answered correctly for any other question type, close resource window
+        else if (isRevisit) _addButton ('close')
+        // If question was not answered correctly, go to next slide (question screen)
+        else _addButton('next', slide + 1)
+      }
+      // Add a back button if it's not the first slide.
       if (slide > 1) _addButton('back', slide - 1)
     }
     // [2] QUESTION.
@@ -502,7 +511,7 @@ var _resource = {
       overlay.querySelector('.resource-responses').style.display = 'block'
 
       _addButton('close')
-      if (revisiting === true) _addButton('back', slide - 3)
+      if (isRevisit === true) _addButton('back', slide - 3)
     }
     else {
       // Generic error for debugging.
@@ -510,55 +519,6 @@ var _resource = {
         $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist.'])
       })
     }
-
-/*
-    //they answered the question
-    if(_answered) {
-      //other player answers page
-      if(_currentSlide === _numSlides + 1) {
-        if(_correctAnswer) {
-          $saveButton.show();
-        }
-        else {
-          $closeButton.show();
-        }
-      } else {
-        $closeButton.show();
-      }
-    }
-
-    //they haven't answered it yet
-    else {
-      //they are returning to the resource
-      if(_revisiting) {
-        //if its the last slide
-        if(_currentSlide === _numSlides - 1) {
-          //not open ended
-          if( _questionType !== 'open') {
-            $closeButton.show();
-          }
-          //answers to show
-          else {
-            if(_currentSlide > 0) {
-              $backButton.show();
-            }
-            $nextButton.show();
-          }
-        }
-        else if(_currentSlide === _numSlides) {
-          $closeButton.show();
-          $backButton.show();
-        }
-        else {
-          $nextButton.show();
-          if(_currentSlide > 0) {
-            $backButton.show();
-          }
-        }
-      }
-    }
-  },
-*/
 
     function _addButton (button, slide, callback) {
       var buttons = overlay.querySelector('.buttons'),
@@ -665,6 +625,9 @@ var _resource = {
     $el.find('.sure-button').bind('click', function () {
       _resource.hideCheckMessage()
       _resource.submitAnswer(resource, true)
+
+      var slides = $('#resource-stage .pages > section').length
+      _resource.addContent(resource.index, slides + 2)
     }).show()
     // Else, close and retry
     $el.find('.retry-button').bind('click', function () {
