@@ -125,6 +125,28 @@ var $resources = $game.$resources = {
     }
   },
 
+  // Display messages on checking user input
+  showCheckMessage: function (message, callback) {
+    var $check = $('#resource-area .check'),
+        $el    = $check.find('.message-feedback')
+
+    $check.find('.check-dialog').hide()
+    $check.show()
+
+    $el.find('.feedback').text(message)
+    $el.find('button').bind('click', function () {
+      $resources.hideCheckMessage(callback)
+    }).show()
+    $el.fadeIn(200)
+  },
+
+  hideCheckMessage: function (callback) {
+    var $el = $('#resource-area .check')
+    if ($el.is(':visible')) {
+      $el.fadeOut(200, callback)
+    }
+  },
+
   //get the shape svg info for a specific resource
   getShape: function(index) {
     var stringId = String(index),
@@ -282,7 +304,6 @@ var _resource = {
           dialogue = feedback + ' Here, take ' + _resource.seedsToAdd + ' seeds!'
         }
         else {
-          $game.$audio.playTriggerFx('resourceRight')
           // The tangram piece should be preloaded with _loadTangram on the previous slide
           dialogue = feedback + ' Here, take this puzzle piece, and ' + _resource.seedsToAdd + ' seeds!'
         }
@@ -292,6 +313,7 @@ var _resource = {
           dialogue += ' You unlocked the ' + $game.$skins.data[resource.skinSuit].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
         }
 
+        $game.$audio.playTriggerFx('resourceRight')
         el.querySelector('.speaker').textContent = npc.name
         el.querySelector('.message').textContent = dialogue
   },
@@ -518,7 +540,6 @@ var _resource = {
           save.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
             if (_resource.validateTagline(resource) !== true) return
-            else $game.$player.saveAnswer()
 
             if (section) _resource.addContent(index, section)
             else $resources.hideResource()
@@ -544,7 +565,7 @@ var _resource = {
         tagline = input.value.trim()
 
     if (tagline.length === 0) {
-      _resource.showCheckMessage('You should create a custom tagline!', _focusInput)
+      $resources.showCheckMessage('You should create a custom tagline!', _focusInput)
       return false
     }
     else {
@@ -562,7 +583,7 @@ var _resource = {
     var response = this.getAnswer(resource)
 
     if (response.length === 0) {
-      _resource.showCheckMessage('Please answer the question!', _focusInput)
+      $resources.showCheckMessage('Please answer the question!', _focusInput)
       return false
     }
     else if (resource.requiredLength && response.length < resource.requiredLength) {
@@ -587,7 +608,7 @@ var _resource = {
     // Bind actions to buttons.
     // [1] Acknowledge prompt that your answer is skimpy and submit anyway
     $el.find('.sure-button').bind('click', function () {
-      _resource.hideCheckMessage()
+      $resources.hideCheckMessage()
       _resource.submitAnswer(resource, true)
 
       var slides = $('#resource-stage .pages > section').length
@@ -595,31 +616,9 @@ var _resource = {
     }).show()
     // [2] Else, close and retry
     $el.find('.retry-button').bind('click', function () {
-      _resource.hideCheckMessage(callback)
+      $resources.hideCheckMessage(callback)
     }).show()
     $el.fadeIn(200)
-  },
-
-  // Display messages on checking user input
-  showCheckMessage: function (message, callback) {
-    var $check = $('#resource-area .check'),
-        $el    = $check.find('.message-feedback')
-
-    $check.find('.check-dialog').hide()
-    $check.show()
-
-    $el.find('.feedback').text(message)
-    $el.find('button').bind('click', function () {
-      _resource.hideCheckMessage(callback)
-    }).show()
-    $el.fadeIn(200)
-  },
-
-  hideCheckMessage: function (callback) {
-    var $el = $('#resource-area .check')
-    if ($el.is(':visible')) {
-      $el.fadeOut(200, callback)
-    }
   },
 
   // Check whether the Player made the correct response

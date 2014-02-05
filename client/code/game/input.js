@@ -6,8 +6,7 @@ var $chatText,
 	$progressArea,
 	$gameLog,
 	_helpShowing,
-	_logShowing,
-	_pledgeFeedbackTimeout;
+	_logShowing
 
 var $input = $game.$input = module.exports = {
 
@@ -19,7 +18,6 @@ var $input = $game.$input = module.exports = {
 		$gameLog = $('.gameLog');
 		_helpShowing = false;
 		_logShowing = false;
-		_pledgeFeedbackTimeout = null;
 	},
 
 	init: function() {
@@ -298,19 +296,11 @@ var $input = $game.$input = module.exports = {
 			if(pledges > 0) {
 				ss.rpc('game.player.pledgeSeed', info, function(r) {
 					$game.$player.updatePledges(-1);
-					clearTimeout(_pledgeFeedbackTimeout);
-					$('#resource-area .feedback').text('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.').show();
-					_pledgeFeedbackTimeout = setTimeout(function() {
-						$('#resource-area .feedback').fadeOut();
-					}, 3000);
+          $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
 				});
 			}
 			else {
-				clearTimeout(_pledgeFeedbackTimeout);
-				$('#resource-area .feedback').text('You cannot seed any more answers this level.').show();
-				_pledgeFeedbackTimeout = setTimeout(function() {
-					$('#resource-area .feedback').fadeOut();
-				}, 3000);
+        $game.$resources.showCheckMessage('You cannot seed any more answers this level.')
 			}
 		});
 
@@ -683,7 +673,6 @@ var $input = $game.$input = module.exports = {
 	resetInit: function() {
 		_helpShowing = null;
 		_logShowing = null;
-		_pledgeFeedbackTimeout = null;
 	}
 
 };

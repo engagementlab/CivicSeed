@@ -831,6 +831,7 @@ var $player = $game.$player = {
 
   //add the tagline to the resource, then save it to db
   setTagline: function(resource, tagline) {
+
     var realResource = null,
         npcLevel     = $game.$npc.getLevel(resource.index),
         shapeName    = resource.shape;
@@ -848,31 +849,18 @@ var $player = $game.$player = {
       }
     }
 
-
     //add this to the DB of resources for all player answers
-    /*
     var newAnswer = {
-          npc:          resource.index,
-          id:           $game.$player.id,
-          name:         $game.$player.firstName,
-          answer:       response,
-          madePublic:   false,
-          instanceName: $game.$player.instanceName,
-          questionType: resource.questionType
-        }
-    */
-
-    //hack to not include demo users
-    var newAnswer = {
-      npc: resource.index,
-      id: $game.$player.id,
-      name: $game.$player.firstName,
-      answer: realResource.answers[realResource.answers.length - 1],
-      madePublic: false,
+      npc:          resource.index,
+      id:           $game.$player.id,
+      name:         $game.$player.firstName,
+      answer:       realResource.answers[realResource.answers.length - 1],
+      madePublic:   false,
       instanceName: $game.$player.instanceName,
       questionType: realResource.questionType
     };
 
+    //hack to not include demo users
     if($game.$player.firstName !== 'Demo') {
       ss.rpc('game.npc.saveResponse', newAnswer);
     }
@@ -880,10 +868,48 @@ var $player = $game.$player = {
     _saveResourceToDB(realResource);
     //display npc bubble for comment num
     $game.$player.displayNpcComments();
+
   },
 
   // Replacement function for saving to DB
+  // Currently a duplicate of setTagline, without the tagline.
   saveAnswer: function (resource, data) {
+
+    var realResource = null,
+        npcLevel     = $game.$npc.getLevel(resource.index),
+        shapeName    = resource.shape;
+
+    //find the resource and add tagline
+    if(_resources[resource.index]) {
+      realResource = _resources[resource.index];
+    }
+    //add piece to inventory
+    if($game.$player.currentLevel === npcLevel) {
+      if(!_resourceExists(resource.index)) {
+        _inventory.push({name: shapeName, npc: resource.index});
+        _addToInventory({name: shapeName, npc: resource.index});
+      }
+    }
+
+    //add this to the DB of resources for all player answers
+    var newAnswer = {
+      npc:          resource.index,
+      id:           $game.$player.id,
+      name:         $game.$player.firstName,
+      answer:       realResource.answers[realResource.answers.length - 1],
+      madePublic:   false,
+      instanceName: $game.$player.instanceName,
+      questionType: realResource.questionType
+    };
+
+    //hack to not include demo users
+    if($game.$player.firstName !== 'Demo') {
+      ss.rpc('game.npc.saveResponse', newAnswer);
+    }
+
+    _saveResourceToDB(realResource);
+    //display npc bubble for comment num
+    $game.$player.displayNpcComments();
 
   },
 
