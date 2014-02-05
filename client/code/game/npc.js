@@ -344,19 +344,19 @@ var $npc = $game.$npc = {
 
       if (index < messages.length - 1) {
         // Intermediary messages
-        $el.find('.nextButton').unbind('click').bind('click', function (e) {
+        $el.find('.nextButton').off('click').on('click', function (e) {
           e.stopImmediatePropagation()
           _showMultiline(index + 1)
         }).show()
       }
       else {
         // Last message
-        $el.find('.nextButton').unbind('click').hide()
+        $el.find('.nextButton').off('click').hide()
         if (hasPrompt === true) {
           _setupPrompt()
         }
         else {
-          $el.find('.closeButton').bind('click', function (e) {
+          $el.find('.closeButton').on('click', function (e) {
             e.stopImmediatePropagation()
             $npc.hideSpeechBubble(callback)
           }).show()
@@ -370,13 +370,13 @@ var $npc = $game.$npc = {
       // prompt is a callback function that is executed when player clicks the Yes button.
       // Currently assuming that all prompt responses automatically closes the speech bubble
       // rather than lead to next line of conversation.
-      $el.find('.yesButton').bind('click', function (e) {
+      $el.find('.yesButton').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(prompt)
       }).show()
 
       // Close prompt
-      $el.find('.noButton').bind('click', function (e) {
+      $el.find('.noButton').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(callback)
       }).show()
@@ -403,10 +403,10 @@ var $npc = $game.$npc = {
     var $el = $('.speechBubble')
 
     $game.$npc.isChat = false
-    $el.find('.nextButton').unbind('click')
-    $el.find('.closeButton').unbind('click')
-    $el.find('.yesButton').unbind('click')
-    $el.find('.noButton').unbind('click')
+    $el.find('.nextButton').off('click')
+    $el.find('.closeButton').off('click')
+    $el.find('.yesButton').off('click')
+    $el.find('.noButton').off('click')
 
     $el.fadeOut(300, function () {
       // Execute a callback function passed to this method

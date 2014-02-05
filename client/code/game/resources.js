@@ -134,7 +134,7 @@ var $resources = $game.$resources = {
     $check.show()
 
     $el.find('.feedback').text(message)
-    $el.find('button').bind('click', function () {
+    $el.find('button').on('click', function () {
       $resources.hideCheckMessage(callback)
     }).show()
     $el.fadeIn(200)
@@ -442,8 +442,18 @@ var _resource = {
       // Only shown immediately after section [2] if it is answered correctly.
       case 3:
         _resource.loadRewards(resource)
+        var input = overlay.querySelector('.tagline-input input')
         overlay.querySelector('.resource-content').style.display = 'block'
-        overlay.querySelector('.tagline-input input').focus()
+
+        // Reset and focus input
+        input.value = ''
+        input.focus()
+
+        $('#resource-area a.close-overlay').on('click.onCloseCheck', function (e) {
+          e.stopImmediatePropagation()
+          if (_resource.validateTagline(resource) !== true) return
+          $(this).off('click.onCloseCheck')
+        })
 
         if (resource.questionType === 'open') {
           _addButton('save', 4)
@@ -607,7 +617,7 @@ var _resource = {
 
     // Bind actions to buttons.
     // [1] Acknowledge prompt that your answer is skimpy and submit anyway
-    $el.find('.sure-button').bind('click', function () {
+    $el.find('.sure-button').on('click', function () {
       $resources.hideCheckMessage()
       _resource.submitAnswer(resource, true)
 
@@ -615,7 +625,7 @@ var _resource = {
       _resource.addContent(resource.index, 3)
     }).show()
     // [2] Else, close and retry
-    $el.find('.retry-button').bind('click', function () {
+    $el.find('.retry-button').on('click', function () {
       $resources.hideCheckMessage(callback)
     }).show()
     $el.fadeIn(200)
@@ -675,7 +685,7 @@ var _resource = {
       $game.debug('Warning: an answer was submitted via _resources.submitAnswer() without indicating whether it is correct or incorrect.')
     }
 
-    // Set up seedsToAdd on this object. Not ideal
+    // Store seedsToAdd on this object. Not ideal? but it works for now
     _resource.seedsToAdd = seedsToAdd
   },
 

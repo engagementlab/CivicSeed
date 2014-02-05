@@ -833,7 +833,7 @@ var $player = $game.$player = {
   setTagline: function(resource, tagline) {
 
     var realResource = null,
-        npcLevel     = $game.$npc.getLevel(resource.index),
+        npcLevel     = $game.$npc.getNpc(resource.index).level,
         shapeName    = resource.shape;
 
     //find the resource and add tagline
@@ -872,44 +872,9 @@ var $player = $game.$player = {
   },
 
   // Replacement function for saving to DB
-  // Currently a duplicate of setTagline, without the tagline.
   saveAnswer: function (resource, data) {
 
-    var realResource = null,
-        npcLevel     = $game.$npc.getLevel(resource.index),
-        shapeName    = resource.shape;
-
-    //find the resource and add tagline
-    if(_resources[resource.index]) {
-      realResource = _resources[resource.index];
-    }
-    //add piece to inventory
-    if($game.$player.currentLevel === npcLevel) {
-      if(!_resourceExists(resource.index)) {
-        _inventory.push({name: shapeName, npc: resource.index});
-        _addToInventory({name: shapeName, npc: resource.index});
-      }
-    }
-
-    //add this to the DB of resources for all player answers
-    var newAnswer = {
-      npc:          resource.index,
-      id:           $game.$player.id,
-      name:         $game.$player.firstName,
-      answer:       realResource.answers[realResource.answers.length - 1],
-      madePublic:   false,
-      instanceName: $game.$player.instanceName,
-      questionType: realResource.questionType
-    };
-
-    //hack to not include demo users
-    if($game.$player.firstName !== 'Demo') {
-      ss.rpc('game.npc.saveResponse', newAnswer);
-    }
-
-    _saveResourceToDB(realResource);
-    //display npc bubble for comment num
-    $game.$player.displayNpcComments();
+    // Doesn't do anything right now. Saving occurs with setTagline().
 
   },
 
