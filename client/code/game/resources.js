@@ -273,7 +273,7 @@ var _resource = {
         }
         break
       case 'open':
-        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." autofocus>' + _resource.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
+        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." maxlength="5000" autofocus>' + _resource.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
         break
       case 'truefalse':
         formHTML = '<input name="resourceMultipleChoice" type="radio" id="true" value="true"><label for="true">true</label>' +
@@ -310,7 +310,7 @@ var _resource = {
 
         //give them the skinsuit regardless if in prev level or not
         if (resource.skinSuit) {
-          dialogue += ' You unlocked the ' + $game.$skins.data[resource.skinSuit].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
+          dialogue += ' You unlocked the ' + $game.$skins.data.sets[resource.skinSuit].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
         }
 
         $game.$audio.playTriggerFx('resourceRight')

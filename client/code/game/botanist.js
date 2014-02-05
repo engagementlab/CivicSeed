@@ -536,7 +536,7 @@ var $botanist = $game.$botanist = {
 			else {
 				var endQuestion = _levelQuestion[$game.$player.currentLevel];
 				$botanistAreaMessage.text(endQuestion);
-				var inputBox = '<textarea placeholder="Type your answer here..." autofocus></textarea>';
+				var inputBox = '<textarea placeholder="Type your answer here..." maxlength="5000" autofocus></textarea>';
 				$botanistContent.html(inputBox);
 			}
 		}

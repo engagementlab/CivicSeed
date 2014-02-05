@@ -215,14 +215,14 @@ var $renderer = $game.$renderer = {
       }
     }
 
-    for (var id in $skins.data) {
+    for (var id in $skins.data.sets) {
       var filepath = CivicSeed.CLOUD_PATH + '/img/game/skins/' + id + '.png';
 
       var image = new Image()
       image.src = filepath
       image.onload = _onSkinLoad(image, id)
 
-      if ($skins.data.hasOwnProperty(id)) {
+      if ($skins.data.sets.hasOwnProperty(id)) {
         ++count
       }
     }

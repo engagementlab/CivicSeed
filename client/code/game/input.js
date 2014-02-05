@@ -637,7 +637,7 @@ var $input = $game.$input = module.exports = {
         break
       case 'suit alors':
         $game.$input._cheatActivated('All suits unlocked!')
-        for (var skin in $game.$skins.data) {
+        for (var skin in $game.$skins.data.sets) {
           $game.$skins.unlockSkin(skin)
         }
         break

@@ -5,279 +5,343 @@ var $skins = $game.$skins = {
   ready: false,
 
   data: {
-    'basic': {
-      'id': 'basic',
-      'name': 'Default Look',
-      'description': 'This is you. You look great!',
-      'effect': null,
-      'modifiers': null,
-      'head': {
-        'name': 'Default Head',
-        'description': 'Your beautiful face.',
+    'sets': {
+      'basic': {
+        'id': 'basic',
+        'name': 'Default Look',
+        'description': 'This is you. You look great!',
         'effect': null,
-        'modifiers': null
+        'modifiers': null,
+        'head': {
+          'name': 'Default Head',
+          'description': 'Your beautiful face.',
+          'effect': null,
+          'modifiers': null
+        },
+        'torso': {
+          'name': 'Default Body',
+          'description': 'Your heart is in here somewhere.',
+          'effect': null,
+          'modifiers': null
+        },
+        'legs': {
+          'name': 'Default Legs',
+          'description': 'These legs are made for walking.',
+          'effect': null,
+          'modifiers': null
+        }
       },
-      'torso': {
-        'name': 'Default Body',
-        'description': 'Your heart is in here somewhere.',
-        'effect': null,
-        'modifiers': null
+      'tuxedo': {
+        'id': 'tuxedo',
+        'name': 'Tuxedo',
+        'description': '',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Tuxedo Mask',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Tuxedo Jacket',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Tuxedo Pants',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
       },
-      'legs': {
-        'name': 'Default Legs',
-        'description': 'These legs are made for walking.',
-        'effect': null,
-        'modifiers': null
+      'lion': {
+        'id': 'lion',
+        'name': 'Lion',
+        'description': '',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Lion Head',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Lion Body',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Lion Legs',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'cactus': {
+        'id': 'cactus',
+        'name': 'Cactus',
+        'description': '',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Cactus Head',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Cactus Body',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Cactus Legs',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'cone': {
+        'id': 'cone',
+        'name': 'Ice Cream Cone',
+        'description': 'You look delicious.',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Strawberry Scoop',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Sugar Cone Top',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Sugar Cone Bottom',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'astronaut': {
+        'id': 'astronaut',
+        'name': 'Astronaut',
+        'description': 'This allows you to explore in space.',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Space Helmet',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Space Suit',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Space Pants',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'ninja': {
+        'id': 'ninja',
+        'name': 'Ninja',
+        'description': 'A shady ninja costume.',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Ninja Mask',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Ninja Gi',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Ninja Pants',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'horse': {
+        'id': 'horse',
+        'name': 'Horse',
+        'description': 'You’re a horse!',
+        'effect': 'You walk a lot faster!',
+        'modifiers': '',
+        'head': {
+          'name': 'Horse Head',
+          'description': '',
+          'effect': 'You walk slightly faster.',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Horse Body',
+          'description': '',
+          'effect': 'You walk slightly faster.',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Horse Legs',
+          'description': '',
+          'effect': 'You walk slightly faster.',
+          'modifiers': ''
+        }
+      },
+      'penguin': {
+        'id': 'penguin',
+        'name': 'Penguin',
+        'description': '',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Penguin Head',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Penguin Suit',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Penguin Feet',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'dinosaur': {
+        'id': 'dinosaur',
+        'name': 'Dinosaur',
+        'description': '',
+        'effect': '',
+        'modifiers': '',
+        'head': {
+          'name': 'Dinosaur Head',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Dinosaur Body',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Dinosaur Legs',
+          'description': '',
+          'effect': '',
+          'modifiers': ''
+        }
+      },
+      'octopus': {
+        'id': 'octopus',
+        'name': 'Octopus',
+        'description': '',
+        'effect': 'Your paint radius goes up by three.',
+        'modifiers': '',
+        'head': {
+          'name': 'Octopus Head',
+          'description': '',
+          'effect': 'Your paint radius goes up by one.',
+          'modifiers': ''
+        },
+        'torso': {
+          'name': 'Octopus Body',
+          'description': '',
+          'effect': 'Your paint radius goes up by one.',
+          'modifiers': ''
+        },
+        'legs': {
+          'name': 'Eight Legs',
+          'description': '',
+          'effect': 'Your paint radius goes up by one.',
+          'modifiers': ''
+        }
       }
     },
-    'tuxedo': {
-      'id': 'tuxedo',
-      'name': 'Tuxedo',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Tuxedo Mask',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
+    'outfits': {
+      'hunter': {
+        'id': 'hunter',
+        'name': 'Forest Hunter',
+        'description': 'You stalk the forest like the lion ninja you are.',
+        'effect': 'You can teleport to the forest! Just chat FOREST (all caps)',
+        'modifiers': null,
+        'parts': {
+          'head': 'lion',
+          'torso': 'ninja',
+          'legs': 'ninja'
+        }
       },
-      'torso': {
-        'name': 'Tuxedo Jacket',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
+      'mariner': {
+        'id': 'mariner',
+        'name': 'Sub-Mariner',
+        'description': 'You are at home in aquatic environments.',
+        'effect': 'You can teleport to the port! Just chat PORT (all caps)',
+        'modifiers': null,
+        'parts': {
+          'head': 'penguin',
+          'torso': 'ninja',
+          'legs': 'ninja'
+        }
       },
-      'legs': {
-        'name': 'Tuxedo Pants',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'lion': {
-      'id': 'lion',
-      'name': 'Lion',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Lion Head',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
+      'rancher': {
+        'id': 'rancher',
+        'name': 'Ranch Ronin',
+        'description': 'The stealth cactus could be anywhere.',
+        'effect': 'You can teleport to the ranch! Just chat RANCH (all caps)',
+        'modifiers': null,
+        'parts': {
+          'head': 'cactus',
+          'torso': 'ninja',
+          'legs': 'ninja'
+        }
       },
-      'torso': {
-        'name': 'Lion Body',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
+      'mayor': {
+        'id': 'mayor',
+        'name': 'Ninja Mayor',
+        'description': 'You’re the king or queen of town.',
+        'effect': 'You can teleport to Calliope Town Square! Just chat TOWN (all caps)',
+        'modifiers': null,
+        'parts': {
+          'head': 'tuxedo',
+          'torso': 'ninja',
+          'legs': 'ninja'
+        }
       },
-      'legs': {
-        'name': 'Lion Legs',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'cactus': {
-      'id': 'cactus',
-      'name': 'Cactus',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Cactus Head',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Cactus Body',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Cactus Legs',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'cone': {
-      'id': 'cone',
-      'name': 'Ice Cream Cone',
-      'description': 'You look delicious.',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Strawberry Scoop',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Sugar Cone Top',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Sugar Cone Bottom',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'astronaut': {
-      'id': 'astronaut',
-      'name': 'Astronaut',
-      'description': 'This allows you to explore in space.',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Space Helmet',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Space Suit',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Space Pants',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'ninja': {
-      'id': 'ninja',
-      'name': 'Ninja',
-      'description': 'A shady ninja costume.',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Ninja Mask',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Ninja Gi',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Ninja Pants',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'horse': {
-      'id': 'horse',
-      'name': 'Horse',
-      'description': 'You’re a horse!',
-      'effect': 'You walk a lot faster!',
-      'modifiers': '',
-      'head': {
-        'name': 'Horse Head',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Horse Body',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Horse Legs',
-        'description': '',
-        'effect': 'You walk slightly faster.',
-        'modifiers': ''
-      }
-    },
-    'penguin': {
-      'id': 'penguin',
-      'name': 'Penguin',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Penguin Head',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Penguin Suit',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Penguin Feet',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'dinosaur': {
-      'id': 'dinosaur',
-      'name': 'Dinosaur',
-      'description': '',
-      'effect': '',
-      'modifiers': '',
-      'head': {
-        'name': 'Dinosaur Head',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Dinosaur Body',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Dinosaur Legs',
-        'description': '',
-        'effect': '',
-        'modifiers': ''
-      }
-    },
-    'octopus': {
-      'id': 'octopus',
-      'name': 'Octopus',
-      'description': '',
-      'effect': 'Your paint radius goes up by three.',
-      'modifiers': '',
-      'head': {
-        'name': 'Octopus Head',
-        'description': '',
-        'effect': 'Your paint radius goes up by one.',
-        'modifiers': ''
-      },
-      'torso': {
-        'name': 'Octopus Body',
-        'description': '',
-        'effect': 'Your paint radius goes up by one.',
-        'modifiers': ''
-      },
-      'legs': {
-        'name': 'Eight Legs',
-        'description': '',
-        'effect': 'Your paint radius goes up by one.',
-        'modifiers': ''
+      'sprinkle': {
+        'id': 'sprinkle',
+        'name': 'Sprinklesaurus Rex',
+        'description': 'A cold-blooded cone with extra sprinkles',
+        'effect': 'You gain 10 paintbrush seeds every time you click “Seed it!” on a friend’s response',
+        'modifiers': null,
+        'parts': {
+          'head': 'dinosaur',
+          'torso': 'cone',
+          'legs': 'cone'
+        }
       }
     }
   },
@@ -291,8 +355,8 @@ var $skins = $game.$skins = {
   // Creates an array of skin names
   getSkinsList: function () {
     var list = []
-    for (var i in $skins.data) {
-      list.push($skins.data[i].id)
+    for (var i in $skins.data.sets) {
+      list.push($skins.data.sets[i].id)
     }
     return list
   },
@@ -348,7 +412,7 @@ var $skins = $game.$skins = {
   renderSkinventory: function () {
     var playerSkin = $game.$player.getSkinSuit(),
         unlocked   = playerSkin.unlocked,
-        skins      = $skins.data
+        skins      = $skins.data.sets
 
     function _render (skin, part) {
       var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
@@ -395,7 +459,7 @@ var $skins = $game.$skins = {
 
   renderSkinformation: function () {
     var playerSkin = $game.$player.getSkinSuit(),
-        skins      = $skins.data,
+        skins      = $skins.data.sets,
         head       = playerSkin.head,
         torso      = playerSkin.torso,
         legs       = playerSkin.legs,
@@ -442,7 +506,7 @@ function _renderUnlockedPart ($el, skin, part, isNew) {
   // skin is either the name of the skin or the skin object itself
   // Either way, we want to end up with the skin object.
   if (typeof skin == 'string') {
-    skin  = $skins.data[skin]
+    skin  = $skins.data.sets[skin]
   }
 
   var $inner = $el.find('.inner'),

@@ -191,7 +191,7 @@ function _addContent() {
           var levelQuestion = $game.$botanist.getLevelQuestion(i);
           html += '<p class="resumeQuestion">Q: ' + levelQuestion + '</p>';
           html += '<p class="resumeAnswer"><span>A random peer said: </span> ' + _resumes[i].answer + '</p>';
-          html += '<p>Do you have any feedback for his or her response? Enter it below.</p><textarea></textarea>';
+          html += '<p>Do you have any feedback for his or her response? Enter it below.</p><textarea class="resume-feedback" placeholder="Type your feedback here..." maxlength="5000" autofocus></textarea>';
         }
         $bossAreaContent.append(html);
       } else {
