@@ -1,29 +1,13 @@
 'use strict';
 
-var _resources = [],
-  _currentSlide = 0,
-  _numSlides = 0,
-  _speak = null,
-  _answered = false,
-  _who = null,
-  _correctAnswer = false,
-  _curResource = null,
-  _revisiting = false,
-  _inventory = false,
-
-  $speakerName = null,
-  $resourceMessage = null,
-  $resourceContent = null,
-  $resourceContentBody = null,
+var _resources = []
 
   //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
-  _publicAnswers = null;
 
 var $resources = $game.$resources = {
 
   isShowing: false,
   ready: false,
-  waitingForTagline: false,
 
   //load in all the resources and the corresponding answers
   init: function(callback) {
@@ -47,9 +31,6 @@ var $resources = $game.$resources = {
         }
       });
 
-      //set dom selectors
-      _setDomSelectors();
-
       $game.$resources.ready = true;
       callback();
     });
@@ -57,26 +38,9 @@ var $resources = $game.$resources = {
 
   resetInit: function() {
     _resources = [];
-    _currentSlide = 0;
-    _numSlides = 0;
-    _speak = null;
-    _answered = false;
-    _who = null;
-    _correctAnswer = false;
-    _curResource = null;
-    _revisiting = false;
-    _inventory = false;
 
-    $speakerName = null;
-    $resourceMessage = null;
-    $resourceContent = null;
-    $resourceContentBody = null;
-
-    _publicAnswers = null;
-
-    $game.$resources.isShowing= false;
-    $game.$resources.ready= false;
-    $game.$resources.waitingForTagline= false;
+    $game.$resources.isShowing = false;
+    $game.$resources.ready = false;
   },
 
   debug: function () { // TODO: REMOVE
@@ -148,7 +112,7 @@ var $resources = $game.$resources = {
         el             = overlay.querySelector('.resource-responses'),
         resource       = _resources[index]
 
-    _resource.loadResponses(resource)
+    _resource.addContent(index, 4)
 
     // Display rules
     el.style.display = 'block'
@@ -161,17 +125,11 @@ var $resources = $game.$resources = {
     }
   },
 
-  showResponses: function (index) {
-    $game.debug('showResponses() be getting deprecated.')
-    // Wrapper for:
-    this.examineResponses(index)
-  },
-
   //get the shape svg info for a specific resource
   getShape: function(index) {
     var stringId = String(index),
       shapeName = _resources[stringId].shape;
-    return _shapes[$game.$player.currentLevel][shapeName];
+    return _resource.shapes[$game.$player.currentLevel][shapeName];
   },
 
   getShapeName: function(index) {
@@ -220,46 +178,17 @@ var $resources = $game.$resources = {
     return _resources[stringId].question;
   },
 
-  getCurResource: function() {
-    return _curResource;
-  },
-
-  //decide what to do if we save custom tagline
-  saveTagline: function (tagline) {
-    if (tagline.length > 0) {
-      $game.$player.setTagline(tagline);
-      $game.$resources.waitingForTagline = false;
-
-      //if open -> next slide
-      //else -> close resource
-      if(_curResource.questionType === 'open') {
-        $game.$resources.nextSlide();
-      } else {
-        $game.$resources.hideResource();
-      }
-    }
-    else {
-      $('.tagline-input input').focus()
-      _resource.showCheckMessage('You should create a custom tagline!')
-    }
-  },
-
   getNumResponses: function(index) {
     var stringId = String(index);
     return _resources[stringId].playerAnswers.length;
   }
 };
 
-/***** PRIVATE FUNCTIONS ******/
-
-//reuse for doms
-function _setDomSelectors() {
-  $speakerName = $('#resource-area .speakerName');
-  $resourceMessage = $('#resource-area .message');
-  $resourceContent = $('.resourceContent');
-  $resourceContentBody = $('.resourceContentBody');
-}
-
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
 
 var _resource = {
 
@@ -322,7 +251,7 @@ var _resource = {
         }
         break
       case 'open':
-        formHTML = '<textarea placeholder="Type your answer here..." autofocus>' + _resource.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You  can later choose to make it public to earn special seeds.</p>';
+        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." autofocus>' + _resource.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
         break
       case 'truefalse':
         formHTML = '<input name="resourceMultipleChoice" type="radio" id="true" value="true"><label for="true">true</label>' +
@@ -365,12 +294,6 @@ var _resource = {
 
         el.querySelector('.speaker').textContent = npc.name
         el.querySelector('.message').textContent = dialogue
-
-/*
-        $game.$resources.waitingForTagline = true;
-
-        $('#resource-area .dialog').show()
-*/
   },
 
   // Load other players answers and your own
@@ -428,7 +351,7 @@ var _resource = {
   },
 
   // Clear the display and decide what to show on screen
-  addContent: function (index, slide) {
+  addContent: function (index, section, slide) {
     var overlay     = document.getElementById('resource-area'),
         playerLevel = $game.$player.getLevel(),
         answer      = $game.$player.getAnswer(index),
@@ -444,83 +367,90 @@ var _resource = {
     _resource.resetButtons()
 
     // Determine what content to add.
+    switch (section) {
+      // [SECTION 01] ARTICLE.
+      case 1:
+        if (!slide) slide = 0
+        if (slide < 0 || slide === slides) this.addContent('next', 4)  // Exit out if bad slide
 
-    // [1] ARTICLE.
-    //     Slides start at 1. (Not 0-indexed.)
-    if (slide > 0 && slide <= slides) {
-      // Load and show article content.
-      var page = $article.get(slide - 1).innerHTML
-      $('.resource-article').html(page).show()
+        // Load and show article content. Assuming already preloaded!
+        var page = $article.get(slide).innerHTML
+        $('.resource-article').html(page).show()
 
-      // Logic for adding buttons
-      // Always add a next button if there is more article to show
-      if (slide < slides) _addButton('next', slide + 1)
-      // On the last article slide, we must test for certain conditions
-      else if (slide === slides) {
-        // If open-ended question and is answered, go straight to responses
-        if (isRevisit && resource.questionType === 'open') _addButton('next', slide + 3)
-        // If question was answered correctly for any other question type, close resource window
-        else if (isRevisit) _addButton ('close')
-        // If question was not answered correctly, go to next slide (question screen)
-        else _addButton('next', slide + 1)
-      }
-      // Add a back button if it's not the first slide.
-      if (slide > 1) _addButton('back', slide - 1)
-    }
-    // [2] QUESTION.
-    //     The next slide after the article is the Question screen, which displays if the
-    //     player has NOT answered this question correctly.
-    else if (slide === slides + 1) {
-      // Load and show question.
-      _resource.loadQuestion(resource)
-      overlay.querySelector('.resource-question').style.display = 'block'
-
-      // Preload the tangram for later
-      _resource.loadTangram(resource)
-
-      // Add buttons
-      _addButton('answer', slide + 1)
-      _addButton('back', slide - 1, function () {
-        // If they were answering an open question, store their answer if the player goes back
-        if (resource.questionType === 'open') {
-          _resource.temporaryAnswer = overlay.querySelector('textarea').value
+        // Logic for adding buttons
+        // Always add a next button if there is more article to show
+        if (slide < slides - 1) _addButton('next', 1, slide + 1)
+        // On the last article slide, we must test for certain conditions
+        else if (slide === slides - 1) {
+          // If open-ended question and is answered, go straight to responses
+          if (isRevisit && resource.questionType === 'open') _addButton('next', 4)
+          // If question was answered correctly for any other question type, close resource window
+          else if (isRevisit) _addButton ('close')
+          // If question was not answered correctly, go to next slide (question screen)
+          else _addButton('next', 2)
         }
-      })
-      // After submitting an answer, if incorrect, the player is kicked back out to the game.
-      // If correct, the player goes to slide [3].
-      // If answered, the player skips to slide [4].
-    }
-    // [3] REWARD.
-    //     Only shown immediately after slide [2] if it is answered correctly.
-    else if (slide === slides + 2) {
-      _resource.loadRewards(resource)
-      overlay.querySelector('.resource-content').style.display = 'block'
+        // Add a back button if it's not the first slide.
+        if (slide > 0) _addButton('back', 1, slide - 1)
 
-      if (resource.questionType === 'open') {
-        _addButton('save', slide + 1)
-      }
-      else {
+        break
+      // [SECTION 02] QUESTION.
+      // The next slide after the article is the Question screen, which displays if the
+      // player has NOT answered this question correctly.
+      case 2:
+        // Load and show question.
+        _resource.loadQuestion(resource)
+        overlay.querySelector('.resource-question').style.display = 'block'
+
+        // Preload the tangram for later
+        _resource.loadTangram(resource)
+
+        // Add buttons
+        _addButton('answer')
+        _addButton('back', 1, slide - 1, function () {
+          // If they were answering an open question, store their answer if the player goes back
+          if (resource.questionType === 'open') {
+            _resource.temporaryAnswer = overlay.querySelector('.open-response').value
+          }
+        })
+        // After submitting an answer, if incorrect, the player is kicked back out to the game.
+        // If correct, the player goes to section [3].
+        // If answered, the player skips to section [4].
+        break
+      // [SECTION 03] REWARD.
+      // Only shown immediately after section [2] if it is answered correctly.
+      case 3:
+        _resource.loadRewards(resource)
+        overlay.querySelector('.resource-content').style.display = 'block'
+
+        if (resource.questionType === 'open') {
+          _addButton('save', 4)
+        }
+        else {
+          _addButton('save')
+        }
+        break
+      // [4] RESPONSES.
+      // Shown immediately after slide [3] if the player gets it correct, -OR-
+      // immediately after [1] if question was answered correctly and player is revisiting.
+      case 4:
+        _resource.loadResponses(resource)
+        overlay.querySelector('.resource-responses').style.display = 'block'
+
         _addButton('close')
-      }
-    }
-    // [4] RESPONSES.
-    //     Shown immediately after slide [3] if the player gets it correct, -OR-
-    //     immediately after [1] if question was answered correctly and player is revisiting.
-    else if (slide === slides + 3) {
-      _resource.loadResponses(resource)
-      overlay.querySelector('.resource-responses').style.display = 'block'
-
-      _addButton('close')
-      if (isRevisit === true) _addButton('back', slide - 3)
-    }
-    else {
+        // if (isRevisit === true) _addButton('back', 1, slides)
+        // This is currently disabled because it is possible to view this directly without
+        // preloading the article content, which would break in that instance.
+        break
       // Generic error for debugging.
-      $resources.hideResource(function callback() {
-        $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist.'])
-      })
+      default:
+        $resources.hideResource(function callback() {
+          $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist.'])
+        })
+        break
     }
 
-    function _addButton (button, slide, callback) {
+    // Private add button function. Displays the button each slide asks for and binds actions to them.
+    function _addButton (button, section, slide, callback) {
       var buttons = overlay.querySelector('.buttons'),
           back    = buttons.querySelector('.back-button'),
           next    = buttons.querySelector('.next-button'),
@@ -539,14 +469,14 @@ var _resource = {
           next.style.display = 'inline-block'
           next.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resource.addContent(index, slide)
+            _resource.addContent(index, section, slide)
           })
           break
         case 'back':
           back.style.display = 'inline-block'
           back.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resource.addContent(index, slide)
+            _resource.addContent(index, section, slide)
           })
           break
         case 'answer':
@@ -557,6 +487,8 @@ var _resource = {
             // This is kind of a dumb place to put it, but it's the best place for it to
             // work right now. If it's an open-ended question, check to make sure that the
             // response is sufficient. If not, exit prematurely and preserve the state of the form.
+            // It doesn't seem possible to put these returns inside another callback function
+            // because it only returns out of the callback, not the listener function.
             if (resource.questionType === 'open') {
               if (_resource.validateOpenResponse(resource) !== true) return
             }
@@ -565,8 +497,8 @@ var _resource = {
             // to the next slide. If not, we'll record that the answer was wrong, and quit.
             if (_resource.checkAnswer(resource) === true) {
               _resource.submitAnswer(resource, true)
-              // Go to the provided slide
-              _resource.addContent(index, slide)
+              // Go to reward screen.
+              _resource.addContent(index, 3)
             }
             else {
               _resource.submitAnswer(resource, false)
@@ -579,7 +511,11 @@ var _resource = {
           save.style.display = 'inline-block'
           save.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            if (slide) _resource.addContent(index, slide)
+            if (_resource.validateTagline(resource) !== true) return
+            else $game.$player.saveAnswer()
+
+            if (section) _resource.addContent(index, section)
+            else $resources.hideResource()
           })
           break
         case 'close':
@@ -595,7 +531,21 @@ var _resource = {
       }
       return true
     }
+  },
 
+  validateTagline: function (resource) {
+    var input   = document.getElementById('resource-area').querySelector('.tagline-input input'),
+        tagline = input.value.trim()
+
+    if (tagline.length === 0) {
+      input.focus()
+      _resource.showCheckMessage('You should create a custom tagline!')
+      return false
+    }
+    else {
+      $game.$player.setTagline(resource, tagline)
+      return true
+    }
   },
 
   // Called by check answer to validate whether an open-ended response is sufficient
@@ -621,7 +571,8 @@ var _resource = {
     $el.find('.check-dialog').hide()
     $el.find('.confirm-skimpy').show()
 
-    // Acknowledge prompt that your answer is skimpy and submit anyway
+    // Bind actions to buttons.
+    // [1] Acknowledge prompt that your answer is skimpy and submit anyway
     $el.find('.sure-button').bind('click', function () {
       _resource.hideCheckMessage()
       _resource.submitAnswer(resource, true)
@@ -629,7 +580,7 @@ var _resource = {
       var slides = $('#resource-stage .pages > section').length
       _resource.addContent(resource.index, slides + 2)
     }).show()
-    // Else, close and retry
+    // [2] Else, close and retry
     $el.find('.retry-button').bind('click', function () {
       _resource.hideCheckMessage()
     }).show()
@@ -669,7 +620,7 @@ var _resource = {
   // Retrieve Player's answers from the question form
   getAnswer: function (resource) {
     if (resource.questionType === 'open') {
-      return document.getElementById('resource-area').querySelector('.resource-question textarea').value.trim()
+      return document.getElementById('resource-area').querySelector('.open-response').value.trim()
     }
     else {
       return $('input[name=resourceMultipleChoice]:checked').val()
@@ -679,20 +630,20 @@ var _resource = {
   submitAnswer: function (resource, isCorrect) {
     var response   = this.getAnswer(resource),
         npcLevel   = $game.$npc.getNpc(resource.index).level,
-        seedsToAdd = 0
+        seedsToAdd = 0,
+        data       = {
+          index:        resource.index,
+          answer:       response,
+          npcLevel:     npcLevel,
+          questionType: resource.questionType
+        }
 
     // If correct, determine number of seeds to add, and push answer to DB
     if (isCorrect === true) {
-      var correctData = {
-            correct:      true,
-            index:        resource.index,
-            answer:       response,
-            npcLevel:     npcLevel,
-            questionType: resource.questionType,
-            skinSuit:     resource.skinSuit
-          }
+      data.correct  = true
+      data.skinSuit = resource.skinSuit
 
-      seedsToAdd = $game.$player.answerResource(correctData)
+      seedsToAdd = $game.$player.answerResource(data)
       // If they took more than 1 try to get a binary, drop down more
       if (resource.questionType === 'truefalse' || resource.questionType === 'yesno') {
         if (seedsToAdd < 5 && seedsToAdd > 2) {
@@ -700,28 +651,13 @@ var _resource = {
         }
       }
 
-      //add this to the DB of resources for all player answers
-      // TODO: THIS APPEARS TO BE REFERRED TO OR USED BY ANYONE OR ANYTHING.
-      var newAnswer = {
-            npc:          resource.index,
-            id:           $game.$player.id,
-            name:         $game.$player.firstName,
-            answer:       response,
-            madePublic:   false,
-            instanceName: $game.$player.instanceName,
-            questionType: resource.questionType
-          }
+      $game.$player.saveAnswer(resource, data)
     }
     else if (isCorrect === false) {
-      var incorrectData = {
-            correct:      false,
-            index:        resource.index,
-            answer:       response,
-            npcLevel:     npcLevel,
-            questionType: resource.questionType
-          }
+      data.correct  = false
 
-      seedsToAdd = $game.$player.answerResource(incorrectData)
+      seedsToAdd = $game.$player.answerResource(data)
+      $game.$player.saveAnswer(resource, data)
     }
     else {
       $game.debug('Warning: an answer was submitted via _resources.submitAnswer() without indicating whether it is correct or incorrect.')
@@ -742,195 +678,187 @@ var _resource = {
     })
   },
 
-  checkTagline: function () {
-      if(!$game.$resources.waitingForTagline) {
-        $game.$resources.hideCheckMessage()
-      } else {
-        // TODO: Keep this out of here?
-        $game.$resources.showCheckMessage('You should create a custom tagline!')
-      }
+  // Shape paths
+  shapes: [{
+    correct1: {
+      path: 'm0,0l0,70l80,0l0,-70l-80,0z',
+      fill: 'lightGreen'
+    },
+    wrong1: {
+      path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
+      fill: 'blue'
+    },
+    wrong2: {
+      path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
+      fill: 'lightBlue'
+    },
+    correct2: {
+      path: 'm0,0l-50,50l50,50l0,-100z',
+      fill: 'orange'
+    },
+    wrong3: {
+      path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
+      fill: 'orange'
+    },
+    correct3: {
+      path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
+      fill: 'green'
+    },
+    wrong4: {
+      path: 'm0,0l0,100l-50,-50l50,-50z',
+      fill: 'lightOrange'
+    },
+    wrong5: {
+      path: 'm0,0l0,-50l200,0l0,50l-200,0z',
+      fill: 'green'
+    },
+    wrong6: {
+      path: 'm0,0l80,0l0,90l-80,0l0,-90z',
+      fill: 'lightGreen'
+    },
+    correct4: {
+      path: 'm0,0l0,100l50,-50l-50,-50z',
+      fill: 'lightOrange'
+    }
+  },{
+    correct1: {
+      path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
+      fill: 'green'
+    },
+    wrong1: {
+      path: 'm0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z',
+      fill: 'orange'
+    },
+    wrong2: {
+      path: 'm0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z',
+      fill: 'lightOrange'
+    },
+    wrong3: {
+      path: 'm0,0l100,-40l100,0l100,40l-300,0z',
+      fill: 'green'
+    },
+    wrong4: {
+      path: 'm0,0l100,0l0,-40l-50,-40l-50,40l0,40z',
+      fill: 'lightGreen'
+    },
+    wrong5: {
+      path: 'm0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z',
+      fill: 'blue'
+    },
+    wrong6: {
+      path: 'm0,0c0,0 0,110 0,110c0,0 0,10 0,10c0,0 150,0 150,0c0,0 -100,-40 -100,-40c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40z',
+      fill: 'lightBlue'
+    },
+    correct2: {
+      path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
+      fill: 'lightOrange'
+    },
+    correct3: {
+      path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
+      fill: 'lightGreen'
+    },
+    wrong7: {
+      path: 'm0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z',
+      fill: 'orange'
+    },
+    correct4: {
+      path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+      fill: 'blue'
+    },
+    wrong8: {
+      path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
+      fill: 'lightOrange'
+    },
+    correct5: {
+      path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
+      fill: 'orange'
+    },
+    wrong9: {
+      path: 'm0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z',
+      fill: 'blue'
+    }
+  }, {
+    correct1: {
+      path: 'm0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z',
+      fill: 'orange'
+    },
+    correct2: {
+      path: 'm0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z',
+      fill: 'lightOrange'
+    },
+    correct3: {
+      path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
+      fill: 'green'
+    },
+    correct4: {
+      path: 'm0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z',
+      fill: 'lightGreen'
+    },
+    correct5: {
+      path: 'm0,0l0,-70l150,0l0,70l-150,0z',
+      fill: 'lightBlue'
+    },
+    wrong1: {
+      path: 'm0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z',
+      fill: 'blue'
+    },
+    wrong2: {
+      path: 'm0,0l0,60l260,0l-20,-40l-20,-20l-220,0z',
+      fill: 'lightOrange'
+    },
+    correct6: {
+      path: 'm0,0l0,40l300,0l-10,-20l-20,-20l-270,0z',
+      fill: 'blue'
+    },
+    wrong3: {
+      path: 'm0,0l90,0l0,-60l-50,0l-20,20l-20,40z',
+      fill: 'green'
+    }
+  }, {
+    correct1: {
+      path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
+      fill: 'orange'
+    },
+    wrong1: {
+      path: 'm0,0l0,-40l240,0l0,40l-240,0z',
+      fill: 'blue'
+    },
+    wrong2: {
+      path: 'm0,0l80,0l0,-90l-100,0l20,90z',
+      fill: 'lightOrange'
+    },
+    correct2: {
+      path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
+      fill: 'lightGreen'
+    },
+    wrong3: {
+      path: 'm0,0l-100,0l0,90l80,0l20,-90z',
+      fill: 'green'
+    },
+    wrong4: {
+      path: 'm0,0l-20,-90l160,0l-20,90l-120,0z',
+      fill: 'lightGreen'
+    },
+    correct3: {
+      path: 'm0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z',
+      fill: 'blue'
+    },
+    correct4: {
+      path: 'm0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z',
+      fill: 'lightOrange'
+    },
+    wrong5: {
+      path: 'm0,0l120,0l0,220l-60,0l-40,-180l-20,0l0,-40z',
+      fill: 'orange'
+    },
+    correct5: {
+      path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
+      fill: 'green'
+    }
+  }]
 
-  }
 }
 
 
 
 
-/***shape data ***/
-var _shapes = [{
-  correct1: {
-    path: 'm0,0l0,70l80,0l0,-70l-80,0z',
-    fill: 'lightGreen'
-  },
-  wrong1: {
-    path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
-    fill: 'blue'
-  },
-  wrong2: {
-    path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
-    fill: 'lightBlue'
-  },
-  correct2: {
-    path: 'm0,0l-50,50l50,50l0,-100z',
-    fill: 'orange'
-  },
-  wrong3: {
-    path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
-    fill: 'orange'
-  },
-  correct3: {
-    path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
-    fill: 'green'
-  },
-  wrong4: {
-    path: 'm0,0l0,100l-50,-50l50,-50z',
-    fill: 'lightOrange'
-  },
-  wrong5: {
-    path: 'm0,0l0,-50l200,0l0,50l-200,0z',
-    fill: 'green'
-  },
-  wrong6: {
-    path: 'm0,0l80,0l0,90l-80,0l0,-90z',
-    fill: 'lightGreen'
-  },
-  correct4: {
-    path: 'm0,0l0,100l50,-50l-50,-50z',
-    fill: 'lightOrange'
-  }
-},{
-  correct1: {
-    path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
-    fill: 'green'
-  },
-  wrong1: {
-    path: 'm0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z',
-    fill: 'orange'
-  },
-  wrong2: {
-    path: 'm0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z',
-    fill: 'lightOrange'
-  },
-  wrong3: {
-    path: 'm0,0l100,-40l100,0l100,40l-300,0z',
-    fill: 'green'
-  },
-  wrong4: {
-    path: 'm0,0l100,0l0,-40l-50,-40l-50,40l0,40z',
-    fill: 'lightGreen'
-  },
-  wrong5: {
-    path: 'm0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z',
-    fill: 'blue'
-  },
-  wrong6: {
-    path: 'm0,0c0,0 0,110 0,110c0,0 0,10 0,10c0,0 150,0 150,0c0,0 -100,-40 -100,-40c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40z',
-    fill: 'lightBlue'
-  },
-  correct2: {
-    path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
-    fill: 'lightOrange'
-  },
-  correct3: {
-    path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
-    fill: 'lightGreen'
-  },
-  wrong7: {
-    path: 'm0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z',
-    fill: 'orange'
-  },
-  correct4: {
-    path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
-    fill: 'blue'
-  },
-  wrong8: {
-    path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
-    fill: 'lightOrange'
-  },
-  correct5: {
-    path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
-    fill: 'orange'
-  },
-  wrong9: {
-    path: 'm0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z',
-    fill: 'blue'
-  }
-}, {
-  correct1: {
-    path: 'm0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z',
-    fill: 'orange'
-  },
-  correct2: {
-    path: 'm0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z',
-    fill: 'lightOrange'
-  },
-  correct3: {
-    path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
-    fill: 'green'
-  },
-  correct4: {
-    path: 'm0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z',
-    fill: 'lightGreen'
-  },
-  correct5: {
-    path: 'm0,0l0,-70l150,0l0,70l-150,0z',
-    fill: 'lightBlue'
-  },
-  wrong1: {
-    path: 'm0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z',
-    fill: 'blue'
-  },
-  wrong2: {
-    path: 'm0,0l0,60l260,0l-20,-40l-20,-20l-220,0z',
-    fill: 'lightOrange'
-  },
-  correct6: {
-    path: 'm0,0l0,40l300,0l-10,-20l-20,-20l-270,0z',
-    fill: 'blue'
-  },
-  wrong3: {
-    path: 'm0,0l90,0l0,-60l-50,0l-20,20l-20,40z',
-    fill: 'green'
-  }
-}, {
-  correct1: {
-    path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
-    fill: 'orange'
-  },
-  wrong1: {
-    path: 'm0,0l0,-40l240,0l0,40l-240,0z',
-    fill: 'blue'
-  },
-  wrong2: {
-    path: 'm0,0l80,0l0,-90l-100,0l20,90z',
-    fill: 'lightOrange'
-  },
-  correct2: {
-    path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
-    fill: 'lightGreen'
-  },
-  wrong3: {
-    path: 'm0,0l-100,0l0,90l80,0l20,-90z',
-    fill: 'green'
-  },
-  wrong4: {
-    path: 'm0,0l-20,-90l160,0l-20,90l-120,0z',
-    fill: 'lightGreen'
-  },
-  correct3: {
-    path: 'm0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z',
-    fill: 'blue'
-  },
-  correct4: {
-    path: 'm0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z',
-    fill: 'lightOrange'
-  },
-  wrong5: {
-    path: 'm0,0l120,0l0,220l-60,0l-40,-180l-20,0l0,-40z',
-    fill: 'orange'
-  },
-  correct5: {
-    path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
-    fill: 'green'
-  }
-}]

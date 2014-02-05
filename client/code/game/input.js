@@ -145,16 +145,10 @@ var $input = $game.$input = module.exports = {
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
     //close the resource area
-    $BODY.on('click', '#resource-area a.close-overlay, #resource-area .close-button', function (e) {
+    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
       e.preventDefault()
       $game.$resources.hideResource()
       return false;
-    });
-
-    //previous page of content in resource
-    $BODY.on('click', '#resource-area .save-button', function () {
-      var tagline = $.trim($('.tagline-input input').val())
-      $game.$resources.saveTagline(tagline);
     });
 
     // ************* SKINVENTORY WINDOW INTERACTIONS *************

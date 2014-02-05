@@ -830,11 +830,10 @@ var $player = $game.$player = {
   },
 
   //add the tagline to the resource, then save it to db
-  setTagline: function(tagline) {
-    var resource = $game.$resources.getCurResource(),
-      realResource = null,
-      npcLevel = $game.$npc.getNpcLevel(),
-      shapeName = resource.shape;
+  setTagline: function(resource, tagline) {
+    var realResource = null,
+        npcLevel     = $game.$npc.getLevel(resource.index),
+        shapeName    = resource.shape;
 
     //find the resource and add tagline
     if(_resources[resource.index]) {
@@ -848,6 +847,21 @@ var $player = $game.$player = {
         _addToInventory({name: shapeName, npc: resource.index, tagline: tagline});
       }
     }
+
+
+    //add this to the DB of resources for all player answers
+    /*
+    var newAnswer = {
+          npc:          resource.index,
+          id:           $game.$player.id,
+          name:         $game.$player.firstName,
+          answer:       response,
+          madePublic:   false,
+          instanceName: $game.$player.instanceName,
+          questionType: resource.questionType
+        }
+    */
+
     //hack to not include demo users
     var newAnswer = {
       npc: resource.index,
@@ -866,6 +880,11 @@ var $player = $game.$player = {
     _saveResourceToDB(realResource);
     //display npc bubble for comment num
     $game.$player.displayNpcComments();
+  },
+
+  // Replacement function for saving to DB
+  saveAnswer: function (resource, data) {
+
   },
 
   //show a bubble over visited npcs of how many comments there are
