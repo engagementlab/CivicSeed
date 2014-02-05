@@ -538,13 +538,16 @@ var _resource = {
         tagline = input.value.trim()
 
     if (tagline.length === 0) {
-      input.focus()
-      _resource.showCheckMessage('You should create a custom tagline!')
+      _resource.showCheckMessage('You should create a custom tagline!', _focusInput)
       return false
     }
     else {
       $game.$player.setTagline(resource, tagline)
       return true
+    }
+
+    function _focusInput () {
+      input.focus()
     }
   },
 
@@ -553,20 +556,24 @@ var _resource = {
     var response = this.getAnswer(resource)
 
     if (response.length === 0) {
-      _resource.showCheckMessage('Please answer the question!')
+      _resource.showCheckMessage('Please answer the question!', _focusInput)
       return false
     }
     else if (resource.requiredLength && response.length < resource.requiredLength) {
-      _resource.popupCheck(resource)
+      _resource.popupCheck(resource, _focusInput)
       return false
     }
     else {
       return true
     }
+
+    function _focusInput () {
+      document.querySelector('.open-response').focus()
+    }
   },
 
   // Trigger a popup if answer was too short
-  popupCheck: function (resource) {
+  popupCheck: function (resource, callback) {
     var $el = $('#resource-area .check')
     $el.find('.check-dialog').hide()
     $el.find('.confirm-skimpy').show()
@@ -582,13 +589,13 @@ var _resource = {
     }).show()
     // [2] Else, close and retry
     $el.find('.retry-button').bind('click', function () {
-      _resource.hideCheckMessage()
+      _resource.hideCheckMessage(callback)
     }).show()
     $el.fadeIn(200)
   },
 
   // Display messages on checking user input
-  showCheckMessage: function (message) {
+  showCheckMessage: function (message, callback) {
     var $check = $('#resource-area .check'),
         $el    = $check.find('.message-feedback')
 
@@ -597,15 +604,15 @@ var _resource = {
 
     $el.find('.feedback').text(message)
     $el.find('button').bind('click', function () {
-      _resource.hideCheckMessage()
+      _resource.hideCheckMessage(callback)
     }).show()
     $el.fadeIn(200)
   },
 
-  hideCheckMessage: function () {
+  hideCheckMessage: function (callback) {
     var $el = $('#resource-area .check')
     if ($el.is(':visible')) {
-      $el.fadeOut(200)
+      $el.fadeOut(200, callback)
     }
   },
 
