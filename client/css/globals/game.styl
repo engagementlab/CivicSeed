@@ -68,6 +68,9 @@
 			font-size 36px
 	&.background-3
 		background-image $cloudUrl('img/bg/tri.png')
+		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+			background-image $cloudUrl('img/bg/tri@2x.png')
+			background-size 188px
 	.buttons
 		position absolute
 		z-index 9994
