@@ -1469,7 +1469,7 @@ module.exports.global = [
         "dependsOn": null,
         "dialog": {
             "prompts": [
-                "Do you ever wonder what the world will be like when you’re gone? I think the best we can hope for is to leave the world a better place! Hopefuly this bit will help you. Ready?",
+                "Do you ever wonder what the world will be like when you’re gone? I think the best we can hope for is to leave the world a better place! Hopefully this bit will help you. Ready?",
                 "Focus! Try again!",
                 "Was that resource helpful? I’m worried about my legacy!"
             ],
