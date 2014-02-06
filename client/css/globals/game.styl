@@ -55,7 +55,7 @@
 	background #efefef
 	background-image $cloudUrl('img/bg/grey.png')
 	box-shadow $csUIDropShadow
-	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
 		background-image $cloudUrl('img/bg/grey@2x.png')
 		background-size 397px
 	h2
@@ -71,7 +71,7 @@
 			font-size 36px
 	&.background-3
 		background-image $cloudUrl('img/bg/tri.png')
-		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)
+		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
 			background-image $cloudUrl('img/bg/tri@2x.png')
 			background-size 188px
 	.buttons
@@ -180,6 +180,11 @@
 	.resource-content
 		display none
 		.tangram
+			position absolute
+			bottom 120px
+			left 0
+			width 100%
+			height 250px
 			img
 				margin-left 45px
 				height 250px
@@ -1039,4 +1044,7 @@ p.townSite
 	font-family $buttonFont
 	font-size 13px
 
-
+svg.tangram-svg
+	// see also .puzzleSvg
+	width 100%
+	height 250px

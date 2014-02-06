@@ -242,16 +242,54 @@ var _resource = {
     $('#resource-stage').empty().load(url, callback)
   },
 
-  // Preloads the tangram from the server and adds it into DOM
+  // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
+    /* DEPRECATED:  The old version of this function loaded an image rather than the SVG.
     var overlay   = document.getElementById('resource-area'),
         level     = $game.$npc.getNpc(resource.index).getLevel(),
         folder    = 'level' + level,
         imagePath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + folder + '/' + resource.shape + '.png'
 
     overlay.querySelector('.tangram').innerHTML = '<img src="' + imagePath + '">'
+    */
 
-    // TODO: get path from db, make svg with that  (replace the image?)
+    // Loads the SVG version of the tangram.
+    var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
+        artboardX = artboard.offsetWidth,
+        artboardY = artboard.offsetHeight,
+        shape     = $game.$resources.getShape(resource.index),
+        // Copied from botanist.js/_svgFills
+        fills = {
+          orange: 'rgb(236,113,41)',
+          lightOrange: 'rgb(237,173,135)',
+          blue: 'rgb(14,152,212)',
+          lightBlue: 'rgb(109,195,233)',
+          green: 'rgb(76,212,206)',
+          lightGreen: 'rgb(164,238,235)'
+        },
+        fill = fills[shape.fill]
+
+    // Clear previous SVG if any
+    artboard.innerHMTL = ''
+    d3.select('svg').remove()
+
+    var svg  = d3.select('#resource-area .tangram').append('svg').attr('class','tangram-svg'),
+        path = svg.append('path')
+                .attr('d', shape.path)
+                .attr('fill', fill)
+                .attr('stroke', 'rgb(255,255,255)')
+                .attr('stroke-width', 0),
+        pathCentroid = _getCentroid(path),
+        displayX = (artboardX / 2) - pathCentroid[0],
+        displayY = (artboardY / 2) - pathCentroid[1]
+
+    console.log(artboardX, artboardY, pathCentroid)
+    path.attr('transform', 'translate(' + displayX + ',' + displayY +')')
+
+    function _getCentroid (selection) {
+      var bbox = selection.node().getBBox()
+      return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
+    }
   },
 
   // Preloads question information into the DOM
@@ -304,7 +342,9 @@ var _resource = {
           dialogue = feedback + ' Here, take ' + _resource.seedsToAdd + ' seeds!'
         }
         else {
-          // The tangram piece should be preloaded with _loadTangram on the previous slide
+          // Load the tangram as an SVG path
+          _resource.loadTangram(resource)
+
           dialogue = feedback + ' Here, take this puzzle piece, and ' + _resource.seedsToAdd + ' seeds!'
         }
 
@@ -423,9 +463,6 @@ var _resource = {
         _resource.loadQuestion(resource)
         overlay.querySelector('.resource-question').style.display = 'block'
 
-        // Preload the tangram for later
-        _resource.loadTangram(resource)
-
         // Add buttons
         _addButton('answer')
         _addButton('back', 1, slide - 1, function () {
@@ -441,14 +478,18 @@ var _resource = {
       // [SECTION 03] REWARD.
       // Only shown immediately after section [2] if it is answered correctly.
       case 3:
-        _resource.loadRewards(resource)
         var input = overlay.querySelector('.tagline-input input')
         overlay.querySelector('.resource-content').style.display = 'block'
+
+        // Load resource details and draw tangram - note that this needs to happen after
+        // the visibility is set to 'block' because we calculate div width/height in this function.
+        _resource.loadRewards(resource)
 
         // Reset and focus input
         input.value = ''
         input.focus()
 
+        // Bind a check event listener to the standard close button on the upper right
         $('#resource-area a.close-overlay').on('click.onCloseCheck', function (e) {
           e.stopImmediatePropagation()
           if (_resource.validateTagline(resource) !== true) return
