@@ -560,7 +560,7 @@ var $player = $game.$player = {
   openSeedventory: function() {
     //open up the inventory
     if(_seeds.draw > 0) {
-      $game.alert('choose a seed to plant')
+      $game.alert('Choose a seed to plant')
       $('.seedventory').slideDown(function() {
         if (_seeds.regular > 0) {
           $('.regularButton').addClass('active');
@@ -575,13 +575,13 @@ var $player = $game.$player = {
     //start seed mode on 0
     else {
       if(_seeds.regular > 0) {
-        $game.$player.seedPlanting = true;
-        $game.$player.seedMode = 'regular';
-        $game.alert('click any tile to drop some color')
+        $game.$player.seedPlanting = true
+        $game.$player.seedMode = 'regular'
+        $game.alert('Click anywhere to plant a seed and watch color bloom there')
       }
       else {
         // No seeds, cancel out of seed mode.
-        $game.alert('you have no seeds')
+        $game.alert('You have no seeds')
         $game.$input.endSeedMode()
       }
     }
@@ -596,13 +596,13 @@ var $player = $game.$player = {
     });
     var msg;
     if(choice === 'regular') {
-      msg = 'click a tile to drop some color';
+      msg = 'Click anywhere to plant a seed and watch color bloom there'
     } else {
-      msg = 'paintbrush mode activated - click and drag to draw';
+      msg = 'Paintbrush mode activated - click and drag to draw'
       $graffiti.show();
       $graffitiNum.text(_seeds.draw);
     }
-    $game.statusUpdate({message: msg,input:'status',screen: true,log:false});
+    $game.alert(msg)
   },
 
   //make a response public to all other users
