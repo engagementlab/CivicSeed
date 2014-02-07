@@ -11,9 +11,9 @@ var $log = $game.$log = {
 
   init: function (callback) {
     _setupDomSelectors();
+    $game.$log.ready = true
     $game.log('Welcome to Civic Seed')
     $game.$log.clearUnread()
-    $game.$log.ready = true
     callback()
   },
 
