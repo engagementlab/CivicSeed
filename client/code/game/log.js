@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var $gameLog,
     _unread,

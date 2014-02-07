@@ -289,7 +289,7 @@ var $npc = $game.$npc = {
     $game.$audio.playTriggerFx('npcBubble')
 
     // Set up message
-    $el.find('.speakerName').text(speaker)
+    $el.find('.speaker').text(speaker)
     $el.find('.dialog').show()        // This is sometimes hidden - who hides it?
 
     // Clear any residue of interaction detritus

@@ -483,13 +483,14 @@
 	// 	background #dedede
 	// 	background $csLightGreen
 
-.dialog     // Consider making a generic set of styles for all .dialogs (.resourceContent, .botanistContent, .speechBubble)
-	.speakerName, .speaker
+.dialog
+	.speaker
 		font-size 1.2em
 		font-weight 700
 		color $csBlue
 		&::after
-			content ': '
+			content ':'
+			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the ': ' string
 
 .skinventory
 	.parts

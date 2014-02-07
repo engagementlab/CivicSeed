@@ -451,7 +451,7 @@ var $botanist = $game.$botanist = {
 
 	//determine which content to add and add it
 	addContent: function() {
-		$('.botanistArea .speakerName').text($game.$botanist.name);
+		$('.botanistArea .speaker').text($game.$botanist.name);
 		//if _promptNum is 0, then it is the just showing the riddle no interaction
 		if(_promptNum === 0) {
 			if(_currentSlide === 0) {
