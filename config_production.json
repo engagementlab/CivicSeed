@@ -1,11 +1,12 @@
 {
-  "NAME": "Civic Seed",
-  "PORT": 8000,
-  "USE_REDIS": true,
-  "REDIS_HOST": "localhost",
-  "REDIS_PORT": 6379,
-  "REDIS_DB": "civic_dev_db",
-  "MONGO_URL": "mongodb://localhost/civic_dev_db",
-  "EMAIL_SERVICE": "Mailgun",
-  "CLOUD_PATH": "http://s3.amazonaws.com/civicseed"
+	"NAME": "Civic Seed",
+	"PORT": 8000,
+	"USE_REDIS": true,
+	"REDIS_HOST": "ec2-54-224-148-141.compute-1.amazonaws.com",
+	"REDIS_PORT": 6379,
+	"REDIS_DB": "civic-redis",
+	"MONGO_URL": "mongodb://ip-10-202-153-133.ec2.internal/civicseed_testing",
+	"EMAIL_SERVICE": "Mailgun",
+	"CLOUD_PATH": "http://s3.amazonaws.com/civicseed"
 }
+

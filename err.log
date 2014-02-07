@@ -1,0 +1,957 @@
+Error: Failed to lookup view "/home/ec2-user/CivicSeed/client/views/app.jade"
+    at Function.app.render (/home/ec2-user/CivicSeed/node_modules/express/lib/application.js:495:17)
+    at ServerResponse.res.render (/home/ec2-user/CivicSeed/node_modules/express/lib/response.js:760:7)
+    at Object.handle (/home/ec2-user/CivicSeed/server/controllers/app-control.js:36:8)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at pass (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:110:24)
+    at Router._dispatch (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:33:10)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at Object.methodOverride [as handle] (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/middleware/methodOverride.js:49:5)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+Error: Redis connection to ec2-54-224-148-141.compute-1.amazonaws.com:6379 failed - read ETIMEDOUT
+    at RedisClient.on_error (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:148:24)
+    at Socket.<anonymous> (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:83:14)
+    at Socket.EventEmitter.emit (events.js:95:17)
+    at net.js:411:14
+    at process._tickCallback (node.js:415:13)
+Error: Failed to lookup view "/home/ec2-user/CivicSeed/client/views/app.jade"
+    at Function.app.render (/home/ec2-user/CivicSeed/node_modules/express/lib/application.js:495:17)
+    at ServerResponse.res.render (/home/ec2-user/CivicSeed/node_modules/express/lib/response.js:760:7)
+    at Object.handle (/home/ec2-user/CivicSeed/server/controllers/app-control.js:36:8)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at pass (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:110:24)
+    at Router._dispatch (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:33:10)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at Object.methodOverride [as handle] (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/middleware/methodOverride.js:49:5)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+[31mActive session ID does not match session ID.[39m
+Error: Redis connection to ec2-54-224-148-141.compute-1.amazonaws.com:6379 failed - read ETIMEDOUT
+    at RedisClient.on_error (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:148:24)
+    at Socket.<anonymous> (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:83:14)
+    at Socket.EventEmitter.emit (events.js:95:17)
+    at net.js:411:14
+    at process._tickCallback (node.js:415:13)
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+Error: Failed to lookup view "/home/ec2-user/CivicSeed/client/views/app.jade"
+    at Function.app.render (/home/ec2-user/CivicSeed/node_modules/express/lib/application.js:495:17)
+    at ServerResponse.res.render (/home/ec2-user/CivicSeed/node_modules/express/lib/response.js:760:7)
+    at Object.handle (/home/ec2-user/CivicSeed/server/controllers/app-control.js:36:8)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at pass (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:110:24)
+    at Router._dispatch (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:33:10)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at Object.methodOverride [as handle] (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/middleware/methodOverride.js:49:5)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+TypeError: Cannot read property 'instanceName' of undefined
+    at Function.checkGameSession (/home/ec2-user/CivicSeed/server/rpc/shared/account.js:131:46)
+    at Array.main [as 1] (/home/ec2-user/CivicSeed/node_modules/socketstream/lib/request/responders/rpc/request.js:90:21)
+    at exec (/home/ec2-user/CivicSeed/node_modules/socketstream/lib/request/responders/rpc/request.js:99:23)
+    at /home/ec2-user/CivicSeed/node_modules/socketstream/lib/request/responders/rpc/request.js:100:16
+    at /home/ec2-user/CivicSeed/node_modules/socketstream/lib/request/middleware/internal.js:32:22
+    at /home/ec2-user/CivicSeed/node_modules/socketstream/lib/session/index.js:84:12
+    at /home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/connect/lib/middleware/session/store.js:60:21
+    at /home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/connect-redis/lib/connect-redis.js:100:9
+    at try_callback (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:520:9)
+    at RedisClient.return_reply (/home/ec2-user/CivicSeed/node_modules/socketstream/node_modules/redis/index.js:590:13)
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+Error: Failed to lookup view "/home/ec2-user/CivicSeed/client/views/app.jade"
+    at Function.app.render (/home/ec2-user/CivicSeed/node_modules/express/lib/application.js:495:17)
+    at ServerResponse.res.render (/home/ec2-user/CivicSeed/node_modules/express/lib/response.js:760:7)
+    at Object.handle (/home/ec2-user/CivicSeed/server/controllers/app-control.js:36:8)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at pass (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:110:24)
+    at Router._dispatch (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:173:5)
+    at Object.router (/home/ec2-user/CivicSeed/node_modules/express/lib/router/index.js:33:10)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+    at Object.methodOverride [as handle] (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/middleware/methodOverride.js:49:5)
+    at next (/home/ec2-user/CivicSeed/node_modules/express/node_modules/connect/lib/proto.js:190:15)
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+[31mActive session ID does not match session ID.[39m
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
+
+/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141
+      throw new Error("Error parsing your JSON configuration file: [" + self.f
+            ^
+Error: Error parsing your JSON configuration file: [/home/ec2-user/CivicSeed/config_production.json].
+    at File.loadSync (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/stores/file.js:141:13)
+    at Provider.add (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:135:23)
+    at Provider.file (/home/ec2-user/CivicSeed/node_modules/nconf/lib/nconf/provider.js:61:15)
+    at Object.<anonymous> (/home/ec2-user/CivicSeed/config.js:13:20)
+    at Module._compile (module.js:456:26)
+    at Object.Module._extensions..js (module.js:474:10)
+    at Module.load (module.js:356:32)
+    at Function.Module._load (module.js:312:12)
+    at Module.require (module.js:364:17)
+    at require (module.js:380:17)
