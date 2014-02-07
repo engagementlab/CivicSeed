@@ -4,9 +4,7 @@ var $chatText,
 	$chatBox,
 	$inventory,
 	$progressArea,
-	$gameLog,
-	_helpShowing,
-	_logShowing
+	_helpShowing
 
 var $input = $game.$input = module.exports = {
 
@@ -15,9 +13,7 @@ var $input = $game.$input = module.exports = {
 		$chatBox = $('.chatBox');
 		$inventory = $('.inventory');
 		$progressArea = $('.progressArea');
-		$gameLog = $('.gameLog');
 		_helpShowing = false;
-		_logShowing = false;
 	},
 
 	init: function() {
@@ -200,28 +196,14 @@ var $input = $game.$input = module.exports = {
 			return false;
 		});
 
-		//open the game log
-		$BODY.on('click', '.logButton', function () {
-			var h = $(window).height();
-			$('html, body').stop().animate({
-            	scrollTop: h
-        	}, 250);
-        		$game.$log.clearUnread();
-			// var goAhead = startNewAction();
-			// if(goAhead || _logShowing) {
-			// 	_logShowing = !_logShowing;
-			// 	$('.logButton').toggleClass('hud-button-active');
-			// 	$gameLog.fadeToggle();
-			// 	$gameLog.scrollTop($gameLog[0].scrollHeight);
-			// 	$game.$log.clearUnread();
-			// }
-			// return false;
-		});
+    //open the game log
+    $BODY.on('click', '.hud-log-button', function () {
+      $input.toggleGameLog()
+    })
 
-		$BODY.on('click', '.gameLog', function() {
+		$BODY.on('click', '#game-log', function() {
 			$game.$log.clearUnread();
 		});
-
 
 		//close botanist window
 		$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
@@ -332,7 +314,7 @@ var $input = $game.$input = module.exports = {
 		//decide if we should or should not let buttons be clicked based on state
 		var startNewAction = function() {
 			//check all the game states (if windows are open ,in transit, etc.) to begin a new action
-			// console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !_logShowing, !$game.$boss.isShowing);
+			// console.log(!$game.inTransit, !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !$game.$boss.isShowing);
 			// !$game.$player.inventoryShowing
 			return (
         !$game.inTransit &&
@@ -343,7 +325,6 @@ var $input = $game.$input = module.exports = {
         $game.running &&
         !$game.$botanist.isChat &&
         !_helpShowing &&
-        !_logShowing &&
         !$game.$boss.isShowing &&
         !$game.showingSkinventory
       ) ? true : false
@@ -438,6 +419,10 @@ var $input = $game.$input = module.exports = {
         case 67:  // 'c'
           // Changing room
           $input.toggleSkinventory()
+          break
+        case 76:  // 'l'
+          // Game log
+          $input.toggleGameLog()
           break
         case 80:  // 'p'
           // Progress
@@ -572,6 +557,23 @@ var $input = $game.$input = module.exports = {
     $('.skinventory').hide()
   },
 
+  toggleGameLog: function () {
+    $game.$log.clearUnread()
+
+    if (!$('#game-log').is(':visible')) {
+      $('#game-log-overlay').hide()
+      var h = $(window).height();
+      $('html, body').stop().animate({
+        scrollTop: h
+      }, 250);
+      $('#game-log').show()
+    }
+    else {
+      $('#game-log').hide()
+      $('#game-log-overlay').fadeIn(200)
+    }
+  },
+
   toggleProgress: function () {
     $game.showingProgress = !$game.showingProgress
     if ($game.showingProgress) {
@@ -613,7 +615,6 @@ var $input = $game.$input = module.exports = {
 
 	resetInit: function() {
 		_helpShowing = null;
-		_logShowing = null;
 	}
 
 }

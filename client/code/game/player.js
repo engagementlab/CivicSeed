@@ -880,7 +880,7 @@ var $player = $game.$player = {
 
   //show a bubble over visited npcs of how many comments there are
   displayNpcComments: function() {
-    $('.npcBubble').remove();
+    $('.npc-bubble').remove();
     var npcs = $game.$npc.getOnScreenNpcs();
     //go thru each npc and see if they are in player resources
     for (var n = 0; n < npcs.length; n++) {
@@ -893,7 +893,7 @@ var $player = $game.$player = {
         } else {
           num = '*';
         }
-        var bubble = $('<p class="npcBubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
+        var bubble = $('<p class="npc-bubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
         $gameboard.append(bubble);
         $('#' + npcId).css({
           top: npcInfo.y - 68,

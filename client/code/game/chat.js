@@ -18,17 +18,17 @@ $game.$chat = {
 		_chatIdSelector = null;
 	},
 
-	message: function(data) {
-		var message = data.message,
-			other = false;
+  message: function (data) {
+    var message = data.message,
+        other = false;
 
 		if(data.name !== $game.$player.firstName) {
 			other = data;
 		}
 
-		var len = message.length + 4,
-			fadeTime = len * 150 + 1000,
-			sz = Math.floor(len * 8) + 20;
+    var len = message.length + 4,
+        fadeTime = len * 150 + 1000,
+        sz = Math.floor(len * 8) + 20;
 		fadeTime = (fadeTime > 11500) ? 11500 : fadeTime;
 		//this was the client's message
 		if(!other) {
@@ -104,7 +104,7 @@ function _placeChat(sz, other) {
   // To add further adjustment, edit the adjustY variable.
   // adjustY - positive integers cause it to move up, negative moves down.
   if (position.y <= 1 * $game.TILE_SIZE) {
-    // Prevent bubble from appearing above the gameboard if 
+    // Prevent bubble from appearing above the gameboard if
     // player is standing within the top two rows.
     placeY = $game.TILE_SIZE - adjustY
   }
@@ -125,5 +125,5 @@ function _placeChat(sz, other) {
 			'width': sz
 		});
 	}
-	
+
 }

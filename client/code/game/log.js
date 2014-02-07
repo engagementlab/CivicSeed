@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 var $gameLog,
     _unread,
@@ -7,15 +7,15 @@ var $gameLog,
 
 var $log = $game.$log = {
 
-	ready: false,
+  ready: false,
 
-	init: function(callback) {
-		_setupDomSelectors();
-		$game.$log.clearUnread();
-		$game.$log.ready = true;
-		$game.log('Welcome to Civic Seed')
-		callback();
-	},
+  init: function (callback) {
+    _setupDomSelectors();
+    $game.log('Welcome to Civic Seed')
+    $game.$log.clearUnread()
+    $game.$log.ready = true
+    callback()
+  },
 
 	resetInit: function() {
 		_unread = null;
@@ -25,18 +25,21 @@ var $log = $game.$log = {
 	},
 
 	//add message to game log
-	addMessage: function(data) {
+	addMessage: function (data) {
 		//update unread messages icon number
-		if($game.$log.ready) {
-			_unread++;
-			_numItems++;
-			var hudText = _unread;
-			if(_unread > 10) {
-				hudText = '10+';
-				$game.alert('There are new messages in your game log below');
-			}
+		if ($game.$log.ready) {
 
-      $game.setBadgeCount('.logButton', hudText)
+      if ($('#game-log').is(':visible')) {
+        _unread++;
+        _numItems++;
+        var hudText = _unread;
+        if(_unread > 10) {
+          hudText = '10+';
+          $game.alert('There are new messages in your game log below');
+        }
+
+        $game.setBadgeCount('.hud-log-button', hudText)
+      }
 
 			var	date = Date(),
 				displayDate = date.substring(0,10) + date.substring(15,24),
@@ -49,9 +52,16 @@ var $log = $game.$log = {
 				html += data.message + '</p>';
 			}
 			if(_numItems > _maxItems) {
-				$('.gameLog p').last().remove();
+				$('#game-log p').last().remove();
+				$('#game-log-overlay p').last().remove()
 			}
 			$gameLog.prepend(html);
+
+      // Add to game log overlay and scroll it
+      var overlay = document.getElementById('game-log-overlay')
+      overlay.innerHTML += html
+      overlay.scrollTop = overlay.scrollHeight
+
 			// $gameLog.scrollTop($gameLog[0].scrollHeight);
 			// $gameLog.scrollTop(0);
 		}
@@ -59,11 +69,11 @@ var $log = $game.$log = {
 	},
 
 	clearUnread: function() {
-    $game.setBadgeCount('.logButton', 0)
+    $game.setBadgeCount('.hud-log-button', 0)
 		_unread = 0;
 	}
 };
 
 function _setupDomSelectors() {
-	$gameLog = $('.gameLog');
+	$gameLog = $('#game-log');
 }

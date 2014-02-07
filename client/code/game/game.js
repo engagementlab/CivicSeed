@@ -236,7 +236,7 @@ var $game = module.exports = {
     _stepNumber = 0;
     $game.$chat.hideChat();
     $game.$others.hideAllChats();
-    $('.npcBubble').remove();
+    $('.npc-bubble').remove();
     $game.stepTransition();
   },
 

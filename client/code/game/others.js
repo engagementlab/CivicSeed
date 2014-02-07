@@ -346,7 +346,8 @@ $game.$others = {
 				}
 			},
 
-			message: function(data) {
+			message: function (data) {
+				// Display over other player's head if onscreen
 				if(!otherPlayer.offScreen) {
 					var position = {x: otherPlayer.renderInfo.curX, y: otherPlayer.renderInfo.curY};
 					data.isChatting = otherPlayer.isChatting;
@@ -358,9 +359,10 @@ $game.$others = {
 					otherPlayer.isChatting = true;
 					var fadeTime = $game.$chat.message(data);
 					otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat, fadeTime);
-				} else {
-					$game.$log.addMessage(data);
 				}
+
+				// Display message in game log regardless
+				$game.$log.addMessage(data)
 			},
 
 			hideChat: function() {
