@@ -48,8 +48,10 @@ Certain variables, like authentication credentials, should not be stored in conf
 * `EMAIL_USER` - User account name for the mailing service used by Nodemailer.
 * `EMAIL_PW` - Account password for the mailing service used by Nodemailer.
 * `EMAIL_TO` - E-mail address that feedback from within Civic Seed should be sent to.
+* `NODE_ENV` - Set to `production` on Amazon S3 and `heroku` on Heroku.
+* `SS_ENV` - Set to `production` on Amazon S3.
 
-Your actual environment (e.g. Heroku or Amazon S3) may set other environment variables (e.g. `NODE_ENV` or `MONGOHQ_URL`).
+Your actual environment (e.g. Heroku or Amazon S3) may set other environment variables (e.g. `MONGOHQ_URL`).
 
 To pass environment variables directly to Civic Seed without storing it, type any number of them consecutively before running `npm start`, for instance: `EMAIL_USER=user@domain.com EMAIL_PW=password EMAIL_TO=otheruser@otherdomain.com npm start`
 
@@ -163,9 +165,13 @@ To run the REDIS database as a daemon:
 
 ### Deployment
 
-Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.) You'll need to use the `sudo` command if you're using a production client port lower than 1024:
+Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.) 
 
-	$ sudo NODE_ENV=production SS_ENV=production SS_PACK=1 npm start
+	$ SS_ENV=production SS_PACK=1 npm start
+
+You'll need to use the `sudo` command if you're using a production client port lower than 1024:
+
+	$ sudo SS_ENV=production SS_PACK=1 npm start
 
 Once the app is running and assets are packed, make sure to commit the compiled assets (`/client/assets/*`) to git and push them up to where you're hosting static assets.
 
@@ -215,6 +221,7 @@ Other helps:
 Civic Seed can be installed from GitHub. Civic Seed also relies on forever to keep the app running, so make sure to install this as a global dependency. SSH into the AWS Node.js instance and run:
 
 	$ git clone https://github.com/engagementgamelab/CivicSeed.git ~/CivicSeed
+	$ npm install
 	$ npm install -g forever
 
 #### Start Up
@@ -222,12 +229,19 @@ Civic Seed can be installed from GitHub. Civic Seed also relies on forever to ke
 To start the app:
 
 	$ cd ~/CivicSeed/
-	$ NODE_ENV=production SS_ENV=production forever -o out.log -e err.log start bin/server
+	$ forever -o out.log -e err.log start bin/server
 
 If the app is already running, to avoid downtime, use the restart command instead (for example, if you've just updated using `git pull`):
 
-	$ git pull # optional command, for updating the app
-	$ NODE_ENV=production SS_ENV=production forever -o out.log -e err.log restart bin/server
+	$ forever -o out.log -e err.log restart bin/server
+
+#### Updating the App
+
+	$ git pull origin
+	$ npm update
+	$ forever -o out.log -e err.log restart bin/server
+
+#### Troubleshooting
 
 You can list check the running instance:
 
@@ -237,6 +251,10 @@ Or check the logs:
 
 	$ cat err.log
 	$ cat out.log
+
+To check the environment variables:
+
+	$ set
 
 To actually stop the server:
 
