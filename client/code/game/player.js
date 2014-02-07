@@ -993,7 +993,7 @@ var $player = $game.$player = {
       $game.$player.seedMode = false;
       $BODY.off('mousedown touchstart', '.gameboard');
       $game.$player.seedPlanting = false;
-      $game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
+      $game.alert('You are out of seeds!')
       _saveSeedsToDB();
     }
   },
@@ -1193,7 +1193,7 @@ function _sendSeedBomb(data) {
           $game.$player.seedMode = false;
           _renderInfo.colorNum = _playerColorNum;
           $game.$player.seedPlanting = false;
-          $game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
+          $game.alert('You are out of seeds!')
           $('.seedButton').removeClass('hud-button-active');
           $game.$player.saveMapImage(true);
           //TODO: save seed values to DB
@@ -1209,7 +1209,7 @@ function _sendSeedBomb(data) {
           _renderInfo.colorNum = _playerColorNum;
           $game.$player.seedPlanting = false;
           $graffiti.hide();
-          $game.statusUpdate({message:'you are out of seeds!',input:'status',screen: true,log:false});
+          $game.alert('You are out of seeds!')
           $('.seedButton').removeClass('hud-button-active');
           $game.$player.saveMapImage(true);
           //TODO: save seed values to DB

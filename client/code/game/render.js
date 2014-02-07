@@ -58,20 +58,22 @@ var $renderer = $game.$renderer = {
     if (window.devicePixelRatio) {
       console.log('Pixel density is = ' + window.devicePixelRatio)
       $game.PIXEL_RATIO = window.devicePixelRatio
+      // Debug: set PIXEL_RATIO to 1 to force native scaling
+      // $game.PIXEL_RATIO = 1
     }
 
     // Create offscreen canvases for optimized rendering
-    _offscreenBackgroundContext = this._createCanvas('offscreenBackground')
+    _offscreenBackgroundContext = _renderer.createCanvas('offscreenBackground')
 
     // Access the canvases for rendering
     // Tiles are currently unscaled because scaling it causes some artifacting
     _backgroundContext    = document.getElementById('background').getContext('2d')
-    //_backgroundContext = _initCanvas('background')
+    //_backgroundContext = _renderer.initCanvas('background')
     _foregroundContext    = document.getElementById('foreground').getContext('2d')
-    _charactersContext    = this._initCanvas('characters')
-    _interfaceContext     = this._initCanvas('interface')
-    _minimapPlayerContext = this._initCanvas('minimapPlayer')
-    _minimapTileContext   = this._initCanvas('minimapTile')
+    _charactersContext    = _renderer.initCanvas('characters')
+    _interfaceContext     = _renderer.initCanvas('interface')
+    _minimapPlayerContext = _renderer.initCanvas('minimapPlayer')
+    _minimapTileContext   = _renderer.initCanvas('minimapTile')
 
     // Interface canvas - style for player names
     _interfaceContext.shadowColor  = '#000'
@@ -805,7 +807,7 @@ var $renderer = $game.$renderer = {
   },
 
   pingMinimap: function (x, y) {
-    var context = this._createCanvas('minimap-ping', 142, 132, true, {
+    var context = _renderer.createCanvas('minimap-ping', 142, 132, true, {
       right: '0',
       zIndex: '6'
     })
@@ -956,9 +958,18 @@ var $renderer = $game.$renderer = {
       $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
       $game.VIEWPORT
     );
-  },
+  }
+}
 
-  _createCanvas: function  (elementId, width, height, onDom, styles) {
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _renderer = {
+
+  createCanvas: function  (elementId, width, height, onDom, styles) {
     var el    = document.createElement('canvas')
     el.id     = elementId
     // Width and height, if not provided, is equal to gameboard dimensions.
@@ -972,10 +983,10 @@ var $renderer = $game.$renderer = {
       $('.gameboard').append(el)
     }
 
-    return this._initCanvas(el)
+    return this.initCanvas(el)
   },
 
-  _initCanvas: function (element) {
+  initCanvas: function (element) {
     var el      = (typeof element === 'object') ? element : document.getElementById(element),
         context = el.getContext('2d'),
         width   = el.width,
@@ -992,4 +1003,5 @@ var $renderer = $game.$renderer = {
 
     return context
   }
-};
+
+}
