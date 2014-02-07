@@ -781,12 +781,12 @@ var $player = $game.$player = {
   },
 
   //transport player back to botanist's garden, magically
-  beamMeUpScotty: function(place) {
+  beamMeUpScotty: function (place) {
     $game.inTransit = true;
     //x any y are viewport coords
     $('.beamMeUp').show();
-    _info.x = 70;
-    _info.y = 74;
+    _info.x = place[0] || 70;
+    _info.y = place[1] || 74;
     _renderInfo.curX = _info.x * $game.TILE_SIZE;
     _renderInfo.curY = _info.y * $game.TILE_SIZE;
     _renderInfo.prevX = _info.x * $game.TILE_SIZE;

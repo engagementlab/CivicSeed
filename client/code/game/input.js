@@ -190,12 +190,12 @@ var $input = $game.$input = module.exports = {
 					instanceName: $game.$player.instanceName
 				};
 			$game.$audio.playTriggerFx('chatSend');
-			// Check for cheat codes
-      if ($game.$input.cheat(data.msg) === false) {
-        ss.rpc('game.chat.sendMessage', data, function(r) {
+			// Check for chat triggers (e.g. cheat codes)
+      if (_input.trigger(data.msg) === false && _input.cheat(data.msg) === false) {
+        ss.rpc('game.chat.sendMessage', data, function (r) {
           //nothing here...
         });
-			} 
+			}
 			$chatText.val('');
 			return false;
 		});
@@ -611,48 +611,42 @@ var $input = $game.$input = module.exports = {
     $('.muteButton i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
   },
 
-  cheat: function (input) {
-    switch (input.toLowerCase()) {
-      case 'beam me up scotty':
-      case 'beam me up, Scotty!':   // Legacy cheat with punctuation
-        $game.$input._cheatActivated('Teleporting to botanist.')
-        $game.$player.beamMeUpScotty()
+	resetInit: function() {
+		_helpShowing = null;
+		_logShowing = null;
+	}
+
+}
+
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _input = {
+
+  // Inputs for game activities
+  trigger: function (input) {
+    switch (input) {
+      case 'FOREST':
+        _input.triggerMessage('Teleporting to ' + $game.world.northwest.name + '!')
+        $game.$player.beamMeUpScotty([15, 22])
         break
-      case 'show me the money':
-        $game.$input._cheatActivated('Adding 200 seeds.')
-        $game.$player.addSeeds('regular', 200)
+      case 'TOWN':
+        _input.triggerMessage('Teleporting to ' + $game.world.northeast.name + '!')
+        $game.$player.beamMeUpScotty([99, 29])
         break
-      case 'like one of your french girls':
-        $game.$input._cheatActivated('Adding 200 paint seeds.')
-        $game.$player.addSeeds('draw', 200)
+      case 'RANCH':
+        _input.triggerMessage('Teleporting to ' + $game.world.southwest.name + '!')
+        $game.$player.beamMeUpScotty([131, 96])
         break
-      case 'loki':
-        $game.$input._cheatActivated('Debug seed amount.')
-        $game.$player.setSeeds('regular', 0)
-        $game.$player.setSeeds('draw', 3)
-        break
-      case 'ding me':
-        $game.$input._cheatActivated('Leveling up!')
-        $game.$player.nextLevel()
-        break
-      case 'suit alors':
-        $game.$input._cheatActivated('All suits unlocked!')
-        for (var skin in $game.$skins.data.sets) {
-          $game.$skins.unlockSkin(skin)
-        }
-        break
-      case 'birthday suit':
-        $game.$input._cheatActivated('All suits removed!')
-        $game.$skins.resetSkinventory()
-        break
-      case 'pleasantville':
-        $game.$input._cheatActivated('Welcome to Pleasantville!')
-        $game.bossModeUnlocked = true
-        $game.$player.currentLevel = 4
-        $game.$boss.init()
+      case 'PORT':
+        _input.triggerMessage('Teleporting to ' + $game.world.southeast.name + '!')
+        $game.$player.beamMeUpScotty([47, 99])
         break
       case 'kazaam':
-        $game.$input._cheatActivated('Starting collaborative challenge.')
+        _input.triggerMessage('Starting collaborative challenge.')
         ss.rpc('game.player.collaborativeChallenge', function (err) {
           //nothing here...
           if (err) {
@@ -665,14 +659,65 @@ var $input = $game.$input = module.exports = {
     }
   },
 
-  _cheatActivated: function (message) {
-    var cheatMessage = '<span class="color-lightpurple">[Cheat code activated]</span>'
-    $game.log(cheatMessage + ' ' + message)
+  // Cheats only
+  cheat: function (input) {
+    switch (input.toLowerCase()) {
+      case 'beam me up scotty':
+      case 'beam me up, Scotty!':   // Legacy cheat with punctuation
+        _input.cheatMessage('Teleporting to botanist.')
+        $game.$player.beamMeUpScotty([70, 74])
+        break
+      case 'show me the money':
+        _input.cheatMessage('Adding 200 seeds.')
+        $game.$player.addSeeds('regular', 200)
+        break
+      case 'like one of your french girls':
+        _input.cheatMessage('Adding 200 paint seeds.')
+        $game.$player.addSeeds('draw', 200)
+        break
+      case 'loki':
+        _input.cheatMessage('Debug seed amount.')
+        $game.$player.setSeeds('regular', 0)
+        $game.$player.setSeeds('draw', 3)
+        break
+      case 'ding me':
+        _input.cheatMessage('Leveling up!')
+        $game.$player.nextLevel()
+        break
+      case 'suit alors':
+        _input.cheatMessage('All suits unlocked!')
+        for (var skin in $game.$skins.data.sets) {
+          $game.$skins.unlockSkin(skin)
+        }
+        break
+      case 'birthday suit':
+        _input.cheatMessage('All suits removed!')
+        $game.$skins.resetSkinventory()
+        break
+      case 'pleasantville':
+        _input.cheatMessage('Welcome to Pleasantville!')
+        $game.bossModeUnlocked = true
+        $game.$player.currentLevel = 4
+        $game.$boss.init()
+        break
+      default:
+        return false
+    }
   },
 
-	resetInit: function() {
-		_helpShowing = null;
-		_logShowing = null;
-	}
+  log: function (color, tag, message) {
+    $game.log('<span class="color-' + color + '">[' + tag + ']</span>' + ' ' + message)
+  },
 
-};
+  triggerMessage: function (message) {
+    this.log('lightpurple', 'Game trigger activated', message)
+  },
+
+  cheatMessage: function (message) {
+    this.log('yellow', 'Cheat code activated', message)
+  },
+
+
+}
+
+
