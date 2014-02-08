@@ -291,7 +291,7 @@ var $input = $game.$input = module.exports = {
           $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
           if ($game.$player.checkFlag('pledge-reward')) {
             $game.$player.addSeeds('draw', 10)
-            _input.triggerMessage('You gained 10 paintbrush seeds for seeding another player’s response.')
+            _input.outfitLog('You gained 10 paintbrush seeds for seeding another player’s response.')
           }
 				});
 			}
@@ -646,34 +646,34 @@ var _input = {
     switch (input) {
       case 'FOREST':
         if ($game.$player.checkFlag('teleport-forest')) {
-          _input.triggerMessage('Teleporting to ' + $game.world.northwest.name + '!')
+          _input.outfitLog('Teleporting to ' + $game.world.northwest.name + '!')
           $game.$player.beamMeUpScotty([15, 22])
         }
         else return false
         break
       case 'TOWN':
         if ($game.$player.checkFlag('teleport-town')) {
-          _input.triggerMessage('Teleporting to ' + $game.world.northeast.name + '!')
+          _input.outfitLog('Teleporting to ' + $game.world.northeast.name + '!')
           $game.$player.beamMeUpScotty([99, 29])
         }
         else return false
         break
       case 'RANCH':
         if ($game.$player.checkFlag('teleport-ranch')) {
-          _input.triggerMessage('Teleporting to ' + $game.world.southeast.name + '!')
+          _input.outfitLog('Teleporting to ' + $game.world.southeast.name + '!')
           $game.$player.beamMeUpScotty([131, 96])
         }
         else return false
         break
       case 'PORT':
         if ($game.$player.checkFlag('teleport-port')) {
-          _input.triggerMessage('Teleporting to ' + $game.world.southwest.name + '!')
+          _input.outfitLog('Teleporting to ' + $game.world.southwest.name + '!')
           $game.$player.beamMeUpScotty([47, 99])
         }
         else return false
         break
       case 'kazaam':
-        _input.triggerMessage('Starting collaborative challenge.')
+        _input.outfitLog('Starting collaborative challenge.')
         ss.rpc('game.player.collaborativeChallenge', function (err) {
           //nothing here...
           if (err) {
@@ -691,38 +691,38 @@ var _input = {
     switch (input.toLowerCase()) {
       case 'beam me up scotty':
       case 'beam me up, Scotty!':   // Legacy cheat with punctuation
-        _input.cheatMessage('Teleporting to botanist.')
+        _input.cheatLog('Teleporting to botanist.')
         $game.$player.beamMeUpScotty([70, 74])
         break
       case 'show me the money':
-        _input.cheatMessage('Adding 200 seeds.')
+        _input.cheatLog('Adding 200 seeds.')
         $game.$player.addSeeds('regular', 200)
         break
       case 'like one of your french girls':
-        _input.cheatMessage('Adding 200 paint seeds.')
+        _input.cheatLog('Adding 200 paint seeds.')
         $game.$player.addSeeds('draw', 200)
         break
       case 'loki':
-        _input.cheatMessage('Debug seed amount.')
+        _input.cheatLog('Debug seed amount.')
         $game.$player.setSeeds('regular', 0)
         $game.$player.setSeeds('draw', 3)
         break
       case 'ding me':
-        _input.cheatMessage('Leveling up!')
+        _input.cheatLog('Leveling up!')
         $game.$player.nextLevel()
         break
       case 'suit alors':
-        _input.cheatMessage('All suits unlocked!')
+        _input.cheatLog('All suits unlocked!')
         for (var skin in $game.$skins.data.sets) {
           $game.$skins.unlockSkin(skin)
         }
         break
       case 'birthday suit':
-        _input.cheatMessage('All suits removed!')
+        _input.cheatLog('All suits removed!')
         $game.$skins.resetSkinventory()
         break
       case 'pleasantville':
-        _input.cheatMessage('Welcome to Pleasantville!')
+        _input.cheatLog('Welcome to Pleasantville!')
         $game.bossModeUnlocked = true
         $game.$player.currentLevel = 4
         $game.$boss.init()
@@ -736,11 +736,11 @@ var _input = {
     $game.log('<span class="color-' + color + '">[' + tag + ']</span>' + ' ' + message)
   },
 
-  triggerMessage: function (message) {
-    this.log('lightpurple', 'Skin effect activated', message)
+  outfitLog: function (message) {
+    this.log('lightpurple', 'Outfit effect', message)
   },
 
-  cheatMessage: function (message) {
+  cheatLog: function (message) {
     this.log('yellow', 'Cheat code activated', message)
   },
 
