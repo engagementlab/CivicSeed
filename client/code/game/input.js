@@ -169,7 +169,7 @@ var $input = $game.$input = module.exports = {
 
     // ************* OTHER GAMEBOARD HUD ELEMENTS *************
 
-    $BODY.on('click', '.speechBubble, .inventory', function (e) {
+    $BODY.on('click', '#speech-bubble, .inventory', function (e) {
       // Prevent clicking on interface elements from interacting with gameboard below
       e.stopImmediatePropagation()
     })

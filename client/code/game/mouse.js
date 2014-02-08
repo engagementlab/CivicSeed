@@ -121,7 +121,7 @@ $game.$mouse = {
 							}
 							else {
 								//show botanist stuff cuz you clicked him!
-								$('.speechBubble button').hide();
+								$('#speech-bubble button').hide();
 								$game.$botanist.show();
 							}
 						}

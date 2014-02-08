@@ -277,10 +277,16 @@ var $npc = $game.$npc = {
 
   // Show an NPC's speech bubble
   showSpeechBubble: function (speaker, messages, prompt, callback) {
-    var $el           = $('.speechBubble'),
+    var el            = document.getElementById('speech-bubble'),
+        $el           = $(el),
         hasPrompt     = false,
         isMultiline   = false,
         text          = null
+
+    // If a speech bubble is currently open, just hide it quickly so that text change can happen
+    if ($el.is(':visible')) {
+      el.style.display = 'none'
+    }
 
     // Set global chat state
     $npc.isChat = true
@@ -290,14 +296,14 @@ var $npc = $game.$npc = {
 
     // Set up message
     $el.find('.speaker').text(speaker)
-    $el.find('.dialog').show()        // This is sometimes hidden - who hides it?
+    // $el.find('.dialog').show()        // This is sometimes hidden - who hides it?
 
     // Clear any residue of interaction detritus
     $el.find('.dialog').removeClass('fit')
     $el.find('button').hide()
 
     if (_.isArray(messages)) {
-      // An array of strings is acceptable as for messages.
+      // An array of strings is acceptable for messages.
       // This would create 'next' buttons until the full array of messages have been displayed.
       // If a prompt is provided, the prompt will always be on the last message.
       // Callbacks are not performed until the player clicks 'Close' of the speech bubble.
@@ -400,7 +406,7 @@ var $npc = $game.$npc = {
   // Hide an NPC's chat bubble
   hideSpeechBubble: function (callback) {
     clearTimeout($game.$npc.hideTimer)
-    var $el = $('.speechBubble')
+    var $el = $('#speech-bubble')
 
     $game.$npc.isChat = false
     $el.find('.nextButton').off('click')
