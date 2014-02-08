@@ -70,18 +70,15 @@ var $resources = $game.$resources = {
     // Close the inventory, then show resource and bind a function that returns to inventory on close
     $game.$input.closeInventory(function () {
       $resources.showResource(index)
-      el.querySelector('.close-button, .close-overlay').addEventListener('click', _onClose)
+      el.querySelector('.close-button, .close-overlay').addEventListener('click', function _onClose () {
+        $game.$input.openInventory()
+        // TODO: CHECK IF FOLLOWING LINE IS NECESSARY.
+        // This is logic for controlling whether inventory state is remembered
+        // when a player is examining items while solving the botanist's puzzle.
+        $game.$player.inventoryShowing = ($game.$botanist.isSolving) ? false : true
+        this.removeEventListener('click', _onClose)
+      })
     })
-
-    function _onClose () {
-      /*jshint validthis: true */
-      $game.$input.openInventory()
-      // TODO: CHECK IF FOLLOWING LINE IS NECESSARY.
-      // This is logic for controlling whether inventory state is remembered
-      // when a player is examining items while solving the botanist's puzzle.
-      $game.$player.inventoryShowing = ($game.$botanist.isSolving) ? false : true
-      this.removeEventListener('click', _onClose)
-    }
   },
 
   // Hide the resource area

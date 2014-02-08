@@ -11,24 +11,24 @@ var $skins = $game.$skins = {
         'name': 'Default Look',
         'description': 'This is you. You look great!',
         'effect': null,
-        'modifiers': null,
+        'flag': null,
         'head': {
           'name': 'Default Head',
           'description': 'Your beautiful face.',
           'effect': null,
-          'modifiers': null
+          'flag': null
         },
         'torso': {
           'name': 'Default Body',
           'description': 'Your heart is in here somewhere.',
           'effect': null,
-          'modifiers': null
+          'flag': null
         },
         'legs': {
           'name': 'Default Legs',
           'description': 'These legs are made for walking.',
           'effect': null,
-          'modifiers': null
+          'flag': null
         }
       },
       'tuxedo': {
@@ -36,24 +36,24 @@ var $skins = $game.$skins = {
         'name': 'Tuxedo',
         'description': '',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Tuxedo Mask',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Tuxedo Jacket',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Tuxedo Pants',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'lion': {
@@ -61,24 +61,24 @@ var $skins = $game.$skins = {
         'name': 'Lion',
         'description': '',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Lion Head',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Lion Body',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Lion Legs',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'cactus': {
@@ -86,24 +86,24 @@ var $skins = $game.$skins = {
         'name': 'Cactus',
         'description': '',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Cactus Head',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Cactus Body',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Cactus Legs',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'cone': {
@@ -111,24 +111,24 @@ var $skins = $game.$skins = {
         'name': 'Ice Cream Cone',
         'description': 'You look delicious.',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Strawberry Scoop',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Sugar Cone Top',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Sugar Cone Bottom',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'astronaut': {
@@ -136,24 +136,24 @@ var $skins = $game.$skins = {
         'name': 'Astronaut',
         'description': 'This allows you to explore in space.',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Space Helmet',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Space Suit',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Space Pants',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'ninja': {
@@ -161,24 +161,24 @@ var $skins = $game.$skins = {
         'name': 'Ninja',
         'description': 'A shady ninja costume.',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Ninja Mask',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Ninja Gi',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Ninja Pants',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'horse': {
@@ -186,24 +186,24 @@ var $skins = $game.$skins = {
         'name': 'Horse',
         'description': 'You’re a horse!',
         'effect': 'You walk a lot faster!',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Horse Head',
           'description': '',
           'effect': 'You walk slightly faster.',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Horse Body',
           'description': '',
           'effect': 'You walk slightly faster.',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Horse Legs',
           'description': '',
           'effect': 'You walk slightly faster.',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'penguin': {
@@ -211,24 +211,24 @@ var $skins = $game.$skins = {
         'name': 'Penguin',
         'description': '',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Penguin Head',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Penguin Suit',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Penguin Feet',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'dinosaur': {
@@ -236,24 +236,24 @@ var $skins = $game.$skins = {
         'name': 'Dinosaur',
         'description': '',
         'effect': '',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Dinosaur Head',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Dinosaur Body',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Dinosaur Legs',
           'description': '',
           'effect': '',
-          'modifiers': ''
+          'flag': ''
         }
       },
       'octopus': {
@@ -261,24 +261,24 @@ var $skins = $game.$skins = {
         'name': 'Octopus',
         'description': '',
         'effect': 'Your paint radius goes up by three.',
-        'modifiers': '',
+        'flag': '',
         'head': {
           'name': 'Octopus Head',
           'description': '',
           'effect': 'Your paint radius goes up by one.',
-          'modifiers': ''
+          'flag': ''
         },
         'torso': {
           'name': 'Octopus Body',
           'description': '',
           'effect': 'Your paint radius goes up by one.',
-          'modifiers': ''
+          'flag': ''
         },
         'legs': {
           'name': 'Eight Legs',
           'description': '',
           'effect': 'Your paint radius goes up by one.',
-          'modifiers': ''
+          'flag': ''
         }
       }
     },
@@ -288,7 +288,7 @@ var $skins = $game.$skins = {
         'name': 'Forest Hunter',
         'description': 'You stalk the forest like the lion ninja you are.',
         'effect': 'You can teleport to the forest! Just chat FOREST (all caps)',
-        'modifiers': null,
+        'flag': 'teleport-forest',
         'parts': {
           'head': 'lion',
           'torso': 'ninja',
@@ -300,7 +300,7 @@ var $skins = $game.$skins = {
         'name': 'Sub-Mariner',
         'description': 'You are at home in aquatic environments.',
         'effect': 'You can teleport to the port! Just chat PORT (all caps)',
-        'modifiers': null,
+        'flag': 'teleport-port',
         'parts': {
           'head': 'penguin',
           'torso': 'ninja',
@@ -312,7 +312,7 @@ var $skins = $game.$skins = {
         'name': 'Ranch Ronin',
         'description': 'The stealth cactus could be anywhere.',
         'effect': 'You can teleport to the ranch! Just chat RANCH (all caps)',
-        'modifiers': null,
+        'flag': 'teleport-ranch',
         'parts': {
           'head': 'cactus',
           'torso': 'ninja',
@@ -324,7 +324,7 @@ var $skins = $game.$skins = {
         'name': 'Ninja Mayor',
         'description': 'You’re the king or queen of town.',
         'effect': 'You can teleport to Calliope Town Square! Just chat TOWN (all caps)',
-        'modifiers': null,
+        'flag': 'teleport-town',
         'parts': {
           'head': 'tuxedo',
           'torso': 'ninja',
@@ -334,9 +334,9 @@ var $skins = $game.$skins = {
       'sprinkle': {
         'id': 'sprinkle',
         'name': 'Sprinklesaurus Rex',
-        'description': 'A cold-blooded cone with extra sprinkles',
-        'effect': 'You gain 10 paintbrush seeds every time you click “Seed it!” on a friend’s response',
-        'modifiers': null,
+        'description': 'A cold-blooded cone with extra sprinkles.',
+        'effect': 'You gain 10 paintbrush seeds every time you click “Seed it!” on a friend’s response.',
+        'flag': 'pledge-reward',
         'parts': {
           'head': 'dinosaur',
           'torso': 'cone',
@@ -380,7 +380,7 @@ var $skins = $game.$skins = {
 
     // Update skinventory
     $skins.updateSkinventory(skin)
-    _updatePlayer(playerSkin)
+    _skins.updatePlayer(playerSkin)
   },
 
   updateSkinventory: function (skin) {
@@ -388,9 +388,9 @@ var $skins = $game.$skins = {
     var head  = $('.head [data-name="' + skin + '"]')
     var torso = $('.torso [data-name="' + skin + '"]')
     var legs  = $('.legs [data-name="' + skin + '"]')
-    _renderUnlockedPart(head, skin, 'head', true)
-    _renderUnlockedPart(torso, skin, 'torso', true)
-    _renderUnlockedPart(legs, skin, 'legs', true)
+    _skins.renderUnlockedPart(head, skin, 'head', true)
+    _skins.renderUnlockedPart(torso, skin, 'torso', true)
+    _skins.renderUnlockedPart(legs, skin, 'legs', true)
   },
 
   // For debug purposes, reset everything but basic skin
@@ -406,7 +406,7 @@ var $skins = $game.$skins = {
 
     $skins.renderSkinventory()          // Re-render with reset skins
     $skins.updateSkinventory('basic')   // Then update with basic skin
-    _updatePlayer(playerSkin)
+    _skins.updatePlayer(playerSkin)
   },
 
   renderSkinventory: function () {
@@ -427,7 +427,7 @@ var $skins = $game.$skins = {
       // Check if unlocked and set display accordingly
       for (var h = 0; h < unlocked[part].length; h++) {
         if (unlocked[part][h] === skin.id) {
-          _renderUnlockedPart($el, skin, part)
+          _skins.renderUnlockedPart($el, skin, part)
           break
         }
       }
@@ -478,6 +478,11 @@ var $skins = $game.$skins = {
 
     // Display inventory data
     // The game doesn't store "full set" data, so we compare the parts to see if this is the case
+    var outfit = _skins.getOutfit(head, torso, legs)
+
+    // Also, clear & set skin effect flags here (Not the best place to put it...!)
+    _skins.clearSkinFlags()
+
     if (head === torso && torso === legs) {
       var suit = head
       content += '<strong>' + skins[suit].name + '.</strong> ' + skins[suit].description
@@ -486,6 +491,15 @@ var $skins = $game.$skins = {
       }
       if (skins[suit].effect) {
         content += ' (' + skins[suit].effect + ')'
+      }
+    }
+    else if (outfit) {
+      content += '<strong>' + outfit.name + '</strong><br>' + outfit.description
+      if (outfit.effect) {
+        content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
+      }
+      if (outfit.flag) {
+        $game.$player.setFlag(outfit.flag)
       }
     }
     else {
@@ -499,32 +513,58 @@ var $skins = $game.$skins = {
 
 }
 
-/***** PRIVATE FUNCTIONS ******/
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
 
+var _skins = {
 
-function _renderUnlockedPart ($el, skin, part, isNew) {
-  // skin is either the name of the skin or the skin object itself
-  // Either way, we want to end up with the skin object.
-  if (typeof skin == 'string') {
-    skin  = $skins.data.sets[skin]
+  // Clear all effect flags set by skins
+  clearSkinFlags: function () {
+    var flags =  _.pluck($skins.data.outfits, 'flag')
+    _.each(flags, $game.$player.removeFlag)
+  },
+
+  // Check if parts are part of an outfit
+  getOutfit: function (head, torso, legs) {
+    var parts = {
+      'head': head,
+      'torso': torso,
+      'legs': legs
+    }
+    // Returns outfit data, or undefined if not found.
+    return _.find($skins.data.outfits, function (each) {
+      return _.isEqual(each.parts, parts)
+    })
+  },
+
+  renderUnlockedPart: function ($el, skin, part, isNew) {
+    // skin is either the name of the skin or the skin object itself
+    // Either way, we want to end up with the skin object.
+    if (typeof skin == 'string') {
+      skin  = $skins.data.sets[skin]
+    }
+
+    var $inner = $el.find('.inner'),
+        bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
+
+    $el.removeClass('locked')
+    $el.attr('title', skin[part].name)
+    $inner.css('backgroundImage', 'url(' + bg + ')')
+    $inner.find('i').remove()
+    $inner.html('')
+    if (isNew === true) {
+      $el.find('.badge-new').show()
+    }
+  },
+
+  updatePlayer: function (playerSkin) {
+    ss.rpc('game.player.updateGameInfo', {
+      id: $game.$player.id,
+      skinSuit: playerSkin
+    })
   }
 
-  var $inner = $el.find('.inner'),
-      bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
-
-  $el.removeClass('locked')
-  $el.attr('title', skin[part].name)
-  $inner.css('backgroundImage', 'url(' + bg + ')')
-  $inner.find('i').remove()
-  $inner.html('')
-  if (isNew === true) {
-    $el.find('.badge-new').show()
-  }
-}
-
-function _updatePlayer (playerSkin) {
-  ss.rpc('game.player.updateGameInfo', {
-    id: $game.$player.id,
-    skinSuit: playerSkin
-  })
 }

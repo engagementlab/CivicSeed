@@ -1031,7 +1031,7 @@ var $player = $game.$player = {
   },
 
   //change up the skin suit the player is wearing and save to db
-  setSkinSuit: function(name, part) {
+  setSkinSuit: function (name, part) {
     if (part !== undefined) {
       _skinSuit[part] = name
     }
@@ -1048,11 +1048,52 @@ var $player = $game.$player = {
     })
     $game.$renderer.createCanvasForPlayer($game.$player.id, false)
     $game.$skins.renderSkinformation()
+  },
+
+  // Checks to see if a game state flag is set
+  checkFlag: function (flag) {
+    // Returns true if a given flag is found, and false if not
+    return _.contains(_player.flags, flag)
+  },
+
+  // Sets a current game state flag
+  setFlag: function (flag) {
+    // Returns true if able to be set
+    if (!this.checkFlag(flag)) {
+      _player.flags.push(flag)
+      return true
+    }
+    // Returns false if flag was not set (e.g. it was already set)
+    else return false
+  },
+
+  // Alias for setFlag()
+  flag: function (flag) {
+    return this.setFlag(flag)
+  },
+
+  // Remove one or all game state flags
+  removeFlag: function (flag) {
+    if (flag) {
+      _player.flags = _.reject(_player.flags, function (item) { return item === flag })
+    }
+    // If no flag is given, clear all flags
+    else {
+      _player.flags = []
+    }
   }
 
-};
+}
 
-/***** PRIVATE FUNCTIONS ******/
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _player = {
+  flags: []
+}
 
 //save a new resource to the database
 function _saveResourceToDB(resource) {

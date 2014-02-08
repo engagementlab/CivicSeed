@@ -138,12 +138,12 @@ var $input = $game.$input = module.exports = {
 
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
-    //close the resource area
+    // Close the resource area
     $BODY.on('click', '#resource-area a.close-overlay', function (e) {
       e.preventDefault()
       $game.$resources.hideResource()
-      return false;
-    });
+      return false
+    })
 
     // ************* SKINVENTORY WINDOW INTERACTIONS *************
 
@@ -285,10 +285,14 @@ var $input = $game.$input = module.exports = {
 				npc: $(this).attr('data-npc')
 			};
 			var pledges = $game.$player.getPledges();
-			if(pledges > 0) {
+			if (pledges > 0) {
 				ss.rpc('game.player.pledgeSeed', info, function(r) {
 					$game.$player.updatePledges(-1);
           $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
+          if ($game.$player.checkFlag('pledge-reward')) {
+            $game.$player.addSeeds('draw', 10)
+            _input.triggerMessage('You gained 10 paintbrush seeds for seeding another player’s response.')
+          }
 				});
 			}
 			else {
@@ -641,20 +645,32 @@ var _input = {
   trigger: function (input) {
     switch (input) {
       case 'FOREST':
-        _input.triggerMessage('Teleporting to ' + $game.world.northwest.name + '!')
-        $game.$player.beamMeUpScotty([15, 22])
+        if ($game.$player.checkFlag('teleport-forest')) {
+          _input.triggerMessage('Teleporting to ' + $game.world.northwest.name + '!')
+          $game.$player.beamMeUpScotty([15, 22])
+        }
+        else return false
         break
       case 'TOWN':
-        _input.triggerMessage('Teleporting to ' + $game.world.northeast.name + '!')
-        $game.$player.beamMeUpScotty([99, 29])
+        if ($game.$player.checkFlag('teleport-town')) {
+          _input.triggerMessage('Teleporting to ' + $game.world.northeast.name + '!')
+          $game.$player.beamMeUpScotty([99, 29])
+        }
+        else return false
         break
       case 'RANCH':
-        _input.triggerMessage('Teleporting to ' + $game.world.southwest.name + '!')
-        $game.$player.beamMeUpScotty([131, 96])
+        if ($game.$player.checkFlag('teleport-ranch')) {
+          _input.triggerMessage('Teleporting to ' + $game.world.southeast.name + '!')
+          $game.$player.beamMeUpScotty([131, 96])
+        }
+        else return false
         break
       case 'PORT':
-        _input.triggerMessage('Teleporting to ' + $game.world.southeast.name + '!')
-        $game.$player.beamMeUpScotty([47, 99])
+        if ($game.$player.checkFlag('teleport-port')) {
+          _input.triggerMessage('Teleporting to ' + $game.world.southwest.name + '!')
+          $game.$player.beamMeUpScotty([47, 99])
+        }
+        else return false
         break
       case 'kazaam':
         _input.triggerMessage('Starting collaborative challenge.')
@@ -721,7 +737,7 @@ var _input = {
   },
 
   triggerMessage: function (message) {
-    this.log('lightpurple', 'Game trigger activated', message)
+    this.log('lightpurple', 'Skin effect activated', message)
   },
 
   cheatMessage: function (message) {
