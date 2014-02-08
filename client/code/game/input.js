@@ -174,6 +174,16 @@ var $input = $game.$input = module.exports = {
       e.stopImmediatePropagation()
     })
 
+    // When scrolling article or log content, prevent page from scrolling also
+    $BODY.on('mouseenter', '.scrollable, .content-box', function () {
+      $(this).scroll(function () {
+        $('body').css('overflow', 'hidden')
+      })
+    })
+    $BODY.on('mouseleave', '.scrollable, .content-box', function () {
+      $('body').css('overflow', 'auto')
+    })
+
 		//send a chat message, pulled from chat field
 		$BODY.on('click', '#chatButton', function (e) {
 			e.preventDefault();

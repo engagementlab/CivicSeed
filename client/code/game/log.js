@@ -53,7 +53,7 @@ var $log = $game.$log = {
 			}
 			if(_numItems > _maxItems) {
 				$('#game-log p').last().remove();
-				$('#game-log-overlay p').last().remove()
+				$('#game-log-overlay p').first().remove()
 			}
 			$gameLog.prepend(html);
 

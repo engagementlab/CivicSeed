@@ -14,7 +14,7 @@
 	#resource-area.gameboard-overlay
 		a.close-overlay(href='#')
 			i.fa.fa-times-circle.fa-lg
-		.resource-article
+		.resource-article.scrollable
 		.resource-question
 			.dialog.question
 			form
@@ -30,7 +30,7 @@
 			.dialog
 				span.speaker
 				span.message
-			.responses.content-box
+			.responses.content-box.scrollable
 				p.question
 				ul.responses
 		.buttons
@@ -173,7 +173,7 @@
 			button.noButton.btn.btn-primary(type='button') Close
 			button.yesButton.btn.btn-success(type='button') View
 
-	#game-log-overlay
+	#game-log-overlay.scrollable
 
 	.pauseMenu
 		p please re-focus your mind, body, and the window...
