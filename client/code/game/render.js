@@ -189,49 +189,9 @@ var $renderer = $game.$renderer = {
   //load all player images
   loadSkinSuitImages: function (num) {
     if (num === undefined) num = 0
-      /*
-    // TODO
-    // Proposed refactor. Doesn't work. Causes player sprites to not load. Why is this?
-    // Hacky way of keeping track of skin loads
-    var total = $game.$skins.getSkinsList().length,
-        count = 0
-
-    function _onSkinLoad (image, id) {
-      _offscreenSkinSuitCanvas[id] = document.createElement('canvas');
-      _offscreenSkinSuitCanvas[id].setAttribute('width', image.width);
-      _offscreenSkinSuitCanvas[id].setAttribute('height', image.height);
-      _offscreenSkinSuitContext[id] = _offscreenSkinSuitCanvas[id].getContext('2d');
-
-      _offscreenSkinSuitContext[id].drawImage(
-        image,
-        0,
-        0
-      );
-
-      if ((count + 1) === total) {
-        _skinSuitWidth = image.width;
-        _skinSuitHeight = image.height;
-        $renderer.ready = true;
-        $game.$skins.renderSkinventory();
-        $renderer.createCanvasForPlayer($game.$player.id, false);
-      }
-    }
-
-    for (var id in $skins.data.sets) {
-      var filepath = CivicSeed.CLOUD_PATH + '/img/game/skins/' + id + '.png';
-
-      var image = new Image()
-      image.src = filepath
-      image.onload = _onSkinLoad(image, id)
-
-      if ($skins.data.sets.hasOwnProperty(id)) {
-        ++count
-      }
-    }
-    */
 
     var next = num + 1,
-        skinsList = $game.$skins.getSkinsList(),
+        skinsList = $game.$skins.getSetsList(),
         filename = skinsList[num],
         skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png';
 

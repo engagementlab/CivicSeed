@@ -713,8 +713,9 @@ var _input = {
         break
       case 'suit alors':
         _input.cheatLog('All suits unlocked!')
-        for (var skin in $game.$skins.data.sets) {
-          $game.$skins.unlockSkin(skin)
+        var sets = $game.$skins.getSetsList()
+        for (var i in sets) {
+          $game.$skins.unlockSkin(sets[i])
         }
         break
       case 'birthday suit':

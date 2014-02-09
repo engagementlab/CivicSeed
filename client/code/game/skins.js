@@ -5,7 +5,7 @@ var $skins = $game.$skins = {
   ready: false,
 
   data: {
-    'sets': {
+    'outfits': {
       'basic': {
         'id': 'basic',
         'name': 'Default Look',
@@ -191,7 +191,7 @@ var $skins = $game.$skins = {
           'name': 'Horse Head',
           'description': '',
           'effect': 'You walk slightly faster.',
-          'flag': ''
+          'flag': 'horse-head'
         },
         'torso': {
           'name': 'Horse Body',
@@ -280,9 +280,7 @@ var $skins = $game.$skins = {
           'effect': 'Your paint radius goes up by one.',
           'flag': ''
         }
-      }
-    },
-    'outfits': {
+      },
       'hunter': {
         'id': 'hunter',
         'name': 'Forest Hunter',
@@ -352,13 +350,27 @@ var $skins = $game.$skins = {
   resetInit: function () {
   },
 
-  // Creates an array of skin names
-  getSkinsList: function () {
-    var list = []
-    for (var i in $skins.data.sets) {
-      list.push($skins.data.sets[i].id)
+  // Returns an array of skin names (sets, not special outfits)
+  getSetsList: function () {
+    var data = $skins.data.outfits,
+        list = []
+
+    for (var i in data) {
+      if (!data[i].parts) list.push(data[i].id)
     }
+
     return list
+  },
+
+  // Returns filtered object collection of sets (without special outfits)
+  getSets: function () {
+    var data = $skins.data.outfits
+
+    return _.filter(data, function (item) { return !item.parts} )
+  },
+
+  getSkin: function (id) {
+    return _.find($game.$skins.getSets(), function (item) { return item.id === id })
   },
 
   // Unlock a new skin
@@ -412,7 +424,7 @@ var $skins = $game.$skins = {
   renderSkinventory: function () {
     var playerSkin = $game.$player.getSkinSuit(),
         unlocked   = playerSkin.unlocked,
-        skins      = $skins.data.sets
+        skins      = this.getSets()
 
     function _render (skin, part) {
       var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
@@ -459,7 +471,7 @@ var $skins = $game.$skins = {
 
   renderSkinformation: function () {
     var playerSkin = $game.$player.getSkinSuit(),
-        skins      = $skins.data.sets,
+        skins      = $skins.data.outfits,
         head       = playerSkin.head,
         torso      = playerSkin.torso,
         legs       = playerSkin.legs,
@@ -471,8 +483,14 @@ var $skins = $game.$skins = {
         string += ' ' + skins[skin][part].description
       }
       if (skins[skin][part].effect) {
-        string += ' (' + skins[skin][part].effect + ')'
+        string += ' <span class="color-orange">Effect:</span> <span class="color-blue">' + skins[skin][part].effect + '</span>'
       }
+
+      // Set individual part flags as well
+      if (skins[skin][part].flag) {
+        $game.$player.setFlag(skins[skin][part].flag)
+      }
+
       return string
     }
 
@@ -483,17 +501,7 @@ var $skins = $game.$skins = {
     // Also, clear & set skin effect flags here (Not the best place to put it...!)
     _skins.clearSkinFlags()
 
-    if (head === torso && torso === legs) {
-      var suit = head
-      content += '<strong>' + skins[suit].name + '.</strong> ' + skins[suit].description
-      if (suit != 'basic') {
-        content += ' Complete outfit bonus!'
-      }
-      if (skins[suit].effect) {
-        content += ' (' + skins[suit].effect + ')'
-      }
-    }
-    else if (outfit) {
+    if (outfit) {
       content += '<strong>' + outfit.name + '</strong><br>' + outfit.description
       if (outfit.effect) {
         content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
@@ -521,30 +529,51 @@ var $skins = $game.$skins = {
 
 var _skins = {
 
-  // Clear all effect flags set by skins
+  // Clear all effect flags set by skins sets and parts
   clearSkinFlags: function () {
-    var flags =  _.pluck($skins.data.outfits, 'flag')
+    // Get all flags
+    var data      = $skins.data.outfits,
+        setFlags  = _.pluck(data, 'flag'),
+        partFlags = _.chain(data)
+                     .map(function (value, key, list) {
+                       if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
+                     })
+                     .flatten()
+                     .compact()
+                     .value(),
+        flags     = _.compact(_.union(setFlags, partFlags))
+
+    // Clear all flags
     _.each(flags, $game.$player.removeFlag)
   },
 
   // Check if parts are part of an outfit
   getOutfit: function (head, torso, legs) {
-    var parts = {
-      'head': head,
-      'torso': torso,
-      'legs': legs
+    var data = $skins.data.outfits
+
+    // If everything is equal, player is wearing a full set
+    if (head === torso && torso === legs) {
+      return data[head]
     }
-    // Returns outfit data, or undefined if not found.
-    return _.find($skins.data.outfits, function (each) {
-      return _.isEqual(each.parts, parts)
-    })
+    // If everything is not equal, check if player is wearing a special outfit.
+    else {
+      var parts = {
+        'head': head,
+        'torso': torso,
+        'legs': legs
+      }
+      // Returns outfit data, or undefined if not found.
+      return _.find(data, function (each) {
+        return _.isEqual(each.parts, parts)
+      })
+    }
   },
 
   renderUnlockedPart: function ($el, skin, part, isNew) {
     // skin is either the name of the skin or the skin object itself
     // Either way, we want to end up with the skin object.
     if (typeof skin == 'string') {
-      skin  = $skins.data.sets[skin]
+      skin = $skins.data.outfits[skin]
     }
 
     var $inner = $el.find('.inner'),

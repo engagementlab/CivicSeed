@@ -336,7 +336,8 @@ var _resource = {
         npcLevel    = npc.level,
         playerLevel = $game.$player.currentLevel,
         feedback    = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight,
-        dialogue    = ''
+        dialogue    = '',
+        skin        = $game.$skins.getSkin(resource.skinSuit)
 
         if (npcLevel < playerLevel) {
           // When does this ever happen?
@@ -350,8 +351,8 @@ var _resource = {
         }
 
         //give them the skinsuit regardless if in prev level or not
-        if (resource.skinSuit) {
-          dialogue += ' You unlocked the ' + $game.$skins.data.sets[resource.skinSuit].name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
+        if (skin) {
+          dialogue += ' You unlocked the ' + skin.name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
         }
 
         $game.$audio.playTriggerFx('resourceRight')
