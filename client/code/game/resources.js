@@ -86,9 +86,9 @@ var $resources = $game.$resources = {
     var el = document.getElementById('resource-area')
 
     $(el).fadeOut(300, function () {
-      // Clearing article content is the safest and easiest way of preventing it from
-      // affecting the rest of the game, e.g. stopping videos that are still playing
-      el.querySelector('.resource-article').innerHTML = ''
+      // Reset all resource slides and buttons to a hidden & clean state.
+      _resource.resetSlides()
+      _resource.resetButtons()
 
       // Clean up background globals
       _resource.temporaryAnswer = ''
@@ -220,6 +220,10 @@ var _resource = {
     _.each(overlay.querySelectorAll('.resource-content, .resource-article, .resource-question, .resource-responses'), function (el) {
       el.style.display = 'none'
     })
+
+    // Clearing article content is the safest and easiest way of preventing it from
+    // affecting the rest of the game, e.g. stopping videos that are still playing
+    overlay.querySelector('.resource-article').innerHTML = ''
   },
 
   resetButtons: function () {
@@ -280,7 +284,7 @@ var _resource = {
         displayX = (artboardX / 2) - pathCentroid[0],
         displayY = (artboardY / 2) - pathCentroid[1]
 
-    console.log(artboardX, artboardY, pathCentroid)
+    // Set the tangram to display in the middle of the area
     path.attr('transform', 'translate(' + displayX + ',' + displayY +')')
 
     function _getCentroid (selection) {
@@ -462,7 +466,7 @@ var _resource = {
 
         // Add buttons
         _addButton('answer')
-        _addButton('back', 1, slide - 1, function () {
+        _addButton('back', 1, slides - 1, function () {
           // If they were answering an open question, store their answer if the player goes back
           if (resource.questionType === 'open') {
             _resource.temporaryAnswer = overlay.querySelector('.open-response').value
