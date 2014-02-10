@@ -3,5 +3,7 @@
 /_HIDDEN
 node_modules
 npm-debug.log
+err.log
+out.log
 dump.rdb
 *.pem
