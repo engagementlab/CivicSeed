@@ -10,7 +10,7 @@ var self = module.exports = {
 			view: 'main.jade',
 			css: ['styles.styl'],
 			code: [
-				'libs/jquery-2.0.3.min.js',
+				'libs/jquery.min.js',
 				'libs/davis-0.9.6.min.js',
 				'libs/underscore.js',
 				'libs/bootstrap.min.js',
