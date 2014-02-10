@@ -437,13 +437,13 @@ var $game = module.exports = {
   },
 
   //triggered by a change server-side in the leaderboard
-  updateLeaderboard: function(data) {
+  updateLeaderboard: function (data) {
     var leaderChange = true;
-    if(_stats.leaderboard.length > 0) {
-      leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true;
+    if (_stats.leaderboard.length > 0) {
+      leaderChange = (_stats.leaderboard[0].name === data.board[0].name) ? false : true
     }
-    if(leaderChange) {
-      $game.statusUpdate({message:data.board[0].name + ' is top seeder!',input:'status',screen: true,log:true});
+    if (leaderChange) {
+      $game.broadcast(data.board[0].name + ' is top seeder!')
     }
     _stats.leaderboard = data.board;
   },
