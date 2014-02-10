@@ -1,0 +1,22 @@
+{
+  "name": "CivicSeed",
+  "homepage": "https://github.com/engagementgamelab/CivicSeed",
+  "authors": [
+    "Robert Hall <@americanyak>",
+    "Russell Goldenberg <@russellgoldenberg>",
+    "Lou Huang <lou@codeforamerica.org>"
+  ],
+  "description": "Civic social training on steroids for students.",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.4.1"
+  }
+}
