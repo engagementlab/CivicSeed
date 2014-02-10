@@ -14,7 +14,7 @@ var self = module.exports = {
 				'libs/davis-0.9.6.min.js',
 				'libs/underscore.js',
 				'libs/bootstrap.min.js',
-				'libs/d3.v2.min.js',
+				'libs/d3.min.js',
 				'libs/howler.min.js',
 				'libs/plugins.js',
 				'routes',
