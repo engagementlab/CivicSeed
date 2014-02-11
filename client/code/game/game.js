@@ -644,7 +644,7 @@ function _startGame(ingame) {
   }
   $game.$map.firstStart(function() {
     if(!ingame) {
-      $('.loading').fadeOut(function() {
+      $('#loading').fadeOut(function() {
         $(this).remove();
         $game.ready = true;
         $game.running = true;

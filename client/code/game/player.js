@@ -424,6 +424,15 @@ var $player = $game.$player = {
 
   //determines what the botanist state should be based on if the player has the right resources
   checkBotanistState: function() {
+
+    // Prevent this from happening when viewing resource in puzzle mode
+    // if ($player.checkFlag('in-puzzle') === true) return
+
+    // Prevent this from happening if player has already been teleported to the Botanist once this level and game session.
+    if ($player.checkFlag('botanist-teleported') === true) return
+
+    // Prevent this from happening if player is already located by the Botanist
+
     //put player to state 3 (solving) if they the RIGHT resources
     //AND they have already seen the first 2 staes
     if($game.$player.botanistState > 1) {
@@ -460,10 +469,15 @@ var $player = $game.$player = {
       //check if they have ALL pieces, of so, beam me up scotty
       // console.log(_inventory.length, $game.resourceCount[$game.$player.currentLevel]);
       if(_inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
+        // Immediately lock player from moving
+        $game.inTransit = true
+
+        // Teleport
         $game.alert('You collected all the pieces, to the botanist!')
-        setTimeout(function() {
-          $game.$player.beamMeUpScotty();
-        },3000);
+        $game.$player.setFlag('botanist-teleported')
+        setTimeout(function () {
+          $player.beam([70, 74])
+        }, 2500)
       }
     }
   },
@@ -519,6 +533,7 @@ var $player = $game.$player = {
     $game.$player.currentLevel += 1;
     $game.$player.seenRobot = false;
     $game.$botanist.setState(0);
+    $game.$player.removeFlag('botanist-teleported')
     _pledges = 5;
     // $game.$renderer.loadTilesheet($game.$player.currentLevel, true);
 
@@ -780,13 +795,19 @@ var $player = $game.$player = {
     return {x: _renderInfo.curX, y: _renderInfo.curY};
   },
 
-  //transport player back to botanist's garden, magically
+  // Transport player magically (or scientifically) to any location in the game world
+  beam: function (place) {
+    // This is an alias for $player.beamMeUpScotty()
+    $player.beamMeUpScotty(place)
+  },
+
   beamMeUpScotty: function (place) {
     $game.inTransit = true;
     //x any y are viewport coords
-    $('.beamMeUp').show();
-    _info.x = place[0] || 70;
-    _info.y = place[1] || 74;
+    $('#beaming').show();
+
+    _info.x = place[0]
+    _info.y = place[1]
     _renderInfo.curX = _info.x * $game.TILE_SIZE;
     _renderInfo.curY = _info.y * $game.TILE_SIZE;
     _renderInfo.prevX = _info.x * $game.TILE_SIZE;
@@ -808,7 +829,7 @@ var $player = $game.$player = {
       $game.$renderer.renderAllTiles();
       setTimeout(function() {
         $game.inTransit = false;
-        $('.beamMeUp').fadeOut();
+        $('#beaming').fadeOut();
         $game.$player.displayNpcComments();
       }, 1000);
 

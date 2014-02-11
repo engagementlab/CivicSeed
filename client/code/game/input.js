@@ -86,7 +86,7 @@ var $input = $game.$input = module.exports = {
     //show / hide the inventory
     $BODY.on('click', '.inventoryButton, .inventory button', function () {
       var goAhead = startNewAction();
-      if(goAhead || $game.$player.inventoryShowing) {
+      if (goAhead || $game.$player.inventoryShowing) {
         $input.toggleInventory()
       }
       return false;
@@ -216,31 +216,31 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//close botanist window
-		$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
+		$BODY.on('click', '#botanist-area a i, #botanist-area .closeButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.hideResource();
 			return false;
 		});
 
 		//advance to next content in botanist area
-		$BODY.on('click', '.botanistArea .nextButton', function (e) {
+		$BODY.on('click', '#botanist-area .nextButton', function (e) {
 			$game.$botanist.nextSlide();
 		});
 
 		//previous content in botanist area
-		$BODY.on('click', '.botanistArea .backButton', function (e) {
+		$BODY.on('click', '#botanist-area .backButton', function (e) {
 			$game.$botanist.previousSlide();
 		});
 
 		//submit tangram answer in botanist area
-		$BODY.on('click', '.botanistArea .answerButton', function (e) {
+		$BODY.on('click', '#botanist-area .answerButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.submitAnswer();
 			return false;
 		});
 
 		//clear all the pieces in botanist area off tangram board
-		$BODY.on('click', '.botanistArea .clearBoardButton', function (e) {
+		$BODY.on('click', '#botanist-area .clearBoardButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.clearBoard();
 			return false;
@@ -529,7 +529,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleInventory: function () {
-    if($game.$player.inventoryShowing) {
+    if ($('.inventory').is(':visible')) {
       $input.closeInventory()
     }
     else {
@@ -540,8 +540,8 @@ var $input = $game.$input = module.exports = {
   openInventory: function (callback) {
     $game.$player.inventoryShowing = true
     $('.inventoryButton').addClass('hud-button-active')
-    if ($game.$player.getInventoryLength() > 0) {
-      $game.alert('click items to view again')
+    if ($game.$player.getInventoryLength() > 0 && $game.$player.checkFlag('viewing-inventory') === false) {
+      $game.alert('Click items to view again')
     }
     $inventory.slideDown(300, callback)
   },

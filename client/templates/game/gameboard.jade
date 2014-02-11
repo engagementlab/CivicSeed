@@ -6,7 +6,7 @@
 	canvas#minimapTile(width='142px', height='132px')
 	canvas#minimapPlayer(width='142px', height='132px')
 
-	.loading
+	#loading
 		p
 			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
 		p loading
@@ -52,15 +52,15 @@
 				.buttons
 					button.btn.btn-primary(type='button') Okay
 
-	.botanistArea.gameboard-overlay.background-3
+	#botanist-area.gameboard-overlay.background-3
 		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 		.dialog
 			span.speaker
 			span.message
-		.botanistContent
-		.tangramArea
-			.tangramOutline
+		.botanist-content
+		.tangram-area
+			.tangram-outline
 		.buttons
 			.left
 				button.backButton.btn.btn-info(type='button') Back
@@ -181,4 +181,5 @@
 			button.unPause.btn.btn-success(type='button') Resume Game
 	.waitingForSeed
 		img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
-	.beamMeUp
+
+	#beaming

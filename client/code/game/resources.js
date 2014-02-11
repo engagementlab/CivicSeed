@@ -69,15 +69,11 @@ var $resources = $game.$resources = {
 
     // Close the inventory, then show resource and bind a function that returns to inventory on close
     $game.$input.closeInventory(function () {
+      // Set a flag that remembers we were in the inventory
+      $game.$player.setFlag('viewing-inventory')
+
+      // Show the resource
       $resources.showResource(index)
-      el.querySelector('.close-button, .close-overlay').addEventListener('click', function _onClose () {
-        $game.$input.openInventory()
-        // TODO: CHECK IF FOLLOWING LINE IS NECESSARY.
-        // This is logic for controlling whether inventory state is remembered
-        // when a player is examining items while solving the botanist's puzzle.
-        $game.$player.inventoryShowing = ($game.$botanist.isSolving) ? false : true
-        this.removeEventListener('click', _onClose)
-      })
     })
   },
 
@@ -93,11 +89,17 @@ var $resources = $game.$resources = {
       // Clean up background globals
       _resource.temporaryAnswer = ''
 
+      // Clear resource stage
+      _resource.unloadArticle()
+
       $resources.isShowing = false
       $game.$audio.fadeHi()
 
-      // TODO: Move this elsewhere (include with logic of where checks should happen - not in the resource hiding function.)
-      $game.$player.checkBotanistState();
+      // If inventory was showing previously, re-open the inventory
+      if ($game.$player.checkFlag('viewing-inventory') === true) {
+        $game.$input.openInventory()
+        $game.$player.removeFlag('viewing-inventory')
+      }
 
       if (typeof callback === 'function') callback()
     })
@@ -243,6 +245,11 @@ var _resource = {
     $('#resource-stage').empty().load(url, callback)
   },
 
+  // Clears staging area
+  unloadArticle: function () {
+    document.getElementById('resource-stage').innerHTML = ''
+  },
+
   // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
     /* DEPRECATED:  The old version of this function loaded an image rather than the SVG.
@@ -261,12 +268,12 @@ var _resource = {
         shape     = $game.$resources.getShape(resource.index),
         // Copied from botanist.js/_svgFills
         fills = {
-          orange: 'rgb(236,113,41)',
+          orange:      'rgb(236,113,41)',
           lightOrange: 'rgb(237,173,135)',
-          blue: 'rgb(14,152,212)',
-          lightBlue: 'rgb(109,195,233)',
-          green: 'rgb(76,212,206)',
-          lightGreen: 'rgb(164,238,235)'
+          blue:        'rgb(14,152,212)',
+          lightBlue:   'rgb(109,195,233)',
+          green:       'rgb(76,212,206)',
+          lightGreen:  'rgb(164,238,235)'
         },
         fill = fills[shape.fill]
 
@@ -416,15 +423,16 @@ var _resource = {
 
   // Clear the display and decide what to show on screen
   addContent: function (index, section, slide) {
-    var overlay     = document.getElementById('resource-area'),
-        playerLevel = $game.$player.getLevel(),
-        answer      = $game.$player.getAnswer(index),
-        isAnswered  = (answer) ? true : false,
-        isRevisit   = (answer && answer.result) ? true : false,
-        resource    = _resources[index]
+    var overlay      = document.getElementById('resource-area'),
+        playerLevel  = $game.$player.getLevel(),
+        answer       = $game.$player.getAnswer(index),
+        isAnswered   = (answer) ? true : false,
+        isRevisit    = (answer && answer.result) ? true : false,
+        inPuzzleMode = $game.$player.checkFlag('in-puzzle'),
+        resource     = _resources[index]
 
-    var $article    = $('#resource-stage .pages > section'),
-        slides      = $article.length
+    var $article     = $('#resource-stage .pages > section'),
+        slides       = $article.length
 
     // Reset all resource slides and buttons to a hidden & clean state.
     _resource.resetSlides()
@@ -446,10 +454,13 @@ var _resource = {
         if (slide < slides - 1) _addButton('next', 1, slide + 1)
         // On the last article slide, we must test for certain conditions
         else if (slide === slides - 1) {
-          // If open-ended question and is answered, go straight to responses
-          if (isRevisit && resource.questionType === 'open') _addButton('next', 4)
-          // If question was answered correctly for any other question type, close resource window
-          else if (isRevisit) _addButton ('close')
+          // If this resource is being reviewed later:
+          if (isRevisit || inPuzzleMode) {
+            // If open-ended question, go to responses next
+            if (resource.questionType === 'open') _addButton('next', 4)
+            // If question was answered correctly for any other question type, close resource window
+            else _addButton ('close')
+          }
           // If question was not answered correctly, go to next slide (question screen)
           else _addButton('next', 2)
         }
@@ -512,10 +523,15 @@ var _resource = {
         _resource.loadResponses(resource)
         overlay.querySelector('.resource-responses').style.display = 'block'
 
-        _addButton('close')
-        // if (isRevisit === true) _addButton('back', 1, slides)
-        // This is currently disabled because it is possible to view this directly without
-        // preloading the article content, which would break in that instance.
+        _addButton('close', null, null, function () {
+          // If this resource was just collected, check to see if player shoud be
+          // automatically teleported to the botanist.
+          if (!isRevisit && !inPuzzleMode) {
+            $game.$player.checkBotanistState()
+          }
+        })
+        // If an article was preloaded onto the stage, display the 'back' button.
+        if (document.getElementById('resource-stage').innerHTML !== '') _addButton('back', 1, slides - 1)
         break
       // Generic error for debugging.
       default:
@@ -626,6 +642,7 @@ var _resource = {
       return true
     }
 
+    // Declare a callback function to focus on the input box after closing the message
     function _focusInput () {
       input.focus()
     }
@@ -647,6 +664,7 @@ var _resource = {
       return true
     }
 
+    // Declare a callback function to focus on the textarea after closing the message
     function _focusInput () {
       document.querySelector('.open-response').focus()
     }
@@ -923,7 +941,3 @@ var _resource = {
   }]
 
 }
-
-
-
-
