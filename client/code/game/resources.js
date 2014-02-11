@@ -93,6 +93,9 @@ var $resources = $game.$resources = {
       // Clean up background globals
       _resource.temporaryAnswer = ''
 
+      // Clear resource stage
+      _resource.unloadArticle()
+
       $resources.isShowing = false
       $game.$audio.fadeHi()
 
@@ -241,6 +244,11 @@ var _resource = {
   loadArticle: function (resource, callback) {
     var url = CivicSeed.CLOUD_PATH + '/articles/' + resource.url + '.html'
     $('#resource-stage').empty().load(url, callback)
+  },
+
+  // Clears staging area
+  unloadArticle: function () {
+    document.getElementById('resource-stage').innerHTML = ''
   },
 
   // Loads the tangram piece and adds it into DOM
@@ -517,9 +525,8 @@ var _resource = {
         overlay.querySelector('.resource-responses').style.display = 'block'
 
         _addButton('close')
-        // if (isRevisit === true) _addButton('back', 1, slides)
-        // This is currently disabled because it is possible to view this directly without
-        // preloading the article content, which would break in that instance.
+        // If an article was preloaded onto the stage, display the 'back' button.
+        if (document.getElementById('resource-stage').innerHTML !== '') _addButton('back', 1, slides - 1)
         break
       // Generic error for debugging.
       default:
