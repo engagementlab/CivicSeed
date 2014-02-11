@@ -4,10 +4,7 @@ var _hideTimer = null
 
 var $chat = $game.$chat = {
 
-  playerId: null,
-
   init: function (callback) {
-    this.playerId = 'player' + $game.$player.id
     _chat.flag(false)
     callback()
   },
@@ -18,54 +15,59 @@ var $chat = $game.$chat = {
 
   message: function (data) {
     var gameboard = document.getElementById('gameboard'),
+        bubble    = document.getElementById('chat-' + data.id),
+        name      = 'me',
         message   = data.message,
-        other     = false,
-        len       = message.length + 4,
-        fadeTime  = len * 150 + 1000,
-        sz        = Math.floor(len * 8) + 20
-
-    // Set maximum display time of message
-    fadeTime = (fadeTime > 11500) ? 11500 : fadeTime
+        other     = false
 
     // See if message is from current player or another player
-    if (data.name !== $game.$player.firstName) other = data
+    if (data.id !== $game.$player.id) {
+      other = true
+      name  = data.name
+    }
 
-    //this was the client's message
-    if (!other) {
-      if (_chat.flag() === true) {
-        clearTimeout(_hideTimer);
-        document.getElementById('chat-' + this.playerId).innerText = 'me: '+ message
-      }
-      else {
-        $(gameboard).append('<p class=\'playerChat\' id=chat-' + this.playerId + '>me: ' + message + '</p>');
-      }
-      _hideTimer = setTimeout($chat.hideChat, fadeTime);
-      _chat.place(sz);
-      _chat.flag(true)
+    // Set some appearance vars
+    var len       = message.length + name.length + 2,
+        fadeTime  = Math.min(len * 150 + 1000, 11500),
+        sz        = Math.floor(len * 8) + 20
+
+    // Clear previous timeout, if any
+    clearTimeout(_hideTimer)
+
+    // Re-use the existing element or create a new one, if not present
+    if (bubble) {
+      bubble.innerText = name + ': '+ message
     }
     else {
-      len = message.length + other.name.length + 2;
-      sz = Math.floor(len * 8) + 20;
-      if(other.isChatting) {
-        document.getElementById('chat-' + other.chatId).innerText = other.name + ': '+ message
-      }
-      else {
-        $(gameboard).append('<p class=\'playerChat\' id=chat-' + other.chatId + '>' + other.name +': '+ message + '</p>');
-      }
-      $game.$audio.playTriggerFx('chatReceive');
-      _chat.place(sz, other);
-      return fadeTime;
+      $(gameboard).append('<p class=\'player-chat\' id="chat-' + data.id + '">' + name +': '+ message + '</p>')
     }
 
+    // Setup a timer to hide the message after some time
+    _hideTimer = setTimeout(function () {
+      $chat.hideChat(data)
+    }, fadeTime)
+
+    // Place the chat bubble
+    _chat.place(sz, data)
+
+    //
+    if (other) {
+      $game.$audio.playTriggerFx('chatReceive')
+    }
+    else {
+      _chat.flag(true)
+    }
+
+    // Add the message to the log
     $game.$log.addMessage(data)
   },
 
   // Remove chat from screen
-  hideChat: function (other) {
-    clearTimeout(_hideTimer)
+  hideChat: function (data) {
+    if (!data) data = { id: $game.$player.id }
+    var el = document.getElementById('chat-' + data.id)
 
-    var el = document.getElementById('chat-' + $chat.playerId)
-    console.log(el)
+    clearTimeout(_hideTimer)
 
     $(el).fadeOut('fast',function() {
       $(this).remove()
@@ -89,18 +91,21 @@ var _chat = {
   },
 
   //this places the chat centered above player, or if too big then left/right align with screen edge
-  place: function (sz, other) {
+  place: function (sz, data) {
     var half     = sz / 2,
         placeX   = null,
         placeY   = null,
         position = null,
-        adjustY  = 0
+        adjustY  = 0,
+        other    = false
+
+    if (data.id !== $game.$player.id) other = true
 
     if (other) {
-      position = other.position;
+      position = data.position;
     }
     else {
-      position = $game.$player.getRenderPosition();
+      position = $game.$player.getRenderPosition()
     }
 
     if (position.x > 470 ) {
@@ -133,19 +138,11 @@ var _chat = {
       placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
     }
 
-    if (other) {
-      $(other.chatIdSelector).css({
-        'top': placeY,
-        'left': placeX,
-        'width': sz
-      });
-    } else {
-      var el = document.getElementById('chat-' + $chat.playerId)
-      $(el).css({
-        'top': placeY,
-        'left': placeX,
-        'width': sz
-      });
-    }
+    var el = document.getElementById('chat-' + data.id)
+    $(el).css({
+      'top': placeY,
+      'left': placeX,
+      'width': sz
+    })
   }
 }

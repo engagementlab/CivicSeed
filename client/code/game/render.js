@@ -56,7 +56,6 @@ var $renderer = $game.$renderer = {
 
     // Optimize display for higher-pixel-density screens (e.g. Retina)
     if (window.devicePixelRatio) {
-      console.log('Pixel density is = ' + window.devicePixelRatio)
       $game.PIXEL_RATIO = window.devicePixelRatio
       // Debug: set PIXEL_RATIO to 1 to force native scaling
       // $game.PIXEL_RATIO = 1

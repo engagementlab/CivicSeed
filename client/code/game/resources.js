@@ -70,7 +70,10 @@ var $resources = $game.$resources = {
     // Close the inventory, then show resource and bind a function that returns to inventory on close
     $game.$input.closeInventory(function () {
       $resources.showResource(index)
-      el.querySelector('.close-button, .close-overlay').addEventListener('click', function _onClose () {
+
+      // Because buttons reset and created on the fly, we can't bind this function
+      // directly to a .close-button button. (The listener will just be removed.)
+      el.querySelector('.close-overlay').addEventListener('click', function _onClose () {
         $game.$input.openInventory()
         // TODO: CHECK IF FOLLOWING LINE IS NECESSARY.
         // This is logic for controlling whether inventory state is remembered
@@ -99,8 +102,10 @@ var $resources = $game.$resources = {
       $resources.isShowing = false
       $game.$audio.fadeHi()
 
-      // TODO: Move this elsewhere (include with logic of where checks should happen - not in the resource hiding function.)
-      $game.$player.checkBotanistState();
+      // If inventory was showing previously, re-open the inventory
+      if ($game.$player.checkFlag('viewing-inventory')) {
+        $game.$input.openInventory()
+      }
 
       if (typeof callback === 'function') callback()
     })
@@ -524,7 +529,13 @@ var _resource = {
         _resource.loadResponses(resource)
         overlay.querySelector('.resource-responses').style.display = 'block'
 
-        _addButton('close')
+        _addButton('close', null, null, function () {
+          // If this resource was just collected, check to see if player shoud be
+          // automatically teleported to the botanist.
+          if (!isRevisit && !inPuzzleMode) {
+            $game.$player.checkBotanistState()
+          }
+        })
         // If an article was preloaded onto the stage, display the 'back' button.
         if (document.getElementById('resource-stage').innerHTML !== '') _addButton('back', 1, slides - 1)
         break
@@ -637,6 +648,7 @@ var _resource = {
       return true
     }
 
+    // Declare a callback function to focus on the input box after closing the message
     function _focusInput () {
       input.focus()
     }
@@ -658,6 +670,7 @@ var _resource = {
       return true
     }
 
+    // Declare a callback function to focus on the textarea after closing the message
     function _focusInput () {
       document.querySelector('.open-response').focus()
     }
@@ -934,7 +947,3 @@ var _resource = {
   }]
 
 }
-
-
-
-

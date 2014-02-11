@@ -426,10 +426,12 @@ var $player = $game.$player = {
   checkBotanistState: function() {
 
     // Prevent this from happening when viewing resource in puzzle mode
-    if ($player.checkFlag('in-puzzle') === true) return
+    // if ($player.checkFlag('in-puzzle') === true) return
 
     // Prevent this from happening if player has already been teleported to the Botanist once this level and game session.
     if ($player.checkFlag('botanist-teleported') === true) return
+
+    // Prevent this from happening if player is already located by the Botanist
 
     //put player to state 3 (solving) if they the RIGHT resources
     //AND they have already seen the first 2 staes

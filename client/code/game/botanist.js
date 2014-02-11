@@ -804,7 +804,7 @@ var $botanist = $game.$botanist = {
       .attr('draggable', 'false');
 
     _new = _svg.append('path')
-      .attr('class',selector)
+      .attr('class', selector)
       .data([{x:x , y: y, id: name, color: fill}])
       .attr('d', shape.path)
       .attr('fill', fill)
@@ -824,11 +824,8 @@ var $botanist = $game.$botanist = {
 
   //this is dragging a puzzle piece on area and moving it around
   dragMoveStart: function (d) {
-    var container = $('.tangram-area')
-    $botanist.hideFeedback()
-
-    _dragOffX = d3.mouse(container)[0],
-    _dragOffY = d3.mouse(container)[1],
+    _dragOffX = d3.mouse(this)[0]
+    _dragOffY = d3.mouse(this)[1]
 
     d3.select('.br' + d.id)
       .attr('stroke-width', 3)
@@ -898,9 +895,9 @@ var $botanist = $game.$botanist = {
         trash = _botanist.trashPosition
 
     d3.select('.br' + d.id)
+      .classed('dragging', false)
       .attr('stroke-width', 0)
       .attr('transform', trans)
-      .classed('dragging', false)
 
     // If over trash area
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
@@ -909,11 +906,6 @@ var $botanist = $game.$botanist = {
         .css('opacity', 1)
         .attr('draggable', 'true')
       $('.trash').removeClass('active')
-    }
-    else {
-      d3.select('.br' + d.id)
-      .attr('stroke-width', 0)
-      .attr('transform', trans)
     }
   },
 
