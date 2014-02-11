@@ -216,31 +216,31 @@ var $input = $game.$input = module.exports = {
 		});
 
 		//close botanist window
-		$BODY.on('click', '.botanistArea a i, .botanistArea .closeButton', function (e) {
+		$BODY.on('click', '#botanist-area a i, #botanist-area .closeButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.hideResource();
 			return false;
 		});
 
 		//advance to next content in botanist area
-		$BODY.on('click', '.botanistArea .nextButton', function (e) {
+		$BODY.on('click', '#botanist-area .nextButton', function (e) {
 			$game.$botanist.nextSlide();
 		});
 
 		//previous content in botanist area
-		$BODY.on('click', '.botanistArea .backButton', function (e) {
+		$BODY.on('click', '#botanist-area .backButton', function (e) {
 			$game.$botanist.previousSlide();
 		});
 
 		//submit tangram answer in botanist area
-		$BODY.on('click', '.botanistArea .answerButton', function (e) {
+		$BODY.on('click', '#botanist-area .answerButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.submitAnswer();
 			return false;
 		});
 
 		//clear all the pieces in botanist area off tangram board
-		$BODY.on('click', '.botanistArea .clearBoardButton', function (e) {
+		$BODY.on('click', '#botanist-area .clearBoardButton', function (e) {
 			e.preventDefault();
 			$game.$botanist.clearBoard();
 			return false;

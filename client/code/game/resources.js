@@ -261,12 +261,12 @@ var _resource = {
         shape     = $game.$resources.getShape(resource.index),
         // Copied from botanist.js/_svgFills
         fills = {
-          orange: 'rgb(236,113,41)',
+          orange:      'rgb(236,113,41)',
           lightOrange: 'rgb(237,173,135)',
-          blue: 'rgb(14,152,212)',
-          lightBlue: 'rgb(109,195,233)',
-          green: 'rgb(76,212,206)',
-          lightGreen: 'rgb(164,238,235)'
+          blue:        'rgb(14,152,212)',
+          lightBlue:   'rgb(109,195,233)',
+          green:       'rgb(76,212,206)',
+          lightGreen:  'rgb(164,238,235)'
         },
         fill = fills[shape.fill]
 
@@ -416,15 +416,16 @@ var _resource = {
 
   // Clear the display and decide what to show on screen
   addContent: function (index, section, slide) {
-    var overlay     = document.getElementById('resource-area'),
-        playerLevel = $game.$player.getLevel(),
-        answer      = $game.$player.getAnswer(index),
-        isAnswered  = (answer) ? true : false,
-        isRevisit   = (answer && answer.result) ? true : false,
-        resource    = _resources[index]
+    var overlay      = document.getElementById('resource-area'),
+        playerLevel  = $game.$player.getLevel(),
+        answer       = $game.$player.getAnswer(index),
+        isAnswered   = (answer) ? true : false,
+        isRevisit    = (answer && answer.result) ? true : false,
+        inPuzzleMode = $game.$player.checkFlag('in-puzzle'),
+        resource     = _resources[index]
 
-    var $article    = $('#resource-stage .pages > section'),
-        slides      = $article.length
+    var $article     = $('#resource-stage .pages > section'),
+        slides       = $article.length
 
     // Reset all resource slides and buttons to a hidden & clean state.
     _resource.resetSlides()
@@ -446,10 +447,13 @@ var _resource = {
         if (slide < slides - 1) _addButton('next', 1, slide + 1)
         // On the last article slide, we must test for certain conditions
         else if (slide === slides - 1) {
-          // If open-ended question and is answered, go straight to responses
-          if (isRevisit && resource.questionType === 'open') _addButton('next', 4)
-          // If question was answered correctly for any other question type, close resource window
-          else if (isRevisit) _addButton ('close')
+          // If this resource is being reviewed later:
+          if (isRevisit || inPuzzleMode) {
+            // If open-ended question, go to responses next
+            if (resource.questionType === 'open') _addButton('next', 4)
+            // If question was answered correctly for any other question type, close resource window
+            else _addButton ('close')
+          }
           // If question was not answered correctly, go to next slide (question screen)
           else _addButton('next', 2)
         }

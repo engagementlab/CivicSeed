@@ -38,7 +38,7 @@
 	.bossArea .bossButton a
 		color white
 
-.loading
+#loading
 	margin 150px 0 0 0
 	text-align center
 	color #222
@@ -143,11 +143,11 @@
 .scrollable
 	overflow auto
 
-.botanistArea
+#botanist-area
 	z-index 9990
 	&.puzzle-mode
 		height 390px
-		.tangramArea
+		.tangram-area
 			top 20px
 	.dialog
 		// See also .dialog at .resourceArea
@@ -155,7 +155,7 @@
 	.seedChips
 		margin-top 30px
 		text-align center
-	.tangramArea
+	.tangram-area
 		position absolute
 		top 40px
 		left 0
@@ -163,12 +163,18 @@
 		padding 0
 		z-index 9992
 		display none
-		.puzzleSvg
+		.puzzle-svg
 			position absolute
 			top 0
 			left 0
 			width 930px
 			height 380px
+		path
+			cursor -webkit-grab
+			cursor -moz-grab
+			&.dragging
+				cursor -webkit-grabbing
+				cursor -moz-grabbing
 		.trash
 			position absolute
 			top 170px
@@ -774,7 +780,7 @@ canvas
 	font-size .8em
 	font-family $buttonFont
 
-.botanistArea .answerButton, .botanistArea .clearBoardButton, .botanistArea i
+#botanist-area .answerButton, #botanist-area .clearBoardButton, #botanist-area i
 	z-index 9999
 
 .chatBox input
@@ -906,7 +912,7 @@ p.townSite
 	font-family $buttonFont
 	display none
 
-.beamMeUp
+#beaming
 	display none
 	position absolute
 	top 0
@@ -931,7 +937,7 @@ p.townSite
 	bottom 20px
 	width 500px
 	height 120px
-	background rgba(50,50,50,0.5)
+	background rgba(50,50,50,0.3)
 	text-shadow 1px 1px 0 $csBlack
 
 #game-log, #game-log-overlay
@@ -1056,6 +1062,6 @@ p.townSite
 	font-size 13px
 
 svg.tangram-svg
-	// see also .puzzleSvg
+	// see also .puzzle-svg
 	width 100%
 	height 250px
