@@ -43,7 +43,6 @@ var $botanist = $game.$botanist = {
   name: null,
   isChat: false,
   isShowing: false,
-  isSolving: false,
   ready: false,
 
   _nudgePlayerInterval: null,
@@ -116,7 +115,6 @@ var $botanist = $game.$botanist = {
     $game.$botanist.name= null;
     $game.$botanist.isChat= false;
     $game.$botanist.isShowing= false;
-    $game.$botanist.isSolving= false;
     $game.$botanist.ready= false;
     $botanist._nudgePlayerInterval = null
     $botanist._nudgePlayerTimeout = null
@@ -360,8 +358,8 @@ var $botanist = $game.$botanist = {
 
     $botanist.chat(dialogue, function () {
       if (prompt === 1) {
-        $game.$botanist.isSolving = true
         $botanistArea.addClass('puzzle-mode')
+        $game.$player.setFlag('solving-puzzle')
       }
       $game.$botanist.showRiddle(prompt);
     })
@@ -509,11 +507,12 @@ var $botanist = $game.$botanist = {
     else {
       if(_currentSlide === 0) {
         $inventoryBtn.hide();
-        $inventory.slideDown(function() {
-          $game.$player.inventoryShowing = false;
+
+        $game.$input.openInventory(function () {
           //set the inventory items to draggable in case they were off
           $inventoryItem.attr('draggable','true');
-        });
+        })
+
         //$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
         $botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.');
         var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
@@ -530,11 +529,11 @@ var $botanist = $game.$botanist = {
         $botanistArea.animate({
             'height':'450px'
         });
-        $inventory.slideUp(function() {
-          $game.$player.inventoryShowing = false;
+
+        $game.$input.closeInventory(function () {
           $inventoryBtn.show();
           $inventoryItem.remove();
-        });
+        })
 
         var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
         //console.log('posttangramtalk', postTangramTalk);
@@ -572,7 +571,9 @@ var $botanist = $game.$botanist = {
       $('.botanist button').hide();
       $(this).removeClass('puzzle-mode')
       $game.$botanist.isChat = false;
-      $game.$botanist.isSolving = false;
+
+      $game.$player.removeFlag('solving-puzzle')
+
       $game.$botanist.clearBoard();
       $('.inventoryItem').css('opacity',1);
 
@@ -586,21 +587,14 @@ var $botanist = $game.$botanist = {
       }
     });
 
-    //if we left inventory on, that means we want to show it again
-    if($game.$player.inventoryShowing) {
-      $inventory.slideDown(function() {
-        $game.$player.inventoryShowing = true;
-      });
-    }
-    //otherwise, make sure it is hidden
-    else {
-      $inventory.slideUp(function() {
-        $game.$player.inventoryShowing = false;
-        $inventoryBtn.show();
-        $('.inventoryPuzzle').show();
-        $('.inventoryHelp').hide();
-      });
-    }
+    // Close and reset inventory to non-puzzle state
+    $game.$input.closeInventory(function () {
+      // TODO: Check this stuff
+      $inventoryBtn.show();
+      $inventoryItem.remove();
+      $('.inventoryPuzzle').show();
+      $('.inventoryHelp').hide();
+    })
   },
 
   //when player submits answer must verify all pieces and respond accordingly
@@ -748,7 +742,7 @@ var $botanist = $game.$botanist = {
 
   //when dragging starts from inventory must bind drop on puzzle area
   dragStart: function (e) {
-    if($game.$botanist.isSolving) {
+    if ($game.$player.checkFlag('solving-puzzle')) {
 
       $tangramArea
         .unbind('dragover')

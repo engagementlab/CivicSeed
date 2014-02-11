@@ -86,7 +86,7 @@ var $input = $game.$input = module.exports = {
     //show / hide the inventory
     $BODY.on('click', '.inventoryButton, .inventory button', function () {
       var goAhead = startNewAction();
-      if(goAhead || $game.$player.inventoryShowing) {
+      if (goAhead || $game.$player.inventoryShowing) {
         $input.toggleInventory()
       }
       return false;
@@ -529,7 +529,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleInventory: function () {
-    if ($game.$player.checkFlag('viewing-inventory') === true) {
+    if ($('.inventory').is(':visible')) {
       $input.closeInventory()
     }
     else {
@@ -539,10 +539,9 @@ var $input = $game.$input = module.exports = {
 
   openInventory: function (callback) {
     $game.$player.inventoryShowing = true
-    $game.$player.setFlag('viewing-inventory')
     $('.inventoryButton').addClass('hud-button-active')
-    if ($game.$player.getInventoryLength() > 0) {
-      $game.alert('click items to view again')
+    if ($game.$player.getInventoryLength() > 0 && $game.$player.checkFlag('viewing-inventory') === false) {
+      $game.alert('Click items to view again')
     }
     $inventory.slideDown(300, callback)
   },
@@ -550,7 +549,6 @@ var $input = $game.$input = module.exports = {
   closeInventory: function (callback) {
     $inventory.slideUp(300, function () {
       $game.$player.inventoryShowing = false
-      $game.$player.removeFlag('viewing-inventory')
       $('.inventoryButton').removeClass('hud-button-active')
       if (typeof callback === 'function') callback()
     })

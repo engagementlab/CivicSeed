@@ -69,18 +69,11 @@ var $resources = $game.$resources = {
 
     // Close the inventory, then show resource and bind a function that returns to inventory on close
     $game.$input.closeInventory(function () {
-      $resources.showResource(index)
+      // Set a flag that remembers we were in the inventory
+      $game.$player.setFlag('viewing-inventory')
 
-      // Because buttons reset and created on the fly, we can't bind this function
-      // directly to a .close-button button. (The listener will just be removed.)
-      el.querySelector('.close-overlay').addEventListener('click', function _onClose () {
-        $game.$input.openInventory()
-        // TODO: CHECK IF FOLLOWING LINE IS NECESSARY.
-        // This is logic for controlling whether inventory state is remembered
-        // when a player is examining items while solving the botanist's puzzle.
-        $game.$player.inventoryShowing = ($game.$botanist.isSolving) ? false : true
-        this.removeEventListener('click', _onClose)
-      })
+      // Show the resource
+      $resources.showResource(index)
     })
   },
 
@@ -103,8 +96,9 @@ var $resources = $game.$resources = {
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
-      if ($game.$player.checkFlag('viewing-inventory')) {
+      if ($game.$player.checkFlag('viewing-inventory') === true) {
         $game.$input.openInventory()
+        $game.$player.removeFlag('viewing-inventory')
       }
 
       if (typeof callback === 'function') callback()
