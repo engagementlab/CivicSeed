@@ -1,6 +1,8 @@
+'use others';
+
 _onScreenPlayers = {};
 
-$game.$others = {
+var $others = $game.$others = {
   ready: false,
 
   //load in other players
@@ -23,13 +25,13 @@ $game.$others = {
   add: function (player) {
     //check if player is on our screen (or near it....)
     //don't add it if its yourself
-    if(player._id != $game.$player.id) {
+    if (player._id != $game.$player.id) {
 
       //set inview if nearby
       var newbie = $game.$others.createOther(player);
       _onScreenPlayers[newbie.id] = newbie;
       newbie.updateRenderInfo();
-      $game.$renderer.createCanvasForPlayer(newbie.id, newbie.skinSuit);
+      $game.$render.createCanvasForPlayer(newbie.id, newbie.skinSuit);
       $game.$map.addPlayer(newbie.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
     }
   },
@@ -69,7 +71,7 @@ $game.$others = {
 
   message: function (data) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.id === data.id) {
+      if (player.id === data.id) {
         player.message(data)
       }
     });
@@ -86,8 +88,8 @@ $game.$others = {
 
   playerCard: function (x, y, show) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.info.x === x && player.info.y === y) {
-        if(show) {
+      if (player.info.x === x && player.info.y === y) {
+        if (show) {
           player.showPlayerCard();
         }
         return true;
@@ -98,7 +100,7 @@ $game.$others = {
 
   updateTilesColored: function (id, count) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.id === id) {
+      if (player.id === id) {
         player.setTilesColored(count);
       }
     });
@@ -106,7 +108,7 @@ $game.$others = {
 
   levelChange: function (id, level) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.id === id) {
+      if (player.id === id) {
         player.changeLevel(level);
       }
     });
@@ -162,25 +164,25 @@ $game.$others = {
       },
 
       update: function () {
-        if(otherPlayer.isMoving) {
+        if (otherPlayer.isMoving) {
           otherPlayer.move();
           otherPlayer.getMaster = true;
         }
-        else if(!$game.inTransit) {
+        else if (!$game.checkFlag('in-transit')) {
           otherPlayer.idle();
         }
-        else if($game.inTransit) {
+        else if ($game.checkFlag('in-transit')) {
           otherPlayer.getMaster = true;
         }
 
-        if(otherPlayer.getMaster) {
+        if (otherPlayer.getMaster) {
           otherPlayer.updateRenderInfo();
         }
       },
 
       updateRenderInfo: function () {
         var loc = $game.$map.masterToLocal(otherPlayer.info.x, otherPlayer.info.y);
-        if(loc) {
+        if (loc) {
           var prevX = loc.x * $game.TILE_SIZE + otherPlayer.info.prevOffX * $game.STEP_PIXELS,
             prevY = loc.y * $game.TILE_SIZE + otherPlayer.info.prevOffY * $game.STEP_PIXELS,
             curX = loc.x * $game.TILE_SIZE + otherPlayer.info.offX * $game.STEP_PIXELS,
@@ -204,14 +206,14 @@ $game.$others = {
       idle: function () {
 
         otherPlayer.idleCounter += 1;
-        if(otherPlayer.idleCounter >= 64) {
+        if (otherPlayer.idleCounter >= 64) {
           otherPlayer.idleCounter = 0;
           otherPlayer.info.srcX = 0;
           otherPlayer.info.srcY = 0;
           otherPlayer.getMaster = true;
         }
 
-        else if(otherPlayer.idleCounter == 48) {
+        else if (otherPlayer.idleCounter == 48) {
           otherPlayer.info.srcX = 32;
           otherPlayer.info.srcY = 0;
           otherPlayer.getMaster = true;
@@ -223,7 +225,7 @@ $game.$others = {
       },
 
       clear: function () {
-        $game.$renderer.clearCharacter(otherPlayer.renderInfo);
+        $game.$render.clearCharacter(otherPlayer.renderInfo);
       },
 
       slide: function (sX, sY) {
@@ -237,7 +239,7 @@ $game.$others = {
       },
 
       getRenderInfo: function () {
-        if(!otherPlayer.offScreen) {
+        if (!otherPlayer.offScreen) {
           return otherPlayer.renderInfo;
         }
         else {
@@ -274,7 +276,7 @@ $game.$others = {
       move: function () {
         //if the steps between the tiles has finished,
         //update the master location, and reset steps to go on to next move
-        if(otherPlayer.currentStep >= otherPlayer.numSteps) {
+        if (otherPlayer.currentStep >= otherPlayer.numSteps) {
           otherPlayer.currentStep = 0;
           otherPlayer.info.x = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX;
           otherPlayer.info.y = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY;
@@ -287,7 +289,7 @@ $game.$others = {
         }
 
         //check to see if done
-        if(otherPlayer.currentMove >= otherPlayer.seriesOfMoves.length) {
+        if (otherPlayer.currentMove >= otherPlayer.seriesOfMoves.length) {
           otherPlayer.endMove();
         }
 
@@ -298,7 +300,7 @@ $game.$others = {
           otherPlayer.currentStep += 1;
 
           //if it the first one, then figure out the direction to face
-          if(otherPlayer.currentStep === 1) {
+          if (otherPlayer.currentStep === 1) {
             otherPlayer.currentStepIncX = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterX - otherPlayer.info.x;
             otherPlayer.currentStepIncY = otherPlayer.seriesOfMoves[otherPlayer.currentMove].masterY - otherPlayer.info.y;
 
@@ -311,13 +313,13 @@ $game.$others = {
             //direction refers to the y location on the sprite sheet
             //since the character will be in different rows
             //will be 0,1,2,3
-            if(otherPlayer.currentStepIncX === 1) {
+            if (otherPlayer.currentStepIncX === 1) {
               otherPlayer.direction = 2;
             }
-            else if(otherPlayer.currentStepIncX === -1) {
+            else if (otherPlayer.currentStepIncX === -1) {
               otherPlayer.direction = 1;
             }
-            else if(otherPlayer.currentStepIncY === -1) {
+            else if (otherPlayer.currentStepIncY === -1) {
               otherPlayer.direction = 4;
             }
             else {
@@ -334,9 +336,9 @@ $game.$others = {
           otherPlayer.info.offY = otherPlayer.currentStep * otherPlayer.currentStepIncY;
 
           //try only changing the src (frame) every X frames
-          if((otherPlayer.currentStep-1)%8 === 0) {
+          if ((otherPlayer.currentStep-1)%8 === 0) {
             otherPlayer.curFrame += 1;
-            if(otherPlayer.curFrame >= otherPlayer.numFrames) {
+            if (otherPlayer.curFrame >= otherPlayer.numFrames) {
               otherPlayer.curFrame = 0;
             }
           }
@@ -348,7 +350,7 @@ $game.$others = {
 
       message: function (data) {
         // Display over other player's head if onscreen
-        if(!otherPlayer.offScreen) {
+        if (!otherPlayer.offScreen) {
           var position = {x: otherPlayer.renderInfo.curX, y: otherPlayer.renderInfo.curY};
           data.isChatting = otherPlayer.isChatting;
           data.chatId = otherPlayer.chatId;
@@ -380,7 +382,7 @@ $game.$others = {
 
       showPlayerCard: function () {
         var msg = otherPlayer.name + ' is a ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles';
-        if(!otherPlayer.offScreen) {
+        if (!otherPlayer.offScreen) {
           $game.statusUpdate({message: msg, input:'status', screen: true , log:false});
         }
       },
@@ -398,7 +400,7 @@ $game.$others = {
 
       skinSuitChange: function (info) {
         otherPlayer.skinSuit = info.skinSuit;
-        $game.$renderer.createCanvasForPlayer(info.id, info.skinSuit);
+        $game.$render.createCanvasForPlayer(info.id, info.skinSuit);
       }
     };
     return otherPlayer;
@@ -408,7 +410,7 @@ $game.$others = {
     var all = [];
     $.each(_onScreenPlayers, function (key, player) {
       var temp = player.getRenderInfo();
-      if(temp) {
+      if (temp) {
         all.push(temp);
       }
     });
@@ -416,14 +418,14 @@ $game.$others = {
   },
 
   sendMoveInfo: function (moves, id) {
-    if(_onScreenPlayers[id]) {
+    if (_onScreenPlayers[id]) {
       _onScreenPlayers[id].beginMove(moves);
     }
   },
 
   beam: function (info) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.id === info.id) {
+      if (player.id === info.id) {
         player.beam(info);
       }
     });
@@ -437,7 +439,7 @@ $game.$others = {
 
   skinSuitChange: function (info) {
     $.each(_onScreenPlayers, function (key, player) {
-      if(player.id === info.id) {
+      if (player.id === info.id) {
         player.skinSuitChange(info);
       }
     });

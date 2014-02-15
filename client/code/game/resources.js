@@ -9,13 +9,23 @@ var $resources = $game.$resources = {
   isShowing: false,
   ready: false,
 
+  // Copied from botanist.js/_svgFills
+  fills: {
+    orange:      'rgb(236,113,41)',
+    lightOrange: 'rgb(237,173,135)',
+    blue:        'rgb(14,152,212)',
+    lightBlue:   'rgb(109,195,233)',
+    green:       'rgb(76,212,206)',
+    lightGreen:  'rgb(164,238,235)'
+  },
+
   //load in all the resources and the corresponding answers
-  init: function(callback) {
+  init: function (callback) {
     var response = $game.$npc.getNpcData();
     //create array of ALL player responses and resource information
-    ss.rpc('game.npc.getResponses', $game.$player.instanceName, function(all) {
-      $.each(response, function(key, npc) {
-        if(npc.isHolding) {
+    ss.rpc('game.npc.getResponses', $game.$player.instanceName, function (all) {
+      $.each(response, function (key, npc) {
+        if (npc.isHolding) {
           var stringId = String(npc.index);
           _resources[stringId] = npc.resource;
           _resources[stringId].index = npc.index;
@@ -24,8 +34,8 @@ var $resources = $game.$resources = {
         }
       });
       var allRes = all[0].resourceResponses;
-      $.each(allRes, function(key, answer) {
-        if(answer.madePublic) {
+      $.each(allRes, function (key, answer) {
+        if (answer.madePublic) {
           var stringId = String(answer.npc);
           _resources[stringId].playerAnswers.push(answer);
         }
@@ -36,7 +46,7 @@ var $resources = $game.$resources = {
     });
   },
 
-  resetInit: function() {
+  resetInit: function () {
     _resources = [];
 
     $game.$resources.isShowing = false;
@@ -70,7 +80,7 @@ var $resources = $game.$resources = {
     // Close the inventory, then show resource and bind a function that returns to inventory on close
     $game.$input.closeInventory(function () {
       // Set a flag that remembers we were in the inventory
-      $game.$player.setFlag('viewing-inventory')
+      $game.setFlag('viewing-inventory')
 
       // Show the resource
       $resources.showResource(index)
@@ -96,9 +106,9 @@ var $resources = $game.$resources = {
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
-      if ($game.$player.checkFlag('viewing-inventory') === true) {
+      if ($game.checkFlag('viewing-inventory') === true) {
         $game.$input.openInventory()
-        $game.$player.removeFlag('viewing-inventory')
+        $game.removeFlag('viewing-inventory')
       }
 
       if (typeof callback === 'function') callback()
@@ -147,26 +157,26 @@ var $resources = $game.$resources = {
   },
 
   //get the shape svg info for a specific resource
-  getShape: function(index) {
+  getShape: function (index) {
     var stringId = String(index),
       shapeName = _resources[stringId].shape;
     return _resource.shapes[$game.$player.currentLevel][shapeName];
   },
 
-  getShapeName: function(index) {
+  getShapeName: function (index) {
     var stringId = String(index),
       shapeName = _resources[stringId].shape;
     return shapeName;
   },
 
   //get the tagline for the resource
-  getTagline: function(index) {
+  getTagline: function (index) {
     var stringId = String(index);
     return _resources[stringId].tagline;
   },
 
   //add an answer to the player answers for the specific resource
-  addAnswer: function(data) {
+  addAnswer: function (data) {
     var stringId = String(data.npc);
     _resources[stringId].playerAnswers.push(data);
     //update the npc bubbles on screen
@@ -174,18 +184,18 @@ var $resources = $game.$resources = {
   },
 
   //moreve an answer (this means they made it private and it was previously public)
-  removeAnswer: function(data) {
+  removeAnswer: function (data) {
     var stringId = String(data.npc);
     var found = false,
       i = 0;
     // console.log(_resources[stringId].playerAnswers);
     while(!found) {
-      if(_resources[stringId].playerAnswers[i].id === data.id) {
+      if (_resources[stringId].playerAnswers[i].id === data.id) {
         _resources[stringId].playerAnswers.splice(i, 1);
         found = true;
       }
       i++;
-      if(i >= _resources[stringId].playerAnswers.length) {
+      if (i >= _resources[stringId].playerAnswers.length) {
         found = true;
       }
     }
@@ -194,12 +204,12 @@ var $resources = $game.$resources = {
   },
 
   //get the question for a resource
-  getQuestion: function(index) {
+  getQuestion: function (index) {
     var stringId = String(index);
     return _resources[stringId].question;
   },
 
-  getNumResponses: function(index) {
+  getNumResponses: function (index) {
     var stringId = String(index);
     return _resources[stringId].playerAnswers.length;
   }
@@ -265,17 +275,8 @@ var _resource = {
     var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
         artboardX = artboard.offsetWidth,
         artboardY = artboard.offsetHeight,
-        shape     = $game.$resources.getShape(resource.index),
-        // Copied from botanist.js/_svgFills
-        fills = {
-          orange:      'rgb(236,113,41)',
-          lightOrange: 'rgb(237,173,135)',
-          blue:        'rgb(14,152,212)',
-          lightBlue:   'rgb(109,195,233)',
-          green:       'rgb(76,212,206)',
-          lightGreen:  'rgb(164,238,235)'
-        },
-        fill = fills[shape.fill]
+        shape     = $resources.getShape(resource.index),
+        fill      = $resources.fills[shape.fill]
 
     // Clear previous SVG if any
     artboard.innerHMTL = ''
@@ -428,7 +429,7 @@ var _resource = {
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
         isRevisit    = (answer && answer.result) ? true : false,
-        inPuzzleMode = $game.$player.checkFlag('in-puzzle'),
+        inPuzzleMode = $game.checkFlag('in-puzzle'),
         resource     = _resources[index]
 
     var $article     = $('#resource-stage .pages > section'),

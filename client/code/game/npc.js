@@ -15,12 +15,12 @@ var $npc = $game.$npc = {
   init: function (callback) {
     //load all the npc info from the DB store it in an array
     //where the index is the id of the npc / mapIndex
-    ss.rpc('game.npc.getNpcs', function(response) {
+    ss.rpc('game.npc.getNpcs', function (response) {
       // console.log(response);
       //iterate through repsonses, create a key
       //with the id and value is the object
       _allNpcs = {};
-      $.each(response, function(key, npc) {
+      $.each(response, function (key, npc) {
         $game.$npc.addNpc(npc);
       });
       _loaded = true;
@@ -41,35 +41,35 @@ var $npc = $game.$npc = {
   },
 
   //add an npc to the list
-  addNpc: function(npc) {
+  addNpc: function (npc) {
     var newbie = $game.$npc.createNpc(npc);
     newbie.getMaster();
     _allNpcs[npc.index] = newbie;
   },
 
   //update all npcs (for movement and rendering)
-  update: function() {
+  update: function () {
     //if is moving, move
-    $.each(_allNpcs, function(key, npc) {
+    $.each(_allNpcs, function (key, npc) {
       npc.update();
     });
   },
 
   //clear all npcs to draw fresh
-  clear: function() {
+  clear: function () {
     //if is moving, move
-    $.each(_allNpcs, function(key, npc) {
+    $.each(_allNpcs, function (key, npc) {
       npc.clear();
     });
   },
 
   //get render info for all npcs to draw them
-  getRenderInfo: function() {
+  getRenderInfo: function () {
     var all = [];
-    if((!$game.bossModeUnlocked && $game.$player.currentLevel > 3) || $game.$player.currentLevel <= 3) {
-      $.each(_allNpcs, function(key, npc) {
+    if ((!$game.bossModeUnlocked && $game.$player.currentLevel > 3) || $game.$player.currentLevel <= 3) {
+      $.each(_allNpcs, function (key, npc) {
         var temp = npc.getRenderInfo();
-        if(temp) {
+        if (temp) {
           all.push(temp);
         }
       });
@@ -114,20 +114,20 @@ var $npc = $game.$npc = {
       },
 
       //update the npc's rendering
-      update: function() {
+      update: function () {
 
-        if(!$game.inTransit) {
+        if (!$game.checkFlag('in-transit')) {
           npcObject.idle();
         }
-        else if($game.inTransit) {
+        else if ($game.checkFlag('in-transit')) {
           npcObject.getMaster();
         }
       },
 
       //figure out if it is on screen or not
-      getMaster: function() {
+      getMaster: function () {
         var loc = $game.$map.masterToLocal(npcObject.info.x, npcObject.info.y);
-        if(loc) {
+        if (loc) {
           var prevX = loc.x * $game.TILE_SIZE,
               prevY = loc.y * $game.TILE_SIZE,
               curX  = loc.x * $game.TILE_SIZE,
@@ -146,34 +146,34 @@ var $npc = $game.$npc = {
       },
 
       //advance the idle cycle for animation
-      idle: function() {
+      idle: function () {
         npcObject.counter += 1;
 
-        if(npcObject.counter >= 56) {
+        if (npcObject.counter >= 56) {
           npcObject.counter = 0;
           npcObject.renderInfo.srcX = 0;
           npcObject.renderInfo.srcY = npcObject.info.spriteY;
         }
 
-        else if(npcObject.counter == 24) {
+        else if (npcObject.counter == 24) {
           npcObject.renderInfo.srcX = 32;
           npcObject.renderInfo.srcY = npcObject.info.spriteY;
         }
 
-        else if(npcObject.counter == 28) {
+        else if (npcObject.counter == 28) {
           npcObject.renderInfo.srcX = 64;
           npcObject.renderInfo.srcY = npcObject.info.spriteY;
         }
 
-        else if(npcObject.counter == 32) {
+        else if (npcObject.counter == 32) {
           npcObject.renderInfo.srcX = 96;
           npcObject.renderInfo.srcY = npcObject.info.spriteY;
         }
       },
 
       //clear from the screen
-      clear: function() {
-        $game.$renderer.clearCharacter(npcObject.renderInfo);
+      clear: function () {
+        $game.$render.clearCharacter(npcObject.renderInfo);
       },
 
       // Returns actual numerical value of level
@@ -182,8 +182,8 @@ var $npc = $game.$npc = {
       },
 
       //get the render information to draw it
-      getRenderInfo: function() {
-        if(npcObject.onScreen) {
+      getRenderInfo: function () {
+        if (npcObject.onScreen) {
           return npcObject.renderInfo;
         }
         else {
@@ -448,7 +448,7 @@ var $npc = $game.$npc = {
     // resource-related functions that rely on it.
     var stringId = String(index);
     _curNpc = _allNpcs[stringId];
-    if(!_curNpc) {
+    if (!_curNpc) {
       index += $game.TOTAL_WIDTH;
       stringId = String(index);
       _curNpc = _allNpcs[stringId];
@@ -502,17 +502,17 @@ var $npc = $game.$npc = {
     return _allNpcs[index].name
   },
 
-  getOnScreenNpcs: function() {
+  getOnScreenNpcs: function () {
     var onScreen = [];
-    $.each(_allNpcs, function(key, npc) {
-      if(npc.onScreen) {
+    $.each(_allNpcs, function (key, npc) {
+      if (npc.onScreen) {
         onScreen.push(npc.index);
       }
     });
     return onScreen;
   },
 
-  getNpcCoords: function(index) {
+  getNpcCoords: function (index) {
     var stringId = String(index),
       npc = _allNpcs[stringId];
     return({x: npc.renderInfo.curX, y: npc.renderInfo.curY});

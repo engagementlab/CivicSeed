@@ -2,33 +2,33 @@
 
 //private botanist vars
 var _info = null,
-  _renderInfo = null,
-  _onScreen = false,
-  _messages = null,
-  _currentMessage = 0,
-  _currentSlide = 0,
-  _promptNum = 0,
-  _transferData = {},
-  _svg = null,
-  _drag = null,
-  _new = null,
-  _counter = 0,
-  _dragOffX = 0,
-  _dragOffY = 0,
-  _svgFills = {orange: 'rgb(236,113,41)', lightOrange: 'rgb(237,173,135)', blue: 'rgb(14,152,212)', lightBlue: 'rgb(109,195,233)', green: 'rgb(76,212,206)', lightGreen: 'rgb(164,238,235)' },
-  _paintbrushSeedFactor = 5,
-  _levelQuestion = ['What motivates you to civically engage? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!', 'What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your civic engagement to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
-  _firstTime = false,
+    _renderInfo = null,
+    _onScreen = false,
+    _messages = null,
+    _currentMessage = 0,
+    _currentSlide = 0,
+    _promptNum = 0,
+    _transferData = {},
+    _svg = null,
+    _drag = null,
+    _new = null,
+    _counter = 0,
+    _dragOffX = 0,
+    _dragOffY = 0,
 
-  $botanistArea = null,
-  $inventoryItem = null,
-  $tangramArea = null,
-  $botanistTextArea = null,
-  $inventory = null,
-  $inventoryBtn = null,
-  $inventoryPuzzle = null,
-  $botanistContent = null,
-  $botanistAreaMessage = null;
+    _paintbrushSeedFactor = 5,
+    _levelQuestion = ['What motivates you to civically engage? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!', 'What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your civic engagement to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
+    _firstTime = false,
+
+    $botanistArea = null,
+    $inventoryItem = null,
+    $tangramArea = null,
+    $botanistTextArea = null,
+    $inventory = null,
+    $inventoryBtn = null,
+    $inventoryPuzzle = null,
+    $botanistContent = null,
+    $botanistAreaMessage = null;
 
 //export botanist functions
 var $botanist = $game.$botanist = {
@@ -49,8 +49,8 @@ var $botanist = $game.$botanist = {
   _nudgePlayerTimeout: null,
   tutorialState: 0,
 
-  init: function(callback) {
-    ss.rpc('game.npc.loadBotanist', function(botanist) {
+  init: function (callback) {
+    ss.rpc('game.npc.loadBotanist', function (botanist) {
       $game.$botanist.index = botanist.id;
       $game.$botanist.dialog = botanist.dialog;
       $game.$botanist.name = botanist.name;
@@ -80,7 +80,7 @@ var $botanist = $game.$botanist = {
     });
   },
 
-  resetInit: function() {
+  resetInit: function () {
     _info = null;
     _renderInfo = null;
     _onScreen = false;
@@ -122,15 +122,15 @@ var $botanist = $game.$botanist = {
   },
 
   //clear botanist from canvas
-  clear: function() {
-    $game.$renderer.clearBotanist(_renderInfo);
+  clear: function () {
+    $game.$render.clearBotanist(_renderInfo);
   },
 
   //get botanist current render data
-  getRenderInfo: function() {
+  getRenderInfo: function () {
     //since the botanist is stationary, we can hard code his location
 
-    if(_onScreen) {
+    if (_onScreen) {
       return _renderInfo;
     }
     else {
@@ -139,13 +139,13 @@ var $botanist = $game.$botanist = {
   },
 
   //decide how to render botanist
-  update: function() {
-    if(!$game.inTransit) {
-      if(_onScreen) {
+  update: function () {
+    if (!$game.checkFlag('in-transit')) {
+      if (_onScreen) {
         $game.$botanist.idle();
       }
     }
-    else if($game.inTransit) {
+    else if ($game.checkFlag('in-transit')) {
       $game.$botanist.getMaster();
     }
   },
@@ -172,10 +172,10 @@ var $botanist = $game.$botanist = {
   },
 
   //determine if botanist is on screen
-  getMaster: function() {
+  getMaster: function () {
     var loc = $game.$map.masterToLocal(_info.x, _info.y);
 
-    if(loc) {
+    if (loc) {
       var prevX = loc.x * $game.TILE_SIZE,
         prevY = loc.y * $game.TILE_SIZE,
         curX = loc.x * $game.TILE_SIZE,
@@ -194,24 +194,24 @@ var $botanist = $game.$botanist = {
   },
 
   //update data for idle cycle animation
-  idle: function() {
+  idle: function () {
     _counter += 1;
 
-    if(_renderInfo.srcY === 0) {
-      if(_counter >= 24) {
+    if (_renderInfo.srcY === 0) {
+      if (_counter >= 24) {
         _counter = 0;
         _renderInfo.srcX = 0;
       }
 
-      else if(_counter == 18) {
+      else if (_counter == 18) {
         _renderInfo.srcX = 32 * 6;
       }
 
-      else if(_counter == 12) {
+      else if (_counter == 12) {
         _renderInfo.srcX = 32 * 12;
       }
 
-      else if(_counter == 6) {
+      else if (_counter == 6) {
         _renderInfo.srcX = 32 * 18;
       }
     } else {
@@ -220,7 +220,7 @@ var $botanist = $game.$botanist = {
   },
 
   //determine what to show the player when they click on the botanist
-  show: function() {
+  show: function () {
     var level = $game.$player.currentLevel
 
     // Clear nudges if present
@@ -290,7 +290,7 @@ var $botanist = $game.$botanist = {
 
     function _nudge() {
       $game.alert('Talk to the botanist')
-      $game.$renderer.pingMinimap(70, 71)
+      $game.$render.pingMinimap(70, 71)
     }
   },
 
@@ -359,18 +359,18 @@ var $botanist = $game.$botanist = {
     $botanist.chat(dialogue, function () {
       if (prompt === 1) {
         $botanistArea.addClass('puzzle-mode')
-        $game.$player.setFlag('solving-puzzle')
+        $game.setFlag('solving-puzzle')
       }
       $game.$botanist.showRiddle(prompt);
     })
   },
 
   //show the riddle if the inventory is open and it was clicked
-  inventoryShowRiddle: function() {
+  inventoryShowRiddle: function () {
 
     //hide the inventory if the resource is not already visible
     //when clicked on from inventory (this means it isn't in puzzle mode)
-    if(!$game.$botanist.isShowing) {
+    if (!$game.$botanist.isShowing) {
       $inventory.slideUp();
       $game.$botanist.isChat = true;
       $game.$botanist.showRiddle(0);
@@ -378,32 +378,31 @@ var $botanist = $game.$botanist = {
   },
 
   //show the riddle, its basically an image
-  showRiddle: function(num) {
+  showRiddle: function (num) {
     _promptNum = num;
     _currentSlide = 0;
     //if they are solving, change functionality of inventory
-    if(num === 1) {
+    if (num === 1) {
       $game.$botanist.isChat = true;
-    } else if(num === 2) {
+    } else if (num === 2) {
       _currentSlide = 2;
     }
     $game.$botanist.addContent();
     $game.$botanist.addButtons();
 
     $game.$npc.hideSpeechBubble(function () {
-      $botanistArea.fadeIn(function() {
+      $botanistArea.fadeIn(function () {
         $game.$botanist.isShowing = true;
 
-        if(_currentSlide === 0 && !$game.$player.firstTime) {
+        if (_currentSlide === 0 && !$game.$player.firstTime) {
           $tangramArea.show();
 
-          $game.$player.setFlag('in-puzzle')
+          $game.setFlag('in-puzzle')
 
           // Show 'how-to-play' puzzle hints
-          $game.alert('Drag a piece to the board to place it')
           setTimeout(function () {
-            $game.alert('Click a piece in the inventory to review')
-          }, 6000)
+            $game.alert('Drag a piece to the board to place it')
+          }, 5000)
 
           // Find and store coordinates for the trash area
           _botanist.setTrashPosition()
@@ -414,13 +413,13 @@ var $botanist = $game.$botanist = {
   },
 
   //determine which buttons to show based on what is being shown
-  addButtons: function() {
+  addButtons: function () {
     $('#botanist-area button').hide();
 
     //no buttons except close
-    if(_promptNum === 0) {
-      if(_currentSlide === 0) {
-        if($game.$player.firstTime) {
+    if (_promptNum === 0) {
+      if (_currentSlide === 0) {
+        if ($game.$player.firstTime) {
           $('#botanist-area .nextButton').show();
         } else {
           $('#botanist-area .closeButton').show();
@@ -431,11 +430,11 @@ var $botanist = $game.$botanist = {
       }
     }
     else {
-      if(_currentSlide === 0) {
+      if (_currentSlide === 0) {
         $('#botanist-area .answerButton').show();
         $('#botanist-area .clearBoardButton').show();
       }
-      else if(_currentSlide === 1) {
+      else if (_currentSlide === 1) {
         $('#botanist-area .nextButton').show();
       }
       else {
@@ -446,29 +445,29 @@ var $botanist = $game.$botanist = {
   },
 
   //advance to next slide content
-  nextSlide: function() {
+  nextSlide: function () {
     _currentSlide += 1;
     $game.$botanist.addContent();
     $game.$botanist.addButtons();
   },
 
   //go to previous slide content
-  previousSlide: function() {
+  previousSlide: function () {
     _currentSlide -= 1;
     $game.$botanist.addContent();
     $game.$botanist.addButtons();
   },
 
   //determine which content to add and add it
-  addContent: function() {
+  addContent: function () {
     $('#botanist-area .speaker').text($game.$botanist.name);
     //if _promptNum is 0, then it is the just showing the riddle no interaction
-    if(_promptNum === 0) {
-      if(_currentSlide === 0) {
+    if (_promptNum === 0) {
+      if (_currentSlide === 0) {
 
         $botanistContent.empty()
 
-        if($botanist.getState() > 1) {
+        if ($botanist.getState() > 1) {
           $botanistAreaMessage.text('Here is the notebook page to view again.');
         }
         else {
@@ -485,7 +484,7 @@ var $botanist = $game.$botanist = {
 
       }
       else {
-        if($game.$player.currentLevel === 0) {
+        if ($game.$player.currentLevel === 0) {
           $game.$player.firstTime = false;
           var info = {
             id: $game.$player.id,
@@ -505,7 +504,7 @@ var $botanist = $game.$botanist = {
     }
     //they are solving it, so riddle interface and stuff
     else {
-      if(_currentSlide === 0) {
+      if (_currentSlide === 0) {
         $inventoryBtn.hide();
 
         $game.$input.openInventory(function () {
@@ -525,7 +524,7 @@ var $botanist = $game.$botanist = {
         $('.inventoryHelp').show();
       }
       //right/wrong screen
-      else if(_currentSlide === 1) {
+      else if (_currentSlide === 1) {
         $botanistArea.animate({
             'height':'450px'
         });
@@ -558,30 +557,30 @@ var $botanist = $game.$botanist = {
   },
 
   //hide botanist window return game functionality
-  hideResource: function() {
+  hideResource: function () {
     //slide up the botanist area that contains big content
     //re-enable clicking by setting bools to false
-    if($game.$player.firstTime && $game.$player.botanistState === 2) {
+    if ($game.$player.firstTime && $game.$player.botanistState === 2) {
       $game.statusUpdate({message:'Level 1: Looking Inward.  See the log below for more details.',input:'status',screen: true,log:false});
       $game.statusUpdate({message:'Level 1 is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.',input:'status',screen: false, log: true});
     }
     $tangramArea.hide();
-    $botanistArea.fadeOut(function() {
+    $botanistArea.fadeOut(function () {
       $game.$botanist.isShowing = false;
       $('.botanist button').hide();
       $(this).removeClass('puzzle-mode')
       $game.$botanist.isChat = false;
 
-      $game.$player.removeFlag('solving-puzzle')
+      $game.removeFlag('solving-puzzle')
 
       $game.$botanist.clearBoard();
       $('.inventoryItem').css('opacity',1);
 
       // Remove flags
-      $game.$player.removeFlag('in-puzzle')
+      $game.removeFlag('in-puzzle')
 
       //if they just beat a level, then show progreess
-      if($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
+      if ($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
         $game.highlightUI('.progressButton')
         $game.showProgress();
       }
@@ -598,10 +597,10 @@ var $botanist = $game.$botanist = {
   },
 
   //when player submits answer must verify all pieces and respond accordingly
-  submitAnswer: function() {
+  submitAnswer: function () {
     //go through and check each piece on 'the board' and see it exists within the right answer
     //array and check the location. give feedback/next screen based on results
-    if(_currentSlide === 0) {
+    if (_currentSlide === 0) {
       var allTangrams = $('.puzzle-svg > path'),
       correct = true,
       numRight = 0,
@@ -610,7 +609,7 @@ var $botanist = $game.$botanist = {
       wrongOne = false,
       nudge = false;
 
-      allTangrams.each(function(i, d) {
+      allTangrams.each(function (i, d) {
         //pull the coordinates for each tangram
         var tanIdD = $(this).attr('class'),
           tanId = tanIdD.substring(2,tanIdD.length),
@@ -627,10 +626,10 @@ var $botanist = $game.$botanist = {
 
         while(--t > -1) {
           var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t];
-          if(answer.id === tanId) {
+          if (answer.id === tanId) {
             found = true;
             //this is a hard check for snapping
-            if(transX === answer.x && transY === answer.y) {
+            if (transX === answer.x && transY === answer.y) {
               numRight += 1;
               correctPiece = true;
             }
@@ -640,7 +639,7 @@ var $botanist = $game.$botanist = {
           }
         }
 
-        if(!found) {
+        if (!found) {
           wrongOne = true;
           correct = false;
           //remove it from the board
@@ -649,7 +648,7 @@ var $botanist = $game.$botanist = {
             .css('opacity', 1)
             .attr('draggable', 'true');
         }
-        else if(found && !correctPiece) {
+        else if (found && !correctPiece) {
           nudge = true;
           correct = false;
           //remove it from the board
@@ -660,31 +659,31 @@ var $botanist = $game.$botanist = {
         }
       });
 
-      if(allTangrams.length === 0) {
+      if (allTangrams.length === 0) {
         correct = false;
         _paintbrushSeedFactor -= 1;
         message = 'At least TRY to solve it!';
       }
-      else if(wrongOne) {
+      else if (wrongOne) {
         correct= false;
         _paintbrushSeedFactor -=1;
         message = 'Oh! That’s not quite right. Think more about how the pieces relate to one another, and try again.';
       }
-      else if(allTangrams.length < aLength) {
+      else if (allTangrams.length < aLength) {
         correct= false;
         _paintbrushSeedFactor -=1;
         message = 'You are missing some pieces. Be sure to read the notebook clues carefully to help pick out the right pieces.';
       }
-      else if(nudge) {
+      else if (nudge) {
         correct= false;
         _paintbrushSeedFactor -=1;
         message = 'So close! You had the right pieces, just fix the placement.';
       }
 
-      if(correct) {
+      if (correct) {
         //it is correct if none were WRONG
         //make sure ALL were on the board
-        if(numRight === aLength) {
+        if (numRight === aLength) {
           _currentSlide = 1;
           $game.$botanist.addContent();
           $game.$botanist.addButtons();
@@ -742,7 +741,7 @@ var $botanist = $game.$botanist = {
 
   //when dragging starts from inventory must bind drop on puzzle area
   dragStart: function (e) {
-    if ($game.$player.checkFlag('solving-puzzle')) {
+    if ($game.checkFlag('solving-puzzle')) {
 
       $tangramArea
         .unbind('dragover')
@@ -772,7 +771,7 @@ var $botanist = $game.$botanist = {
   },
 
   //when drop add it to puzzle area
-  drop: function(e) {
+  drop: function (e) {
     e.preventDefault();
     if (e.stopPropagation) {
       e.stopPropagation();
@@ -789,7 +788,7 @@ var $botanist = $game.$botanist = {
 
     var shape = $game.$resources.getShape(npc),
       path = shape.path,
-      fill = _svgFills[shape.fill];
+      fill = $game.$resources.fills[shape.fill];
 
 
     //console.log(npcData, selector, x);
@@ -874,7 +873,7 @@ var $botanist = $game.$botanist = {
     // Set the appearance of the tangram piece
     d3.select('.br' + d.id)
       .attr('transform', trans)
-      .attr('opacity', function() {
+      .attr('opacity', function () {
         return trashing ? 0.5 : 1
       })
   },
@@ -883,8 +882,8 @@ var $botanist = $game.$botanist = {
   dropMove: function (d) {
     var x     = d3.event.sourceEvent.layerX,
         y     = d3.event.sourceEvent.layerY,
-        mX    = $game.$botanist.snapTo(x - _dragOffX),
-        mY    = $game.$botanist.snapTo(y - _dragOffY),
+        mX    = _botanist.snapTangramTo(x - _dragOffX),
+        mY    = _botanist.snapTangramTo(y - _dragOffY),
         trans = 'translate(' + mX  + ', ' + mY + ')',
         trash = _botanist.trashPosition
 
@@ -907,22 +906,6 @@ var $botanist = $game.$botanist = {
   clearBoard: function () {
     $('.puzzle-svg').empty()
     $('.inventoryItem').css('opacity', 1).attr('draggable', 'true')
-  },
-
-  // When piece is moved, snap to 10x10 grid
-  snapTo: function (num) {
-    var result = num,
-        thresh = 10,
-        half   = thresh / 2,
-        round  = (num % thresh - half)
-
-    if (round > -1) {
-      result += half - round
-    }
-    else {
-      result += -half - round
-    }
-    return result
   },
 
   // Give user feedback on puzzle answer
@@ -988,6 +971,11 @@ var _botanist = {
     this.trashPosition = this.getTrashPosition()
 
     return (this.trashPosition.top !== null) ? true : false
-  }
+  },
 
+  // When piece is moved, snap to 10x10 grid
+  snapTangramTo: function (num) {
+    var thresh = 10
+    return Math.round(num / thresh) * thresh
+  }
 }

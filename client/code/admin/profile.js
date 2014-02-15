@@ -18,7 +18,7 @@ var self = module.exports = {
 				resume: updates
 			};
 			ss.rpc('shared.profiles.updateResume', updateInfo, function(res) {
-				if(res) {
+				if (res) {
 					apprise('changes saved');
 				}
 			});
@@ -29,7 +29,7 @@ var self = module.exports = {
 				changeTo,
 				newText,
 				newClass;
-			if(profilePublic === 'false' || !profilePublic) {
+			if (profilePublic === 'false' || !profilePublic) {
 				profilePublic = 'true';
 				changeTo = true;
 				newText = 'your profile is public';

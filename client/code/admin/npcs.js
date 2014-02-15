@@ -22,7 +22,7 @@ var self = module.exports = {
 			$(this).toggleClass('current');
 			var show = $(this).hasClass('current'),
 				npcSel = '.level' + (level - 1);
-			if(show) {
+			if (show) {
 				$(npcSel).show();
 			} else {
 				$(npcSel).hide();
@@ -44,7 +44,7 @@ var self = module.exports = {
 				npc = $(parents[parents.length-1]),
 				sprite = npc.attr('data-sprite'),
 				bg = $(parents[1]);
-			if(sprite > 0) {
+			if (sprite > 0) {
 				sprite--;
 				var locY = sprite * -64,
 					pos = '0 ' + locY + 'px';
@@ -60,7 +60,7 @@ var self = module.exports = {
 				npc = $(parents[parents.length-1]),
 				sprite = npc.attr('data-sprite'),
 				bg = $(parents[1]);
-			if(sprite < 53) {
+			if (sprite < 53) {
 				sprite++;
 				var locY = sprite * -64,
 					pos = '0 ' + locY + 'px';
@@ -99,7 +99,7 @@ var self = module.exports = {
 				parents = $(this).parentsUntil('.npcs'),
 				npcParent = $(parents[parents.length-1]);
 
-			if(holding) {
+			if (holding) {
 				$(npcParent).find('.resource').show();
 				$(npcParent).find('.prompts').show();
 				$(npcParent).find('.smalltalk').hide();
@@ -116,10 +116,10 @@ var self = module.exports = {
 				npcParent = $(parents[parents.length-1]);
 			$(npcParent).find('.questionOptions').hide();
 
-			if(questionType === 'open') {
+			if (questionType === 'open') {
 				$(npcParent).find('.requiredDiv').show();
 			} else {
-				if(questionType === 'multiple') {
+				if (questionType === 'multiple') {
 					$(npcParent).find('.possibleDiv').show();
 				}
 				$(npcParent).find('.answerDiv').show();
@@ -197,13 +197,13 @@ var self = module.exports = {
       var area = $(this).attr('data-area'),
           val  = self._prettify(this.value);
 
-			if(area === 'name') {
+			if (area === 'name') {
 				updates.name = val;
-			} else if(area === 'level') {
+			} else if (area === 'level') {
 				updates.level = parseInt(val, 10) - 1;
-			} else if(area === 'x') {
+			} else if (area === 'x') {
 				x = parseInt(val, 10);
-			} else if(area === 'y') {
+			} else if (area === 'y') {
 				y = parseInt(val, 10);
 			}
 		});
@@ -213,23 +213,23 @@ var self = module.exports = {
 		resourceAreas.each(function(i) {
 			var area = $(this).attr('data-area'),
 				val =  self._prettify(this.value);
-			if(area === 'url') {
+			if (area === 'url') {
 				updates.resource.url = val;
-			} else if(area === 'shape') {
+			} else if (area === 'shape') {
 				updates.resource.shape = val;
-			} else if(area === 'question') {
+			} else if (area === 'question') {
 				updates.resource.question = val;
-			} else if(area === 'possibleAnswers') {
+			} else if (area === 'possibleAnswers') {
 				updates.resource.possibleAnswers.push(val);
-			} else if(area === 'answer') {
+			} else if (area === 'answer') {
 				updates.resource.answer = val;
-			} else if(area === 'requiredLength') {
+			} else if (area === 'requiredLength') {
 				updates.resource.requiredlength = parseInt(val, 10);
-			} else if(area === 'dependsOn') {
+			} else if (area === 'dependsOn') {
 				updates.dependsOn = parseInt(val,10);
-			} else if(area === 'feedbackRight') {
+			} else if (area === 'feedbackRight') {
 				updates.resource.feedbackRight = val;
-			} else if(area === 'feedbackWrong') {
+			} else if (area === 'feedbackWrong') {
 				updates.resource.feedbackWrong = val;
 			}
 		});
@@ -238,7 +238,7 @@ var self = module.exports = {
 			var area = $(this).attr('data-area'),
 				val = self._prettify(this.value);
 
-			if(area === 'prompt') {
+			if (area === 'prompt') {
 				updates.dialog.prompts.push(val);
 			}
 		});
@@ -248,24 +248,24 @@ var self = module.exports = {
 			var area = $(this).attr('data-area'),
 				val = self._prettify(this.value);
 
-			if(area === 'smalltalk') {
+			if (area === 'smalltalk') {
 				updates.dialog.smalltalk.push(val);
 			}
 		});
 
 		var skinVal = skinSuitArea.val();
 		// console.log(skinVal);
-		if(skinVal && skinVal.length > 0) {
+		if (skinVal && skinVal.length > 0) {
 			updates.skinSuit = skinVal;
 		}
 
 		//this means it is a new one, do not save, but add new in db
-		if(id < 0) {
+		if (id < 0) {
 			//figure out id
 			var max = 0;
 			$('.saveChanges').each(function(i){
 				var id = parseInt($(this).data('id'),10);
-				if(id > max) {
+				if (id > max) {
 					max = id;
 				}
 			});
@@ -282,7 +282,7 @@ var self = module.exports = {
 			$(saveButton).attr('data-id', updates.id);
 			$(deleteButton).attr('data-id', updates.id);
 			ss.rpc('admin.npcs.addNpc', updates, function(err) {
-				if(err) {
+				if (err) {
 					apprise(err);
 				} else {
 					var saveButton = npc.find('.saveChanges');
@@ -294,7 +294,7 @@ var self = module.exports = {
 			});
 		} else {
 			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
-				if(err) {
+				if (err) {
 					apprise(err);
 				} else {
 					var saveButton = npc.find('.saveChanges');
@@ -312,17 +312,17 @@ var self = module.exports = {
 
 	deleteNpc: function(id) {
 		var confirm = prompt('please type "delete" to permanently remove the npc.');
-		if(confirm === 'delete') {
+		if (confirm === 'delete') {
 			var npc = $('.npc' + id);
 
 			//this means it has never been saved, delete it from client
-			if(id < 0) {
+			if (id < 0) {
 				npc.fadeOut(function() {
 					this.remove();
 				});
 			} else {
 				ss.rpc('admin.npcs.deleteNpc',id, function(err,res) {
-					if(err) {
+					if (err) {
 						console.log(err);
 					} else {
 						npc.fadeOut(function() {

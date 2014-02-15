@@ -1,7 +1,5 @@
 'use strict';
 
-var _hideTimer = null
-
 var $chat = $game.$chat = {
 
   init: function (callback) {
@@ -10,7 +8,7 @@ var $chat = $game.$chat = {
   },
 
   resetInit: function () {
-    _hideTimer = null
+    // Nothing.
   },
 
   message: function (data) {
@@ -27,30 +25,30 @@ var $chat = $game.$chat = {
     }
 
     // Set some appearance vars
-    var len       = message.length + name.length + 2,
-        fadeTime  = Math.min(len * 150 + 1000, 11500),
-        sz        = Math.floor(len * 8) + 20
+    var len          = message.length + name.length + 2,
+        displayTime  = Math.min(len * 150 + 1000, 11500),
+        sz           = Math.floor(len * 8) + 20
 
     // Clear previous timeout, if any
-    clearTimeout(_hideTimer)
+    clearTimeout(_chat.displayTime)
 
     // Re-use the existing element or create a new one, if not present
     if (bubble) {
       bubble.innerText = name + ': '+ message
     }
     else {
-      $(gameboard).append('<p class=\'player-chat\' id="chat-' + data.id + '">' + name +': '+ message + '</p>')
+      $(gameboard).append('<p class="player-chat" id="chat-' + data.id + '">' + name +': '+ message + '</p>')
     }
 
     // Setup a timer to hide the message after some time
-    _hideTimer = setTimeout(function () {
+    _chat.displayTime = setTimeout(function () {
       $chat.hideChat(data)
-    }, fadeTime)
+    }, displayTime)
 
     // Place the chat bubble
     _chat.place(sz, data)
 
-    //
+    // Misc actions
     if (other) {
       $game.$audio.playTriggerFx('chatReceive')
     }
@@ -64,12 +62,11 @@ var $chat = $game.$chat = {
 
   // Remove chat from screen
   hideChat: function (data) {
+    // If data is not passed in, assume it's the chat for current player
     if (!data) data = { id: $game.$player.id }
     var el = document.getElementById('chat-' + data.id)
-
-    clearTimeout(_hideTimer)
-
-    $(el).fadeOut('fast',function() {
+    clearTimeout(_chat.displayTime)
+    $(el).fadeOut('fast',function () {
       $(this).remove()
       _chat.flag(false)
     })
@@ -78,25 +75,29 @@ var $chat = $game.$chat = {
 
 var _chat = {
 
+  // Placeholder for chat display time, after which a setTimeout is used to hide the chat bubble.
+  displayTime: null,
+
+  // Set a flag to indicate if a player has a chat bubble on screen
   flag: function (bool) {
     if (bool === true) {
-      $game.$player.setFlag('chatting')
+      $game.setFlag('chatting')
       return true
     }
     else if (bool === false) {
-      $game.$player.removeFlag('chatting')
+      $game.removeFlag('chatting')
       return false
     }
-    return $game.$player.checkFlag('chatting')
+    return $game.checkFlag('chatting')
   },
 
-  //this places the chat centered above player, or if too big then left/right align with screen edge
+  // Place the chat centered above player, or if too big then left/right align with screen edge
   place: function (sz, data) {
     var half     = sz / 2,
         placeX   = null,
         placeY   = null,
         position = null,
-        adjustY  = 0,
+        adjustY  = 3,
         other    = false
 
     if (data.id !== $game.$player.id) other = true

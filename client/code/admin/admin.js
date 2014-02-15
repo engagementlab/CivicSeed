@@ -47,14 +47,14 @@ var self = module.exports = {
 
 			var instanceName = $('#instanceName').val().trim();
 
-			if(instanceName && emailList) {
+			if (instanceName && emailList) {
 				emailList = emailList.slice(0, 20);
 				emailListLength = emailList.length;
 				var id = sessionStorage.getItem('userId');
 				ss.rpc('admin.invitecodes.newGameInstance', {instanceName: instanceName, numPlayers: emailListLength, id: id}, function(err, res) {
-					if(err) {
+					if (err) {
 						console.log('error with db', err);
-					} else if(res) {
+					} else if (res) {
 						apprise('game name already exists');
 					} else {
 						ss.rpc('admin.invitecodes.sendInvites', emailList, instanceName, function(res) {
@@ -68,7 +68,7 @@ var self = module.exports = {
 			// var sessionName = document.getElementById('sessionName').value;
 			// var date;
 			// sessionName = sessionName.replace(/ /g, '.');
-			// if(sessionName === '') {
+			// if (sessionName === '') {
 			// 	date = new Date();
 			// 	sessionName = 'session.' + date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 			// 	sessionName += '.' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
@@ -92,7 +92,7 @@ var self = module.exports = {
 		$body.on('click', '#players', function() {
 			var instance = $(this).attr('data-instance');
 			ss.rpc('admin.monitor.getPlayers', instance, function(err, res) {
-				if(res) {
+				if (res) {
 					//console.log(res);
 					self.players = res;
 					self.showPlayersInfo();
@@ -108,7 +108,7 @@ var self = module.exports = {
 		$body.on('click', '#chat', function() {
 			var instance = $(this).attr('data-instance');
 			ss.rpc('admin.monitor.getRecentChat', instance, function(err, res) {
-				if(res) {
+				if (res) {
 					self.showChat(res);
 				}
 			});
@@ -142,7 +142,7 @@ var self = module.exports = {
 		$body.on('click', '.deletePlayer', function() {
 			var id = $(this).attr('data-id'),
 				word = $('.input' + id).val();
-			if(word.indexOf('delete') > -1) {
+			if (word.indexOf('delete') > -1) {
 				self.deletePlayer(id, this);	
 			} else {
 				apprise('you must type delete to delete user');
@@ -160,11 +160,11 @@ var self = module.exports = {
 			var email = $('#addPlayerEmail').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi),
 				instanceName = $(this).attr('data-instance');
 
-			if(email) {
+			if (email) {
 				ss.rpc('admin.invitecodes.getCount', instanceName, function(space) {
-					if(space) {
+					if (space) {
 						ss.rpc('admin.invitecodes.sendInvites', email, instanceName, space,function(okay) {
-							if(okay) {
+							if (okay) {
 								apprise('added successfully');
 							} else {
 								apprise('error');
@@ -204,7 +204,7 @@ var self = module.exports = {
 
 	showChat: function(chat) {
 		var html = '<h2>Recent Chat History</h2><div class="allChat">';
-		if(chat.length === 0) {
+		if (chat.length === 0) {
 			html += '<p>No one has spoken yet.</p>';
 		} else {
 			for(var i = 0; i < chat.length; i++) {
@@ -230,7 +230,7 @@ var self = module.exports = {
 
 	getQuestions: function() {
 		ss.rpc('admin.monitor.init', function(err,res) {
-			if(res) {
+			if (res) {
 				self.allQuestions = res.sort(self.sortByLevel);
 			}
 		});
@@ -247,26 +247,26 @@ var self = module.exports = {
 				found = false,
 				open = false;
 			while(!found) {
-				if(self.allQuestions[n].index === npcInt) {
+				if (self.allQuestions[n].index === npcInt) {
 					found = true;
-					if(self.allQuestions[n].resource.questionType === 'open') {
+					if (self.allQuestions[n].resource.questionType === 'open') {
 						open = true;
 						html += '<p class="question level' + self.allQuestions[n].level + '">Q: ' + self.allQuestions[n].resource.question + '</p>';
 					}
 				}
 				n++;
-				if(n >= numNPC) {
+				if (n >= numNPC) {
 					found = true;
 				}
 			}
 			//answer only if open ended
-			if(open) {
+			if (open) {
 				html += '<div class="answer"><p>A: ' + npc.answers[0] + '</p><div class="extras">';
-				if(npc.madePublic) {
+				if (npc.madePublic) {
 					//put unlocked icon
 					html += '<i class="fa fa-unlock-alt fa-lg"></i>';
 				}
-				if(npc.seeded) {
+				if (npc.seeded) {
 					//thumbs up icon with number
 					html += '<i class="fa fa-thumbs-up fa-lg"></i> ' + npc.seeded.length;
 				}
@@ -278,7 +278,7 @@ var self = module.exports = {
 
 	deletePlayer: function(id) {
 		ss.rpc('admin.monitor.deletePlayer', id, function(err) {
-			if(err) {
+			if (err) {
 				console.log(err);
 			} else {
 				var sel = '.player' + id;
@@ -289,10 +289,10 @@ var self = module.exports = {
 
 	toggleGame: function(instance, bool) {
 		ss.rpc('admin.monitor.toggleGame', instance, bool, function(err) {
-			if(err) {
+			if (err) {
 				apprise('error switching game');
 			} else {
-				if(bool) {
+				if (bool) {
 					apprise('the game is now active');	
 				} else {
 					apprise('the game is now inactive');
@@ -304,7 +304,7 @@ var self = module.exports = {
 	showQuestions: function(instance) {
 		var html = '<h2>All Open-Ended Questions</h2>';
 		for(var q = 0; q < self.allQuestions.length; q++) {
-			if(self.allQuestions[q].resource.questionType === 'open') {
+			if (self.allQuestions[q].resource.questionType === 'open') {
 				html += '<div class="allQuestion" data-instance="' + instance + '" data-npc="' + self.allQuestions[q].index +'">';
 				html += '<p data-npc="' + self.allQuestions[q].index +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>';
 			}
@@ -315,9 +315,9 @@ var self = module.exports = {
 
 	getAllAnswers: function(instance) {
 		ss.rpc('admin.monitor.getInstanceAnswers', instance, function(err, res){
-			if(err) {
+			if (err) {
 				self.allAnswers = [];
-			} else if(res) {
+			} else if (res) {
 				self.allAnswers = res.resourceResponses;
 			}
 		});
@@ -330,13 +330,13 @@ var self = module.exports = {
 			npcInt = parseInt(npc,10);
 
 		for(var i = 0; i < self.allAnswers.length; i++) {
-			if(self.allAnswers[i].npc === npcInt) {
+			if (self.allAnswers[i].npc === npcInt) {
 				found = true;
 				html += '<p class="allPlayerAnswers"><span class="subWho">' + self.allAnswers[i].name + ': </span>';
 				html += '<span class="subAnswer">' + self.allAnswers[i].answer + '</span></p>';
 			}
 		}
-		if(!found) {
+		if (!found) {
 			html += '<p class="allPlayerAnswers">There are no answers for this question yet.</p>';
 		}
 

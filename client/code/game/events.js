@@ -80,7 +80,7 @@ var $events = $game.$events = module.exports = {
 
     //some one pledged a seed to someone's answer
     ss.event.on('ss-seedPledged', function (data, chan) {
-      if($game.$player.id === data.id) {
+      if ($game.$player.id === data.id) {
         $game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have some seeds.',input:'status',screen: true,log:true});
         $game.$player.addSeeds('regular', 3);
         $game.$player.updateResource(data);
@@ -90,21 +90,21 @@ var $events = $game.$events = module.exports = {
     //the game meter has hit the end, boss mode is unlocked
     ss.event.on('ss-bossModeUnlocked', function () {
       $game.bossModeUnlocked = true;
-      if($game.$player.currentLevel > 3) {
+      if ($game.$player.currentLevel > 3) {
         $game.toBossLevel();
       }
     });
 
     //another player has beamed
     ss.event.on('ss-beam', function (info) {
-      if(info.id !== $game.$player.id) {
+      if (info.id !== $game.$player.id) {
         $game.$others.beam(info);
       }
     });
 
     ss.event.on('ss-collaborativeChallenge', function (info) {
       for(var i = 0; i < info.players.length; i++) {
-        if(info.players[i] === $game.$player.id) {
+        if (info.players[i] === $game.$player.id) {
           //TODO add seeds
           $game.statusUpdate({message: 'Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.',input:'status', screen:true, log:true});
           $game.$player.addSeeds('draw', info.seeds);
@@ -114,7 +114,7 @@ var $events = $game.$events = module.exports = {
     });
 
     ss.event.on('ss-skinSuitChange', function (info) {
-      if(info.id !== $game.$player.id) {
+      if (info.id !== $game.$player.id) {
         $game.$others.skinSuitChange(info);
       }
     });

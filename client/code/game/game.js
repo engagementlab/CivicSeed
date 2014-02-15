@@ -1,14 +1,16 @@
+'use strict';
+
 var _lastTime = 0;
-window.requestAnimationFrame = (function() {
+window.requestAnimationFrame = (function () {
   return window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
-    function(callback, element) {
+    function (callback, element) {
       var currTime = new Date().getTime();
       var timeToCall = Math.max(0, 16 - (currTime - _lastTime));
-      var id = window.setTimeout(function() { callback(currTime + timeToCall); }, timeToCall);
+      var id = window.setTimeout(function () { callback(currTime + timeToCall); }, timeToCall);
       _lastTime = currTime + timeToCall;
       return id;
     };
@@ -17,7 +19,7 @@ window.requestAnimationFrame = (function() {
 // PRIVATE GAME VARS
 var _stepNumber = 0,
   _stats = null,
-  _badWords = ['fuck','shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck','piss', 'whore', 'slut'], //should be moved
+  _badWords = ['fuck', 'shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck', 'piss', 'whore', 'slut'], //should be moved
   _levelNames = [
     'Level 1: Looking Inward',
     'Level 2: Expanding Outward',
@@ -27,9 +29,10 @@ var _stepNumber = 0,
   ],
   _displayTimeout = null,
   $map,
-  $game_render,
+  $render,
   $npc,
   $resources,
+  $skins,
   $player,
   $others,
   $robot,
@@ -57,7 +60,6 @@ var $game = module.exports = {
 
   //GLOBAL GAME VARS
   currentTiles: [],
-  inTransit: false,
   running: false,
   ready: false,
   showingProgress : false,
@@ -102,37 +104,36 @@ var $game = module.exports = {
   },
 
   startNewAction: true,
-
   instantiated: false,
 
-  init: function(callback) {
+  init: function (callback) {
 
-    // instantiating code (if not already done)
-    $map = require('/map');
-    $render = require('/render');
-    $npc = require('/npc');
-    $resources = require('/resources');
-    $skins = require('/skins');
-    $player = require('/player');
-    $others = require('/others');
-    $robot = require('/robot');
-    $botanist = require('/botanist');
-    $mouse = require('/mouse');
-    $audio = require('/audio');
-    $pathfinder = require('/pathfinder');
-    $events = require('/events');
-    $input = require('/input');
-    $chat = require('/chat');
-    $log = require('/log');
-    $boss = require('/boss');
+    // Instantiating code (if not already done)
+    $map        = require('/map')
+    $render     = require('/render')
+    $npc        = require('/npc')
+    $resources  = require('/resources')
+    $skins      = require('/skins')
+    $player     = require('/player')
+    $others     = require('/others')
+    $robot      = require('/robot')
+    $botanist   = require('/botanist')
+    $mouse      = require('/mouse')
+    $audio      = require('/audio')
+    $pathfinder = require('/pathfinder')
+    $events     = require('/events')
+    $input      = require('/input')
+    $chat       = require('/chat')
+    $log        = require('/log')
+    $boss       = require('/boss')
 
     // events recevied by RPC
     $events.init();
     $input.init();
 
     // TODO: there needs to be some other kind of mechanism to see if the user has retired from the game...
-    $WINDOW.on('beforeunload', function() {
-      if(sessionStorage.isPlaying === 'true') {
+    $WINDOW.on('beforeunload', function () {
+      if (sessionStorage.isPlaying === 'true') {
         var x = $game.exitGame();
         return x;
       }
@@ -143,10 +144,10 @@ var $game = module.exports = {
   },
 
   //must reset every module because init won't be called since the app was already loaded once (if they navigate to profile and back for example)
-  reInit: function() {
+  reInit: function () {
     $game.resetInit();
     $game.$map.resetInit();
-    $game.$renderer.resetInit();
+    $game.$render.resetInit();
     $game.$npc.resetInit();
     $game.$resources.resetInit();
     $game.$skins.resetInit();
@@ -163,14 +164,14 @@ var $game = module.exports = {
   },
 
   //resets the local game vars
-  resetInit: function() {
+  resetInit: function () {
     _lastTime = 0;
     _stepNumber = 0;
     _stats = null;
     _displayTimeout = null;
 
     $game.currentTiles = [];
-    $game.inTransit = false;
+    $game.removeFlag('in-transit');
     $game.running = false;
     $game.ready = false;
     $game.showingProgress = false;
@@ -183,20 +184,20 @@ var $game = module.exports = {
     $game.startNewAction = true;
   },
 
-  enterGame: function(callback) {
+  enterGame: function (callback) {
     //check if they are ACTUALLY playing
-    ss.rpc('shared.account.checkGameSession', function(response) {
+    ss.rpc('shared.account.checkGameSession', function (response) {
       // YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
-      if(!$game.instantiated) {
+      if (!$game.instantiated) {
         $game.init();
       } else {
         $game.reInit();
       }
-      if(response.status) {
+      if (response.status) {
         sessionStorage.setItem('isPlaying', true);
         $game.kickOffGame();
       } else {
-        if(response.profileLink) {
+        if (response.profileLink) {
             Davis.location.assign('/profiles/' + response.profileLink);
         }
         apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
@@ -205,7 +206,7 @@ var $game = module.exports = {
   },
 
   //start the the game up by appending the dom
-  kickOffGame: function() {
+  kickOffGame: function () {
     $CONTAINER.append(JT['game-gameboard']());
     $CONTAINER.append(JT['game-resourceStage']());
     $CONTAINER.append(JT['game-hud']());
@@ -215,7 +216,7 @@ var $game = module.exports = {
   },
 
   // pause menu on browser tab unfocus (currently disabled)
-  pause: function() {
+  pause: function () {
     $('.pauseMenu').fadeIn();
     $game.running = false;
     // TODO: play pause music?
@@ -223,16 +224,16 @@ var $game = module.exports = {
   },
 
   // resume from the pause menu, start up game loop (currenty disabled)
-  resume: function() {
-    $('.pauseMenu').slideUp(function() {
+  resume: function () {
+    $('.pauseMenu').slideUp(function () {
       $game.running = true;
       $game.tick();
     });
   },
 
   //starts a transition from one viewport to another
-  beginTransition: function() {
-    $game.inTransit = true;
+  beginTransition: function () {
+    $game.setFlag('in-transit');
     _stepNumber = 0;
     $game.$chat.hideChat();
     $game.$others.hideAllChats();
@@ -241,8 +242,8 @@ var $game = module.exports = {
   },
 
   //decides if we continue tweening the viewports or to end transition
-  stepTransition: function() {
-    if(_stepNumber !== $game.$map.numberOfSteps) {
+  stepTransition: function () {
+    if (_stepNumber !== $game.$map.numberOfSteps) {
       _stepNumber += 1;
       $game.$map.transitionMap(_stepNumber);
     }
@@ -252,36 +253,37 @@ var $game = module.exports = {
   },
 
   //resumes normal state of being able to walk and enables chat etc.
-  endTransition: function() {
-    $game.inTransit = false;
+  endTransition: function () {
+    $game.removeFlag('in-transit');
     $game.$player.isMoving = false;
     $game.$player.resetRenderValues();
     $game.$others.resetRenderValues();
     //now that the transition has ended, create a new grid
-    $game.$map.createPathGrid(function() {
+    $game.$map.createPathGrid(function () {
       $game.$map.stepDirection = null;
     });
     $game.$player.displayNpcComments();
     $game.$player.saveTimeToDB();
+    console.log('endTransition() complete.')
   },
 
   //the game loop, if it is running, call all the updates and render
-  tick: function() {
-    if($game.running) {
-      if($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
+  tick: function () {
+    if ($game.running) {
+      if ($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
         $game.$others.update();
         $game.$npc.update();
         $game.$botanist.update();
         $game.$robot.update();
       }
       $game.$player.update();
-      $game.$renderer.renderFrame();
+      $game.$render.renderFrame();
       requestAnimationFrame($game.tick);
     }
   },
 
   //displays the progress area section, pulling the latest pertient data
-  showProgress: function() {
+  showProgress: function () {
 
     //save and show player's colors
     var myImageSrc = $game.$map.saveImage();
@@ -333,7 +335,7 @@ var $game = module.exports = {
     $('.numCollected').text(numItems + ' / 42');
 
     /*
-    $('.progressArea').show(function() {
+    $('.progressArea').show(function () {
       $game.showingProgress = true;
     });
     */
@@ -349,7 +351,7 @@ var $game = module.exports = {
       clearTimeout(_displayTimeout)
       var len      = data.message.length,
           fadeTime = len * 100 + 500
-      _displayTimeout = setTimeout(function() {
+      _displayTimeout = setTimeout(function () {
         $el.fadeOut(150)
       }, fadeTime)
     }
@@ -425,11 +427,11 @@ var $game = module.exports = {
   },
 
   //check for bad language to censor it in chat
-  checkPotty: function(msg) {
+  checkPotty: function (msg) {
     var temp = msg.toLowerCase();
 
     for(var i = 0; i < _badWords.length; i++) {
-      if(temp.indexOf(_badWords[i]) > -1) {
+      if (temp.indexOf(_badWords[i]) > -1) {
         return 'I have a potty mouth and I am sorry for cussing.';
       }
     }
@@ -449,20 +451,20 @@ var $game = module.exports = {
   },
 
   //triggered by a change server-side in the color map percent
-  updatePercent: function(dropped) {
+  updatePercent: function (dropped) {
     _stats.prevPercent = _stats.percent;
     _stats.seedsDropped = dropped;
     _stats.percent = Math.floor(( _stats.seedsDropped / _stats.seedsDroppedGoal) * 100);
     //var percentString = _stats.percent + '%';
 
     //if we have gone up a milestone, feedback it
-    if(_stats.percent > 99 && !$game.bossModeUnlocked) {
+    if (_stats.percent > 99 && !$game.bossModeUnlocked) {
       //do something for game over?
         $game.statusUpdate({message:'The meter is full! The color has been restored.',input:'status',screen: true,log:true});
     }
-    if(_stats.prevPercent != _stats.percent) {
+    if (_stats.prevPercent != _stats.percent) {
       _stats.prevPercent = _stats.percent;
-      if(_stats.percent % 5 === 0) {
+      if (_stats.percent % 5 === 0) {
         //$game.temporaryStatus('the world is now ' + percentString + ' colored!');
         //$game.statusUpdate({message:'',input:'status',screen: true,log:true});
       }
@@ -470,51 +472,94 @@ var $game = module.exports = {
   },
 
   // save and exit game
-  exitGame: function(callback) {
+  exitGame: function (callback) {
     // console.log('exiting game!');
     sessionStorage.removeItem('isPlaying');
     $game.running = false;
     // TODO: fade out, instead of abrupt stop???
     $game.$audio.stopAll();
     // save out all current status of player to db on exit
-    if(!$game.bossModeUnlocked) {
+    if (!$game.bossModeUnlocked) {
       $game.$player.saveTimeToDB();
     }
     $game.$map.removePlayer($game.$player.id);
-    ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.firstName, function() {
-      if(typeof callback === 'function') {
+    ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.firstName, function () {
+      if (typeof callback === 'function') {
         callback();
       }
     });
   },
 
   //startup boss level if player finished game and boss level is unlocked
-  toBossLevel: function() {
+  toBossLevel: function () {
     $game.$audio.pauseTrack();
-    $game.$renderer.clearMap();
+    $game.$render.clearMap();
     $game.$player.setPositionInfo();
     $game.$botanist.disable();
     $game.$robot.disable();
     $game.$others.disable();
     _setBoundaries();
     _startGame(true);
+  },
+
+  // Checks to see if a game state flag is set
+  checkFlag: function (flag) {
+    // Returns true if a given flag is found, and false if not
+    return _.contains(_game.flags, flag)
+  },
+
+  // Sets a current game state flag
+  setFlag: function (flag) {
+    // Returns true if able to be set
+    if (!this.checkFlag(flag)) {
+      _game.flags.push(flag)
+      return true
+    }
+    // Returns false if flag was not set (e.g. it was already set)
+    else return false
+  },
+
+  // Alias for setFlag()
+  flag: function (flag) {
+    return this.setFlag(flag)
+  },
+
+  // Remove one or all game state flags
+  removeFlag: function (flag) {
+    if (flag) {
+      _game.flags = _.reject(_game.flags, function (item) { return item === flag })
+    }
+    // If no flag is given, clear all flags
+    else {
+      _game.flags = []
+    }
   }
 
 };
 
-/********* PRIVATE FUNCTIONS **********/
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _game = {
+
+  flags: []
+
+}
 
 // all the init calls will trigger others, a waterfall approach to assure
 // the right data is loaded before we start
 function _kickOffGame() {
-  $game.$player.init(function() {
+  $game.$player.init(function () {
     _loadGameInfo();
   });
 }
 
 function _loadGameInfo() {
   // get the global game information stats
-  ss.rpc('game.player.getGameInfo', function(response) {
+  ss.rpc('game.player.getGameInfo', function (response) {
     // regular game mode
     $game.bossModeUnlocked = response.bossModeUnlocked;
 
@@ -527,14 +572,14 @@ function _loadGameInfo() {
       prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
     };
     $game.$player.setPositionInfo();
-    $game.$renderer.init(function() {
+    $game.$render.init(function () {
       _loadMap();
     });
   });
 }
 
 function _loadMap() {
-  $game.$map.init(function() {
+  $game.$map.init(function () {
     // required for npcs to be placed
     _setBoundaries();
     _loadOthers();
@@ -543,52 +588,52 @@ function _loadMap() {
 
 function _loadOthers() {
   //depends on map
-  $game.$others.init(function() {
+  $game.$others.init(function () {
     _loadNpc();
   });
 }
 
 function _loadNpc() {
-  $game.$npc.init(function() {
+  $game.$npc.init(function () {
     _loadResources();
   });
 }
 
 function _loadResources() {
   //depends on npc
-  $game.$resources.init(function() {
+  $game.$resources.init(function () {
     _loadBotanist();
   });
 }
 
 function _loadBotanist() {
   //depends on player/game
-  $game.$botanist.init(function() {
+  $game.$botanist.init(function () {
     _loadRobot();
   });
 }
 
 function _loadRobot() {
-  $game.$robot.init(function() {
+  $game.$robot.init(function () {
     _loadAudio();
   });
 }
 
 function _loadAudio() {
   //depends on player position
-  $game.$audio.init(function() {
+  $game.$audio.init(function () {
     _loadChat();
   });
 }
 
 function _loadChat() {
-  $game.$chat.init(function() {
+  $game.$chat.init(function () {
     _loadLog();
   });
 }
 
 function _loadLog() {
-  $game.$log.init(function() {
+  $game.$log.init(function () {
     _loadExtra();
   });
 }
@@ -596,15 +641,15 @@ function _loadLog() {
 //this is all the other stuff that needs to happen once everything is loaded
 function _loadExtra() {
   //fill player inventory and creat outlines
-  if($game.$player.currentLevel < 4) {
+  if ($game.$player.currentLevel < 4) {
     $game.$player.fillInventory();
     $game.$player.createInventoryOutlines();
   }
 
   //make players color map
   var src = $game.$player.getColorMap();
-  if(src !== undefined) {
-    $game.$renderer.imageToCanvas(src);
+  if (src !== undefined) {
+    $game.$render.imageToCanvas(src);
   }
   //create collective image
   $game.$map.createCollectiveImage();
@@ -637,18 +682,18 @@ function _setBoundaries() {
 
 //start the game, decide if going to boss level or not
 function _startGame(ingame) {
-  if($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-    $game.$boss.init(function() {
+  if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+    $game.$boss.init(function () {
       //TODO: something here?
     });
   }
-  $game.$map.firstStart(function() {
-    if(!ingame) {
-      $('#loading').fadeOut(function() {
+  $game.$map.firstStart(function () {
+    if (!ingame) {
+      $('#loading').fadeOut(function () {
         $(this).remove();
         $game.ready = true;
         $game.running = true;
-        $game.$renderer.renderAllTiles();
+        $game.$render.renderAllTiles();
         $game.tick();
         $game.$player.displayNpcComments();
         if ($game.$player.firstTime) {

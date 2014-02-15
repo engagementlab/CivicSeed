@@ -34,24 +34,24 @@ var $skins = $game.$skins = {
       'tuxedo': {
         'id': 'tuxedo',
         'name': 'Tuxedo',
-        'description': '',
-        'effect': '',
+        'description': 'You are ready for a night out on Calliope!',
+        'effect': 'A top hat makes any outfit classier, right?',
         'flag': '',
         'head': {
           'name': 'Tuxedo Mask',
-          'description': '',
-          'effect': '',
+          'description': 'My, but you look dashing!',
+          'effect': '???',
           'flag': ''
         },
         'torso': {
           'name': 'Tuxedo Jacket',
-          'description': '',
+          'description': 'Or maybe more of a cummerbund...',
           'effect': '',
           'flag': ''
         },
         'legs': {
           'name': 'Tuxedo Pants',
-          'description': '',
+          'description': 'Don’t forget to shine your shoes.',
           'effect': '',
           'flag': ''
         }
@@ -59,24 +59,24 @@ var $skins = $game.$skins = {
       'lion': {
         'id': 'lion',
         'name': 'Lion',
-        'description': '',
-        'effect': '',
+        'description': 'You are Lion. Hear you roar.',
+        'effect': 'I wonder how this head would look on different bodies...',
         'flag': '',
         'head': {
           'name': 'Lion Head',
-          'description': '',
-          'effect': '',
+          'description': 'The Mane Event.',
+          'effect': '???',
           'flag': ''
         },
         'torso': {
           'name': 'Lion Body',
-          'description': '',
+          'description': 'Have you been working out?',
           'effect': '',
           'flag': ''
         },
         'legs': {
           'name': 'Lion Legs',
-          'description': '',
+          'description': 'Don’t press paws.',
           'effect': '',
           'flag': ''
         }
@@ -84,24 +84,24 @@ var $skins = $game.$skins = {
       'cactus': {
         'id': 'cactus',
         'name': 'Cactus',
-        'description': '',
-        'effect': '',
+        'description': 'Your prickly personality hides a beautiful desert bloom.',
+        'effect': 'How does a cactus get ahead?',
         'flag': '',
         'head': {
           'name': 'Cactus Head',
-          'description': '',
-          'effect': '',
+          'description': 'You’re ready to “Head” over to the Ranch...',
+          'effect': '???',
           'flag': ''
         },
         'torso': {
           'name': 'Cactus Body',
-          'description': '',
+          'description': 'How about a hug?',
           'effect': '',
           'flag': ''
         },
         'legs': {
           'name': 'Cactus Legs',
-          'description': '',
+          'description': 'You’re the fastest cactus in the west.',
           'effect': '',
           'flag': ''
         }
@@ -110,23 +110,23 @@ var $skins = $game.$skins = {
         'id': 'cone',
         'name': 'Ice Cream Cone',
         'description': 'You look delicious.',
-        'effect': '',
+        'effect': 'Have you heard the legend of the Sprinkle-Saurus?',
         'flag': '',
         'head': {
           'name': 'Strawberry Scoop',
-          'description': '',
-          'effect': '',
+          'description': 'So cold. So fare.',
+          'effect': '???',
           'flag': ''
         },
         'torso': {
           'name': 'Sugar Cone Top',
-          'description': '',
+          'description': 'CRUNCH!',
           'effect': '',
           'flag': ''
         },
         'legs': {
           'name': 'Sugar Cone Bottom',
-          'description': '',
+          'description': 'Don’t spring a leak!',
           'effect': '',
           'flag': ''
         }
@@ -134,25 +134,25 @@ var $skins = $game.$skins = {
       'astronaut': {
         'id': 'astronaut',
         'name': 'Astronaut',
-        'description': 'This allows you to explore in space.',
-        'effect': '',
+        'description': 'You’re ready for the final frontier.',
+        'effect': 'You have global radar. All characters with resources are highlighted in the mini-map!',
         'flag': '',
         'head': {
           'name': 'Space Helmet',
-          'description': '',
-          'effect': '',
+          'description': 'Ground Control to Major Tom...',
+          'effect': 'You have local radar. Characters with resources near you are highlighted.',
           'flag': ''
         },
         'torso': {
           'name': 'Space Suit',
-          'description': '',
-          'effect': '',
+          'description': 'Commencing countdown, engines on.',
+          'effect': 'You have local radar. Characters with resources near you are highlighted.',
           'flag': ''
         },
         'legs': {
           'name': 'Space Pants',
-          'description': '',
-          'effect': '',
+          'description': 'Press ignition, and may space pants be with you!',
+          'effect': 'You have local radar. Characters with resources near you are highlighted',
           'flag': ''
         }
       },
@@ -164,20 +164,20 @@ var $skins = $game.$skins = {
         'flag': '',
         'head': {
           'name': 'Ninja Mask',
-          'description': '',
+          'description': 'You could be anybody.',
           'effect': '',
           'flag': ''
         },
         'torso': {
           'name': 'Ninja Gi',
-          'description': '',
-          'effect': '',
+          'description': 'This mysterious Gi can grant you powers...',
+          'effect': '???',
           'flag': ''
         },
         'legs': {
           'name': 'Ninja Pants',
-          'description': '',
-          'effect': '',
+          'description': 'These pants of mystery must be combined the Gi...',
+          'effect': '???',
           'flag': ''
         }
       },
@@ -186,47 +186,47 @@ var $skins = $game.$skins = {
         'name': 'Horse',
         'description': 'You’re a horse!',
         'effect': 'You walk a lot faster!',
-        'flag': '',
+        'flag': 'speed-max',
         'head': {
           'name': 'Horse Head',
-          'description': '',
+          'description': 'You have a horse’s head. The best part of the horse.',
           'effect': 'You walk slightly faster.',
-          'flag': 'horse-head'
+          'flag': 'speed-up'
         },
         'torso': {
           'name': 'Horse Body',
-          'description': '',
+          'description': 'You have a horse’s body. You’re probably mythical.',
           'effect': 'You walk slightly faster.',
-          'flag': ''
+          'flag': 'speed-up'
         },
         'legs': {
           'name': 'Horse Legs',
-          'description': '',
+          'description': 'Get ready to gallop!',
           'effect': 'You walk slightly faster.',
-          'flag': ''
+          'flag': 'speed-up'
         }
       },
       'penguin': {
         'id': 'penguin',
         'name': 'Penguin',
-        'description': '',
+        'description': 'Hey, don’t you already have a tuxedo?',
         'effect': '',
         'flag': '',
         'head': {
           'name': 'Penguin Head',
-          'description': '',
-          'effect': '',
+          'description': 'How adorable!',
+          'effect': '???',
           'flag': ''
         },
         'torso': {
           'name': 'Penguin Suit',
-          'description': '',
+          'description': 'Nice flippers!',
           'effect': '',
           'flag': ''
         },
         'legs': {
           'name': 'Penguin Feet',
-          'description': '',
+          'description': 'Looks like you’re ready to march 1,000 miles and sit on an egg.',
           'effect': '',
           'flag': ''
         }
@@ -234,51 +234,51 @@ var $skins = $game.$skins = {
       'dinosaur': {
         'id': 'dinosaur',
         'name': 'Dinosaur',
-        'description': '',
+        'description': 'You’re an awesome dinosaur. The ground shakes at your approach!',
         'effect': '',
         'flag': '',
         'head': {
           'name': 'Dinosaur Head',
-          'description': '',
+          'description': 'So scale. Much teeth.',
           'effect': '',
           'flag': ''
         },
         'torso': {
           'name': 'Dinosaur Body',
-          'description': '',
-          'effect': '',
+          'description': 'Making things into ’zillas since 2013.',
+          'effect': '???',
           'flag': ''
         },
         'legs': {
           'name': 'Dinosaur Legs',
-          'description': '',
-          'effect': '',
+          'description': 'Combine with Dino Body for ultimate stompage.',
+          'effect': '???',
           'flag': ''
         }
       },
       'octopus': {
         'id': 'octopus',
         'name': 'Octopus',
-        'description': '',
+        'description': 'You’re an octopus, smartest of all cephalopods.',
         'effect': 'Your paint radius goes up by three.',
-        'flag': '',
+        'flag': 'paint-max',
         'head': {
           'name': 'Octopus Head',
-          'description': '',
+          'description': 'Where the octo-brain is kept.',
           'effect': 'Your paint radius goes up by one.',
-          'flag': ''
+          'flag': 'paint-up-1'
         },
         'torso': {
           'name': 'Octopus Body',
-          'description': '',
+          'description': 'Technically octopuses don’t have heads, just bodies. The more you know.',
           'effect': 'Your paint radius goes up by one.',
-          'flag': ''
+          'flag': 'paint-up-2'
         },
         'legs': {
           'name': 'Eight Legs',
-          'description': '',
+          'description': 'They see you crawling. You painting.',
           'effect': 'Your paint radius goes up by one.',
-          'flag': ''
+          'flag': 'paint-up-3'
         }
       },
       'hunter': {
@@ -369,6 +369,7 @@ var $skins = $game.$skins = {
     return _.filter(data, function (item) { return !item.parts} )
   },
 
+  // Returns a particular set
   getSkin: function (id) {
     return _.find($game.$skins.getSets(), function (item) { return item.id === id })
   },
@@ -395,6 +396,7 @@ var $skins = $game.$skins = {
     _skins.updatePlayer(playerSkin)
   },
 
+  // Called when a skin suit is unlocked to render its unlocked appearance.
   updateSkinventory: function (skin) {
     // Unlock an entire skin easily
     var head  = $('.head [data-name="' + skin + '"]')
@@ -421,6 +423,7 @@ var $skins = $game.$skins = {
     _skins.updatePlayer(playerSkin)
   },
 
+  // Creates HTML content for the structure of suit parts
   renderSkinventory: function () {
     var playerSkin = $game.$player.getSkinSuit(),
         unlocked   = playerSkin.unlocked,
@@ -469,6 +472,7 @@ var $skins = $game.$skins = {
     $skins.renderSkinformation()
   },
 
+  // Creates HTML content showing information about currently worn parts or outfits.
   renderSkinformation: function () {
     var playerSkin = $game.$player.getSkinSuit(),
         skins      = $skins.data.outfits,
@@ -488,7 +492,7 @@ var $skins = $game.$skins = {
 
       // Set individual part flags as well
       if (skins[skin][part].flag) {
-        $game.$player.setFlag(skins[skin][part].flag)
+        $game.setFlag(skins[skin][part].flag)
       }
 
       return string
@@ -507,7 +511,7 @@ var $skins = $game.$skins = {
         content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
       }
       if (outfit.flag) {
-        $game.$player.setFlag(outfit.flag)
+        $game.setFlag(outfit.flag)
       }
     }
     else {
@@ -529,8 +533,9 @@ var $skins = $game.$skins = {
 
 var _skins = {
 
-  // Clear all effect flags set by skins sets and parts
+  // Clear all effects of skins sets and parts
   clearSkinFlags: function () {
+    // Effects are stored as game flags.
     // Get all flags
     var data      = $skins.data.outfits,
         setFlags  = _.pluck(data, 'flag'),
@@ -544,10 +549,10 @@ var _skins = {
         flags     = _.compact(_.union(setFlags, partFlags))
 
     // Clear all flags
-    _.each(flags, $game.$player.removeFlag)
+    _.each(flags, $game.removeFlag)
   },
 
-  // Check if parts are part of an outfit
+  // If parts are part of an outfit, returns an object containing outfit data.
   getOutfit: function (head, torso, legs) {
     var data = $skins.data.outfits
 
@@ -569,6 +574,7 @@ var _skins = {
     }
   },
 
+  // If a part is unlocked, display it as such
   renderUnlockedPart: function ($el, skin, part, isNew) {
     // skin is either the name of the skin or the skin object itself
     // Either way, we want to end up with the skin object.
@@ -589,6 +595,7 @@ var _skins = {
     }
   },
 
+  // Saves current skin information to the database
   updatePlayer: function (playerSkin) {
     ss.rpc('game.player.updateGameInfo', {
       id: $game.$player.id,

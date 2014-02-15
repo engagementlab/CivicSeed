@@ -1,47 +1,48 @@
 'use strict';
 
 var _currentSlide,
-  _resumes,
-  _charger = {},
-  _grid,
-  $BODY,
-  $bossArea,
-  $bossAreaContent,
-  $buttons,
-  $seedButton,
-  $seedButtonCount,
-  $clock,
-  $score,
+    _resumes,
+    _charger = {},
+    _grid,
+    $BODY,
+    $bossArea,
+    $bossAreaContent,
+    $buttons,
+    $seedButton,
+    $seedButtonCount,
+    $clock,
+    $score,
 
-  _numChargers = 4,
-  _currentCharger,
-  _numDrawSeeds,
-  _numRegularSeeds,
-  _seedMode = 0,
-  _rgbString,
+    _numChargers = 4,
+    _currentCharger,
+    _numDrawSeeds,
+    _numRegularSeeds,
+    _seedMode = 0,
+    _rgbString,
 
-  //clock stuff
-  _start,
-  _time,
-  _elapsed,
-  _target,
-  _pause,
-  _totalTime,
-  _clockRate,
-  _clockTimeout,
+    //clock stuff
+    _start,
+    _time,
+    _elapsed,
+    _target,
+    _pause,
+    _totalTime,
+    _clockRate,
+    _clockTimeout,
 
-  _videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/',
-  _numVideos = 4,
-  _cutSceneVids = [],
-  _score,
-  _bossScore,
+    _videoPath = CivicSeed.CLOUD_PATH + '/audio/cutScenes/',
+    _numVideos = 4,
+    _cutSceneVids = [],
+    _score,
+    _bossScore,
 
-  _hackTimeout,
-  _canPlace;
-
+    _hackTimeout,
+    _canPlace;
 
 var $boss = $game.$boss = {
+
   isShowing: false,
+
   //place player on map
   init: function (callback) {
     _setDomSelectors();
@@ -61,7 +62,7 @@ var $boss = $game.$boss = {
     if (typeof callback === 'function') callback()
   },
 
-  resetInit: function() {
+  resetInit: function () {
     _currentSlide = null;
     _resumes = null;
     _charger = {};
@@ -90,17 +91,17 @@ var $boss = $game.$boss = {
   },
 
   //advance to the resumes
-  nextSlide: function() {
-    if(_currentSlide === 4) {
+  nextSlide: function () {
+    if (_currentSlide === 4) {
       //unlock profile
     } else {
       _currentSlide++;
-      if(_currentSlide === 2) {
+      if (_currentSlide === 2) {
         //TODO: uncomment this
         // _saveFeedback();
         $('.bossHud').show();
-      } else if(_currentSlide > 2) {
-        $bossArea.fadeOut('fast',function() {
+      } else if (_currentSlide > 2) {
+        $bossArea.fadeOut('fast',function () {
           $game.$boss.isShowing = false;
           _beginGame();
         });
@@ -110,15 +111,15 @@ var $boss = $game.$boss = {
   },
 
   //drop a seed to reveal clues
-  dropSeed: function(pos) {
+  dropSeed: function (pos) {
     //update hud
-    if(!_pause) {
-      if(_seedMode === 1) {
+    if (!_pause) {
+      if (_seedMode === 1) {
         _numRegularSeeds--;
         $game.$audio.playTriggerFx('seedDrop');
         $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
         _renderTiles(pos);
-        if(_numRegularSeeds <= 0) {
+        if (_numRegularSeeds <= 0) {
           //TODO: out of regular seeds display
           _seedMode = 0;
           $game.$player.seedMode = false;
@@ -127,10 +128,10 @@ var $boss = $game.$boss = {
           //check if they fail
           _checkFail();
         }
-      } else if(_seedMode === 2) {
+      } else if (_seedMode === 2) {
         _numDrawSeeds--;
         $('.bossHud .drawSeedButton .badge').text(_numDrawSeeds);
-        if(_numDrawSeeds <= 0) {
+        if (_numDrawSeeds <= 0) {
           //TODO: out of regular seeds display
           _seedMode = 0;
           $game.$player.seedMode = false;
@@ -143,14 +144,14 @@ var $boss = $game.$boss = {
   },
 
   //finish walking, determine if we crushed charger or got item
-  endMove: function(x,y) {
+  endMove: function (x,y) {
     //check for charger first
     //charger = means it has a revealed charger
-    if(!_pause) {
-      if(_grid[x][y].charger === 1) {
+    if (!_pause) {
+      if (_grid[x][y].charger === 1) {
         _checkWin();
-        $game.$renderer.clearBossLevel();
-      } else if(_grid[x][y].item > -1) {
+        $game.$render.clearBossLevel();
+      } else if (_grid[x][y].item > -1) {
         //pick up good item
         _activateItem({x: x, y:y, item: _grid[x][y].item});
       }
@@ -177,14 +178,14 @@ function _addContent() {
   $bossAreaContent.empty();
 
   var html = '';
-  if(_currentSlide === 0) {
+  if (_currentSlide === 0) {
     //show intro videp
     html = '<div class="videoFrame"><iframe src="//player.vimeo.com/video/74144898" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
     $bossAreaContent.append(html);
-  } else if(_currentSlide === 1) {
+  } else if (_currentSlide === 1) {
     //show resumes and responses
-    ss.rpc('game.player.getRandomResumes',{instanceName: $game.$player.instanceName}, function(result) {
-      if(result.length > 0) {
+    ss.rpc('game.player.getRandomResumes',{instanceName: $game.$player.instanceName}, function (result) {
+      if (result.length > 0) {
         _resumes = _chooseResumes(result);
         html = '<p class="dialog"><span>Botanist:</span>  To find the charging modules, you will need to use my SPECIAL SEEDS. But... the seeds aren\'t finished yet. You\'ll need to add the last ingredient. Please read what your fellow players have said and provide feedback. This will help them improve their civic resumes. Review all four to receive your SPECIAL SEEDS!</p>';
         for(var i = 0; i < _resumes.length; i++) {
@@ -199,7 +200,7 @@ function _addContent() {
         console.log('error');
       }
     });
-  } else if(_currentSlide === 2) {
+  } else if (_currentSlide === 2) {
     //show instructions and begin
     var img1 = CivicSeed.CLOUD_PATH + '/img/game/boss/mini_lab.jpg',
       img2 = CivicSeed.CLOUD_PATH + '/img/game/boss/charger.png',
@@ -214,15 +215,15 @@ function _addContent() {
 
     $('.bossArea .bossButton').text('Ready?');
     $bossAreaContent.append(html);
-  }  else if(_currentSlide === 3) {
+  }  else if (_currentSlide === 3) {
     //fail screen
     html = '<p class="dialog"><span>Botanist:</span> You failed to defeat the robot. Why don\'t you try again?</p>';
     $('.bossArea .bossButton').text('Play Again').css('margin-top', '50px');
     $bossAreaContent.append(html);
-  }else if(_currentSlide === 4) {
+  }else if (_currentSlide === 4) {
     //win screen
-    ss.rpc('game.player.unlockProfile', $game.$player.id, function(err) {
-      if(err) {
+    ss.rpc('game.player.unlockProfile', $game.$player.id, function (err) {
+      if (err) {
         console.log('error');
       } else {
         html = '<p class="dialog"><span>Botanist:</span> Congratulations, you defeated the robot!</p>';
@@ -263,10 +264,10 @@ function _chooseResumes (people) {
       else {
         var ran1 = Math.floor(Math.random() * numPeople);
         person = people[ran1];
-        if(person._id !== $game.$player.id) {
+        if (person._id !== $game.$player.id) {
           foundPerson = true;
           /*
-          if(!person.game.resume[question]) {
+          if (!person.game.resume[question]) {
             foundPerson = false;
           }
           */
@@ -283,7 +284,7 @@ function _chooseResumes (people) {
 //save feedback on resume responses to db for each user
 function _saveFeedback() {
   var info = [];
-  $('.bossArea textarea').each(function(i) {
+  $('.bossArea textarea').each(function (i) {
     var val = this.value;
     info.push({
       comment: val,
@@ -295,9 +296,9 @@ function _saveFeedback() {
 
 //randomly place the charger
 function _placeCharger() {
-  if(_canPlace) {
+  if (_canPlace) {
     _canPlace = false;
-    _hackTimeout = setTimeout(function() {
+    _hackTimeout = setTimeout(function () {
       _canPlace = true;
     },200);
     var x = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
@@ -363,7 +364,7 @@ function _distFromCharger(pos) {
 //start the game, clock, sound
 function _beginGame() {
   //clear the canvas if a restart
-  $game.$renderer.clearBossLevel();
+  $game.$render.clearBossLevel();
   //set score from tiles colored
   _score = $game.$player.getTilesColored();
   _bossScore = 0;
@@ -397,16 +398,16 @@ function _updateTime(){
 
     $clock.text(_elapsed);
 
-    if(_elapsed <= 0) {
+    if (_elapsed <= 0) {
     _fail();
-    } else if(!_pause) {
+    } else if (!_pause) {
         setTimeout(_updateTime, (100 - diff));
     }
 }
 
 //check if they are out of seeds and the charger hasn't been revealed
 function _checkFail() {
-  if(!_charger.revealed || _currentCharger < _numChargers) {
+  if (!_charger.revealed || _currentCharger < _numChargers) {
     _fail();
   }
 }
@@ -426,15 +427,15 @@ function _checkWin() {
   $('.cutSceneBg').fadeIn('fast');
   $('.cutScene')[0].play();
   _clockRate = 0;
-  $('.cutScene')[0].addEventListener('ended', function() {
+  $('.cutScene')[0].addEventListener('ended', function () {
     $('.cutScene')[0].removeEventListener('ended');
-    $('.cutSceneBg').fadeOut('fast', function() {
+    $('.cutSceneBg').fadeOut('fast', function () {
       var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
       $game.statusUpdate({message:left,input:'status',screen: true,log:false});
       _clockRate = 1;
       $('.cutSceneBg').remove();
     });
-    if(_currentCharger >= 4 && _bossScore === 200) {
+    if (_currentCharger >= 4 && _bossScore === 200) {
       _pause = true;
       _currentSlide = 4;
       _addContent();
@@ -458,18 +459,18 @@ function _fail() {
 
 //setup the new hud for the level
 function _setupHud() {
-  $BODY.on('click','.bossHud .regularSeedButton', function() {
-    if(_seedMode === 0 && _numRegularSeeds > 0) {
+  $BODY.on('click','.bossHud .regularSeedButton', function () {
+    if (_seedMode === 0 && _numRegularSeeds > 0) {
       $(this).addClass('hud-button-active');
       _seedMode = 1;
       $game.$player.seedMode = true;
-    } else if(_seedMode === 1) {
+    } else if (_seedMode === 1) {
       $(this).removeClass('hud-button-active');
       _seedMode = 0;
       $game.$player.seedMode = false;
       $game.$player.resetRenderColor();
-    } else if(_seedMode === 2) {
-      if(_numRegularSeeds > 0) {
+    } else if (_seedMode === 2) {
+      if (_numRegularSeeds > 0) {
         $(this).addClass('hud-button-active');
         $('.bossHud .drawSeedButton').removeClass('hud-button-active');
         _seedMode = 1;
@@ -481,12 +482,12 @@ function _setupHud() {
     }
   });
 
-  $BODY.on('click','.bossHud .drawSeedButton', function() {
-    if(_seedMode === 0) {
+  $BODY.on('click','.bossHud .drawSeedButton', function () {
+    if (_seedMode === 0) {
       $(this).addClass('hud-button-active');
       _seedMode = 2;
       $game.$player.seedMode = true;
-    } else if(_seedMode === 1) {
+    } else if (_seedMode === 1) {
       $(this).addClass('hud-button-active');
       $('.bossHud .regularSeedButton').removeClass('hud-button-active');
       _seedMode = 2;
@@ -510,11 +511,11 @@ function _renderTiles(pos) {
       var curX = topLeftX + x,
         curY = topLeftY + y;
       //only add it if in the bounds of the game area
-      if(curX >= 0 && curX < $game.VIEWPORT_WIDTH && curY >= 0 && curY < $game.VIEWPORT_HEIGHT) {
+      if (curX >= 0 && curX < $game.VIEWPORT_WIDTH && curY >= 0 && curY < $game.VIEWPORT_HEIGHT) {
         var val = _grid[curX][curY].distance,
           item = _grid[curX][curY].item,
           charger = _grid[curX][curY].charger;
-        if(val < min) {
+        if (val < min) {
           min = val;
         }
         squares.push({
@@ -525,14 +526,14 @@ function _renderTiles(pos) {
           charger: charger
         });
         //if they found the charger, set it to found, send alert
-        if(charger === 0) {
+        if (charger === 0) {
           _foundCharger(curX, curY);
         }
-        if(item > -1) {
+        if (item > -1) {
           //make sure it is revealed
           _grid[curX][curY].itemRevealed = true;
           //if they revealed a bad item, activate it now
-          if(item < 2) {
+          if (item < 2) {
             _activateItem({x: curX, y:curY, item:item});
           }
         }
@@ -545,13 +546,13 @@ function _renderTiles(pos) {
     squares[s].color = _rgbString + alpha + ')';
     //console.log(squares[s]);
   }
-  $game.$renderer.renderBossTiles(squares);
+  $game.$render.renderBossTiles(squares);
 }
 
 //create a random item
 function _makeRandomItem() {
   var ran = Math.floor(Math.random() * 200);
-  if(ran < 4) {
+  if (ran < 4) {
     return ran;
   } else {
     return -1;
@@ -567,42 +568,42 @@ function _foundCharger(x,y) {
 
 //player activates an special item
 function _activateItem(data) {
-  if(_grid[data.x][data.y].itemRevealed) {
+  if (_grid[data.x][data.y].itemRevealed) {
     //disable item in future
     _grid[data.x][data.y].item = -1;
-    if(data.item === 0) {
+    if (data.item === 0) {
       //speed up time (bad)
       $game.statusUpdate({message:'uh oh...time warp!',input:'status',screen: true,log:false});
       _clockRate = 4;
-      _clockTimeout = setTimeout(function() {
+      _clockTimeout = setTimeout(function () {
         _clockRate = 1;
       },5000);
-      setTimeout(function() {
-        $game.$renderer.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
+      setTimeout(function () {
+        $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
       },2000);
-    } else if(data.item === 1) {
+    } else if (data.item === 1) {
       //wipeout
       $game.statusUpdate({message:'wipeout!',input:'status',screen: true,log:false});
-      setTimeout(function() {
+      setTimeout(function () {
         _hideItems();
-        $game.$renderer.clearBossLevel();
+        $game.$render.clearBossLevel();
       }, 1000);
       _grid[_charger.x][_charger.y].charger = 0;
-    } else if(data.item === 2) {
+    } else if (data.item === 2) {
       //time freeze
       $game.statusUpdate({message:'time freeze, nice!',input:'status',screen: true,log:false});
       _clockRate = 0;
       clearTimeout(_clockTimeout);
-      _clockTimeout = setTimeout(function() {
+      _clockTimeout = setTimeout(function () {
         _clockRate = 1;
       },5000);
-      $game.$renderer.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
-    } else if(data.item === 3) {
+      $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
+    } else if (data.item === 3) {
       //extra seeds
       $game.statusUpdate({message:'bonus seeds!',input:'status',screen: true,log:false});
       _numRegularSeeds += 3;
       $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
-      $game.$renderer.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
+      $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
     }
   }
 }
@@ -612,7 +613,7 @@ function _loadVideo (num) {
   var vid = document.createElement('video'),
       i = num // ????? i is not defined anywhere else.
 
-  if(CivicSeed.ENVIRONMENT === 'development') {
+  if (CivicSeed.ENVIRONMENT === 'development') {
     vid.src = Modernizr.video.h264 ? _videoPath + num + '.mp4' :
       _videoPath + i + '.webm?VERSION=' + Math.round(Math.random(1) * 1000000000);
   } else {
@@ -631,8 +632,21 @@ function _loadVideo (num) {
     this.removeEventListener('canplaythrough', _listenerFunction);
     _cutSceneVids.push(vid);
     num += 1;
-    if(num < _numVideos) {
+    if (num < _numVideos) {
       _loadVideo(num);
     }
   }
 }
+
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _boss = {
+
+  // Private
+}
+
+

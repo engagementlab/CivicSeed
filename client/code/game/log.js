@@ -15,7 +15,7 @@ var $log = $game.$log = {
     callback()
   },
 
-	resetInit: function() {
+	resetInit: function () {
 		_unread = null;
 		_maxItems = 50;
 		_numItems = 0;
