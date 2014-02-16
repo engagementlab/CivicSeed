@@ -764,16 +764,11 @@ canvas
 	padding 0
 	z-index 9999
 	display none
-
-.pauseMenu p
-	text-align center, Sans-serif
-	color #222
-	font-size 2em
-	margin-top 100px
-
-#chatButton
-	margin-left 10px
-	background #333
+	p
+		text-align center, Sans-serif
+		color #222
+		font-size 2em
+		margin-top 100px
 
 .riddleText
 	position absolute
@@ -787,9 +782,13 @@ canvas
 #botanist-area .answerButton, #botanist-area .clearBoardButton, #botanist-area i
 	z-index 9999
 
-.chatBox input
-	width 75%
-	font-size 16px, monospace
+#hud-chat
+	input
+		width 75%
+		font-size 16px, monospace
+	button
+		margin-left 10px
+		background #333
 
 textarea
 	font-family $buttonFont

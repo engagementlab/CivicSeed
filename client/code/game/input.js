@@ -1,16 +1,12 @@
 'use strict';
 
-var $chatText,
-    $chatBox,
-    $inventory,
+var $inventory,
     $progressArea,
     _helpShowing
 
 var $input = $game.$input = module.exports = {
 
   registerVariables: function () {
-    $chatText = $('#chatText');
-    $chatBox = $('.chatBox');
     $inventory = $('.inventory');
     $progressArea = $('.progressArea');
     _helpShowing = false;
@@ -185,26 +181,28 @@ var $input = $game.$input = module.exports = {
     })
 
     //send a chat message, pulled from chat field
-    $BODY.on('click', '#chatButton', function (e) {
-      e.preventDefault();
-      var sentence = $chatText.val(),
-        data = {
-          msg: $game.checkPotty(sentence),
-          name: $game.$player.firstName,
-          id: $game.$player.id,
-          log: sentence,
-          instanceName: $game.$player.instanceName
-        };
-      $game.$audio.playTriggerFx('chatSend');
-      // Check for chat triggers (e.g. cheat codes)
-      if (_input.trigger(data.msg) === false && _input.cheat(data.msg) === false) {
-        ss.rpc('game.chat.sendMessage', data, function (r) {
-          //nothing here...
-        });
+    $BODY.on('click', '#chat-submit', function (e) {
+      e.preventDefault()
+      var el = document.getElementById('chat-input'),
+          message = el.value
+
+      // Stop chatting if player has tried to submit a blank message
+      if (message === '') {
+        el.blur()
+        return false
       }
-      $chatText.val('');
-      return false;
-    });
+
+      $game.$audio.playTriggerFx('chatSend')
+
+      // Check for chat triggers (e.g. cheat codes)
+      if (_input.trigger(message) === false && _input.cheat(message) === false) {
+        $game.$chat.send(message)
+      }
+
+      // Reset input box
+      el.value = ''
+      return true
+    })
 
     //open the game log
     $BODY.on('click', '.hud-log-button', function () {
@@ -318,7 +316,7 @@ var $input = $game.$input = module.exports = {
     // $WINDOW.blur(function (e) {
     //  if (!$game.$npc.isResource) {
     //    //$game.pause();
-    //  } 
+    //  }
     // });
 
     // $('.unPause').click(function () {
@@ -359,9 +357,7 @@ var $input = $game.$input = module.exports = {
         $input.endSeedMode()
 
         // Unfocus chat input box
-        if ($chatText.is(':focus')) {
-          $chatText.blur()
-        }
+        document.getElementById('chat-input').blur()
 
         // Sets cursor to walk action
       }
@@ -476,7 +472,7 @@ var $input = $game.$input = module.exports = {
   },
 
   focusChatInput: function () {
-    $chatText.focus()
+    document.getElementById('chat-input').focus()
   },
 
   toggleMinimap: function () {

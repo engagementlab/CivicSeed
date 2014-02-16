@@ -11,6 +11,19 @@ var $chat = $game.$chat = {
     // Nothing.
   },
 
+  send: function (message) {
+    var data = {
+          msg:          _chat.checkPotty(message),
+          name:         $game.$player.firstName,
+          id:           $game.$player.id,
+          log:          message,
+          instanceName: $game.$player.instanceName
+        }
+    ss.rpc('game.chat.sendMessage', data, function (r) {
+      // Nothing
+    })
+  },
+
   message: function (data) {
     var gameboard = document.getElementById('gameboard'),
         bubble    = document.getElementById('chat-' + data.id),
@@ -77,6 +90,19 @@ var _chat = {
 
   // Placeholder for chat display time, after which a setTimeout is used to hide the chat bubble.
   displayTime: null,
+  badWords: ['fuck', 'shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck', 'piss', 'whore', 'slut'],
+
+  // Check for bad language to censor it in chat
+  checkPotty: function (message) {
+    var check = message.toLowerCase()
+
+    for (var i = 0; i < this.badWords.length; i++) {
+      if (check.indexOf(this.badWords[i]) > -1) {
+        return 'I have a potty mouth and I am sorry for cussing.'
+      }
+    }
+    return message
+  },
 
   // Set a flag to indicate if a player has a chat bubble on screen
   flag: function (bool) {

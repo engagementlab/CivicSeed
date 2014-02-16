@@ -19,7 +19,6 @@ window.requestAnimationFrame = (function () {
 // PRIVATE GAME VARS
 var _stepNumber = 0,
   _stats = null,
-  _badWords = ['fuck', 'shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck', 'piss', 'whore', 'slut'], //should be moved
   _levelNames = [
     'Level 1: Looking Inward',
     'Level 2: Expanding Outward',
@@ -264,7 +263,6 @@ var $game = module.exports = {
     });
     $game.$player.displayNpcComments();
     $game.$player.saveTimeToDB();
-    console.log('endTransition() complete.')
   },
 
   //the game loop, if it is running, call all the updates and render
@@ -278,7 +276,7 @@ var $game = module.exports = {
       }
       $game.$player.update();
       $game.$render.renderFrame();
-      requestAnimationFrame($game.tick);
+      window.requestAnimationFrame($game.tick);
     }
   },
 
@@ -424,18 +422,6 @@ var $game = module.exports = {
   addBadgeCount: function (target, quantity) {
     var number = this.getBadgeCount(target) + quantity
     this.setBadgeCount(target, number)
-  },
-
-  //check for bad language to censor it in chat
-  checkPotty: function (msg) {
-    var temp = msg.toLowerCase();
-
-    for(var i = 0; i < _badWords.length; i++) {
-      if (temp.indexOf(_badWords[i]) > -1) {
-        return 'I have a potty mouth and I am sorry for cussing.';
-      }
-    }
-    return msg;
   },
 
   //triggered by a change server-side in the leaderboard
