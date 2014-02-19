@@ -65,10 +65,9 @@ var $render = $game.$render = {
 
     // Access the canvases for rendering
     // Tiles are currently unscaled because scaling it causes some artifacting
-    _backgroundContext    = document.getElementById('background').getContext('2d')
-    //_backgroundContext = _render.initCanvas('background')
-    _foregroundContext    = document.getElementById('foreground').getContext('2d')
-    _charactersContext    = _render.initCanvas('characters')
+    _backgroundContext    = _render.initCanvas('background', true)
+    _foregroundContext    = _render.initCanvas('foreground', true)
+    _charactersContext    = _render.initCanvas('characters', true)
     _interfaceContext     = _render.initCanvas('interface')
     _minimapPlayerContext = _render.initCanvas('minimapPlayer')
     _minimapTileContext   = _render.initCanvas('minimapTile')
@@ -79,7 +78,7 @@ var $render = $game.$render = {
     _interfaceContext.fillStyle    = '#fff'
     _interfaceContext.textAlign    = 'center'
     _interfaceContext.textBaseline = 'bottom'
-    _interfaceContext.font         = '12pt Nunito, sans-serif'
+    _interfaceContext.font         = '12pt sans-serif'
 
     // set stroke stuff for mouse
     _foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Green default
@@ -568,10 +567,10 @@ var $render = $game.$render = {
     );
 
     // Display player name
-    _interfaceContext.save();
+    //_interfaceContext.save();
     _interfaceContext.strokeText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
     _interfaceContext.fillText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
-    _interfaceContext.restore();
+    //_interfaceContext.restore();
   },
 
   //clear the character canvas
@@ -786,7 +785,7 @@ var $render = $game.$render = {
     );
   },
 
-  pingMinimap: function (x, y) {
+  pingMinimap: function (location) {
     var context = _render.createCanvas('minimap-ping', 142, 132, true, {
       right: '0',
       zIndex: '6'
@@ -794,8 +793,8 @@ var $render = $game.$render = {
     context.fillStyle = this.colors.red
     // TODO: Incomplete
     context.fillRect(
-      x,
-      y,
+      location.x,
+      location.y,
       20,
       20
     );
@@ -964,7 +963,7 @@ var _render = {
     width:  null
   },
 
-  createCanvas: function  (elementId, width, height, onDom, styles) {
+  createCanvas: function (elementId, width, height, onDom, styles) {
     var el    = document.createElement('canvas')
     el.id     = elementId
     // Width and height, if not provided, is equal to gameboard dimensions.
@@ -981,14 +980,16 @@ var _render = {
     return this.initCanvas(el)
   },
 
-  initCanvas: function (element) {
+  initCanvas: function (element, forcePixelRatio) {
     var el      = (typeof element === 'object') ? element : document.getElementById(element),
         context = el.getContext('2d'),
         width   = el.width,
         height  = el.height
 
     // Scale interface display for higher-pixel-density screens
-    if ($game.PIXEL_RATIO > 1) {
+    // forcePixelRatio can be passed as true to this function to force this
+    // canvas to use a pixel ratio of 1 and use the browser's native scaling
+    if ($game.PIXEL_RATIO > 1 && forcePixelRatio !== true) {
         $(el).attr('width',  width  * $game.PIXEL_RATIO)
         $(el).attr('height', height * $game.PIXEL_RATIO)
         $(el).css('width',   width)

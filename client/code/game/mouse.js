@@ -89,7 +89,7 @@ var $mouse = $game.$mouse = {
               };
             var r = $game.$player.dropSeed(m);
             if (!r) {
-              $('.seedButton').removeClass('hud-button-active');
+              $('.hud-seed').removeClass('hud-button-active');
             }
           }
         }

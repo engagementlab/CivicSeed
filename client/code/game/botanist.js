@@ -24,7 +24,6 @@ var _info = null,
     $inventoryItem = null,
     $tangramArea = null,
     $botanistTextArea = null,
-    $inventory = null,
     $inventoryBtn = null,
     $inventoryPuzzle = null,
     $botanistContent = null,
@@ -45,8 +44,6 @@ var $botanist = $game.$botanist = {
   isShowing: false,
   ready: false,
 
-  _nudgePlayerInterval: null,
-  _nudgePlayerTimeout: null,
   tutorialState: 0,
 
   init: function (callback) {
@@ -101,7 +98,6 @@ var $botanist = $game.$botanist = {
     $inventoryItem = null;
     $tangramArea = null;
     $botanistTextArea = null;
-    $inventory = null;
     $inventoryBtn = null;
     $inventoryPuzzle = null;
     $botanistContent = null;
@@ -116,8 +112,7 @@ var $botanist = $game.$botanist = {
     $game.$botanist.isChat= false;
     $game.$botanist.isShowing= false;
     $game.$botanist.ready= false;
-    $botanist._nudgePlayerInterval = null
-    $botanist._nudgePlayerTimeout = null
+
     $botanist.tutorialState = 0
   },
 
@@ -224,8 +219,8 @@ var $botanist = $game.$botanist = {
     var level = $game.$player.currentLevel
 
     // Clear nudges if present
-    clearInterval($botanist._nudgePlayerInterval)
-    clearTimeout($botanist._nudgePlayerTimeout)
+    clearInterval(_botanist.nudgePlayerInterval)
+    clearTimeout(_botanist.nudgePlayerTimeout)
 
     // Walk to botanist
     // Hacky. Player moves during game speech.
@@ -267,7 +262,7 @@ var $botanist = $game.$botanist = {
         break
       // 2 = Player has obtained tangram puzzle and is currently collecting resources.
       case 2:
-        var hintIndex = ($game.$player.getInventoryLength() > 0) ? 1 : 0
+        var hintIndex = ($game.$player.getInventory().length > 0) ? 1 : 0
         $botanist.chat($botanist.dialog[level].hint[hintIndex])
         break
       // 3 = Player has all the correct resources, ready to solve.
@@ -286,11 +281,11 @@ var $botanist = $game.$botanist = {
     _nudge()
 
     // Set up a recurring timer, which is cleared when player talks to the botanist.
-    $botanist._nudgePlayerInterval = setInterval(_nudge, 16000)
+    _botanist.nudgePlayerInterval = setInterval(_nudge, 16000)
 
     function _nudge() {
       $game.alert('Talk to the botanist')
-      $game.$render.pingMinimap(70, 71)
+      $game.$render.pingMinimap({x: 70, y: 71})
     }
   },
 
@@ -315,7 +310,7 @@ var $botanist = $game.$botanist = {
       case 0:
         dialogue = $botanist.dialog[0].instructions
         $botanist.chat(dialogue, null, function () {
-          $game.highlightUI('.seedButton')
+          $game.highlightUI('.hud-seed')
           $game.$player.setSeeds('regular', 1)
           $botanist.tutorialState = 1
         })
@@ -326,7 +321,7 @@ var $botanist = $game.$botanist = {
         if ($game.$player.getSeedsDropped() < 1) {
           // dialogue =  'To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Oh, look at that, you have a seed already! Try and plant it, then talk to me again.'
           dialogue =  ['To plant a seed, click the leaf icon at the bottom of the screen, and then click the area where you wish to plant. Try and plant it, then talk to me again.']
-          $game.highlightUI('.seedButton')
+          $game.highlightUI('.hud-seed')
           $botanist.chat(dialogue, null, function () {
             $game.alert('Plant a seed by clicking the seed icon')
           })
@@ -340,7 +335,7 @@ var $botanist = $game.$botanist = {
           $game.$player.saveMapImage(true)
 
           // Player now does progress window tutorial.
-          $game.highlightUI('.progressButton')
+          $game.highlightUI('.hud-progress')
           $botanist.chat(dialogue, null, function () {
             $game.alert('Look at the progress window')
             setTimeout($botanist.nudgePlayer, 5000)
@@ -371,7 +366,7 @@ var $botanist = $game.$botanist = {
     //hide the inventory if the resource is not already visible
     //when clicked on from inventory (this means it isn't in puzzle mode)
     if (!$game.$botanist.isShowing) {
-      $inventory.slideUp();
+      $('#inventory').slideUp();
       $game.$botanist.isChat = true;
       $game.$botanist.showRiddle(0);
     }
@@ -420,26 +415,26 @@ var $botanist = $game.$botanist = {
     if (_promptNum === 0) {
       if (_currentSlide === 0) {
         if ($game.$player.firstTime) {
-          $('#botanist-area .nextButton').show();
+          $('#botanist-area .next-button').show();
         } else {
-          $('#botanist-area .closeButton').show();
+          $('#botanist-area .close-button').show();
         }
       }
       else {
-        $('#botanist-area .closeButton').show();
+        $('#botanist-area .close-button').show();
       }
     }
     else {
       if (_currentSlide === 0) {
-        $('#botanist-area .answerButton').show();
-        $('#botanist-area .clearBoardButton').show();
+        $('#botanist-area .answer-button').show();
+        $('#botanist-area .clear-button').show();
       }
       else if (_currentSlide === 1) {
-        $('#botanist-area .nextButton').show();
+        $('#botanist-area .next-button').show();
       }
       else {
-        $('#botanist-area .answerButton').show();
-        //$('#botanist-area .clearBoardButton').show();
+        $('#botanist-area .answer-button').show();
+        //$('#botanist-area .clear-button').show();
       }
     }
   },
@@ -520,8 +515,8 @@ var $botanist = $game.$botanist = {
         $('.tangram-outline').html(newHTML);
 
         //replace the tangram image in the inventory with tip
-        $('.inventoryPuzzle').hide();
-        $('.inventoryHelp').show();
+        $('.inventory-puzzle').hide();
+        $('#inventory .help').show();
       }
       //right/wrong screen
       else if (_currentSlide === 1) {
@@ -537,10 +532,10 @@ var $botanist = $game.$botanist = {
         var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
         //console.log('posttangramtalk', postTangramTalk);
         $botanistAreaMessage.text(postTangramTalk);
-        var newHTML2 = '<p>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</p>',
-          imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
+        var newHTML2 = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3>',
+            imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
 
-        newHTML2 += '<div class="seedChips"><img src="' + imgPath3 +'"></div>';
+        newHTML2 += '<div class="seed-chips"><img src="' + imgPath3 +'"></div>';
         $botanistContent.html(newHTML2);
       }
       else {
@@ -574,14 +569,14 @@ var $botanist = $game.$botanist = {
       $game.removeFlag('solving-puzzle')
 
       $game.$botanist.clearBoard();
-      $('.inventoryItem').css('opacity',1);
+      $('.inventory-item').css('opacity',1);
 
       // Remove flags
       $game.removeFlag('in-puzzle')
 
       //if they just beat a level, then show progreess
       if ($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
-        $game.highlightUI('.progressButton')
+        $game.highlightUI('.hud-progress')
         $game.showProgress();
       }
     });
@@ -591,8 +586,8 @@ var $botanist = $game.$botanist = {
       // TODO: Check this stuff
       $inventoryBtn.show();
       $inventoryItem.remove();
-      $('.inventoryPuzzle').show();
-      $('.inventoryHelp').hide();
+      $('.inventory-puzzle').show();
+      $('#inventory .help').hide();
     })
   },
 
@@ -707,7 +702,7 @@ var $botanist = $game.$botanist = {
       else {
         //display modal on current screen with feedback
         $game.$botanist.clearBoard();
-        $game.$botanist.feedback(message);
+        _botanist.feedback(message);
       }
 
     }
@@ -823,6 +818,10 @@ var $botanist = $game.$botanist = {
     d3.select('.br' + d.id)
       .attr('stroke-width', 3)
       .classed('dragging', true)
+
+    // Hacky way of making it so that dragging puzzle pieces at the lower end of tangram area doesn't
+    // create calculation errors by bringing the z-index of tangram area above all other interface elements.
+    $('.tangram-area').css({zIndex: 43000})
   },
 
   //make different color if over trash can
@@ -900,28 +899,15 @@ var $botanist = $game.$botanist = {
         .attr('draggable', 'true')
       $('.trash').removeClass('active')
     }
+
+    // Restore z-index to normal
+    $('.tangram-area').css({zIndex: 'initial'})
   },
 
   // Remove all pieces from puzzle board return to inventory
   clearBoard: function () {
     $('.puzzle-svg').empty()
-    $('.inventoryItem').css('opacity', 1).attr('draggable', 'true')
-  },
-
-  // Give user feedback on puzzle answer
-  feedback: function (message) {
-    var $el = $('#botanist-area .check')
-
-    $el.find('.feedback').text(message)
-    $el.find('button').bind('click', $botanist.hideFeedback).show()
-    $el.fadeIn(200)
-  },
-
-  hideFeedback: function () {
-    var $el = $('#botanist-area .check')
-    if ($el.is(':visible')) {
-      $el.fadeOut(200)
-    }
+    $('.inventory-item').css('opacity', 1).attr('draggable', 'true')
   },
 
   //return level question for resume
@@ -936,18 +922,25 @@ var $botanist = $game.$botanist = {
 
 function _setDomSelectors() {
   $botanistArea = $('#botanist-area');
-  $inventoryItem = $('.inventoryItem');
+  $inventoryItem = $('.inventory-item');
   $tangramArea = $('.tangram-area');
   $botanistTextArea = $('.botanist-content textarea');
-  $inventory = $('.inventory');
-  $inventoryBtn = $('.inventory button');
-  $inventoryPuzzle = $('.inventoryPuzzle');
+  $inventoryBtn = $('#inventory button');
+  $inventoryPuzzle = $('.inventory-puzzle');
   $botanistContent = $('.botanist-content');
   $botanistAreaMessage = $('#botanist-area .message');
 }
 
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
 var _botanist = {
 
+  nudgePlayerInterval: null,
+  nudgePlayerTimeout: null,
   trashPosition: {
     top:    null,
     bottom: null,
@@ -977,5 +970,22 @@ var _botanist = {
   snapTangramTo: function (num) {
     var thresh = 10
     return Math.round(num / thresh) * thresh
-  }
+  },
+
+  // Give user feedback on puzzle answer
+  feedback: function (message) {
+    var $el = $('#botanist-area .check')
+
+    $el.find('.feedback').text(message)
+    $el.find('button').bind('click', _botanist.hideFeedback).show()
+    $el.fadeIn(200)
+  },
+
+  hideFeedback: function () {
+    var $el = $('#botanist-area .check')
+    if ($el.is(':visible')) {
+      $el.fadeOut(200)
+    }
+  },
+
 }

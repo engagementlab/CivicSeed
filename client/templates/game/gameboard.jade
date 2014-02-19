@@ -48,7 +48,7 @@
 					button.sure-button.right.btn.btn-success(type='button') I'm Sure
 					button.retry-button.left.btn.btn-primary(type='button') I'll Add More
 			.check-dialog.message-feedback
-				p.feedback
+				.feedback
 				.buttons
 					button.btn.btn-primary(type='button') Okay
 
@@ -63,19 +63,19 @@
 			.tangram-outline
 		.buttons
 			.left
-				button.backButton.btn.btn-info(type='button') Back
-				button.clearBoardButton.btn.btn-info(type='button') Clear Board
+				button.back-button.btn.btn-info(type='button') Back
+				button.clear-button.btn.btn-info(type='button') Clear Board
 			.right
-				button.nextButton.btn.btn-success(type='button') Next
-				button.answerButton.btn.btn-success(type='button') Answer
-				button.closeButton.btn.btn-primary(type='button') Close
+				button.next-button.btn.btn-success(type='button') Next
+				button.answer-button.btn.btn-success(type='button') Answer
+				button.close-button.btn.btn-primary(type='button') Close
 		.check
 			.check-dialog
-				p.feedback
+				.feedback
 				.buttons
 					button.retryButton.btn.btn-primary(type='button') Okay
 
-	.progressArea.gameboard-overlay
+	#progress-area.gameboard-overlay
 		h2 Progress
 		.personalInfo
 			.levelImages
@@ -114,24 +114,24 @@
 		a(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	.collectedResources.gameboard-overlay.background-3
+	#collected-resources.gameboard-overlay.background-3
 		h2 Your Answers
 		.displayMyAnswers.content-box You haven't collected any resources yet.
 		button.btn.backToProgress.btn-info(type='button') Back
 
-	.helpArea.gameboard-overlay
+	#help-area.gameboard-overlay
 		h2 How To Play
-		.helpContent.content-box
+		.content-box
 			include help
-		a.closeButton(href='#')
+		a.close-button(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	.bossArea.gameboard-overlay
+	#boss-area.gameboard-overlay
 		.content
-		p.buttons
-			button.bossButton.btn.btn-success(type='button') Next
+		.buttons
+			button.boss-button.btn.btn-success(type='button') Next
 
-	.skinventory.gameboard-overlay.background-3
+	#skinventory.gameboard-overlay.background-3
 		h2 Changing Room
 		p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
 		.parts
@@ -140,46 +140,49 @@
 			.part.legs(data-part='legs')
 		.skinformation
 			h3 You're wearing
-			p Just the basics!
-		a.closeButton(href='#')
+			p Nothing!
+		a.close-button(href='#')
 			i.fa.fa-times-circle.fa-lg
 
-	.inventory
-		.outlines
-		.pieces
-		button.closeButton.btn.btn-primary(type='button') Close
-		p.inventoryHelp click piece to view resource
+	#inventory
+		.inventory-boxes
+		.inventory-items
+		.inventory-tangram
+		button.close-button.btn.btn-primary(type='button') Close
+		.help click piece to view resource
 
-	.status-update
+	#status-update
 		span
 
-	.seedventory
-		.seed.regularButton
+	#seedventory
+		.seed.regular-button
 			i.fa.fa-leaf.fa-lg(title='regular seed', data-placement='top')
 			span.badge.always-show
-		.seed.drawButton
+		.seed.draw-button
 			i.fa.fa-star.fa-lg(title='paintbrush seed', data-placement='top')
 			span.badge.always-show
+
 	.graffiti
 		p seeds left: <span></span>
 
 	#speech-bubble
-		p.dialog
+		.dialog
 			span.speaker
 			span.message
-		.buttonCorner
-			button.nextButton.btn.btn-success(type='button') Next
-			button.closeButton.btn.btn-primary(type='button') Okay
-			button.noButton.btn.btn-primary(type='button') Close
-			button.yesButton.btn.btn-success(type='button') View
+		.buttons
+			button.next-button.btn.btn-success(type='button') Next
+			button.close-button.btn.btn-primary(type='button') Okay
+			button.no-button.btn.btn-primary(type='button') Close
+			button.yes-button.btn.btn-success(type='button') View
 
 	#game-log-overlay.scrollable
 
-	.pauseMenu
+	#pause-menu
 		p please re-focus your mind, body, and the window...
 		p
-			button.unPause.btn.btn-success(type='button') Resume Game
-	.waitingForSeed
-		img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
+			button.unpause.btn.btn-success(type='button') Resume Game
+
+	#waiting-for-seed.spinner
+		// img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
 
 	#beaming

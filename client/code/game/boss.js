@@ -163,11 +163,11 @@ var $boss = $game.$boss = {
 
 function _setDomSelectors() {
   $BODY = $('body');
-  $bossArea = $('.bossArea');
-  $bossAreaContent = $('.bossArea .content');
-  $buttons = $('.bossArea .buttons');
-  $seedButton = $('.bossHud .seedButton');
-  $seedButtonCount = $('.bossHud .seedButton .badge');
+  $bossArea = $('#boss-area');
+  $bossAreaContent = $('#boss-area .content');
+  $buttons = $('#boss-area .buttons');
+  $seedButton = $('.bossHud .hud-seed');
+  $seedButtonCount = $('.bossHud .hud-seed .badge');
   $clock = $('.bossHud .clock');
   $score = $('.bossHud .score span');
 }
@@ -213,12 +213,12 @@ function _addContent() {
     html += '<p class="detailedInstructions"><img class="minilab" src="' + img1 + '"> This is the basement of my lab. The CHARGING MODULES <img src="' + img2 + '"> are hidden somwhere here.  To find the charging modules, you\'ll need to use the SPECIAL SEEDS  you earned.  These special seeds can detect and reveal the charging modules. Whenver you plant one, the color bursts will be DARKER the CLOSER it is to a charging module. It will help guide the way!</p>';
     html += '<p class="detailedInstructions">Once you reveal a charging module, you have to WALK OVER TO IT, and disable it by hand. Find all four to shut down the robot!  You might also find some of my other inventions down here. These can give you more seeds <img src="' + img3 + '"> , or more time <img src="' + img4 + '"> . Watch out for the red potion <img src="' + img5 + '">  which can erase your progress, or the watch <img src="' + img6 + '">  that speeds up the timer. If you run out seeds, or run out of time, you\'ll have to try again.</p>';
 
-    $('.bossArea .bossButton').text('Ready?');
+    $('#boss-area .boss-button').text('Ready?');
     $bossAreaContent.append(html);
   }  else if (_currentSlide === 3) {
     //fail screen
     html = '<p class="dialog"><span>Botanist:</span> You failed to defeat the robot. Why don\'t you try again?</p>';
-    $('.bossArea .bossButton').text('Play Again').css('margin-top', '50px');
+    $('#boss-area .boss-button').text('Play Again').css('margin-top', '50px');
     $bossAreaContent.append(html);
   }else if (_currentSlide === 4) {
     //win screen
@@ -228,7 +228,7 @@ function _addContent() {
       } else {
         html = '<p class="dialog"><span>Botanist:</span> Congratulations, you defeated the robot!</p>';
         html += '<p class="hoorayVideo"><iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>';
-        $('.bossArea .bossButton').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
+        $('#boss-area .boss-button').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
         $bossAreaContent.append(html);
       }
     });
@@ -284,7 +284,7 @@ function _chooseResumes (people) {
 //save feedback on resume responses to db for each user
 function _saveFeedback() {
   var info = [];
-  $('.bossArea textarea').each(function (i) {
+  $('#boss-area textarea').each(function (i) {
     var val = this.value;
     info.push({
       comment: val,

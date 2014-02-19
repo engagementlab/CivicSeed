@@ -216,7 +216,7 @@ var $game = module.exports = {
 
   // pause menu on browser tab unfocus (currently disabled)
   pause: function () {
-    $('.pauseMenu').fadeIn();
+    $('#pause-menu').fadeIn();
     $game.running = false;
     // TODO: play pause music?
     // CAN USE: $game.$audio.stopAll();
@@ -224,7 +224,7 @@ var $game = module.exports = {
 
   // resume from the pause menu, start up game loop (currenty disabled)
   resume: function () {
-    $('.pauseMenu').slideUp(function () {
+    $('#pause-menu').slideUp(function () {
       $game.running = true;
       $game.tick();
     });
@@ -289,7 +289,7 @@ var $game = module.exports = {
 
     //get stats
     var tilesColored = $game.$player.getTilesColored(),
-      resourcesDiscovered = $game.$player.getResourcesDiscovered();
+        resourcesDiscovered = $game.$player.getResourcesDiscovered();
 
     //show proper level image and color map
     $('.levelImages img').removeClass('currentLevelImage');
@@ -301,16 +301,16 @@ var $game = module.exports = {
 
     //calculate the playing time
     var playingTime = $game.$player.getPlayingTime(),
-      hours = Math.floor(playingTime / 3600),
-      hoursRemainder = playingTime % 3600,
-      minutes = Math.floor(hoursRemainder / 60),
-      seconds = playingTime % 60,
-      displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
+        hours = Math.floor(playingTime / 3600),
+        hoursRemainder = playingTime % 3600,
+        minutes = Math.floor(hoursRemainder / 60),
+        seconds = playingTime % 60,
+        displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
     //other game stats and leaderboard
     // var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
     var displayLevel = $game.$player.currentLevel + 1,
-      topPlayers = '<p>top seeders:</p><ol>';
+        topPlayers = '<p>top seeders:</p><ol>';
     for(var i = 0; i < _stats.leaderboard.length; i++) {
       topPlayers += '<li>' + _stats.leaderboard[i].name + ' &mdash; ' + _stats.leaderboard[i].count + '</li>';
     }
@@ -333,7 +333,7 @@ var $game = module.exports = {
     $('.numCollected').text(numItems + ' / 42');
 
     /*
-    $('.progressArea').show(function () {
+    $('#progress-area').show(function () {
       $game.showingProgress = true;
     });
     */
@@ -341,7 +341,7 @@ var $game = module.exports = {
 
   // Shows a message in either an on-screen display, in the chat log, or both
   statusUpdate: function (data) {
-    var $el = $('.status-update')
+    var $el = $('#status-update')
 
     if (data.screen) {
       $el.find('span').text(data.message)
@@ -628,8 +628,7 @@ function _loadLog() {
 function _loadExtra() {
   //fill player inventory and creat outlines
   if ($game.$player.currentLevel < 4) {
-    $game.$player.fillInventory();
-    $game.$player.createInventoryOutlines();
+    $game.$player.setupInventory()
   }
 
   //make players color map
@@ -642,7 +641,7 @@ function _loadExtra() {
 
   //update text in HUD
   // var percentString = _stats.percent + '%';
-  // $('.progressButton .badge').text(percentString);
+  // $('.hud-progress .badge').text(percentString);
 
   //init chat rpc
   ss.rpc('game.chat.init');

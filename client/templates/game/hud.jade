@@ -1,15 +1,15 @@
-.container.hud
+#hud.container
 	.row.regularGameHud.hud-regular
 		.span4.hud-player
-			.hud-button.inventoryButton
+			.hud-button.hud-inventory
 				a(title='(I)nventory', data-placement='top')
 					i.fa.fa-briefcase.fa-lg
 				span.badge
-			.hud-button.skinventoryButton
+			.hud-button.hud-skinventory
 				a(title='(C)hanging room', data-placement='top')
 					i.fa.fa-user.fa-lg
 				span.badge
-			.hud-button.seedButton
+			.hud-button.hud-seed
 				a(title='S(e)eds', data-placement='top')
 					i.fa.fa-leaf.fa-lg
 				span.badge.always-show
@@ -18,17 +18,17 @@
 				input#chat-input.input-xlarge(type='text', maxlength='90', placeholder='chat with other players...')
 				button#chat-submit.btn(type='submit') Chat
 		.span4.hud-global
-			.hud-button.hud-log-button
+			.hud-button.hud-log
 				a(title='Game log', data-placement='top')
 					i.fa.fa-list.fa-lg
 				span.badge
-			.hud-button.progressButton
+			.hud-button.hud-progress
 				a(title='(P)rogress', data-placement='top')
 					i.fa.fa-desktop.fa-lg
-			.hud-button.muteButton
+			.hud-button.hud-mute
 				a(title='(V)olume', data-placement='top')
 					i.fa.fa-volume-up.fa-lg
-			.hud-button.helpButton
+			.hud-button.hud-help
 				a(title='(H)elp', data-placement='top')
 					i.fa.fa-question-circle.fa-lg
 	.row.bossHud.hud-boss
@@ -45,7 +45,7 @@
 		.span3
 			p.score score: <span>---</span>
 		.span1
-			.hud-button.muteButton.bossBox
+			.hud-button.hud-mute.bossBox
 				a(title='music', data-placement='top')
 					i.fa.fa-volume-up.fa-lg
 

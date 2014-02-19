@@ -38,7 +38,7 @@ var $log = $game.$log = {
           $game.alert('There are new messages in your game log below');
         }
 
-        $game.setBadgeCount('.hud-log-button', hudText)
+        $game.setBadgeCount('.hud-log', hudText)
       }
 
 			var	date = Date(),
@@ -67,7 +67,7 @@ var $log = $game.$log = {
 	},
 
 	clearUnread: function () {
-    $game.setBadgeCount('.hud-log-button', 0)
+    $game.setBadgeCount('.hud-log', 0)
 		_unread = 0;
 	}
 }

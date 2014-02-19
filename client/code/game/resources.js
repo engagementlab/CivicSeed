@@ -233,8 +233,7 @@ var _resource = {
       el.style.display = 'none'
     })
 
-    // Clearing article content is the safest and easiest way of preventing it from
-    // affecting the rest of the game, e.g. stopping videos that are still playing
+    // Clear article content to prevent it from affecting the rest of the game, e.g. stopping videos that are still playing
     overlay.querySelector('.resource-article').innerHTML = ''
   },
 
@@ -514,7 +513,7 @@ var _resource = {
           _addButton('save', 4)
         }
         else {
-          _addButton('save')
+          _addButton('save', null, null, _checkBotanistCallback)
         }
         break
       // [4] RESPONSES.
@@ -524,13 +523,7 @@ var _resource = {
         _resource.loadResponses(resource)
         overlay.querySelector('.resource-responses').style.display = 'block'
 
-        _addButton('close', null, null, function () {
-          // If this resource was just collected, check to see if player shoud be
-          // automatically teleported to the botanist.
-          if (!isRevisit && !inPuzzleMode) {
-            $game.$player.checkBotanistState()
-          }
-        })
+        _addButton('close', null, null, _checkBotanistCallback)
         // If an article was preloaded onto the stage, display the 'back' button.
         if (document.getElementById('resource-stage').innerHTML !== '') _addButton('back', 1, slides - 1)
         break
@@ -607,12 +600,10 @@ var _resource = {
           break
         case 'save':
           save.style.display = 'inline-block'
-          save.addEventListener('click', function () {
-            if (typeof callback === 'function') callback()
+          save.addEventListener('click', function _saveButton () {
             if (_resource.validateTagline(resource) !== true) return
-
             if (section) _resource.addContent(index, section)
-            else $resources.hideResource()
+            else $resources.hideResource(callback)
           })
           break
         case 'close':
@@ -627,6 +618,15 @@ var _resource = {
           break
       }
       return true
+    }
+
+    function _checkBotanistCallback () {
+      // A callback function. If a resource was just collected, check to see if player shoud be automatically teleported to the botanist.
+      if (!inPuzzleMode) {
+        // TODO: Removed the check for !isRevisit because it does not actually differentiate
+        // between whether a resource is being reviewed from the NPC bubble or not
+        $game.$player.checkBotanistState()
+      }
     }
   },
 
