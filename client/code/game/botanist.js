@@ -581,11 +581,10 @@ var $botanist = $game.$botanist = {
 
     // Close and reset inventory to non-puzzle state
     $game.$input.closeInventory(function () {
-      // TODO: Check this stuff
       $inventoryBtn.show();
       $inventoryItem.remove();
-      $('.inventory-puzzle').show();
-      $('#inventory .help').hide();
+      $('.inventory-tangram').show()
+      $('#inventory .help').hide()
     })
   },
 
