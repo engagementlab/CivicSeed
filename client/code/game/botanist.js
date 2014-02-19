@@ -514,9 +514,9 @@ var $botanist = $game.$botanist = {
         var newHTML = '<img src="' + imgPath1 + '"><img src="' + imgPath2 + '" class="trash">';
         $('.tangram-outline').html(newHTML);
 
-        //replace the tangram image in the inventory with tip
-        $('.inventory-puzzle').hide();
-        $('#inventory .help').show();
+        // Replace the tangram image in the inventory with tip
+        $('.inventory-tangram').hide()
+        $('#inventory .help').show()
       }
       //right/wrong screen
       else if (_currentSlide === 1) {
