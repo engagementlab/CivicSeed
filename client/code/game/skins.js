@@ -152,7 +152,7 @@ var $skins = $game.$skins = {
         'legs': {
           'name': 'Space Pants',
           'description': 'Press ignition, and may space pants be with you!',
-          'effect': 'You have local radar. Characters with resources near you are highlighted',
+          'effect': 'You have local radar. Characters with resources near you are highlighted.',
           'flag': ''
         }
       },

@@ -436,7 +436,7 @@ var $player = $game.$player = {
     if ($game.checkFlag('botanist-teleported') === true) return false
 
     // Prevent check from occurring of the player was inside the inventory when this function was called
-    if ($game.checkFlag('viewing-inventory') === false) return false
+    if ($game.checkFlag('viewing-inventory') === true) return false
 
     // Get an array containing all the correct tangram pieces for this level, and an object containing all the pieces (resources) player is currently holding
     var pieces    = $game.$botanist.tangram[$game.$player.currentLevel].answer,

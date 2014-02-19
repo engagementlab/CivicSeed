@@ -78,7 +78,7 @@ var $render = $game.$render = {
     _interfaceContext.fillStyle    = '#fff'
     _interfaceContext.textAlign    = 'center'
     _interfaceContext.textBaseline = 'bottom'
-    _interfaceContext.font         = '12pt sans-serif'
+    _interfaceContext.font         = '12pt Nunito, sans-serif'
 
     // set stroke stuff for mouse
     _foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Green default
