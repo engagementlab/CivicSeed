@@ -381,7 +381,6 @@ var $map = $game.$map = {
     _topEdge    = $game.masterY
     _bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1
 
-    console.log('requesting Animation Frame')
     window.requestAnimationFrame($game.stepTransition)
   },
 
@@ -458,18 +457,15 @@ function _getTiles (data, callback) {
 
     while(c < cLength) {
       var found = false;
-      console.log(c, cLength)
       while(!found) {
         if (_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
           _nextTiles[a][b].colored = true;
           found = true;
         }
         a++;
-        console.log(a)
         if (a >= aMax) {
           a = 0;
           b++;
-          console.log(b)
           if (b >= bMax) {
             console.log('errrr');
             found = true;
@@ -478,7 +474,6 @@ function _getTiles (data, callback) {
       }
       c++;
     }
-    console.log(_nextTiles)
     $game.$map.dataLoaded = true;
     callback();
   });

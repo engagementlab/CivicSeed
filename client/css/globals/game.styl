@@ -35,8 +35,6 @@
 			height 480px
 	.defeatedRobot
 		text-align center
-	.bossArea .bossButton a
-		color white
 
 #loading
 	margin 150px 0 0 0
@@ -50,7 +48,7 @@
 	left 15px
 	width 930px
 	height 450px
-	z-index 9999
+	z-index 10000
 	padding 20px
 	background #efefef
 	background-image $cloudUrl('img/bg/grey.png')
@@ -76,7 +74,6 @@
 			background-size 188px
 	.buttons
 		position absolute
-		z-index 9994
 		bottom 20px
 		left 0
 		width 100%
@@ -102,7 +99,7 @@
 		width 100%
 		height 100%
 		background-color rgba(255,255,255,0.75)
-		z-index 10000
+		z-index 11000
 		.check-dialog
 			position absolute
 			left 280px
@@ -152,7 +149,7 @@
 	.dialog
 		// See also .dialog at .resourceArea
 		padding-right 50px
-	.seedChips
+	.seed-chips
 		margin-top 30px
 		text-align center
 	.tangram-area
@@ -161,7 +158,6 @@
 		left 0
 		height 360px
 		padding 0
-		z-index 9992
 		display none
 		.puzzle-svg
 			position absolute
@@ -182,8 +178,8 @@
 			&.active
 				opacity 0.5
 	textarea
-		max-height 300px
-		height 300px
+		height 280px
+		margin-top 20px
 
 #resource-area
 	.resource-content
@@ -295,7 +291,7 @@
 			margin 20px 0 0
 		textarea
 			width 100%
-			min-height 200px
+			height 200px
 			padding 10px
 		input[type='radio']
 			// Somewhere the alignment is actually incorrect
@@ -308,7 +304,7 @@
 #resource-stage
 	display none
 
-.progressArea
+#progress-area
 	h2
 		color $csGreen
 		font-size 3.5em
@@ -455,7 +451,7 @@
 			bottom 0
 			margin 10px 0 0 0px
 
-.collectedResources
+#collected-resources
 	box-shadow none
 	.backToProgress
 		position absolute
@@ -501,7 +497,7 @@
 			content ':'
 			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the ': ' string
 
-.skinventory
+#skinventory
 	.parts
 		margin-bottom 10px
 		text-align center
@@ -566,19 +562,6 @@
 
 // END LARGE OVERLAYS
 
-.megaRiddle
-	width 780px
-	margin-left 20px
-	max-height 343px
-	overflow auto
-	border 3px solid $csGray
-	background #eee
-
-
-.newDislpay
-	background $csLightOrange
-
-
 .player-chat
 	position absolute
 	z-index 100
@@ -594,11 +577,8 @@
 	//border 3px solid $csLightGray
 	border-radius 20px
 
-.centerText
-	text-align center
-
-.inventory,
-.seedventory
+#inventory,
+#seedventory
 	position absolute
 	bottom 15px
 	left 15px
@@ -606,14 +586,46 @@
 	height 60px
 	background rgba(50,50,50,0.9)
 	padding 0
-	z-index 9999
+	z-index 9000
 	display none
 	button
 		position absolute
 		bottom 15px
 		right 15px
 
-.seedventory
+#inventory
+	.inventory-boxes,
+	.inventory-items
+		position absolute
+		top 0
+		left 0
+		height 99%
+		width 100%
+	.inventory-tangram
+		position absolute
+		right 100px
+	.inventory-box,
+	.inventory-item
+		float left
+		margin 12px 0 10px 20px
+		width 32px
+		height 32px
+	.inventory-box
+		border 1px dashed gray
+	.inventory-item
+		cursor pointer
+	.help
+		position absolute
+		right 0
+		top 20px
+		width 250px
+		padding-right 20px
+		color $csLightBlue
+		line-height 1.2em
+		text-align right
+		display none
+
+#seedventory
 	padding-left 10px
 	font-size 24px
 	.seed
@@ -637,7 +649,7 @@
 	width 125px
 	height 36px
 	background rgba(50,50,50,0.9)
-	z-index 9999
+	z-index 9400
 	font-size 24px
 	cursor pointer
 	p
@@ -648,17 +660,9 @@
 			text-align right
 			float right
 
-.inventory > .outlines,
-.inventory > .pieces
-	position absolute
-	top 0
-	left 0
-	height 99%
-	width 100%
-
 #speech-bubble
 	display none
-	z-index 9999
+	z-index 9600
 	position absolute
 	top 20px
 	left 20px
@@ -667,11 +671,19 @@
 	background #efefef
 	color #222
 	box-shadow $csUIDropShadow
+	background-image $cloudUrl('img/bg/grey.png')
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
+		background-image $cloudUrl('img/bg/grey@2x.png')
+		background-size 397px
 	.dialog
 		margin 0
 		padding 0
 		&.fit
 			width 760px
+	.buttons
+		position absolute
+		bottom 10px
+		right 6px
 	button
 		display none
 		float right
@@ -685,30 +697,30 @@ canvas
 	z-index 0
 
 #characters
-	z-index 2
+	z-index 20
 
 #foreground
-	z-index 3
+	z-index 30
 
 #interface
-	z-index 4
+	z-index 40
 
 #minimapTile
-	z-index 5
+	z-index 50
 	right 0px
 	background rgba(20,20,20,0.3)
 	display none
 
 #minimapPlayer
 	background rgba(20,20,20,0.8)
-	z-index 5
+	z-index 55
 	right 0px
 
 .debug p
 	float left
 	margin-left 20px
 
-.hud
+#hud
 	margin-top 20px
 	margin-bottom 4px
 	-webkit-touch-callout none
@@ -744,16 +756,20 @@ canvas
 		margin-left -10px
 		.hud-global
 			text-align right
-		.hud-chat
-			padding-top 8px
-			input
-				border 2px solid $csLightGray
-				background white
-				&:focus
-					border 2px solid $csGreen
-					box-shadow none
+	.hud-chat
+		padding-top 8px
+		input
+			border 3px solid $csLightGray
+			background white
+			width 75%
+			&:focus
+				border 3px solid $csGreen
+				box-shadow none
+		button
+			margin-left 10px
+			background #333
 
-.pauseMenu
+#pause-menu
 	position absolute
 	top 15px
 	left 15px
@@ -764,16 +780,11 @@ canvas
 	padding 0
 	z-index 9999
 	display none
-
-.pauseMenu p
-	text-align center, Sans-serif
-	color #222
-	font-size 2em
-	margin-top 100px
-
-#chatButton
-	margin-left 10px
-	background #333
+	p
+		text-align center, Sans-serif
+		color #222
+		font-size 2em
+		margin-top 100px
 
 .riddleText
 	position absolute
@@ -784,19 +795,14 @@ canvas
 	font-size .8em
 	font-family $buttonFont
 
-#botanist-area .answerButton, #botanist-area .clearBoardButton, #botanist-area i
+#botanist-area .answer-button, #botanist-area .clear-button, #botanist-area i
 	z-index 9999
-
-.chatBox input
-	width 75%
-	font-size 16px, monospace
 
 textarea
 	font-family $buttonFont
 	width 800px
 	height 150px
 	max-width 800px
-	max-height 200px
 	resize none
 
 .hide
@@ -815,39 +821,13 @@ textarea
 	color #333
 	background-color $csYellow
 
-.waitingForSeed
-	width 32px
-	height 32px
+#waiting-for-seed
+	// May be removed if css .spinner works better
+	//width 32px
+	//height 32px
 	z-index 99999
 	position absolute
 	display none
-
-.buttonCorner
-	position absolute
-	bottom 10px
-	right 6px
-
-.inventoryItem.puzzle0,
-.inventoryItem.puzzle1,
-.inventoryItem.puzzle2,
-.inventoryItem.puzzle3
-	float right
-	margin-right 100px
-
-.inventoryOutline
-	float left
-	margin 12px 0 10px 20px
-	width 32px
-	height 32px
-	border 1px dashed gray
-
-.inventoryItem
-	float left
-	margin 12px 0 10px 20px
-	width 32px
-	height 32px
-	cursor pointer
-	border 1px solid rgba(0,0,0,0)
 
 .gameCursor
 	position absolute
@@ -861,11 +841,10 @@ textarea
 	width 960px
 	height 480px
 	z-index 9999
-
-.hooray p
-	margin-top 100px
-	font-size 2em
-	text-align center
+	p
+		margin-top 100px
+		font-size 2em
+		text-align center
 
 .hoorayVideo
 	text-align center;
@@ -905,17 +884,6 @@ p.townSite
 .miniExample
 	text-align center
 
-.inventoryHelp
-	position absolute
-	right 5px
-	top 12px
-	text-align center
-	line-height 1.2em
-	width 110px
-	color #eee
-	font-family $buttonFont
-	display none
-
 #beaming
 	display none
 	position absolute
@@ -925,7 +893,7 @@ p.townSite
 	height 100%
 	background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
 	background-size cover
-	z-index 99999
+	z-index 40000
 
 #game-log
 	width 100%
@@ -967,7 +935,7 @@ p.townSite
 	p.status
 		color $csLightOrange
 
-.status-update
+#status-update
 	display none
 	position absolute
 	bottom 90px
@@ -977,7 +945,7 @@ p.townSite
 	font-family $buttonFont
 	height 20px
 	margin 0
-	z-index 99999
+	z-index 45000
 	color #eee
 	span
 		background rgba(0,0,0,0.75)
@@ -996,7 +964,7 @@ p.townSite
 	color $csLightGreen
 	cursor pointer
 
-.bossArea
+#boss-area
 	z-index 9997
 	display none
 	.content
@@ -1021,6 +989,9 @@ p.townSite
 			font-weight 700
 			font-family $buttonFont
 			color $csBlue
+	.boss-button a
+		color white
+
 .minilab
 	float left
 	margin-right 20px
@@ -1042,7 +1013,7 @@ p.townSite
 	text-align center
 	&:hover
 		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
-.bossHud
+.boss-hud
 	display none
 	.clock
 		color $csBlue
@@ -1055,7 +1026,7 @@ p.townSite
 		line-height 36px
 		color $csOrange
 		font-size 1.2em
-	.muteButton
+	.hud-mute
 		float left
 
 .labBackground
@@ -1069,3 +1040,102 @@ svg.tangram-svg
 	// see also .puzzle-svg
 	width 100%
 	height 250px
+
+// CSS Spinner test: https://github.com/jlong/css-spinners/blob/master/css/spinner/spinner.css
+// Modify font-size for .spinner get the right size
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* :not(:required) hides this rule from IE9 and below */
+.spinner:not(:required) {
+  -webkit-animation: spinner 1500ms infinite linear;
+  -moz-animation: spinner 1500ms infinite linear;
+  -ms-animation: spinner 1500ms infinite linear;
+  -o-animation: spinner 1500ms infinite linear;
+  animation: spinner 1500ms infinite linear;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  -ms-border-radius: 0.5em;
+  -o-border-radius: 0.5em;
+  border-radius: 0.5em;
+  -webkit-box-shadow: rgba(64, 64, 64, 0.5) 1.5em 0 0 0, rgba(64, 64, 64, 0.5) 1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) 0 1.5em 0 0, rgba(64, 64, 64, 0.5) -1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) -1.5em 0 0 0, rgba(64, 64, 64, 0.5) -1.1em -1.1em 0 0, rgba(64, 64, 64, 0.5) 0 -1.5em 0 0, rgba(64, 64, 64, 0.5) 1.1em -1.1em 0 0;
+  -moz-box-shadow: rgba(64, 64, 64, 0.5) 1.5em 0 0 0, rgba(64, 64, 64, 0.5) 1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) 0 1.5em 0 0, rgba(64, 64, 64, 0.5) -1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) -1.5em 0 0 0, rgba(64, 64, 64, 0.5) -1.1em -1.1em 0 0, rgba(64, 64, 64, 0.5) 0 -1.5em 0 0, rgba(64, 64, 64, 0.5) 1.1em -1.1em 0 0;
+  box-shadow: rgba(64, 64, 64, 0.5) 1.5em 0 0 0, rgba(64, 64, 64, 0.5) 1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) 0 1.5em 0 0, rgba(64, 64, 64, 0.5) -1.1em 1.1em 0 0, rgba(64, 64, 64, 0.5) -1.5em 0 0 0, rgba(64, 64, 64, 0.5) -1.1em -1.1em 0 0, rgba(64, 64, 64, 0.5) 0 -1.5em 0 0, rgba(64, 64, 64, 0.5) 1.1em -1.1em 0 0;
+  display: none;
+  font-size: 8px;
+  width: 1em;
+  height: 1em;
+  margin: 1.5em;
+  overflow: hidden;
+  text-indent: 100%;
+}
+

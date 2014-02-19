@@ -152,7 +152,7 @@ var $skins = $game.$skins = {
         'legs': {
           'name': 'Space Pants',
           'description': 'Press ignition, and may space pants be with you!',
-          'effect': 'You have local radar. Characters with resources near you are highlighted',
+          'effect': 'You have local radar. Characters with resources near you are highlighted.',
           'flag': ''
         }
       },
@@ -381,14 +381,14 @@ var $skins = $game.$skins = {
     if (part !== undefined) {
       // Specify a part to unlock
       playerSkin.unlocked[part].push(skin)
-      $game.addBadgeCount('.skinventoryButton', 1)
+      $game.addBadgeCount('.hud-skinventory', 1)
     }
     else {
       // Assume all parts of the skin is unlocked
       playerSkin.unlocked.head.push(skin)
       playerSkin.unlocked.torso.push(skin)
       playerSkin.unlocked.legs.push(skin)
-      $game.addBadgeCount('.skinventoryButton', 3)
+      $game.addBadgeCount('.hud-skinventory', 3)
     }
 
     // Update skinventory
@@ -457,9 +457,9 @@ var $skins = $game.$skins = {
     }
 
     // Reset parts
-    $('.skinventory .head').empty()
-    $('.skinventory .torso').empty()
-    $('.skinventory .legs').empty()
+    $('#skinventory .head').empty()
+    $('#skinventory .torso').empty()
+    $('#skinventory .legs').empty()
 
     // For each skin, create display element and render
     for (var id in skins) {

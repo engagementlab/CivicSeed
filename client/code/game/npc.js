@@ -9,7 +9,6 @@ var $npc = $game.$npc = {
   ready:      false,
   hideTimer:  null,
   isResource: false,
-  isChat:     false,
 
   //pull all npc info from the DB
   init: function (callback) {
@@ -37,7 +36,6 @@ var $npc = $game.$npc = {
     $game.$npc.ready      = false;
     $game.$npc.hideTimer  = null;
     $game.$npc.isResource = false;
-    $game.$npc.isChat     = false;
   },
 
   //add an npc to the list
@@ -289,7 +287,7 @@ var $npc = $game.$npc = {
     }
 
     // Set global chat state
-    $npc.isChat = true
+    $game.setFlag('npc-chatting')
 
     // Play sound effect
     $game.$audio.playTriggerFx('npcBubble')
@@ -333,10 +331,10 @@ var $npc = $game.$npc = {
     // Display the speech bubble
     $el.fadeIn(300, function () {
       // If no prompt, the dialog box should fade on its own after some time.
-      // The timer is set by the length of the message, but no less than 2 seconds at minimum.
+      // The timer is set by the length of the message, but no less than 4 seconds at minimum.
       if (!isMultiline && !hasPrompt) {
         var hideTimer = text.length * 50
-        if (hideTimer < 2000) hideTimer = 2000
+        if (hideTimer < 4000) hideTimer = 4000
         $npc.hideTimer = setTimeout($npc.hideSpeechBubble, hideTimer)
       }
     })
@@ -350,19 +348,19 @@ var $npc = $game.$npc = {
 
       if (index < messages.length - 1) {
         // Intermediary messages
-        $el.find('.nextButton').off('click').on('click', function (e) {
+        $el.find('.next-button').off('click').on('click', function (e) {
           e.stopImmediatePropagation()
           _showMultiline(index + 1)
         }).show()
       }
       else {
         // Last message
-        $el.find('.nextButton').off('click').hide()
+        $el.find('.next-button').off('click').hide()
         if (hasPrompt === true) {
           _setupPrompt()
         }
         else {
-          $el.find('.closeButton').on('click', function (e) {
+          $el.find('.close-button').on('click', function (e) {
             e.stopImmediatePropagation()
             $npc.hideSpeechBubble(callback)
           }).show()
@@ -376,13 +374,13 @@ var $npc = $game.$npc = {
       // prompt is a callback function that is executed when player clicks the Yes button.
       // Currently assuming that all prompt responses automatically closes the speech bubble
       // rather than lead to next line of conversation.
-      $el.find('.yesButton').on('click', function (e) {
+      $el.find('.yes-button').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(prompt)
       }).show()
 
       // Close prompt
-      $el.find('.noButton').on('click', function (e) {
+      $el.find('.no-button').on('click', function (e) {
         e.stopImmediatePropagation()
         $npc.hideSpeechBubble(callback)
       }).show()
@@ -398,7 +396,7 @@ var $npc = $game.$npc = {
         button.removeEventListener('click', _onClose)
       })
 
-      $el.querySelector('.buttonCorner').appendChild(button)
+      $el.querySelector('.buttons').appendChild(button)
     }
 
   },
@@ -408,11 +406,11 @@ var $npc = $game.$npc = {
     clearTimeout($game.$npc.hideTimer)
     var $el = $('#speech-bubble')
 
-    $game.$npc.isChat = false
-    $el.find('.nextButton').off('click')
-    $el.find('.closeButton').off('click')
-    $el.find('.yesButton').off('click')
-    $el.find('.noButton').off('click')
+    $game.removeFlag('npc-chatting')
+    $el.find('.next-button').off('click')
+    $el.find('.close-button').off('click')
+    $el.find('.yes-button').off('click')
+    $el.find('.no-button').off('click')
 
     $el.fadeOut(300, function () {
       // Execute a callback function passed to this method

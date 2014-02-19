@@ -89,7 +89,7 @@ var $mouse = $game.$mouse = {
               };
             var r = $game.$player.dropSeed(m);
             if (!r) {
-              $('.seedButton').removeClass('hud-button-active');
+              $('.hud-seed').removeClass('hud-button-active');
             }
           }
         }
@@ -105,7 +105,7 @@ var $mouse = $game.$mouse = {
             //if the player isn't "searching" for a path it is a green tile, move
             if (state === -1 && !$game.$player.pathfinding) {
               $game.$player.beginMove(_curX,_curY);
-              if ($game.$npc.isChat) {
+              if ($game.checkFlag('npc-chatting')) {
                 $game.$npc.hideSpeechBubble();
               }
               if ($game.$botanist.isChat) {
@@ -115,7 +115,7 @@ var $mouse = $game.$mouse = {
             //they clicked on an NPC
             else if (state >= 0 ) {
               if (state !== $game.$botanist.index && !$game.$player.pathfinding) {
-                if ($game.$npc.isChat) {
+                if ($game.checkFlag('npc-chatting')) {
                   $game.$npc.hideSpeechBubble();
                 }
                 $game.$npc.selectNpc(state);
