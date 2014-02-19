@@ -428,7 +428,7 @@ var _resource = {
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
         isRevisit    = (answer && answer.result) ? true : false,
-        inPuzzleMode = $game.checkFlag('in-puzzle'),
+        inPuzzleMode = $game.checkFlag('solving-puzzle'),
         resource     = _resources[index]
 
     var $article     = $('#resource-stage .pages > section'),

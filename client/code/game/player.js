@@ -18,9 +18,6 @@ var _curFrame = 0,
 
     _previousSeedsDropped = null,
 
-    $waiting = null,
-    $gameboard = null,
-    $inventory = null,
     $graffiti = null,
     $graffitiNum = null,
     _startTime = null,
@@ -53,7 +50,6 @@ var $player = $game.$player = {
   instanceName: null,
   currentLevel: null,
   botanistState: null,
-  firstTime: null,
   seenRobot: null,
   seriesOfMoves: null,
   currentMove: 0,
@@ -145,9 +141,6 @@ var $player = $game.$player = {
 
     _previousSeedsDropped = null;
 
-    $waiting = null;
-    $gameboard = null;
-    $inventory = null;
     $graffiti = null;
     $graffitiNum = null;
     _startTime = null;
@@ -176,7 +169,6 @@ var $player = $game.$player = {
     $game.$player.instanceName= null;
     $game.$player.currentLevel= null;
     $game.$player.botanistState= null;
-    $game.$player.firstTime= null;
     $game.$player.seenRobot= null;
     $game.$player.seriesOfMoves= null;
     $game.$player.currentMove= 0;
@@ -929,7 +921,7 @@ var $player = $game.$player = {
           num = '*';
         }
         var bubble = $('<p class="npc-bubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
-        $gameboard.append(bubble);
+        $('#gameboard').append(bubble);
         $('#' + npcId).css({
           top: npcInfo.y - 68,
           left: npcInfo.x
@@ -1127,7 +1119,7 @@ var _player = {
         //tagline = $game.$resources.getTagline(index);
 
     //put image on page in inventory
-    $inventory.prepend('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">');
+    $('#inventory > .inventory-items').prepend('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">');
 
     $('.' + className).bind('mouseenter',function () {
       //var info = $(this).attr('title');
@@ -1160,9 +1152,6 @@ var _player = {
 //setup all the dom elements for reuse
 function _setDomSelectors() {
   //set variables for dom selectors
-  $waiting = $('#waiting-for-seed');
-  $gameboard = $('#gameboard');
-  $inventory = $('#inventory > .inventory-items');
   $graffiti = $('.graffiti');
   $graffitiNum = $('.graffiti p span');
 }
@@ -1193,10 +1182,14 @@ function _setPlayerInformation(info) {
   $game.$player.firstName = info.firstName;
   $game.$player.currentLevel = info.game.currentLevel;
   $game.$player.botanistState = info.game.botanistState;
-  $game.$player.firstTime = info.game.firstTime;
   $game.$player.instanceName = info.game.instanceName;
   $game.$player.seenRobot = info.game.seenRobot;
   $game.$player.isMuted = info.game.isMuted
+
+  if (info.game.firstTime === true) {
+    $game.setFlag('first-time')
+  }
+
 }
 
 //figure out what color to make which tiles when a seed is dropped
@@ -1241,8 +1234,11 @@ function _calculateSeeds(options) {
 
 //plant the seed on the server and wait for response and update hud and map
 function _sendSeedBomb(data) {
+  var waitingEl = document.getElementById('waiting-for-seed')
+
   //set a waiting boolean so we don't plant more until receive data back from rpc
   $game.$player.awaitingBomb = true;
+  $game.setFlag('awaiting-seed')
 
   //send the data to the rpc
   var info = {
@@ -1259,7 +1255,7 @@ function _sendSeedBomb(data) {
 
   var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
 
-  $waiting
+  $(waitingEl)
     .css({
       top: loc.y * 32,
       left: loc.x * 32
@@ -1268,7 +1264,9 @@ function _sendSeedBomb(data) {
 
   ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
     $game.$player.awaitingBomb = false;
-    $waiting.fadeOut();
+    $game.removeFlag('awaiting-seed')
+
+    $(waitingEl).fadeOut();
     if (result > 0) {
       _seeds.dropped += 1;
       //increase the drop count for the player

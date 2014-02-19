@@ -9,7 +9,6 @@ var $npc = $game.$npc = {
   ready:      false,
   hideTimer:  null,
   isResource: false,
-  isChat:     false,
 
   //pull all npc info from the DB
   init: function (callback) {
@@ -37,7 +36,6 @@ var $npc = $game.$npc = {
     $game.$npc.ready      = false;
     $game.$npc.hideTimer  = null;
     $game.$npc.isResource = false;
-    $game.$npc.isChat     = false;
   },
 
   //add an npc to the list
@@ -289,7 +287,7 @@ var $npc = $game.$npc = {
     }
 
     // Set global chat state
-    $npc.isChat = true
+    $game.setFlag('npc-chatting')
 
     // Play sound effect
     $game.$audio.playTriggerFx('npcBubble')
@@ -408,7 +406,7 @@ var $npc = $game.$npc = {
     clearTimeout($game.$npc.hideTimer)
     var $el = $('#speech-bubble')
 
-    $game.$npc.isChat = false
+    $game.removeFlag('npc-chatting')
     $el.find('.next-button').off('click')
     $el.find('.close-button').off('click')
     $el.find('.yes-button').off('click')

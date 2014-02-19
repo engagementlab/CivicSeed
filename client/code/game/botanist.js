@@ -18,7 +18,6 @@ var _info = null,
 
     _paintbrushSeedFactor = 5,
     _levelQuestion = ['What motivates you to civically engage? Your answer will become a permanent part of your Civic Resume, so think carefully!','Please describe your past experience and skills in civic engagement. Your answer will become a permanent part of your Civic Resume, so think carefully!','What aspect of civic engagement interests you the most? What type of projects do you want to work on? Your answer will become a permanent part of your Civic Resume, so think carefully!', 'What outcomes do you hope to achieve for yourself through civic engagement? What are you hoping to learn, and where do you want your civic engagement to lead? Your answer will become a permanent part of your Civic Resume, so think carefully!'],
-    _firstTime = false,
 
     $botanistArea = null,
     $inventoryItem = null,
@@ -92,7 +91,6 @@ var $botanist = $game.$botanist = {
     _counter = 0;
     _dragOffX = 0;
     _dragOffY = 0;
-    _firstTime = false;
 
     $botanistArea = null;
     $inventoryItem = null;
@@ -151,7 +149,6 @@ var $botanist = $game.$botanist = {
 
   // Sets the botanist state which determines what he shows
   setState: function (state) {
-    // $game.$player.checkBotanistState();
     // Set state globally for player
     $game.$player.botanistState = state
 
@@ -242,19 +239,19 @@ var $botanist = $game.$botanist = {
 
     // Look at Botanist state
     switch ($game.$player.botanistState) {
-      // 0 = Initial state. Player has either started the game for the first time, or has just attained the next level.
+      // 0 = Initial state. Player is beginning the current level.
       case 0:
-        // Tutorial at level 1.
-        if (level === 0) {
+        // If this is the player's first time in the game, player should complete the tutorial first.
+        if ($game.checkFlag('first-time') === true) {
           $botanist.doTutorial($botanist.tutorialState)
+          return
         }
-        else {
-          // Show instructions.
-          $botanist.chat($botanist.dialog[level].instructions, null, function () {
-            $botanist.setState(1)
-            $botanist.show()
-          })
-        }
+
+        // Show instructions.
+        $botanist.chat($botanist.dialog[level].instructions, null, function () {
+          $botanist.setState(1)
+          $botanist.show()
+        })
         break
       // 1 = Player has looked at the instructions / tutorial, and needs to obtain the puzzle piece for that level.
       case 1:
@@ -331,7 +328,6 @@ var $botanist = $game.$botanist = {
           dialogue = [$botanist.dialog[0].instructions2]     // Force instruction to prompt
 
           // TODO: ?????
-          _firstTime = true;
           $game.$player.saveMapImage(true)
 
           // Player now does progress window tutorial.
@@ -389,19 +385,18 @@ var $botanist = $game.$botanist = {
       $botanistArea.fadeIn(function () {
         $game.$botanist.isShowing = true;
 
-        if (_currentSlide === 0 && !$game.$player.firstTime) {
+        if (_currentSlide === 0 && $game.checkFlag('first-time') === false) {
           $tangramArea.show();
 
-          $game.setFlag('in-puzzle')
+          if ($game.checkFlag('solving-puzzle') === true) {
+            // Show 'how-to-play' puzzle hints
+            setTimeout(function () {
+              $game.alert('Drag a piece to the board to place it')
+            }, 5000)
 
-          // Show 'how-to-play' puzzle hints
-          setTimeout(function () {
-            $game.alert('Drag a piece to the board to place it')
-          }, 5000)
-
-          // Find and store coordinates for the trash area
-          _botanist.setTrashPosition()
-
+            // Find and store coordinates for the trash area
+            _botanist.setTrashPosition()
+          }
         }
       });
     });
@@ -414,7 +409,7 @@ var $botanist = $game.$botanist = {
     //no buttons except close
     if (_promptNum === 0) {
       if (_currentSlide === 0) {
-        if ($game.$player.firstTime) {
+        if ($game.checkFlag('first-time')) {
           $('#botanist-area .next-button').show();
         } else {
           $('#botanist-area .close-button').show();
@@ -480,19 +475,21 @@ var $botanist = $game.$botanist = {
       }
       else {
         if ($game.$player.currentLevel === 0) {
-          $game.$player.firstTime = false;
-          var info = {
-            id: $game.$player.id,
-            firstTime: $game.$player.firstTime
-          };
-          ss.rpc('game.player.updateGameInfo', info);
+
+          $game.removeFlag('first-time')
+
+          // Update player info.
+          ss.rpc('game.player.updateGameInfo', {
+            id:        $game.$player.id,
+            firstTime: false
+          })
+
           //add this tangram outline to the inventory
           $game.$player.tangramToInventory();
           $botanist.setState(2)
-          $game.$player.checkBotanistState();
           $('.tangram-area').hide()
+
           $botanistAreaMessage.text('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.');
-          // $botanistContent.html('<p>To collect the pieces for the recipe, you must go out into the world and talk to its citizens by clicking on them. They will ask you questions.  Answer the questions to gain more <b>seeds</b> and, more importantly, <b>research</b> that will enable to you create paintbrush seeds..  When you think you have enough pieces to complete the recipe come see me again.</p><img class="miniExample" src="/img/game/minimap.png"><p>The pieces of the first recipe can be found in Brightwood Forest to the northwest of here.  Pictured to the right is the mini map display you can see in the top right corner of the game screen.  You can toggle this on/off by clicking the globe icon below.  The highlighted quadrant represents the Brightwood Forest, and I am the square in the center.</p><p>Level 1, <b>Looking Inward</b>, is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.</p><p>Click the help icon (<i class="fa fa-question-sign fa-lg"></i>) for more details on how to play.');
           $botanistContent.html('<p class="miniExample" ><img src="/img/game/minimap.png"></p><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>');
         }
       }
@@ -555,10 +552,13 @@ var $botanist = $game.$botanist = {
   hideResource: function () {
     //slide up the botanist area that contains big content
     //re-enable clicking by setting bools to false
-    if ($game.$player.firstTime && $game.$player.botanistState === 2) {
-      $game.statusUpdate({message:'Level 1: Looking Inward.  See the log below for more details.',input:'status',screen: true,log:false});
-      $game.statusUpdate({message:'Level 1 is about understanding one\'s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.',input:'status',screen: false, log: true});
+
+    // TODO: THIS HAS NEVER HAPPENED. PUT IT BACK???
+    if ($game.$player.currentlevel === 0 && $game.$player.botanistState === 2) {
+      $game.alert('Level 1: Looking Inward.  See the log below for more details.')
+      $game.log('Level 1 is about understanding one’s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.')
     }
+
     $tangramArea.hide();
     $botanistArea.fadeOut(function () {
       $game.$botanist.isShowing = false;
@@ -566,13 +566,11 @@ var $botanist = $game.$botanist = {
       $(this).removeClass('puzzle-mode')
       $game.$botanist.isChat = false;
 
-      $game.removeFlag('solving-puzzle')
-
       $game.$botanist.clearBoard();
       $('.inventory-item').css('opacity',1);
 
       // Remove flags
-      $game.removeFlag('in-puzzle')
+      $game.removeFlag('solving-puzzle')
 
       //if they just beat a level, then show progreess
       if ($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
