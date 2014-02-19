@@ -47,7 +47,7 @@ var $boss = $game.$boss = {
   init: function (callback) {
     _setDomSelectors();
     _createGrid();
-    $('.regularGameHud').fadeOut('fast');
+    $('.regular-hud').fadeOut('fast');
     _setupHud();
     $bossArea.show();
     _rgbString = 'rgba(255,0,0,';
@@ -99,7 +99,7 @@ var $boss = $game.$boss = {
       if (_currentSlide === 2) {
         //TODO: uncomment this
         // _saveFeedback();
-        $('.bossHud').show();
+        $('.boss-hud').show();
       } else if (_currentSlide > 2) {
         $bossArea.fadeOut('fast',function () {
           $game.$boss.isShowing = false;
@@ -117,20 +117,20 @@ var $boss = $game.$boss = {
       if (_seedMode === 1) {
         _numRegularSeeds--;
         $game.$audio.playTriggerFx('seedDrop');
-        $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
+        $('.boss-hud .regularSeedButton .badge').text(_numRegularSeeds);
         _renderTiles(pos);
         if (_numRegularSeeds <= 0) {
           //TODO: out of regular seeds display
           _seedMode = 0;
           $game.$player.seedMode = false;
           $game.$player.resetRenderColor();
-          $('.bossHud .regularSeedButton').removeClass('hud-button-active');
+          $('.boss-hud .regularSeedButton').removeClass('hud-button-active');
           //check if they fail
           _checkFail();
         }
       } else if (_seedMode === 2) {
         _numDrawSeeds--;
-        $('.bossHud .drawSeedButton .badge').text(_numDrawSeeds);
+        $('.boss-hud .drawSeedButton .badge').text(_numDrawSeeds);
         if (_numDrawSeeds <= 0) {
           //TODO: out of regular seeds display
           _seedMode = 0;
@@ -166,10 +166,10 @@ function _setDomSelectors() {
   $bossArea = $('#boss-area');
   $bossAreaContent = $('#boss-area .content');
   $buttons = $('#boss-area .buttons');
-  $seedButton = $('.bossHud .hud-seed');
-  $seedButtonCount = $('.bossHud .hud-seed .badge');
-  $clock = $('.bossHud .clock');
-  $score = $('.bossHud .score span');
+  $seedButton = $('.boss-hud .hud-seed');
+  $seedButtonCount = $('.boss-hud .hud-seed .badge');
+  $clock = $('.boss-hud .clock');
+  $score = $('.boss-hud .score span');
 }
 
 //add content to the display window
@@ -382,7 +382,7 @@ function _beginGame() {
     _seedMode = 0;
     _canPlace = true;
     _placeCharger();
-    $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
+    $('.boss-hud .regularSeedButton .badge').text(_numRegularSeeds);
     setTimeout(_updateTime, 100);
     //trigger boss music!
     $game.$audio.switchTrack(7);
@@ -448,7 +448,7 @@ function _checkWin() {
 
 //show stuff if they don't beat the level
 function _fail() {
-  $('.bossHud .regularSeedButton').removeClass('hud-button-active');
+  $('.boss-hud .regularSeedButton').removeClass('hud-button-active');
   $game.$player.seedMode = false;
   $game.$player.resetRenderColor();
   _pause = true;
@@ -459,7 +459,7 @@ function _fail() {
 
 //setup the new hud for the level
 function _setupHud() {
-  $BODY.on('click','.bossHud .regularSeedButton', function () {
+  $BODY.on('click','.boss-hud .regularSeedButton', function () {
     if (_seedMode === 0 && _numRegularSeeds > 0) {
       $(this).addClass('hud-button-active');
       _seedMode = 1;
@@ -472,7 +472,7 @@ function _setupHud() {
     } else if (_seedMode === 2) {
       if (_numRegularSeeds > 0) {
         $(this).addClass('hud-button-active');
-        $('.bossHud .drawSeedButton').removeClass('hud-button-active');
+        $('.boss-hud .drawSeedButton').removeClass('hud-button-active');
         _seedMode = 1;
       } else {
         $game.statusUpdate({message:'you have no more seeds!',input:'status',screen: true,log:false});
@@ -482,14 +482,14 @@ function _setupHud() {
     }
   });
 
-  $BODY.on('click','.bossHud .drawSeedButton', function () {
+  $BODY.on('click','.boss-hud .drawSeedButton', function () {
     if (_seedMode === 0) {
       $(this).addClass('hud-button-active');
       _seedMode = 2;
       $game.$player.seedMode = true;
     } else if (_seedMode === 1) {
       $(this).addClass('hud-button-active');
-      $('.bossHud .regularSeedButton').removeClass('hud-button-active');
+      $('.boss-hud .regularSeedButton').removeClass('hud-button-active');
       _seedMode = 2;
       $game.$player.seedMode = false;
       $game.$player.resetRenderColor();
@@ -602,7 +602,7 @@ function _activateItem(data) {
       //extra seeds
       $game.statusUpdate({message:'bonus seeds!',input:'status',screen: true,log:false});
       _numRegularSeeds += 3;
-      $('.bossHud .regularSeedButton .badge').text(_numRegularSeeds);
+      $('.boss-hud .regularSeedButton .badge').text(_numRegularSeeds);
       $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
     }
   }
