@@ -106,12 +106,12 @@ var $others = $game.$others = {
     });
   },
 
-  levelChange: function (id, level) {
+  levelChange: function (data) {
     $.each(_onScreenPlayers, function (key, player) {
-      if (player.id === id) {
-        player.changeLevel(level);
+      if (player.id === data.id) {
+        player.changeLevel(data.level)
       }
-    });
+    })
   },
 
   createOther: function (player) {

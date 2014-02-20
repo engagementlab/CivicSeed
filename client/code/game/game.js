@@ -469,7 +469,10 @@ var $game = module.exports = {
       $game.$player.saveTimeToDB();
     }
     $game.$map.removePlayer($game.$player.id);
-    ss.rpc('game.player.exitPlayer', $game.$player.id, $game.$player.firstName, function () {
+    ss.rpc('game.player.exitPlayer', {
+      id:   $game.$player.id,
+      name: $game.$player.firstName
+    }, function () {
       if (typeof callback === 'function') {
         callback();
       }

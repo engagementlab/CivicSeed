@@ -227,7 +227,7 @@ var $botanist = $game.$botanist = {
     $game.$player.beginMove(location.x, location.y)
 
     // Decide what to show based on the player's current level
-    if (level >= 4) {
+    if (level > 4) {
       // Player is in a different level (e.g. boss?) What are they doing here?
       //they have beaten the INDIVIDUAL part of the game
       //if they have beat level 4

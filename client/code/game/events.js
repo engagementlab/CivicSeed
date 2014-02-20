@@ -75,6 +75,7 @@ var $events = $game.$events = module.exports = {
 
     //level change for a player
     ss.event.on('ss-levelChange', function (data, chan) {
+      $game.broadcast(data.name + ' has reached level ' + (data.level + 1) +'!')
       $game.$others.levelChange(data.id, data.level);
     });
 

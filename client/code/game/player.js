@@ -540,7 +540,11 @@ var $player = $game.$player = {
       //send status to message board
       var newLevelMsg = $game.$player.currentLevel + 1;
       // var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
-      ss.rpc('game.player.levelChange', $game.$player.id, $game.$player.currentLevel);
+      ss.rpc('game.player.levelChange', {
+        id:    $game.$player.id,
+        level: $game.$player.currentLevel,
+        name:  $game.$player.firstName
+      })
 
       // Begin the next level introduction from the Botanist
       $game.$botanist.show()
