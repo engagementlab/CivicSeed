@@ -189,29 +189,22 @@ var $game = module.exports = {
       // YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
       if (!$game.instantiated) {
         $game.init();
-      } else {
+      }
+      else {
         $game.reInit();
       }
+
       if (response.status) {
         sessionStorage.setItem('isPlaying', true);
-        $game.kickOffGame();
-      } else {
+        _game.kickOffGame()
+      }
+      else {
         if (response.profileLink) {
             Davis.location.assign('/profiles/' + response.profileLink);
         }
         apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
       }
     });
-  },
-
-  //start the the game up by appending the dom
-  kickOffGame: function () {
-    $CONTAINER.append(JT['game-gameboard']());
-    $CONTAINER.append(JT['game-resourceStage']());
-    $CONTAINER.append(JT['game-hud']());
-    $events.registerVariables();
-    $input.registerVariables();
-    _kickOffGame();
   },
 
   // pause menu on browser tab unfocus (currently disabled)
@@ -487,8 +480,8 @@ var $game = module.exports = {
     $game.$botanist.disable();
     $game.$robot.disable();
     $game.$others.disable();
-    _setBoundaries();
-    _startGame(true);
+    _game.setBoundaries();
+    _game.startGame(true);
   },
 
   // Checks to see if a game state flag is set
@@ -534,164 +527,169 @@ var $game = module.exports = {
 
 var _game = {
 
-  flags: []
+  flags: [],
 
-}
+  // At start of the game, append DOM elements
+  kickOffGame: function () {
+    $CONTAINER.append(JT['game-gameboard']())
+    $CONTAINER.append(JT['game-resourcestage']())
+    $CONTAINER.append(JT['game-hud']())
 
-// all the init calls will trigger others, a waterfall approach to assure
-// the right data is loaded before we start
-function _kickOffGame() {
-  $game.$player.init(function () {
-    _loadGameInfo();
-  });
-}
-
-function _loadGameInfo() {
-  // get the global game information stats
-  ss.rpc('game.player.getGameInfo', function (response) {
-    // regular game mode
-    $game.bossModeUnlocked = response.bossModeUnlocked;
-
-    $game.resourceCount = response.resourceCount;
-    _stats = {
-      seedsDropped: response.seedsDropped,
-      seedsDroppedGoal: response.seedsDroppedGoal,
-      leaderboard: response.leaderboard,
-      percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
-      prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
-    };
-    $game.$player.setPositionInfo();
-    $game.$render.init(function () {
-      _loadMap();
+    // all the init calls will trigger others, a waterfall approach to assure
+    // the right data is loaded before we start
+    $game.$player.init(function () {
+      _game.loadGameInfo();
     });
-  });
-}
+  },
 
-function _loadMap() {
-  $game.$map.init(function () {
-    // required for npcs to be placed
-    _setBoundaries();
-    _loadOthers();
-  });
-}
+  loadGameInfo: function () {
+    // get the global game information stats
+    ss.rpc('game.player.getGameInfo', function (response) {
+      // regular game mode
+      $game.bossModeUnlocked = response.bossModeUnlocked;
 
-function _loadOthers() {
-  //depends on map
-  $game.$others.init(function () {
-    _loadNpc();
-  });
-}
-
-function _loadNpc() {
-  $game.$npc.init(function () {
-    _loadResources();
-  });
-}
-
-function _loadResources() {
-  //depends on npc
-  $game.$resources.init(function () {
-    _loadBotanist();
-  });
-}
-
-function _loadBotanist() {
-  //depends on player/game
-  $game.$botanist.init(function () {
-    _loadRobot();
-  });
-}
-
-function _loadRobot() {
-  $game.$robot.init(function () {
-    _loadAudio();
-  });
-}
-
-function _loadAudio() {
-  //depends on player position
-  $game.$audio.init(function () {
-    _loadChat();
-  });
-}
-
-function _loadChat() {
-  $game.$chat.init(function () {
-    _loadLog();
-  });
-}
-
-function _loadLog() {
-  $game.$log.init(function () {
-    _loadExtra();
-  });
-}
-
-//this is all the other stuff that needs to happen once everything is loaded
-function _loadExtra() {
-  //fill player inventory and creat outlines
-  if ($game.$player.currentLevel < 4) {
-    $game.$player.setupInventory()
-  }
-
-  //make players color map
-  var src = $game.$player.getColorMap();
-  if (src !== undefined) {
-    $game.$render.imageToCanvas(src);
-  }
-  //create collective image
-  $game.$map.createCollectiveImage();
-
-  //update text in HUD
-  // var percentString = _stats.percent + '%';
-  // $('.hud-progress .badge').text(percentString);
-
-  //init chat rpc
-  ss.rpc('game.chat.init');
-  _startGame();
-}
-
-//calculates the bounding box for the current viewport to get the right tiles
-function _setBoundaries() {
-  //calculate the top left corner of the viewport based on where the player is
-  var position = $game.$player.getPosition(),
-    tx = (position.x === 0) ? 0 : position.x - 1,
-    ty = (position.y === 0) ? 0 : position.y - 1,
-    divX = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2 )),
-    divY = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2 )),
-    startX  = divX * ($game.VIEWPORT_WIDTH - 2),
-    startY = divY * ($game.VIEWPORT_HEIGHT - 2);
-
-  $game.masterX = startX;
-  $game.masterY = startY;
-
-  $game.$map.setBoundaries();
-}
-
-//start the game, decide if going to boss level or not
-function _startGame(ingame) {
-  if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-    $game.$boss.init(function () {
-      //TODO: something here?
+      $game.resourceCount = response.resourceCount;
+      _stats = {
+        seedsDropped: response.seedsDropped,
+        seedsDroppedGoal: response.seedsDroppedGoal,
+        leaderboard: response.leaderboard,
+        percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
+        prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
+      };
+      $game.$player.setPositionInfo();
+      $game.$render.init(function () {
+        _game.loadMap();
+      });
     });
-  }
-  $game.$map.firstStart(function () {
-    if (!ingame) {
-      $('#loading').fadeOut(function () {
-        $(this).remove();
-        $game.ready = true;
-        $game.running = true;
-        $game.$render.renderAllTiles();
-        $game.tick();
-        $game.$player.displayNpcComments();
-        if ($game.checkFlag('first-time') === true) {
-          $game.alert('Welcome to Civic Seed!')
-          $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
-        }
-        else if ($game.$player.botanistState === 0) {
-          $game.$botanist.nudgePlayer()
-        }
+  },
+
+  loadMap: function() {
+    $game.$map.init(function () {
+      // required for npcs to be placed
+      _game.setBoundaries();
+      _game.loadOthers();
+    });
+  },
+
+  loadOthers: function () {
+    //depends on map
+    $game.$others.init(function () {
+      _game.loadNpc();
+    });
+  },
+
+  loadNpc: function () {
+    $game.$npc.init(function () {
+      _game.loadResources();
+    });
+  },
+
+  loadResources: function () {
+    //depends on npc
+    $game.$resources.init(function () {
+      _game.loadBotanist();
+    });
+  },
+
+  loadBotanist: function () {
+    //depends on player/game
+    $game.$botanist.init(function () {
+      _game.loadRobot();
+    });
+  },
+
+  loadRobot: function () {
+    $game.$robot.init(function () {
+      _game.loadAudio();
+    });
+  },
+
+  loadAudio: function () {
+    //depends on player position
+    $game.$audio.init(function () {
+      _game.loadChat();
+    });
+  },
+
+  loadChat: function () {
+    $game.$chat.init(function () {
+      _game.loadLog();
+    });
+  },
+
+  loadLog: function () {
+    $game.$log.init(function () {
+      _game.loadExtra();
+    });
+  },
+
+  //this is all the other stuff that needs to happen once everything is loaded
+  loadExtra: function () {
+    //fill player inventory and creat outlines
+    if ($game.$player.currentLevel < 4) {
+      $game.$player.setupInventory()
+    }
+
+    //make players color map
+    var src = $game.$player.getColorMap();
+    if (src !== undefined) {
+      $game.$render.imageToCanvas(src);
+    }
+    //create collective image
+    $game.$map.createCollectiveImage();
+
+    //update text in HUD
+    // var percentString = _stats.percent + '%';
+    // $('.hud-progress .badge').text(percentString);
+
+    //init chat rpc
+    ss.rpc('game.chat.init');
+    _game.startGame();
+  },
+
+  //calculates the bounding box for the current viewport to get the right tiles
+  setBoundaries: function () {
+    //calculate the top left corner of the viewport based on where the player is
+    var position = $game.$player.getPosition(),
+        tx       = (position.x === 0) ? 0 : position.x - 1,
+        ty       = (position.y === 0) ? 0 : position.y - 1,
+        divX     = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2)),
+        divY     = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2)),
+        startX   = divX * ($game.VIEWPORT_WIDTH - 2),
+        startY   = divY * ($game.VIEWPORT_HEIGHT - 2)
+
+    $game.masterX = startX;
+    $game.masterY = startY;
+
+    $game.$map.setBoundaries();
+  },
+
+  //start the game, decide if going to boss level or not
+  startGame: function (ingame) {
+    if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+      $game.$boss.init(function () {
+        //TODO: something here?
       });
     }
-  });
+    $game.$map.firstStart(function () {
+      if (!ingame) {
+        $('#loading').fadeOut(function () {
+          $(this).remove();
+          $game.ready = true;
+          $game.running = true;
+          $game.$render.renderAllTiles();
+          $game.tick();
+          $game.$player.displayNpcComments();
+          if ($game.checkFlag('first-time') === true) {
+            $game.alert('Welcome to Civic Seed!')
+            $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
+          }
+          else if ($game.$player.botanistState === 0) {
+            $game.$botanist.nudgePlayer()
+          }
+        });
+      }
+    });
+  }
+
 }

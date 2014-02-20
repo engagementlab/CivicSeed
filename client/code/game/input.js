@@ -1,12 +1,6 @@
 'use strict';
 
-var _helpShowing
-
 var $input = $game.$input = module.exports = {
-
-  registerVariables: function () {
-    _helpShowing = false;
-  },
 
   init: function () {
 
@@ -66,7 +60,7 @@ var $input = $game.$input = module.exports = {
     })
 
     // Close Help window
-    $BODY.on('click', '#help-area a i', function (e) {
+    $BODY.on('click', '#help-area a i, #help-area .close-button', function (e) {
       e.preventDefault()
       $input.closeHelp()
       return false
@@ -322,7 +316,7 @@ var $input = $game.$input = module.exports = {
     //decide if we should or should not let buttons be clicked based on state
     var startNewAction = function () {
       //check all the game states (if windows are open ,in transit, etc.) to begin a new action
-      // console.log(!$game.checkFlag('in-transit'), !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !_helpShowing, !$game.$boss.isShowing);
+      // console.log(!$game.checkFlag('in-transit'), !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !$game.$boss.isShowing);
       // !$game.$player.inventoryShowing
       return (
         !$game.checkFlag('in-transit') &&
@@ -332,7 +326,7 @@ var $input = $game.$input = module.exports = {
         !$game.$player.seedventoryShowing &&
         $game.running &&
         !$game.$botanist.isChat &&
-        !_helpShowing &&
+        !$game.checkFlag('viewing-help') &&
         !$game.$boss.isShowing &&
         !$game.showingSkinventory
       ) ? true : false
@@ -587,13 +581,22 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleHelp: function () {
-    _helpShowing = !_helpShowing
-    $('.hud-help').toggleClass('hud-button-active')
-    $('#help-area').toggle()
+    if ($game.checkFlag('viewing-help') === true) {
+      $input.closeHelp()
+    }
+    else {
+      $input.openHelp()
+    }
+  },
+
+  openHelp: function () {
+    $game.setFlag('viewing-help')
+    $('.hud-help').addClass('hud-button-active')
+    $('#help-area').show()
   },
 
   closeHelp: function () {
-    _helpShowing = false
+    $game.removeFlag('viewing-help')
     $('.hud-help').removeClass('hud-button-active')
     $('#help-area').hide()
   },
@@ -622,10 +625,6 @@ var $input = $game.$input = module.exports = {
     document.getElementById('chat-input').blur()
 
     // Sets cursor to walk action
-  },
-
-  resetInit: function () {
-    _helpShowing = null;
   }
 
 }

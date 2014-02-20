@@ -30,8 +30,8 @@
 						}
 				ul.nav
 					li: a(href='/') Home
-					li: a(href='/about') About 
-					li: a(href='/profiles') Profiles 
+					li: a(href='/about') About
+					li: a(href='/profiles') Profiles
 					li: a(href='/contact') Contact Us
 					- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
 						li: a(href='/admin') Admin Console

@@ -2,10 +2,6 @@
 
 var $events = $game.$events = module.exports = {
 
-  registerVariables: function () {
-    // Blank
-  },
-
   init: function () {
 
     /******* RPC EVENTS *********/
