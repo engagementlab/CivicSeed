@@ -24,6 +24,10 @@ The following table documents flags that are currently set in CivicSeed.
 | ------------- | ------------- |
 | `in-transit`  | Player is currently moving from one screen to another. Movement and input should be disabled during this time.|
 | `viewing-inventory` | Player was viewing the inventory, but it had been temporarily closed for another action (e.g. reviewing the contents of a resource).|
+| `viewing-help` | Player is viewing the Help overlay. |
+| `viewing-progress` | Player is viewing the Progress overlay.|
+| `viewing-skinventory` | Player is viewing the Changing Room overlay.|
 | `npc-chatting` | Set when an NPC is communicating with the player.|
 | `first-time`   | Set a player has joined the game for the first time. (New account.)|
 | `solving-puzzle` | The player is currently attempting to solve the botanist's tangram puzzle.|
+| `seed-mode` | The player is currently in seed mode. This can mean currently planting a seed or viewing the seed inventory.|

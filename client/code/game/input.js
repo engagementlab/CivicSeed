@@ -22,8 +22,7 @@ var $input = $game.$input = module.exports = {
 
     //decide what to do based on generic mouse click
     $BODY.on('click', '.gameboard', function (e) {
-      var goAhead = startNewAction();
-      if (goAhead) {
+      if (_input.startNewAction() === true) {
           var mInfo = {
           x: e.pageX,
           y: e.pageY,
@@ -35,56 +34,55 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    // ************* MENU OVERLAYS *************
+    // ************* HUD BUTTONS *************
+
+    // Toggle display of Inventory
+    $BODY.on('click', '.hud-inventory, #inventory button', function () {
+      $input.toggleInventory()
+    })
 
     // Toggle display of Changing Room (skinventory)
     $BODY.on('click', '.hud-skinventory', function () {
       $input.toggleSkinventory()
-    });
+    })
+
+    // Toggle display of Seed inventory (seedventory)
+    $BODY.on('click', '.hud-seed', function () {
+      $input.toggleSeedMode()
+    })
+
+    // Toggle display of Game log
+    $BODY.on('click', '.hud-log', function () {
+      $input.toggleGameLog()
+    })
 
     // Toggle display of Progress window
     $BODY.on('click', '.hud-progress', function () {
       $input.toggleProgress()
-    });
+    })
 
-    // Close Progress window
-    $BODY.on('click', '#progress-area a i', function (e) {
-      e.preventDefault()
-      $input.closeProgress()
-      return false
-    });
+    // Toggle Audio on/off
+    $BODY.on('click', '.hud-mute', function () {
+      $input.toggleMute()
+    })
 
     // Toggle display of Help window
     $BODY.on('click', '.hud-help', function () {
       $input.toggleHelp()
     })
 
-    // Close Help window
-    $BODY.on('click', '#help-area a i, #help-area .close-button', function (e) {
-      e.preventDefault()
-      $input.closeHelp()
-      return false
+    // Display a tooltip when player hovers over HUD controls
+    $BODY.on('mouseenter', '.hud-button a', function () {
+      var info = $(this).attr('title')
+      $(this).tooltip('show')
     })
 
+    // When player clicks a highlighted HUD button, remove the highlight
+    $BODY.on('click', '.hud-button-highlight', function () {
+      $game.unhighlightUI(this)
+    })
 
-    // ************* INVENTORY OVERLAYS *************
-
-    //show / hide the inventory
-    $BODY.on('click', '.hud-inventory, #inventory button', function () {
-      var goAhead = startNewAction();
-      if (goAhead || $game.$player.inventoryShowing) {
-        $input.toggleInventory()
-      }
-      return false;
-    });
-
-    //show / hide the seed inventory, start blinking
-    $BODY.on('click', '.hud-seed', function () {
-      var goAhead = startNewAction();
-      if (goAhead) {
-        $input.toggleSeedMode()
-      }
-    });
+    // ************* SEEDVENTORY OVERLAYS *************
 
     //regular seed select
     $BODY.on('click', '.regular-button', function () {
@@ -110,10 +108,20 @@ var $input = $game.$input = module.exports = {
       });
     });
 
+    // Close Seed inventory
+    $BODY.on('click', '#seedventory .close-button', function () {
+      $input.endSeedMode()
+    })
+
     // ************* PROGRESS WINDOW INTERACTIONS *************
 
+    $BODY.on('click', '.tabbable li a', function (e) {
+      e.preventDefault();
+      return false;
+    });
+
     //view all player resource answers
-    $BODY.on('click', '.collectedButton', function () {
+    $BODY.on('click', '.collected-button', function () {
       $('#collected-resources').show();
     });
 
@@ -122,14 +130,12 @@ var $input = $game.$input = module.exports = {
       $('#collected-resources').hide();
     });
 
-    // ************* RESOURCE WINDOW INTERACTIONS *************
-
-    // Close the resource area
-    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
+    // Close Progress window
+    $BODY.on('click', '#progress-area a i', function (e) {
       e.preventDefault()
-      $game.$resources.hideResource()
+      $input.closeProgress()
       return false
-    })
+    });
 
     // ************* SKINVENTORY WINDOW INTERACTIONS *************
 
@@ -153,97 +159,23 @@ var $input = $game.$input = module.exports = {
       return false
     });
 
-    // ************* OTHER GAMEBOARD HUD ELEMENTS *************
+    // ************* HELP WINDOW OVERLAY *************
 
-    $BODY.on('click', '#speech-bubble, #inventory', function (e) {
-      // Prevent clicking on interface elements from interacting with gameboard below
-      e.stopImmediatePropagation()
-    })
-
-    // When scrolling article or log content, prevent page from scrolling also
-    $BODY.on('mouseenter', '.scrollable, .content-box', function () {
-      $(this).scroll(function () {
-        $('body').css('overflow', 'hidden')
-      })
-    })
-    $BODY.on('mouseleave', '.scrollable, .content-box', function () {
-      $('body').css('overflow', 'auto')
-    })
-
-    //send a chat message, pulled from chat field
-    $BODY.on('click', '#chat-submit', function (e) {
+    // Close Help window
+    $BODY.on('click', '#help-area a i, #help-area .close-button', function (e) {
       e.preventDefault()
-      var el = document.getElementById('chat-input'),
-          message = el.value
-
-      // Stop chatting if player has tried to submit a blank message
-      if (message === '') {
-        el.blur()
-        return false
-      }
-
-      $game.$audio.playTriggerFx('chatSend')
-
-      // Check for chat triggers (e.g. cheat codes)
-      if (_input.trigger(message) === false && _input.cheat(message) === false) {
-        $game.$chat.send(message)
-      }
-
-      // Reset input box
-      el.value = ''
-      return true
+      $input.closeHelp()
+      return false
     })
 
-    //open the game log
-    $BODY.on('click', '.hud-log', function () {
-      $input.toggleGameLog()
+    // ************* RESOURCE WINDOW INTERACTIONS *************
+
+    // Close the resource area
+    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
+      e.preventDefault()
+      $game.$resources.hideResource()
+      return false
     })
-
-    $BODY.on('click', '#game-log', function () {
-      $game.$log.clearUnread();
-    });
-
-    //close botanist window
-    $BODY.on('click', '#botanist-area a i, #botanist-area .close-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.hideResource();
-      return false;
-    });
-
-    //advance to next content in botanist area
-    $BODY.on('click', '#botanist-area .next-button', function (e) {
-      $game.$botanist.nextSlide();
-    });
-
-    //previous content in botanist area
-    $BODY.on('click', '#botanist-area .back-button', function (e) {
-      $game.$botanist.previousSlide();
-    });
-
-    //submit tangram answer in botanist area
-    $BODY.on('click', '#botanist-area .answer-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.submitAnswer();
-      return false;
-    });
-
-    //clear all the pieces in botanist area off tangram board
-    $BODY.on('click', '#botanist-area .clear-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.clearBoard();
-      return false;
-    });
-
-    //toggle audio on/off
-    $BODY.on('click', '.hud-mute', function () {
-      $input.toggleMute()
-    });
-
-    //tooltip for HUD controls
-    $BODY.on('mouseenter', '.hud-button a', function () {
-      var info = $(this).attr('title');
-      $(this).tooltip('show');
-    });
 
     //make your comment public
     $BODY.on('click', '.public-button button', function () {
@@ -288,19 +220,87 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    $BODY.on('click', '#boss-area .boss-button', function () {
-      $game.$boss.nextSlide();
-    });
+    // ************* BOTANIST OVERLAY INTERACTIONS *************
 
-    $BODY.on('click', '.tabbable li a', function (e) {
+    //close botanist window
+    $BODY.on('click', '#botanist-area a i, #botanist-area .close-button', function (e) {
       e.preventDefault();
+      $game.$botanist.hideResource();
       return false;
     });
 
-    // When player clicks a highlighted HUD button, remove the highlight
-    $BODY.on('click', '.hud-button-highlight', function () {
-      $game.unhighlightUI(this)
+    //advance to next content in botanist area
+    $BODY.on('click', '#botanist-area .next-button', function (e) {
+      $game.$botanist.nextSlide();
+    });
+
+    //previous content in botanist area
+    $BODY.on('click', '#botanist-area .back-button', function (e) {
+      $game.$botanist.previousSlide();
+    });
+
+    //submit tangram answer in botanist area
+    $BODY.on('click', '#botanist-area .answer-button', function (e) {
+      e.preventDefault();
+      $game.$botanist.submitAnswer();
+      return false;
+    });
+
+    //clear all the pieces in botanist area off tangram board
+    $BODY.on('click', '#botanist-area .clear-button', function (e) {
+      e.preventDefault();
+      $game.$botanist.clearBoard();
+      return false;
+    });
+
+    // ************* OTHER GAMEBOARD HUD ELEMENTS *************
+
+    $BODY.on('click', '#speech-bubble, #inventory, #botanist-area', function (e) {
+      // Prevent clicking on interface elements from interacting with gameboard below
+      e.stopImmediatePropagation()
     })
+
+    // When scrolling article or log content, prevent page from scrolling also
+    $BODY.on('mouseenter', '.scrollable, .content-box', function () {
+      $(this).scroll(function () {
+        $('body').css('overflow', 'hidden')
+      })
+    })
+    $BODY.on('mouseleave', '.scrollable, .content-box', function () {
+      $('body').css('overflow', 'auto')
+    })
+
+    // Send a chat message when submitted from the chat input field
+    $BODY.on('click', '#chat-submit', function (e) {
+      e.preventDefault()
+      var el = document.getElementById('chat-input'),
+          message = el.value
+
+      // Stop chatting if player has tried to submit a blank message
+      if (message === '') {
+        el.blur()
+        return false
+      }
+
+      $game.$audio.playTriggerFx('chatSend')
+
+      // Check for chat triggers (e.g. cheat codes)
+      if (_input.trigger(message) === false && _input.cheat(message) === false) {
+        $game.$chat.send(message)
+      }
+
+      // Reset input box
+      el.value = ''
+      return true
+    })
+
+    $BODY.on('click', '#game-log', function () {
+      $game.$log.clearUnread();
+    });
+
+    $BODY.on('click', '#boss-area .boss-button', function () {
+      $game.$boss.nextSlide();
+    });
 
     //pause menu if we want it
     // $WINDOW.blur(function (e) {
@@ -313,29 +313,6 @@ var $input = $game.$input = module.exports = {
     //  $game.resume();
     // });
 
-    //decide if we should or should not let buttons be clicked based on state
-    var startNewAction = function () {
-      //check all the game states (if windows are open ,in transit, etc.) to begin a new action
-      // console.log(!$game.checkFlag('in-transit'), !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing, !$game.showingProgress ,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !$game.$boss.isShowing);
-      // !$game.$player.inventoryShowing
-      return (
-        !$game.checkFlag('in-transit') &&
-        !$game.$player.isMoving &&
-        !$game.$resources.isShowing &&
-        !$game.showingProgress &&
-        !$game.$player.seedventoryShowing &&
-        $game.running &&
-        !$game.$botanist.isChat &&
-        !$game.checkFlag('viewing-help') &&
-        !$game.$boss.isShowing &&
-        !$game.showingSkinventory
-      ) ? true : false
-    };
-
-    var acceptKeyInput = function () {
-      return (!$('input, textarea').is(':focus')) ? true : false
-    }
-
     // Keybindings for actions
     $BODY.keydown(function (e) {
       // If escape is pressed, cancels any current action and returns to default gameboard view
@@ -344,8 +321,8 @@ var $input = $game.$input = module.exports = {
       }
 
       // Allow keyboard inputs only when gameboard is active.
-      if (!startNewAction()) return
-      if (!acceptKeyInput()) return
+      if (!_input.startNewAction()) return
+      if (!_input.acceptKeyInput()) return
 
       // Refuse inputs if Ctrl or Command is pressed so that the game doesn't overwrite other system/client command keys
       // This does not cover Mac's fn' key
@@ -471,12 +448,14 @@ var $input = $game.$input = module.exports = {
 
   startSeedMode: function () {
     $game.$player.seedMode = true
+    $game.setFlag('seed-mode')
     $('.hud-seed').addClass('hud-button-active')
     $input.openSeedventory()
   },
 
   endSeedMode: function () {
     $game.$player.seedMode = false
+    $game.removeFlag('seed-mode')
     if ($game.$player.seedventoryShowing) {
       $input.closeSeedventory()
     }
@@ -493,10 +472,11 @@ var $input = $game.$input = module.exports = {
   },
 
   openSeedventory: function () {
+    $input.resetUI()
     // The logic for this is in another controller!
     $game.$player.openSeedventory()
 
-    // That should be separated into startSeedMode() or openSeedventory()
+    // TODO: That should be separated into startSeedMode() or openSeedventory()
   },
 
   closeSeedventory: function () {
@@ -515,7 +495,9 @@ var $input = $game.$input = module.exports = {
   },
 
   openInventory: function (callback) {
+    $input.resetUI()
     $game.$player.inventoryShowing = true
+
     $('.hud-inventory').addClass('hud-button-active')
     if ($game.$player.getInventory().length > 0 && $game.checkFlag('viewing-inventory') === false) {
       $game.alert('Click on a piece to review again')
@@ -524,6 +506,8 @@ var $input = $game.$input = module.exports = {
   },
 
   closeInventory: function (callback) {
+    if ($game.checkFlag('solving-puzzle') === true) return false
+
     $('#inventory').slideUp(300, function () {
       $game.$player.inventoryShowing = false
       $('.hud-inventory').removeClass('hud-button-active')
@@ -532,23 +516,27 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleSkinventory: function () {
-    $game.showingSkinventory = !$game.showingSkinventory
-    $('.hud-skinventory').toggleClass('hud-button-active')
-    $('#skinventory').toggle()
+    return ($game.checkFlag('viewing-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
+  },
 
-    // Resets badge count - lame that it happens here
-    if ($game.showingSkinventory === true) {
-      $game.setBadgeCount('.hud-skinventory', 0)
-    }
+  openSkinventory: function () {
+    $input.resetUI()
+    $game.setFlag('viewing-skinventory')
+    $('.hud-skinventory').addClass('hud-button-active')
+    $('#skinventory').show()
+
+    // Reset badge count
+    $game.setBadgeCount('.hud-skinventory', 0)
   },
 
   closeSkinventory: function () {
-    $game.showingSkinventory = false
+    $game.removeFlag('viewing-skinventory')
     $('.hud-skinventory').removeClass('hud-button-active')
     $('#skinventory').hide()
   },
 
   toggleGameLog: function () {
+    $input.resetUI()
     $game.$log.clearUnread()
 
     if (!$('#game-log').is(':visible')) {
@@ -566,30 +554,28 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleProgress: function () {
-    $game.showingProgress = !$game.showingProgress
-    if ($game.showingProgress) {
-      $game.showProgress()
-    }
-    $('.hud-progress').toggleClass('hud-button-active')
-    $('#progress-area').toggle()
+    return ($game.checkFlag('viewing-progress') === true) ? $input.closeProgress() : $input.openProgress()
+  },
+
+  openProgress: function () {
+    $input.resetUI()
+    $game.setFlag('viewing-progress')
+    $('.hud-progress').addClass('hud-button-active')
+    $('#progress-area').show()
   },
 
   closeProgress: function () {
-    $game.showingProgress = false
+    $game.removeFlag('viewing-progress')
     $('.hud-progress').removeClass('hud-button-active')
     $('#progress-area').hide()
   },
 
   toggleHelp: function () {
-    if ($game.checkFlag('viewing-help') === true) {
-      $input.closeHelp()
-    }
-    else {
-      $input.openHelp()
-    }
+    return ($game.checkFlag('viewing-help') === true) ? $input.closeHelp() : $input.openHelp()
   },
 
   openHelp: function () {
+    $input.resetUI()
     $game.setFlag('viewing-help')
     $('.hud-help').addClass('hud-button-active')
     $('#help-area').show()
@@ -617,9 +603,12 @@ var $input = $game.$input = module.exports = {
   resetUI: function () {
     // Close any overlays
     $input.closeInventory()
+    $input.closeSkinventory()
     $input.closeProgress()
     $input.closeHelp()
     $input.endSeedMode()
+
+    // TODO: Also simultaneously cancel out of resources, botanist, and speechbubbles.
 
     // Unfocus chat input box
     document.getElementById('chat-input').blur()
@@ -636,6 +625,29 @@ var $input = $game.$input = module.exports = {
  **/
 
 var _input = {
+
+  // Decide if we should or should not let buttons be clicked based on state
+  startNewAction: function () {
+    //check all the game states (if windows are open ,in transit, etc.) to begin a new action
+    // console.log(!$game.checkFlag('in-transit'), !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !$game.$boss.isShowing);
+    // !$game.$player.inventoryShowing
+    return (
+      !$game.checkFlag('in-transit') &&
+      !$game.$player.isMoving &&
+      !$game.$resources.isShowing &&
+      !$game.checkFlag('viewing-progress') &&
+      !$game.$player.seedventoryShowing &&
+      $game.running &&
+      !$game.$botanist.isChat &&
+      !$game.checkFlag('viewing-help') &&
+      !$game.$boss.isShowing &&
+      !$game.checkFlag('viewing-skinventory')
+    ) ? true : false
+  },
+
+  acceptKeyInput: function () {
+    return (!$('input, textarea').is(':focus')) ? true : false
+  },
 
   // Inputs for game activities
   trigger: function (input) {

@@ -61,8 +61,6 @@ var $game = module.exports = {
   currentTiles: [],
   running: false,
   ready: false,
-  showingProgress : false,
-  showingSkinventory : false,
   resourceCount: [],
   graph: null,
   masterX: null,
@@ -156,7 +154,6 @@ var $game = module.exports = {
     $game.$botanist.resetInit();
     $game.$mouse.resetInit();
     $game.$audio.resetInit();
-    $game.$input.resetInit();
     $game.$chat.resetInit();
     $game.$log.resetInit();
     $game.$boss.resetInit();
@@ -173,8 +170,6 @@ var $game = module.exports = {
     $game.removeFlag('in-transit');
     $game.running = false;
     $game.ready = false;
-    $game.showingProgress = false;
-    $game.showingSkinventory = false;
     $game.resourceCount = [];
     $game.graph = null;
     $game.masterX = null;
@@ -324,12 +319,6 @@ var $game = module.exports = {
     //$('.displayPercent').text(percentString);
     $('.topSeeders').empty().append(topPlayers);
     $('.numCollected').text(numItems + ' / 42');
-
-    /*
-    $('#progress-area').show(function () {
-      $game.showingProgress = true;
-    });
-    */
   },
 
   // Shows a message in either an on-screen display, in the chat log, or both
