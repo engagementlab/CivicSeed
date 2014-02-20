@@ -344,18 +344,9 @@ var $input = $game.$input = module.exports = {
 
     // Keybindings for actions
     $BODY.keydown(function (e) {
-      // If escape is pressed, cancels  any current action and returns to default gameboard view
+      // If escape is pressed, cancels any current action and returns to default gameboard view
       if (e.which === 27) {
-        // Close any overlays
-        $input.closeInventory()
-        $input.closeProgress()
-        $input.closeHelp()
-        $input.endSeedMode()
-
-        // Unfocus chat input box
-        document.getElementById('chat-input').blur()
-
-        // Sets cursor to walk action
+        $input.resetUI()
       }
 
       // Allow keyboard inputs only when gameboard is active.
@@ -617,6 +608,20 @@ var $input = $game.$input = module.exports = {
 
   unmuteAudio: function () {
     $('.hud-mute i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
+  },
+
+  // Clears UI and sets everything into the most defaultest mode we can
+  resetUI: function () {
+    // Close any overlays
+    $input.closeInventory()
+    $input.closeProgress()
+    $input.closeHelp()
+    $input.endSeedMode()
+
+    // Unfocus chat input box
+    document.getElementById('chat-input').blur()
+
+    // Sets cursor to walk action
   },
 
   resetInit: function () {

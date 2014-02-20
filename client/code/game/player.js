@@ -813,6 +813,7 @@ var $player = $game.$player = {
   beam: function (location) {
     $game.setFlag('is-beaming')
     $game.setFlag('in-transit')
+    $game.$input.resetUI()
     $('#beaming').show()
 
     _info.x = location.x
