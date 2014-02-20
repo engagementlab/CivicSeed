@@ -561,37 +561,6 @@ var $player = $game.$player = {
     return totalTime
   },
 
-  //reveals the seed menu to choose which seed they want to use
-  openSeedventory: function () {
-    //open up the inventory
-    if (_seeds.draw > 0) {
-      $game.alert('Choose a seed to plant')
-      $('#seedventory').slideDown(function () {
-        if (_seeds.regular > 0) {
-          $('.regular-button').addClass('active');
-        }
-        if (_seeds.draw > 0) {
-          $('.draw-button').addClass('active');
-        }
-
-        $game.$player.seedventoryShowing = true;
-      });
-    }
-    //start seed mode on 0
-    else {
-      if (_seeds.regular > 0) {
-        $game.$player.seedPlanting = true
-        $game.$player.seedMode = 'regular'
-        $game.alert('Click anywhere to plant a seed and watch color bloom there')
-      }
-      else {
-        // No seeds, cancel out of seed mode.
-        $game.alert('You have no seeds')
-        $game.$input.endSeedMode()
-      }
-    }
-  },
-
   //remove the menu once they have selected a seed flash player and disable other actions
   startSeeding: function (choice) {
     $game.$player.seedMode = choice;
@@ -754,6 +723,11 @@ var $player = $game.$player = {
 
   getSkinSuit: function () {
     return _skinSuit;
+  },
+
+  // Get seeds
+  getSeeds: function () {
+    return _seeds
   },
 
   //get the number of seeds dropped

@@ -437,8 +437,9 @@ var $input = $game.$input = module.exports = {
     $('#minimapPlayer').toggleClass('hide')
   },
 
+  // Toggles Seed Mode.
   toggleSeedMode: function () {
-    if ($game.$player.seedMode !== false) {
+    if ($game.$player.seedMode === true || $game.checkFlag('seed-mode') === true) {
       $input.endSeedMode()
     }
     else {
@@ -447,10 +448,29 @@ var $input = $game.$input = module.exports = {
   },
 
   startSeedMode: function () {
+    var seeds = $game.$player.getSeeds()
+
+    $input.resetUI()
+
     $game.$player.seedMode = true
     $game.setFlag('seed-mode')
     $('.hud-seed').addClass('hud-button-active')
-    $input.openSeedventory()
+
+    // If player has multiple types of seeds, open up the seed inventory
+    if (seeds.draw > 0) {
+      $input.openSeedventory(seeds)
+    }
+    // Otherwise, go straight to regular seed planting mode
+    else if (seeds.regular > 0) {
+      $game.$player.seedPlanting = true
+      $game.$player.seedMode = 'regular'
+      $game.alert('Click anywhere to plant a seed and watch color bloom there')
+    }
+    else {
+      // No seeds, cancel out of seed mode.
+      $game.alert('You have no seeds')
+      $game.$input.endSeedMode()
+    }
   },
 
   endSeedMode: function () {
@@ -471,16 +491,18 @@ var $input = $game.$input = module.exports = {
     $game.$player.saveSeeds();
   },
 
-  openSeedventory: function () {
-    $input.resetUI()
-    // The logic for this is in another controller!
-    $game.$player.openSeedventory()
-
-    // TODO: That should be separated into startSeedMode() or openSeedventory()
+  openSeedventory: function (seeds) {
+    $game.alert('Choose a seed to plant')
+    $('#seedventory').slideDown(300, function () {
+      if (seeds.regular > 0) $('.regular-button').addClass('active')
+      if (seeds.draw > 0) $('.draw-button').addClass('active')
+      $game.$player.seedventoryShowing = true;
+      $game.setFlag('viewing-seedventory')
+    })
   },
 
   closeSeedventory: function () {
-    $('#seedventory').slideUp(function () {
+    $('#seedventory').slideUp(300, function () {
       $game.$player.seedventoryShowing = false;
     })
   },
@@ -629,8 +651,6 @@ var _input = {
   // Decide if we should or should not let buttons be clicked based on state
   startNewAction: function () {
     //check all the game states (if windows are open ,in transit, etc.) to begin a new action
-    // console.log(!$game.checkFlag('in-transit'), !$game.$player.isMoving, !$game.$resources.isShowing, !$game.$player.inventoryShowing,  !$game.$player.seedventoryShowing, $game.running, !$game.$botanist.isChat, !$game.$boss.isShowing);
-    // !$game.$player.inventoryShowing
     return (
       !$game.checkFlag('in-transit') &&
       !$game.$player.isMoving &&
