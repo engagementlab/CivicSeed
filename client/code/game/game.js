@@ -178,6 +178,11 @@ var $game = module.exports = {
     $game.startNewAction = true;
   },
 
+  kickOffGame: function () {
+    // Alias for private function
+    _game.kickOffGame()
+  },
+
   enterGame: function (callback) {
     //check if they are ACTUALLY playing
     ss.rpc('shared.account.checkGameSession', function (response) {
