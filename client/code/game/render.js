@@ -74,6 +74,7 @@ var $render = $game.$render = {
 
     // Interface canvas - style for player names
     _interfaceContext.lineWidth    = 6
+    _interfaceContext.lineJoin     = 'round'
     _interfaceContext.strokeStyle  = '#777'
     _interfaceContext.fillStyle    = '#fff'
     _interfaceContext.textAlign    = 'center'
