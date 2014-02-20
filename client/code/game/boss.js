@@ -331,11 +331,13 @@ var _boss = {
     for (var i = 0; i < numberToGet; i++) {
       var response = _selectResponse(i, allResponses)
 
-      theChosenOnes.push({
-        id:     response._id,
-        level:  i,
-        answer: response.game.resume[i]
-      })
+      if (response) {
+        theChosenOnes.push({
+          id:     response._id,
+          level:  i,
+          answer: response.game.resume[i]
+        })
+      }
     }
 
     return theChosenOnes
