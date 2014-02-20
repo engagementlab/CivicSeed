@@ -708,7 +708,7 @@ var $botanist = $game.$botanist = {
       var portAnswer = $.trim($('.botanist-content textarea').val());
 
       if (portAnswer.length === 0) {
-        this.feedback('Please answer the question!')
+        _botanist.feedback('Please answer the question!')
       }
       else {
         $game.$player.resumeAnswer(portAnswer);
