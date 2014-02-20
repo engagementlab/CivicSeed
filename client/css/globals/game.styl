@@ -36,10 +36,32 @@
 	.defeatedRobot
 		text-align center
 
-#loading
-	margin 150px 0 0 0
-	text-align center
-	color #222
+canvas
+	position absolute
+	cursor none
+
+#background
+	z-index 0
+
+#characters
+	z-index 20
+
+#foreground
+	z-index 30
+
+#interface
+	z-index 40
+
+#minimapTile
+	z-index 50
+	right 0px
+	background rgba(20,20,20,0.3)
+	display none
+
+#minimapPlayer
+	background rgba(20,20,20,0.8)
+	z-index 55
+	right 0px
 
 .gameboard-overlay
 	display none
@@ -60,7 +82,7 @@
 		color $csBlue
 		font-size 2em
 	h3
-		color $csGreen
+		color $csDarkGreen
 	a, .close-overlay
 		i.fa // Font-Awesome X 'close' button
 			position absolute
@@ -140,6 +162,11 @@
 .scrollable
 	overflow auto
 
+#loading
+	margin 150px 0 0 0
+	text-align center
+	color #222
+
 #botanist-area
 	z-index 9990
 	&.puzzle-mode
@@ -180,6 +207,9 @@
 	textarea
 		height 280px
 		margin-top 20px
+
+//#botanist-area .answer-button, #botanist-area .clear-button, #botanist-area i
+//	z-index 9999
 
 #resource-area
 	.resource-content
@@ -488,15 +518,6 @@
 	// 	background #dedede
 	// 	background $csLightGreen
 
-.dialog
-	.speaker
-		font-size 1.2em
-		font-weight 700
-		color $csBlue
-		&::after
-			content ':'
-			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the ': ' string
-
 #skinventory
 	.parts
 		margin-bottom 10px
@@ -560,22 +581,59 @@
 				line-height 18px                // Positioning for lock
 				background-position 0 -45px     // Positioning for sprite
 
-// END LARGE OVERLAYS
-
-.player-chat
+// Pause menu has been disabled in the game
+#pause-menu
 	position absolute
-	z-index 100
-	padding 5px 10px
-	font-size 16px
-	font-family $mono
-	line-height 1.4
-	white-space nowrap
-	background rgba(0,0,0,0.75)
-	color #eee
-	//background rgba(255,255,255,0.75)
-	//color $csBlack
-	//border 3px solid $csLightGray
-	border-radius 20px
+	top 15px
+	left 15px
+	width 930px
+	height 450px
+	background $cloudUrl('img/bg/maze.png') #efefef
+	box-shadow $csUIDropShadow
+	padding 0
+	z-index 9999
+	display none
+	p
+		text-align center, Sans-serif
+		color #222
+		font-size 2em
+		margin-top 100px
+
+#boss-area
+	display none
+	.video
+		margin 20px 0 0 0
+		text-align center
+		background $cloudUrl('img/bg/loading.png') no-repeat center center
+	.boss-resumes
+		display none
+		.content-box // Extends generic .content-box
+			height 280px
+			margin-top 15px
+		.resume-response
+			margin-bottom 20px
+		.resume-question // TODO: Match other styles
+			color $csPurple
+			font-weight bold
+		.resume-answer
+			span
+				color $csOrange
+	.boss-instructions
+		display none
+		margin-top 20px
+		img.minilab
+			float left
+			margin-top 10px
+			margin-right 20px
+		p
+			line-height 32px
+		span, strong
+			white-space nowrap
+	.content
+	.buttons
+		text-align center
+
+// END LARGE OVERLAYS
 
 #inventory,
 #seedventory
@@ -639,7 +697,8 @@
 			color #eee           // color for active seeds
 		&.selected
 			color $csOrange      // color for selected seed
-
+		&.active:hover, &.selected:hover
+			color $csGreen       // color for hover
 
 .graffiti
 	position absolute
@@ -660,65 +719,6 @@
 			text-align right
 			float right
 
-#speech-bubble
-	display none
-	z-index 9600
-	position absolute
-	top 20px
-	left 20px
-	width 920px
-	padding 14px
-	background #efefef
-	color #222
-	box-shadow $csUIDropShadow
-	background-image $cloudUrl('img/bg/grey.png')
-	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-		background-image $cloudUrl('img/bg/grey@2x.png')
-		background-size 397px
-	.dialog
-		margin 0
-		padding 0
-		&.fit
-			width 760px
-	.buttons
-		position absolute
-		bottom 10px
-		right 6px
-	button
-		display none
-		float right
-		margin 0 6px
-
-canvas
-	position absolute
-	cursor none
-
-#background
-	z-index 0
-
-#characters
-	z-index 20
-
-#foreground
-	z-index 30
-
-#interface
-	z-index 40
-
-#minimapTile
-	z-index 50
-	right 0px
-	background rgba(20,20,20,0.3)
-	display none
-
-#minimapPlayer
-	background rgba(20,20,20,0.8)
-	z-index 55
-	right 0px
-
-.debug p
-	float left
-	margin-left 20px
 
 #hud
 	margin-top 20px
@@ -769,22 +769,65 @@ canvas
 			margin-left 10px
 			background #333
 
-#pause-menu
+
+// Generic dialog styles
+.dialog
+	.speaker
+		font-size 1.2em
+		font-weight 700
+		color $csBlue
+		&::after
+			content ':'
+			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the ': ' string
+
+// Speech bubble for players
+.player-chat
 	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	background $cloudUrl('img/bg/maze.png') #efefef
-	box-shadow $csUIDropShadow
-	padding 0
-	z-index 9999
+	z-index 100
+	padding 5px 10px
+	font-size 16px
+	font-family $mono
+	line-height 1.4
+	white-space nowrap
+	background rgba(0,0,0,0.75)
+	color #eee
+	//background rgba(255,255,255,0.75)
+	//color $csBlack
+	//border 3px solid $csLightGray
+	border-radius 20px
+
+#speech-bubble
 	display none
-	p
-		text-align center, Sans-serif
-		color #222
-		font-size 2em
-		margin-top 100px
+	z-index 9600
+	position absolute
+	top 20px
+	left 20px
+	width 920px
+	padding 14px
+	background #efefef
+	color #222
+	box-shadow $csUIDropShadow
+	background-image $cloudUrl('img/bg/grey.png')
+	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
+		background-image $cloudUrl('img/bg/grey@2x.png')
+		background-size 397px
+	.dialog
+		margin 0
+		padding 0
+		&.fit
+			width 760px
+	.buttons
+		position absolute
+		bottom 10px
+		right 6px
+	button
+		display none
+		float right
+		margin 0 6px
+
+.debug p
+	float left
+	margin-left 20px
 
 .riddleText
 	position absolute
@@ -794,9 +837,6 @@ canvas
 	color #999
 	font-size .8em
 	font-family $buttonFont
-
-#botanist-area .answer-button, #botanist-area .clear-button, #botanist-area i
-	z-index 9999
 
 textarea
 	font-family $buttonFont
@@ -829,6 +869,17 @@ textarea
 	position absolute
 	display none
 
+#beaming
+	display none
+	position absolute
+	top 0
+	left 0
+	width 100%
+	height 100%
+	background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
+	background-size cover
+	z-index 40000
+
 .gameCursor
 	position absolute
 	width 24px
@@ -845,9 +896,6 @@ textarea
 		margin-top 100px
 		font-size 2em
 		text-align center
-
-.hoorayVideo
-	text-align center;
 
 .message
 	font-family $bodyFont
@@ -883,17 +931,6 @@ p.townSite
 
 .miniExample
 	text-align center
-
-#beaming
-	display none
-	position absolute
-	top 0
-	left 0
-	width 100%
-	height 100%
-	background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
-	background-size cover
-	z-index 40000
 
 #game-log
 	width 100%
@@ -964,42 +1001,6 @@ p.townSite
 	color $csLightGreen
 	cursor pointer
 
-#boss-area
-	z-index 9997
-	display none
-	.content
-		.videoFrame
-			margin 20px 0 0 0
-			text-align center
-			background $cloudUrl('img/bg/loading.png') no-repeat center center
-		p
-			padding 0 20px
-		.resumeQuestion
-			color $csPurple
-		.resumeAnswer
-			span
-				color $csOrange
-		textarea
-			margin 0 20px 20px 20px
-			height 100px
-	p.dialog   // TODO: Deprecrate in favor of generic .dialog style?
-		padding-top 10px
-		span
-			font-size 1.1em
-			font-weight 700
-			font-family $buttonFont
-			color $csBlue
-	.boss-button a
-		color white
-
-.minilab
-	float left
-	margin-right 20px
-	margin-bottom 10px
-
-.detailedInstructions
-	line-height 32px
-
 .bossBox
 	cursor pointer
 	width 48px
@@ -1013,6 +1014,7 @@ p.townSite
 	text-align center
 	&:hover
 		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
+
 .boss-hud
 	display none
 	.clock

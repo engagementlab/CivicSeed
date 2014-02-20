@@ -52,7 +52,7 @@ var $boss = $game.$boss = {
     $bossArea.show();
     _rgbString = 'rgba(255,0,0,';
     _currentSlide = 0;
-    _addContent();
+    _boss.addContent(0);
     //for testing
     // _currentSlide = 1;
     // $game.$boss.nextSlide();
@@ -91,22 +91,24 @@ var $boss = $game.$boss = {
   },
 
   //advance to the resumes
-  nextSlide: function () {
+  nextSlide: function (_currentSlide) {
     if (_currentSlide === 4) {
       //unlock profile
-    } else {
+    }
+    else {
       _currentSlide++;
       if (_currentSlide === 2) {
         //TODO: uncomment this
         // _saveFeedback();
         $('.boss-hud').show();
-      } else if (_currentSlide > 2) {
+      }
+      else if (_currentSlide > 2) {
         $bossArea.fadeOut('fast',function () {
           $game.$boss.isShowing = false;
           _beginGame();
         });
       }
-      _addContent();
+      _boss.addContent(_currentSlide);
     }
   },
 
@@ -159,7 +161,188 @@ var $boss = $game.$boss = {
   }
 };
 
-/****** PRIVATE FUNCTIONS ******/
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _boss = {
+
+  resetSlides: function () {
+    var overlay = document.getElementById('boss-area')
+    _.each(overlay.querySelectorAll('.boss-introduction, .boss-resumes, .boss-instructions, .boss-win'), function (el) {
+      el.style.display = 'none'
+    })
+    overlay.querySelector('.dialog').style.display = 'block'
+  },
+
+  // Add content to the boss area overlay window
+  addContent: function (section) {
+    $game.$boss.isShowing = true;
+    $game.setFlag('showing-boss-overlay')
+    $bossAreaContent.empty();
+
+    var overlay   = document.getElementById('boss-area'),
+        speakerEl = overlay.querySelector('.dialog .speaker'),
+        messageEl = overlay.querySelector('.dialog .message'),
+        speaker   = $game.$botanist.name,
+        resumes   = null,
+        el        = null
+
+    var html = '';
+
+    _boss.resetSlides()
+
+    // Determine what content to add.
+    switch (section) {
+      // [SECTION 00] VIDEO INTRO TO BOSS LEVEL.
+      case 0:
+        el = overlay.querySelector('.boss-introduction')
+        el.style.display = 'block'
+        el.innerHTML = '<iframe src="//player.vimeo.com/video/74144898" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+        overlay.querySelector('.dialog').style.display = 'none'
+
+        _boss.setButton(1)
+        break
+      // [SECTION 01] RESUMES AND RESPONSES.
+      case 1:
+        ss.rpc('game.player.getRandomResumes', {instanceName: $game.$player.instanceName}, function (res) {
+          el = overlay.querySelector('.boss-resumes')
+          var resumeContent = el.querySelector('.content-box')
+
+          speakerEl.innerText = speaker
+          messageEl.innerHTML = 'To find the charging modules, you will need to use my <strong class="color-darkgreen">Special Seeds</strong>. But... the seeds aren’t finished yet. You’ll need to add the last ingredient. Please read what your fellow players have said and provide feedback. This will help them improve their civic resumes. Review them all to receive your <strong class="color-darkgreen">Special Seeds!</strong>'
+
+          resumes = _boss.chooseResumeResponses(res)
+
+          // There are no resumes to respond to; move onto the next section.
+          if (resumes.length < 1) {
+            _boss.addContent(2)
+            return
+          }
+
+          // If there are resumes to respond to, add them
+          for (var i = 0; i < resumes.length; i++) {
+            var question = $game.$botanist.getLevelQuestion(resumes[i].level);
+            html += '<div class="resume-response">';
+            html += '<p class="resume-question">Q: ' + question + '</p>';
+            html += '<p class="resume-answer"><span>A random peer said:</span> ' + resumes[i].answer + '</p>';
+            html += '<p class="resume-response-prompt">Do you have any feedback for his or her response? Enter it below.</p>'
+            html += '<textarea class="resume-feedback" placeholder="Type your feedback here..." maxlength="5000"></textarea>'
+            html += '</div>'
+          }
+          resumeContent.innerHTML += html
+          _boss.setButton(2)
+
+          el.style.display = 'block'
+        })
+        break
+      // [SECTION 02] INSTRUCTIONS.
+      case 2:
+        speakerEl.innerText = speaker
+        messageEl.innerText = 'Thanks! You got 20 special seeds.'
+        $('.boss-instructions').show()
+        _boss.setButton(5, 'Ready?')
+        break
+      // [SECTION 03] FAIL SCREEN.
+      case 3:
+        speakerEl.innerText = speaker
+        messageEl.innerText = 'You failed to defeat the robot. Why don’t you try again?'
+        _boss.setButton(2, 'Play again')
+        break
+      // [SECTION 04] WIN SCREEN.
+      case 4:
+        ss.rpc('game.player.unlockProfile', $game.$player.id, function (err) {
+          if (!err) {
+            speakerEl.innerText = speaker
+            messageEl.innerText = 'Congratulations, you defeated the robot!'
+
+            el = overlay.querySelector('.boss-win')
+            el.style.display = 'block'
+            el.innerHTML = '<iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+            _boss.setButton(5, 'Unlock profile', function () {
+              window.open('/profiles/' + sessionStorage.profileLink + '')
+            })
+          }
+          else {
+            $game.debug('Error unlocking profile. Server returned this message: ' + err)
+          }
+        })
+        break
+      default:
+        // Nothing. Close this window.
+        $game.removeFlag('showing-boss-overlay')
+        $(overlay).hide()
+        break
+    }
+  },
+
+  // There is only one button on the boss windows so this will do all the work
+  setButton: function (section, display, callback) {
+    var button = document.getElementById('boss-area').querySelector('.boss-button'),
+        clone  = button.cloneNode(true)
+
+    button = button.parentNode.replaceChild(clone, button)
+    if (display) {
+      clone.innerText = display
+    }
+    clone.addEventListener('click', function _click () {
+      _boss.addContent(section)
+      if (typeof callback === 'function') callback()
+    })
+  },
+
+  // Choose random resume responses from peers
+  chooseResumeResponses: function (data) {
+    var numberToGet   = 4,
+        allResponses  = _removeCurrentPlayer(data),
+        theChosenOnes = []
+
+    // Function to remove responses belonging to the current player.
+    function _removeCurrentPlayer (data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i]._id === $game.$player.id) {
+          data.splice(i, 1)
+          return data
+        }
+      }
+      // If the current player is not found, just return everything
+      return data
+    }
+
+    // Function to select a response at random, given a level
+    function _selectResponse (level, data) {
+      var responses = []
+
+      // Create an array of all responses at a given level
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].game.resume[level]) {
+          responses.push(data[i])
+        }
+      }
+
+      // Select one at random
+      var random = Math.floor(Math.random() * responses.length)
+      return responses[random]
+    }
+
+    // For each level, get a random response and select it for the Q&A.
+    for (var i = 0; i < numberToGet; i++) {
+      var response = _selectResponse(i, allResponses)
+
+      theChosenOnes.push({
+        id:     response._id,
+        level:  i,
+        answer: response.game.resume[i]
+      })
+    }
+
+    return theChosenOnes
+  }
+
+}
+
 
 function _setDomSelectors() {
   $BODY = $('body');
@@ -172,114 +355,7 @@ function _setDomSelectors() {
   $score = $('.boss-hud .score span');
 }
 
-//add content to the display window
-function _addContent() {
-  $game.$boss.isShowing = true;
-  $bossAreaContent.empty();
 
-  var html = '';
-  if (_currentSlide === 0) {
-    //show intro videp
-    html = '<div class="videoFrame"><iframe src="//player.vimeo.com/video/74144898" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>';
-    $bossAreaContent.append(html);
-  } else if (_currentSlide === 1) {
-    //show resumes and responses
-    ss.rpc('game.player.getRandomResumes',{instanceName: $game.$player.instanceName}, function (result) {
-      if (result.length > 0) {
-        _resumes = _chooseResumes(result);
-        html = '<p class="dialog"><span>Botanist:</span>  To find the charging modules, you will need to use my SPECIAL SEEDS. But... the seeds aren\'t finished yet. You\'ll need to add the last ingredient. Please read what your fellow players have said and provide feedback. This will help them improve their civic resumes. Review all four to receive your SPECIAL SEEDS!</p>';
-        for(var i = 0; i < _resumes.length; i++) {
-          var levelQuestion = $game.$botanist.getLevelQuestion(i);
-          html += '<p class="resumeQuestion">Q: ' + levelQuestion + '</p>';
-          html += '<p class="resumeAnswer"><span>A random peer said: </span> ' + _resumes[i].answer + '</p>';
-          html += '<p>Do you have any feedback for his or her response? Enter it below.</p><textarea class="resume-feedback" placeholder="Type your feedback here..." maxlength="5000" autofocus></textarea>';
-        }
-        $bossAreaContent.append(html);
-      } else {
-        //TODO: what do we do here?
-        console.log('error');
-      }
-    });
-  } else if (_currentSlide === 2) {
-    //show instructions and begin
-    var img1 = CivicSeed.CLOUD_PATH + '/img/game/boss/mini_lab.jpg',
-      img2 = CivicSeed.CLOUD_PATH + '/img/game/boss/charger.png',
-      img3  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing1.png',
-      img4  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing2.png',
-      img5  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing3.png',
-      img6  = CivicSeed.CLOUD_PATH + '/img/game/boss/thing4.png';
-
-    html = '<p class="dialog"><span>Botanist:</span> Thanks! You got 20 special seeds.</p>';
-    html += '<p class="detailedInstructions"><img class="minilab" src="' + img1 + '"> This is the basement of my lab. The CHARGING MODULES <img src="' + img2 + '"> are hidden somwhere here.  To find the charging modules, you\'ll need to use the SPECIAL SEEDS  you earned.  These special seeds can detect and reveal the charging modules. Whenver you plant one, the color bursts will be DARKER the CLOSER it is to a charging module. It will help guide the way!</p>';
-    html += '<p class="detailedInstructions">Once you reveal a charging module, you have to WALK OVER TO IT, and disable it by hand. Find all four to shut down the robot!  You might also find some of my other inventions down here. These can give you more seeds <img src="' + img3 + '"> , or more time <img src="' + img4 + '"> . Watch out for the red potion <img src="' + img5 + '">  which can erase your progress, or the watch <img src="' + img6 + '">  that speeds up the timer. If you run out seeds, or run out of time, you\'ll have to try again.</p>';
-
-    $('#boss-area .boss-button').text('Ready?');
-    $bossAreaContent.append(html);
-  }  else if (_currentSlide === 3) {
-    //fail screen
-    html = '<p class="dialog"><span>Botanist:</span> You failed to defeat the robot. Why don\'t you try again?</p>';
-    $('#boss-area .boss-button').text('Play Again').css('margin-top', '50px');
-    $bossAreaContent.append(html);
-  }else if (_currentSlide === 4) {
-    //win screen
-    ss.rpc('game.player.unlockProfile', $game.$player.id, function (err) {
-      if (err) {
-        console.log('error');
-      } else {
-        html = '<p class="dialog"><span>Botanist:</span> Congratulations, you defeated the robot!</p>';
-        html += '<p class="hoorayVideo"><iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p>';
-        $('#boss-area .boss-button').html('<a href="/profiles/' + sessionStorage.profileLink + '">Unlock Profile</a>');
-        $bossAreaContent.append(html);
-      }
-    });
-  }
- }
-
-//pick random resume responses from peers
-function _chooseResumes (people) {
-  var numToGet = 4,
-      numPeople = people.length,
-      responses = []
-
-  people = {}
-
-  for (var i = 0; i < numToGet; i++) {
-    var person = pickPerson(i),
-        info = {
-          id: person._id,
-          answer: person.game.resume[i]
-        };
-    responses.push(info);
-  }
-
-  function pickPerson (question) {
-    var foundPerson = false,
-        person
-
-    while (!foundPerson) {
-      if (numPeople === 1) {
-        person = people[0];
-        foundPerson = true;
-      }
-      else {
-        var ran1 = Math.floor(Math.random() * numPeople);
-        person = people[ran1];
-        if (person._id !== $game.$player.id) {
-          foundPerson = true;
-          /*
-          if (!person.game.resume[question]) {
-            foundPerson = false;
-          }
-          */
-        }
-      }
-    }
-
-    return person
-  }
-
-  return responses
-}
 
 //save feedback on resume responses to db for each user
 function _saveFeedback() {
@@ -438,7 +514,7 @@ function _checkWin() {
     if (_currentCharger >= 4 && _bossScore === 200) {
       _pause = true;
       _currentSlide = 4;
-      _addContent();
+      _boss.addContent(4);
       $bossArea.show();
     } else {
       _placeCharger();
@@ -453,7 +529,7 @@ function _fail() {
   $game.$player.resetRenderColor();
   _pause = true;
   _currentSlide = 3;
-  _addContent();
+  _boss.addContent(3);
   $bossArea.show();
 }
 
@@ -636,17 +712,6 @@ function _loadVideo (num) {
       _loadVideo(num);
     }
   }
-}
-
-/**
-  *
-  *  PRIVATE FUNCTIONS
-  *
- **/
-
-var _boss = {
-
-  // Private
 }
 
 

@@ -531,10 +531,7 @@ var _resource = {
       default:
         $resources.hideResource(function callback() {
           $game.debug('Error Code 4992 dump!')
-          console.log(index)
-          console.log(resource)
-          console.log(section)
-          console.log(slide)
+          console.log(index, resource, section, slide)
           $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
         })
         break

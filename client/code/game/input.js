@@ -298,10 +298,6 @@ var $input = $game.$input = module.exports = {
       $game.$log.clearUnread();
     });
 
-    $BODY.on('click', '#boss-area .boss-button', function () {
-      $game.$boss.nextSlide();
-    });
-
     //pause menu if we want it
     // $WINDOW.blur(function (e) {
     //  if (!$game.$npc.isResource) {
@@ -504,6 +500,7 @@ var $input = $game.$input = module.exports = {
   closeSeedventory: function () {
     $('#seedventory').slideUp(300, function () {
       $game.$player.seedventoryShowing = false;
+      $game.removeFlag('viewing-seedventory')
     })
   },
 
