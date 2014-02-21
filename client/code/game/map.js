@@ -74,7 +74,7 @@ var $map = $game.$map = {
   firstStart: function (callback) {
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
       $('#minimap-player').hide()
-      _setupBossMap();
+      _map.setupBossMap()
       $game.$map.createPathGrid(function () {
         callback();
       }, true);
@@ -86,8 +86,8 @@ var $map = $game.$map = {
             numX: $game.VIEWPORT_WIDTH,
             numY: $game.VIEWPORT_HEIGHT
           };
-      _getTiles(info, function () {
-        _copyTileArray(function () {
+      _map.getTiles(info, function () {
+        _map.copyTileArray(function () {
           $game.$map.createPathGrid(function () {
             callback();
           });
@@ -290,7 +290,7 @@ var $map = $game.$map = {
       getThisY = _nextY + 2;
     }
 
-    _getTiles({x:getThisX, y: getThisY, numX: getThisManyX, numY: getThisManyY}, function () {
+    _map.getTiles({x:getThisX, y: getThisY, numX: getThisManyX, numY: getThisManyY}, function () {
       return;
     });
   },
@@ -421,105 +421,103 @@ var $map = $game.$map = {
 
 var _map = {
 
-}
+  //get new tiles from DB for new viewport
+  getTiles: function (data, callback) {
+    $game.$map.dataLoaded = false;
+    var x1 = data.x,
+        y1 = data.y,
+        x2 = data.x + data.numX,
+        y2 = data.y + data.numY;
 
-//get new tiles from DB for new viewport
-function _getTiles (data, callback) {
-  $game.$map.dataLoaded = false;
-  var x1 = data.x,
-      y1 = data.y,
-      x2 = data.x + data.numX,
-      y2 = data.y + data.numY;
+    ss.rpc('game.map.getMapData',x1, y1, x2, y2, function (map, colors) {
+      //breakdown single array into 2d array
+      var index = null;
 
-  ss.rpc('game.map.getMapData',x1, y1, x2, y2, function (map, colors) {
-    //breakdown single array into 2d array
-    var index = null;
+      _nextTiles = new Array(data.numX);
+      var i = data.numX;
 
-    _nextTiles = new Array(data.numX);
-    var i = data.numX;
+      while(--i >= 0) {
+        _nextTiles[i] = new Array(data.numY);
+        var j = data.numY;
 
-    while(--i >= 0) {
-      _nextTiles[i] = new Array(data.numY);
-      var j = data.numY;
-
-      while(--j >= 0) {
-        index = j * data.numX + (i % data.numX);
-        _nextTiles[i][j] = map[index];
-      }
-    }
-    //now go thru colors and attach to proper tile
-    //should be going left to right, top to bottom
-    var cLength = colors.length,
-      a = 0,
-      b = 0,
-      c = 0,
-      aMax = _nextTiles.length,
-      bMax = _nextTiles[0].length;
-
-    while(c < cLength) {
-      var found = false;
-      while(!found) {
-        if (_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
-          _nextTiles[a][b].colored = true;
-          found = true;
+        while(--j >= 0) {
+          index = j * data.numX + (i % data.numX);
+          _nextTiles[i][j] = map[index];
         }
-        a++;
-        if (a >= aMax) {
-          a = 0;
-          b++;
-          if (b >= bMax) {
-            console.log('errrr');
+      }
+      //now go thru colors and attach to proper tile
+      //should be going left to right, top to bottom
+      var cLength = colors.length,
+        a = 0,
+        b = 0,
+        c = 0,
+        aMax = _nextTiles.length,
+        bMax = _nextTiles[0].length;
+
+      while(c < cLength) {
+        var found = false;
+        while(!found) {
+          if (_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
+            _nextTiles[a][b].colored = true;
             found = true;
           }
+          a++;
+          if (a >= aMax) {
+            a = 0;
+            b++;
+            if (b >= bMax) {
+              console.log('errrr');
+              found = true;
+            }
+          }
+        }
+        c++;
+      }
+      $game.$map.dataLoaded = true;
+      callback();
+    });
+  },
+
+  //copy over new tiles to current tiles
+  copyTileArray: function (callback) {
+    // $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
+    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+
+    var i = $game.VIEWPORT_WIDTH;
+    while(--i >= 0) {
+      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
+      var j = $game.VIEWPORT_HEIGHT;
+      while(--j >= 0) {
+        $game.$map.currentTiles[i][j] = _nextTiles[i][j];
+      }
+    }
+    //reset array
+    _nextTiles = [];
+    callback();
+  },
+
+  //create the data for the boss map
+  setupBossMap: function () {
+    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+    var i = $game.VIEWPORT_WIDTH;
+    while (--i >= 0) {
+      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
+      var j = $game.VIEWPORT_HEIGHT;
+      while (--j >= 0) {
+        $game.$map.currentTiles[i][j] = {
+          x: i,
+          y: j,
+          tileState: -1,
+          isMapEdge: true,
+          background: 0,
+          background2: 0,
+          background3: 0,
+          foreground: 0,
+          foreground2: 0,
+          mapIndex: j * $game.VIEWPORT_WIDTH + i
         }
       }
-      c++;
-    }
-    $game.$map.dataLoaded = true;
-    callback();
-  });
-}
-
-//copy over new tiles to current tiles
-function _copyTileArray(callback) {
-  // $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
-  $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
-
-  var i = $game.VIEWPORT_WIDTH;
-  while(--i >= 0) {
-    $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
-    var j = $game.VIEWPORT_HEIGHT;
-    while(--j >= 0) {
-      $game.$map.currentTiles[i][j] = _nextTiles[i][j];
     }
   }
-  //reset array
-  _nextTiles = [];
-  callback();
-}
 
-//create the data for the boss map
-function _setupBossMap() {
-  console.log('Setting up Boss Map')
-  $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
-  var i = $game.VIEWPORT_WIDTH;
-  while (--i >= 0) {
-    $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
-    var j = $game.VIEWPORT_HEIGHT;
-    while (--j >= 0) {
-      $game.$map.currentTiles[i][j] = {
-        x: i,
-        y: j,
-        tileState: -1,
-        isMapEdge: true,
-        background: 0,
-        background2: 0,
-        background3: 0,
-        foreground: 0,
-        foreground2: 0,
-        mapIndex: j * $game.VIEWPORT_WIDTH + i
-      }
-    }
-  }
-  console.log($game.$map.currentTiles)
 }
