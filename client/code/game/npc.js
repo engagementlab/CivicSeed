@@ -1,8 +1,7 @@
 'use strict';
 
 var _loaded  = false,
-    _allNpcs = {},
-    _curNpc  = null
+    _allNpcs = {}
 
 var $npc = $game.$npc = {
 
@@ -31,7 +30,6 @@ var $npc = $game.$npc = {
   resetInit: function () {
     _loaded  = false;
     _allNpcs = {};
-    _curNpc  = null;
 
     $game.$npc.ready      = false;
     $game.$npc.hideTimer  = null;
@@ -440,20 +438,9 @@ var $npc = $game.$npc = {
     })
   },
 
-  //set the current npc to specific one so we can operate on it in the near future
+  // Set the current npc to specific one so we can operate on it in the near future
   selectNpc: function (index) {
-    // TODO: Deprecate setting of _curNpc global variable, used primarily by getNpcLevel() and various
-    // resource-related functions that rely on it.
-    var stringId = String(index);
-    _curNpc = _allNpcs[stringId];
-    if (!_curNpc) {
-      index += $game.TOTAL_WIDTH;
-      stringId = String(index);
-      _curNpc = _allNpcs[stringId];
-    }
-
-    // Hack to pass the selected NPC index somewhere
-    // This is still used in player.js to trigger the correct NPC
+    // Pass the selected NPC index to $player to trigger the selected NPC
     $game.$player.npcOnDeck = index;
   },
 
@@ -478,16 +465,6 @@ var $npc = $game.$npc = {
     if (index) {
       return $npc.getNpc(index).getLevel()
     }
-    else {
-      $game.debug('Getting NPC level with _curNpc global is deprecated. Please provide an NPC by index directly.')
-      return _curNpc.level + 1
-    }
-  },
-
-  // Alias for $npc.getLevel()
-  getNpcLevel: function (index) {
-    $game.debug('$npc.getNpcLevel() is deprecated. Use $npc.getLevel() or npc.getLevel() (on NPC object) instead.')
-    $npc.getLevel(index)
   },
 
   //get all npc data
