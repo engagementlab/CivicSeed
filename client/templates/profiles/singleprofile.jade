@@ -17,7 +17,7 @@
 				.row.no-print
 					.span12.box
 						p
-							a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!		
+							a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
 				.row.no-print
 					.span12.instructions
 						p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
@@ -46,12 +46,14 @@
 				.span12.box.objectives
 					if resume[3]
 						p(data-email=email) <span class="profileTitle">Civic Objectives </span> <span class='resumeText'> #{resume[3]} </span>
+			if colorMap
+				.row
+					.span12.box.color-map
+						img(src='#{colorMap}')
 			if (sessionStorage.userEmail === email)
 				.row.no-print
 					.span12
 						p.saveProfileChanges Save Changes
-							if colorMap
-								img(src='#{colorMap}')
 		else
 			if (firstName === 'Demo')
 				.row.demoProfile
@@ -63,10 +65,10 @@
 						h2 Exploring the Mystery
 						p As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.
 						h2 The Big Reveal
-						p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color. 
+						p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.
 						p The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.
 						h2 Boss Battle and Final Sequence
-						p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each. 
+						p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.
 						p This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.
 						h2 Features of the full version of Civic Seed
 						ul
@@ -87,11 +89,10 @@
 								h2 Your profile is locked. Play the game to complete your profile!
 								p.buttonResume
 									a(href='/game') Resume Game
-							else 
+							else
 								h2 The game is currently inactive.
-						else 
+						else
 							h2 This profile has not yet been completed.
-		
+
 	else
 		h1 This person does not exist in our database.
-		
