@@ -7,10 +7,6 @@ var $chat = $game.$chat = {
     callback()
   },
 
-  resetInit: function () {
-    // Nothing.
-  },
-
   send: function (message) {
     var data = {
           msg:          _chat.checkPotty(message),
@@ -31,46 +27,47 @@ var $chat = $game.$chat = {
         message   = data.message,
         other     = false
 
+    // Clear previous timeout, if any
+    clearTimeout(_chat.displayTimer)
+
     // See if message is from current player or another player
     if (data.id !== $game.$player.id) {
+      // This is the other player
       other = true
       name  = data.name
+      // Play a sound
+      $game.$audio.playTriggerFx('chatReceive')
+    }
+    else {
+      // This is the current plater
+      _chat.flag(true)
     }
 
     // Set some appearance vars
-    var len          = message.length + name.length + 2,
-        displayTime  = Math.min(len * 150 + 1000, 11500),
-        sz           = Math.floor(len * 8) + 20
-
-    // Clear previous timeout, if any
-    clearTimeout(_chat.displayTime)
+    var len         = message.length + name.length + 2,
+        displayTime = Math.min(len * 150 + 1000, 11500)
 
     // Re-use the existing element or create a new one, if not present
     if (bubble) {
       bubble.innerText = name + ': '+ message
     }
     else {
-      $(gameboard).append('<p class="player-chat" id="chat-' + data.id + '">' + name +': '+ message + '</p>')
+      $(gameboard).append('<div class="player-chat" id="chat-' + data.id + '">' + name +': '+ message + '</div>')
     }
 
     // Setup a timer to hide the message after some time
-    _chat.displayTime = setTimeout(function () {
+    _chat.displayTimer = setTimeout(function () {
       $chat.hideChat(data)
     }, displayTime)
 
     // Place the chat bubble
-    _chat.place(sz, data)
-
-    // Misc actions
-    if (other) {
-      $game.$audio.playTriggerFx('chatReceive')
-    }
-    else {
-      _chat.flag(true)
-    }
+    _chat.place(data)
 
     // Add the message to the log
     $game.$log.addMessage(data)
+
+    // Return the length of time for this message to display; used by $others.message timer
+    return displayTime
   },
 
   // Remove chat from screen
@@ -78,18 +75,24 @@ var $chat = $game.$chat = {
     // If data is not passed in, assume it's the chat for current player
     if (!data) data = { id: $game.$player.id }
     var el = document.getElementById('chat-' + data.id)
-    clearTimeout(_chat.displayTime)
-    $(el).fadeOut('fast',function () {
+    clearTimeout(_chat.displayTimer)
+    $(el).fadeOut('fast', function () {
       $(this).remove()
       _chat.flag(false)
     })
   }
 }
 
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
 var _chat = {
 
   // Placeholder for chat display time, after which a setTimeout is used to hide the chat bubble.
-  displayTime: null,
+  displayTimer: null,
   badWords: ['fuck', 'shit', 'bitch', 'cunt', 'damn', 'penis', 'vagina', 'crap', 'screw', 'suck', 'piss', 'whore', 'slut'],
 
   // Check for bad language to censor it in chat
@@ -118,8 +121,10 @@ var _chat = {
   },
 
   // Place the chat centered above player, or if too big then left/right align with screen edge
-  place: function (sz, data) {
-    var half     = sz / 2,
+  place: function (data) {
+    var el       = document.getElementById('chat-' + data.id),
+        sz       = el.offsetWidth,
+        half     = sz / 2,
         placeX   = null,
         placeY   = null,
         position = null,
@@ -165,11 +170,9 @@ var _chat = {
       placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
     }
 
-    var el = document.getElementById('chat-' + data.id)
     $(el).css({
-      'top': placeY,
-      'left': placeX,
-      'width': sz
+      'top':   placeY,
+      'left':  placeX
     })
   }
 }

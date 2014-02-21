@@ -42,6 +42,8 @@ canvas
 
 #background
 	z-index 0
+	&.lab-background
+		background $cloudUrl('img/game/lab_bg.png') no-repeat center center
 
 #characters
 	z-index 20
@@ -52,13 +54,13 @@ canvas
 #interface
 	z-index 40
 
-#minimapTile
+#minimap-tile
 	z-index 50
 	right 0px
 	background rgba(20,20,20,0.3)
 	display none
 
-#minimapPlayer
+#minimap-player
 	background rgba(20,20,20,0.8)
 	z-index 55
 	right 0px
@@ -768,6 +770,35 @@ canvas
 		button
 			margin-left 10px
 			background #333
+	.hud-boss
+		display none
+		.clock
+			color $csBlue
+			font-size 1.5em
+			font-family	$buttonFont
+			text-align center
+			line-height 36px
+		.score
+			text-align right
+			line-height 36px
+			color $csOrange
+			font-size 1.2em
+		.hud-mute
+			float left
+
+.bossBox
+	cursor pointer
+	width 48px
+	height 36px
+	line-height 36px
+	margin-right 10px
+	margin-left 10px
+	background #ccc
+	// background rgba(0,0,0,.2)
+	position relative
+	text-align center
+	&:hover
+		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
 
 
 // Generic dialog styles
@@ -776,25 +807,35 @@ canvas
 		font-size 1.2em
 		font-weight 700
 		color $csBlue
-		&::after
+		&:after
 			content ':'
-			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the ': ' string
+			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the content declaration, if you used ': ' instead
 
 // Speech bubble for players
 .player-chat
 	position absolute
 	z-index 100
 	padding 5px 10px
+	height 32px
 	font-size 16px
-	font-family $mono
+	font-family $buttonFont
 	line-height 1.4
+	text-align center
 	white-space nowrap
 	background rgba(0,0,0,0.75)
 	color #eee
-	//background rgba(255,255,255,0.75)
-	//color $csBlack
-	//border 3px solid $csLightGray
-	border-radius 20px
+	border-radius 10px
+	&:after   // Speech bubble pointer. Assumes that bubble is positioned in the center above the player.
+		content ''
+		position relative
+		display block
+		width 0
+		border-width 12px 10px 0 0
+		border-style solid
+		border-color rgba(0,0,0,0.75) transparent
+		margin 0 auto
+		bottom -5px
+		left 16px
 
 #speech-bubble
 	display none
@@ -844,9 +885,6 @@ textarea
 	height 150px
 	max-width 800px
 	resize none
-
-.hide
-	display none
 
 .badge
 	// Used only on buttons on HUD and seedventory
@@ -1000,39 +1038,6 @@ p.townSite
 	background rgba(50,50,50,0.7)
 	color $csLightGreen
 	cursor pointer
-
-.bossBox
-	cursor pointer
-	width 48px
-	height 36px
-	line-height 36px
-	margin-right 10px
-	margin-left 10px
-	background #ccc
-	// background rgba(0,0,0,.2)
-	position relative
-	text-align center
-	&:hover
-		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
-
-.boss-hud
-	display none
-	.clock
-		color $csBlue
-		font-size 1.5em
-		font-family	$buttonFont
-		text-align center
-		line-height 36px
-	.score
-		text-align right
-		line-height 36px
-		color $csOrange
-		font-size 1.2em
-	.hud-mute
-		float left
-
-.labBackground
-	background $cloudUrl('img/game/lab_bg.png') no-repeat center center
 
 .tooltip
 	font-family $buttonFont

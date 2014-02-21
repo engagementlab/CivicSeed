@@ -154,7 +154,6 @@ var $game = module.exports = {
     $game.$botanist.resetInit();
     $game.$mouse.resetInit();
     $game.$audio.resetInit();
-    $game.$chat.resetInit();
     $game.$log.resetInit();
     $game.$boss.resetInit();
   },

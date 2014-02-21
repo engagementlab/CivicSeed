@@ -28,6 +28,7 @@ The following table documents flags that are currently set in CivicSeed.
 | `viewing-progress` | Player is viewing the Progress overlay.|
 | `viewing-skinventory` | Player is viewing the Changing Room overlay.|
 | `npc-chatting` | Set when an NPC is communicating with the player.|
+| `chatting`     | Set when a player is chatting. |
 | `first-time`   | Set a player has joined the game for the first time. (New account.)|
 | `solving-puzzle` | The player is currently attempting to solve the botanist's tangram puzzle.|
 | `seed-mode` | The player is currently in seed mode. This can mean currently planting a seed or viewing the seed inventory.|

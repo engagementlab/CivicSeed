@@ -43,7 +43,8 @@ var $events = $game.$events = module.exports = {
       data.input = 'chat'
       if (data.id === $game.$player.id ) {
         $game.$chat.message(data)
-      } else {
+      }
+      else {
         $game.$others.message(data)
       }
     })

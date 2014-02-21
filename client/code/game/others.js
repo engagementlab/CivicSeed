@@ -363,8 +363,8 @@ var $others = $game.$others = {
           otherPlayer.hideTimer = setTimeout(otherPlayer.hideChat, fadeTime);
         }
 
-        // Display message in game log regardless
-        $game.$log.addMessage(data)
+        // Display message in game log regardless (removed because it dupes functionality with $chat.message())
+        // $game.$log.addMessage(data)
       },
 
       hideChat: function () {
@@ -381,9 +381,8 @@ var $others = $game.$others = {
       },
 
       showPlayerCard: function () {
-        var msg = otherPlayer.name + ' is a ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles';
         if (!otherPlayer.offScreen) {
-          $game.statusUpdate({message: msg, input:'status', screen: true , log:false});
+          $game.alert(otherPlayer.name + ' is a ' + $game.playerRanks[otherPlayer.level] + ' who has colored ' + otherPlayer.tilesColored + ' tiles')
         }
       },
 
