@@ -430,7 +430,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleMinimap: function () {
-    $('#minimapPlayer').toggleClass('hide')
+    $('#minimap-player').toggle()
   },
 
   // Toggles Seed Mode.
@@ -751,7 +751,10 @@ var _input = {
         _input.cheatLog('Welcome to Pleasantville!')
         $game.bossModeUnlocked = true
         $game.$player.currentLevel = 4
-        $game.$boss.init()
+        $game.toBossLevel()
+        //$game.$boss.init()
+        // Reinitialize map.
+        //$game.$map.firstStart()
         break
       default:
         return false

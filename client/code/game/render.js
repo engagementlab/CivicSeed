@@ -69,8 +69,8 @@ var $render = $game.$render = {
     _foregroundContext    = _render.initCanvas('foreground', true)
     _charactersContext    = _render.initCanvas('characters', true)
     _interfaceContext     = _render.initCanvas('interface')
-    _minimapPlayerContext = _render.initCanvas('minimapPlayer')
-    _minimapTileContext   = _render.initCanvas('minimapTile')
+    _minimapPlayerContext = _render.initCanvas('minimap-player')
+    _minimapTileContext   = _render.initCanvas('minimap-tile')
 
     // Interface canvas - style for player names
     _interfaceContext.lineWidth    = 6

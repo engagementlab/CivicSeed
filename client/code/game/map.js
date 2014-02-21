@@ -73,18 +73,19 @@ var $map = $game.$map = {
   //pull down current viewport tiles, create the pathfinding grid
   firstStart: function (callback) {
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-      $('#minimapPlayer').toggleClass('hide');
+      $('#minimap-player').hide()
       _setupBossMap();
       $game.$map.createPathGrid(function () {
         callback();
       }, true);
-    } else {
+    }
+    else {
       var info = {
-        x: $game.masterX,
-        y: $game.masterY,
-        numX: $game.VIEWPORT_WIDTH,
-        numY: $game.VIEWPORT_HEIGHT
-      };
+            x:    $game.masterX,
+            y:    $game.masterY,
+            numX: $game.VIEWPORT_WIDTH,
+            numY: $game.VIEWPORT_HEIGHT
+          };
       _getTiles(info, function () {
         _copyTileArray(function () {
           $game.$map.createPathGrid(function () {
@@ -203,7 +204,7 @@ var $map = $game.$map = {
 
   //save an image from the color minimap for the player
   saveImage: function () {
-    var myDrawing = document.getElementById('minimapTile');
+    var myDrawing = document.getElementById('minimap-tile');
     var drawingURL = myDrawing.toDataURL('img/png');
     return drawingURL;
   },
@@ -499,12 +500,13 @@ function _copyTileArray(callback) {
 
 //create the data for the boss map
 function _setupBossMap() {
+  console.log('Setting up Boss Map')
   $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
   var i = $game.VIEWPORT_WIDTH;
-  while(--i >= 0) {
+  while (--i >= 0) {
     $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
     var j = $game.VIEWPORT_HEIGHT;
-    while(--j >= 0) {
+    while (--j >= 0) {
       $game.$map.currentTiles[i][j] = {
         x: i,
         y: j,
@@ -516,7 +518,8 @@ function _setupBossMap() {
         foreground: 0,
         foreground2: 0,
         mapIndex: j * $game.VIEWPORT_WIDTH + i
-      };
+      }
     }
   }
+  console.log($game.$map.currentTiles)
 }

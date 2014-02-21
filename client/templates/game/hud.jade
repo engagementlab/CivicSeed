@@ -1,5 +1,5 @@
 #hud.container
-	.row.regular-hud.hud-regular
+	.row.hud-regular
 		.span4.hud-player
 			.hud-button.hud-inventory
 				a(title='(I)nventory', data-placement='top')
@@ -31,9 +31,9 @@
 			.hud-button.hud-help
 				a(title='(H)elp', data-placement='top')
 					i.fa.fa-question-circle.fa-lg
-	.row.boss-hud.hud-boss
+	.row.hud-boss
 		.span4
-			.hud-button.regularSeedButton.bossBox
+			.hud-button.regularSeedButton
 				a(title='seeds', data-placement='top')
 					i.fa.fa-leaf.fa-lg
 				span.badge 20
@@ -45,7 +45,7 @@
 		.span3
 			p.score score: <span>---</span>
 		.span1
-			.hud-button.hud-mute.bossBox
+			.hud-button.hud-mute
 				a(title='music', data-placement='top')
 					i.fa.fa-volume-up.fa-lg
 
