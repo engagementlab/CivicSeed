@@ -19,7 +19,7 @@
 				button#chat-submit.btn(type='submit') Chat
 		.span4.hud-global
 			.hud-button.hud-log
-				a(title='Game log', data-placement='top')
+				a(title='Game (L)og', data-placement='top')
 					i.fa.fa-list.fa-lg
 				span.badge
 			.hud-button.hud-progress
@@ -33,20 +33,17 @@
 					i.fa.fa-question-circle.fa-lg
 	.row.hud-boss
 		.span4
-			.hud-button.regularSeedButton
-				a(title='seeds', data-placement='top')
+			.hud-button.hud-seed.regularSeedButton
+				a(title='S(e)eds', data-placement='top')
 					i.fa.fa-leaf.fa-lg
 				span.badge 20
-			//- .drawSeedButton.bossBox
-			//- 	i.fa.fa-star.fa-lg(title='seeds', data-placement='top')
-			//- 	span.badge 20
 		.span4
 			p.clock 90
 		.span3
 			p.score score: <span>---</span>
 		.span1
 			.hud-button.hud-mute
-				a(title='music', data-placement='top')
+				a(title='(V)olume', data-placement='top')
 					i.fa.fa-volume-up.fa-lg
 
 #game-log.scrollable

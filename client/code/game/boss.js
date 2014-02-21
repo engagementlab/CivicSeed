@@ -44,12 +44,10 @@ var $boss = $game.$boss = {
     _setDomSelectors();
     _createGrid();
     $('.hud-regular').fadeOut('fast');
-    $('.hud-boss').fadeIn('fast')
     _setupHud();
-    $bossArea.show();
+    _boss.showOverlay(0)
     _rgbString = 'rgba(255,0,0,';
 
-    _boss.addContent(0);
     _loadVideo(0);
     $('#background').addClass('lab-background');
 
@@ -139,6 +137,25 @@ var $boss = $game.$boss = {
 
 var _boss = {
 
+  showOverlay: function (section) {
+    var overlay = document.getElementById('boss-area')
+    overlay.style.display = 'block'
+
+    $game.$boss.isShowing = true;
+    $game.setFlag('showing-boss-overlay')
+
+    _boss.addContent(section)
+  },
+
+  hideOverlay: function (callback) {
+    var overlay = document.getElementById('boss-area')
+    $(overlay).fadeOut('fast', function () {
+      $game.$boss.isShowing = false;
+      $game.removeFlag('showing-boss-overlay')
+      if (typeof callback === 'function') callback()
+    })
+  },
+
   resetContent: function () {
     var overlay = document.getElementById('boss-area')
     _.each(overlay.querySelectorAll('.boss-introduction, .boss-resumes, .boss-instructions, .boss-win'), function (el) {
@@ -149,9 +166,6 @@ var _boss = {
 
   // Add content to the boss area overlay window
   addContent: function (section) {
-    $game.$boss.isShowing = true;
-    $game.setFlag('showing-boss-overlay')
-
     var overlay   = document.getElementById('boss-area'),
         speakerEl = overlay.querySelector('.dialog .speaker'),
         messageEl = overlay.querySelector('.dialog .message'),
@@ -214,7 +228,9 @@ var _boss = {
         speakerEl.innerText = speaker
         messageEl.innerText = 'Thanks! You got 20 special seeds.'
         $('.boss-instructions').show()
-        _boss.setButton(5, 'Ready?')
+        _boss.setButton(5, 'Ready?', function () {
+          _beginGame();
+        })
         break
       // [SECTION 03] FAIL SCREEN.
       case 3:
@@ -243,11 +259,7 @@ var _boss = {
         break
       default:
         // Nothing. Close this window.
-        $game.removeFlag('showing-boss-overlay')
-        $(overlay).fadeOut('fast',function () {
-          $game.$boss.isShowing = false;
-          _beginGame();
-        })
+        _boss.hideOverlay()
         break
     }
   },
@@ -317,8 +329,6 @@ var _boss = {
     return theChosenOnes
   },
 
-
-  // TODO!!!
   //save feedback on resume responses to db for each user
   saveFeedback: function (resumes) {
     var info = [];
@@ -410,53 +420,58 @@ function _calculateGrid() {
 }
 
 //calculate how far from the charger the tile is
-function _distFromCharger(pos) {
+function _distFromCharger (pos) {
   var delta = Math.abs(pos.x - _charger.x)  + Math.abs(pos.y - _charger.y);
   return delta;
 }
 
 //start the game, clock, sound
-function _beginGame() {
+function _beginGame () {
+  // Display boss HUD
+  $('.hud-boss').fadeIn('fast')
+
   //clear the canvas if a restart
   $game.$render.clearBossLevel();
+
   //set score from tiles colored
   _score = $game.$player.getTilesColored();
   _bossScore = 0;
   $score.text(_score);
   _start = new Date().getTime();
-    _time = 0;
-    _elapsed = '0.0';
-    _pause = false;
-    _totalTime = 0;
-    _target = 90;
-    _clockRate = 1;
-    _numRegularSeeds = 20;
-    _currentCharger = 0;
-    _charger = {};
-    _seedMode = 0;
-    _canPlace = true;
-    _placeCharger();
-    $('.hud-boss .regularSeedButton .badge').text(_numRegularSeeds);
-    setTimeout(_updateTime, 100);
-    //trigger boss music!
-    $game.$audio.switchTrack(7);
+  _time = 0;
+  _elapsed = '0.0';
+  _pause = false;
+  _totalTime = 0;
+  _target = 90;
+  _clockRate = 1;
+  _numRegularSeeds = 20;
+  _currentCharger = 0;
+  _charger = {};
+  _seedMode = 0;
+  _canPlace = true;
+  _placeCharger();
+  $('.hud-boss .regularSeedButton .badge').text(_numRegularSeeds);
+  setTimeout(_updateTime, 100);
+  //trigger boss music!
+  $game.$audio.switchTrack(7);
 }
 
 //tick the clock
-function _updateTime(){
-    _time += 100;
-    _totalTime += 100 * _clockRate;
-    _elapsed = _target - Math.floor(_totalTime / 1000);
+function _updateTime () {
+  _time += 100;
+  _totalTime += 100 * _clockRate;
+  _elapsed = _target - Math.floor(_totalTime / 1000);
 
-    var diff = (new Date().getTime() - _start) - _time;
+  var diff = (new Date().getTime() - _start) - _time;
 
-    $clock.text(_elapsed);
+  $clock.text(_elapsed);
 
-    if (_elapsed <= 0) {
+  if (_elapsed <= 0) {
     _fail();
-    } else if (!_pause) {
-        setTimeout(_updateTime, (100 - diff));
-    }
+  }
+  else if (!_pause) {
+    setTimeout(_updateTime, (100 - diff));
+  }
 }
 
 //check if they are out of seeds and the charger hasn't been revealed
@@ -484,15 +499,24 @@ function _checkWin() {
   $('.cutScene')[0].addEventListener('ended', function () {
     $('.cutScene')[0].removeEventListener('ended');
     $('.cutSceneBg').fadeOut('fast', function () {
-      var left = 'only '  + (_numChargers - _currentCharger + 1) + ' chargers left!';
-      $game.statusUpdate({message:left,input:'status',screen: true,log:false});
+
+      var chargers = (_numChargers - _currentCharger + 1),
+          message  = ''
+
+      if (chargers === 1) {
+        message = 'Only 1 charger left!'
+      }
+      else {
+        message = 'Only ' + chargers + ' chargers left!'
+      }
+      $game.alert(message)
+
       _clockRate = 1;
       $('.cutSceneBg').remove();
     });
     if (_currentCharger >= 4 && _bossScore === 200) {
       _pause = true;
-      _boss.addContent(4);
-      $bossArea.show();
+      _boss.showOverlay(4)
     } else {
       _placeCharger();
     }
@@ -505,8 +529,7 @@ function _fail() {
   $game.$player.seedMode = false;
   $game.$player.resetRenderColor();
   _pause = true;
-  _boss.addContent(3);
-  $bossArea.show();
+  _boss.showOverlay(3)
 }
 
 //setup the new hud for the level
@@ -527,10 +550,10 @@ function _setupHud() {
         $('.hud-boss .drawSeedButton').removeClass('hud-button-active');
         _seedMode = 1;
       } else {
-        $game.statusUpdate({message:'you have no more seeds!',input:'status',screen: true,log:false});
+        $game.alert('You have no more seeds!')
       }
     } else {
-      $game.statusUpdate({message:'you have no more seeds!',input:'status',screen: true,log:false});
+      $game.alert('You have no more seeds!')
     }
   });
 
@@ -614,7 +637,7 @@ function _makeRandomItem() {
 //the player reveals the charger
 function _foundCharger(x,y) {
   _grid[x][y].charger = 1;
-  $game.statusUpdate({message:'you found a charger! Go to it to disable it.',input:'status',screen: true,log:false});
+  $game.alert('You found a charger! Go to it to disable it.')
   _charger.revealed = true;
 }
 
@@ -625,7 +648,7 @@ function _activateItem(data) {
     _grid[data.x][data.y].item = -1;
     if (data.item === 0) {
       //speed up time (bad)
-      $game.statusUpdate({message:'uh oh...time warp!',input:'status',screen: true,log:false});
+      $game.alert('Uh oh... time warp!')
       _clockRate = 4;
       _clockTimeout = setTimeout(function () {
         _clockRate = 1;
@@ -635,7 +658,7 @@ function _activateItem(data) {
       },2000);
     } else if (data.item === 1) {
       //wipeout
-      $game.statusUpdate({message:'wipeout!',input:'status',screen: true,log:false});
+      $game.alert('Wipeout!')
       setTimeout(function () {
         _hideItems();
         $game.$render.clearBossLevel();
@@ -643,7 +666,7 @@ function _activateItem(data) {
       _grid[_charger.x][_charger.y].charger = 0;
     } else if (data.item === 2) {
       //time freeze
-      $game.statusUpdate({message:'time freeze, nice!',input:'status',screen: true,log:false});
+      $game.alert('Time freeze, nice!')
       _clockRate = 0;
       clearTimeout(_clockTimeout);
       _clockTimeout = setTimeout(function () {
@@ -652,7 +675,7 @@ function _activateItem(data) {
       $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
     } else if (data.item === 3) {
       //extra seeds
-      $game.statusUpdate({message:'bonus seeds!',input:'status',screen: true,log:false});
+      $game.alert('Bonus seeds!')
       _numRegularSeeds += 3;
       $('.hud-boss .regularSeedButton .badge').text(_numRegularSeeds);
       $game.$render.clearMapTile(data.x * $game.TILE_SIZE, data.y * $game.TILE_SIZE);
