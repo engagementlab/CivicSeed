@@ -37,9 +37,7 @@ var _charger = {},
 
 var $boss = $game.$boss = {
 
-  isShowing: false,
-
-  //place player on map
+  // place player on map
   init: function (callback) {
     _setDomSelectors();
     _createGrid();
@@ -50,6 +48,7 @@ var $boss = $game.$boss = {
 
     _loadVideo(0);
     $('#background').addClass('lab-background');
+    $game.setFlag('boss-level')
 
     if (typeof callback === 'function') callback()
   },
@@ -76,8 +75,6 @@ var $boss = $game.$boss = {
     _cutSceneVids = [];
     _score = null;
     _bossScore = null;
-
-    $game.$boss.isShowing= false;
   },
 
   //drop a seed to reveal clues
@@ -140,17 +137,13 @@ var _boss = {
   showOverlay: function (section) {
     var overlay = document.getElementById('boss-area')
     overlay.style.display = 'block'
-
-    $game.$boss.isShowing = true;
     $game.setFlag('showing-boss-overlay')
-
     _boss.addContent(section)
   },
 
   hideOverlay: function (callback) {
     var overlay = document.getElementById('boss-area')
     $(overlay).fadeOut('fast', function () {
-      $game.$boss.isShowing = false;
       $game.removeFlag('showing-boss-overlay')
       if (typeof callback === 'function') callback()
     })

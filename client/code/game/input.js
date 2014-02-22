@@ -657,7 +657,7 @@ var _input = {
       $game.running &&
       !$game.$botanist.isChat &&
       !$game.checkFlag('viewing-help') &&
-      !$game.$boss.isShowing &&
+      !$game.checkFlag('showing-boss-overlay') &&
       !$game.checkFlag('viewing-skinventory')
     ) ? true : false
   },
@@ -752,9 +752,6 @@ var _input = {
         $game.bossModeUnlocked = true
         $game.$player.currentLevel = 4
         $game.toBossLevel()
-        //$game.$boss.init()
-        // Reinitialize map.
-        //$game.$map.firstStart()
         break
       default:
         return false
