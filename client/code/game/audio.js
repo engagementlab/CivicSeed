@@ -314,10 +314,13 @@ var $audio = $game.$audio = {
           message += $game.world.origin.name
           break
         default:
-          message  = 'You are on the equator'
+          // message  = 'You are on the equator'
+          message = ''
           break
       }
-      $game.alert(message)
+      if (message.length > 0) {
+        $game.alert(message)
+      }
     }
     if (!_currentLoop) {
       $audio.checkEnvironmentLoopFx(trackNum);
