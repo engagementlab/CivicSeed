@@ -73,7 +73,6 @@ var $input = $game.$input = module.exports = {
 
     // Display a tooltip when player hovers over HUD controls
     $BODY.on('mouseenter', '.hud-button a', function () {
-      var info = $(this).attr('title')
       $(this).tooltip('show')
     })
 
