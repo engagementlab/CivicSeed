@@ -261,15 +261,6 @@ var _resource = {
 
   // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
-    /* DEPRECATED:  The old version of this function loaded an image rather than the SVG.
-    var overlay   = document.getElementById('resource-area'),
-        level     = $game.$npc.getNpc(resource.index).getLevel(),
-        folder    = 'level' + level,
-        imagePath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + folder + '/' + resource.shape + '.png'
-
-    overlay.querySelector('.tangram').innerHTML = '<img src="' + imagePath + '">'
-    */
-
     // Loads the SVG version of the tangram.
     var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
         artboardX = artboard.offsetWidth,
