@@ -4,6 +4,267 @@ var $skins = $game.$skins = {
 
   ready: false,
 
+  init: function () {
+  },
+
+  resetInit: function () {
+  },
+
+  // Returns an array of skin names (sets, not special outfits)
+  getSetsList: function () {
+    var data = _skins.data.outfits,
+        list = []
+
+    for (var i in data) {
+      if (!data[i].parts) list.push(data[i].id)
+    }
+
+    return list
+  },
+
+  // Returns filtered object collection of sets (without special outfits)
+  getSets: function () {
+    var data = _skins.data.outfits
+
+    return _.filter(data, function (item) { return !item.parts} )
+  },
+
+  // Returns a particular set
+  getSkin: function (id) {
+    return _.find($game.$skins.getSets(), function (item) { return item.id === id })
+  },
+
+  // Unlock a new skin
+  unlockSkin: function (skin, part) {
+    var playerSkin = $game.$player.getSkinSuit()
+
+    if (part !== undefined) {
+      // Specify a part to unlock
+      playerSkin.unlocked[part].push(skin)
+      $game.addBadgeCount('.hud-skinventory', 1)
+    }
+    else {
+      // Assume all parts of the skin is unlocked
+      playerSkin.unlocked.head.push(skin)
+      playerSkin.unlocked.torso.push(skin)
+      playerSkin.unlocked.legs.push(skin)
+      $game.addBadgeCount('.hud-skinventory', 3)
+    }
+
+    // Update skinventory
+    $skins.updateSkinventory(skin)
+    _skins.updatePlayer(playerSkin)
+  },
+
+  // Called when a skin suit is unlocked to render its unlocked appearance.
+  updateSkinventory: function (skin) {
+    // Unlock an entire skin easily
+    var head  = $('.head [data-name="' + skin + '"]')
+    var torso = $('.torso [data-name="' + skin + '"]')
+    var legs  = $('.legs [data-name="' + skin + '"]')
+    _skins.renderUnlockedPart(head, skin, 'head', true)
+    _skins.renderUnlockedPart(torso, skin, 'torso', true)
+    _skins.renderUnlockedPart(legs, skin, 'legs', true)
+  },
+
+  // For debug purposes, reset everything but basic skin
+  resetSkinventory: function () {
+    var playerSkin = $game.$player.getSkinSuit()
+
+    // Reset unlocked array
+    playerSkin.unlocked.head  = ['basic']
+    playerSkin.unlocked.torso = ['basic']
+    playerSkin.unlocked.legs  = ['basic']
+
+    $game.$player.setSkinSuit('basic')
+
+    $skins.renderSkinventory()          // Re-render with reset skins
+    $skins.updateSkinventory('basic')   // Then update with basic skin
+    _skins.updatePlayer(playerSkin)
+  },
+
+  // Creates HTML content for the structure of suit parts
+  renderSkinventory: function () {
+    var playerSkin = $game.$player.getSkinSuit(),
+        unlocked   = playerSkin.unlocked,
+        skins      = this.getSets()
+
+    function _render (skin, part) {
+      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
+          $part      = $('.' + part),
+          $el        = $(skinHTML)
+
+      $part.append($el)
+
+      // Check if currently selected
+      if (skin.id === playerSkin[part]) $el.addClass('equipped')
+
+      // Check if unlocked and set display accordingly
+      for (var h = 0; h < unlocked[part].length; h++) {
+        if (unlocked[part][h] === skin.id) {
+          _skins.renderUnlockedPart($el, skin, part)
+          break
+        }
+      }
+
+      // Bind actions
+      $el.on('mouseenter', function () {
+        $(this).tooltip('show')
+      })
+      $el.on('click', function () {
+        $(this).find('.badge-new:visible').hide()
+      })
+    }
+
+    // Reset parts
+    $('#skinventory .head').empty()
+    $('#skinventory .torso').empty()
+    $('#skinventory .legs').empty()
+
+    // For each skin, create display element and render
+    for (var id in skins) {
+      _render(skins[id], 'head')
+      _render(skins[id], 'torso')
+      _render(skins[id], 'legs')
+    }
+
+    // Display skinformation
+    $skins.renderSkinformation()
+  },
+
+  // Creates HTML content showing information about currently worn parts or outfits.
+  renderSkinformation: function () {
+    var playerSkin = $game.$player.getSkinSuit(),
+        skins      = _skins.data.outfits,
+        head       = playerSkin.head,
+        torso      = playerSkin.torso,
+        legs       = playerSkin.legs,
+        content    = ''
+
+    function _createPartString (skin, part) {
+      var string = '<strong>' + skins[skin][part].name + '.</strong>'
+      if (skins[skin][part].description) {
+        string += ' ' + skins[skin][part].description
+      }
+      if (skins[skin][part].effect) {
+        string += ' <span class="color-orange">Effect:</span> <span class="color-blue">' + skins[skin][part].effect + '</span>'
+      }
+
+      // Set individual part flags as well
+      if (skins[skin][part].flag) {
+        $game.setFlag(skins[skin][part].flag)
+      }
+
+      return string
+    }
+
+    // Display inventory data
+    // The game doesn't store "full set" data, so we compare the parts to see if this is the case
+    var outfit = _skins.getOutfit(head, torso, legs)
+
+    // Also, clear & set skin effect flags here (Not the best place to put it...!)
+    _skins.clearSkinFlags()
+
+    if (outfit) {
+      content += '<strong>' + outfit.name + '</strong><br>' + outfit.description
+      if (outfit.effect) {
+        content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
+      }
+      if (outfit.flag) {
+        $game.setFlag(outfit.flag)
+      }
+    }
+    else {
+      content += _createPartString(head, 'head')
+      content += '<br>' + _createPartString(torso, 'torso')
+      content += '<br>' + _createPartString(legs, 'legs')
+    }
+
+    $('.skinformation p').html(content)
+  }
+
+}
+
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _skins = {
+
+  // Clear all effects of skins sets and parts
+  clearSkinFlags: function () {
+    // Effects are stored as game flags.
+    // Get all flags
+    var data      = _skins.data.outfits,
+        setFlags  = _.pluck(data, 'flag'),
+        partFlags = _.chain(data)
+                     .map(function (value, key, list) {
+                       if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
+                     })
+                     .flatten()
+                     .compact()
+                     .value(),
+        flags     = _.compact(_.union(setFlags, partFlags))
+
+    // Clear all flags
+    _.each(flags, $game.removeFlag)
+  },
+
+  // If parts are part of an outfit, returns an object containing outfit data.
+  getOutfit: function (head, torso, legs) {
+    var data = _skins.data.outfits
+
+    // If everything is equal, player is wearing a full set
+    if (head === torso && torso === legs) {
+      return data[head]
+    }
+    // If everything is not equal, check if player is wearing a special outfit.
+    else {
+      var parts = {
+        'head': head,
+        'torso': torso,
+        'legs': legs
+      }
+      // Returns outfit data, or undefined if not found.
+      return _.find(data, function (each) {
+        return _.isEqual(each.parts, parts)
+      })
+    }
+  },
+
+  // If a part is unlocked, display it as such
+  renderUnlockedPart: function ($el, skin, part, isNew) {
+    // skin is either the name of the skin or the skin object itself
+    // Either way, we want to end up with the skin object.
+    if (typeof skin == 'string') {
+      skin = _skins.data.outfits[skin]
+    }
+
+    var $inner = $el.find('.inner'),
+        bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
+
+    $el.removeClass('locked')
+    $el.attr('title', skin[part].name)
+    $inner.css('backgroundImage', 'url(' + bg + ')')
+    $inner.find('i').remove()
+    $inner.html('')
+    if (isNew === true) {
+      $el.find('.badge-new').show()
+    }
+  },
+
+  // Saves current skin information to the database
+  updatePlayer: function (playerSkin) {
+    ss.rpc('game.player.updateGameInfo', {
+      id: $game.$player.id,
+      skinSuit: playerSkin
+    })
+  },
+
+  // Skins data!
+  // TODO: Save this information somewhere else outside of this script?
   data: {
     'outfits': {
       'basic': {
@@ -342,265 +603,6 @@ var $skins = $game.$skins = {
         }
       }
     }
-  },
-
-  init: function () {
-  },
-
-  resetInit: function () {
-  },
-
-  // Returns an array of skin names (sets, not special outfits)
-  getSetsList: function () {
-    var data = $skins.data.outfits,
-        list = []
-
-    for (var i in data) {
-      if (!data[i].parts) list.push(data[i].id)
-    }
-
-    return list
-  },
-
-  // Returns filtered object collection of sets (without special outfits)
-  getSets: function () {
-    var data = $skins.data.outfits
-
-    return _.filter(data, function (item) { return !item.parts} )
-  },
-
-  // Returns a particular set
-  getSkin: function (id) {
-    return _.find($game.$skins.getSets(), function (item) { return item.id === id })
-  },
-
-  // Unlock a new skin
-  unlockSkin: function (skin, part) {
-    var playerSkin = $game.$player.getSkinSuit()
-
-    if (part !== undefined) {
-      // Specify a part to unlock
-      playerSkin.unlocked[part].push(skin)
-      $game.addBadgeCount('.hud-skinventory', 1)
-    }
-    else {
-      // Assume all parts of the skin is unlocked
-      playerSkin.unlocked.head.push(skin)
-      playerSkin.unlocked.torso.push(skin)
-      playerSkin.unlocked.legs.push(skin)
-      $game.addBadgeCount('.hud-skinventory', 3)
-    }
-
-    // Update skinventory
-    $skins.updateSkinventory(skin)
-    _skins.updatePlayer(playerSkin)
-  },
-
-  // Called when a skin suit is unlocked to render its unlocked appearance.
-  updateSkinventory: function (skin) {
-    // Unlock an entire skin easily
-    var head  = $('.head [data-name="' + skin + '"]')
-    var torso = $('.torso [data-name="' + skin + '"]')
-    var legs  = $('.legs [data-name="' + skin + '"]')
-    _skins.renderUnlockedPart(head, skin, 'head', true)
-    _skins.renderUnlockedPart(torso, skin, 'torso', true)
-    _skins.renderUnlockedPart(legs, skin, 'legs', true)
-  },
-
-  // For debug purposes, reset everything but basic skin
-  resetSkinventory: function () {
-    var playerSkin = $game.$player.getSkinSuit()
-
-    // Reset unlocked array
-    playerSkin.unlocked.head  = ['basic']
-    playerSkin.unlocked.torso = ['basic']
-    playerSkin.unlocked.legs  = ['basic']
-
-    $game.$player.setSkinSuit('basic')
-
-    $skins.renderSkinventory()          // Re-render with reset skins
-    $skins.updateSkinventory('basic')   // Then update with basic skin
-    _skins.updatePlayer(playerSkin)
-  },
-
-  // Creates HTML content for the structure of suit parts
-  renderSkinventory: function () {
-    var playerSkin = $game.$player.getSkinSuit(),
-        unlocked   = playerSkin.unlocked,
-        skins      = this.getSets()
-
-    function _render (skin, part) {
-      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
-          $part      = $('.' + part),
-          $el        = $(skinHTML)
-
-      $part.append($el)
-
-      // Check if currently selected
-      if (skin.id === playerSkin[part]) $el.addClass('equipped')
-
-      // Check if unlocked and set display accordingly
-      for (var h = 0; h < unlocked[part].length; h++) {
-        if (unlocked[part][h] === skin.id) {
-          _skins.renderUnlockedPart($el, skin, part)
-          break
-        }
-      }
-
-      // Bind actions
-      $el.on('mouseenter', function () {
-        $(this).tooltip('show')
-      })
-      $el.on('click', function () {
-        $(this).find('.badge-new:visible').hide()
-      })
-    }
-
-    // Reset parts
-    $('#skinventory .head').empty()
-    $('#skinventory .torso').empty()
-    $('#skinventory .legs').empty()
-
-    // For each skin, create display element and render
-    for (var id in skins) {
-      _render(skins[id], 'head')
-      _render(skins[id], 'torso')
-      _render(skins[id], 'legs')
-    }
-
-    // Display skinformation
-    $skins.renderSkinformation()
-  },
-
-  // Creates HTML content showing information about currently worn parts or outfits.
-  renderSkinformation: function () {
-    var playerSkin = $game.$player.getSkinSuit(),
-        skins      = $skins.data.outfits,
-        head       = playerSkin.head,
-        torso      = playerSkin.torso,
-        legs       = playerSkin.legs,
-        content    = ''
-
-    function _createPartString (skin, part) {
-      var string = '<strong>' + skins[skin][part].name + '.</strong>'
-      if (skins[skin][part].description) {
-        string += ' ' + skins[skin][part].description
-      }
-      if (skins[skin][part].effect) {
-        string += ' <span class="color-orange">Effect:</span> <span class="color-blue">' + skins[skin][part].effect + '</span>'
-      }
-
-      // Set individual part flags as well
-      if (skins[skin][part].flag) {
-        $game.setFlag(skins[skin][part].flag)
-      }
-
-      return string
-    }
-
-    // Display inventory data
-    // The game doesn't store "full set" data, so we compare the parts to see if this is the case
-    var outfit = _skins.getOutfit(head, torso, legs)
-
-    // Also, clear & set skin effect flags here (Not the best place to put it...!)
-    _skins.clearSkinFlags()
-
-    if (outfit) {
-      content += '<strong>' + outfit.name + '</strong><br>' + outfit.description
-      if (outfit.effect) {
-        content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
-      }
-      if (outfit.flag) {
-        $game.setFlag(outfit.flag)
-      }
-    }
-    else {
-      content += _createPartString(head, 'head')
-      content += '<br>' + _createPartString(torso, 'torso')
-      content += '<br>' + _createPartString(legs, 'legs')
-    }
-
-    $('.skinformation p').html(content)
-  }
-
-}
-
-/**
-  *
-  *  PRIVATE FUNCTIONS
-  *
- **/
-
-var _skins = {
-
-  // Clear all effects of skins sets and parts
-  clearSkinFlags: function () {
-    // Effects are stored as game flags.
-    // Get all flags
-    var data      = $skins.data.outfits,
-        setFlags  = _.pluck(data, 'flag'),
-        partFlags = _.chain(data)
-                     .map(function (value, key, list) {
-                       if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
-                     })
-                     .flatten()
-                     .compact()
-                     .value(),
-        flags     = _.compact(_.union(setFlags, partFlags))
-
-    // Clear all flags
-    _.each(flags, $game.removeFlag)
-  },
-
-  // If parts are part of an outfit, returns an object containing outfit data.
-  getOutfit: function (head, torso, legs) {
-    var data = $skins.data.outfits
-
-    // If everything is equal, player is wearing a full set
-    if (head === torso && torso === legs) {
-      return data[head]
-    }
-    // If everything is not equal, check if player is wearing a special outfit.
-    else {
-      var parts = {
-        'head': head,
-        'torso': torso,
-        'legs': legs
-      }
-      // Returns outfit data, or undefined if not found.
-      return _.find(data, function (each) {
-        return _.isEqual(each.parts, parts)
-      })
-    }
-  },
-
-  // If a part is unlocked, display it as such
-  renderUnlockedPart: function ($el, skin, part, isNew) {
-    // skin is either the name of the skin or the skin object itself
-    // Either way, we want to end up with the skin object.
-    if (typeof skin == 'string') {
-      skin = $skins.data.outfits[skin]
-    }
-
-    var $inner = $el.find('.inner'),
-        bg     = CivicSeed.CLOUD_PATH + '/img/game/skins/' + skin.id + '.png'
-
-    $el.removeClass('locked')
-    $el.attr('title', skin[part].name)
-    $inner.css('backgroundImage', 'url(' + bg + ')')
-    $inner.find('i').remove()
-    $inner.html('')
-    if (isNew === true) {
-      $el.find('.badge-new').show()
-    }
-  },
-
-  // Saves current skin information to the database
-  updatePlayer: function (playerSkin) {
-    ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
-      skinSuit: playerSkin
-    })
   }
 
 }
