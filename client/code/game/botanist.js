@@ -25,8 +25,7 @@ var _info = null,
     $botanistTextArea = null,
     $inventoryBtn = null,
     $inventoryPuzzle = null,
-    $botanistContent = null,
-    $botanistAreaMessage = null;
+    $botanistContent = null;
 
 //export botanist functions
 var $botanist = $game.$botanist = {
@@ -99,7 +98,6 @@ var $botanist = $game.$botanist = {
     $inventoryBtn = null;
     $inventoryPuzzle = null;
     $botanistContent = null;
-    $botanistAreaMessage = null;
 
     $game.$botanist.index= 0;
     $game.$botanist.counter= Math.floor(Math.random() * 64);
@@ -393,9 +391,6 @@ var $botanist = $game.$botanist = {
             setTimeout(function () {
               $game.alert('Drag a piece to the board to place it')
             }, 5000)
-
-            // Find and store coordinates for the trash area
-            _botanist.setTrashPosition()
           }
         }
       });
@@ -450,7 +445,6 @@ var $botanist = $game.$botanist = {
 
   //determine which content to add and add it
   addContent: function () {
-    $('#botanist-area .speaker').text($game.$botanist.name);
     //if _promptNum is 0, then it is the just showing the riddle no interaction
     if (_promptNum === 0) {
       if (_currentSlide === 0) {
@@ -458,18 +452,17 @@ var $botanist = $game.$botanist = {
         $botanistContent.empty()
 
         if ($botanist.getState() > 1) {
-          $botanistAreaMessage.text('Here is the notebook page to view again.');
+          _botanist.say('Here is the notebook page to view again.')
         }
         else {
-          $botanistAreaMessage.text('Here is the page. You will be able to view it at any time in your inventory.');
+          _botanist.say('Here is the page. You will be able to view it at any time in your inventory.')
 
           //add this tangram outline to the inventory
           $game.$player.tangramToInventory();
           $botanist.setState(2);
         }
 
-        var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel+ '.png';
-        $('.tangram-outline').html('<img src="' + imgPath + '">');
+        _botanist.loadPuzzleImage()
         $('.tangram-area').show()
 
       }
@@ -489,7 +482,7 @@ var $botanist = $game.$botanist = {
           $botanist.setState(2)
           $('.tangram-area').hide()
 
-          $botanistAreaMessage.text('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.');
+          _botanist.say('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.')
           $botanistContent.html('<p class="miniExample" ><img src="/img/game/minimap.png"></p><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>');
         }
       }
@@ -499,17 +492,15 @@ var $botanist = $game.$botanist = {
       if (_currentSlide === 0) {
         $inventoryBtn.hide();
 
-        $game.$input.openInventory(function () {
+        $game.$input.showInventory(function () {
           //set the inventory items to draggable in case they were off
           $inventoryItem.attr('draggable','true');
         })
 
-        //$game.$botanist.dialog[$game.$player.currentLevel].riddle.sonnet
-        $botanistAreaMessage.text('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.');
-        var imgPath1 = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle'+$game.$player.currentLevel+'.png',
-            imgPath2 = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-        var newHTML = '<img src="' + imgPath1 + '"><img src="' + imgPath2 + '" class="trash">';
-        $('.tangram-outline').html(newHTML);
+        // Setup contents
+        _botanist.say('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.')
+        _botanist.loadPuzzleImage()
+        _botanist.setupPuzzleSolvingTrashCan()
 
         // Replace the tangram image in the inventory with tip
         $('.inventory-tangram').hide()
@@ -521,14 +512,14 @@ var $botanist = $game.$botanist = {
             'height':'450px'
         });
 
-        $game.$input.closeInventory(function () {
+        $game.$input.hideInventory(function () {
           $inventoryBtn.show();
           $inventoryItem.remove();
         })
 
         var postTangramTalk = $game.$botanist.dialog[$game.$player.currentLevel].riddle.response;
-        //console.log('posttangramtalk', postTangramTalk);
-        $botanistAreaMessage.text(postTangramTalk);
+        _botanist.say(postTangramTalk)
+
         var newHTML2 = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3>',
             imgPath3 = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png';
 
@@ -537,7 +528,8 @@ var $botanist = $game.$botanist = {
       }
       else {
         var endQuestion = _levelQuestion[$game.$player.currentLevel];
-        $botanistAreaMessage.text(endQuestion);
+        _botanist.say(endQuestion)
+
         var inputBox = '<textarea placeholder="Type your answer here..." maxlength="5000" autofocus></textarea>';
         $botanistContent.html(inputBox);
       }
@@ -580,7 +572,7 @@ var $botanist = $game.$botanist = {
     });
 
     // Close and reset inventory to non-puzzle state
-    $game.$input.closeInventory(function () {
+    $game.$input.hideInventory(function () {
       $inventoryBtn.show();
       $inventoryItem.remove();
       $('.inventory-tangram').show()
@@ -832,7 +824,7 @@ var $botanist = $game.$botanist = {
         width    = $('.puzzle-svg').width(),
         height   = $('.puzzle-svg').height(),
         trans    = 'translate(' + mX  + ', ' + mY + ')',
-        $trashEl = $('.trash'),
+        trashEl  = document.querySelector('#botanist-area .trash'),
         trashing = false,
         trash    = _botanist.trashPosition
 
@@ -858,11 +850,11 @@ var $botanist = $game.$botanist = {
 
     // If over trash area
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
-      $trashEl.addClass('active')
+      trashEl.classList.add('active')
       trashing = true
     }
     else {
-      $trashEl.removeClass('active')
+      trashEl.classList.remove('active')
       trashing = false
     }
 
@@ -925,7 +917,6 @@ function _setDomSelectors() {
   $inventoryBtn = $('#inventory button');
   $inventoryPuzzle = $('.inventory-puzzle');
   $botanistContent = $('.botanist-content');
-  $botanistAreaMessage = $('#botanist-area .message');
 }
 
 /**
@@ -945,6 +936,7 @@ var _botanist = {
     right:  null
   },
 
+  // Gets the position of the trash can and returns it
   getTrashPosition: function () {
     var el  = document.getElementById('botanist-area').querySelector('.trash'),
         $el = $(el)
@@ -957,16 +949,61 @@ var _botanist = {
     }
   },
 
+  // Gets the position of the trash can and stores it on an internal variable for later
   setTrashPosition: function () {
     this.trashPosition = this.getTrashPosition()
 
     return (this.trashPosition.top !== null) ? true : false
   },
 
+  // Bind a tooltip to the trash can to provide some UI feedback for the user.
+  setupPuzzleSolvingTrashCan: function () {
+    var el      = document.querySelector('#botanist-area .tangram-outline'),
+        trashEl = document.createElement('img')
+
+    // Create & format the trash can element
+    trashEl.classList.add('trash')
+    trashEl.src = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+    trashEl.title = 'Drag a piece to the trash can to put it back in your inventory.'
+    trashEl.setAttribute('data-placement', 'top')
+    trashEl.addEventListener('mouseover', function () {
+      $(this).tooltip('show')
+    })
+
+    // Add it to the DOM
+    el.appendChild(trashEl)
+
+    // Remember the trash position for later
+    return this.setTrashPosition()
+  },
+
   // When piece is moved, snap to 10x10 grid
   snapTangramTo: function (num) {
     var thresh = 10
     return Math.round(num / thresh) * thresh
+  },
+
+  // Give the Botanist something to say in the botanist window.
+  say: function (message) {
+    var el        = document.getElementById('botanist-area'),
+        speakerEl = el.querySelector('.speaker'),
+        messageEl = el.querySelector('.message')
+
+    speakerEl.innerText = $botanist.name
+    messageEl.innerText = message
+  },
+
+  // Load the puzzle image for player's current level and adds it to DOM.
+  loadPuzzleImage: function () {
+    var el       = document.querySelector('#botanist-area .tangram-outline'),
+        puzzleEl = document.createElement('img')
+
+    // Clear the area first.
+    while (el.firstChild) el.removeChild(el.firstChild)
+
+    // Put in the image.
+    puzzleEl.src = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png'
+    el.appendChild(puzzleEl)
   },
 
   // Give user feedback on puzzle answer
