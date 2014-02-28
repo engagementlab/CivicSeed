@@ -1065,7 +1065,7 @@ var _player = {
   // Make the bounding box for each possible resource in inventory
   createInventoryBoxes: function () {
     var el = document.getElementById('inventory').querySelector('.inventory-boxes')
-    el.innerHTML = ''
+    while (el.firstChild) el.removeChild(el.firstChild)
     for (var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i++) {
       el.innerHTML += '<div class="inventory-box"></div>'
     }

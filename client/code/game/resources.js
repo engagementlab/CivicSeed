@@ -216,14 +216,16 @@ var _resources = {
   seedsToAdd:      0,
 
   resetSlides: function () {
-    var overlay = document.getElementById('resource-area')
+    var overlay = document.getElementById('resource-area'),
+        article = overlay.querySelector('.resource-article')
     // Note: this appears to perform faster than equivalent jQuery in tests: http://jsperf.com/jquery-vs-queryselectorall/40
     _.each(overlay.querySelectorAll('.resource-content, .resource-article, .resource-question, .resource-responses'), function (el) {
       el.style.display = 'none'
     })
 
     // Clear article content to prevent it from affecting the rest of the game, e.g. stopping videos that are still playing
-    overlay.querySelector('.resource-article').innerHTML = ''
+    // This is equivalent to, but faster than & less prone to memory leaks than innerHTML = ''
+    while (article.firstChild) article.removeChild(article.firstChild)
 
     // When slides are reset, always reset all buttons
     this.resetButtons()
@@ -248,7 +250,9 @@ var _resources = {
 
   // Clears staging area
   unloadArticle: function () {
-    document.getElementById('resource-stage').innerHTML = ''
+    var el = document.getElementById('resource-stage')
+    // This is equivalent to, but faster than & less prone to memory leaks than innerHTML = ''
+    while (el.firstChild) el.removeChild(el.firstChild)
   },
 
   // Loads the tangram piece and adds it into DOM
