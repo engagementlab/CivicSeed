@@ -170,7 +170,7 @@ var $input = $game.$input = module.exports = {
     // ************* RESOURCE WINDOW INTERACTIONS *************
 
     // Close the resource area
-    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
+    $BODY.on('click', '#resource-area .close-overlay', function (e) {
       e.preventDefault()
       $game.$resources.hideResource()
       return false
@@ -221,13 +221,6 @@ var $input = $game.$input = module.exports = {
 
     // ************* BOTANIST OVERLAY INTERACTIONS *************
 
-    //close botanist window
-    $BODY.on('click', '#botanist-area a i, #botanist-area .close-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.hideResource();
-      return false;
-    });
-
     //advance to next content in botanist area
     $BODY.on('click', '#botanist-area .next-button', function (e) {
       $game.$botanist.nextSlide();
@@ -249,6 +242,13 @@ var $input = $game.$input = module.exports = {
     $BODY.on('click', '#botanist-area .clear-button', function (e) {
       e.preventDefault();
       $game.$botanist.clearBoard();
+      return false;
+    });
+
+    //close botanist window
+    $BODY.on('click', '#botanist-area .close-button, #botanist-area .close-overlay', function (e) {
+      e.preventDefault();
+      $game.$botanist.hideResource();
       return false;
     });
 
@@ -503,6 +503,24 @@ var $input = $game.$input = module.exports = {
     })
   },
 
+  // Shows the inventory overlay only.
+  // Used to restore inventory overlay after reviewing an inventory item / resource.
+  showInventory: function (callback) {
+    $game.setFlag('showing-inventory')
+    $('#inventory').slideDown(300, function () {
+      if (typeof callback === 'function') callback()
+    })
+  },
+
+  // Only visually hides the inventory window.
+  // Used to temporarily hide the inventory with the intention of re-opening it.
+  hideInventory: function (callback) {
+    $('#inventory').slideUp(300, function () {
+      $game.removeFlag('showing-inventory')
+      if (typeof callback === 'function') callback()
+    })
+  },
+
   toggleInventory: function () {
     if ($('#inventory').is(':visible')) {
       $input.closeInventory()
@@ -512,23 +530,25 @@ var $input = $game.$input = module.exports = {
     }
   },
 
+  // The following extends showInventory() and hideInventory() respectively for actual inventory interaction.
   openInventory: function (callback) {
     $input.resetUI()
-    $game.$player.inventoryShowing = true
 
-    $('.hud-inventory').addClass('hud-button-active')
-    if ($game.$player.getInventory().length > 0 && $game.checkFlag('viewing-inventory') === false) {
-      $game.alert('Click on a piece to review again')
-    }
-    $('#inventory').slideDown(300, callback)
+    this.showInventory(function () {
+      $('.hud-inventory').addClass('hud-button-active')
+      if ($game.$player.getInventory().length > 0) {
+        $game.alert('Click on a piece to review again')
+      }
+      if (typeof callback === 'function') callback()
+    })
   },
 
   closeInventory: function (callback) {
     if ($game.checkFlag('solving-puzzle') === true) return false
 
-    $('#inventory').slideUp(300, function () {
-      $game.$player.inventoryShowing = false
+    this.hideInventory(function () {
       $('.hud-inventory').removeClass('hud-button-active')
+      $game.removeFlag('viewing-inventory')
       if (typeof callback === 'function') callback()
     })
   },

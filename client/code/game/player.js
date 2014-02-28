@@ -55,7 +55,6 @@ var $player = $game.$player = {
   currentMove: 0,
   currentStep: 0,
   isMoving: false,
-  inventoryShowing: false,
   seedventoryShowing: false,
   seedPlanting: false,
   npcOnDeck: false,
@@ -174,7 +173,6 @@ var $player = $game.$player = {
     $game.$player.currentMove= 0;
     $game.$player.currentStep= 0;
     $game.$player.isMoving= false;
-    $game.$player.inventoryShowing= false;
     $game.$player.seedventoryShowing= false;
     $game.$player.seedPlanting= false;
     $game.$player.npcOnDeck= false;
@@ -212,7 +210,7 @@ var $player = $game.$player = {
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
   beginMove: function (x, y) {
     // Clear HUD
-    if ($game.$player.inventoryShowing) $game.$input.closeInventory()
+    if ($game.checkFlag('showing-inventory')) $game.$input.closeInventory()
 
     var loc    = $player.getLocalPosition(),
         master = {x: x, y: y}

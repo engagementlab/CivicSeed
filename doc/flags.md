@@ -23,7 +23,8 @@ The following table documents flags that are currently set in CivicSeed.
 | Flag          | Description   |
 | ------------- | ------------- |
 | `in-transit`  | Player is currently moving from one screen to another. Movement and input should be disabled during this time.|
-| `viewing-inventory` | Player was viewing the inventory, but it had been temporarily closed for another action (e.g. reviewing the contents of a resource).|
+| `viewing-inventory` | Player was using the inventory, but it had been temporarily hidden for another action (e.g. reviewing the contents of a resource).|
+| `showing-inventory` | Set when the inventory overlay is currently visible on the gameboard.|
 | `viewing-help` | Player is viewing the Help overlay. |
 | `viewing-progress` | Player is viewing the Progress overlay.|
 | `viewing-skinventory` | Player is viewing the Changing Room overlay.|
