@@ -137,14 +137,14 @@ var _boss = {
   showOverlay: function (section) {
     var overlay = document.getElementById('boss-area')
     overlay.style.display = 'block'
-    $game.setFlag('showing-boss-overlay')
+    $game.setFlag('visible-boss-overlay')
     _boss.addContent(section)
   },
 
   hideOverlay: function (callback) {
     var overlay = document.getElementById('boss-area')
     $(overlay).fadeOut('fast', function () {
-      $game.removeFlag('showing-boss-overlay')
+      $game.removeFlag('visible-boss-overlay')
       if (typeof callback === 'function') callback()
     })
   },

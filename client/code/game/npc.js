@@ -111,11 +111,11 @@ var $npc = $game.$npc = {
 
       //update the npc's rendering
       update: function () {
-
-        if (!$game.checkFlag('in-transit')) {
+        var check = $game.checkFlag('in-transit')
+        if (!check) {
           npcObject.idle();
         }
-        else if ($game.checkFlag('in-transit')) {
+        else {
           npcObject.getMaster();
         }
       },
@@ -248,7 +248,7 @@ var $npc = $game.$npc = {
     $game.$player.npcOnDeck = false
 
     // NPC interaction to display if the player has not finished speaking with Botanist
-    if ($game.$botanist.getState() === 0 && $game.$player.getLevel() === 1 && $game.$botanist.tutorialState === 0) {
+    if ($game.$botanist.getState() === 0 && $game.$player.getLevel() === 1 && $game.checkFlag('first-time') === true) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
     else if ($game.$botanist.getState() < 2 ) {
@@ -394,7 +394,7 @@ var $npc = $game.$npc = {
         button.removeEventListener('click', _onClose)
       })
 
-      $el.querySelector('.buttons').appendChild(button)
+      el.querySelector('.buttons').appendChild(button)
     }
 
   },

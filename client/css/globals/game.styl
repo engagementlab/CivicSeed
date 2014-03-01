@@ -171,6 +171,9 @@ canvas
 
 #botanist-area
 	z-index 9990
+	// A transition animation occurs whenever this area changes in height
+	-webkit-transition height .3s
+	transition height .3s
 	&.puzzle-mode
 		height 390px
 		.tangram-area
@@ -178,9 +181,11 @@ canvas
 	.dialog
 		// See also .dialog at .resourceArea
 		padding-right 50px
-	.seed-chips
-		margin-top 30px
-		text-align center
+	.botanist-content
+		.seed-chips, .minimap
+			margin-top 30px
+			margin-bottom 20px
+			text-align center
 	.tangram-area
 		position absolute
 		top 40px
@@ -969,9 +974,6 @@ p.townSite
 			background $csGreen
 			padding 10px
 			color white
-
-.miniExample
-	text-align center
 
 #game-log
 	width 100%

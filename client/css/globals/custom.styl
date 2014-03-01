@@ -128,7 +128,12 @@ blockquote
 	margin 1em 40px
 	border-left 4px solid #b3b3b3
 
-// Fix broken bootstylus tooltip arrows
+// Fixes for bootstylus tooltips
+// Reduce line spacing between multiple lines
+.tooltip-inner
+	line-height 1.25em
+	padding 8px
+// Fix slightly uncentered placement of pointer arrows due to global box model change
 .tooltip.top, .tooltip.bottom
 	.tooltip-arrow
 		margin-left -5px

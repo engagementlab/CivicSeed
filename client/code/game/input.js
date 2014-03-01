@@ -1,5 +1,16 @@
 'use strict';
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    input.js
+
+    - Handles on-screen buttons, HUD elements, generic gameboard
+      interactions, keypresses, and codes/effects triggered in chat.
+    - Also handles various UI interactions, like show / hide / toggle of
+      overlays.
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var $input = $game.$input = module.exports = {
 
   init: function () {
@@ -78,7 +89,7 @@ var $input = $game.$input = module.exports = {
 
     // When player clicks a highlighted HUD button, remove the highlight
     $BODY.on('click', '.hud-button-highlight', function () {
-      $game.unhighlightUI(this)
+      $game.unhighlightHUDButton(this)
     })
 
     // ************* SEEDVENTORY OVERLAYS *************
@@ -396,7 +407,7 @@ var $input = $game.$input = module.exports = {
           $input.toggleMute()
           break
         case 72:  // 'h'
-        case 191: // 'question mark'
+        case 191: // 'question mark' (?)
           // Help
           $input.toggleHelp()
           break
@@ -506,7 +517,7 @@ var $input = $game.$input = module.exports = {
   // Shows the inventory overlay only.
   // Used to restore inventory overlay after reviewing an inventory item / resource.
   showInventory: function (callback) {
-    $game.setFlag('showing-inventory')
+    $game.setFlag('visible-inventory')
     $('#inventory').slideDown(300, function () {
       if (typeof callback === 'function') callback()
     })
@@ -516,7 +527,7 @@ var $input = $game.$input = module.exports = {
   // Used to temporarily hide the inventory with the intention of re-opening it.
   hideInventory: function (callback) {
     $('#inventory').slideUp(300, function () {
-      $game.removeFlag('showing-inventory')
+      $game.removeFlag('visible-inventory')
       if (typeof callback === 'function') callback()
     })
   },
@@ -534,8 +545,8 @@ var $input = $game.$input = module.exports = {
   openInventory: function (callback) {
     $input.resetUI()
 
+    $('.hud-inventory').addClass('hud-button-active')
     this.showInventory(function () {
-      $('.hud-inventory').addClass('hud-button-active')
       if ($game.$player.getInventory().length > 0) {
         $game.alert('Click on a piece to review again')
       }
@@ -544,8 +555,6 @@ var $input = $game.$input = module.exports = {
   },
 
   closeInventory: function (callback) {
-    if ($game.checkFlag('solving-puzzle') === true) return false
-
     this.hideInventory(function () {
       $('.hud-inventory').removeClass('hud-button-active')
       $game.removeFlag('viewing-inventory')
@@ -554,12 +563,12 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleSkinventory: function () {
-    return ($game.checkFlag('viewing-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
+    return ($game.checkFlag('visible-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
   },
 
   openSkinventory: function () {
     $input.resetUI()
-    $game.setFlag('viewing-skinventory')
+    $game.setFlag('visible-skinventory')
     $('.hud-skinventory').addClass('hud-button-active')
     $('#skinventory').show()
 
@@ -568,7 +577,7 @@ var $input = $game.$input = module.exports = {
   },
 
   closeSkinventory: function () {
-    $game.removeFlag('viewing-skinventory')
+    $game.removeFlag('visible-skinventory')
     $('.hud-skinventory').removeClass('hud-button-active')
     $('#skinventory').hide()
   },
@@ -592,35 +601,35 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleProgress: function () {
-    return ($game.checkFlag('viewing-progress') === true) ? $input.closeProgress() : $input.openProgress()
+    return ($game.checkFlag('visible-progress') === true) ? $input.closeProgress() : $input.openProgress()
   },
 
   openProgress: function () {
     $input.resetUI()
-    $game.setFlag('viewing-progress')
+    $game.setFlag('visible-progress')
     $('.hud-progress').addClass('hud-button-active')
     $('#progress-area').show()
   },
 
   closeProgress: function () {
-    $game.removeFlag('viewing-progress')
+    $game.removeFlag('visible-progress')
     $('.hud-progress').removeClass('hud-button-active')
     $('#progress-area').hide()
   },
 
   toggleHelp: function () {
-    return ($game.checkFlag('viewing-help') === true) ? $input.closeHelp() : $input.openHelp()
+    return ($game.checkFlag('visible-help') === true) ? $input.closeHelp() : $input.openHelp()
   },
 
   openHelp: function () {
     $input.resetUI()
-    $game.setFlag('viewing-help')
+    $game.setFlag('visible-help')
     $('.hud-help').addClass('hud-button-active')
     $('#help-area').show()
   },
 
   closeHelp: function () {
-    $game.removeFlag('viewing-help')
+    $game.removeFlag('visible-help')
     $('.hud-help').removeClass('hud-button-active')
     $('#help-area').hide()
   },
@@ -635,6 +644,17 @@ var $input = $game.$input = module.exports = {
 
   unmuteAudio: function () {
     $('.hud-mute i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
+  },
+
+  // Add a highlight to a HUD button
+  highlightHUDButton: function (target) {
+    $('.hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
+    $(target).addClass('hud-button-highlight')
+  },
+
+  // Remove a highlight to a HUD button
+  unhighlightHUDButton: function (target) {
+    $(target).removeClass('hud-button-highlight')
   },
 
   // Clears UI and sets everything into the most defaultest mode we can
@@ -670,14 +690,15 @@ var _input = {
     return (
       !$game.checkFlag('in-transit') &&
       !$game.$player.isMoving &&
-      !$game.$resources.isShowing &&
-      !$game.checkFlag('viewing-progress') &&
       !$game.$player.seedventoryShowing &&
       $game.running &&
-      !$game.$botanist.isChat &&
-      !$game.checkFlag('viewing-help') &&
-      !$game.checkFlag('showing-boss-overlay') &&
-      !$game.checkFlag('viewing-skinventory')
+      !$game.checkFlag('botanist-chatting') &&
+      !$game.checkFlag('visible-skinventory') &&
+      !$game.checkFlag('visible-help') &&
+      !$game.checkFlag('visible-progress') &&
+      !$game.checkFlag('visible-resource-overlay') &&
+      !$game.checkFlag('visible-botanist-overlay') &&
+      !$game.checkFlag('visible-boss-overlay')
     ) ? true : false
   },
 

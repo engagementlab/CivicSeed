@@ -378,15 +378,6 @@ var $game = module.exports = {
     console.error('CIVIC SEED DEBUG MESSAGE: ' + message)
   },
 
-  highlightUI: function (target) {
-    $('.hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
-    $(target).addClass('hud-button-highlight')
-  },
-
-  unhighlightUI: function (target) {
-    $(target).removeClass('hud-button-highlight')
-  },
-
   getBadgeCount: function (target) {
     return window.parseInt($(target).find('.badge').text()) || 0
   },
@@ -508,6 +499,10 @@ var $game = module.exports = {
     else {
       _game.flags = []
     }
+  },
+
+  debugOutputFlags: function () {
+    console.log('All currently set game flags: ' + _game.flags)
   }
 
 };

@@ -24,13 +24,17 @@ The following table documents flags that are currently set in CivicSeed.
 | ------------- | ------------- |
 | `in-transit`  | Player is currently moving from one screen to another. Movement and input should be disabled during this time.|
 | `viewing-inventory` | Player was using the inventory, but it had been temporarily hidden for another action (e.g. reviewing the contents of a resource).|
-| `showing-inventory` | Set when the inventory overlay is currently visible on the gameboard.|
-| `viewing-help` | Player is viewing the Help overlay. |
-| `viewing-progress` | Player is viewing the Progress overlay.|
-| `viewing-skinventory` | Player is viewing the Changing Room overlay.|
+| `visible-inventory` | Set when the inventory overlay is currently visible on the gameboard.|
+| `visible-help` | Set when the Help overlay is currently visible. |
+| `visible-progress` | Set when the Progress overlay is currently visible.|
+| `visible-skinventory` | Set when the Changing Room overlay is currently visible.|
+| `visible-resource-overlay` | Set when the Resource overlay is currently visible. |
+| `visible-botanist-overlay` | Set when the Botanist overlay is currently visible. |
+| `visible-boss-overlay` | Set when the Boss overlay is currently visible. |
 | `npc-chatting` | Set when an NPC is communicating with the player.|
+| `botanist-chatting` | Set when the Botanist is communicating with the player.|
 | `chatting`     | Set when a player is chatting. |
-| `first-time`   | Set a player has joined the game for the first time. (New account.)|
+| `first-time`   | Set a player has joined the game for the first time with a new account, and has not yet completed the tutorial.|
 | `solving-puzzle` | The player is currently attempting to solve the botanist's tangram puzzle.|
 | `seed-mode` | The player is currently in seed mode. This can mean currently planting a seed or viewing the seed inventory.|
 | `boss-level` | The player is currently playing the boss level. |

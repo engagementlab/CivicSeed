@@ -210,7 +210,7 @@ var $player = $game.$player = {
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
   beginMove: function (x, y) {
     // Clear HUD
-    if ($game.checkFlag('showing-inventory')) $game.$input.closeInventory()
+    if ($game.checkFlag('visible-inventory')) $game.$input.closeInventory()
 
     var loc    = $player.getLocalPosition(),
         master = {x: x, y: y}
@@ -489,14 +489,25 @@ var $player = $game.$player = {
   },
 
   // Put the Botanist's tangram puzzle in the inventory
-  tangramToInventory: function () {
-    var el        = document.getElementById('inventory').querySelector('.inventory-tangram'),
+  putTangramPuzzleInInventory: function () {
+    var el        = document.querySelector('#inventory .inventory-tangram'),
         className = 'puzzle' + $player.currentLevel,
-        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png'
+        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png',
+        imgEl     = document.createElement('img')
 
-    el.innerHTML = '<img src="' + imgPath + '" class="inventory-item ' + className + '" draggable="false" data-placement="top" data-original-title="Click to view tangram puzzle">>'
+    // Format the puzzle item
+    imgEl.src = imgPath
+    imgEl.classList.add('inventory-item')
+    imgEl.classList.add(className)
+    imgEl.setAttribute('draggable', 'false')
+    imgEl.setAttribute('data-placement', 'top')
+    imgEl.setAttribute('data-title', 'Click to review the botanist’s puzzle')
 
-    $('.' + className).bind('click', $game.$botanist.inventoryShowRiddle)
+    // Add it to DOM
+    el.appendChild(imgEl)
+
+    // Bind actions
+    $('.' + className).bind('click', $game.$botanist.showPuzzleFromInventory)
     $('.' + className).bind('mouseenter', function () {
       $(this).tooltip('show')
     })
@@ -1083,7 +1094,7 @@ var _player = {
 
     // If the player has gotten the riddle, put the tangram in the inventory + bind actions
     if ($player.botanistState > 1) {
-      $player.tangramToInventory();
+      $player.putTangramPuzzleInInventory();
     }
   },
 

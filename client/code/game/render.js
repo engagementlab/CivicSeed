@@ -288,11 +288,11 @@ var $render = $game.$render = {
   //create order for drawing all characters (other players, your player, npcs, botanist, robot)
   makeQueue: function (callback) {
     var playerInfo = $game.$player.getRenderInfo(),
-      order = [playerInfo],
-      order2 = $game.$others.getRenderInfo(),
-      order3 = $game.$npc.getRenderInfo(),
+      order        = [playerInfo],
+      order2       = $game.$others.getRenderInfo(),
+      order3       = $game.$npc.getRenderInfo(),
       botanistInfo = $game.$botanist.getRenderInfo(),
-      robotInfo = $game.$robot.getRenderInfo();
+      robotInfo    = $game.$robot.getRenderInfo();
 
     var finalOrder = order.concat(order2, order3);
 

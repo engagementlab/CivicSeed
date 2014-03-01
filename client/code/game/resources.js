@@ -1,11 +1,18 @@
 'use strict';
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    resources.js
+
+    - In-game resources that NPCs give to the player
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var $resources = $game.$resources = {
 
-  isShowing: false,
   ready:     false,
 
-  // Copied from botanist.js/_svgFills
+  // SVG fills for tangram pieces
   fills: {
     orange:      'rgb(236,113,41)',
     lightOrange: 'rgb(237,173,135)',
@@ -43,7 +50,6 @@ var $resources = $game.$resources = {
   },
 
   resetInit: function () {
-    $resources.isShowing = false;
     $resources.ready = false;
   },
 
@@ -57,7 +63,7 @@ var $resources = $game.$resources = {
         resource = _resources.data[index]
 
     // Load resource content, then display.
-    $resources.isShowing = true
+    $game.setFlag('visible-resource-overlay')
     _resources.loadArticle(resource, function () {
       $game.$audio.playTriggerFx('windowShow')
       $game.$audio.fadeLow()
@@ -86,13 +92,14 @@ var $resources = $game.$resources = {
       // Reset all resource slides and buttons to a hidden & clean state.
       _resources.resetSlides()
 
-      // Clean up background globals
+      // Clean up background globals & game state flags
       _resources.temporaryAnswer = ''
+      $game.removeFlag('visible-resource-overlay')
 
       // Clear resource stage
       _resources.unloadArticle()
 
-      $resources.isShowing = false
+      // Restore sound level
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
@@ -116,7 +123,7 @@ var $resources = $game.$resources = {
       el.style.display = 'none'
     })
     if ($(overlay).is(':hidden')) {
-      $resources.isShowing = true
+      $game.setFlag('visible-resource-overlay')
       $(overlay).fadeIn(300)
     }
   },
@@ -417,7 +424,7 @@ var _resources = {
         playerLevel  = $game.$player.getLevel(),
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
-        isRevisit    = (answer && answer.result) ? true : false,
+        isRevisit    = (answer && answer.result) ? true : false, // TODO: This is ???
         inPuzzleMode = $game.checkFlag('solving-puzzle'),
         resource     = _resources.data[index]
 
