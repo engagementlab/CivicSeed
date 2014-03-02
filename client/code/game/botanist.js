@@ -1092,6 +1092,7 @@ var _botanist = {
     document.getElementById('botanist-area').classList.remove('puzzle-mode')
 
     // Hide and reset inventory to non-puzzle state
+    $game.removeFlag('viewing-inventory')
     $game.$input.hideInventory(function () {
       document.querySelector('#inventory .inventory-tangram').style.display = 'block'
       document.querySelector('#inventory .close-button').style.display = 'block'
