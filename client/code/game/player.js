@@ -834,12 +834,15 @@ var $player = $game.$player = {
         $game.$player.displayNpcComments();
       }, 1000);
 
+      // Publish beam status
       ss.rpc('game.player.beam', {
         id: $game.$player.id,
         x: location.x,
         y: location.y
       })
-      $game.$map.updatePlayer($game.$player.id, location.x, location.y)
+
+      // Update player position on server and minimap
+      _player.savePosition(location)
     })
   },
 
@@ -1127,7 +1130,7 @@ var _player = {
       .bind('click', function () {
         $game.$resources.examineResource(data.npc);
       })
-      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
+      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragStart);
   },
 
   // Save a new resource to the database
@@ -1141,6 +1144,20 @@ var _player = {
     })
   },
 
+  // Saves player location
+  savePosition: function (position) {
+    // Location is an object with x and y properties
+    // Update on server
+    ss.rpc('game.player.savePosition', {
+      id:       $game.$player.id,
+      position: {
+                  x: position.x,
+                  y: position.y
+                }
+    })
+    // Update on minimap
+    $game.$map.updatePlayer($game.$player.id, position.x, position.y)
+  }
 }
 
 //setup all the dom elements for reuse
@@ -1430,15 +1447,8 @@ function _sendMoveInfo(moves) {
 
 //when a move is done, decide waht to do next (if it is a transition) and save position to DB
 function _endMove() {
-  var posInfo = {
-    id: $game.$player.id,
-    position: {
-      x: _info.x,
-      y: _info.y
-    }
-  };
-  ss.rpc('game.player.savePosition', posInfo);
-  $game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+
+  _player.savePosition({x: _info.x, y: _info.y})
 
   //put the character back to normal position
   _info.offX = 0;
