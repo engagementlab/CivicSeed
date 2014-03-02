@@ -397,9 +397,12 @@ var _botanist = {
           _botanist.showPrompt(0)
         }
         break
-      // This can be expanded to include any number of steps in the future.
-      // Be sure to call _botanist.completeTutorial() at the last step to record that the player has
-      // finished the tutorial session.
+      // This can potentially be expanded to include any number of steps in the future, although
+      // currently the tutorial starts to make use of other functions similar to rest of the
+      // levels (e.g. addContent()) to kick off level 1. Look for the presence of the 'first-time'
+      // flag to detect whether player is in tutorial mode. When complete, be sure to call the
+      // _botanist.completeTutorial() function to remember that the player has completed the
+      // tutorial session.
     }
   },
 
@@ -442,8 +445,6 @@ var _botanist = {
 
     // Determine what content to add.
     switch (section) {
-      // NOTE: Use slides as a last resort, because of how fucky it is.
-
       // [SECTION 00] PUZZLE / TANGRAM / NOTEBOOK PAGE.
       //   This game seems to use the terms "tangram", "puzzle", and "notebook page" almost
       //   interchangeably.  "Notebook page" is most commonly used by the Botanist character
@@ -550,6 +551,8 @@ var _botanist = {
           }
         })
         break
+      // (Skipped section 4 on purpose)
+
       // [SECTION 05] GIVE THE PLAYER THE MINIMAP
       //  This is a special screen that occurs only during the tutorial.
       case 5:
@@ -657,7 +660,7 @@ var _botanist = {
     })
 
     // Empties contents of certain divs
-    _.each(overlay.querySelectorAll('.botanist-content, .tangram-outline'), function (el) {
+    _.each(overlay.querySelectorAll('.botanist-content, .botanist-puzzle'), function (el) {
       while (el.firstChild) el.removeChild(el.firstChild)
     })
 
@@ -678,13 +681,12 @@ var _botanist = {
   },
 
   // Give the Botanist something to say in the botanist overlay.
+  // Use the .chat() function if you want to use a speech bubble instead.
   say: function (message) {
-    var el        = document.getElementById('botanist-area'),
-        speakerEl = el.querySelector('.speaker'),
-        messageEl = el.querySelector('.message')
+    var el        = document.getElementById('botanist-area')
 
-    speakerEl.innerText = $botanist.name
-    messageEl.innerText = message
+    el.querySelector('.speaker').innerText = $botanist.name
+    el.querySelector('.message').innerText = message
   },
 
   // Display the puzzle page.
@@ -713,7 +715,7 @@ var _botanist = {
 
   // Load the puzzle image for player's current level and adds it to DOM.
   loadPuzzleImage: function () {
-    var el       = document.querySelector('#botanist-area .tangram-outline'),
+    var el       = document.querySelector('#botanist-area .botanist-puzzle'),
         puzzleEl = document.createElement('img')
 
     // Put in the image.
@@ -733,7 +735,12 @@ var _botanist = {
   hideFeedback: function () {
     var $el = $('#botanist-area .check')
     if ($el.is(':visible')) {
-      $el.fadeOut(200)
+      $el.fadeOut(200, function () {
+        // Remind player to review resources.
+        setTimeout(function () {
+          $game.alert('Click on a piece to review its contents')
+        }, 1000)
+      })
     }
   },
 
@@ -759,7 +766,7 @@ var _botanist = {
 
   // Bind a tooltip to the trash can to provide some UI feedback for the user.
   setupPuzzleSolvingTrash: function () {
-    var el      = document.querySelector('#botanist-area .tangram-outline'),
+    var el      = document.querySelector('#botanist-area .botanist-puzzle'),
         trashEl = document.createElement('img')
 
     // Create & format the trash can element

@@ -427,7 +427,7 @@ var $player = $game.$player = {
   // to solve the puzzle. If so, set Botanist state to 3 (ready to solve).
   checkBotanistState: function () {
 
-    // Prevent check from occurring if Botanist state is not at 2 (resource collecting mode)
+    // Prevent check from occurring if Botanist state is not at 2 or 3 (resource collecting mode)
     if ($game.$player.botanistState < 2) return false
 
     // Prevent check from occurring if player has already been teleported to the Botanist once this level and game session.
@@ -474,7 +474,7 @@ var $player = $game.$player = {
       $game.setFlag('botanist-teleported')
       setTimeout(function () {
         $player.beam({x: 70, y: 74})
-      }, 2500)
+      }, 1500)
     }
   },
 

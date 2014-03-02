@@ -424,7 +424,6 @@ var _resources = {
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
         isRevisit    = $game.checkFlag('viewing-inventory'),
-        inPuzzleMode = $game.checkFlag('solving-puzzle'),
         resource     = _resources.data[index]
 
     var $article     = $('#resource-stage .pages > section'),
@@ -450,11 +449,11 @@ var _resources = {
         // On the last article slide, we must test for certain conditions
         else if (slide === slides - 1) {
           // If this resource is being reviewed later:
-          if (isRevisit || inPuzzleMode) {
+          if (isRevisit || isAnswered) {
             // If open-ended question, go to responses next
             if (resource.questionType === 'open') _addButton('next', 4)
             // If question was answered correctly for any other question type, close resource window
-            else _addButton ('close')
+            else _addButton ('close', null, null, _checkBotanistCallback)
           }
           // If question was not answered correctly, go to next slide (question screen)
           else _addButton('next', 2)
@@ -617,7 +616,7 @@ var _resources = {
 
     function _checkBotanistCallback () {
       // A callback function. If a resource was just collected, check to see if player shoud be automatically teleported to the botanist.
-      if (!inPuzzleMode || !isRevisit) {
+      if (!isRevisit) {
         $game.$player.checkBotanistState()
       }
     }
