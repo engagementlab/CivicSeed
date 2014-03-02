@@ -15,7 +15,7 @@ var $input = $game.$input = module.exports = {
 
   init: function () {
 
-    // ************* GENERIC GAMEBOARD INTERACTION *************
+    /* * * * * * * *       GENERIC GAMEBOARD INTERACTION       * * * * * * * */
 
     //change cursor on mouse move
     $BODY.on('mousemove', '.gameboard', function (e) {
@@ -45,7 +45,7 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    // ************* HUD BUTTONS *************
+    /* * * * * * * *                HUD BUTTONS                * * * * * * * */
 
     // Toggle display of Inventory
     $BODY.on('click', '.hud-inventory, #inventory button', function () {
@@ -89,23 +89,24 @@ var $input = $game.$input = module.exports = {
 
     // When player clicks a highlighted HUD button, remove the highlight
     $BODY.on('click', '.hud-button-highlight', function () {
-      $game.unhighlightHUDButton(this)
+      $input.unhighlightHUDButton(this)
     })
 
-    // ************* SEEDVENTORY OVERLAYS *************
+    /* * * * * * * *      SEEDVENTORY WINDOW INTERACTIONS      * * * * * * * */
 
-    //regular seed select
-    $BODY.on('click', '.regular-button', function () {
-      // Not particularly scalable but works so far for 2 seeds
-      $('.draw-button').removeClass('selected')
+    // When a seed button is clicked, clear all seed selected (highlight) classes
+    $BODY.on('click', '#seedventory .seed', function () {
+      $('#seedventory .seed').removeClass('selected')
+    })
+
+    // Select regular seed
+    $BODY.on('click', '#seedventory .regular-button', function () {
       $('.regular-button').addClass('selected')
-
-      $game.$player.startSeeding('regular');
+      $game.$player.startSeeding('regular')
     });
 
-    //draw seed select
-    $BODY.on('click', '.draw-button', function () {
-      $('.regular-button').removeClass('selected')
+    // Select draw seed
+    $BODY.on('click', '#seedventory .draw-button', function () {
       $('.draw-button').addClass('selected')
 
       $game.$player.startSeeding('draw');
@@ -123,7 +124,7 @@ var $input = $game.$input = module.exports = {
       $input.endSeedMode()
     })
 
-    // ************* PROGRESS WINDOW INTERACTIONS *************
+    /* * * * * * * *       PROGRESS WINDOW INTERACTIONS        * * * * * * * */
 
     $BODY.on('click', '.tabbable li a', function (e) {
       e.preventDefault();
@@ -141,14 +142,15 @@ var $input = $game.$input = module.exports = {
     });
 
     // Close Progress window
-    $BODY.on('click', '#progress-area a i', function (e) {
+    $BODY.on('click', '#progress-area .close-overlay', function (e) {
       e.preventDefault()
       $input.closeProgress()
       return false
-    });
+    })
 
-    // ************* SKINVENTORY WINDOW INTERACTIONS *************
+    /* * * * * * * *      SKINVENTORY WINDOW INTERACTIONS      * * * * * * * */
 
+    // Click to equip a new skin part
     $BODY.on('click', '#skinventory .outer', function () {
       if (!$(this).hasClass('locked')) {
         var part = $(this).parent().data('part')
@@ -163,13 +165,14 @@ var $input = $game.$input = module.exports = {
       }
     })
 
+    // Close skinventory
     $BODY.on('click', '#skinventory .close-button', function (e) {
       e.preventDefault()
       $input.closeSkinventory()
       return false
-    });
+    })
 
-    // ************* HELP WINDOW OVERLAY *************
+    /* * * * * * * *            HELP WINDOW OVERLAY            * * * * * * * */
 
     // Close Help window
     $BODY.on('click', '#help-area a i, #help-area .close-button', function (e) {
@@ -178,7 +181,12 @@ var $input = $game.$input = module.exports = {
       return false
     })
 
-    // ************* RESOURCE WINDOW INTERACTIONS *************
+    /* * * * * * * *        RESOURCE WINDOW INTERACTIONS       * * * * * * * *
+
+    NOTE:   Interactions bound to some buttons in the resource overlay are
+            programatically bound when needed in resources.js.
+
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // Close the resource area
     $BODY.on('click', '#resource-area .close-overlay', function (e) {
@@ -230,40 +238,21 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    // ************* BOTANIST OVERLAY INTERACTIONS *************
+    /* * * * * * * *       BOTANIST OVERLAY INTERACTIONS       * * * * * * * *
 
-    //advance to next content in botanist area
-    $BODY.on('click', '#botanist-area .next-button', function (e) {
-      $game.$botanist.nextSlide();
-    });
+    NOTE:   Interactions bound to buttons in the botanist overlay are
+            programatically bound when needed in botanist.js.
 
-    //previous content in botanist area
-    $BODY.on('click', '#botanist-area .back-button', function (e) {
-      $game.$botanist.previousSlide();
-    });
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    //submit tangram answer in botanist area
-    $BODY.on('click', '#botanist-area .answer-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.submitAnswer();
-      return false;
-    });
+    // Close botanist window
+    $BODY.on('click', '#botanist-area .close-overlay', function (e) {
+      e.preventDefault()
+      $game.$botanist.hideOverlay()
+      return false
+    })
 
-    //clear all the pieces in botanist area off tangram board
-    $BODY.on('click', '#botanist-area .clear-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.clearBoard();
-      return false;
-    });
-
-    //close botanist window
-    $BODY.on('click', '#botanist-area .close-button, #botanist-area .close-overlay', function (e) {
-      e.preventDefault();
-      $game.$botanist.hideResource();
-      return false;
-    });
-
-    // ************* OTHER GAMEBOARD HUD ELEMENTS *************
+    /* * * * * * * *        OTHER GAMEBOARD HUD ELEMENTS       * * * * * * * */
 
     $BODY.on('click', '#speech-bubble, #inventory, #botanist-area', function (e) {
       // Prevent clicking on interface elements from interacting with gameboard below
@@ -319,7 +308,8 @@ var $input = $game.$input = module.exports = {
     //  $game.resume();
     // });
 
-    // Keybindings for actions
+    /* * * * * * * *                KEYBINDINGS                * * * * * * * */
+
     $BODY.keydown(function (e) {
       // If escape is pressed, cancels any current action and returns to default gameboard view
       if (e.which === 27) {
@@ -639,16 +629,16 @@ var $input = $game.$input = module.exports = {
   },
 
   muteAudio: function () {
-    $('.hud-mute i').removeClass('fa fa-volume-up').addClass('fa fa-volume-off')
+    $('.hud-mute .fa').removeClass('fa-volume-up').addClass('fa-volume-off')
   },
 
   unmuteAudio: function () {
-    $('.hud-mute i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
+    $('.hud-mute .fa').removeClass('fa-volume-off').addClass('fa-volume-up')
   },
 
   // Add a highlight to a HUD button
   highlightHUDButton: function (target) {
-    $('.hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
+    $('#hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
     $(target).addClass('hud-button-highlight')
   },
 

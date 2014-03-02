@@ -59,7 +59,7 @@
 			span.speaker
 			span.message
 		.botanist-content
-		.tangram-area
+		.botanist-puzzle
 			.tangram-outline
 		.buttons
 			.left
@@ -68,6 +68,7 @@
 			.right
 				button.next-button.btn.btn-success(type='button') Next
 				button.answer-button.btn.btn-success(type='button') Answer
+				button.save-button.btn.btn-success(type='button') Save
 				button.close-button.btn.btn-primary(type='button') Close
 		.check
 			.check-dialog
@@ -76,6 +77,8 @@
 					button.retryButton.btn.btn-primary(type='button') Okay
 
 	#progress-area.gameboard-overlay
+		a.close-overlay(href='')
+			i.fa.fa-times-circle.fa-lg
 		h2 Progress
 		.personalInfo
 			.levelImages
@@ -87,7 +90,6 @@
 			p.resourcesCollected resources collected:
 			p.numCollected 12/40
 			button.btn.collected-button.btn-success(type='button') View Answers
-
 		.tabbable
 			ul.nav.nav-tabs
 				li.active.tabYou
@@ -108,11 +110,7 @@
 						.progress
 							.bar
 					p.percentTitle world color meter
-
 		.topSeeders
-
-		a(href='')
-			i.fa.fa-times-circle.fa-lg
 
 	#collected-resources.gameboard-overlay.background-3
 		h2 Your Answers
@@ -120,14 +118,14 @@
 		button.btn.backToProgress.btn-info(type='button') Back
 
 	#help-area.gameboard-overlay
+		a.close-overlay(href='')
+			i.fa.fa-times-circle.fa-lg
 		h2 How To Play
 		.content-box
 			include help
 		.buttons
 			.right
 				button.close-button.btn.btn-primary(type='button') Close
-		a.close-button(href='')
-			i.fa.fa-times-circle.fa-lg
 
 	#boss-area.gameboard-overlay
 		.dialog
@@ -143,6 +141,8 @@
 			button.boss-button.btn.btn-success(type='button') Next
 
 	#skinventory.gameboard-overlay.background-3
+		a.close-button(href='')
+			i.fa.fa-times-circle.fa-lg
 		h2 Changing Room
 		p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
 		.parts
@@ -152,8 +152,6 @@
 		.skinformation
 			h3 You're wearing
 			p Nothing!
-		a.close-button(href='')
-			i.fa.fa-times-circle.fa-lg
 
 	#inventory
 		.inventory-boxes

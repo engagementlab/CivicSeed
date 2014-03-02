@@ -241,17 +241,20 @@ var $npc = $game.$npc = {
 
   // Determine NPC content to display when clicked
   activate: function (index) {
-    var npc = $npc.getNpc(index)
+    var npc           = $npc.getNpc(index),
+        botanistState = $game.$botanist.getState()
 
     // Once activated, reset global NPC state
     // TODO: This should be deprecated eventually
     $game.$player.npcOnDeck = false
 
     // NPC interaction to display if the player has not finished speaking with Botanist
-    if ($game.$botanist.getState() === 0 && $game.$player.getLevel() === 1 && $game.checkFlag('first-time') === true) {
+    // (1) If the player attempts to roam the world before completing the tutorial
+    if ($game.checkFlag('first-time') === true) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
-    else if ($game.$botanist.getState() < 2 ) {
+    // (2) If the player attempts to roam the world before the Botanist is done talking
+    else if (botanistState < 2 || botanistState > 3) {
       $npc.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
     }
     // If resource is available for the player

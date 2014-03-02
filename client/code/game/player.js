@@ -503,11 +503,12 @@ var $player = $game.$player = {
     imgEl.setAttribute('data-placement', 'top')
     imgEl.setAttribute('data-title', 'Click to review the botanist’s puzzle')
 
-    // Add it to DOM
+    // Clear any previous puzzles, then add the new one to DOM
+    while (el.firstChild) el.removeChild(el.firstChild)
     el.appendChild(imgEl)
 
     // Bind actions
-    $('.' + className).bind('click', $game.$botanist.showPuzzleFromInventory)
+    $('.' + className).bind('click', $game.$botanist.showPuzzlePageFromInventory)
     $('.' + className).bind('mouseenter', function () {
       $(this).tooltip('show')
     })
@@ -518,6 +519,15 @@ var $player = $game.$player = {
     _inventory = [];
     $('.inventory-item').remove();
     $game.setBadgeCount('.hud-inventory', 0)
+
+    // Including the puzzle
+    document.querySelector('#inventory .inventory-tangram').innerHTML = ''
+
+    // Save to server
+    ss.rpc('game.player.updateGameInfo', {
+      id:        $game.$player.id,
+      inventory: []
+    })
   },
 
   //reset items and prepare other entities for fresh level
@@ -535,7 +545,6 @@ var $player = $game.$player = {
       botanistState: $game.$player.botanistState,
       seenRobot:     $game.$player.seenRobot,
       pledges:       _pledges,
-      inventory:     [],
       currentLevel:  $game.$player.currentLevel
     })
 
@@ -554,9 +563,6 @@ var $player = $game.$player = {
         level: $game.$player.currentLevel,
         name:  $game.$player.firstName
       })
-
-      // Begin the next level introduction from the Botanist
-      $game.$botanist.show()
     }
     else if ($game.bossModeUnlocked) {
       $game.toBossLevel();

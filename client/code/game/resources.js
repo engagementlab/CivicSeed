@@ -79,7 +79,6 @@ var $resources = $game.$resources = {
     // Set a flag that remembers we were in the inventory
     $game.setFlag('viewing-inventory')
     $game.$input.hideInventory(function () {
-      // Show the resource
       $resources.showResource(index)
     })
   },
@@ -525,7 +524,7 @@ var _resources = {
         break
       // Generic error for debugging.
       default:
-        $resources.hideResource(function callback() {
+        $resources.hideResource(function callback () {
           $game.debug('Error Code 4992 dump!')
           console.log(index, resource, section, slide)
           $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
@@ -627,8 +626,12 @@ var _resources = {
   },
 
   validateTagline: function (resource) {
-    var input   = document.getElementById('resource-area').querySelector('.tagline-input input'),
-        tagline = input.value.trim()
+    var input       = document.getElementById('resource-area').querySelector('.tagline-input input'),
+        tagline     = input.value.trim(),
+        // This is a callback function to focus on the input box after closing the message
+        _focusInput = function () {
+          input.focus()
+        }
 
     if (tagline.length === 0) {
       $resources.showCheckMessage('You should create a custom tagline!', _focusInput)
@@ -638,16 +641,14 @@ var _resources = {
       $game.$player.setTagline(resource, tagline)
       return true
     }
-
-    // Declare a callback function to focus on the input box after closing the message
-    function _focusInput () {
-      input.focus()
-    }
   },
 
   // Called by check answer to validate whether an open-ended response is sufficient
   validateOpenResponse: function (resource) {
-    var response = this.getAnswer(resource)
+    var response    = this.getAnswer(resource),
+        _focusInput = function () {
+          document.querySelector('.open-response').focus()
+        }
 
     if (response.length === 0) {
       $resources.showCheckMessage('Please answer the question!', _focusInput)
@@ -657,14 +658,7 @@ var _resources = {
       _resources.popupCheck(resource, _focusInput)
       return false
     }
-    else {
-      return true
-    }
-
-    // Declare a callback function to focus on the textarea after closing the message
-    function _focusInput () {
-      document.querySelector('.open-response').focus()
-    }
+    else return true
   },
 
   // Trigger a popup if answer was too short
