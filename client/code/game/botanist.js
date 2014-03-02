@@ -32,15 +32,15 @@ var $botanist = $game.$botanist = {
 
   init: function (callback) {
     ss.rpc('game.npc.loadBotanist', function (data) {
-      _botanist.data    = data;
+      _botanist.data    = data
+
       $botanist.index   = _botanist.data.id
       $botanist.dialog  = _botanist.data.dialog
-      $botanist.name    = _botanist.data.name
       $botanist.tangram = _botanist.data.tangram
+      $botanist.name    = _botanist.data.name
+      $botanist.ready   = true
 
-      $game.$botanist.setupTangram();
-      $game.$botanist.setState($game.$player.botanistState);
-      $game.$botanist.ready = true;
+      $botanist.setState($game.$player.botanistState);
       callback()
     });
   },
@@ -53,11 +53,11 @@ var $botanist = $game.$botanist = {
     _dragOffX = 0;
     _dragOffY = 0;
 
-    $game.$botanist.index= 0;
-    $game.$botanist.dialog= null;
-    $game.$botanist.tangram= null;
-    $game.$botanist.name= null;
-    $game.$botanist.ready= false;
+    $botanist.index   = 0;
+    $botanist.dialog  = null;
+    $botanist.tangram = null;
+    $botanist.name    = null;
+    $botanist.ready   = false;
   },
 
   // Get current render data
@@ -141,7 +141,7 @@ var $botanist = $game.$botanist = {
         break
       // 1 = Player has looked at the instructions / tutorial, and needs to obtain the puzzle piece for that level.
       case 1:
-        $game.$botanist.showPrompt(0)
+        _botanist.showPrompt(0)
         break
       // 2 = Player has obtained tangram puzzle and is currently collecting resources.
       case 2:
@@ -150,11 +150,11 @@ var $botanist = $game.$botanist = {
         break
       // 3 = Player has all the correct resources, ready to solve.
       case 3:
-        $game.$botanist.showPrompt(1)
+        _botanist.showPrompt(1)
         break
       // 4 = Player has correctly solved the puzzle, but has not answered the portfolio question.
       case 4:
-        $game.$botanist.showOverlay(3);
+        _botanist.showOverlay(3);
         break
     }
   },
@@ -172,234 +172,17 @@ var $botanist = $game.$botanist = {
     // Set a flag that remembers we were in the inventory
     $game.setFlag('viewing-inventory')
     $game.$input.hideInventory(function () {
-      $botanist.showOverlay(0)
+      _botanist.showOverlay(0)
     })
-  },
-
-  // Show a chat bubble prompt before displaying overlay content
-  showPrompt: function (section) {
-    var dialogue = $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[section]
-    _botanist.chat(dialogue, function () {
-      $game.$botanist.showOverlay(section)
-    })
-  },
-
-  showOverlay: function (section) {
-    var overlay = document.getElementById('botanist-area')
-    $game.setFlag('visible-botanist-overlay')
-    this.addContent(section)
-    $(overlay).fadeIn(300)
-  },
-
-  addContent: function (section) {
-    var overlay = document.getElementById('botanist-area'),
-        content = overlay.querySelector('.botanist-content')
-
-    // Reset all resource slides and buttons to a hidden & clean state.
-    _botanist.resetSlides()
-
-    // Determine what content to add.
-    switch (section) {
-      // NOTE: Use slides as a last resort, because of how fucky it is.
-
-      // [SECTION 00] PUZZLE / TANGRAM / NOTEBOOK PAGE.
-      //   This game seems to use the terms "tangram", "puzzle", and "notebook page" almost
-      //   interchangeably.  "Notebook page" is most commonly used by the Botanist character
-      //   when speaking to the player.  Internally, this is called the "tangram" in the code.
-      //   Despite being an accurate term, this developer prefers using the word "puzzle" so as
-      //   to avoid confusion with individual tangram pieces which the player collects during
-      //   the course of the game.
-      //
-      //   For case 0, we are just showing or giving the puzzle page to the player. No further
-      //   interaction.
-      case 0:
-        _botanist.showPuzzlePageContent()
-
-        // Special case for tutorial
-        if ($game.checkFlag('first-time')) {
-          _addButton('next', 5)
-          break
-        }
-
-        // Add close button
-        _addButton('close', null, function () {
-          // If the player does not yet have this puzzle piece, the game adds it to the
-          // player's inventory after this window is closed.
-          if ($botanist.getState() < 2) {
-            $game.$player.putTangramPuzzleInInventory()
-            $botanist.setState(2)
-          }
-        })
-        break
-      // [SECTION 01] SOLVING THE BOTANISTS'S PUZZLE.
-      case 1:
-        // Setup classes and flags
-        document.getElementById('botanist-area').classList.add('puzzle-mode')
-        $game.setFlag('solving-puzzle')
-
-        // Setup contents
-        _botanist.say('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.')
-        _botanist.loadPuzzleImage()
-        _botanist.setupPuzzleSolvingTrashCan()
-        overlay.querySelector('.botanist-puzzle').style.display = 'block'
-
-        // Replace the tangram image in the inventory with puzzle-mode tip
-        document.querySelector('#inventory .inventory-tangram').style.display = 'none'
-        document.querySelector('#inventory .close-button').style.display = 'none'
-        document.querySelector('#inventory .help').style.display = 'block'
-
-        // Show the inventory screen
-        $game.$input.showInventory(function () {
-          // Set the inventory items to draggable in case they were off
-          $('.inventory-item').attr('draggable', 'true')
-        })
-
-        // Show 'how-to-play' puzzle hints
-        setTimeout(function () {
-          $game.alert('Drag a piece to the board to place it')
-        }, 1000)
-
-        _addButton('clear')
-        _addButton('answer', 2)
-        break
-      // [SECTION 02] CORRECTLY SOLVED THE PUZZLE.
-      case 2:
-        _botanist.say($game.$botanist.dialog[$game.$player.currentLevel].riddle.response)
-        var imgPath = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png'
-        content.innerHTML = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3><div class="seed-chips"><img src="' + imgPath +'"></div>'
-        content.style.display = 'block'
-
-        _addButton('next', 3)
-        break
-      // [SECTION 03] ANSWER THE CIVIC RESUME / PORTFOLIO QUESTION.
-      case 3:
-        _botanist.say(_botanist.levelQuestion[$game.$player.currentLevel])
-        content.innerHTML = '<textarea placeholder="Type your answer here..." maxlength="5000" autofocus></textarea>'
-        content.style.display = 'block'
-
-        _addButton('save')
-        break
-      // [SECTION 05] GIVE THE PLAYER THE MINIMAP
-      //  This is a special case that occurs only during the tutorial.
-      case 5:
-        _botanist.say('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.')
-        content.innerHTML = '<div class="minimap"><img src="/img/game/minimap.png"></div><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>'
-        content.style.display = 'block'
-
-        _addButton('close', null, function () {
-          // Add this tangram outline to the inventory
-          $game.$player.putTangramPuzzleInInventory()
-          $botanist.setState(2)
-
-          // Complete the tutorial phase.
-          _botanist.completeTutorial()
-
-          // Note: this has actually never happened, but I'm putting it back here to see what happens
-          $game.alert('Level 1: Looking Inward.  See the log below for more details.')
-          $game.log('Level 1 is about understanding one’s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.')
-        })
-        break
-      // Generic error for debugging.
-      default:
-        $botanist.hideOverlay(function callback () {
-          $game.debug('Error Code 4998 dump!')
-          console.log(section)
-          $game.$npc.showSpeechBubble('Error Code 4998', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
-        })
-        break
-
-   }
-
-    // Private add button function. Displays the button each slide asks for and binds actions to them.
-    // Similar to _addButton() in resources.js - refer to that for notes
-    function _addButton (button, section, callback) {
-      var buttons = overlay.querySelector('.buttons'),
-          back    = buttons.querySelector('.back-button'),
-          clear   = buttons.querySelector('.clear-button'),
-          next    = buttons.querySelector('.next-button'),
-          answer  = buttons.querySelector('.answer-button'),
-          save    = buttons.querySelector('.save-button'),
-          close   = buttons.querySelector('.close-button')
-
-      // Show requested button and bind event listeners
-      switch (button) {
-        case 'next':
-          next.style.display = 'inline-block'
-          next.addEventListener('click', function () {
-            if (typeof callback === 'function') callback()
-            $botanist.addContent(section)
-          })
-          break
-        case 'back':
-          back.style.display = 'inline-block'
-          back.addEventListener('click', function () {
-            if (typeof callback === 'function') callback()
-            $botanist.addContent(section)
-          })
-          break
-        // Clear button is used during puzzle to clear the puzzle board.
-        case 'clear':
-          clear.style.display = 'inline-block'
-          clear.addEventListener('click', function () {
-            $botanist.clearBoard()
-          })
-          break
-        // Answer button is used during puzzle mode to submit a puzzle answer.
-        case 'answer':
-          answer.style.display = 'inline-block'
-          answer.addEventListener('click', function () {
-            if (typeof callback === 'function') callback()
-
-            // Check the puzzle answer. If correct, submit it and move on to the next screen.
-            if (_botanist.checkPuzzleAnswer() === true) {
-              _botanist.submitPuzzleAnswer()
-
-              // Go to reward screen.
-              $botanist.addContent(2)
-            }
-          })
-          break
-        // Save button is used to submit a portfolio response answer at the end of each level.
-        case 'save':
-          save.style.display = 'inline-block'
-          save.addEventListener('click', function () {
-            // If the response is complete, upload the user's answer to the server and go to the next level
-            if (_botanist.validatePortfolioResponse() === true) {
-              _botanist.submitPortfolioResponse()
-
-              // Reset - TODO: Verify this is all good
-              _paintbrushSeedFactor = 5;
-              $game.$player.nextLevel()
-              $botanist.hideOverlay(function () {
-                // Begin the next level introduction from the Botanist
-                $botanist.show()
-              })
-            }
-          })
-          break
-        case 'close':
-          close.style.display = 'inline-block'
-          close.addEventListener('click', function () {
-            $botanist.hideOverlay(callback)
-          })
-          break
-        default:
-          // Nothing.
-          $game.debug('Warning: the game attempted to add a button that does not exist.')
-          break
-      }
-      return true
-    }
-
   },
 
   // Hide botanist overlay window
   hideOverlay: function (callback) {
     var overlay = document.getElementById('botanist-area')
 
-    $(overlay).fadeOut(function () {
+    $(overlay).fadeOut(300, function () {
       // Reset all UI
-      _botanist.resetSlides()
+      _botanist.resetContent()
       _botanist.clearPuzzleMode()
       $botanist.clearBoard()
       $('.inventory-item').css('opacity',1);
@@ -423,186 +206,6 @@ var $botanist = $game.$botanist = {
     })
   },
 
-  //preps the area for drag and drop puzzle mode
-  setupTangram: function () {
-    _svg = d3.select('.botanist-puzzle').append('svg')
-            .attr('class','puzzle-svg')
-
-    _drag = d3.behavior.drag()
-              .origin(Object)
-              .on('drag',      $botanist.dragMove)
-              .on('dragstart', $botanist.dragMoveStart)
-              .on('dragend',   $botanist.dropMove);
-  },
-
-  //when dragging starts from inventory must bind drop on puzzle area
-  dragStart: function (e) {
-    if ($game.checkFlag('solving-puzzle')) {
-
-      $('.botanist-puzzle')
-        .unbind('dragover')
-        .unbind('drop');
-
-      var npcData = e.data,
-        dt = e.originalEvent.dataTransfer;
-
-      dt.setData('text/plain', npcData.npc);
-
-      //set drag over and drop to receive
-      $('.botanist-puzzle')
-        .bind('dragover',$game.$botanist.dragOver)
-        .bind('drop', $game.$botanist.drop);
-    }
-  },
-
-  dragEnd: function (e) {
-    e.preventDefault()
-  },
-
-  dragOver: function (e) {
-    if (e.preventDefault) {
-      e.preventDefault();
-    }
-    return false;
-  },
-
-  //when drop add it to puzzle area
-  drop: function (e) {
-    e.preventDefault();
-    if (e.stopPropagation) {
-      e.stopPropagation();
-    }
-    //set class name for new shape and fetch shape data
-    //e.originalEvent.offsetX
-    var npcData = e.originalEvent.dataTransfer.getData('text/plain'),
-      splits = npcData.split(','),
-      npc = splits[0],
-      name = splits[1],
-      selector = 'br' + name,
-      x = e.originalEvent.layerX,
-      y =  e.originalEvent.layerY;
-
-    var shape = $game.$resources.getShape(npc),
-        path = shape.path,
-        fill = $game.$resources.fills[shape.fill];
-
-    //console.log(npcData, selector, x);
-    $('.r' + name)
-      .css('opacity','.4')
-      .attr('draggable', 'false');
-
-    _new = _svg.append('path')
-      .attr('class', selector)
-      .data([{x:x , y: y, id: name, color: fill}])
-      .attr('d', shape.path)
-      .attr('fill', fill)
-      .attr('stroke', 'rgb(255,255,255)')
-      .attr('stroke-width', 0)
-      .attr('transform', 'translate('+x+','+y+')')
-      .call(_drag);
-
-    $('.botanist-puzzle')
-      .unbind('dragover')
-      .unbind('drop');
-
-    //clear data from drag bind
-    e.originalEvent.dataTransfer.clearData();
-    return false;
-  },
-
-  //this is dragging a puzzle piece on area and moving it around
-  dragMoveStart: function (d) {
-    _dragOffX = d3.mouse(this)[0]
-    _dragOffY = d3.mouse(this)[1]
-
-    d3.select('.br' + d.id)
-      .attr('stroke-width', 3)
-      .classed('dragging', true)
-
-    // Hacky way of making it so that dragging puzzle pieces at the lower end of tangram area doesn't
-    // create calculation errors by bringing the z-index of tangram area above all other interface elements.
-    $('.botanist-puzzle').css({zIndex: 43000})
-  },
-
-  //make different color if over trash can
-  dragMove: function (d) {
-    var x        = d3.event.sourceEvent.layerX,
-        y        = d3.event.sourceEvent.layerY,
-//        mX       = d3.event.x,
-//        mY       = d3.event.y,
-        mX       = x - _dragOffX,
-        mY       = y - _dragOffY,
-        width    = $('.puzzle-svg').width(),
-        height   = $('.puzzle-svg').height(),
-        trans    = 'translate(' + mX  + ', ' + mY + ')',
-        trashEl  = document.querySelector('#botanist-area .trash'),
-        trashing = false,
-        trash    = _botanist.trashPosition
-
-    function _getCentroid (selection) {
-      var bbox = selection.node().getBBox()
-      return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
-    }
-
-/*
-    // Debug output
-    console.log({
-      x: x,
-      y: y,
-      mX: mX,
-      mY: mY,
-      _dragOffX: _dragOffX,
-      _dragOffY: _dragOffY,
-      trans: trans,
-      event: d3.event,
-      d: d
-    })
-*/
-    // If over trash area
-    if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
-      trashEl.classList.add('active')
-      trashing = true
-    }
-    else {
-      trashEl.classList.remove('active')
-      trashing = false
-    }
-
-    // Set the appearance of the tangram piece
-    d3.select('.br' + d.id)
-      .attr('transform', trans)
-      .attr('opacity', function () {
-        return trashing ? 0.5 : 1
-      })
-  },
-
-  //move puzzle piece or trash it (return to inventory) on drop
-  dropMove: function (d) {
-    var x     = d3.event.sourceEvent.layerX,
-        y     = d3.event.sourceEvent.layerY,
-        mX    = _botanist.snapTangramTo(x - _dragOffX),
-        mY    = _botanist.snapTangramTo(y - _dragOffY),
-        trans = 'translate(' + mX  + ', ' + mY + ')',
-        trash = _botanist.trashPosition
-
-    d3.select('.br' + d.id)
-      .classed('dragging', false)
-      .attr('stroke-width', 0)
-      .attr('transform', trans)
-
-    // If over trash area
-    if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
-      $('.br' + d.id).remove();
-      $('.r' + d.id)
-        .css('opacity', 1)
-        .attr('draggable', 'true')
-      $('.trash').removeClass('active')
-    }
-
-    // Restore z-index to normal
-    $('.botanist-puzzle').css({zIndex: 'initial'})
-  },
-
   // Remove all pieces from puzzle board return to inventory
   clearBoard: function () {
     $('.puzzle-svg').empty()
@@ -612,6 +215,26 @@ var $botanist = $game.$botanist = {
   // Return level question for resume
   getLevelQuestion: function (level) {
     return _botanist.levelQuestion[level]
+  },
+
+  //when dragging starts from inventory must bind drop on puzzle area
+  // Called from player.js when an item is added to the inventory.
+  onTangramDragStart: function (e) {
+    var $puzzleEl = $('.botanist-puzzle')
+
+    $puzzleEl
+      .unbind('dragover')
+      .unbind('drop')
+
+    var npcData = e.data,
+        dt = e.originalEvent.dataTransfer;
+
+    dt.setData('text/plain', npcData.npc);
+
+    //set drag over and drop to receive
+    $puzzleEl
+      .bind('dragover', _botanist.onTangramDragOver)
+      .bind('drop',     _botanist.onTangramDrop);
   },
 
   disable: function () {
@@ -771,7 +394,7 @@ var _botanist = {
         }
         else {
           // Display start to level 1
-          $botanist.showPrompt(0)
+          _botanist.showPrompt(0)
         }
         break
       // This can be expanded to include any number of steps in the future.
@@ -795,9 +418,235 @@ var _botanist = {
     $game.$render.pingMinimap({x: 70, y: 71})
   },
 
+  // Show a chat bubble prompt before displaying overlay content
+  showPrompt: function (section) {
+    var dialogue = $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[section]
+    _botanist.chat(dialogue, function () {
+      _botanist.showOverlay(section)
+    })
+  },
+
+  showOverlay: function (section) {
+    var overlay = document.getElementById('botanist-area')
+    $game.setFlag('visible-botanist-overlay')
+    this.addContent(section)
+    $(overlay).fadeIn(300)
+  },
+
+  addContent: function (section) {
+    var overlay = document.getElementById('botanist-area'),
+        content = overlay.querySelector('.botanist-content')
+
+    // Reset all resource slides and buttons to a hidden & clean state.
+    _botanist.resetContent()
+
+    // Determine what content to add.
+    switch (section) {
+      // NOTE: Use slides as a last resort, because of how fucky it is.
+
+      // [SECTION 00] PUZZLE / TANGRAM / NOTEBOOK PAGE.
+      //   This game seems to use the terms "tangram", "puzzle", and "notebook page" almost
+      //   interchangeably.  "Notebook page" is most commonly used by the Botanist character
+      //   when speaking to the player.  Internally, this is called the "tangram" in the code.
+      //   Despite being an accurate term, this developer prefers using the word "puzzle" so as
+      //   to avoid confusion with individual tangram pieces which the player collects during
+      //   the course of the game.
+      //
+      //   For case 0, we are just showing or giving the puzzle page to the player. No further
+      //   interaction.
+      case 0:
+        _botanist.showPuzzlePageContent()
+
+        // Special case for tutorial
+        if ($game.checkFlag('first-time')) {
+          _addButton('next', 5)
+          break
+        }
+
+        // Add close button
+        _addButton('close', null, function () {
+          // If the player does not yet have this puzzle piece, the game adds it to the
+          // player's inventory after this window is closed.
+          if ($botanist.getState() < 2) {
+            $game.$player.putTangramPuzzleInInventory()
+            $botanist.setState(2)
+          }
+        })
+        break
+      // [SECTION 01] SOLVING THE BOTANISTS'S PUZZLE.
+      case 1:
+        // Setup classes and flags
+        document.getElementById('botanist-area').classList.add('puzzle-mode')
+        $game.setFlag('solving-puzzle')
+
+        // Setup contents
+        _botanist.say('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.')
+        _botanist.setupPuzzleSolvingTangram()
+        _botanist.setupPuzzleSolvingTrash()
+        _botanist.loadPuzzleImage()
+        overlay.querySelector('.botanist-puzzle').style.display = 'block'
+
+        // Replace the tangram image in the inventory with puzzle-mode tip
+        document.querySelector('#inventory .inventory-tangram').style.display = 'none'
+        document.querySelector('#inventory .close-button').style.display = 'none'
+        document.querySelector('#inventory .help').style.display = 'block'
+
+        // Show the inventory screen
+        $game.$input.showInventory(function () {
+          // Set the inventory items to draggable in case they were off
+          $('.inventory-item').attr('draggable', 'true')
+        })
+
+        // Show 'how-to-play' puzzle hints
+        setTimeout(function () {
+          $game.alert('Drag a piece to the board to place it')
+        }, 1000)
+        setTimeout(function () {
+          $game.alert('Click on a piece to review its contents')
+        }, 6000)
+
+        // Add buttons
+        _addButton('clear')
+
+        // Add an Answer button and provide a function for what to do when it's pressed
+        _addButton('answer', 2, function () {
+          // Check the puzzle answer. If correct, submit it and move on to the next screen.
+          if (_botanist.checkPuzzleAnswer() === true) {
+            _botanist.submitPuzzleAnswer()
+
+            // Go to reward screen.
+            _botanist.addContent(2)
+          }
+        })
+        break
+      // [SECTION 02] CORRECTLY SOLVED THE PUZZLE.
+      case 2:
+        _botanist.say($game.$botanist.dialog[$game.$player.currentLevel].riddle.response)
+        var imgPath = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png'
+        content.innerHTML = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3><div class="seed-chips"><img src="' + imgPath +'"></div>'
+        content.style.display = 'block'
+
+        _addButton('next', 3)
+        break
+      // [SECTION 03] ANSWER THE CIVIC RESUME / PORTFOLIO QUESTION.
+      case 3:
+        _botanist.say(_botanist.levelQuestion[$game.$player.currentLevel])
+        content.innerHTML = '<textarea placeholder="Type your answer here..." maxlength="5000" autofocus></textarea>'
+        content.style.display = 'block'
+
+        // Add a save button and provide a function for what to do when it's pressed
+        _addButton('save', null, function () {
+          // If the response is complete, upload the user's answer to the server and go to the next level
+          if (_botanist.validatePortfolioResponse() === true) {
+            _botanist.submitPortfolioResponse()
+
+            // Reset - TODO: Verify this is all good
+            _paintbrushSeedFactor = 5;
+            $game.$player.nextLevel()
+            $botanist.hideOverlay(function () {
+              // Begin the next level introduction from the Botanist
+              $botanist.show()
+            })
+          }
+        })
+        break
+      // [SECTION 05] GIVE THE PLAYER THE MINIMAP
+      //  This is a special screen that occurs only during the tutorial.
+      case 5:
+        _botanist.say('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.')
+        content.innerHTML = '<div class="minimap"><img src="/img/game/minimap.png"></div><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>'
+        content.style.display = 'block'
+
+        _addButton('close', null, function () {
+          // Add this tangram outline to the inventory
+          $game.$player.putTangramPuzzleInInventory()
+          $botanist.setState(2)
+
+          // Complete the tutorial phase.
+          _botanist.completeTutorial()
+
+          // Note: this has actually never happened, but I'm putting it back here to see what happens
+          $game.alert('Level 1: Looking Inward.  See the log below for more details.')
+          $game.log('Level 1 is about understanding one’s own motivations, goals, social identities, ethics and values in the context of a larger society.  Before beginning work in the community, it is important to look within, and reflect on where you are coming from in order to move forward. The more you understand yourself, the better equipped you will be to becoming an aware and effective active citizen.')
+        })
+        break
+      // Generic error for debugging.
+      default:
+        $botanist.hideOverlay(function callback () {
+          $game.debug('Error Code 4998 dump!')
+          console.log(section)
+          $game.$npc.showSpeechBubble('Error Code 4998', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
+        })
+        break
+    }
+
+    // Private add button function. Displays the button each slide asks for and binds actions to them.
+    // Similar to _addButton() in resources.js - refer to that for notes
+    function _addButton (button, section, callback) {
+      var buttons = overlay.querySelector('.buttons'),
+          back    = buttons.querySelector('.back-button'),
+          clear   = buttons.querySelector('.clear-button'),
+          next    = buttons.querySelector('.next-button'),
+          answer  = buttons.querySelector('.answer-button'),
+          save    = buttons.querySelector('.save-button'),
+          close   = buttons.querySelector('.close-button')
+
+      // Show requested button and bind event listeners
+      switch (button) {
+        case 'next':
+          next.style.display = 'inline-block'
+          next.addEventListener('click', function () {
+            if (typeof callback === 'function') callback()
+            _botanist.addContent(section)
+          })
+          break
+        case 'back':
+          back.style.display = 'inline-block'
+          back.addEventListener('click', function () {
+            if (typeof callback === 'function') callback()
+            _botanist.addContent(section)
+          })
+          break
+        // Clear button is used during puzzle to clear the puzzle board.
+        case 'clear':
+          clear.style.display = 'inline-block'
+          clear.addEventListener('click', function () {
+            $botanist.clearBoard()
+          })
+          break
+        // Answer button is used during puzzle mode to submit a puzzle answer.
+        case 'answer':
+          answer.style.display = 'inline-block'
+          answer.addEventListener('click', function () {
+            if (typeof callback === 'function') callback()
+          })
+          break
+        // Save button is used to submit a portfolio response answer at the end of each level.
+        case 'save':
+          save.style.display = 'inline-block'
+          save.addEventListener('click', function () {
+            if (typeof callback === 'function') callback()
+          })
+          break
+        case 'close':
+          close.style.display = 'inline-block'
+          close.addEventListener('click', function () {
+            $botanist.hideOverlay(callback)
+          })
+          break
+        default:
+          // Nothing.
+          $game.debug('Warning: the game attempted to add a button that does not exist.')
+          break
+      }
+      return true
+    }
+
+  },
+
   // The following reset functions are similar to resource.js functionality, so be sure to
   // make sure code improvements occur on both
-  resetSlides: function () {
+  resetContent: function () {
     // Similar to _resources.resetSlides()
     var overlay = document.getElementById('botanist-area'),
         content = overlay.querySelector('.botanist-content')
@@ -807,8 +656,10 @@ var _botanist = {
       el.style.display = 'none'
     })
 
-    // Discard contents of .botanist-content
-    while (content.firstChild) content.removeChild(content.firstChild)
+    // Empties contents of certain divs
+    _.each(overlay.querySelectorAll('.botanist-content, .tangram-outline'), function (el) {
+      while (el.firstChild) el.removeChild(el.firstChild)
+    })
 
     // When slides are reset, always reset all buttons
     this.resetButtons()
@@ -824,53 +675,6 @@ var _botanist = {
       button = button.parentNode.replaceChild(clone, button)
       clone.style.display = 'none'
     })
-  },
-
-  // Gets the position of the trash can and returns it
-  getTrashPosition: function () {
-    var el  = document.getElementById('botanist-area').querySelector('.trash'),
-        $el = $(el)
-
-    return {
-      top:    $el.position().top,
-      bottom: $el.position().top  + $el.height(),
-      left:   $el.position().left,
-      right:  $el.position().left + $el.width()
-    }
-  },
-
-  // Gets the position of the trash can and stores it on an internal variable for later
-  setTrashPosition: function () {
-    this.trashPosition = this.getTrashPosition()
-
-    return (this.trashPosition.top !== null) ? true : false
-  },
-
-  // Bind a tooltip to the trash can to provide some UI feedback for the user.
-  setupPuzzleSolvingTrashCan: function () {
-    var el      = document.querySelector('#botanist-area .tangram-outline'),
-        trashEl = document.createElement('img')
-
-    // Create & format the trash can element
-    trashEl.classList.add('trash')
-    trashEl.src = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
-    trashEl.title = 'Drag a piece to the trash can to put it back in your inventory.'
-    trashEl.setAttribute('data-placement', 'top')
-    trashEl.addEventListener('mouseover', function () {
-      $(this).tooltip('show')
-    })
-
-    // Add it to the DOM
-    el.appendChild(trashEl)
-
-    // Remember the trash position for later
-    return this.setTrashPosition()
-  },
-
-  // When piece is moved, snap to 10x10 grid
-  snapTangramTo: function (num) {
-    var thresh = 10
-    return Math.round(num / thresh) * thresh
   },
 
   // Give the Botanist something to say in the botanist overlay.
@@ -912,9 +716,6 @@ var _botanist = {
     var el       = document.querySelector('#botanist-area .tangram-outline'),
         puzzleEl = document.createElement('img')
 
-    // Clear the area first.
-    while (el.firstChild) el.removeChild(el.firstChild)
-
     // Put in the image.
     puzzleEl.src = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png'
     el.appendChild(puzzleEl)
@@ -934,6 +735,212 @@ var _botanist = {
     if ($el.is(':visible')) {
       $el.fadeOut(200)
     }
+  },
+
+  // Gets the position of the trash can and returns it
+  getTrashPosition: function () {
+    var el  = document.getElementById('botanist-area').querySelector('.trash'),
+        $el = $(el)
+
+    return {
+      top:    $el.position().top,
+      bottom: $el.position().top  + $el.height(),
+      left:   $el.position().left,
+      right:  $el.position().left + $el.width()
+    }
+  },
+
+  // Gets the position of the trash can and stores it on an internal variable for later
+  setTrashPosition: function () {
+    this.trashPosition = this.getTrashPosition()
+
+    return (this.trashPosition.top !== null) ? true : false
+  },
+
+  // Bind a tooltip to the trash can to provide some UI feedback for the user.
+  setupPuzzleSolvingTrash: function () {
+    var el      = document.querySelector('#botanist-area .tangram-outline'),
+        trashEl = document.createElement('img')
+
+    // Create & format the trash can element
+    trashEl.classList.add('trash')
+    trashEl.src = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+    trashEl.title = 'Drag a piece to the trash can to put it back in your inventory.'
+    trashEl.setAttribute('data-placement', 'top')
+    trashEl.addEventListener('mouseover', function () {
+      $(this).tooltip('show')
+    })
+
+    // Add it to the DOM
+    el.appendChild(trashEl)
+
+    // Remember the trash position for later
+    return this.setTrashPosition()
+  },
+
+  // Preps the area for drag and drop puzzle mode
+  setupPuzzleSolvingTangram: function () {
+    _svg = d3.select('.botanist-puzzle').append('svg')
+            .attr('class','puzzle-svg')
+
+    _drag = d3.behavior.drag()
+              .origin(Object)
+              .on('drag',      _botanist.onTangramDragMove)
+              .on('dragstart', _botanist.onTangramDragMoveStart)
+              .on('dragend',   _botanist.onTangramDropMove);
+  },
+
+  onTangramDragEnd: function (e) {
+    e.preventDefault()
+  },
+
+  onTangramDragOver: function (e) {
+    e.preventDefault()
+    return false
+  },
+
+  //when drop add it to puzzle area
+  onTangramDrop: function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    //set class name for new shape and fetch shape data
+    //e.originalEvent.offsetX
+    var npcData = e.originalEvent.dataTransfer.getData('text/plain'),
+        splits = npcData.split(','),
+        npc = splits[0],
+        name = splits[1],
+        selector = 'br' + name,
+        x = e.originalEvent.layerX,
+        y =  e.originalEvent.layerY;
+
+    var shape = $game.$resources.getShape(npc),
+        path = shape.path,
+        fill = $game.$resources.fills[shape.fill];
+
+    //console.log(npcData, selector, x);
+    $('.r' + name)
+      .css('opacity','.4')
+      .attr('draggable', 'false');
+
+    _new = _svg.append('path')
+      .attr('class', selector)
+      .data([{x:x , y: y, id: name, color: fill}])
+      .attr('d', shape.path)
+      .attr('fill', fill)
+      .attr('stroke', 'rgb(255,255,255)')
+      .attr('stroke-width', 0)
+      .attr('transform', 'translate('+x+','+y+')')
+      .call(_drag);
+
+    $('.botanist-puzzle')
+      .unbind('dragover')
+      .unbind('drop');
+
+    //clear data from drag bind
+    e.originalEvent.dataTransfer.clearData();
+    return false;
+  },
+
+  //this is dragging a puzzle piece on area and moving it around
+  onTangramDragMoveStart: function (d) {
+
+    _dragOffX = d3.mouse(this)[0]
+    _dragOffY = d3.mouse(this)[1]
+
+    d3.select('.br' + d.id)
+      .attr('stroke-width', 3)
+      .classed('dragging', true)
+
+    // Hacky way of making it so that dragging puzzle pieces at the lower end of tangram area doesn't
+    // create calculation errors by bringing the z-index of tangram area above all other interface elements.
+    $('.botanist-puzzle').css({zIndex: 43000})
+  },
+
+  //make different color if over trash can
+  onTangramDragMove: function (d) {
+
+    var x        = d3.event.sourceEvent.layerX,
+        y        = d3.event.sourceEvent.layerY,
+//        mX       = d3.event.x,
+//        mY       = d3.event.y,
+        mX       = x - _dragOffX,
+        mY       = y - _dragOffY,
+        width    = $('.puzzle-svg').width(),
+        height   = $('.puzzle-svg').height(),
+        trans    = 'translate(' + mX  + ', ' + mY + ')',
+        trashEl  = document.querySelector('#botanist-area .trash'),
+        trashing = false,
+        trash    = _botanist.trashPosition
+
+    function _getCentroid (selection) {
+      var bbox = selection.node().getBBox()
+      return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
+    }
+
+/*
+    // Debug output
+    console.log({
+      x: x,
+      y: y,
+      mX: mX,
+      mY: mY,
+      _dragOffX: _dragOffX,
+      _dragOffY: _dragOffY,
+      trans: trans,
+      event: d3.event,
+      d: d
+    })
+*/
+    // If over trash area
+    if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
+      trashEl.classList.add('active')
+      trashing = true
+    }
+    else {
+      trashEl.classList.remove('active')
+      trashing = false
+    }
+
+    // Set the appearance of the tangram piece
+    d3.select('.br' + d.id)
+      .attr('transform', trans)
+      .attr('opacity', function () {
+        return trashing ? 0.5 : 1
+      })
+  },
+
+  //move puzzle piece or trash it (return to inventory) on drop
+  onTangramDropMove: function (d) {
+    var x     = d3.event.sourceEvent.layerX,
+        y     = d3.event.sourceEvent.layerY,
+        mX    = _botanist.snapTangramTo(x - _dragOffX),
+        mY    = _botanist.snapTangramTo(y - _dragOffY),
+        trans = 'translate(' + mX  + ', ' + mY + ')',
+        trash = _botanist.trashPosition
+
+    d3.select('.br' + d.id)
+      .classed('dragging', false)
+      .attr('stroke-width', 0)
+      .attr('transform', trans)
+
+    // If over trash area
+    if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
+      $('.br' + d.id).remove();
+      $('.r' + d.id)
+        .css('opacity', 1)
+        .attr('draggable', 'true')
+      $('.trash').removeClass('active')
+    }
+
+    // Restore z-index to normal
+    $('.botanist-puzzle').css({zIndex: 'initial'})
+  },
+
+  // When piece is moved, snap to 10x10 grid
+  snapTangramTo: function (num) {
+    var thresh = 10
+    return Math.round(num / thresh) * thresh
   },
 
   checkPuzzleAnswer: function () {
@@ -1060,7 +1067,6 @@ var _botanist = {
     $botanist.setState(4)
   },
 
-
   // Reads the player's portfolio response answer from the textarea input
   getPortfolioResponseInput: function () {
     return $.trim($('.botanist-content textarea').val())
@@ -1090,10 +1096,13 @@ var _botanist = {
   clearPuzzleMode: function () {
     // Remove puzzle-mode class
     document.getElementById('botanist-area').classList.remove('puzzle-mode')
+    this.resetInventoryInterface()
+  },
 
-    // Hide and reset inventory to non-puzzle state
+  // Hide and reset inventory view to non-puzzle state
+  resetInventoryInterface: function () {
     $game.removeFlag('viewing-inventory')
-    $game.$input.hideInventory(function () {
+    $game.$input.closeInventory(function () {
       document.querySelector('#inventory .inventory-tangram').style.display = 'block'
       document.querySelector('#inventory .close-button').style.display = 'block'
       document.querySelector('#inventory .help').style.display = 'none'

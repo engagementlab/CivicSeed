@@ -423,7 +423,7 @@ var _resources = {
         playerLevel  = $game.$player.getLevel(),
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
-        isRevisit    = (answer && answer.result) ? true : false, // TODO: This is ???
+        isRevisit    = $game.checkFlag('viewing-inventory'),
         inPuzzleMode = $game.checkFlag('solving-puzzle'),
         resource     = _resources.data[index]
 
@@ -617,9 +617,7 @@ var _resources = {
 
     function _checkBotanistCallback () {
       // A callback function. If a resource was just collected, check to see if player shoud be automatically teleported to the botanist.
-      if (!inPuzzleMode) {
-        // TODO: Removed the check for !isRevisit because it does not actually differentiate
-        // between whether a resource is being reviewed from the NPC bubble or not
+      if (!inPuzzleMode || !isRevisit) {
         $game.$player.checkBotanistState()
       }
     }
