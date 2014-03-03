@@ -105,14 +105,11 @@ var $botanist = $game.$botanist = {
     var location = $game.$map.masterToLocal(71, 74)   // An arbitrary location by the Botanist
     $game.$player.beginMove(location.x, location.y)
 
-    // Decide what to show based on the player's current level
-    if (level > 4) {
-      // Player is in a different level (e.g. boss?) What are they doing here?
-      //they have beaten the INDIVIDUAL part of the game
-      //if they have beat level 4
-      //but comm. meter is <
-      //and comm. meter is >
-      //and final task is solved
+    // Behavior for if player has completed level 4
+    if (level === 4) {
+      // Display a generic end of level chat and then exit out. No further content from botanist.
+      // The game will continue only when the boss mode is unlocked.
+      _botanist.chat($botanist.dialog[4].instructions)
       return
     }
 
