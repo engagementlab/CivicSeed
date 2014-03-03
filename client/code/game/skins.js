@@ -1,14 +1,16 @@
 'use strict';
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    skins.js
+
+    - Skinventory
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var $skins = $game.$skins = {
 
   ready: false,
-
-  init: function () {
-  },
-
-  resetInit: function () {
-  },
 
   // Returns an array of skin names (sets, not special outfits)
   getSetsList: function () {

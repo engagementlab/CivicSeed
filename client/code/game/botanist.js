@@ -37,7 +37,6 @@ var $botanist = $game.$botanist = {
       $botanist.name    = _botanist.data.name
       $botanist.ready   = true
 
-      $botanist.setState($game.$player.botanistState);
       callback()
     });
   },
@@ -71,9 +70,8 @@ var $botanist = $game.$botanist = {
 
   // Sets the botanist state which determines what he shows
   setState: function (state) {
+    // The state of the botanist should be set at the beginning of the game by $game.init()
     _botanist.state = state
-    // Set state globally for player
-    $game.$player.botanistState = state
 
     // Save to database
     ss.rpc('game.player.updateGameInfo', {
@@ -87,7 +85,7 @@ var $botanist = $game.$botanist = {
   },
 
   getState: function () {
-    return $game.$player.botanistState
+    return _botanist.state
   },
 
   //determine what to show the player when they click on the botanist
@@ -120,7 +118,7 @@ var $botanist = $game.$botanist = {
     }
 
     // Determine interaction by looking at Botanist state
-    switch ($game.$player.botanistState) {
+    switch ($game.$botanist.getState()) {
       // 0 = Initial state. Player is beginning the current level.
       case 0:
         // Show instructions.
@@ -184,7 +182,7 @@ var $botanist = $game.$botanist = {
       $game.removeFlag('botanist-chatting')  // Just in case it was accidentally not removed
 
       //if they just beat a level, then show progreess
-      if ($game.$player.botanistState === 0 && $game.$player.currentLevel < 4) {
+      if ($game.$botanist.getState() === 0 && $game.$player.currentLevel < 4) {
         $game.$input.highlightHUDButton('.hud-progress')
         $game.showProgress();
       }
@@ -210,7 +208,7 @@ var $botanist = $game.$botanist = {
 
   //when dragging starts from inventory must bind drop on puzzle area
   // Called from player.js when an item is added to the inventory.
-  onTangramDragStart: function (e) {
+  onTangramDragFromInventoryStart: function (e) {
     var $puzzleEl = $('.botanist-puzzle')
 
     $puzzleEl
@@ -676,8 +674,8 @@ var _botanist = {
   say: function (message) {
     var el        = document.getElementById('botanist-area')
 
-    el.querySelector('.speaker').innerText = $botanist.name
-    el.querySelector('.message').innerText = message
+    el.querySelector('.speaker').textContent = $botanist.name
+    el.querySelector('.message').textContent = message
   },
 
   // Display the puzzle page.

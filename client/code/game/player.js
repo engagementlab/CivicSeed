@@ -167,7 +167,6 @@ var $player = $game.$player = {
     $game.$player.game= null;
     $game.$player.instanceName= null;
     $game.$player.currentLevel= null;
-    $game.$player.botanistState= null;
     $game.$player.seenRobot= null;
     $game.$player.seriesOfMoves= null;
     $game.$player.currentMove= 0;
@@ -428,13 +427,16 @@ var $player = $game.$player = {
   checkBotanistState: function () {
 
     // Prevent check from occurring if Botanist state is not at 2 or 3 (resource collecting mode)
-    if ($game.$player.botanistState < 2) return false
+    if ($game.$botanist.getState() < 2) return false
 
     // Prevent check from occurring if player has already been teleported to the Botanist once this level and game session.
     if ($game.checkFlag('botanist-teleported') === true) return false
 
     // Prevent check from occurring of the player was inside the inventory when this function was called
     if ($game.checkFlag('viewing-inventory') === true) return false
+
+    // Prevent check from occurring if player is a Master Gardener
+    if ($player.getLevel() > 4) return false
 
     // Get an array containing all the correct tangram pieces for this level, and an object containing all the pieces (resources) player is currently holding
     var pieces    = $game.$botanist.tangram[$game.$player.currentLevel].answer,
@@ -461,7 +463,7 @@ var $player = $game.$player = {
     // Send information to backend
     ss.rpc('game.player.updateGameInfo', {
       id:            $game.$player.id,
-      botanistState: $game.$player.botanistState
+      botanistState: $game.$botanist.getState()
     })
 
     // If player is holding ALL the pieces obtainable this level, beam the player directly to the Botanist so that they don't keep wasting time.
@@ -542,7 +544,7 @@ var $player = $game.$player = {
     //save new information to DB
     ss.rpc('game.player.updateGameInfo', {
       id:            $game.$player.id,
-      botanistState: $game.$player.botanistState,
+      botanistState: $game.$botanist.getState(),
       seenRobot:     $game.$player.seenRobot,
       pledges:       _pledges,
       currentLevel:  $game.$player.currentLevel
@@ -1102,7 +1104,7 @@ var _player = {
     }
 
     // If the player has gotten the riddle, put the tangram in the inventory + bind actions
-    if ($player.botanistState > 1) {
+    if ($game.$botanist.getState() > 1) {
       $player.putTangramPuzzleInInventory();
     }
   },
@@ -1130,7 +1132,7 @@ var _player = {
       .bind('click', function () {
         $game.$resources.examineResource(data.npc);
       })
-      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragStart);
+      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart);
   },
 
   // Save a new resource to the database
@@ -1192,10 +1194,11 @@ function _setPlayerInformation(info) {
   $game.$player.id = info.id;
   $game.$player.firstName = info.firstName;
   $game.$player.currentLevel = info.game.currentLevel;
-  $game.$player.botanistState = info.game.botanistState;
   $game.$player.instanceName = info.game.instanceName;
   $game.$player.seenRobot = info.game.seenRobot;
   $game.$player.isMuted = info.game.isMuted
+
+  $game.$botanist.setState(info.game.botanistState)
 
   if (info.game.firstTime === true) {
     $game.setFlag('first-time')

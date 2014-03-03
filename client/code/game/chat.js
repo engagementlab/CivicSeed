@@ -58,10 +58,10 @@ var $chat = $game.$chat = {
     }
 
     // Add bubble contents
-    bubbleEl.innerText = name + ': '+ message
+    bubbleEl.textContent = name + ': '+ message
 
     // Set some appearance vars
-    var displayTime = Math.min(bubbleEl.innerText.length * 200 + 1000, 11500)
+    var displayTime = Math.min(bubbleEl.textContent.length * 200 + 1000, 11500)
 
     // Setup a timer to hide the message after some time
     _chat.displayTimer = setTimeout(function () {

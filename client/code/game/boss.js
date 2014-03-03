@@ -187,7 +187,7 @@ var _boss = {
           el = overlay.querySelector('.boss-resumes')
           var resumeContent = el.querySelector('.content-box')
 
-          speakerEl.innerText = speaker
+          speakerEl.textContent = speaker
           messageEl.innerHTML = 'To find the charging modules, you will need to use my <strong class="color-darkgreen">Special Seeds</strong>. But... the seeds aren’t finished yet. You’ll need to add the last ingredient. Please read what your fellow players have said and provide feedback. This will help them improve their civic resumes. Review them all to receive your <strong class="color-darkgreen">Special Seeds!</strong>'
 
           resumes = _boss.chooseResumeResponses(res)
@@ -204,8 +204,10 @@ var _boss = {
             html += '<div class="resume-response">';
             html += '<p class="resume-question">Q: ' + question + '</p>';
             html += '<p class="resume-answer"><span>A random peer said:</span> ' + resumes[i].answer + '</p>';
-            html += '<p class="resume-response-prompt">Do you have any feedback for his or her response? Enter it below.</p>'
+            html += '<div class="resume-response-prompt">'
+            html += '<p>Do you have any feedback for his or her response? Enter it below.</p>'
             html += '<textarea class="resume-feedback" placeholder="Type your feedback here..." maxlength="5000"></textarea>'
+            html += '</div>'
             html += '</div>'
           }
           resumeContent.innerHTML += html
@@ -218,8 +220,8 @@ var _boss = {
         break
       // [SECTION 02] INSTRUCTIONS.
       case 2:
-        speakerEl.innerText = speaker
-        messageEl.innerText = 'Thanks! You got 20 special seeds.'
+        speakerEl.textContent = speaker
+        messageEl.textContent = 'Thanks! You got 20 special seeds.'
         $('.boss-instructions').show()
         _boss.setButton(5, 'Ready?', function () {
           _beginGame();
@@ -227,16 +229,16 @@ var _boss = {
         break
       // [SECTION 03] FAIL SCREEN.
       case 3:
-        speakerEl.innerText = speaker
-        messageEl.innerText = 'You failed to defeat the robot. Why don’t you try again?'
+        speakerEl.textContent = speaker
+        messageEl.textContent = 'You failed to defeat the robot. Why don’t you try again?'
         _boss.setButton(2, 'Play again')
         break
       // [SECTION 04] WIN SCREEN.
       case 4:
         ss.rpc('game.player.unlockProfile', $game.$player.id, function (err) {
           if (!err) {
-            speakerEl.innerText = speaker
-            messageEl.innerText = 'Congratulations, you defeated the robot!'
+            speakerEl.textContent = speaker
+            messageEl.textContent = 'Congratulations, you defeated the robot!'
 
             el = overlay.querySelector('.boss-win')
             el.style.display = 'block'
@@ -264,7 +266,7 @@ var _boss = {
 
     button = button.parentNode.replaceChild(clone, button)
     if (display) {
-      clone.innerText = display
+      clone.textContent = display
     }
     clone.addEventListener('click', function _click () {
       _boss.addContent(section)

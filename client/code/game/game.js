@@ -147,7 +147,6 @@ var $game = module.exports = {
     $game.$render.resetInit();
     $game.$npc.resetInit();
     $game.$resources.resetInit();
-    $game.$skins.resetInit();
     $game.$player.resetInit();
     $game.$others.resetInit();
     $game.$robot.resetInit();
@@ -673,7 +672,7 @@ var _game = {
             $game.alert('Welcome to Civic Seed!')
             $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
           }
-          else if ($game.$player.botanistState === 0) {
+          else if ($game.$botanist.getState() === 0) {
             $game.$botanist.nudgePlayer()
           }
         });

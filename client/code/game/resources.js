@@ -500,7 +500,8 @@ var _resources = {
         $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
           e.stopImmediatePropagation()
           e.preventDefault()
-          if (_resources.validateTagline(resource) !== true) return
+          // Basically, do the same thing as the save button in this case.
+          $('#resource-area .save-button').trigger('click')
         })
 
         if (resource.questionType === 'open') {
