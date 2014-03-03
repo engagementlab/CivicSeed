@@ -22,7 +22,8 @@ var $chat = $game.$chat = {
 
   message: function (data) {
     var gameboard = document.getElementById('gameboard'),
-        bubble    = document.getElementById('chat-' + data.id),
+        bubbleEl  = document.getElementById('chat-' + data.id),
+        pointerEl = document.getElementById('pointer-' + data.id),
         name      = 'me',
         message   = data.message,
         other     = false
@@ -43,17 +44,24 @@ var $chat = $game.$chat = {
       _chat.flag(true)
     }
 
-    // Set some appearance vars
-    var len         = message.length + name.length + 2,
-        displayTime = Math.min(len * 150 + 1000, 11500)
+    // Re-create the speech bubble & pointer, if it's not already present
+    if (!bubbleEl) {
+      bubbleEl = document.createElement('div')
+      bubbleEl.classList.add('player-chat')
+      bubbleEl.id = 'chat-' + data.id
+      gameboard.appendChild(bubbleEl)
 
-    // Re-use the existing element or create a new one, if not present
-    if (bubble) {
-      bubble.innerText = name + ': '+ message
+      pointerEl = document.createElement('div')
+      pointerEl.classList.add('player-chat-pointer')
+      pointerEl.id = 'chat-pointer-' + data.id
+      gameboard.appendChild(pointerEl)
     }
-    else {
-      $(gameboard).append('<div class="player-chat" id="chat-' + data.id + '">' + name +': '+ message + '</div>')
-    }
+
+    // Add bubble contents
+    bubbleEl.innerText = name + ': '+ message
+
+    // Set some appearance vars
+    var displayTime = Math.min(bubbleEl.innerText.length * 200 + 1000, 11500)
 
     // Setup a timer to hide the message after some time
     _chat.displayTimer = setTimeout(function () {
@@ -74,11 +82,15 @@ var $chat = $game.$chat = {
   hideChat: function (data) {
     // If data is not passed in, assume it's the chat for current player
     if (!data) data = { id: $game.$player.id }
-    var el = document.getElementById('chat-' + data.id)
+    var bubbleEl  = document.getElementById('chat-' + data.id),
+        pointerEl = document.getElementById('chat-pointer-' + data.id)
     clearTimeout(_chat.displayTimer)
-    $(el).fadeOut('fast', function () {
+    $(bubbleEl).fadeOut('fast', function () {
       $(this).remove()
       _chat.flag(false)
+    })
+    $(pointerEl).fadeOut('fast', function () {
+      $(this).remove()
     })
   }
 }
@@ -122,25 +134,24 @@ var _chat = {
 
   // Place the chat centered above player, or if too big then left/right align with screen edge
   place: function (data) {
-    var el       = document.getElementById('chat-' + data.id),
-        sz       = el.offsetWidth,
-        half     = sz / 2,
-        placeX   = null,
-        placeY   = null,
-        position = null,
-        adjustY  = 3,
-        other    = false
+    var bubbleEl  = document.getElementById('chat-' + data.id),
+        pointerEl = document.getElementById('chat-pointer-' + data.id),
+        sz        = bubbleEl.offsetWidth,
+        half      = sz / 2,
+        placeX    = null,
+        placeY    = null,
+        placePointerX = null,
+        placePointerY = null,
+        position  = null,
+        adjustY   = 3,
+        adjustPointerX = 5,
+        other     = false
 
     if (data.id !== $game.$player.id) other = true
 
-    if (other) {
-      position = data.position;
-    }
-    else {
-      position = $game.$player.getRenderPosition()
-    }
+    position = (other) ? data.position : $game.$player.getRenderPosition()
 
-    if (position.x > 470 ) {
+    if (position.x > 470) {
       var rem = 940 - position.x;
       if (half > rem) {
         placeX = position.x - half - (half - rem);
@@ -148,6 +159,7 @@ var _chat = {
       else {
         placeX = position.x - half + 16;
       }
+      pointerEl.classList.add('flipped-horizontal')
     }
     else {
       if (half > position.x) {
@@ -158,21 +170,30 @@ var _chat = {
       }
     }
 
+    placePointerX = position.x + ($game.TILE_SIZE * 1 - adjustPointerX)
+
     // Vertical position of chat bubble - based on game's tile size.
     // To add further adjustment, edit the adjustY variable.
     // adjustY - positive integers cause it to move up, negative moves down.
     if (position.y <= 1 * $game.TILE_SIZE) {
       // Prevent bubble from appearing above the gameboard if
       // player is standing within the top two rows.
-      placeY = $game.TILE_SIZE - adjustY
+      placeY        = ($game.TILE_SIZE * 2) - adjustY
+      placePointerY = ($game.TILE_SIZE * 2) - adjustY - 12
+      pointerEl.classList.add('flipped-vertical')
     }
     else {
-      placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
+      placeY        = position.y - ($game.TILE_SIZE * 2 + adjustY)
+      placePointerY = position.y - ($game.TILE_SIZE * 1 + adjustY)
     }
 
-    $(el).css({
-      'top':   placeY,
-      'left':  placeX
+    $(bubbleEl).css({
+      'top':  placeY,
+      'left': placeX
+    })
+    $(pointerEl).css({
+      'top':  placePointerY,
+      'left': placePointerX
     })
   }
 }

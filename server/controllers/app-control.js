@@ -12,7 +12,8 @@ var self = module.exports = {
 			code: [
 				'libs/jquery.min.js',
 				'libs/davis-0.9.6.min.js',
-				'libs/underscore.js',
+				'libs/underscore-min.js',
+				'libs/backbone-min.js',
 				'libs/bootstrap.min.js',
 				'libs/d3.min.js',
 				'libs/howler.min.js',

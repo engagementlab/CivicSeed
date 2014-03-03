@@ -171,17 +171,22 @@ canvas
 
 #botanist-area
 	z-index 9990
+	// A transition animation occurs whenever this area changes in height
+	-webkit-transition height .3s
+	transition height .3s
 	&.puzzle-mode
 		height 390px
-		.tangram-area
+		.botanist-puzzle
 			top 20px
 	.dialog
 		// See also .dialog at .resourceArea
 		padding-right 50px
-	.seed-chips
-		margin-top 30px
-		text-align center
-	.tangram-area
+	.botanist-content
+		.seed-chips, .minimap
+			margin-top 30px
+			margin-bottom 20px
+			text-align center
+	.botanist-puzzle
 		position absolute
 		top 40px
 		left 0
@@ -204,6 +209,8 @@ canvas
 			position absolute
 			top 170px
 			right -6px
+			cursor pointer
+			z-index 40000
 			&.active
 				opacity 0.5
 	textarea
@@ -824,17 +831,21 @@ canvas
 	background rgba(0,0,0,0.75)
 	color #eee
 	border-radius 10px
-	&:after   // Speech bubble pointer. Assumes that bubble is positioned in the center above the player.
-		content ''
-		position relative
-		display block
-		width 0
-		border-width 12px 10px 0 0
-		border-style solid
-		border-color rgba(0,0,0,0.75) transparent
-		margin 0 auto
-		bottom -5px
-		left 16px
+.player-chat-pointer
+	content ''
+	position absolute
+	z-index 100
+	width 0
+	border-width 12px 10px 0 0
+	border-style solid
+	border-color rgba(0,0,0,0.75) transparent
+	&.flipped-horizontal
+		border-width 12px 0 0 10px
+		margin-left -32px
+		&.flipped-vertical
+			border-width 0 0 12px 10px
+	&.flipped-vertical
+		border-width 0 10px 12px 0
 
 #speech-bubble
 	display none
@@ -965,9 +976,6 @@ p.townSite
 			background $csGreen
 			padding 10px
 			color white
-
-.miniExample
-	text-align center
 
 #game-log
 	width 100%

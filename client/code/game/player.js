@@ -55,7 +55,6 @@ var $player = $game.$player = {
   currentMove: 0,
   currentStep: 0,
   isMoving: false,
-  inventoryShowing: false,
   seedventoryShowing: false,
   seedPlanting: false,
   npcOnDeck: false,
@@ -174,7 +173,6 @@ var $player = $game.$player = {
     $game.$player.currentMove= 0;
     $game.$player.currentStep= 0;
     $game.$player.isMoving= false;
-    $game.$player.inventoryShowing= false;
     $game.$player.seedventoryShowing= false;
     $game.$player.seedPlanting= false;
     $game.$player.npcOnDeck= false;
@@ -212,7 +210,7 @@ var $player = $game.$player = {
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
   beginMove: function (x, y) {
     // Clear HUD
-    if ($game.$player.inventoryShowing) $game.$input.closeInventory()
+    if ($game.checkFlag('visible-inventory')) $game.$input.closeInventory()
 
     var loc    = $player.getLocalPosition(),
         master = {x: x, y: y}
@@ -429,7 +427,7 @@ var $player = $game.$player = {
   // to solve the puzzle. If so, set Botanist state to 3 (ready to solve).
   checkBotanistState: function () {
 
-    // Prevent check from occurring if Botanist state is not at 2 (resource collecting mode)
+    // Prevent check from occurring if Botanist state is not at 2 or 3 (resource collecting mode)
     if ($game.$player.botanistState < 2) return false
 
     // Prevent check from occurring if player has already been teleported to the Botanist once this level and game session.
@@ -476,7 +474,7 @@ var $player = $game.$player = {
       $game.setFlag('botanist-teleported')
       setTimeout(function () {
         $player.beam({x: 70, y: 74})
-      }, 2500)
+      }, 1500)
     }
   },
 
@@ -491,14 +489,26 @@ var $player = $game.$player = {
   },
 
   // Put the Botanist's tangram puzzle in the inventory
-  tangramToInventory: function () {
-    var el        = document.getElementById('inventory').querySelector('.inventory-tangram'),
+  putTangramPuzzleInInventory: function () {
+    var el        = document.querySelector('#inventory .inventory-tangram'),
         className = 'puzzle' + $player.currentLevel,
-        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png'
+        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png',
+        imgEl     = document.createElement('img')
 
-    el.innerHTML = '<img src="' + imgPath + '" class="inventory-item ' + className + '" draggable="false" data-placement="top" data-original-title="Click to view tangram puzzle">>'
+    // Format the puzzle item
+    imgEl.src = imgPath
+    imgEl.classList.add('inventory-item')
+    imgEl.classList.add(className)
+    imgEl.setAttribute('draggable', 'false')
+    imgEl.setAttribute('data-placement', 'top')
+    imgEl.setAttribute('data-title', 'Click to review the botanist’s puzzle')
 
-    $('.' + className).bind('click', $game.$botanist.inventoryShowRiddle)
+    // Clear any previous puzzles, then add the new one to DOM
+    while (el.firstChild) el.removeChild(el.firstChild)
+    el.appendChild(imgEl)
+
+    // Bind actions
+    $('.' + className).bind('click', $game.$botanist.showPuzzlePageFromInventory)
     $('.' + className).bind('mouseenter', function () {
       $(this).tooltip('show')
     })
@@ -509,6 +519,15 @@ var $player = $game.$player = {
     _inventory = [];
     $('.inventory-item').remove();
     $game.setBadgeCount('.hud-inventory', 0)
+
+    // Including the puzzle
+    document.querySelector('#inventory .inventory-tangram').innerHTML = ''
+
+    // Save to server
+    ss.rpc('game.player.updateGameInfo', {
+      id:        $game.$player.id,
+      inventory: []
+    })
   },
 
   //reset items and prepare other entities for fresh level
@@ -526,7 +545,6 @@ var $player = $game.$player = {
       botanistState: $game.$player.botanistState,
       seenRobot:     $game.$player.seenRobot,
       pledges:       _pledges,
-      inventory:     [],
       currentLevel:  $game.$player.currentLevel
     })
 
@@ -545,9 +563,6 @@ var $player = $game.$player = {
         level: $game.$player.currentLevel,
         name:  $game.$player.firstName
       })
-
-      // Begin the next level introduction from the Botanist
-      $game.$botanist.show()
     }
     else if ($game.bossModeUnlocked) {
       $game.toBossLevel();
@@ -819,12 +834,15 @@ var $player = $game.$player = {
         $game.$player.displayNpcComments();
       }, 1000);
 
+      // Publish beam status
       ss.rpc('game.player.beam', {
         id: $game.$player.id,
         x: location.x,
         y: location.y
       })
-      $game.$map.updatePlayer($game.$player.id, location.x, location.y)
+
+      // Update player position on server and minimap
+      _player.savePosition(location)
     })
   },
 
@@ -1067,7 +1085,7 @@ var _player = {
   // Make the bounding box for each possible resource in inventory
   createInventoryBoxes: function () {
     var el = document.getElementById('inventory').querySelector('.inventory-boxes')
-    el.innerHTML = ''
+    while (el.firstChild) el.removeChild(el.firstChild)
     for (var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i++) {
       el.innerHTML += '<div class="inventory-box"></div>'
     }
@@ -1085,7 +1103,7 @@ var _player = {
 
     // If the player has gotten the riddle, put the tangram in the inventory + bind actions
     if ($player.botanistState > 1) {
-      $player.tangramToInventory();
+      $player.putTangramPuzzleInInventory();
     }
   },
 
@@ -1112,7 +1130,7 @@ var _player = {
       .bind('click', function () {
         $game.$resources.examineResource(data.npc);
       })
-      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.dragStart);
+      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragStart);
   },
 
   // Save a new resource to the database
@@ -1126,6 +1144,20 @@ var _player = {
     })
   },
 
+  // Saves player location
+  savePosition: function (position) {
+    // Location is an object with x and y properties
+    // Update on server
+    ss.rpc('game.player.savePosition', {
+      id:       $game.$player.id,
+      position: {
+                  x: position.x,
+                  y: position.y
+                }
+    })
+    // Update on minimap
+    $game.$map.updatePlayer($game.$player.id, position.x, position.y)
+  }
 }
 
 //setup all the dom elements for reuse
@@ -1415,15 +1447,8 @@ function _sendMoveInfo(moves) {
 
 //when a move is done, decide waht to do next (if it is a transition) and save position to DB
 function _endMove() {
-  var posInfo = {
-    id: $game.$player.id,
-    position: {
-      x: _info.x,
-      y: _info.y
-    }
-  };
-  ss.rpc('game.player.savePosition', posInfo);
-  $game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+
+  _player.savePosition({x: _info.x, y: _info.y})
 
   //put the character back to normal position
   _info.offX = 0;

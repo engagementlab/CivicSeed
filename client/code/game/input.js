@@ -1,10 +1,21 @@
 'use strict';
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    input.js
+
+    - Handles on-screen buttons, HUD elements, generic gameboard
+      interactions, keypresses, and codes/effects triggered in chat.
+    - Also handles various UI interactions, like show / hide / toggle of
+      overlays.
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var $input = $game.$input = module.exports = {
 
   init: function () {
 
-    // ************* GENERIC GAMEBOARD INTERACTION *************
+    /* * * * * * * *       GENERIC GAMEBOARD INTERACTION       * * * * * * * */
 
     //change cursor on mouse move
     $BODY.on('mousemove', '.gameboard', function (e) {
@@ -34,7 +45,7 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    // ************* HUD BUTTONS *************
+    /* * * * * * * *                HUD BUTTONS                * * * * * * * */
 
     // Toggle display of Inventory
     $BODY.on('click', '.hud-inventory, #inventory button', function () {
@@ -73,29 +84,29 @@ var $input = $game.$input = module.exports = {
 
     // Display a tooltip when player hovers over HUD controls
     $BODY.on('mouseenter', '.hud-button a', function () {
-      var info = $(this).attr('title')
       $(this).tooltip('show')
     })
 
     // When player clicks a highlighted HUD button, remove the highlight
     $BODY.on('click', '.hud-button-highlight', function () {
-      $game.unhighlightUI(this)
+      $input.unhighlightHUDButton(this)
     })
 
-    // ************* SEEDVENTORY OVERLAYS *************
+    /* * * * * * * *      SEEDVENTORY WINDOW INTERACTIONS      * * * * * * * */
 
-    //regular seed select
-    $BODY.on('click', '.regular-button', function () {
-      // Not particularly scalable but works so far for 2 seeds
-      $('.draw-button').removeClass('selected')
+    // When a seed button is clicked, clear all seed selected (highlight) classes
+    $BODY.on('click', '#seedventory .seed', function () {
+      $('#seedventory .seed').removeClass('selected')
+    })
+
+    // Select regular seed
+    $BODY.on('click', '#seedventory .regular-button', function () {
       $('.regular-button').addClass('selected')
-
-      $game.$player.startSeeding('regular');
+      $game.$player.startSeeding('regular')
     });
 
-    //draw seed select
-    $BODY.on('click', '.draw-button', function () {
-      $('.regular-button').removeClass('selected')
+    // Select draw seed
+    $BODY.on('click', '#seedventory .draw-button', function () {
       $('.draw-button').addClass('selected')
 
       $game.$player.startSeeding('draw');
@@ -113,7 +124,7 @@ var $input = $game.$input = module.exports = {
       $input.endSeedMode()
     })
 
-    // ************* PROGRESS WINDOW INTERACTIONS *************
+    /* * * * * * * *       PROGRESS WINDOW INTERACTIONS        * * * * * * * */
 
     $BODY.on('click', '.tabbable li a', function (e) {
       e.preventDefault();
@@ -131,14 +142,15 @@ var $input = $game.$input = module.exports = {
     });
 
     // Close Progress window
-    $BODY.on('click', '#progress-area a i', function (e) {
+    $BODY.on('click', '#progress-area .close-overlay', function (e) {
       e.preventDefault()
       $input.closeProgress()
       return false
-    });
+    })
 
-    // ************* SKINVENTORY WINDOW INTERACTIONS *************
+    /* * * * * * * *      SKINVENTORY WINDOW INTERACTIONS      * * * * * * * */
 
+    // Click to equip a new skin part
     $BODY.on('click', '#skinventory .outer', function () {
       if (!$(this).hasClass('locked')) {
         var part = $(this).parent().data('part')
@@ -153,13 +165,14 @@ var $input = $game.$input = module.exports = {
       }
     })
 
+    // Close skinventory
     $BODY.on('click', '#skinventory .close-button', function (e) {
       e.preventDefault()
       $input.closeSkinventory()
       return false
-    });
+    })
 
-    // ************* HELP WINDOW OVERLAY *************
+    /* * * * * * * *            HELP WINDOW OVERLAY            * * * * * * * */
 
     // Close Help window
     $BODY.on('click', '#help-area a i, #help-area .close-button', function (e) {
@@ -168,10 +181,15 @@ var $input = $game.$input = module.exports = {
       return false
     })
 
-    // ************* RESOURCE WINDOW INTERACTIONS *************
+    /* * * * * * * *        RESOURCE WINDOW INTERACTIONS       * * * * * * * *
+
+    NOTE:   Interactions bound to some buttons in the resource overlay are
+            programatically bound when needed in resources.js.
+
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
     // Close the resource area
-    $BODY.on('click', '#resource-area a.close-overlay', function (e) {
+    $BODY.on('click', '#resource-area .close-overlay', function (e) {
       e.preventDefault()
       $game.$resources.hideResource()
       return false
@@ -220,40 +238,21 @@ var $input = $game.$input = module.exports = {
       }
     });
 
-    // ************* BOTANIST OVERLAY INTERACTIONS *************
+    /* * * * * * * *       BOTANIST OVERLAY INTERACTIONS       * * * * * * * *
 
-    //close botanist window
-    $BODY.on('click', '#botanist-area a i, #botanist-area .close-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.hideResource();
-      return false;
-    });
+    NOTE:   Interactions bound to buttons in the botanist overlay are
+            programatically bound when needed in botanist.js.
 
-    //advance to next content in botanist area
-    $BODY.on('click', '#botanist-area .next-button', function (e) {
-      $game.$botanist.nextSlide();
-    });
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    //previous content in botanist area
-    $BODY.on('click', '#botanist-area .back-button', function (e) {
-      $game.$botanist.previousSlide();
-    });
+    // Close botanist window
+    $BODY.on('click', '#botanist-area .close-overlay', function (e) {
+      e.preventDefault()
+      $game.$botanist.hideOverlay()
+      return false
+    })
 
-    //submit tangram answer in botanist area
-    $BODY.on('click', '#botanist-area .answer-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.submitAnswer();
-      return false;
-    });
-
-    //clear all the pieces in botanist area off tangram board
-    $BODY.on('click', '#botanist-area .clear-button', function (e) {
-      e.preventDefault();
-      $game.$botanist.clearBoard();
-      return false;
-    });
-
-    // ************* OTHER GAMEBOARD HUD ELEMENTS *************
+    /* * * * * * * *        OTHER GAMEBOARD HUD ELEMENTS       * * * * * * * */
 
     $BODY.on('click', '#speech-bubble, #inventory, #botanist-area', function (e) {
       // Prevent clicking on interface elements from interacting with gameboard below
@@ -309,7 +308,8 @@ var $input = $game.$input = module.exports = {
     //  $game.resume();
     // });
 
-    // Keybindings for actions
+    /* * * * * * * *                KEYBINDINGS                * * * * * * * */
+
     $BODY.keydown(function (e) {
       // If escape is pressed, cancels any current action and returns to default gameboard view
       if (e.which === 27) {
@@ -397,7 +397,7 @@ var $input = $game.$input = module.exports = {
           $input.toggleMute()
           break
         case 72:  // 'h'
-        case 191: // 'question mark'
+        case 191: // 'question mark' (?)
           // Help
           $input.toggleHelp()
           break
@@ -504,6 +504,24 @@ var $input = $game.$input = module.exports = {
     })
   },
 
+  // Shows the inventory overlay only.
+  // Used to restore inventory overlay after reviewing an inventory item / resource.
+  showInventory: function (callback) {
+    $game.setFlag('visible-inventory')
+    $('#inventory').slideDown(300, function () {
+      if (typeof callback === 'function') callback()
+    })
+  },
+
+  // Only visually hides the inventory window.
+  // Used to temporarily hide the inventory with the intention of re-opening it.
+  hideInventory: function (callback) {
+    $('#inventory').slideUp(300, function () {
+      $game.removeFlag('visible-inventory')
+      if (typeof callback === 'function') callback()
+    })
+  },
+
   toggleInventory: function () {
     if ($('#inventory').is(':visible')) {
       $input.closeInventory()
@@ -513,34 +531,34 @@ var $input = $game.$input = module.exports = {
     }
   },
 
+  // The following extends showInventory() and hideInventory() respectively for actual inventory interaction.
   openInventory: function (callback) {
     $input.resetUI()
-    $game.$player.inventoryShowing = true
 
     $('.hud-inventory').addClass('hud-button-active')
-    if ($game.$player.getInventory().length > 0 && $game.checkFlag('viewing-inventory') === false) {
-      $game.alert('Click on a piece to review again')
-    }
-    $('#inventory').slideDown(300, callback)
+    this.showInventory(function () {
+      if ($game.$player.getInventory().length > 0) {
+        $game.alert('Click on a piece to review again')
+      }
+      if (typeof callback === 'function') callback()
+    })
   },
 
   closeInventory: function (callback) {
-    if ($game.checkFlag('solving-puzzle') === true) return false
-
-    $('#inventory').slideUp(300, function () {
-      $game.$player.inventoryShowing = false
+    this.hideInventory(function () {
       $('.hud-inventory').removeClass('hud-button-active')
+      $game.removeFlag('viewing-inventory')
       if (typeof callback === 'function') callback()
     })
   },
 
   toggleSkinventory: function () {
-    return ($game.checkFlag('viewing-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
+    return ($game.checkFlag('visible-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
   },
 
   openSkinventory: function () {
     $input.resetUI()
-    $game.setFlag('viewing-skinventory')
+    $game.setFlag('visible-skinventory')
     $('.hud-skinventory').addClass('hud-button-active')
     $('#skinventory').show()
 
@@ -549,7 +567,7 @@ var $input = $game.$input = module.exports = {
   },
 
   closeSkinventory: function () {
-    $game.removeFlag('viewing-skinventory')
+    $game.removeFlag('visible-skinventory')
     $('.hud-skinventory').removeClass('hud-button-active')
     $('#skinventory').hide()
   },
@@ -573,35 +591,35 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleProgress: function () {
-    return ($game.checkFlag('viewing-progress') === true) ? $input.closeProgress() : $input.openProgress()
+    return ($game.checkFlag('visible-progress') === true) ? $input.closeProgress() : $input.openProgress()
   },
 
   openProgress: function () {
     $input.resetUI()
-    $game.setFlag('viewing-progress')
+    $game.setFlag('visible-progress')
     $('.hud-progress').addClass('hud-button-active')
     $('#progress-area').show()
   },
 
   closeProgress: function () {
-    $game.removeFlag('viewing-progress')
+    $game.removeFlag('visible-progress')
     $('.hud-progress').removeClass('hud-button-active')
     $('#progress-area').hide()
   },
 
   toggleHelp: function () {
-    return ($game.checkFlag('viewing-help') === true) ? $input.closeHelp() : $input.openHelp()
+    return ($game.checkFlag('visible-help') === true) ? $input.closeHelp() : $input.openHelp()
   },
 
   openHelp: function () {
     $input.resetUI()
-    $game.setFlag('viewing-help')
+    $game.setFlag('visible-help')
     $('.hud-help').addClass('hud-button-active')
     $('#help-area').show()
   },
 
   closeHelp: function () {
-    $game.removeFlag('viewing-help')
+    $game.removeFlag('visible-help')
     $('.hud-help').removeClass('hud-button-active')
     $('#help-area').hide()
   },
@@ -611,11 +629,22 @@ var $input = $game.$input = module.exports = {
   },
 
   muteAudio: function () {
-    $('.hud-mute i').removeClass('fa fa-volume-up').addClass('fa fa-volume-off')
+    $('.hud-mute .fa').removeClass('fa-volume-up').addClass('fa-volume-off')
   },
 
   unmuteAudio: function () {
-    $('.hud-mute i').removeClass('fa fa-volume-off').addClass('fa fa-volume-up')
+    $('.hud-mute .fa').removeClass('fa-volume-off').addClass('fa-volume-up')
+  },
+
+  // Add a highlight to a HUD button
+  highlightHUDButton: function (target) {
+    $('#hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
+    $(target).addClass('hud-button-highlight')
+  },
+
+  // Remove a highlight to a HUD button
+  unhighlightHUDButton: function (target) {
+    $(target).removeClass('hud-button-highlight')
   },
 
   // Clears UI and sets everything into the most defaultest mode we can
@@ -651,14 +680,15 @@ var _input = {
     return (
       !$game.checkFlag('in-transit') &&
       !$game.$player.isMoving &&
-      !$game.$resources.isShowing &&
-      !$game.checkFlag('viewing-progress') &&
       !$game.$player.seedventoryShowing &&
       $game.running &&
-      !$game.$botanist.isChat &&
-      !$game.checkFlag('viewing-help') &&
-      !$game.$boss.isShowing &&
-      !$game.checkFlag('viewing-skinventory')
+      !$game.checkFlag('botanist-chatting') &&
+      !$game.checkFlag('visible-skinventory') &&
+      !$game.checkFlag('visible-help') &&
+      !$game.checkFlag('visible-progress') &&
+      !$game.checkFlag('visible-resource-overlay') &&
+      !$game.checkFlag('visible-botanist-overlay') &&
+      !$game.checkFlag('visible-boss-overlay')
     ) ? true : false
   },
 
@@ -752,9 +782,6 @@ var _input = {
         $game.bossModeUnlocked = true
         $game.$player.currentLevel = 4
         $game.toBossLevel()
-        //$game.$boss.init()
-        // Reinitialize map.
-        //$game.$map.firstStart()
         break
       default:
         return false

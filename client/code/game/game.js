@@ -48,7 +48,7 @@ var _stepNumber = 0,
 // PUBLIC EXPORTS
 var $game = module.exports = {
 
-  //GLOBAL GAME CONSTANTS
+  // GLOBAL GAME CONSTANTS
   VIEWPORT_WIDTH: 30,
   VIEWPORT_HEIGHT: 15,
   TOTAL_WIDTH: 142,
@@ -57,7 +57,7 @@ var $game = module.exports = {
   STEP_PIXELS: 4,
   PIXEL_RATIO: 1,
 
-  //GLOBAL GAME VARS
+  // GLOBAL GAME VARS
   currentTiles: [],
   running: false,
   ready: false,
@@ -260,7 +260,8 @@ var $game = module.exports = {
   //the game loop, if it is running, call all the updates and render
   tick: function () {
     if ($game.running) {
-      if ($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
+      // if ($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
+      if (!$game.bossModeUnlocked) {
         $game.$others.update();
         $game.$npc.update();
         $game.$botanist.update();
@@ -376,15 +377,6 @@ var $game = module.exports = {
 
   debug: function (message) {
     console.error('CIVIC SEED DEBUG MESSAGE: ' + message)
-  },
-
-  highlightUI: function (target) {
-    $('.hud .hud-button').removeClass('hud-button-highlight') // Removes all previous HUD highlights
-    $(target).addClass('hud-button-highlight')
-  },
-
-  unhighlightUI: function (target) {
-    $(target).removeClass('hud-button-highlight')
   },
 
   getBadgeCount: function (target) {
@@ -508,6 +500,10 @@ var $game = module.exports = {
     else {
       _game.flags = []
     }
+  },
+
+  debugOutputFlags: function () {
+    console.log('All currently set game flags: ' + _game.flags)
   }
 
 };

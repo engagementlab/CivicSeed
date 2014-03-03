@@ -1,15 +1,18 @@
 'use strict';
 
-var _resources = []
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-  //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
+    resources.js
+
+    - In-game resources that NPCs give to the player
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 var $resources = $game.$resources = {
 
-  isShowing: false,
-  ready: false,
+  ready:     false,
 
-  // Copied from botanist.js/_svgFills
+  // SVG fills for tangram pieces
   fills: {
     orange:      'rgb(236,113,41)',
     lightOrange: 'rgb(237,173,135)',
@@ -27,62 +30,55 @@ var $resources = $game.$resources = {
       $.each(response, function (key, npc) {
         if (npc.isHolding) {
           var stringId = String(npc.index);
-          _resources[stringId] = npc.resource;
-          _resources[stringId].index = npc.index;
-          _resources[stringId].playerAnswers = [];
-          _resources[stringId].skinSuit = npc.skinSuit;
+          _resources.data[stringId] = npc.resource;
+          _resources.data[stringId].index = npc.index;
+          _resources.data[stringId].playerAnswers = [];
+          _resources.data[stringId].skinSuit = npc.skinSuit;
         }
       });
       var allRes = all[0].resourceResponses;
       $.each(allRes, function (key, answer) {
         if (answer.madePublic) {
           var stringId = String(answer.npc);
-          _resources[stringId].playerAnswers.push(answer);
+          _resources.data[stringId].playerAnswers.push(answer);
         }
       });
 
-      $game.$resources.ready = true;
+      $resources.ready = true;
       callback();
     });
   },
 
   resetInit: function () {
-    _resources = [];
-
-    $game.$resources.isShowing = false;
-    $game.$resources.ready = false;
+    $resources.ready = false;
   },
 
   debug: function () { // TODO: REMOVE
-    console.log(_resources)
+    console.log(_resources.data)
   },
 
   //decide how to display resource on screen depending on state of player
   showResource: function (index) {
-    var el          = document.getElementById('resource-area'),
-        resource    = _resources[index]
+    var el       = document.getElementById('resource-area'),
+        resource = _resources.data[index]
 
     // Load resource content, then display.
-    $resources.isShowing = true
-    _resource.loadArticle(resource, function () {
+    $game.setFlag('visible-resource-overlay')
+    _resources.loadArticle(resource, function () {
       $game.$audio.playTriggerFx('windowShow')
       $game.$audio.fadeLow()
 
-      _resource.addContent(index, 1)
+      _resources.addContent(index, 1)
       $(el).fadeIn(300)
     })
   },
 
   // Called when player views a resource from inventory
   examineResource: function (index) {
-    var el = document.getElementById('resource-area')
-
-    // Close the inventory, then show resource and bind a function that returns to inventory on close
-    $game.$input.closeInventory(function () {
-      // Set a flag that remembers we were in the inventory
-      $game.setFlag('viewing-inventory')
-
-      // Show the resource
+    // HIDES (not closes) the inventory, then show resource
+    // Set a flag that remembers we were in the inventory
+    $game.setFlag('viewing-inventory')
+    $game.$input.hideInventory(function () {
       $resources.showResource(index)
     })
   },
@@ -93,23 +89,20 @@ var $resources = $game.$resources = {
 
     $(el).fadeOut(300, function () {
       // Reset all resource slides and buttons to a hidden & clean state.
-      _resource.resetSlides()
-      _resource.resetButtons()
+      _resources.resetSlides()
 
-      // Clean up background globals
-      _resource.temporaryAnswer = ''
+      // Clean up background globals & game state flags
+      _resources.temporaryAnswer = ''
+      $game.removeFlag('visible-resource-overlay')
 
       // Clear resource stage
-      _resource.unloadArticle()
+      _resources.unloadArticle()
 
-      $resources.isShowing = false
+      // Restore sound level
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
-      if ($game.checkFlag('viewing-inventory') === true) {
-        $game.$input.openInventory()
-        $game.removeFlag('viewing-inventory')
-      }
+      if ($game.checkFlag('viewing-inventory') === true) $game.$input.showInventory()
 
       if (typeof callback === 'function') callback()
     })
@@ -119,9 +112,9 @@ var $resources = $game.$resources = {
   examineResponses: function (index) {
     var overlay        = document.getElementById('resource-area'),
         el             = overlay.querySelector('.resource-responses'),
-        resource       = _resources[index]
+        resource       = _resources.data[index]
 
-    _resource.addContent(index, 4)
+    _resources.addContent(index, 4)
 
     // Display rules
     el.style.display = 'block'
@@ -129,7 +122,7 @@ var $resources = $game.$resources = {
       el.style.display = 'none'
     })
     if ($(overlay).is(':hidden')) {
-      $resources.isShowing = true
+      $game.setFlag('visible-resource-overlay')
       $(overlay).fadeIn(300)
     }
   },
@@ -159,26 +152,26 @@ var $resources = $game.$resources = {
   //get the shape svg info for a specific resource
   getShape: function (index) {
     var stringId = String(index),
-      shapeName = _resources[stringId].shape;
-    return _resource.shapes[$game.$player.currentLevel][shapeName];
+      shapeName = _resources.data[stringId].shape;
+    return _resources.shapes[$game.$player.currentLevel][shapeName];
   },
 
   getShapeName: function (index) {
     var stringId = String(index),
-      shapeName = _resources[stringId].shape;
+      shapeName = _resources.data[stringId].shape;
     return shapeName;
   },
 
   //get the tagline for the resource
   getTagline: function (index) {
     var stringId = String(index);
-    return _resources[stringId].tagline;
+    return _resources.data[stringId].tagline;
   },
 
   //add an answer to the player answers for the specific resource
   addAnswer: function (data) {
     var stringId = String(data.npc);
-    _resources[stringId].playerAnswers.push(data);
+    _resources.data[stringId].playerAnswers.push(data);
     //update the npc bubbles on screen
     $game.$player.displayNpcComments()
   },
@@ -188,14 +181,14 @@ var $resources = $game.$resources = {
     var stringId = String(data.npc);
     var found = false,
       i = 0;
-    // console.log(_resources[stringId].playerAnswers);
+    // console.log(_resources.data[stringId].playerAnswers);
     while(!found) {
-      if (_resources[stringId].playerAnswers[i].id === data.id) {
-        _resources[stringId].playerAnswers.splice(i, 1);
+      if (_resources.data[stringId].playerAnswers[i].id === data.id) {
+        _resources.data[stringId].playerAnswers.splice(i, 1);
         found = true;
       }
       i++;
-      if (i >= _resources[stringId].playerAnswers.length) {
+      if (i >= _resources.data[stringId].playerAnswers.length) {
         found = true;
       }
     }
@@ -206,12 +199,12 @@ var $resources = $game.$resources = {
   //get the question for a resource
   getQuestion: function (index) {
     var stringId = String(index);
-    return _resources[stringId].question;
+    return _resources.data[stringId].question;
   },
 
   getNumResponses: function (index) {
     var stringId = String(index);
-    return _resources[stringId].playerAnswers.length;
+    return _resources.data[stringId].playerAnswers.length;
   }
 };
 
@@ -221,20 +214,27 @@ var $resources = $game.$resources = {
   *
  **/
 
-var _resource = {
+var _resources = {
+
+  data: [],
 
   temporaryAnswer: '',
   seedsToAdd:      0,
 
   resetSlides: function () {
-    var overlay = document.getElementById('resource-area')
+    var overlay = document.getElementById('resource-area'),
+        article = overlay.querySelector('.resource-article')
     // Note: this appears to perform faster than equivalent jQuery in tests: http://jsperf.com/jquery-vs-queryselectorall/40
     _.each(overlay.querySelectorAll('.resource-content, .resource-article, .resource-question, .resource-responses'), function (el) {
       el.style.display = 'none'
     })
 
     // Clear article content to prevent it from affecting the rest of the game, e.g. stopping videos that are still playing
-    overlay.querySelector('.resource-article').innerHTML = ''
+    // This is equivalent to, but faster than & less prone to memory leaks than innerHTML = ''
+    while (article.firstChild) article.removeChild(article.firstChild)
+
+    // When slides are reset, always reset all buttons
+    this.resetButtons()
   },
 
   resetButtons: function () {
@@ -256,20 +256,13 @@ var _resource = {
 
   // Clears staging area
   unloadArticle: function () {
-    document.getElementById('resource-stage').innerHTML = ''
+    var el = document.getElementById('resource-stage')
+    // This is equivalent to, but faster than & less prone to memory leaks than innerHTML = ''
+    while (el.firstChild) el.removeChild(el.firstChild)
   },
 
   // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
-    /* DEPRECATED:  The old version of this function loaded an image rather than the SVG.
-    var overlay   = document.getElementById('resource-area'),
-        level     = $game.$npc.getNpc(resource.index).getLevel(),
-        folder    = 'level' + level,
-        imagePath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + folder + '/' + resource.shape + '.png'
-
-    overlay.querySelector('.tangram').innerHTML = '<img src="' + imagePath + '">'
-    */
-
     // Loads the SVG version of the tangram.
     var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
         artboardX = artboard.offsetWidth,
@@ -319,7 +312,7 @@ var _resource = {
         }
         break
       case 'open':
-        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." maxlength="5000" autofocus>' + _resource.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
+        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." maxlength="5000" autofocus>' + _resources.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
         break
       case 'truefalse':
         formHTML = '<input name="resourceMultipleChoice" type="radio" id="true" value="true"><label for="true">true</label>' +
@@ -346,25 +339,28 @@ var _resource = {
         dialogue    = '',
         skin        = $game.$skins.getSkin(resource.skinSuit)
 
-        if (npcLevel < playerLevel) {
-          // When does this ever happen?
-          dialogue = feedback + ' Here, take ' + _resource.seedsToAdd + ' seeds!'
-        }
-        else {
-          // Load the tangram as an SVG path
-          _resource.loadTangram(resource)
+    // Legacy stuff saved here, never used.
+    //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 
-          dialogue = feedback + ' Here, take this puzzle piece, and ' + _resource.seedsToAdd + ' seeds!'
-        }
+    if (npcLevel < playerLevel) {
+      // When does this ever happen?
+      dialogue = feedback + ' Here, take ' + _resources.seedsToAdd + ' seeds!'
+    }
+    else {
+      // Load the tangram as an SVG path
+      _resources.loadTangram(resource)
 
-        //give them the skinsuit regardless if in prev level or not
-        if (skin) {
-          dialogue += ' You unlocked the ' + skin.name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
-        }
+      dialogue = feedback + ' Here, take this puzzle piece, and ' + _resources.seedsToAdd + ' seeds!'
+    }
 
-        $game.$audio.playTriggerFx('resourceRight')
-        el.querySelector('.speaker').textContent = npc.name
-        el.querySelector('.message').textContent = dialogue
+    //give them the skinsuit regardless if in prev level or not
+    if (skin) {
+      dialogue += ' You unlocked the ' + skin.name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
+    }
+
+    $game.$audio.playTriggerFx('resourceRight')
+    el.querySelector('.speaker').textContent = npc.name
+    el.querySelector('.message').textContent = dialogue
   },
 
   // Load other players answers and your own
@@ -427,16 +423,14 @@ var _resource = {
         playerLevel  = $game.$player.getLevel(),
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer) ? true : false,
-        isRevisit    = (answer && answer.result) ? true : false,
-        inPuzzleMode = $game.checkFlag('solving-puzzle'),
-        resource     = _resources[index]
+        isRevisit    = $game.checkFlag('viewing-inventory'),
+        resource     = _resources.data[index]
 
     var $article     = $('#resource-stage .pages > section'),
         slides       = $article.length
 
     // Reset all resource slides and buttons to a hidden & clean state.
-    _resource.resetSlides()
-    _resource.resetButtons()
+    _resources.resetSlides()
 
     // Determine what content to add.
     switch (section) {
@@ -455,11 +449,11 @@ var _resource = {
         // On the last article slide, we must test for certain conditions
         else if (slide === slides - 1) {
           // If this resource is being reviewed later:
-          if (isRevisit || inPuzzleMode) {
+          if (isRevisit || isAnswered) {
             // If open-ended question, go to responses next
             if (resource.questionType === 'open') _addButton('next', 4)
             // If question was answered correctly for any other question type, close resource window
-            else _addButton ('close')
+            else _addButton ('close', null, null, _checkBotanistCallback)
           }
           // If question was not answered correctly, go to next slide (question screen)
           else _addButton('next', 2)
@@ -473,7 +467,7 @@ var _resource = {
       // player has NOT answered this question correctly.
       case 2:
         // Load and show question.
-        _resource.loadQuestion(resource)
+        _resources.loadQuestion(resource)
         overlay.querySelector('.resource-question').style.display = 'block'
 
         // Add buttons
@@ -481,7 +475,7 @@ var _resource = {
         _addButton('back', 1, slides - 1, function () {
           // If they were answering an open question, store their answer if the player goes back
           if (resource.questionType === 'open') {
-            _resource.temporaryAnswer = overlay.querySelector('.open-response').value
+            _resources.temporaryAnswer = overlay.querySelector('.open-response').value
           }
         })
         // After submitting an answer, if incorrect, the player is kicked back out to the game.
@@ -496,17 +490,17 @@ var _resource = {
 
         // Load resource details and draw tangram - note that this needs to happen after
         // the visibility is set to 'block' because we calculate div width/height in this function.
-        _resource.loadRewards(resource)
+        _resources.loadRewards(resource)
 
         // Reset and focus input
         input.value = ''
         input.focus()
 
         // Bind a check event listener to the standard close button on the upper right
-        $('#resource-area a.close-overlay').on('click.onCloseCheck', function (e) {
+        $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
           e.stopImmediatePropagation()
-          if (_resource.validateTagline(resource) !== true) return
-          $(this).off('click.onCloseCheck')
+          e.preventDefault()
+          if (_resources.validateTagline(resource) !== true) return
         })
 
         if (resource.questionType === 'open') {
@@ -520,7 +514,7 @@ var _resource = {
       // Shown immediately after slide [3] if the player gets it correct, -OR-
       // immediately after [1] if question was answered correctly and player is revisiting.
       case 4:
-        _resource.loadResponses(resource)
+        _resources.loadResponses(resource)
         overlay.querySelector('.resource-responses').style.display = 'block'
 
         _addButton('close', null, null, _checkBotanistCallback)
@@ -529,7 +523,7 @@ var _resource = {
         break
       // Generic error for debugging.
       default:
-        $resources.hideResource(function callback() {
+        $resources.hideResource(function callback () {
           $game.debug('Error Code 4992 dump!')
           console.log(index, resource, section, slide)
           $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
@@ -557,14 +551,14 @@ var _resource = {
           next.style.display = 'inline-block'
           next.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resource.addContent(index, section, slide)
+            _resources.addContent(index, section, slide)
           })
           break
         case 'back':
           back.style.display = 'inline-block'
           back.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resource.addContent(index, section, slide)
+            _resources.addContent(index, section, slide)
           })
           break
         case 'answer':
@@ -578,29 +572,32 @@ var _resource = {
             // It doesn't seem possible to put these returns inside another callback function
             // because it only returns out of the callback, not the listener function.
             if (resource.questionType === 'open') {
-              if (_resource.validateOpenResponse(resource) !== true) return
+              if (_resources.validateOpenResponse(resource) !== true) return
             }
 
             // Here is where the answer gets checked. If it's correct, save the answer and move
             // to the next slide. If not, we'll record that the answer was wrong, and quit.
-            if (_resource.checkAnswer(resource) === true) {
-              _resource.submitAnswer(resource, true)
+            if (_resources.checkAnswer(resource) === true) {
+              _resources.submitAnswer(resource, true)
               // Go to reward screen.
-              _resource.addContent(index, 3)
+              _resources.addContent(index, 3)
             }
             else {
-              _resource.submitAnswer(resource, false)
+              _resources.submitAnswer(resource, false)
               // Quit
-              _resource.showFeedbackWrong(resource)
+              _resources.showFeedbackWrong(resource)
             }
           })
           break
         case 'save':
           save.style.display = 'inline-block'
           save.addEventListener('click', function _saveButton () {
-            if (_resource.validateTagline(resource) !== true) return
-            if (section) _resource.addContent(index, section)
+            if (_resources.validateTagline(resource) !== true) return
+            if (section) _resources.addContent(index, section)
             else $resources.hideResource(callback)
+
+            // Remove tagline check event
+            $('#resource-area .close-overlay').off('click.onCloseCheck')
           })
           break
         case 'close':
@@ -619,17 +616,19 @@ var _resource = {
 
     function _checkBotanistCallback () {
       // A callback function. If a resource was just collected, check to see if player shoud be automatically teleported to the botanist.
-      if (!inPuzzleMode) {
-        // TODO: Removed the check for !isRevisit because it does not actually differentiate
-        // between whether a resource is being reviewed from the NPC bubble or not
+      if (!isRevisit) {
         $game.$player.checkBotanistState()
       }
     }
   },
 
   validateTagline: function (resource) {
-    var input   = document.getElementById('resource-area').querySelector('.tagline-input input'),
-        tagline = input.value.trim()
+    var input       = document.getElementById('resource-area').querySelector('.tagline-input input'),
+        tagline     = input.value.trim(),
+        // This is a callback function to focus on the input box after closing the message
+        _focusInput = function () {
+          input.focus()
+        }
 
     if (tagline.length === 0) {
       $resources.showCheckMessage('You should create a custom tagline!', _focusInput)
@@ -639,33 +638,24 @@ var _resource = {
       $game.$player.setTagline(resource, tagline)
       return true
     }
-
-    // Declare a callback function to focus on the input box after closing the message
-    function _focusInput () {
-      input.focus()
-    }
   },
 
   // Called by check answer to validate whether an open-ended response is sufficient
   validateOpenResponse: function (resource) {
-    var response = this.getAnswer(resource)
+    var response    = this.getAnswer(resource),
+        _focusInput = function () {
+          document.querySelector('.open-response').focus()
+        }
 
     if (response.length === 0) {
       $resources.showCheckMessage('Please answer the question!', _focusInput)
       return false
     }
     else if (resource.requiredLength && response.length < resource.requiredLength) {
-      _resource.popupCheck(resource, _focusInput)
+      _resources.popupCheck(resource, _focusInput)
       return false
     }
-    else {
-      return true
-    }
-
-    // Declare a callback function to focus on the textarea after closing the message
-    function _focusInput () {
-      document.querySelector('.open-response').focus()
-    }
+    else return true
   },
 
   // Trigger a popup if answer was too short
@@ -678,10 +668,10 @@ var _resource = {
     // [1] Acknowledge prompt that your answer is skimpy and submit anyway
     $el.find('.sure-button').on('click', function () {
       $resources.hideCheckMessage()
-      _resource.submitAnswer(resource, true)
+      _resources.submitAnswer(resource, true)
 
       var slides = $('#resource-stage .pages > section').length
-      _resource.addContent(resource.index, 3)
+      _resources.addContent(resource.index, 3)
     }).show()
     // [2] Else, close and retry
     $el.find('.retry-button').on('click', function () {
@@ -741,11 +731,11 @@ var _resource = {
       $game.$player.saveAnswer(resource, data)
     }
     else {
-      $game.debug('Warning: an answer was submitted via _resources.submitAnswer() without indicating whether it is correct or incorrect.')
+      $game.debug('Warning: an answer was submitted via _resources.data.submitAnswer() without indicating whether it is correct or incorrect.')
     }
 
     // Store seedsToAdd on this object. Not ideal? but it works for now
-    _resource.seedsToAdd = seedsToAdd
+    _resources.seedsToAdd = seedsToAdd
   },
 
   // Called after submitAnswer(..., false) because the answer is wrong, and we're done

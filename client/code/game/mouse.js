@@ -108,9 +108,6 @@ var $mouse = $game.$mouse = {
               if ($game.checkFlag('npc-chatting')) {
                 $game.$npc.hideSpeechBubble();
               }
-              if ($game.$botanist.isChat) {
-                $game.$botanist.hideChat();
-              }
             }
             //they clicked on an NPC
             else if (state >= 0 ) {
