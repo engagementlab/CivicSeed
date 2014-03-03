@@ -14,21 +14,18 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 //private botanist vars
-var _svg = null,
-    _drag = null,
-    _new = null,
-    _counter = 0,
+var _counter = 0,
     _dragOffX = 0,
     _dragOffY = 0,
     _paintbrushSeedFactor = 5
 
 var $botanist = $game.$botanist = {
 
-  index:     0,
-  dialog:    null,
-  tangram:   null,
-  name:      null,
-  ready:     false,
+  index:   0,
+  dialog:  null,
+  tangram: null,
+  name:    null,
+  ready:   false,
 
   init: function (callback) {
     ss.rpc('game.npc.loadBotanist', function (data) {
@@ -46,9 +43,6 @@ var $botanist = $game.$botanist = {
   },
 
   resetInit: function () {
-    _svg = null;
-    _drag = null;
-    _new = null;
     _counter = 0;
     _dragOffX = 0;
     _dragOffY = 0;
@@ -482,8 +476,8 @@ var _botanist = {
 
         // Setup contents
         _botanist.say('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.')
-        _botanist.setupPuzzleSolvingTangram()
         _botanist.setupPuzzleSolvingTrash()
+        _botanist.setupPuzzleSolvingTangram()
         _botanist.loadPuzzleImage()
         overlay.querySelector('.botanist-puzzle').style.display = 'block'
 
@@ -749,12 +743,15 @@ var _botanist = {
     var el  = document.getElementById('botanist-area').querySelector('.trash'),
         $el = $(el)
 
-    return {
+    var position = {
       top:    $el.position().top,
       bottom: $el.position().top  + $el.height(),
       left:   $el.position().left,
       right:  $el.position().left + $el.width()
     }
+    console.log(position)
+
+    return position
   },
 
   // Gets the position of the trash can and stores it on an internal variable for later
@@ -780,25 +777,13 @@ var _botanist = {
 
     // Add it to the DOM
     el.appendChild(trashEl)
-
-    // Remember the trash position for later
-    return this.setTrashPosition()
   },
 
   // Preps the area for drag and drop puzzle mode
   setupPuzzleSolvingTangram: function () {
-    _svg = d3.select('.botanist-puzzle').append('svg')
-            .attr('class','puzzle-svg')
-
-    _drag = d3.behavior.drag()
-              .origin(Object)
-              .on('drag',      _botanist.onTangramDragMove)
-              .on('dragstart', _botanist.onTangramDragMoveStart)
-              .on('dragend',   _botanist.onTangramDropMove);
-  },
-
-  onTangramDragEnd: function (e) {
-    e.preventDefault()
+    d3.select('.botanist-puzzle')
+      .append('svg')
+      .classed('puzzle-svg', true)
   },
 
   onTangramDragOver: function (e) {
@@ -806,7 +791,7 @@ var _botanist = {
     return false
   },
 
-  //when drop add it to puzzle area
+  // When a tangram piece is dragged & dropped onto the puzzle area, add the shape
   onTangramDrop: function (e) {
     e.preventDefault()
     e.stopPropagation()
@@ -825,12 +810,18 @@ var _botanist = {
         path = shape.path,
         fill = $game.$resources.fills[shape.fill];
 
+    var drag = d3.behavior.drag()
+                .origin(Object)
+                .on('drag',      _botanist.onTangramDrag)
+                .on('dragstart', _botanist.onTangramDragStart)
+                .on('dragend',   _botanist.onTangramDragEnd);
+
     //console.log(npcData, selector, x);
     $('.r' + name)
       .css('opacity','.4')
       .attr('draggable', 'false');
 
-    _new = _svg.append('path')
+    d3.select('.puzzle-svg').append('path')
       .attr('class', selector)
       .data([{x:x , y: y, id: name, color: fill}])
       .attr('d', shape.path)
@@ -838,7 +829,7 @@ var _botanist = {
       .attr('stroke', 'rgb(255,255,255)')
       .attr('stroke-width', 0)
       .attr('transform', 'translate('+x+','+y+')')
-      .call(_drag);
+      .call(drag);
 
     $('.botanist-puzzle')
       .unbind('dragover')
@@ -849,23 +840,38 @@ var _botanist = {
     return false;
   },
 
-  //this is dragging a puzzle piece on area and moving it around
-  onTangramDragMoveStart: function (d) {
+  // Event handler for starting to drag a puzzle piece on the puzzle area
+  onTangramDragStart: function (d) {
 
     _dragOffX = d3.mouse(this)[0]
     _dragOffY = d3.mouse(this)[1]
 
+    // This is put here because right now, trash position returns 0s if this
+    // function is called too early in the setup process. Calling this now
+    // ensures that this information is saved right when the dragging begins
+    _botanist.setTrashPosition()
+
+    // Apply a different visual style to the picked up piece
     d3.select('.br' + d.id)
       .attr('stroke-width', 3)
       .classed('dragging', true)
 
+    // Sorts the picked up piece so that it is above the others.
+    // Taken from here: http://stackoverflow.com/questions/13595175/updating-svg-element-z-index-with-d3
+    d3.selectAll('.puzzle-svg path').sort(function (a, b) { // select the parent and sort the path's
+      if (a.id != d.id) return -1;                          // a is not the hovered element, send "a" to the back
+      else return 1;                                        // a is the hovered element, bring "a" to the front
+    })
+
     // Hacky way of making it so that dragging puzzle pieces at the lower end of tangram area doesn't
     // create calculation errors by bringing the z-index of tangram area above all other interface elements.
+    // And also lower the z-index of the trash can so that we can interact with it.
     $('.botanist-puzzle').css({zIndex: 43000})
+    $('.trash').css({zIndex: 'initial'})
   },
 
-  //make different color if over trash can
-  onTangramDragMove: function (d) {
+  // Event handler for dragging a puzzle piece on area and moving it around
+  onTangramDrag: function (d) {
 
     var x        = d3.event.sourceEvent.layerX,
         y        = d3.event.sourceEvent.layerY,
@@ -885,8 +891,8 @@ var _botanist = {
       return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
     }
 
-/*
     // Debug output
+    /*
     console.log({
       x: x,
       y: y,
@@ -899,7 +905,8 @@ var _botanist = {
       d: d
     })
 */
-    // If over trash area
+
+    // If over trash area, style the trash can
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
       trashEl.classList.add('active')
       trashing = true
@@ -918,7 +925,7 @@ var _botanist = {
   },
 
   //move puzzle piece or trash it (return to inventory) on drop
-  onTangramDropMove: function (d) {
+  onTangramDragEnd: function (d) {
     var x     = d3.event.sourceEvent.layerX,
         y     = d3.event.sourceEvent.layerY,
         mX    = _botanist.snapTangramTo(x - _dragOffX),
@@ -931,7 +938,7 @@ var _botanist = {
       .attr('stroke-width', 0)
       .attr('transform', trans)
 
-    // If over trash area
+    // If over trash area, return it to the inventory
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
       $('.br' + d.id).remove();
       $('.r' + d.id)
@@ -940,8 +947,9 @@ var _botanist = {
       $('.trash').removeClass('active')
     }
 
-    // Restore z-index to normal
+    // Restore z-indexes to normal
     $('.botanist-puzzle').css({zIndex: 'initial'})
+    $('.trash').css({zIndex: 40000})
   },
 
   // When piece is moved, snap to 10x10 grid

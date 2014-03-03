@@ -48,7 +48,7 @@ var _stepNumber = 0,
 // PUBLIC EXPORTS
 var $game = module.exports = {
 
-  //GLOBAL GAME CONSTANTS
+  // GLOBAL GAME CONSTANTS
   VIEWPORT_WIDTH: 30,
   VIEWPORT_HEIGHT: 15,
   TOTAL_WIDTH: 142,
@@ -57,7 +57,7 @@ var $game = module.exports = {
   STEP_PIXELS: 4,
   PIXEL_RATIO: 1,
 
-  //GLOBAL GAME VARS
+  // GLOBAL GAME VARS
   currentTiles: [],
   running: false,
   ready: false,
