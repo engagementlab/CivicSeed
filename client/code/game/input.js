@@ -452,8 +452,12 @@ var $input = $game.$input = module.exports = {
     $game.setFlag('seed-mode')
     $input.activeHUDButton('.hud-seed')
 
+    // Special controls for boss mode
+    if ($game.checkFlag('boss-mode')) {
+      $game.$boss.startSeedMode()
+    }
     // If player has multiple types of seeds, open up the seed inventory
-    if (seeds.draw > 0) {
+    else if (seeds.draw > 0) {
       $input.openSeedventory(seeds)
     }
     // Otherwise, go straight to regular seed planting mode
@@ -464,7 +468,7 @@ var $input = $game.$input = module.exports = {
     }
     else {
       // No seeds, cancel out of seed mode.
-      $game.alert('You have no seeds')
+      $game.alert('You have no more seeds!')
       $game.$input.endSeedMode()
     }
   },

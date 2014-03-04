@@ -593,27 +593,11 @@ var $render = $game.$render = {
 
   //clear all the canvases and draw all the tiles
   renderAllTiles: function () {
-
-    _foregroundContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-      );
+    _render.clearContext(_foregroundContext)
 
     //start fresh for the offscreen every time we change ALL tiles
-    _offscreenBackgroundContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-      );
-    _backgroundContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-      );
+    _render.clearContext(_offscreenBackgroundContext)
+    _render.clearContext(_backgroundContext)
 
     //go through and draw each tile to the appropriate canvas
     var i = $game.VIEWPORT_WIDTH;
@@ -624,12 +608,7 @@ var $render = $game.$render = {
       }
     }
 
-    _charactersContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-      );
+    _render.clearContext(_charactersContext)
   },
 
   //draw and npc to the canvas
@@ -651,15 +630,15 @@ var $render = $game.$render = {
   renderMouse: function (mouse) {
 
     var mX = mouse.cX * $game.TILE_SIZE,
-      mY = mouse.cY * $game.TILE_SIZE,
-      state = $game.$map.getTileState(mouse.cX, mouse.cY);
-      //clear previous mouse area
-      _foregroundContext.clearRect(
-        _prevMouseX * $game.TILE_SIZE,
-        _prevMouseY * $game.TILE_SIZE,
-        $game.TILE_SIZE,
-        $game.TILE_SIZE
-      );
+        mY = mouse.cY * $game.TILE_SIZE,
+        state = $game.$map.getTileState(mouse.cX, mouse.cY);
+        //clear previous mouse area
+        _foregroundContext.clearRect(
+          _prevMouseX * $game.TILE_SIZE,
+          _prevMouseY * $game.TILE_SIZE,
+          $game.TILE_SIZE,
+          $game.TILE_SIZE
+        );
 
       //redraw that area
     var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
@@ -885,7 +864,7 @@ var $render = $game.$render = {
           $game.TILE_SIZE
         );
       }
-      if (tiles[t].charger > -1) {
+      if (tiles[t].charger === 1) {
         // _backgroundContext.fillStyle = 'rgba(255,0,0,0.9)';
         // _backgroundContext.fillRect(
         //  tiles[t].x * $game.TILE_SIZE,
@@ -910,6 +889,7 @@ var $render = $game.$render = {
 
   clearBossLevel: function () {
     _render.clearContext(_backgroundContext)
+    _render.clearContext(_charactersContext)
   },
 
   clearMap: function () {
@@ -978,14 +958,9 @@ var _render = {
     return context
   },
 
-  // Clears a gameboard-sized context
+  // Clears a canvas context
   clearContext: function (context) {
-    context.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH  * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-    )
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
   },
 
 }

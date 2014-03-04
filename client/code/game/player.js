@@ -1385,7 +1385,7 @@ function _move() {
       _info.prevOffY = 0
 
       $game.$player.isMoving = false;
-      $game.$boss.endMove({x: _info.x, y: _info.y});
+      $game.$boss.endMove(_info);
     } else {
       _endMove();
     }

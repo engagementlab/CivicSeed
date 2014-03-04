@@ -8,31 +8,32 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var _numChargers = 4,
-    _currentCharger,
-    _canPlace;
-
 var $boss = $game.$boss = {
 
-  // place player on map
+  // Initialize boss mode
   init: function (callback) {
-    _boss.createGrid()
-    _boss.placeRandomItems()
-
-    $('.hud-regular').fadeOut('fast');
-    _boss.setupHud();
-    _boss.loadVideo(0)
-
-    _boss.showOverlay(0)
-
-    $('#background').addClass('lab-background');
+    $('.hud-regular').fadeOut('fast')
+    document.getElementById('background').classList.add('lab-background')
     $game.setFlag('boss-mode')
+    _boss.createGrid()
+
+    _boss.loadVideo(0)
+    _boss.showOverlay(0)
 
     if (typeof callback === 'function') callback()
   },
 
-  resetInit: function () {
-    _currentCharger = null;
+  // Start seed mode. Called via $input
+  startSeedMode: function () {
+    if (_boss.seeds.regular > 0) {
+      _boss.seeds.current = 'regular'
+    }
+  },
+
+  // Ends seed mode. Hands control back to $input
+  endSeedMode: function () {
+    _boss.seeds.current = 'none'
+    $game.$input.endSeedMode()
   },
 
   // Drop a seed to reveal clues
@@ -40,8 +41,8 @@ var $boss = $game.$boss = {
     // Do not allow seed drop to occur if the game is paused
     if (_boss.clock.isPaused) return
 
-    //update hud
-    if (_boss.seeds.current === 1) {
+    // Regular seed action.
+    if (_boss.seeds.current === 'regular') {
       $game.$audio.playTriggerFx('seedDrop');
 
       _boss.addSeedCount('regular', -1)
@@ -49,50 +50,28 @@ var $boss = $game.$boss = {
 
       // Out of seeds!
       if (_boss.seeds.regular <= 0) {
-        _boss.seeds.current = 0;
-        $game.$player.seedMode = false;
-        $game.$player.resetRenderColor();
-        $game.$input.activeHUDButton('.hud-boss .hud-seed')
+        $boss.endSeedMode()
 
         // Check if player fails
         _boss.checkFail()
       }
     }
-    else if (_boss.seeds.current === 2) {
 
-      _boss.addSeedCount('draw', -1)
-
-      if (_boss.seeds.draw <= 0) {
-        //TODO: out of regular seeds display
-        _boss.seeds.current = 0;
-        $game.$player.seedMode = false;
-        $game.$player.resetRenderColor();
-      }
-    }
+    // Note: previous version of this script included
+    // a draw seed type which has been removed.
   },
 
-  //finish walking, determine if we crushed charger or got item
+  // When player stops on a tile, determine if we picked up a charger or an item
   endMove: function (position) {
     var tile = _boss.grid[position.x][position.y]
 
-    //check for charger first
-    //charger = means it has a revealed charger
-    if (_boss.clock.isPaused === false) {
-      if (tile.charger === 1) {
-        _boss.checkWin();
-        $game.$render.clearBossLevel();
-      }
-      // If player lands on an item, pick it up (activate it)
-      else if (tile.item) _boss.activateItem({ x: position.x, y: position.y })
-    }
-  },
+    // Prevent anything from occurring if something has paused the game (e.g. timer ran out)
+    if (_boss.clock.isPaused) return
 
-  debug: function () {
-    console.log(_boss.clock)
-  },
-
-  go: function () {
-    _boss.clock.unpause()
+    // If player lands on a charger or item, pick it up / activate it
+    // Check for charger first, then the item.
+    if (tile.charger === 1) _boss.pickUpCharger()
+    else if (tile.item) _boss.activateItem(tile)
   }
 };
 
@@ -108,19 +87,81 @@ var _boss = {
   totalScore: null,
   modeScore:  null,
 
+  numberOfChargers: 4,
   theCharger: {
     x:        null,
     y:        null,
     revealed: null
   },
-  charger:    null,   // Stores the number of chargers picked up
-  seeds:      {       // Stores quantity of seeds and current seed mode
+  chargersCollected: null, // Stores the number of chargers picked up
+  seeds:      {            // Stores quantity of seeds and current seed mode
     regular:  null,
-    draw:     null,   // Note: draw seeds are a legacy feature of boss mode?
-    current:  null    // To store the current seed mode
+    draw:     null,        // Note: draw seeds are a legacy feature of boss mode?
+    current:  null         // To store the current seed mode
   },
 
   cutsceneVideos: [],
+
+  // Set up all items for the boss game.
+  items: [
+    {
+      name: 'timewarp',
+      description: 'Speeds up time, bad for the player.',
+      id: 0,
+      spriteIndex: 0,
+      message: 'Uh oh... time warp!',
+      immediate: true,
+      activate: function () {
+        _boss.clock.speed = 4
+        _boss.clock.clockTimeout = setTimeout(function () {
+          _boss.clock.speed = 1
+        }, 5000)
+      }
+    },
+    {
+      name: 'wipeout',
+      description: 'Removes all revealed tiles',
+      id: 1,
+      spriteIndex: 1,
+      message: 'Wipeout!',
+      immediate: true,
+      activate: function () {
+        setTimeout(function () {
+          _boss.hideAllItems()
+          $game.$render.clearBossLevel()
+        }, 1000)
+
+        // Hide the charger
+        _boss.theCharger.revealed = false
+      }
+    },
+    {
+      name: 'timefreeze',
+      description: 'Stops the clock for 5 seconds',
+      id: 2,
+      spriteIndex: 2,
+      message: 'Time freeze, nice!',
+      immediate: false,
+      activate: function () {
+        _boss.clock.speed = 0
+        clearTimeout(_boss.clock.clockTimeout)
+        _boss.clock.clockTimeout = setTimeout(function () {
+          _boss.clock.speed = 1
+        }, 5000)
+      }
+    },
+    {
+      name: 'bonusseeds',
+      description: 'Add more seeds for the player',
+      id: 3,
+      spriteIndex: 3,
+      message: 'Bonus seeds!',
+      immediate: false,
+      activate: function () {
+        _boss.addSeedCount('regular', 3)
+      }
+    }
+  ],
 
   // Preload all cutscene videos
   loadVideo: function (number) {
@@ -151,51 +192,6 @@ var _boss = {
         _boss.loadVideo(number)
       }
     }
-  },
-
-  //setup the new hud for the level
-  setupHud: function () {
-    $BODY = $('body')
-
-    $BODY.on('click','.hud-boss .hud-seed', function () {
-      if (_boss.seeds.current === 0 && _boss.seeds.regular > 0) {
-        $(this).addClass('hud-button-active');
-        _boss.seeds.current = 1;
-        $game.$player.seedMode = true;
-      } else if (_boss.seeds.current === 1) {
-        $(this).removeClass('hud-button-active');
-        _boss.seeds.current = 0;
-        $game.$player.seedMode = false;
-        $game.$player.resetRenderColor();
-      } else if (_boss.seeds.current === 2) {
-        if (_boss.seeds.regular > 0) {
-          $(this).addClass('hud-button-active');
-          $('.hud-boss .drawSeedButton').removeClass('hud-button-active');
-          _boss.seeds.current = 1;
-        } else {
-          $game.alert('You have no more seeds!')
-        }
-      } else {
-        $game.alert('You have no more seeds!')
-      }
-    });
-
-    $BODY.on('click','.hud-boss .drawSeedButton', function () {
-      if (_boss.seeds.current === 0) {
-        $(this).addClass('hud-button-active');
-        _boss.seeds.current = 2;
-        $game.$player.seedMode = true;
-      } else if (_boss.seeds.current === 1) {
-        $(this).addClass('hud-button-active');
-        $('.hud-boss .hud-seed').removeClass('hud-button-active');
-        _boss.seeds.current = 2;
-        $game.$player.seedMode = false;
-        $game.$player.resetRenderColor();
-      } else {
-        $(this).removeClass('hud-button-active');
-        _boss.seeds.current = 0;
-      }
-    });
   },
 
   showOverlay: function (section) {
@@ -419,21 +415,22 @@ var _boss = {
     }
   },
 
-  // Utility function for performing actions for each tile on the gameboard grid
-  // Passes a reference to the tile to the callback function
-  forEachGridTile: function (callback) {
+  // Utility method for performing actions on each tile on the gameboard grid.
+  // Pass in a function as an argument to this method to act on each
+  // tile. The function will be passed a reference to the tile
+  forEachGridTile: function (func) {
     var gridX = $game.VIEWPORT_WIDTH,
         gridY = $game.VIEWPORT_HEIGHT
 
     for (var x = 0; x < gridX; x++) {
       for (var y = 0; y < gridY; y++) {
         var tile = _boss.grid[x][y]
-        if (typeof callback === 'function') callback(tile)
+        if (typeof func === 'function') func(tile)
       }
     }
   },
 
-  //start the game, clock, sound
+  // Start the game, clock, sound
   beginGame: function () {
     // Display boss HUD
     $('.hud-boss').fadeIn('fast')
@@ -445,12 +442,17 @@ var _boss = {
     _boss.updateScore($game.$player.getTilesColored())
     _boss.modeScore = 0
 
-    _boss.seeds.current = 0
+    // Set up seeds
+    _boss.seeds.current = 'none'
     _boss.updateSeedCount('regular', 20)
 
-    _currentCharger = 0;
-    _canPlace = true;
-    _boss.placeCharger();
+    // Set up random items
+    _boss.placeRandomItems()
+
+    // Set up charger
+    _boss.chargersCollected = 0
+    _boss.theCharger = {}
+    _boss.placeCharger()
 
     // Start the clock!
     _boss.clock.reset()
@@ -463,8 +465,10 @@ var _boss = {
   // Place items randomly on grid
   placeRandomItems: function () {
     _boss.forEachGridTile(function (tile) {
-      // 2% chance of a random item being placed on a tile.
-      if (Math.floor(Math.random() * 100) <= 2) {
+      // Clear it first
+      tile.item = null
+      // 4% chance of a random item being placed on a tile.
+      if (Math.floor(Math.random() * 100) <= 4) {
         tile.item = _boss.createRandomItem()
       }
     })
@@ -472,8 +476,7 @@ var _boss = {
 
   // Create a random item
   createRandomItem: function () {
-    var numberOfItems = 4
-
+    var numberOfItems = _boss.items.length
     return {
       id:       Math.floor(Math.random() * numberOfItems),
       revealed: false
@@ -482,106 +485,61 @@ var _boss = {
 
   // Activate a special item
   activateItem: function (position) {
-    var tile = _boss.grid[position.x][position.y]
+    var tile = _boss.grid[position.x][position.y],
+        id   = null
 
     if (!tile.item || !tile.item.revealed) return false
     else {
-      // Do actions based on what item it is
-      switch (tile.item.id) {
-        // [ITEM 0]  TIME WARP - Speeds up time, bad for the player.
-        case 0:
-          $game.alert('Uh oh... time warp!')
+      id = tile.item.id
 
-          _boss.clock.speed = 4
-          _boss.clock.clockTimeout = setTimeout(function () {
-            _boss.clock.speed = 1
-          }, 5000)
-          setTimeout(function () {
-            $game.$render.clearMapTile(position)
-          }, 2000)
+      // Activate the item
+      $game.alert(_boss.items[id].message)
+      _boss.items[id].activate()
 
-          break
+      // TODO: Animate the activation of the item so that player
+      // knows it's active, before it is removed.
 
-        // [ITEM 1]  WIPEOUT - Removes all items and charger
-        case 1:
-          $game.alert('Wipeout!')
-
-          setTimeout(function () {
-            _boss.hideAllItems()
-            $game.$render.clearBossLevel()
-          }, 1000)
-
-          // Remove the charger from the set location
-          delete _boss.grid[_boss.theCharger.x][_boss.theCharger.y].charger
-
-          break
-
-        // [ITEM 2]  TIME FREEZE - Stops the clock for 5 seconds
-        case 2:
-          $game.alert('Time freeze, nice!')
-          _boss.clock.speed = 0
-
-          clearTimeout(_boss.clock.clockTimeout);
-          _boss.clock.clockTimeout = setTimeout(function () {
-            _boss.clock.speed = 1
-          }, 5000)
-          $game.$render.clearMapTile(position)
-
-          break
-
-        // [ITEM 3]  BONUS SEEDS - Add more seeds for the player
-        case 3:
-          $game.alert('Bonus seeds!')
-
-          _boss.addSeedCount('regular', 3)
-
-          $game.$render.clearMapTile(position)
-
-          break
-
-        default:
-          // Nothing
-          break
-      }
+      // Remove the item from the grid.
+      setTimeout(function () {
+        $game.$render.clearMapTile(tile)
+      }, 2000)
 
       // Disable item
       delete tile.item
     }
   },
 
-  //recalc grid values based on charger placement, place item randomly
-  calculateGrid: function () {
-    _boss.forEachGridTile(function (tile) {
-      tile.distance = _boss.getDistanceFromCharger({ x: tile.x, y: tile.y })
-      tile.charger  = -1
-    })
-  },
-
   // Place the charger on a random tile
   placeCharger: function () {
-    if (!_canPlace) return
+    // Clear board of old charger(s) first.
+    _boss.forEachGridTile(function (tile) {
+      tile.charger = 0
+    })
 
-    _canPlace = false;
-    var hack = setTimeout(function () {
-      _canPlace = true;
-    }, 200);
-
+    // Choose a random tile.
     var x    = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
         y    = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT),
         tile = _boss.grid[x][y]
 
     _boss.theCharger = {
+      id:       _boss.chargersCollected + 1,
       x:        x,
       y:        y,
       revealed: false
     }
 
-    _currentCharger++;
-    _boss.calculateGrid();
+    _boss.calculateChargerProximity()
 
     // Set the grid item with the charger, replace an item if it's there
-    tile.charger = 0
+    tile.charger = 1
     if (tile.item) delete tile.item
+  },
+
+  // Calculate grid values based on charger location
+  calculateChargerProximity: function () {
+    _boss.forEachGridTile(function (tile) {
+      tile.distance = _boss.getDistanceFromCharger(tile)
+    })
   },
 
   // Calculate how far from the charger the tile is
@@ -590,9 +548,8 @@ var _boss = {
   },
 
   // The player reveals the charger
-  foundCharger: function (position) {
+  foundCharger: function () {
     $game.alert('You found a charger! Go to it to disable it.')
-    _boss.grid[position.x][position.y].charger = 1
     _boss.theCharger.revealed = true
   },
 
@@ -611,32 +568,34 @@ var _boss = {
 
         //only add it if in the bounds of the game area
         if (curX >= 0 && curX < $game.VIEWPORT_WIDTH && curY >= 0 && curY < $game.VIEWPORT_HEIGHT) {
-          var tile     = _boss.grid[curX][curY]
-          var distance = tile.distance,
-              charger  = tile.charger,
-              item     = -1 // By default, if there is no item pass this digit to the renderer to make it ignore this.
+          var tile          = _boss.grid[curX][curY]
+          var distance      = tile.distance,
+              spriteIndex   = -1 // By default, if there is no item pass this digit to the renderer to make it ignore this.
 
           // If player has revealed an item
           if (tile.item) {
-            item = tile.item.id
+            var itemId = tile.item.id
+
+            // Set sprite index for render
+            spriteIndex = _boss.items[itemId].spriteIndex
 
             // Set it to revealed
             tile.item.revealed = true
 
             // If they revealed a bad item, activate it now
-            if (tile.item.id < 2) _boss.activateItem({x: curX, y: curY})
+            if (_boss.items[itemId].immediate === true) _boss.activateItem(tile)
+          }
+          // If player has found the charger
+          if (tile.charger === 1) {
+            _boss.foundCharger()
           }
 
-          // If player has found the charger
-          if (charger === 0) _boss.foundCharger({x: curX, y: curY})
-
           if (distance < min) min = distance
-
           squares.push({
             val:     distance,
             x:       curX,
             y:       curY,
-            item:    item,
+            item:    spriteIndex,
             charger: tile.charger
           })
         }
@@ -682,18 +641,29 @@ var _boss = {
     })
   },
 
-  //see if the player has won, or set charger
-  checkWin: function () {
+  // Pick up the charger, and then check win condition or place a new charger.
+  pickUpCharger: function () {
     var addPoints = 50
+
+    // Pause the game
+    _boss.clock.pause()
 
     // Update score
     _boss.modeScore += addPoints
     _boss.updateScore(_boss.totalScore + addPoints)
 
+    // Clear board
     _boss.hideAllItems()
+    $game.$render.clearBossLevel()
 
+    // Play the cutscene video
     var newCutsceneEl = document.createElement('div'),
-        videoEl       = _boss.cutsceneVideos[_currentCharger - 1]
+        videoEl       = _boss.cutsceneVideos[_boss.theCharger.id - 1]
+
+    console.log(videoEl)
+    if (!videoEl) {
+      $game.debug('Bug with appending the cutscene video.' + _boss.cutsceneVideos)
+    }
 
     newCutsceneEl.classList.add('cutscene-background')
     newCutsceneEl.appendChild(videoEl)
@@ -702,45 +672,70 @@ var _boss = {
     $('.cutscene-background').fadeIn('fast');
     $('.cutscene')[0].play();
 
-    _boss.clock.pause()
-
     $('.cutscene')[0].addEventListener('ended', function () {
-      $('.cutscene')[0].removeEventListener('ended');
+      $('.cutscene')[0].removeEventListener('ended')
       $('.cutscene-background').fadeOut('fast', function () {
 
-        var chargers = (_numChargers - _currentCharger + 1),
-            message  = ''
+        // After cutscene is over, update chargers and display a message
+        _boss.theCharger = {}
+        _boss.chargersCollected++
 
-        if (chargers === 1) {
-          message = 'Only 1 charger left!'
-        }
-        else {
-          message = 'Only ' + chargers + ' chargers left!'
-        }
-        $game.alert(message)
+        // Check if player wins, otherwise, keep going.
+        if (_boss.checkWin() === false) {
+          // Generate new items
+          _boss.placeRandomItems()
+          // Place another charger
+          _boss.placeCharger()
 
-        _boss.clock.unpause()
-        $('.cutscene-background').remove();
-      });
-      if (_currentCharger >= 4 && _boss.modeScore === 200) {
-        _boss.clock.pause()
-        _boss.showOverlay(4)
-      } else {
-        _boss.placeCharger();
-      }
-    });
+          // Tell the player how many chargers are left
+          var chargersLeft = (_boss.numberOfChargers - _boss.chargersCollected),
+              message      = ''
+
+          if (chargersLeft === 1) {
+            message = 'Just one charger left!'
+          }
+          else {
+            message = 'Only ' + chargersLeft + ' chargers left!'
+          }
+          $game.alert(message)
+
+          // Unpause the game
+          _boss.clock.unpause()
+          $('.cutscene-background').remove()
+        }
+      })
+    })
   },
 
-  // Check if they are out of seeds and the charger hasn't been revealed
+  // If the player has beaten the boss mode, return true and show win screen.
+  checkWin: function () {
+    // If all the chargers have been collected, YOU WIN!
+    // if (_boss.chargersCollected >= _boss.numberofChargers && _boss.modeScore === 200) {
+    if (_boss.chargersCollected >= _boss.numberofChargers) {
+      _boss.clock.pause()
+      _boss.showOverlay(4)
+      return true
+    }
+    else return false
+  },
+
+  // If the player has failed the boss mode, return true and show fail screen.
   checkFail: function () {
-    if (!_boss.theCharger.revealed || _currentCharger < _numChargers) _boss.fail()
+    // Condition for failure:
+    // If player is out of seeds, and the charger hasn't been revealed
+    if (!_boss.theCharger.revealed || _boss.chargersCollected < _boss.numberOfChargers) {
+      _boss.fail()
+      return true
+    }
+    else return false
   },
 
-  // If player fails to beat the level
+  // Show fail screen & gear up for a reset
   fail: function () {
     $game.$input.inactiveHUDButton('.hud-boss .hud-seed')
+    $game.removeFlag('seed-mode')
     $game.$player.seedMode = false;
-    $game.$player.resetRenderColor();
+    $game.$player.resetRenderColor()
     _boss.clock.pause()
     _boss.showOverlay(3)
   },
@@ -755,7 +750,7 @@ var _boss = {
     totalTime:    null,
     speed:        null, // Speed of clock. 0 = paused; 1 = normal; 2 = 2x speed, etc.
     clockTimeout: null,
-    timer:        null, // ?????
+    tickInterval: null,
 
     // Set all the variables pertaining to starting a new clock
     reset: function () {
@@ -766,32 +761,31 @@ var _boss = {
       this.totalTime = 0
       this.target    = 90
       this.speed     = 1
+
+      clearTimeout(this.clockTimeout)
+      clearInterval(this.tickInterval)
     },
 
     // Start the clock
     start: function () {
-      console.log(this)
-      setTimeout(this.update, 100)
+      this.tickInterval = setInterval(this.update, 100)
     },
 
     // Update at each tick of the clock
     update: function () {
       var clockEl = document.querySelector('.hud-boss .clock'),
-          clock   = _boss.clock
+          self    = _boss.clock
 
-      clock.time      += 100;
-      clock.totalTime += 100 * clock.speed;
-      clock.elapsed    = clock.target - Math.floor(clock.totalTime / 1000);
+      self.time      += 100
+      self.totalTime += 100 * self.speed
+      self.elapsed    = self.target - Math.floor(self.totalTime / 1000)
 
-      var diff = (new Date().getTime() - clock.startTime) - clock.time;
+      var diff = (new Date().getTime() - self.startTime) - self.time
 
       // Display time
-      clockEl.textContent = clock.elapsed
+      clockEl.textContent = self.elapsed
 
-      if (clock.elapsed <= 0) _boss.fail()
-      else if (!clock.isPaused) {
-        setTimeout(clock.update, (100 - diff))
-      }
+      if (self.elapsed <= 0) _boss.fail()
     },
 
     // Pause the clock.
@@ -799,12 +793,14 @@ var _boss = {
     pause: function () {
       this.speed    = 0
       this.isPaused = true
+      clearInterval(this.tickInterval)
     },
 
     // Unpause the clock.
     unpause: function () {
       this.speed    = 1
       this.isPaused = false
+      this.start()
     }
 
   }

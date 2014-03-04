@@ -154,7 +154,6 @@ var $game = module.exports = {
     $game.$mouse.resetInit();
     $game.$audio.resetInit();
     $game.$log.resetInit();
-    $game.$boss.resetInit();
   },
 
   //resets the local game vars
