@@ -192,7 +192,7 @@ var $map = $game.$map = {
         //if there IS a color
         curTile = $game.$map.currentTiles[loc.x][loc.y];
         curTile.colored = true;
-        $game.$render.clearMapTile(loc.x * $game.TILE_SIZE, loc.y * $game.TILE_SIZE);
+        $game.$render.clearMapTile(loc);
         $game.$render.renderTile(loc.x,loc.y);
 
         if (id === $game.$player.id) {

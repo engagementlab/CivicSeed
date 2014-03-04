@@ -906,7 +906,8 @@ var $player = $game.$player = {
 
   //show a bubble over visited npcs of how many comments there are
   displayNpcComments: function () {
-    $('.npc-bubble').remove();
+    $player.removeNpcComments()
+
     var npcs = $game.$npc.getOnScreenNpcs();
     //go thru each npc and see if they are in player resources
     for (var n = 0; n < npcs.length; n++) {
@@ -945,10 +946,14 @@ var $player = $game.$player = {
               msg = 'Click to view ' + numComments + ' public answers';
             }
           }
-          $game.statusUpdate({message:msg,input: 'status', screen: true, log:false});
+          $game.alert(msg)
         });
       }
     }
+  },
+
+  removeNpcComments: function () {
+    $('.npc-bubble').remove()
   },
 
   //save the player's current position to the DB
@@ -1009,7 +1014,7 @@ var $player = $game.$player = {
           $game.$map.currentTiles[pos.x][pos.y].colored = true;
 
           //draw over the current tiles to show player they are drawing
-          $game.$render.clearMapTile(pos.x * $game.TILE_SIZE, pos.y * $game.TILE_SIZE);
+          $game.$render.clearMapTile(pos);
           $game.$render.renderTile(pos.x,pos.y);
         }
       }
@@ -1017,7 +1022,7 @@ var $player = $game.$player = {
       $game.$player.dropSeed({mode: 'draw'});
       $game.$mouse.drawMode = false;
       $game.$player.seedMode = false;
-      $BODY.off('mousedown touchstart', '.gameboard');
+      $BODY.off('mousedown touchstart', '#gameboard');
       $game.$player.seedPlanting = false;
       $game.alert('You are out of seeds!')
       _saveSeedsToDB();
@@ -1307,7 +1312,7 @@ function _sendSeedBomb(data) {
         $game.$player.addSeeds('draw', 0);
         if (_seeds.draw === 0) {
           $game.$mouse.drawMode = false;
-          $BODY.off('mousedown touchstart', '.gameboard');
+          $BODY.off('mousedown touchstart', '#gameboard');
           $game.$player.seedMode = false;
           _renderInfo.colorNum = _playerColorNum;
           $game.$player.seedPlanting = false;
@@ -1380,7 +1385,7 @@ function _move() {
       _info.prevOffY = 0
 
       $game.$player.isMoving = false;
-      $game.$boss.endMove(_info.x, _info.y);
+      $game.$boss.endMove({x: _info.x, y: _info.y});
     } else {
       _endMove();
     }
@@ -1531,7 +1536,7 @@ function _gameOver() {
           });
         } else {
           var hooray = '<div class="hooray"><h2>You beat the game, hooray!</h2><p>But the color has not yet returned to the world... If you have more seeds go and color the world. I will contact you when it has returned.</div>';
-          $('.gameboard').append(hooray);
+          $('#gameboard').append(hooray);
         }
       }
     });

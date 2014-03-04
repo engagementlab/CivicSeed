@@ -347,14 +347,15 @@ var $render = $game.$render = {
     }
   },
 
-  //clear a single tile
-  clearMapTile: function (x, y) {
+  // Clear a single tile
+  clearMapTile: function (position) {
+    // Given a position object containing local grid coordinates for x and y
     _backgroundContext.clearRect(
-      x,
-      y,
+      position.x * $game.TILE_SIZE,
+      position.y * $game.TILE_SIZE,
       $game.TILE_SIZE,
       $game.TILE_SIZE
-      );
+    )
   },
 
   //draw the actual tile on the canvas
@@ -576,18 +577,8 @@ var $render = $game.$render = {
 
   //clear the character canvas
   clearAll: function () {
-    _charactersContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-    );
-    _interfaceContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-    );
+    _render.clearContext(_charactersContext)
+    _render.clearContext(_interfaceContext)
   },
 
   //clear a specific region on the character canvas
@@ -865,7 +856,7 @@ var $render = $game.$render = {
 
   renderBossTiles: function (tiles) {
     for(var t = 0; t < tiles.length; t++) {
-      $render.clearMapTile(tiles[t].x * $game.TILE_SIZE, tiles[t].y * $game.TILE_SIZE);
+      $render.clearMapTile(tiles[t]);
       _backgroundContext.fillStyle = tiles[t].color;
       _backgroundContext.fillRect(
         tiles[t].x * $game.TILE_SIZE,
@@ -873,7 +864,8 @@ var $render = $game.$render = {
         $game.TILE_SIZE,
         $game.TILE_SIZE
       );
-      if (tiles[t].item > -1) {
+      // Item is a number from 0 to 3
+      if (tiles[t].item >= 0) {
         // _backgroundContext.fillStyle = 'rgba(0,' + tiles[t].item * 50 + ',200,0.5)';
         // _backgroundContext.fillRect(
         //  tiles[t].x * $game.TILE_SIZE,
@@ -917,27 +909,12 @@ var $render = $game.$render = {
   },
 
   clearBossLevel: function () {
-    _backgroundContext.clearRect(
-      0,
-      0,
-      $game.TILE_SIZE * $game.VIEWPORT_WIDTH,
-      $game.TILE_SIZE * $game.VIEWPORT_HEIGHT
-    );
+    _render.clearContext(_backgroundContext)
   },
 
   clearMap: function () {
-    _backgroundContext.clearRect(
-      0,
-      0,
-      $game.TILE_SIZE * $game.VIEWPORT_WIDTH,
-      $game.TILE_SIZE * $game.VIEWPORT_HEIGHT
-    );
-    _foregroundContext.clearRect(
-      0,
-      0,
-      $game.VIEWPORT_WIDTH * $game.TILE_SIZE,
-      $game.VIEWPORT
-    );
+    _render.clearContext(_backgroundContext)
+    _render.clearContext(_foregroundContext)
   }
 }
 
@@ -999,6 +976,16 @@ var _render = {
     }
 
     return context
-  }
+  },
+
+  // Clears a gameboard-sized context
+  clearContext: function (context) {
+    context.clearRect(
+      0,
+      0,
+      $game.VIEWPORT_WIDTH  * $game.TILE_SIZE,
+      $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+    )
+  },
 
 }

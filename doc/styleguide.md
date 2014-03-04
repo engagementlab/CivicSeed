@@ -43,6 +43,6 @@ Admittedly, the change in developers for CivicSeed over time has resulted in a m
 
 ## Graphics
 
-* Use approved colors whenever possible
+* Use approved colors whenever possible. See `variables.styl` in the `css/globals` folder for colors that have already been set.
 * Use SVG tangram data over images whenever possible
 * Create Retina-ready (2x) versions of graphics whenever possible

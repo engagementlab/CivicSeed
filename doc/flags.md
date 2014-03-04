@@ -10,7 +10,7 @@ Flags are stored as individual strings whose contents indicate what game state i
 
 Flags can be set, removed, or checked via methods on the `$game` object:
 
-- **$game.setFlag(_flag_)** Sets a `flag` string (which makes it `true`). If a flag is already set, this function will refuse to set it a second time (but will not remove it) and returns `false`, otherwise it will set the flag and return `true`. _Note: the method `flag()` is an alias for `setFlag()`._
+- **$game.setFlag(_flag_)** Sets a `flag` string (which makes it `true`). If a flag is already set, this function will refuse to set it a second time (but will not remove it) and returns `false`, otherwise it will set the flag and return `true`.
 - **$game.removeFlag(_flag_)** Removes a `flag` string (which makes it `false`). _Note that not providing an argument clears all the flags in the game. This is not recommended and currently nothing in the game script takes advantage of this functionality and it may be removed eventually._
 - **$game.checkFlag(_flag_)** Returns whether a `flag` is `true` or `false`.
 
@@ -37,4 +37,6 @@ The following table documents flags that are currently set in CivicSeed.
 | `first-time`   | Set a player has joined the game for the first time with a new account, and has not yet completed the tutorial.|
 | `solving-puzzle` | The player is currently attempting to solve the botanist's tangram puzzle.|
 | `seed-mode` | The player is currently in seed mode. This can mean currently planting a seed or viewing the seed inventory.|
-| `boss-level` | The player is currently playing the boss level. |
+| `boss-mode-ready` | The player has completed the game and is ready to play the boss level. |
+| `boss-mode-unlocked` | The world color meter has hit a point where the boss mode is unlocked for all players. |
+| `boss-mode` | The player is currently playing the boss level. |

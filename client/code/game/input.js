@@ -18,7 +18,7 @@ var $input = $game.$input = module.exports = {
     /* * * * * * * *       GENERIC GAMEBOARD INTERACTION       * * * * * * * */
 
     //change cursor on mouse move
-    $BODY.on('mousemove', '.gameboard', function (e) {
+    $BODY.on('mousemove', '#gameboard', function (e) {
       if ( !$game.checkFlag('in-transit') && $game.running){
         var mInfo = {
           x: e.pageX,
@@ -32,7 +32,7 @@ var $input = $game.$input = module.exports = {
     });
 
     //decide what to do based on generic mouse click
-    $BODY.on('click', '.gameboard', function (e) {
+    $BODY.on('click', '#gameboard', function (e) {
       if (_input.startNewAction() === true) {
           var mInfo = {
           x: e.pageX,
@@ -110,11 +110,11 @@ var $input = $game.$input = module.exports = {
       $('.draw-button').addClass('selected')
 
       $game.$player.startSeeding('draw');
-      $BODY.on('mousedown touchstart', '.gameboard', function () {
+      $BODY.on('mousedown touchstart', '#gameboard', function () {
         $game.$player.drawFirstSeed();
         $game.$mouse.drawMode = true;
       });
-      $BODY.on('mouseup touchend', '.gameboard', function () {
+      $BODY.on('mouseup touchend', '#gameboard', function () {
         $game.$mouse.drawMode = false;
       });
     });
@@ -450,7 +450,7 @@ var $input = $game.$input = module.exports = {
 
     $game.$player.seedMode = true
     $game.setFlag('seed-mode')
-    $('.hud-seed').addClass('hud-button-active')
+    $input.activeHUDButton('.hud-seed')
 
     // If player has multiple types of seeds, open up the seed inventory
     if (seeds.draw > 0) {
@@ -475,13 +475,13 @@ var $input = $game.$input = module.exports = {
     if ($game.$player.seedventoryShowing) {
       $input.closeSeedventory()
     }
-    $BODY.off('mousedown touchend', '.gameboard');
-    $BODY.off('mouseup touchend', '.gameboard');
+    $BODY.off('mousedown touchend', '#gameboard');
+    $BODY.off('mouseup touchend', '#gameboard');
     $('.graffiti').hide();
     $game.$mouse.drawMode = false;
     $game.$player.seedPlanting = false;
     $game.$player.resetRenderColor();
-    $('.hud-seed').removeClass('hud-button-active')
+    $input.inactiveHUDButton('.hud-seed')
 
     $game.$player.saveMapImage();
     $game.$player.saveSeeds();
@@ -534,8 +534,8 @@ var $input = $game.$input = module.exports = {
   // The following extends showInventory() and hideInventory() respectively for actual inventory interaction.
   openInventory: function (callback) {
     $input.resetUI()
+    $input.activeHUDButton('.hud-inventory')
 
-    $('.hud-inventory').addClass('hud-button-active')
     this.showInventory(function () {
       if ($game.$player.getInventory().length > 0) {
         $game.alert('Click on a piece to review again')
@@ -546,7 +546,7 @@ var $input = $game.$input = module.exports = {
 
   closeInventory: function (callback) {
     this.hideInventory(function () {
-      $('.hud-inventory').removeClass('hud-button-active')
+      $input.inactiveHUDButton('.hud-inventory')
       $game.removeFlag('viewing-inventory')
       if (typeof callback === 'function') callback()
     })
@@ -558,8 +558,8 @@ var $input = $game.$input = module.exports = {
 
   openSkinventory: function () {
     $input.resetUI()
+    $input.activeHUDButton('.hud-skinventory')
     $game.setFlag('visible-skinventory')
-    $('.hud-skinventory').addClass('hud-button-active')
     $('#skinventory').show()
 
     // Reset badge count
@@ -568,7 +568,7 @@ var $input = $game.$input = module.exports = {
 
   closeSkinventory: function () {
     $game.removeFlag('visible-skinventory')
-    $('.hud-skinventory').removeClass('hud-button-active')
+    $input.inactiveHUDButton('.hud-skinventory')
     $('#skinventory').hide()
   },
 
@@ -596,14 +596,14 @@ var $input = $game.$input = module.exports = {
 
   openProgress: function () {
     $input.resetUI()
+    $input.activeHUDButton('.hud-progress')
     $game.setFlag('visible-progress')
-    $('.hud-progress').addClass('hud-button-active')
     $('#progress-area').show()
   },
 
   closeProgress: function () {
     $game.removeFlag('visible-progress')
-    $('.hud-progress').removeClass('hud-button-active')
+    $input.inactiveHUDButton('.hud-progress')
     $('#progress-area').hide()
   },
 
@@ -613,14 +613,14 @@ var $input = $game.$input = module.exports = {
 
   openHelp: function () {
     $input.resetUI()
+    $input.activeHUDButton('.hud-help')
     $game.setFlag('visible-help')
-    $('.hud-help').addClass('hud-button-active')
     $('#help-area').show()
   },
 
   closeHelp: function () {
     $game.removeFlag('visible-help')
-    $('.hud-help').removeClass('hud-button-active')
+    $input.inactiveHUDButton('.hud-help')
     $('#help-area').hide()
   },
 
@@ -645,6 +645,17 @@ var $input = $game.$input = module.exports = {
   // Remove a highlight to a HUD button
   unhighlightHUDButton: function (target) {
     $(target).removeClass('hud-button-highlight')
+  },
+
+  // Highlight an active HUD button
+  activeHUDButton: function (target) {
+    $('#hud .hud-button').removeClass('hud-button-active') // Removes all previous HUD highlights
+    $(target).addClass('hud-button-active')
+  },
+
+  // Remove highlight to active HUD button
+  inactiveHUDButton: function (target) {
+    $(target).removeClass('hud-button-active')
   },
 
   // Clears UI and sets everything into the most defaultest mode we can
@@ -693,6 +704,7 @@ var _input = {
   },
 
   acceptKeyInput: function () {
+    // TODO: There may be other conditions to test whether keypad input should be accepted.
     return (!$('input, textarea').is(':focus')) ? true : false
   },
 
@@ -780,6 +792,8 @@ var _input = {
       case 'pleasantville':
         _input.cheatLog('Welcome to Pleasantville!')
         $game.bossModeUnlocked = true
+        $game.setFlag('boss-mode-unlocked')
+        $game.setFlag('boss-mode-ready')
         $game.$player.currentLevel = 4
         $game.toBossLevel()
         break

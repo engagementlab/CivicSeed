@@ -378,24 +378,28 @@ var $game = module.exports = {
     console.error('CIVIC SEED DEBUG MESSAGE: ' + message)
   },
 
+  // HUD inventory badges that show numbers
   getBadgeCount: function (target) {
-    return window.parseInt($(target).find('.badge').text()) || 0
+    var count = document.querySelector(target + ' .badge').textContent
+    return window.parseInt(count) || 0
   },
 
   setBadgeCount: function (target, quantity) {
-    var badge = $(target).find('.badge')
-    badge.text(quantity)
+    var badge = document.querySelector(target + ' .badge')
+    badge.textContent = quantity
 
     // Hide or show badge depending on quantity
     // This can be overridden in the layout with a class of always-show, which will never hide.
-    if (quantity > 0 || badge.hasClass('always-show')) {
-      badge.show()
+    if (quantity > 0 || badge.classList.contains('always-show')) {
+      badge.style.display = 'block'
     }
-    else if (quantity <= 0 && !badge.hasClass('always-show')) {
-      badge.hide()
+    else if (quantity <= 0 && !badge.classList.contains('always-show')) {
+      badge.style.display = 'none'
     }
   },
 
+  // Add a certain number of seeds to the current count.
+  // Pass in a negative quantity to subtract.
   addBadgeCount: function (target, quantity) {
     var number = this.getBadgeCount(target) + quantity
     this.setBadgeCount(target, number)
@@ -461,6 +465,7 @@ var $game = module.exports = {
     $game.$audio.pauseTrack();
     $game.$render.clearMap();
     $game.$player.setPositionInfo();
+    $game.$player.removeNpcComments()
     $game.$botanist.disable();
     $game.$robot.disable();
     $game.$others.disable();
@@ -483,11 +488,6 @@ var $game = module.exports = {
     }
     // Returns false if flag was not set (e.g. it was already set)
     else return false
-  },
-
-  // Alias for setFlag()
-  flag: function (flag) {
-    return this.setFlag(flag)
   },
 
   // Remove one or all game state flags
