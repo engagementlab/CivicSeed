@@ -422,7 +422,7 @@ var _resources = {
     var overlay      = document.getElementById('resource-area'),
         playerLevel  = $game.$player.getLevel(),
         answer       = $game.$player.getAnswer(index),
-        isAnswered   = (answer) ? true : false,
+        isAnswered   = (answer && answer.result) ? true : false,
         isRevisit    = $game.checkFlag('viewing-inventory'),
         resource     = _resources.data[index]
 
