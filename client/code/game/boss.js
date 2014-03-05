@@ -710,8 +710,8 @@ var _boss = {
   // If the player has beaten the boss mode, return true and show win screen.
   checkWin: function () {
     // If all the chargers have been collected, YOU WIN!
-    // if (_boss.chargersCollected >= _boss.numberofChargers && _boss.modeScore === 200) {
-    if (_boss.chargersCollected >= _boss.numberofChargers) {
+    // if (_boss.chargersCollected >= _boss.numberOfChargers && _boss.modeScore === 200) {
+    if (_boss.chargersCollected >= _boss.numberOfChargers) {
       _boss.clock.pause()
       _boss.showOverlay(4)
       return true
