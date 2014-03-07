@@ -50,6 +50,7 @@ var $boss = $game.$boss = {
 
       // Out of seeds!
       if (_boss.seeds.regular <= 0) {
+        $game.alert('You are out of seeds!')
         $boss.endSeedMode()
 
         // Check if player fails
@@ -304,7 +305,7 @@ var _boss = {
             el.style.display = 'block'
             el.innerHTML = '<iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
             _boss.setButton(5, 'Unlock profile', function () {
-              window.open('/profiles/' + sessionStorage.profileLink + '')
+              window.location.assign('/profiles/' + sessionStorage.profileLink + '')
             })
           }
           else {
@@ -424,8 +425,7 @@ var _boss = {
 
     for (var x = 0; x < gridX; x++) {
       for (var y = 0; y < gridY; y++) {
-        var tile = _boss.grid[x][y]
-        if (typeof func === 'function') func(tile)
+        if (typeof func === 'function') func(_boss.grid[x][y])
       }
     }
   },
