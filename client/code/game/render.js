@@ -640,19 +640,22 @@ var $render = $game.$render = {
           $game.TILE_SIZE
         );
 
-      //redraw that area
-    var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
-      var foreIndex = tile.foreground - 1,
-        foreIndex2 =  tile.foreground2 - 1,
-        colored = tile.colored,
+    if (state > 0) {
+      console.log('this is an NPC')
+    }
 
+    //redraw that area
+    var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
+    var foreIndex = tile.foreground - 1,
+        foreIndex2 = tile.foreground2 - 1,
+        colored = tile.colored,
         foreData = {
           f1: foreIndex,
           f2: foreIndex2,
           destX: _prevMouseX,
           destY: _prevMouseY,
           colored: colored
-      };
+        };
 
       $render.drawForegroundTile(foreData);
       var srcX;
@@ -692,9 +695,10 @@ var $render = $game.$render = {
       _prevMouseY = mouse.cY;
   },
 
-  //clear the mini mpa
+  // Clear the minimap
   clearMiniMap: function () {
-    _minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
+    _render.clearContext(_minimapPlayerContext)
+    //_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
   },
 
   //render a player to the mini map

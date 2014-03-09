@@ -100,7 +100,6 @@ var $game = module.exports = {
     }
   },
 
-  startNewAction: true,
   instantiated: false,
 
   init: function (callback) {
@@ -172,7 +171,6 @@ var $game = module.exports = {
     $game.masterX = null;
     $game.masterY = null;
     $game.bossModeUnlocked = null;
-    $game.startNewAction = true;
   },
 
   kickOffGame: function () {

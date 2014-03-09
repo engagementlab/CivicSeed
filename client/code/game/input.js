@@ -17,33 +17,29 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *       GENERIC GAMEBOARD INTERACTION       * * * * * * * */
 
-    //change cursor on mouse move
+    // Update cursor on mouse move
     $BODY.on('mousemove', '#gameboard', function (e) {
-      if ( !$game.checkFlag('in-transit') && $game.running){
-        var mInfo = {
-          x: e.pageX,
-          y: e.pageY,
+      if (!$game.checkFlag('in-transit') && $game.running) {
+        $game.$mouse.onMove({
+          x:    e.pageX,
+          y:    e.pageY,
           offX: this.offsetLeft,
-          offY: this.offsetTop,
-          debug: false
-        };
-        $game.$mouse.updateMouse(mInfo, false);
+          offY: this.offsetTop
+        })
       }
-    });
+    })
 
-    //decide what to do based on generic mouse click
+    // Decide what to do on mouse click
     $BODY.on('click', '#gameboard', function (e) {
-      if (_input.startNewAction() === true) {
-          var mInfo = {
-          x: e.pageX,
-          y: e.pageY,
+      if (_input.isNewActionAllowed() === true) {
+        $game.$mouse.onClick({
+          x:    e.pageX,
+          y:    e.pageY,
           offX: this.offsetLeft,
-          offY: this.offsetTop,
-          debug: true
-        };
-        $game.$mouse.updateMouse(mInfo,true);
+          offY: this.offsetTop
+        })
       }
-    });
+    })
 
     /* * * * * * * *                HUD BUTTONS                * * * * * * * */
 
@@ -317,8 +313,8 @@ var $input = $game.$input = module.exports = {
       }
 
       // Allow keyboard inputs only when gameboard is active.
-      if (!_input.startNewAction()) return
-      if (!_input.acceptKeyInput()) return
+      if (!_input.isNewActionAllowed()) return
+      if (!_input.isKeyInputAccepted()) return
 
       // Refuse inputs if Ctrl or Command is pressed so that the game doesn't overwrite other system/client command keys
       // This does not cover Mac's fn' key
@@ -452,6 +448,9 @@ var $input = $game.$input = module.exports = {
     $game.setFlag('seed-mode')
     $input.activeHUDButton('.hud-seed')
 
+    // Force update of mouse cursor
+    $game.$mouse.updateCursor()
+
     // Special controls for boss mode
     if ($game.checkFlag('boss-mode')) {
       $game.$boss.startSeedMode()
@@ -486,6 +485,9 @@ var $input = $game.$input = module.exports = {
     $game.$player.seedPlanting = false;
     $game.$player.resetRenderColor();
     $input.inactiveHUDButton('.hud-seed')
+
+    // Force update of mouse cursor
+    $game.$mouse.updateCursor()
 
     $game.$player.saveMapImage();
     $game.$player.saveSeeds();
@@ -690,7 +692,7 @@ var $input = $game.$input = module.exports = {
 var _input = {
 
   // Decide if we should or should not let buttons be clicked based on state
-  startNewAction: function () {
+  isNewActionAllowed: function () {
     //check all the game states (if windows are open ,in transit, etc.) to begin a new action
     return (
       !$game.checkFlag('in-transit') &&
@@ -707,7 +709,7 @@ var _input = {
     ) ? true : false
   },
 
-  acceptKeyInput: function () {
+  isKeyInputAccepted: function () {
     // TODO: There may be other conditions to test whether keypad input should be accepted.
     return (!$('input, textarea').is(':focus')) ? true : false
   },
@@ -766,12 +768,12 @@ var _input = {
         $game.$player.beam({x: 70, y: 74})
         break
       case 'show me the money':
-        _input.cheatLog('Adding 200 seeds.')
-        $game.$player.addSeeds('regular', 200)
+        _input.cheatLog('Adding 50 seeds.')
+        $game.$player.addSeeds('regular', 50)
         break
       case 'like one of your french girls':
-        _input.cheatLog('Adding 200 paint seeds.')
-        $game.$player.addSeeds('draw', 200)
+        _input.cheatLog('Adding 50 paint seeds.')
+        $game.$player.addSeeds('draw', 50)
         break
       case 'loki':
         _input.cheatLog('Debug seed amount.')
