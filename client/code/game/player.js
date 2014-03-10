@@ -805,6 +805,7 @@ var $player = $game.$player = {
     $game.setFlag('is-beaming')
     $game.setFlag('in-transit')
     $game.$input.resetUI()
+    $game.$chat.clearAllChats()
     $('#beaming').show()
 
     _info.x = location.x
@@ -831,9 +832,9 @@ var $player = $game.$player = {
       $game.$render.renderAllTiles();
       setTimeout(function () {
         $game.removeFlag('is-beaming')
-        $game.removeFlag('in-transit')
         $('#beaming').fadeOut()
-        $game.$player.displayNpcComments();
+        // Use default viewport transition end function
+        $game.endTransition()
       }, 1000);
 
       // Publish beam status
@@ -907,7 +908,7 @@ var $player = $game.$player = {
   //show a bubble over visited npcs of how many comments there are
   displayNpcComments: function () {
     // Clear any previous comment bubbles
-    $player.removeNpcComments()
+    $player.clearNpcComments()
 
     // Get on-screen NPCs
     var npcs = $game.$npc.getOnScreenNpcs()
@@ -999,7 +1000,7 @@ var $player = $game.$player = {
 
   },
 
-  removeNpcComments: function () {
+  clearNpcComments: function () {
     $('.npc-bubble').remove()
   },
 

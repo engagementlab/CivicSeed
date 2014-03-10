@@ -51,7 +51,6 @@ var $others = $game.$others = {
   },
 
   slide: function (slideX, slideY) {
-
     $.each(_onScreenPlayers, function (key, player) {
       player.slide(slideX, slideY);
     });

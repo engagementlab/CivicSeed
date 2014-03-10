@@ -92,6 +92,14 @@ var $chat = $game.$chat = {
     $(pointerEl).fadeOut('fast', function () {
       $(this).remove()
     })
+  },
+
+  // Force clear all chats from screen
+  // (TODO) This is a hack to address more pressing problems in the
+  // others.js chat functionality (timer not clearing itself?)
+  clearAllChats: function () {
+    $('.player-chat').remove()
+    $('.player-chat-pointer').remove()
   }
 }
 

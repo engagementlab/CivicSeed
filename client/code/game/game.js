@@ -224,7 +224,10 @@ var $game = module.exports = {
     _stepNumber = 0;
     $game.$chat.hideChat();
     $game.$others.hideAllChats();
-    $('.npc-bubble').remove();
+    $game.$player.clearNpcComments()
+
+    // Force clear all chats here (TODO: This is a hack because $others.hideAllChats() *SHOULD* BE DOING THIS!)
+    $game.$chat.clearAllChats()
     $game.stepTransition();
   },
 
@@ -249,7 +252,7 @@ var $game = module.exports = {
     $game.$map.createPathGrid(function () {
       $game.$map.stepDirection = null;
     });
-    $game.$player.displayNpcComments();
+    $game.$player.displayNpcComments()
     $game.$player.saveTimeToDB();
   },
 
@@ -462,7 +465,7 @@ var $game = module.exports = {
     $game.$audio.pauseTrack();
     $game.$render.clearMap();
     $game.$player.setPositionInfo();
-    $game.$player.removeNpcComments()
+    $game.$player.clearNpcComments()
     $game.$botanist.disable();
     $game.$robot.disable();
     $game.$others.disable();
