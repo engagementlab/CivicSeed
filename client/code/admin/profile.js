@@ -19,7 +19,7 @@ var self = module.exports = {
 			};
 			ss.rpc('shared.profiles.updateResume', updateInfo, function(res) {
 				if (res) {
-					apprise('changes saved');
+					apprise('Changes saved.');
 				}
 			});
 		});

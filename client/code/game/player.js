@@ -942,7 +942,7 @@ var $player = $game.$player = {
         // Only display if the NPC is holding a resource, player doesn't have it yet, and the NPC is at the same level as the player
         if ($game.$npc.getNpc(npcIndex).isHolding === true && !_resources[npcIndex] && $player.getLevel() === $game.$npc.getLevel(npcIndex)) {
           contents = '!'
-          message  = 'This character has something to give you!'
+          message  = 'This character has something for you!'
           _addBubble(npcIndex, contents, message)
         }
       }

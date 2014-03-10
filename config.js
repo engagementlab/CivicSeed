@@ -23,6 +23,10 @@ nconf.set('EMAIL_PW',   process.env.EMAIL_PW   || '')
 nconf.set('EMAIL_TO',   process.env.EMAIL_TO   || '')
 nconf.set('REDIS_PW',   process.env.REDIS_PW   || '')
 
+// HEROKU ENVIRONMENT
+// Environment variables for Redis and Mongo are pre-set by Heroku add-ons.
+// These use slightly different names we parse them here and add them via nconf.
+// Heroku still relies on the existence of the config_heroku.json file but unused settings are removed in it.
 if (nodeEnv === 'heroku') {
   console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')
   nconf.set('MONGO_URL', process.env.MONGOHQ_URL)

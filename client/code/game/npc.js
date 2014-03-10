@@ -299,9 +299,13 @@ var $npc = $game.$npc = {
   },
 
   getNpcCoords: function (index) {
-    var stringId = String(index),
-      npc = _npc.data[stringId];
-    return({x: npc.renderInfo.curX, y: npc.renderInfo.curY});
+    var npc = _npc.data[index]
+    return {
+      x:    npc.renderInfo.curX,
+      y:    npc.renderInfo.curY,
+      curX: npc.renderInfo.curX,
+      curY: npc.renderInfo.curY
+    }
   }
 }
 
