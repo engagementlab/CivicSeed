@@ -17,7 +17,7 @@ var $boss = $game.$boss = {
     $game.setFlag('boss-mode')
     _boss.createGrid()
 
-    _boss.loadVideo(0)
+    _boss.setupCutsceneVideos()
     _boss.showOverlay(0)
 
     if (typeof callback === 'function') callback()
@@ -164,11 +164,32 @@ var _boss = {
     }
   ],
 
+  // Setup cutscene DOM element
+  setupCutsceneVideos: function () {
+    var el = document.createElement('div')
+    el.id = 'boss-cutscene'
+    el.classList.add('cutscene-background')
+    el.style.display = 'none'
+    document.getElementById('gameboard').appendChild(el)
+
+    // Now preload all the videos
+    _boss.preloadVideos()
+  },
+
   // Preload all cutscene videos
+  preloadVideos: function () {
+    var numberVideos = 4,
+        videoEl      = null
+
+    for (var i = 0; i < numberVideos; i++) {
+      this.loadVideo(i)
+    }
+  },
+
+  // Load a cutscene video
   loadVideo: function (number) {
     var videoEl      = document.createElement('video'),
-        path         = CivicSeed.CLOUD_PATH + '/audio/cutscenes/',
-        numberVideos = 4
+        path         = CivicSeed.CLOUD_PATH + '/audio/cutscenes/'
 
     if (CivicSeed.ENVIRONMENT === 'development') {
       videoEl.src = (Modernizr.video.h264) ? path + number + '.mp4' : path + number + '.webm?VERSION=' + Math.round(Math.random(1) * 1000000000)
@@ -177,21 +198,17 @@ var _boss = {
       videoEl.src = (Modernizr.video.h264) ? path + number + '.mp4?VERSION=' + CivicSeed.VERSION : path + number + '.webm?VERSION=' + CivicSeed.VERSION
     }
 
-    videoEl.load()
-    videoEl.className = 'cutscene'
+    videoEl.id = 'boss-cutscene-' + number
+    videoEl.classList.add('cutscene')
+    videoEl.style.display = 'none'
     videoEl.addEventListener('canplaythrough', _listenerFunction)
     videoEl.addEventListener('error', function (e) {
       $game.debug('Boss cutscene video error')
     })
 
     function _listenerFunction (e) {
-      this.removeEventListener('canplaythrough', _listenerFunction)
-      _boss.cutsceneVideos.push(videoEl)
-
-      number++
-      if (number < numberVideos) {
-        _boss.loadVideo(number)
-      }
+      videoEl.removeEventListener('canplaythrough', _listenerFunction)
+      document.getElementById('boss-cutscene').appendChild(videoEl)
     }
   },
 
@@ -657,24 +674,19 @@ var _boss = {
     $game.$render.clearBossLevel()
 
     // Play the cutscene video
-    var newCutsceneEl = document.createElement('div'),
-        videoEl       = _boss.cutsceneVideos[_boss.theCharger.id - 1]
+    var cutsceneEl = document.getElementById('boss-cutscene'),
+        videoEl    = document.getElementById('boss-cutscene-' + (_boss.theCharger.id - 1))
 
-    console.log(videoEl)
-    if (!videoEl) {
-      $game.debug('Bug with appending the cutscene video.' + _boss.cutsceneVideos)
-    }
+    $('#boss-cutscene').fadeIn('fast');
+    videoEl.style.display = 'block'
+    videoEl.play()
 
-    newCutsceneEl.classList.add('cutscene-background')
-    newCutsceneEl.appendChild(videoEl)
-    document.getElementById('gameboard').appendChild(newCutsceneEl)
+    videoEl.addEventListener('ended', function () {
+      videoEl.removeEventListener('ended')
+      $('#boss-cutscene').fadeOut('fast', function () {
 
-    $('.cutscene-background').fadeIn('fast');
-    $('.cutscene')[0].play();
-
-    $('.cutscene')[0].addEventListener('ended', function () {
-      $('.cutscene')[0].removeEventListener('ended')
-      $('.cutscene-background').fadeOut('fast', function () {
+        // Hide the video
+        videoEl.style.display = 'none'
 
         // After cutscene is over, update chargers and display a message
         _boss.theCharger = {}
@@ -701,7 +713,6 @@ var _boss = {
 
           // Unpause the game
           _boss.clock.unpause()
-          $('.cutscene-background').remove()
         }
       })
     })
