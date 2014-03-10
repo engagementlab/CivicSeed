@@ -1,5 +1,14 @@
 'use strict';
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    render.js
+
+    - Handles loading and rendering of tilesheets / sprites / images
+    - Rendering of canvases
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var _tilesheets = {},
     _currentTilesheet = null,
     _tilesheetWidth = 0,
