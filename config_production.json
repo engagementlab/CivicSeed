@@ -9,4 +9,3 @@
   "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "http://s3.amazonaws.com/civicseed"
 }
-

@@ -30,7 +30,6 @@ if (nodeEnv === 'heroku') {
   // Set up RedisToGo on Heroku environment
   // See: https://devcenter.heroku.com/articles/redistogo#using-with-node
   var rtg   = require('url').parse(process.env.REDISTOGO_URL)
-  nconf.set('USE_REDIS', true)
   nconf.set('REDIS_HOST', rtg.hostname)
   nconf.set('REDIS_PORT', rtg.port)
   nconf.set('REDIS_PW', rtg.auth.split(':')[1])
