@@ -272,8 +272,8 @@ var $game = module.exports = {
     }
   },
 
-  //displays the progress area section, pulling the latest pertient data
-  showProgress: function () {
+  // Updates the progress area section, pulling the latest pertient data
+  updateProgressOverlay: function () {
 
     //save and show player's colors
     var myImageSrc = $game.$map.saveImage();

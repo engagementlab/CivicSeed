@@ -184,7 +184,6 @@ var $botanist = $game.$botanist = {
       //if they just beat a level, then show progreess
       if ($game.$botanist.getState() === 0 && $game.$player.currentLevel < 4) {
         $game.$input.highlightHUDButton('.hud-progress')
-        $game.showProgress();
       }
 
       // If inventory was showing previously, re-open the inventory

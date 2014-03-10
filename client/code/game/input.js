@@ -610,6 +610,7 @@ var $input = $game.$input = module.exports = {
     $input.resetUI()
     $input.activeHUDButton('.hud-progress')
     $game.setFlag('visible-progress')
+    $game.updateProgressOverlay()
     $('#progress-area').show()
   },
 
