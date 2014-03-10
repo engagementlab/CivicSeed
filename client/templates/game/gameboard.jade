@@ -84,8 +84,8 @@
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
 			p.currentLevel Novice gardener
-			p.resourcesCollected Resources collected:
-			p.numCollected 0
+			.resources-collected-heading Resources collected:
+			.resources-collected 0
 			button.btn.collected-button.btn-success(type='button') View Answers
 		.tabbable
 			ul.nav.nav-tabs
@@ -107,7 +107,10 @@
 						.progress
 							.bar
 					p.percentTitle world color meter
-		.topSeeders
+		.top-seeders
+			.top-seeders-heading Top seeders
+			.your-seeds
+			ol.top-seeders-ranking
 		a.close-overlay(href='')
 			i.fa.fa-times-circle.fa-lg
 

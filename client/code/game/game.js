@@ -302,12 +302,10 @@ var $game = module.exports = {
     //other game stats and leaderboard
     // var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
     var displayLevel = $game.$player.currentLevel + 1,
-        topPlayers = '<p>top seeders:</p><ol>';
+        topPlayers = ''
     for(var i = 0; i < _stats.leaderboard.length; i++) {
       topPlayers += '<li>' + _stats.leaderboard[i].name + ' &mdash; ' + _stats.leaderboard[i].count + '</li>';
     }
-    topPlayers += '</ol>';
-    topPlayers += '<p class="yourSeeds">You (' + tilesColored + ')</p>';
 
     //player's answers for all the open-ended questions, some others stats
     var allAnswers = $game.$player.compileAnswers();
@@ -321,8 +319,9 @@ var $game = module.exports = {
     }
     $('.displayTime').html('<i class="fa fa-clock-o fa-lg"></i> ' + displayTime);
     //$('.displayPercent').text(percentString);
-    $('.topSeeders').empty().append(topPlayers);
-    $('.numCollected').text(numItems + ' / 42');
+    $('.top-seeders-ranking').html(topPlayers)
+    $('.your-seeds').text('You (' + tilesColored + ')')
+    $('.resources-collected').text(numItems + ' / 42');
   },
 
   // Shows a message in either an on-screen display, in the chat log, or both
