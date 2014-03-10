@@ -1,7 +1,3 @@
-// Note for Heroku development environment
-// Environment variables for Redis and Mongo are pre-set by Heroku add-ons.
-// These use slightly different names so config.js parses them and adds them via nconf.
-
 {
   "NAME": "Civic Seed",
   "PORT": 8000,
