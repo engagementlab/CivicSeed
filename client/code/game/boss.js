@@ -679,8 +679,11 @@ var _boss = {
     videoEl.style.display = 'block'
     videoEl.play()
 
-    videoEl.addEventListener('ended', function () {
-      videoEl.removeEventListener('ended')
+    // Set up actions to perform after the video has finished
+    videoEl.addEventListener('ended', _onVideoHasFinishedPlaying)
+
+    function _onVideoHasFinishedPlaying () {
+      this.removeEventListener('ended', _onVideoHasFinishedPlaying)
       $('#boss-cutscene').fadeOut('fast', function () {
 
         // Hide the video
@@ -716,7 +719,7 @@ var _boss = {
           _boss.clock.unpause()
         }
       })
-    })
+    }
   },
 
   // Check if the player has beaten the boss mode
