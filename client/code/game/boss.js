@@ -94,14 +94,12 @@ var _boss = {
     y:        null,
     revealed: null
   },
-  chargersCollected: null, // Stores the number of chargers picked up
+  chargersCollected: 0,    // Stores the number of chargers picked up
   seeds:      {            // Stores quantity of seeds and current seed mode
     regular:  null,
     draw:     null,        // Note: draw seeds are a legacy feature of boss mode?
     current:  null         // To store the current seed mode
   },
-
-  cutsceneVideos: [],
 
   // Set up all items for the boss game.
   items: [
@@ -693,7 +691,10 @@ var _boss = {
         _boss.chargersCollected++
 
         // Check if player wins, otherwise, keep going.
-        if (_boss.checkWin() === false) {
+        if (_boss.checkWin() === true) {
+          _boss.win()
+        }
+        else {
           // Generate new items
           _boss.placeRandomItems()
           // Place another charger
@@ -718,15 +719,11 @@ var _boss = {
     })
   },
 
-  // If the player has beaten the boss mode, return true and show win screen.
+  // Check if the player has beaten the boss mode
   checkWin: function () {
     // If all the chargers have been collected, YOU WIN!
     // if (_boss.chargersCollected >= _boss.numberOfChargers && _boss.modeScore === 200) {
-    if (_boss.chargersCollected >= _boss.numberOfChargers) {
-      _boss.clock.pause()
-      _boss.showOverlay(4)
-      return true
-    }
+    if (_boss.chargersCollected >= _boss.numberOfChargers) return true
     else return false
   },
 
@@ -739,6 +736,16 @@ var _boss = {
       return true
     }
     else return false
+  },
+
+  // Actions to perform if player wins
+  win: function () {
+    // Pause music & timer
+    _boss.clock.pause()
+    $game.$audio.pauseTrack()
+
+    // Show win screen
+    _boss.showOverlay(4)
   },
 
   // Show fail screen & gear up for a reset
