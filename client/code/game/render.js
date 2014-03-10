@@ -23,6 +23,7 @@ var _tilesheets = {},
     _foregroundContext    = null,
     _charactersContext    = null,
     _interfaceContext     = null,
+    _npcNamesContext      = null,
     _minimapPlayerContext = null,
     _minimapTileContext   = null,
 
@@ -63,23 +64,26 @@ var $render = $game.$render = {
     // Create offscreen canvases for optimized rendering
     _offscreenBackgroundContext = _render.createCanvas('offscreenBackground')
 
+    // Interface canvas - style for player names
+    var labelStyle = {
+      lineWidth:    6,
+      lineJoin:     'round',
+      strokeStyle:  '#777',
+      fillStyle:    '#fff',
+      textAlign:    'center',
+      textBaseline: 'bottom',
+      font:         '12pt Nunito, sans-serif'
+    }
+
     // Access the canvases for rendering
     // Tiles are currently unscaled because scaling it causes some artifacting
     _backgroundContext    = _render.initCanvas('background', true)
     _foregroundContext    = _render.initCanvas('foreground', true)
     _charactersContext    = _render.initCanvas('characters', true)
-    _interfaceContext     = _render.initCanvas('interface')
+    _interfaceContext     = _render.createCanvas('interface', null, null, false, labelStyle)
+    _npcNamesContext      = _render.initCanvas('npcNames')
     _minimapPlayerContext = _render.initCanvas('minimap-player')
     _minimapTileContext   = _render.initCanvas('minimap-tile')
-
-    // Interface canvas - style for player names
-    _interfaceContext.lineWidth    = 6
-    _interfaceContext.lineJoin     = 'round'
-    _interfaceContext.strokeStyle  = '#777'
-    _interfaceContext.fillStyle    = '#fff'
-    _interfaceContext.textAlign    = 'center'
-    _interfaceContext.textBaseline = 'bottom'
-    _interfaceContext.font         = '12pt Nunito, sans-serif'
 
     // set stroke stuff for mouse
     _foregroundContext.strokeStyle = 'rgba(0,255,0,.4)'; // Green default
@@ -569,7 +573,7 @@ var $render = $game.$render = {
     );
 
     // Display player name
-    _render.displayText(info.firstName, info)
+    _render.renderText(info.firstName, info)
   },
 
   //clear the character canvas
@@ -641,39 +645,18 @@ var $render = $game.$render = {
     // NOTE: Using CSS won't have the same text-stroke effect as the player
     // but has the benefit of being able to stack above the NPC comment.
 
-    // Potential solution is to generalize the position of displayText
+    // Potential solution is to generalize the position of renderText
     // and have the NPC name displayed below.
 
     // Display NPC name when you hover over one
-    $('.npc-name').remove()
+    */
     if (state > 0) {
-      // _render.displayText($game.$npc.getNpc(state).name, mouse)
-      console.log('This is ' + $game.$npc.getNpc(state).name)
-
-      var nameEl
-      nameEl = document.createElement('div')
-      nameEl.classList.add('npc-name')
-      nameEl.textContent = $game.$npc.getNpc(state).name
-      document.getElementById('gameboard').appendChild(nameEl)
-
-      var size = nameEl.offsetWidth,
-          half = size / 2,
-          placeX    = null,
-          placeY    = null,
-          position  = null,
-          adjustY   = 3
-
-      position = $game.$player.getRenderPosition()
-
-      placeX = position.x - half + 16
-      placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
-
-      $(nameEl).css({
-        'top':  placeY,
-        'left': placeX
-      })
+      var npcIndex = state
+      _render.renderText($game.$npc.getNpc(npcIndex).name, $game.$npc.getNpc(npcIndex).renderInfo)
+      //console.log($game.$npc.getNpc(npcIndex).renderInfo)
+      console.log('This is ' + $game.$npc.getNpc(npcIndex).name)
     }
-*/
+
     //redraw that area
     var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
     var foreIndex = tile.foreground - 1,
@@ -971,16 +954,16 @@ var _render = {
     return this.initCanvas(el)
   },
 
-  initCanvas: function (element, forcePixelRatio) {
+  initCanvas: function (element, forceNativeScaling) {
     var el      = (typeof element === 'object') ? element : document.getElementById(element),
         context = el.getContext('2d'),
         width   = el.width,
         height  = el.height
 
     // Scale interface display for higher-pixel-density screens
-    // forcePixelRatio can be passed as true to this function to force this
-    // canvas to use a pixel ratio of 1 and use the browser's native scaling
-    if ($game.PIXEL_RATIO > 1 && forcePixelRatio !== true) {
+    // forceNativeScaling can be passed as true to this function to force this
+    // canvas to use a pixel ratio of 1 and disable higher pixel density
+    if ($game.PIXEL_RATIO > 1 && forceNativeScaling !== true) {
         $(el).attr('width',  width  * $game.PIXEL_RATIO)
         $(el).attr('height', height * $game.PIXEL_RATIO)
         $(el).css('width',   width)
@@ -996,7 +979,7 @@ var _render = {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height)
   },
 
-  displayText: function (text, position) {
+  renderText: function (text, position) {
     var theContext = _interfaceContext    // Use this context
 
     theContext.strokeText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
