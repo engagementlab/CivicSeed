@@ -40,3 +40,21 @@ The following table documents flags that are currently set in CivicSeed.
 | `boss-mode-ready` | The player has completed the game and is ready to play the boss level. |
 | `boss-mode-unlocked` | The world color meter has hit a point where the boss mode is unlocked for all players. |
 | `boss-mode` | The player is currently playing the boss level. |
+
+#### Player skin effect flags
+
+These are a category of flags that are set depending on outfits that the player is wearing.
+
+| Flag          | Description   |
+| ------------- | ------------- |
+| `local-radar`  | NPCs on the player's screen that are holding available resources are highlighted.|
+| `global-radar` | NPCs on the player's level that are holding available resources are highlighted.|
+| `speed-up`     | The player walks slightly faster.|
+| `speed-max`    | The player walks at maximum speed.|
+| `paint-up`     | The player paints a higher radius with a seed.|
+| `paint-max`    | The player paints the maximum radius with a seed.|
+| `teleport-port` | The player can teleport to the Port with a special command.|
+| `teleport-ranch` | The player can teleport to the Ranch with a special command.|
+| `teleport-town` | The player can teleport to the Town with a special command.|
+| `teleport-forest` | The player can teleport to the Forest with a special command.|
+| `pledge-reward` | The player gets ten more paintbrush seeds whenever they pledge another player's response. |

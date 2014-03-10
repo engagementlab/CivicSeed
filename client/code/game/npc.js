@@ -289,13 +289,13 @@ var $npc = $game.$npc = {
   },
 
   getOnScreenNpcs: function () {
-    var onScreen = [];
+    var onScreenNpcs = [];
     $.each(_npc.data, function (key, npc) {
       if (npc.onScreen) {
-        onScreen.push(npc.index);
+        onScreenNpcs.push(npc.index);
       }
-    });
-    return onScreen;
+    })
+    return onScreenNpcs
   },
 
   getNpcCoords: function (index) {

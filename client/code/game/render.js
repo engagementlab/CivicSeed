@@ -569,10 +569,7 @@ var $render = $game.$render = {
     );
 
     // Display player name
-    //_interfaceContext.save();
-    _interfaceContext.strokeText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
-    _interfaceContext.fillText(info.firstName, info.curX + $game.TILE_SIZE / 2, info.curY - $game.TILE_SIZE);
-    //_interfaceContext.restore();
+    _render.displayText(info.firstName, info)
   },
 
   //clear the character canvas
@@ -640,10 +637,43 @@ var $render = $game.$render = {
           $game.TILE_SIZE
         );
 
-    if (state > 0) {
-      console.log('this is an NPC')
-    }
+/*  // TODO: Experiment on what is the best way to do this.
+    // NOTE: Using CSS won't have the same text-stroke effect as the player
+    // but has the benefit of being able to stack above the NPC comment.
 
+    // Potential solution is to generalize the position of displayText
+    // and have the NPC name displayed below.
+
+    // Display NPC name when you hover over one
+    $('.npc-name').remove()
+    if (state > 0) {
+      // _render.displayText($game.$npc.getNpc(state).name, mouse)
+      console.log('This is ' + $game.$npc.getNpc(state).name)
+
+      var nameEl
+      nameEl = document.createElement('div')
+      nameEl.classList.add('npc-name')
+      nameEl.textContent = $game.$npc.getNpc(state).name
+      document.getElementById('gameboard').appendChild(nameEl)
+
+      var size = nameEl.offsetWidth,
+          half = size / 2,
+          placeX    = null,
+          placeY    = null,
+          position  = null,
+          adjustY   = 3
+
+      position = $game.$player.getRenderPosition()
+
+      placeX = position.x - half + 16
+      placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
+
+      $(nameEl).css({
+        'top':  placeY,
+        'left': placeX
+      })
+    }
+*/
     //redraw that area
     var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
     var foreIndex = tile.foreground - 1,
@@ -698,7 +728,6 @@ var $render = $game.$render = {
   // Clear the minimap
   clearMiniMap: function () {
     _render.clearContext(_minimapPlayerContext)
-    //_minimapPlayerContext.clearRect(0,0,$game.TOTAL_WIDTH,$game.TOTAL_HEIGHT);
   },
 
   //render a player to the mini map
@@ -966,5 +995,12 @@ var _render = {
   clearContext: function (context) {
     context.clearRect(0, 0, context.canvas.width, context.canvas.height)
   },
+
+  displayText: function (text, position) {
+    var theContext = _interfaceContext    // Use this context
+
+    theContext.strokeText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
+    theContext.fillText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
+  }
 
 }

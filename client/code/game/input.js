@@ -21,10 +21,11 @@ var $input = $game.$input = module.exports = {
     $BODY.on('mousemove', '#gameboard', function (e) {
       if (!$game.checkFlag('in-transit') && $game.running) {
         $game.$mouse.onMove({
-          x:    e.pageX,
-          y:    e.pageY,
-          offX: this.offsetLeft,
-          offY: this.offsetTop
+          event: e,
+          x:     e.pageX,
+          y:     e.pageY,
+          offX:  this.offsetLeft,
+          offY:  this.offsetTop
         })
       }
     })
@@ -33,10 +34,11 @@ var $input = $game.$input = module.exports = {
     $BODY.on('click', '#gameboard', function (e) {
       if (_input.isNewActionAllowed() === true) {
         $game.$mouse.onClick({
-          x:    e.pageX,
-          y:    e.pageY,
-          offX: this.offsetLeft,
-          offY: this.offsetTop
+          event: e,
+          x:     e.pageX,
+          y:     e.pageY,
+          offX:  this.offsetLeft,
+          offY:  this.offsetTop
         })
       }
     })

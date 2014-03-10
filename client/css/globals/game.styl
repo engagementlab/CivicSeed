@@ -887,6 +887,18 @@ canvas
 		float right
 		margin 0 6px
 
+// Name display for NPCs
+.npc-name
+	position absolute
+	z-index 800
+	height 32px
+	font-size 16px
+	font-family $buttonFont
+	line-height 1.4
+	text-align center
+	white-space nowrap
+	color #fff
+
 .debug p
 	float left
 	margin-left 20px
@@ -1056,6 +1068,10 @@ p.townSite
 	background rgba(50,50,50,0.7)
 	color $csLightGreen
 	cursor pointer
+	&.npc-bubble-exclaim
+		font-weight bold
+		font-size 1.25em
+		color $csYellow
 
 .tooltip
 	font-family $buttonFont

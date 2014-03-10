@@ -906,50 +906,97 @@ var $player = $game.$player = {
 
   //show a bubble over visited npcs of how many comments there are
   displayNpcComments: function () {
+    // Clear any previous comment bubbles
     $player.removeNpcComments()
 
-    var npcs = $game.$npc.getOnScreenNpcs();
-    //go thru each npc and see if they are in player resources
-    for (var n = 0; n < npcs.length; n++) {
-      if (_resources[npcs[n]]) {
-        var npcInfo = $game.$npc.getNpcCoords(npcs[n]),
-          npcId = 'npcBubble' + npcs[n],
-          num;
-        if (_resources[npcs[n]].questionType === 'open') {
-          num = $game.$resources.getNumResponses(npcs[n]);
-        } else {
-          num = '*';
-        }
-        var bubble = $('<p class="npc-bubble" data-npc="' + npcs[n] + '" id="' + npcId + '">' + num + '</p>');
-        $('#gameboard').append(bubble);
-        $('#' + npcId).css({
-          top: npcInfo.y - 68,
-          left: npcInfo.x
-        });
-        //only bind function to show answers for open ended
-        if (_resources[npcs[n]].questionType === 'open') {
-          $('#' + npcId).bind('click', function () {
-            var npc = $(this).attr('data-npc');
-            $game.$resources.examineResponses(npc)
-          });
-        }
+    // Get on-screen NPCs
+    var npcs = $game.$npc.getOnScreenNpcs()
 
-        //mouseneter functions
-        $('#' + npcId).bind('mouseenter', function () {
-          var numComments = $(this).text(),
-            msg;
-          if (isNaN(numComments)) {
-            msg = 'You answered this question correctly';
-          } else {
-            msg = 'There are no public answers, click to make yours public';
-            if (numComments > 0) {
-              msg = 'Click to view ' + numComments + ' public answers';
-            }
+    // Go thru each on-screen NPC; figure out what to display inside the bubble and what to display when player hovers over it.
+    for (var n = 0; n < npcs.length; n++) {
+      var npcIndex = npcs[n],
+          contents = null,
+          message  = null
+
+      // If player has obtained the NPC's resource
+      if (_resources[npcIndex]) {
+        // For open-ended questions
+        if (_resources[npcIndex].questionType === 'open') {
+          contents = $game.$resources.getNumResponses(npcIndex)
+          if (contents > 0) {
+            message = 'Click to view ' + contents + ' public answers'
           }
-          $game.alert(msg)
-        });
+          else {
+            message = 'There are no public answers, click to make yours public'
+          }
+        }
+        // For all other question types
+        else {
+          contents = '*'
+          message  = 'You answered this question correctly'
+        }
+        _addBubble(npcIndex, contents, message)
+      }
+      // If player has a rader that can sense if NPCs have a resource to give
+      else if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
+        // Only display if the NPC is holding a resource, player doesn't have it yet, and the NPC is at the same level as the player
+        if ($game.$npc.getNpc(npcIndex).isHolding === true && !_resources[npcIndex] && $player.getLevel() === $game.$npc.getLevel(npcIndex)) {
+          contents = '!'
+          message  = 'This character has something to give you!'
+          _addBubble(npcIndex, contents, message)
+        }
       }
     }
+
+    // Create and append the bubble to the gameboard
+    function _addBubble(npcIndex, contents, hoverMessage) {
+      var gameboardEl = document.getElementById('gameboard'),
+          npcPosition = $game.$npc.getNpcCoords(npcIndex),
+          theBubble   = _createBubbleElement(npcIndex, contents)
+
+      // Append bubble to gameboard
+      gameboardEl.appendChild(theBubble)
+
+      // Positioning
+      $(theBubble).css({
+        top:  npcPosition.y - 68,
+        left: npcPosition.x
+      });
+
+      // Bind mouse actions to the comment bubble
+      // Show a message on hover
+      $(theBubble).on('mouseenter', function () {
+        _showMessageOnHover(hoverMessage)
+      })
+
+      // For open ended questions, display player responses on click
+      if (_resources[npcIndex] && _resources[npcIndex].questionType === 'open') {
+        $(theBubble).on('click', function () {
+          _examineResponsesOnClick(npcIndex)
+        })
+      }
+    }
+
+    function _createBubbleElement(npcIndex, contents) {
+      var el = document.createElement('div')
+      el.classList.add('npc-bubble')
+      // Hacky way to style the '!' differently
+      if (contents == '!') {
+        el.classList.add('npc-bubble-exclaim')
+      }
+      el.id = 'npcBubble' + npcIndex
+      el.textContent = contents
+      return el
+    }
+
+    function _examineResponsesOnClick (npcIndex) {
+      $game.$resources.examineResponses(npcIndex)
+    }
+
+    function _showMessageOnHover (message) {
+      if (_.isString(message)) $game.alert(message)
+    }
+
   },
 
   removeNpcComments: function () {
@@ -1069,12 +1116,7 @@ var $player = $game.$player = {
       _skinSuit.legs  = name
     }
 
-    ss.rpc('game.player.changeSkinSuit', {
-      id: $game.$player.id,
-      skinSuit: _skinSuit
-    })
-    $game.$render.createCanvasForPlayer($game.$player.id, false)
-    $game.$skins.renderSkinformation()
+    $game.$skins.changeSkin(_skinSuit)
   }
 
 }

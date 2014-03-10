@@ -55,7 +55,7 @@ var $skins = $game.$skins = {
 
     // Update skinventory
     $skins.updateSkinventory(skin)
-    _skins.updatePlayer(playerSkin)
+    _skins.updatePlayerOnDb(playerSkin)
   },
 
   // Called when a skin suit is unlocked to render its unlocked appearance.
@@ -82,10 +82,10 @@ var $skins = $game.$skins = {
 
     $skins.renderSkinventory()          // Re-render with reset skins
     $skins.updateSkinventory('basic')   // Then update with basic skin
-    _skins.updatePlayer(playerSkin)
+    _skins.updatePlayerOnDb(playerSkin)
   },
 
-  // Creates HTML content for the structure of suit parts
+  // Creates HTML structure of Skinventory
   renderSkinventory: function () {
     var playerSkin = $game.$player.getSkinSuit(),
         unlocked   = playerSkin.unlocked,
@@ -114,6 +114,7 @@ var $skins = $game.$skins = {
         $(this).tooltip('show')
       })
       $el.on('click', function () {
+        // If marked as 'new', this hides it
         $(this).find('.badge-new:visible').hide()
       })
     }
@@ -143,29 +144,9 @@ var $skins = $game.$skins = {
         legs       = playerSkin.legs,
         content    = ''
 
-    function _createPartString (skin, part) {
-      var string = '<strong>' + skins[skin][part].name + '.</strong>'
-      if (skins[skin][part].description) {
-        string += ' ' + skins[skin][part].description
-      }
-      if (skins[skin][part].effect) {
-        string += ' <span class="color-orange">Effect:</span> <span class="color-blue">' + skins[skin][part].effect + '</span>'
-      }
-
-      // Set individual part flags as well
-      if (skins[skin][part].flag) {
-        $game.setFlag(skins[skin][part].flag)
-      }
-
-      return string
-    }
-
     // Display inventory data
     // The game doesn't store "full set" data, so we compare the parts to see if this is the case
     var outfit = _skins.getOutfit(head, torso, legs)
-
-    // Also, clear & set skin effect flags here (Not the best place to put it...!)
-    _skins.clearSkinFlags()
 
     if (outfit) {
       content += '<strong>' + outfit.name + '</strong><br>' + outfit.description
@@ -183,6 +164,39 @@ var $skins = $game.$skins = {
     }
 
     $('.skinformation p').html(content)
+
+    // Private function used to create text that describes the outfit parts
+    function _createPartString (skin, part) {
+      var string = '<strong>' + skins[skin][part].name + '.</strong>'
+      if (skins[skin][part].description) {
+        string += ' ' + skins[skin][part].description
+      }
+      if (skins[skin][part].effect) {
+        string += ' <span class="color-orange">Effect:</span> <span class="color-blue">' + skins[skin][part].effect + '</span>'
+      }
+
+      // Set individual part flags as well
+      if (skins[skin][part].flag) {
+        $game.setFlag(skins[skin][part].flag)
+      }
+
+      return string
+    }
+  },
+
+  changeSkin: function (data) {
+    // Clear & set skin effect flags here
+    _skins.clearSkinFlags()
+
+    // Update on DB
+    _skins.changePlayerSkinOnDb(data)
+
+    // Render
+    $game.$render.createCanvasForPlayer($game.$player.id, false)
+    $skins.renderSkinformation()
+
+    // Hack to re-render NPC comments
+    $game.$player.displayNpcComments()
   }
 
 }
@@ -198,17 +212,18 @@ var _skins = {
   // Clear all effects of skins sets and parts
   clearSkinFlags: function () {
     // Effects are stored as game flags.
-    // Get all flags
-    var data      = _skins.data.outfits,
-        setFlags  = _.pluck(data, 'flag'),
-        partFlags = _.chain(data)
-                     .map(function (value, key, list) {
-                       if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
-                     })
-                     .flatten()
-                     .compact()
-                     .value(),
-        flags     = _.compact(_.union(setFlags, partFlags))
+    // Get all flags from skins data.
+    var data        = _skins.data.outfits,
+        outfitFlags = _.pluck(data, 'flag'),   // Outfit flags
+        partFlags   = _.chain(data)
+                      .map(function (value, key, list) {
+                        if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
+                      })
+                      .flatten()
+                      .compact()
+                      .value(),
+        // Assemble a list from outfit and part-related flags
+        flags       = _.compact(_.union(outfitFlags, partFlags))
 
     // Clear all flags
     _.each(flags, $game.removeFlag)
@@ -258,9 +273,17 @@ var _skins = {
   },
 
   // Saves current skin information to the database
-  updatePlayer: function (playerSkin) {
+  updatePlayerOnDb: function (playerSkin) {
     ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
+      id:       $game.$player.id,
+      skinSuit: playerSkin
+    })
+  },
+
+  // Change skin on database
+  changePlayerSkinOnDb: function (playerSkin) {
+    ss.rpc('game.player.changeSkinSuit', {
+      id:       $game.$player.id,
       skinSuit: playerSkin
     })
   },
@@ -399,24 +422,24 @@ var _skins = {
         'name': 'Astronaut',
         'description': 'You’re ready for the final frontier.',
         'effect': 'You have global radar. All characters with resources are highlighted in the mini-map!',
-        'flag': '',
+        'flag': 'global-radar',
         'head': {
           'name': 'Space Helmet',
           'description': 'Ground Control to Major Tom...',
           'effect': 'You have local radar. Characters with resources near you are highlighted.',
-          'flag': ''
+          'flag': 'local-radar'
         },
         'torso': {
           'name': 'Space Suit',
           'description': 'Commencing countdown, engines on.',
           'effect': 'You have local radar. Characters with resources near you are highlighted.',
-          'flag': ''
+          'flag': 'local-radar'
         },
         'legs': {
           'name': 'Space Pants',
           'description': 'Press ignition, and may space pants be with you!',
           'effect': 'You have local radar. Characters with resources near you are highlighted.',
-          'flag': ''
+          'flag': 'local-radar'
         }
       },
       'ninja': {

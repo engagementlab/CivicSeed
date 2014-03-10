@@ -74,6 +74,10 @@ var $mouse = $game.$mouse = {
 
   // On mouse click, perform actions
   onClick: function (mouseInfo) {
+    if (mouseInfo.event.which === 3) {
+      console.log('Right mouse button clicked')
+    }
+
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
       if ($game.$player.seedMode) {
         $game.$boss.dropSeed({x:_curX, y:_curY});
