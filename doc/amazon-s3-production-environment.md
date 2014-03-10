@@ -35,4 +35,4 @@ Copy and paste this command:
 #### On the S3 instance
 
 1. Pull the latest repository from GitHub. Change the folder `cd CivicSeed` and then `git pull origin`.
-2. Restart the server. `forever -o out.log -e err.log restart bin/server`
+2. Restart the server. `forever -o out.log -e err.log restart bin/server` Note that for some server-side changes you may need to completely stop the server and then start it again from scratch. `forever stopall` then `forever -o out.log -e err.log start bin/server`
