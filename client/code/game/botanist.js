@@ -406,8 +406,10 @@ var _botanist = {
   },
 
   nudgePlayer: function () {
-    $game.alert('Talk to the botanist')
-    $game.$render.pingMinimap({x: 70, y: 71})
+    if ($botanist.getState() !== 2) {
+      $game.alert('Talk to the botanist')
+      $game.$render.pingMinimap({x: 70, y: 71})
+    }
   },
 
   // Show a chat bubble prompt before displaying overlay content
@@ -553,6 +555,9 @@ var _botanist = {
           // Add this tangram outline to the inventory
           $game.$player.putTangramPuzzleInInventory()
           $botanist.setState(2)
+
+          // Give the player the map.
+          $game.$input.showMinimap()
 
           // Complete the tutorial phase.
           _botanist.completeTutorial()

@@ -664,14 +664,19 @@ var _game = {
           $game.running = true;
           $game.$render.renderAllTiles();
           $game.tick();
-          $game.$player.displayNpcComments();
+          $game.$player.displayNpcComments()
+
+          // Things to do if the player has not completed the tutorial
           if ($game.checkFlag('first-time') === true) {
             $game.alert('Welcome to Civic Seed!')
-            $game.$botanist._nudgePlayerTimeout = window.setTimeout(function () { $game.alert('Talk to the botanist')}, 4000)
           }
-          else if ($game.$botanist.getState() === 0) {
-            $game.$botanist.nudgePlayer()
+          // Things to do if this is not the player's first time here
+          else {
+            $game.$input.showMinimap()
           }
+
+          // Set up a nudge for the botanist, in case it needs to happen
+          $game.$botanist._nudgePlayerTimeout = window.setTimeout($botanist.nudgePlayer, 4000)
         });
       }
     });

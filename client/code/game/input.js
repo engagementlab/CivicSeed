@@ -431,6 +431,10 @@ var $input = $game.$input = module.exports = {
     $('#minimap-player').toggle()
   },
 
+  showMinimap: function () {
+    $('#minimap-player').show()
+  },
+
   // Toggles Seed Mode.
   toggleSeedMode: function () {
     if ($game.$player.seedMode === true || $game.checkFlag('seed-mode') === true) {
