@@ -46,13 +46,6 @@ var $audio = $game.$audio = {
   ready: false,
   isMute: false,
 
-  config: {
-    soundtrackVolume:        0.2,
-    environmentLoopFxVolume: 0.1,
-    environmentOnceFxVolume: 0.3,
-    triggerFxVolume:         0.4
-  },
-
   init: function (callback) {
     if (CivicSeed.ENVIRONMENT !== 'development') {
       _extension = CivicSeed.version;
@@ -117,7 +110,7 @@ var $audio = $game.$audio = {
       urls: [mp3, ogg],
       autoplay: autoplay,
       loop: true,
-      volume: $audio.config.soundtrackVolume,
+      volume: _audio.config.soundtrackVolume,
       buffer: true
     });
     //this goes thru all the tracks, and skips num since its preloaded
@@ -187,7 +180,7 @@ var $audio = $game.$audio = {
         pieceDrop: [16000, 200],
         robot: [17000, 2800]
       },
-      volume: $audio.config.triggerFxVolume,
+      volume: _audio.config.triggerFxVolume,
       onload: function () {
         $audio.loadEnvironmentLoopFx();
       }
@@ -217,7 +210,7 @@ var $audio = $game.$audio = {
       onend: function () {
         $audio.checkLoopExit();
       },
-      volume: $audio.config.environmentLoopFxVolume,
+      volume: _audio.config.environmentLoopFxVolume,
       onload: function () {
         $audio.loadEnvironmentOnceFx();
       }
@@ -256,7 +249,7 @@ var $audio = $game.$audio = {
         chatter: [43000, 5500],
         forest3: [49000, 2700]
       },
-      volume: $audio.config.environmentOnceFxVolume,
+      volume: _audio.config.environmentOnceFxVolume,
       onend: function () {
       },
       onload: function () {
@@ -403,7 +396,7 @@ var $audio = $game.$audio = {
       _soundtracks[_prevTrack].fadeOut(0, 1000, function () {
         _soundtracks[_prevTrack].pause();
       });
-      _soundtracks[_currentTrack].fadeIn(0.2, 3000, function (swap) {
+      _soundtracks[_currentTrack].fadeIn( _audio.config.soundtrackVolume, 3000, function (swap) {
         _midTransition = false;
       });
     }
@@ -437,19 +430,22 @@ var $audio = $game.$audio = {
 
   unmute: function () {
     Howler.unmute()
+    // Make sure that sountrack volume is restored, because sometimes it does not do it 
+    _soundtracks[_currentTrack].volume(_audio.config.soundtrackVolume)
   },
 
+  // Sound is faded to a lower level when viewing resource contents
   fadeLow: function () {
     if (!$audio.isMute) {
-      _soundtracks[_currentTrack].volume($audio.config.soundtrackVolume * 0.25)
-      _environmentLoopFx.volume($audio.config.environmentLoopFxVolume * 0.15)
+      _soundtracks[_currentTrack].volume(_audio.config.soundtrackVolume * 0.25)
+      _environmentLoopFx.volume(_audio.config.environmentLoopFxVolume * 0.15)
     }
   },
 
   fadeHi: function () {
     if (!$audio.isMute) {
-      _soundtracks[_currentTrack].volume($audio.config.soundtrackVolume)
-      _environmentLoopFx.volume($audio.config.environmentLoopFxVolume)
+      _soundtracks[_currentTrack].volume(_audio.config.soundtrackVolume)
+      _environmentLoopFx.volume(_audio.config.environmentLoopFxVolume)
     }
   },
 
@@ -467,6 +463,13 @@ var $audio = $game.$audio = {
  **/
 
 var _audio = {
+
+  config: {
+    soundtrackVolume:        0.2,
+    environmentLoopFxVolume: 0.1,
+    environmentOnceFxVolume: 0.3,
+    triggerFxVolume:         0.4
+  },
 
   getProximity: function (location, prox) {
     var distX = Math.abs(_currentPos.x - location.x),
