@@ -632,7 +632,7 @@ var _resources = {
         }
 
     if (tagline.length === 0) {
-      $resources.showCheckMessage('You should create a custom tagline!', _focusInput)
+      $resources.showCheckMessage('You should summarize what you learned. You’ll need this later!', _focusInput)
       return false
     }
     else {
