@@ -510,8 +510,8 @@ var $player = $game.$player = {
     el.appendChild(imgEl)
 
     // Bind actions
-    $('.' + className).bind('click', $game.$botanist.showPuzzlePageFromInventory)
-    $('.' + className).bind('mouseenter', function () {
+    $('.' + className).on('click', $game.$botanist.showPuzzlePageFromInventory)
+    $('.' + className).on('mouseenter', function () {
       $(this).tooltip('show')
     })
   },
@@ -1177,7 +1177,7 @@ var _player = {
     //put image on page in inventory
     $('#inventory > .inventory-items').prepend('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">');
 
-    $('.' + className).bind('mouseenter',function () {
+    $('.' + className).on('mouseenter',function () {
       //var info = $(this).attr('title');
       $(this).tooltip('show');
     });
@@ -1186,10 +1186,10 @@ var _player = {
 
     //bind click and drag functions, pass npc #
     $('img.inventory-item.'+ className)
-      .bind('click', function () {
+      .on('click', function () {
         $game.$resources.examineResource(data.npc);
       })
-      .bind('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart);
+      .on('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart);
   },
 
   // Save a new resource to the database

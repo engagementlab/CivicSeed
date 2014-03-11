@@ -505,7 +505,7 @@ var $game = module.exports = {
     }
   },
 
-  debugOutputFlags: function () {
+  listFlags: function () {
     console.log('All currently set game flags: ' + _game.flags)
   }
 

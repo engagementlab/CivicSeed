@@ -172,7 +172,7 @@ var $botanist = $game.$botanist = {
     $(overlay).fadeOut(300, function () {
       // Reset all UI
       _botanist.resetContent()
-      _botanist.clearPuzzleMode()
+      if (document.getElementById('botanist-area').classList.contains('puzzle-mode')) _botanist.clearPuzzleMode()
       $botanist.clearBoard()
       $('.inventory-item').css('opacity',1);
 
@@ -181,13 +181,10 @@ var $botanist = $game.$botanist = {
       $game.removeFlag('solving-puzzle')
       $game.removeFlag('botanist-chatting')  // Just in case it was accidentally not removed
 
-      //if they just beat a level, then show progreess
+      // If they just beat a level, then show progreess
       if ($game.$botanist.getState() === 0 && $game.$player.currentLevel < 4) {
         $game.$input.highlightHUDButton('.hud-progress')
       }
-
-      // If inventory was showing previously, re-open the inventory
-      if ($game.checkFlag('viewing-inventory') === true) $game.$input.showInventory()
 
       // Execute a callback function if provided
       if (typeof callback === 'function') callback()
@@ -205,14 +202,14 @@ var $botanist = $game.$botanist = {
     return _botanist.levelQuestion[level]
   },
 
-  //when dragging starts from inventory must bind drop on puzzle area
+  // When dragging starts from inventory must bind drop on puzzle area
   // Called from player.js when an item is added to the inventory.
   onTangramDragFromInventoryStart: function (e) {
     var $puzzleEl = $('.botanist-puzzle')
 
     $puzzleEl
-      .unbind('dragover')
-      .unbind('drop')
+      .off('dragover')
+      .off('drop')
 
     var npcData = e.data,
         dt = e.originalEvent.dataTransfer;
@@ -221,8 +218,8 @@ var $botanist = $game.$botanist = {
 
     //set drag over and drop to receive
     $puzzleEl
-      .bind('dragover', _botanist.onTangramDragOver)
-      .bind('drop',     _botanist.onTangramDrop);
+      .on('dragover', _botanist.onTangramDragOver)
+      .on('drop',     _botanist.onTangramDrop);
   },
 
   disable: function () {
@@ -462,6 +459,9 @@ var _botanist = {
             $game.$player.putTangramPuzzleInInventory()
             $botanist.setState(2)
           }
+
+          // If inventory was showing previously, re-open the inventory
+          if ($game.checkFlag('viewing-inventory') === true) $game.$input.showInventory()
         })
         break
       // [SECTION 01] SOLVING THE BOTANISTS'S PUZZLE.
@@ -721,7 +721,7 @@ var _botanist = {
     var $el = $('#botanist-area .check')
 
     $el.find('.feedback').text(message)
-    $el.find('button').bind('click', _botanist.hideFeedback).show()
+    $el.find('button').on('click', _botanist.hideFeedback).show()
     $el.fadeIn(200)
   },
 

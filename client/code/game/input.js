@@ -131,7 +131,7 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *       PROGRESS WINDOW INTERACTIONS        * * * * * * * */
 
-    $BODY.bind('click', '.tabbable li a', function (e) {
+    $BODY.on('click', '.tabbable li a', function (e) {
       e.preventDefault()
       return false
     })
