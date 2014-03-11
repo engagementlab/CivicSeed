@@ -160,7 +160,7 @@ var $render = $game.$render = {
       else {
         //if they are the world ones, do render them to canvas
 
-        if (filename === 'tilesheet_gray_old') {
+        if (filename === 'tilesheet_gray') {
 
           _render.tilesheet.width  = Math.floor(_tilesheets[filename].width / $game.TILE_SIZE)
           _render.tilesheet.height = Math.floor(_tilesheets[filename].height / $game.TILE_SIZE)
@@ -186,7 +186,7 @@ var $render = $game.$render = {
             _tilesheets[filename].height
           );
         }
-        else if (filename === 'tilesheet_color_old') {
+        else if (filename === 'tilesheet_color') {
           //color
           _tilesheetCanvas[1] = document.createElement('canvas');
           _tilesheetCanvas[1].setAttribute('width', _tilesheets[filename].width);
@@ -939,8 +939,8 @@ var $render = $game.$render = {
 
 var _render = {
 
-  images: [ 'tilesheet_color_old',
-            'tilesheet_gray_old',
+  images: [ 'tilesheet_color',
+            'tilesheet_gray',
             'boss_items',
             'botanist',
             'cursors',
