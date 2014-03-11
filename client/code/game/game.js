@@ -272,7 +272,7 @@ var $game = module.exports = {
     }
   },
 
-  // Updates the progress area section, pulling the latest pertient data
+  // Updates the progress area section, pulling the latest pertinent data
   updateProgressOverlay: function () {
 
     //save and show player's colors
@@ -284,20 +284,13 @@ var $game = module.exports = {
         resourcesDiscovered = $game.$player.getResourcesDiscovered();
 
     //show proper level image and color map
-    $('.levelImages img').removeClass('currentLevelImage');
-    $('.levelImages img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('currentLevelImage');
-    $('.personalInfo .currentLevel').text($game.playerRanks[$game.$player.currentLevel]);
-    $('.colorMapYou img')
+    $('.level-images img').removeClass('current-level-image');
+    $('.level-images img:nth-child(' + ($game.$player.currentLevel + 1) + ')').addClass('current-level-image');
+    $('.current-level-name').text($game.playerRanks[$game.$player.currentLevel]);
+
+    $('.color-map-you img.color-map-image')
       .attr('src', myImageSrc)
       .attr('width', '426px');
-
-    //calculate the playing time
-    var playingTime = $game.$player.getPlayingTime(),
-        hours = Math.floor(playingTime / 3600),
-        hoursRemainder = playingTime % 3600,
-        minutes = Math.floor(hoursRemainder / 60),
-        seconds = playingTime % 60,
-        displayTime = hours + 'h ' + minutes + 'm ' + seconds + 's';
 
     //other game stats and leaderboard
     // var contribution = Math.floor((tilesColored / $game.tilesColored) * 100) + '%',
@@ -313,15 +306,27 @@ var $game = module.exports = {
     var numItems = $game.$player.getResourcesDiscovered();
 
     //display everthing
-    $('.displayPercent .progress .bar').css('width', percentString)
+    $('.percent-complete .progress .bar').css('width', percentString)
     if (allAnswers) {
       $('.displayMyAnswers').empty().append(allAnswers)
     }
-    $('.displayTime').html('<i class="fa fa-clock-o fa-lg"></i> ' + displayTime);
-    //$('.displayPercent').text(percentString);
+    $('.time-played-text').text(_formatDisplayTime())
+
     $('.top-seeders-ranking').html(topPlayers)
     $('.your-seeds').text('You (' + tilesColored + ')')
     $('.resources-collected').text(numItems + ' / 42');
+
+    // Calculates the playing time
+    function _formatDisplayTime () {
+      var playingTime    = $game.$player.getPlayingTime(),
+          hours          = Math.floor(playingTime / 3600),
+          hoursRemainder = playingTime % 3600,
+          minutes        = Math.floor(hoursRemainder / 60),
+          seconds        = playingTime % 60
+
+      return hours + 'h ' + minutes + 'm ' + seconds + 's'
+    }
+
   },
 
   // Shows a message in either an on-screen display, in the chat log, or both
@@ -674,7 +679,7 @@ var _game = {
           }
           // Things to do if this is not the player's first time here
           else {
-            $game.$input.showMinimap()
+            $game.$player.giveMapToPlayer()
           }
 
           // Set up a nudge for the botanist, in case it needs to happen

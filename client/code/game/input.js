@@ -45,6 +45,13 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *                HUD BUTTONS                * * * * * * * */
 
+    // Prevent clicking of any HUD button if resource or botanist overlays are shown
+    $BODY.on('click', '.hud-button', function (e) {
+      if ($game.checkFlag('visible-resource-overlay') || $game.checkFlag('visible-botanist-overlay')) {
+        e.stopImmediatePropagation()
+      }
+    })
+
     // Toggle display of Inventory
     $BODY.on('click', '.hud-inventory, #inventory button', function () {
       $input.toggleInventory()
@@ -124,20 +131,20 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *       PROGRESS WINDOW INTERACTIONS        * * * * * * * */
 
-    $BODY.on('click', '.tabbable li a', function (e) {
-      e.preventDefault();
-      return false;
-    });
+    $BODY.bind('click', '.tabbable li a', function (e) {
+      e.preventDefault()
+      return false
+    })
 
     //view all player resource answers
     $BODY.on('click', '.collected-button', function () {
-      $('#collected-resources').show();
-    });
+      $('#collected-resources').show()
+    })
 
     //go back to progress menu from player resource answers
-    $BODY.on('click', '#collected-resources .backToProgress', function () {
-      $('#collected-resources').hide();
-    });
+    $BODY.on('click', '#collected-resources .back-button', function () {
+      $('#collected-resources').hide()
+    })
 
     // Close Progress window
     $BODY.on('click', '#progress-area .close-overlay', function (e) {
@@ -428,6 +435,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleMinimap: function () {
+    if ($game.checkFlag('first-time') === true) return // Disables if it's player's first time in the game.
     $('#minimap-player').toggle()
   },
 
@@ -680,12 +688,15 @@ var $input = $game.$input = module.exports = {
     $input.closeHelp()
     $input.endSeedMode()
 
-    // TODO: Also simultaneously cancel out of resources, botanist, and speechbubbles.
+    // Also simultaneously cancel out of resources, botanist, and speechbubbles.
+    $game.$npc.hideSpeechBubble()
+    //$game.$resources.hideResource()
+    //$game.$botanist.hideOverlay()
 
     // Unfocus chat input box
     document.getElementById('chat-input').blur()
 
-    // Sets cursor to walk action
+    // TODO: Set cursor to walk action
   }
 
 }
@@ -712,7 +723,8 @@ var _input = {
       !$game.checkFlag('visible-progress') &&
       !$game.checkFlag('visible-resource-overlay') &&
       !$game.checkFlag('visible-botanist-overlay') &&
-      !$game.checkFlag('visible-boss-overlay')
+      !$game.checkFlag('visible-boss-overlay') &&
+      !$game.checkFlag('playing-cutscene')
     ) ? true : false
   },
 

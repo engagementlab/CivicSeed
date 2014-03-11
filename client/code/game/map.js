@@ -202,24 +202,22 @@ var $map = $game.$map = {
     }
   },
 
-  //save an image from the color minimap for the player
+  // Save an image from the color minimap for the player
   saveImage: function () {
-    var myDrawing = document.getElementById('minimap-tile');
-    var drawingURL = myDrawing.toDataURL('img/png');
-    return drawingURL;
+    return document.getElementById('minimap-tile').toDataURL('img/png')
   },
 
   //get all the images from all players and make composite
   createCollectiveImage: function () {
-    $('.colorMapEveryone').empty();
+    $('.color-map-everyone .color-map-image').remove();
     ss.rpc('game.player.getAllImages', $game.$player.id, function (data) {
       var myImage = $game.$map.saveImage();
       var index = data.length;
       //go thru each image create a new image using canvas?
       while(--index > -1) {
-        $('.colorMapEveryone').append('<img src="'+ data[index] + '">');
+        $('.color-map-everyone').append('<img src="'+ data[index] + '" class="color-map-image">');
       }
-      $('.colorMapEveryone').append('<img src="'+ myImage + '">');
+      $('.color-map-everyone').append('<img src="'+ myImage + '" class="color-map-image">');
     });
   },
 

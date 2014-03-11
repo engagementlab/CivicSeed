@@ -77,36 +77,39 @@
 
 	#progress-area.gameboard-overlay
 		h2 Progress
-		.personalInfo
-			.levelImages
-				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').currentLevelImage
+		.personal-info
+			.level-images
+				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').current-level-image
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
-			p.currentLevel Novice gardener
+			.current-level-name Novice gardener
 			.resources-collected-heading Resources collected:
 			.resources-collected 0
 			button.btn.collected-button.btn-success(type='button') View Answers
-		.tabbable
+		.color-map.tabbable
 			ul.nav.nav-tabs
-				li.active.tabYou
+				li.tab-you.active
 					a(href='#tab1', data-toggle='tab') you
-				li.tabEveryone
+				li.tab-everyone
 					a(href='#tab2', data-toggle='tab') everyone
 			.tab-content
-				.tab-pane.active#tab1
-					.colorMapYou
-						img(src='')
-					p.displayTime
-					p.timeTitle time played
-
-				.tab-pane#tab2
-					.colorMapEveryone
-						img(src='')
-					.displayPercent
+				#tab1.tab-pane.active
+					.color-map-you
+						img.color-map-image(src='')
+						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+					.time-played
+						i.fa.fa-clock-o.fa-lg
+						span.time-played-text
+					.time-played-label time played
+				#tab2.tab-pane
+					.color-map-everyone
+						img.color-map-image(src='')
+						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+					.percent-complete
 						.progress
 							.bar
-					p.percentTitle world color meter
+					.percent-label world color meter
 		.top-seeders
 			.top-seeders-heading Top seeders
 			.your-seeds
@@ -117,7 +120,7 @@
 	#collected-resources.gameboard-overlay.background-3
 		h2 Your Answers
 		.displayMyAnswers.content-box You haven't collected any resources yet.
-		button.btn.backToProgress.btn-info(type='button') Back
+		button.btn.back-button.btn-info(type='button') Back
 
 	#help-area.gameboard-overlay
 		h2 How To Play

@@ -556,7 +556,7 @@ var _botanist = {
           $botanist.setState(2)
 
           // Give the player the map.
-          $game.$input.showMinimap()
+          $game.$player.giveMapToPlayer()
 
           // Complete the tutorial phase.
           _botanist.completeTutorial()

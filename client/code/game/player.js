@@ -532,6 +532,15 @@ var $player = $game.$player = {
     })
   },
 
+  // Simulates giving a map to the player
+  giveMapToPlayer: function () {
+    // Turn on minimap view on gameboard
+    $game.$input.showMinimap()
+
+    // Enable minimap view on progress window
+    $('#progress-area .minimap').show()
+  },
+
   //reset items and prepare other entities for fresh level
   nextLevel: function () {
     $game.$player.currentLevel += 1;

@@ -349,7 +349,7 @@ canvas
 	h2
 		color $csGreen
 		font-size 3.5em
-	.personalInfo
+	.personal-info
 		position absolute
 		left 20px
 		bottom 20px
@@ -359,9 +359,12 @@ canvas
 		// border 3px solid $csLightOrange
 		background $csGray
 		color white
-		.levelImages img
-			margin 7px
-			border 2px solid rbga(0,0,0,0)
+		.level-images
+			img
+				margin 7px
+				border 2px solid rbga(0,0,0,0)
+			.current-level-image
+				border 2px solid $csLightOrange
 		.resources-collected-heading
 			position absolute
 			top 230px
@@ -373,7 +376,7 @@ canvas
 			top 280px
 			right 20px
 			font-size 2em
-		.currentLevel
+		.current-level-name
 			position absolute
 			width 230px
 			font-size 1.4em
@@ -381,14 +384,12 @@ canvas
 			text-align left
 			left 20px
 			top 90px
-		.currentLevelImage
-			border 2px solid $csLightOrange
 		.collected-button
 			position absolute
 			top 275px
 			left 20px
 
-	.tabbable
+	.color-map
 		position absolute
 		// Hack
 		bottom 42px
@@ -404,65 +405,64 @@ canvas
 				margin 0
 				padding 0
 				width 155px
-			li a
-				font-family $bodyFont
-				font-size 1.2em
-				border 0
-				color white
-				text-align center
-			li.tabYou, li.active.tabYou, li.active.tabYou a, li.tabYou a:hover
-				margin 0
+				a
+					font-family $bodyFont
+					font-size 1.2em
+					border 0
+					color white
+					text-align center
+			li.tab-you, li.active.tab-you, li.active.tab-you a, li.tab-you a:hover
 				background $csLightOrange
-				border 0
-			li.tabEveryone, li.active.tabEveryone, li.active.tabEveryone a, li.tabEveryone a:hover
-				margin 0
+			li.tab-everyone, li.active.tab-everyone, li.active.tab-everyone a, li.tab-everyone a:hover
 				background $csOrange
-				border 0
 		.tab-content
-			p
+			div
 				color #fff
 				position absolute
-			.displayTime, .displayPercent
-				font-family $buttonFont
-				font-size 1.3em
-				top 326px
-			.displayTime
-				left 10px
-			.displayPercent
-				right 10px
-			.timeTitle
-				top 352px
-				left 10px
-				color #efefef
-			.percentTitle
-				top 352px
-				right 10px
-				color #efefef
-		#tab1, #tab2
-			width 310px
-			height 350px
+		#tab1
 			background $csLightOrange
 		#tab2
 			background $csOrange
-		// 	width 310px
-		// 	height 350px
-		.colorMapYou,
-		.colorMapEveryone
+		.tab-pane
+			width 310px
+			height 350px
+		.color-map-you,
+		.color-map-everyone
 			position absolute
-			top 50px
+			top 20px
 			left 12px
 			background #fff
 			width 284px
 			height 264px
-		.colorMapYou img
-			width 284px
-		.colorMapEveryone img
-			position absolute
-			width 284px
-		.displayPercent
-			position absolute
-			top 200px
+			img
+				position absolute
+				left 0
+				top 0
+				width 100%
+				height 100%
+			img.minimap
+				display none
+				opacity 0.25
+		.time-played, .percent-complete
+			font-family $buttonFont
+			font-size 1.3em
+			top 295px
+		.time-played
+			left 12px
+			.time-played-text
+				margin-left 8px
+		.percent-complete
 			left 10px
+			right 10px
+			.progress
+				width 100%
+		.time-played-label, .percent-label
+			top 320px
+			color #efefef
+		.time-played-label
+			left 12px
+		.percent-label
+			right 12px
 	.top-seeders
 		position absolute
 		bottom 20px
@@ -492,7 +492,7 @@ canvas
 
 #collected-resources
 	box-shadow none
-	.backToProgress
+	.back-button
 		position absolute
 		bottom 20px
 		left 20px
@@ -803,21 +803,6 @@ canvas
 		.hud-mute
 			float left
 
-.bossBox
-	cursor pointer
-	width 48px
-	height 36px
-	line-height 36px
-	margin-right 10px
-	margin-left 10px
-	background #ccc
-	// background rgba(0,0,0,.2)
-	position relative
-	text-align center
-	&:hover
-		box-shadow 0 0 2px 2px rgba(0,0,0,.5)
-
-
 // Generic dialog styles
 .dialog
 	.speaker
@@ -891,15 +876,6 @@ canvas
 	float left
 	margin-left 20px
 
-.riddleText
-	position absolute
-	top 40px
-	left 10px
-	width 220px
-	color #999
-	font-size .8em
-	font-family $buttonFont
-
 textarea
 	font-family $buttonFont
 	width 800px
@@ -939,54 +915,8 @@ textarea
 	background-size cover
 	z-index 40000
 
-.gameCursor
-	position absolute
-	width 24px
-	height 24px
-	border 4px dashed green
-
-.hooray
-	position absolute
-	background #ccc
-	width 960px
-	height 480px
-	z-index 9999
-	p
-		margin-top 100px
-		font-size 2em
-		text-align center
-
 .message
 	font-family $bodyFont
-
-
-.firstRiddle
-	width 60%
-	font-size: 1.4em
-	line-height: 1.4em
-	margin 40px auto
-	// text-align center
-
-p.townSite
-	font-size 1.4em
-	margin 150px 100px 0 100px
-
-.hideLock
-	display none
-
-.demoProfile
-	p, li
-		color #333
-	h1
-		color $csBlue
-	h2
-		color $csBlue
-	.demoUserPlayLink
-		margin 30px 0 30px 0
-		a
-			background $csGreen
-			padding 10px
-			color white
 
 #game-log
 	width 100%

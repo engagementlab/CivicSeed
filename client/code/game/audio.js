@@ -430,7 +430,7 @@ var $audio = $game.$audio = {
 
   unmute: function () {
     Howler.unmute()
-    // Make sure that sountrack volume is restored, because sometimes it does not do it 
+    // Make sure that sountrack volume is restored, because sometimes it does not do it
     _soundtracks[_currentTrack].volume(_audio.config.soundtrackVolume)
   },
 

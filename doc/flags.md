@@ -40,6 +40,7 @@ The following table documents flags that are currently set in CivicSeed.
 | `boss-mode-ready` | The player has completed the game and is ready to play the boss level. |
 | `boss-mode-unlocked` | The world color meter has hit a point where the boss mode is unlocked for all players. |
 | `boss-mode` | The player is currently playing the boss level. |
+| `playing-cutscene` | A cutscene is currently being played. |
 
 #### Player skin effect flags
 

@@ -675,50 +675,66 @@ var _boss = {
     var cutsceneEl = document.getElementById('boss-cutscene'),
         videoEl    = document.getElementById('boss-cutscene-' + (_boss.theCharger.id - 1))
 
-    $('#boss-cutscene').fadeIn('fast');
+    $('#boss-cutscene').fadeIn('fast')
+    $game.setFlag('playing-cutscene')
     videoEl.style.display = 'block'
-    videoEl.play()
 
     // Set up actions to perform after the video has finished
     videoEl.addEventListener('ended', _onVideoHasFinishedPlaying)
+    videoEl.addEventListener('error', _onVideoHasFinishedPlaying) // In case of playback error, let's keep going instead of freezing the game
+
+    // Play video
+    videoEl.play()
 
     function _onVideoHasFinishedPlaying () {
       this.removeEventListener('ended', _onVideoHasFinishedPlaying)
-      $('#boss-cutscene').fadeOut('fast', function () {
-
-        // Hide the video
-        videoEl.style.display = 'none'
-
-        // After cutscene is over, update chargers and display a message
-        _boss.theCharger = {}
-        _boss.chargersCollected++
-
-        // Check if player wins, otherwise, keep going.
-        if (_boss.checkWin() === true) {
-          _boss.win()
-        }
-        else {
-          // Generate new items
-          _boss.placeRandomItems()
-          // Place another charger
-          _boss.placeCharger()
-
-          // Tell the player how many chargers are left
-          var chargersLeft = (_boss.numberOfChargers - _boss.chargersCollected),
-              message      = ''
-
-          if (chargersLeft === 1) {
-            message = 'Just one charger left!'
-          }
-          else {
-            message = 'Only ' + chargersLeft + ' chargers left!'
-          }
-          $game.alert(message)
-
-          // Unpause the game
-          _boss.clock.unpause()
-        }
+      this.removeEventListener('error', _onVideoHasFinishedPlaying)
+      _boss.hideCutscene(function callback() {
+        _boss.nextCharger()
       })
+    }
+  },
+
+  // Hide cutscene player element
+  hideCutscene: function (callback) {
+    $('#boss-cutscene').fadeOut('fast', function () {
+      // Hide the video & unset flags
+      $('#boss-cutscene .cutscene').hide()
+      $game.removeFlag('playing-cutscene')
+
+      if (typeof callback === 'function') callback()
+    })
+  },
+
+  // After a charger is collected, reset, check win condition or place another charger
+  nextCharger: function () {
+    _boss.theCharger = {}
+    _boss.chargersCollected++
+
+    // Check if player wins, otherwise, keep going.
+    if (_boss.checkWin() === true) {
+      _boss.win()
+    }
+    else {
+      // Generate new items
+      _boss.placeRandomItems()
+      // Place another charger
+      _boss.placeCharger()
+
+      // Tell the player how many chargers are left
+      var chargersLeft = (_boss.numberOfChargers - _boss.chargersCollected),
+          message      = ''
+
+      if (chargersLeft === 1) {
+        message = 'Just one charger left!'
+      }
+      else {
+        message = 'Only ' + chargersLeft + ' chargers left!'
+      }
+      $game.alert(message)
+
+      // Unpause the game
+      _boss.clock.unpause()
     }
   },
 
