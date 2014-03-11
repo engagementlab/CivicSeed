@@ -108,6 +108,7 @@ var $botanist = $game.$botanist = {
       // Display a generic end of level chat and then exit out. No further content from botanist.
       // The game will continue only when the boss mode is unlocked.
       _botanist.chat($botanist.dialog[4].instructions)
+      $botanist.finishedAllBotanistPuzzles()
       return
     }
 
@@ -220,6 +221,12 @@ var $botanist = $game.$botanist = {
     $puzzleEl
       .on('dragover', _botanist.onTangramDragOver)
       .on('drop',     _botanist.onTangramDrop);
+  },
+
+  // Things to do if the player has completed level 4
+  finishedAllBotanistPuzzles: function () {
+    $game.setFlag('completed-all-puzzles')
+    $botanist.setState(2)
   },
 
   disable: function () {

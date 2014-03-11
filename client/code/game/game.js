@@ -685,6 +685,11 @@ var _game = {
             $game.$player.giveMapToPlayer()
           }
 
+          // If the player has completed level 4 but the world color meter not restored
+          if ($game.$player.getLevel() > 4) {
+            $game.$botanist.finishedAllBotanistPuzzles(0)
+          }
+
           // Set up a nudge for the botanist, in case it needs to happen
           $game.$botanist._nudgePlayerTimeout = window.setTimeout($botanist.nudgePlayer, 4000)
         });
