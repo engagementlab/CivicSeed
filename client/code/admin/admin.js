@@ -18,13 +18,15 @@ var self = module.exports = {
 	},
 
 	setupLoaders: function() {
-		$body.on('click', '#dataLoaders .btn', function(event) {
-			var button = $(this),
-			dataType = button.data().type;
-			button.removeClass('btn-success');
+		$body.on('click', '#admin-startup button', function(event) {
+			var button   = $(this),
+					dataType = button.data().type;
+
+			button.removeClass('btn-success')
+			button.next('.loader-spinner').show()
 			ss.rpc('admin.startup.loadData', dataType, function(res) {
-				// console.log(res);
 				button.addClass('btn-success');
+				button.next('.loader-spinner').fadeOut()
 			});
 		});
 	},
@@ -99,12 +101,12 @@ var self = module.exports = {
 				}
 			});
 		});
-		
+
 		$body.on('click', '#questions', function() {
 			var instance = $(this).attr('data-instance');
 			self.showQuestions(instance);
 		});
-		
+
 		$body.on('click', '#chat', function() {
 			var instance = $(this).attr('data-instance');
 			ss.rpc('admin.monitor.getRecentChat', instance, function(err, res) {
@@ -113,7 +115,7 @@ var self = module.exports = {
 				}
 			});
 		});
-		
+
 		$body.on('click', '#addPlayer', function() {
 			var instance = $(this).attr('data-instance');
 			self.showAddPlayerForm(instance);
@@ -143,7 +145,7 @@ var self = module.exports = {
 			var id = $(this).attr('data-id'),
 				word = $('.input' + id).val();
 			if (word.indexOf('delete') > -1) {
-				self.deletePlayer(id, this);	
+				self.deletePlayer(id, this);
 			} else {
 				apprise('you must type delete to delete user');
 			}
@@ -293,12 +295,12 @@ var self = module.exports = {
 				apprise('error switching game');
 			} else {
 				if (bool) {
-					apprise('the game is now active');	
+					apprise('the game is now active');
 				} else {
 					apprise('the game is now inactive');
 				}
 			}
-		});	
+		});
 	},
 
 	showQuestions: function(instance) {
@@ -348,7 +350,7 @@ var self = module.exports = {
   			return -1;
   		}
   		if (a.level > b.level) {
-  			return 1;		
+  			return 1;
   		}
     	return 0;
     }

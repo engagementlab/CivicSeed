@@ -1,16 +1,53 @@
-.console
-	h1 Startup
-	h2 Database Initialization
-	h4 #{environment} Environment
+h1 Startup
 
-	div#dataLoaders.loader
-		button#userLoadBtn.btn(data-type='users') Users
-		button#gameLoadBtn.btn(data-type='game') Game
-		button#gameLoadBtn.btn(data-type='colors') Colors
-		button#chatLoadBtn.btn(data-type='chat') Chat
-		button#tileLoadBtn.btn(data-type='tiles') Tiles (hard)
-		button#botanistLoadBtn.btn(data-type='botanist') Botanist (hard)
-		button#npcLoadBtn.btn(data-type='npcs') NPC *super caution*
+#admin-startup.console
+	h2 Database Initialization
+
+	.loader
+		h4 #{environment} Environment
+
+		.loader-button-row.row
+			.loader-button.span2
+				button#userLoadBtn.btn(data-type='users') Users
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p
+		.loader-button-row.row
+			.loader-button.span2
+				button#gameLoadBtn.btn(data-type='game') Game
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p
+		.loader-button-row.row
+			.loader-button.span2
+				button#gameLoadBtn.btn(data-type='colors') Colors
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p
+		.loader-button-row.row
+			.loader-button.span2
+				button#chatLoadBtn.btn(data-type='chat') Chat
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p
+		.loader-button-row.row
+			.loader-button.span2
+				button#tileLoadBtn.btn(data-type='tiles') Tiles
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p After resetting tiles, always update NPCs next so that tile states can be updated with NPC locations.
+		.loader-button-row.row
+			.loader-button.span2
+				button#botanistLoadBtn.btn(data-type='botanist') Botanist
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p
+		.loader-button-row.row
+			.loader-button.span2
+				button#npcLoadBtn.btn(data-type='npcs') NPC
+				.loader-spinner.spinner
+			.loader-instructions.span6
+				p <strong class='color-orange'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.
 
 		//- button#resourcesLoadBtn.btn(data-type='resources') Preload Resources
 		//- pre #{consoleOutput}

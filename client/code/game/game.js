@@ -104,6 +104,9 @@ var $game = module.exports = {
 
   init: function (callback) {
 
+    // Overwrite page container with game size
+    document.getElementById('container').classList.add('game-container')
+
     // Instantiating code (if not already done)
     $map        = require('/map')
     $render     = require('/render')
