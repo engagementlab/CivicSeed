@@ -19,47 +19,47 @@
 
 				p <strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order. The button will turn green after the loading is complete.
 
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#userLoadBtn.btn(data-type='users') Users
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p Clears current users; sets up test and demo users.
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#gameLoadBtn.btn(data-type='game') Game
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p Clears current game sessions; sets up test and demo games.
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#gameLoadBtn.btn(data-type='colors') Colors
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p ??? (No idea what this does.)
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#chatLoadBtn.btn(data-type='chat') Chat
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p Clears all chat logs.
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#tileLoadBtn.btn(data-type='tiles') Tiles
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p Reloads tiles. Do this after exporting a new tileset from Tiled. After resetting tiles, always update NPCs next so that tile states can be updated with NPC locations.
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#botanistLoadBtn.btn(data-type='botanist') Botanist
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p Resets botanist content to default. (Note: nothing in the game or admin currently modifies the default data.)
-				.loader-button-row.row
-					.loader-button.span2
+				.row
+					.span2
 						button#npcLoadBtn.btn(data-type='npcs') NPC
-						.loader-spinner.spinner
-					.loader-instructions.span6
+						.admin-spinner.spinner
+					.admin-instructions.span6
 						p <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.
 
 				//- button#resourcesLoadBtn.btn(data-type='resources') Preload Resources
