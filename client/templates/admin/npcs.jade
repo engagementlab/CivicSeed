@@ -1,204 +1,214 @@
-.npcs
-	.row
-		.span12
-			h1 NPC Panel
-	each npc, n in npcs
-		.npc(class='level' + npc.level +' npc' + npc.id, data-sprite=npc.sprite)
-			- var formId = 'npc_' + npc.id
-			form(id=formId)
-				.information
-					.sprite
-						.sprite-controls
-							i.fa.fa-arrow-circle-up.spriteUp
-							i.fa.fa-arrow-circle-down.spriteDown
-					.npcName
-						input(type='text', data-area='name', value='#{npc.name}', placeholder='name')
+.row
+	.span10.offset1.back-to-admin
+		a(href='/admin')
+			i.fa.fa-arrow-circle-o-left.fa-lg
+			| back
 
-						label(for='npcLevel_' + npc.id) level:
-						input.number(id='npcLevel_' + npc.id, type='text', data-area='level', value='#{npc.level + 1}', placeholder='lvl')
+.row
+	.span10.offset1
+		h1 NPC Panel
 
-						label(for='npcCoordsX_' + npc.id) location:
-						input.number(id='npcCoordsX_' + npc.id, type='text', data-area='x', value='#{npc.x}', placeholder='x')
-						input.number(id='npcCoordsY_' + npc.id, type='text', data-area='y', value='#{npc.y}', placeholder='y')
+		h4 <span class='color-darkorange'>#{environment} Environment</a>
 
-						- var npcIsHolding = (npc.isHolding) ? true : false
-						label(for='npcIsHolding_' + npc.id) holding:
-						input.holding(id='npcIsHolding_' + npc.id, name='isHolding', value='isHolding', type='checkbox', checked=npcIsHolding)
+#admin-npcs.row
+	.span10.offset1
+		each npc, n in npcs
+			.npc(class='level' + npc.level +' npc' + npc.id, data-sprite=npc.sprite)
+				- var formId = 'npc_' + npc.id
+				form(id=formId)
+					.information
+						.sprite
+							.sprite-controls
+								i.fa.fa-arrow-circle-up.spriteUp
+								i.fa.fa-arrow-circle-down.spriteDown
+						.npc-basic-info
+							input.name(type='text', data-area='name', value='#{npc.name}', placeholder='name')
 
-				.resource(style=(npcIsHolding) ? 'display:block' : 'display:none')
-					button.viewResource(type='button') view resource
+							label(for='npcLevel_' + npc.id) level:
+							input.number(id='npcLevel_' + npc.id, type='text', data-area='level', value='#{npc.level + 1}', placeholder='lvl')
 
-					h3 Resource
+							label(for='npcCoordsX_' + npc.id) location:
+							input.number(id='npcCoordsX_' + npc.id, type='text', data-area='x', value='#{npc.x}', placeholder='x')
+							input.number(id='npcCoordsY_' + npc.id, type='text', data-area='y', value='#{npc.y}', placeholder='y')
 
-					label(for='resourceUrl_' + npc.id) URL <small>case and space sensitive</small>
-					input.url(id='resourceUrl_' + npc.id, type='text', data-area='url', placeholder='numerical id', value=(npc.resource.url) ? '#{npc.resource.url}' : '')
+							- var npcIsHolding = (npc.isHolding) ? true : false
+							label(for='npcIsHolding_' + npc.id) holding:
+							input.holding(id='npcIsHolding_' + npc.id, name='isHolding', value='isHolding', type='checkbox', checked=npcIsHolding)
 
-					label(for='resourceTangram_' + npc.id) Tangram Piece
-					input.url(id='resourceTangram_' + npc.id, type='text', data-area='shape', value=(npc.resource.shape) ? '#{npc.resource.shape}' : '')
+					.resource(style=(npcIsHolding) ? 'display:block' : 'display:none')
+						button.viewResource(type='button') view resource
 
-					label(for='resourceQuestion_' + npc.id) Question
-						- var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
-						- var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
-						- var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
-						- var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
+						h3 Resource
 
-						.questionType
-							input(id='questionOpen_' + npc.id, name=('radio' + npc.id) , value='open', type='radio', checked=questionOpen)
-							label(for='questionOpen_' + npc.id) open
+						label(for='resourceUrl_' + npc.id) URL <small>case and space sensitive</small>
+						input.url(id='resourceUrl_' + npc.id, type='text', data-area='url', placeholder='numerical id', value=(npc.resource.url) ? '#{npc.resource.url}' : '')
 
-							input(id='questionTrueFalse_' + npc.id, name=('radio' + npc.id) , value='truefalse', type='radio', checked=questionTrueFalse)
-							label(for='questionTrueFalse_' + npc.id) true / false
+						label(for='resourceTangram_' + npc.id) Tangram Piece
+						input.url(id='resourceTangram_' + npc.id, type='text', data-area='shape', value=(npc.resource.shape) ? '#{npc.resource.shape}' : '')
 
-							input(id='questionYesNo_' + npc.id, name=('radio' + npc.id) , value='yesno', type='radio', checked=questionYesNo)
-							label(for='questionYesNo_' + npc.id) yes / no
+						label(for='resourceQuestion_' + npc.id) Question
+							- var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
+							- var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
+							- var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
+							- var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
 
-							input(id='questionMultiple_' + npc.id, name=('radio' + npc.id) , value='multiple', type='radio', checked=questionMultiple)
-							label(for='questionMultiple_' + npc.id) multiple choice
+							.questionType
+								input(id='questionOpen_' + npc.id, name=('radio' + npc.id) , value='open', type='radio', checked=questionOpen)
+								label(for='questionOpen_' + npc.id) open
 
-					textarea.question(id='resourceQuestion_' + npc.id, data-area='question') #{npc.resource.question}
-					
-					.requiredDiv.questionOptions(style=(questionOpen) ? 'display:block' : 'display:none')
-						label(for='questionSuggestedLength_' + npc.id) Suggested Length
-						input(id='questionSuggestedLength_' + npc.id, type='text', data-area='requiredLength', maxlength='3', value=(npc.resource.requiredLength) ? '#{npc.resource.requiredLength}' : '')
+								input(id='questionTrueFalse_' + npc.id, name=('radio' + npc.id) , value='truefalse', type='radio', checked=questionTrueFalse)
+								label(for='questionTrueFalse_' + npc.id) true / false
 
-					.possibleDiv.questionOptions(style=(questionMultiple) ? 'display:block' : 'display:none')
-						label Choices
-						if (questionMultiple)
-							each choice, c in npc.resource.possibleAnswers
-								textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[c]}
-						else
+								input(id='questionYesNo_' + npc.id, name=('radio' + npc.id) , value='yesno', type='radio', checked=questionYesNo)
+								label(for='questionYesNo_' + npc.id) yes / no
+
+								input(id='questionMultiple_' + npc.id, name=('radio' + npc.id) , value='multiple', type='radio', checked=questionMultiple)
+								label(for='questionMultiple_' + npc.id) multiple choice
+
+						textarea.question(id='resourceQuestion_' + npc.id, data-area='question') #{npc.resource.question}
+
+						.requiredDiv.questionOptions(style=(questionOpen) ? 'display:block' : 'display:none')
+							label(for='questionSuggestedLength_' + npc.id) Suggested Length
+							input(id='questionSuggestedLength_' + npc.id, type='text', data-area='requiredLength', maxlength='3', value=(npc.resource.requiredLength) ? '#{npc.resource.requiredLength}' : '')
+
+						.possibleDiv.questionOptions(style=(questionMultiple) ? 'display:block' : 'display:none')
+							label Choices
+							if (questionMultiple)
+								each choice, c in npc.resource.possibleAnswers
+									textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[c]}
+							else
+								textarea.possible(data-area='possibleAnswers')
+								textarea.possible(data-area='possibleAnswers')
+								textarea.possible(data-area='possibleAnswers')
+								textarea.possible(data-area='possibleAnswers')
+
+						.answerDiv.questionOptions(style=(!questionOpen) ? 'display:block' : 'display:none')
+							label(for='questionAnswer_' + npc.id) Answer
+							input.answer(id='questionAnswer_' + npc.id, type='text', data-area='answer', value=(npc.resource.answer) ? '#{npc.resource.answer}' : '')
+
+						label(for='resourceDependsOn_' + npc.id) Depends on NPC
+						input(id='resourceDependsOn_' + npc.id, type='text', data-area='dependsOn', maxlength='4', value=(npc.dependsOn) ? '#{npc.dependsOn}' : '')
+
+						label(for='resourceCorrect_' + npc.id) Feedback Correct
+						textarea.question(id='resourceCorrect_' + npc.id, data-area='feedbackRight') #{npc.resource.feedbackRight}
+
+						label(for='resourceWrong_' + npc.id) Feedback Wrong
+						textarea.question(id='resourceWrong_' + npc.id, data-area='feedbackWrong') #{npc.resource.feedbackWrong}
+
+					.prompts(style=npcIsHolding?'display:block':'display:none')
+						h3 Prompts
+
+						label(for='promptsFirstTime_' + npc.id) First Time
+						textarea(id='promptsFirstTime_' + npc.id, data-area='prompt') #{npc.dialog.prompts[0]}
+
+						label(for='promptsAfterIncorrect_' + npc.id) Returning After Incorrect
+						textarea(id='promptsAfterIncorrect_' + npc.id, data-area='prompt') #{npc.dialog.prompts[1]}
+
+						label(for='promptsAfterCompleted_' + npc.id) Returning After Completed
+						textarea(id='promptsAfterCompleted_' + npc.id, data-area='prompt') #{npc.dialog.prompts[2]}
+
+					.smalltalk(style=!npcIsHolding?'display:block':'display:none')
+						h3 Dialog
+
+						label(for='dialogPast_' + npc.id) Past
+						textarea(id='dialogPast_' + npc.id, data-area='smalltalk', data-index='0') #{npc.dialog.smalltalk[0]}
+
+						label(for='dialogPresent_' + npc.id) Present
+						textarea(id='dialogPresent_' + npc.id, data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
+
+						label(for='dialogFuture_' + npc.id) Future
+						textarea(id='dialogFuture_' + npc.id, data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
+
+					.skinSuit
+						h3 Skin Suit
+						input(type='text', value=(npc.skinSuit) ? '#{npc.skinSuit}' : '')
+
+					.options
+						button.saveChanges(type='button', data-id='#{npc.id}') save
+						button.deleteNpc(type='button', data-id='#{npc.id}') delete
+		.addDiv
+			button.addNpc(type='button') Add NPC
+
+		.buffer
+		.article
+
+		.npcTemplate(style="display:none;")
+		.npc(class='level0 npc-1', data-sprite='0')
+			.row
+				.span12
+					.information
+						.sprite
+							p
+								i.fa.fa-arrow-circle-up.spriteUp
+								i.fa.fa-arrow-circle-down.spriteDown
+						p.npc-basic-info
+							textarea(data-area='name') Nombre
+							<span class="regular">level:</span>
+							textarea.areaNumber(data-area='level') 1
+							<span class="regular">location:</span>
+							textarea.areaNumber(data-area='x') 23
+							textarea.areaNumber(data-area='y') 23
+							<span class="regular">holding: </span>
+							input(name='isHolding', value='isHolding', type='checkbox',checked)
+					.resource
+						p.viewResource(data-url='/articles/test.html') view resource
+						h3 Resource
+						p URL <span class='smallerFont'> case and space sensitive</span>
+						textarea.url(data-area='url') test
+						p.questionType
+							|Question
+							input(name=('radioX') , value='open', type='radio', checked)
+							<span> open</span>
+							input(name=('radioX') , value='truefalse', type='radio')
+							<span> true/false</span>
+							input(name=('radioX') , value='yesno', type='radio')
+							<span> yes/no</span>
+							input(name=('radioX') , value='multiple', type='radio')
+							<span> multiple choice</span>
+						textarea.question(data-area='question') What is the answer?
+						.requiredDiv.questionOptions
+							p Suggested Length
+							textarea.required(data-area='requiredLength', maxlength='3') 50
+						.possibleDiv.questionOptions(style="display:none;")
+							p Choices
 							textarea.possible(data-area='possibleAnswers')
 							textarea.possible(data-area='possibleAnswers')
 							textarea.possible(data-area='possibleAnswers')
 							textarea.possible(data-area='possibleAnswers')
-
-					.answerDiv.questionOptions(style=(!questionOpen) ? 'display:block' : 'display:none')
-						label(for='questionAnswer_' + npc.id) Answer
-						input.answer(id='questionAnswer_' + npc.id, type='text', data-area='answer', value=(npc.resource.answer) ? '#{npc.resource.answer}' : '')
-
-					label(for='resourceDependsOn_' + npc.id) Depends on NPC
-					input(id='resourceDependsOn_' + npc.id, type='text', data-area='dependsOn', maxlength='4', value=(npc.dependsOn) ? '#{npc.dependsOn}' : '')
-
-					label(for='resourceCorrect_' + npc.id) Feedback Correct
-					textarea.question(id='resourceCorrect_' + npc.id, data-area='feedbackRight') #{npc.resource.feedbackRight}
-
-					label(for='resourceWrong_' + npc.id) Feedback Wrong
-					textarea.question(id='resourceWrong_' + npc.id, data-area='feedbackWrong') #{npc.resource.feedbackWrong}
-
-				.prompts(style=npcIsHolding?'display:block':'display:none')
-					h3 Prompts
-
-					label(for='promptsFirstTime_' + npc.id) First Time
-					textarea(id='promptsFirstTime_' + npc.id, data-area='prompt') #{npc.dialog.prompts[0]}
-
-					label(for='promptsAfterIncorrect_' + npc.id) Returning After Incorrect
-					textarea(id='promptsAfterIncorrect_' + npc.id, data-area='prompt') #{npc.dialog.prompts[1]}
-
-					label(for='promptsAfterCompleted_' + npc.id) Returning After Completed
-					textarea(id='promptsAfterCompleted_' + npc.id, data-area='prompt') #{npc.dialog.prompts[2]}
-
-				.smalltalk(style=!npcIsHolding?'display:block':'display:none')
-					h3 Dialog
-
-					label(for='dialogPast_' + npc.id) Past
-					textarea(id='dialogPast_' + npc.id, data-area='smalltalk', data-index='0') #{npc.dialog.smalltalk[0]}
-
-					label(for='dialogPresent_' + npc.id) Present
-					textarea(id='dialogPresent_' + npc.id, data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
-
-					label(for='dialogFuture_' + npc.id) Future
-					textarea(id='dialogFuture_' + npc.id, data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
-
-				.skinSuit
-					h3 Skin Suit
-					input(type='text', value=(npc.skinSuit) ? '#{npc.skinSuit}' : '')
-
-				.options
-					button.saveChanges(type='button', data-id='#{npc.id}') save
-					button.deleteNpc(type='button', data-id='#{npc.id}') delete
-	.addDiv
-		button.addNpc(type='button') Add NPC
-
-.buffer
-.article
-
-.npcTemplate(style="display:none;")
-	.npc(class='level0 npc-1', data-sprite='0')
-		.row
-			.span12
-				.information
-					.sprite
+						.answerDiv.questionOptions(style="display:none;")
+							p Answer
+							textarea.answer(data-area='answer')
+						p Tagline
+						textarea(data-area='tagline', maxlength='24') I am a tagline
+						p Depends on NPC
+						textarea.required(data-area='dependsOn', maxlength='4')
+						p Feedback Correct
+						textarea.question(data-area='feedbackRight') Nice job.
+						p Feedback Wrong
+						textarea.question(data-area='feedbackWrong') Not quite.
+					.prompts
+						h3 Prompts
+						p First Time
+						textarea(data-area='prompt') Answer my question?
+						p Returning After Incorrect
+						textarea(data-area='prompt') Try again.
+						p Returning After Completed
+						textarea(data-area='prompt') Welcome back.
+					.smalltalk(style="display:none;")
+						h3 Dialog
+						p Past
+						textarea(data-area='smalltalk')
+						p Present
+						textarea(data-area='smalltalk')
+						p Future
+						textarea(data-area='smalltalk')
+					.skinSuit
+						p Skin Suit
+						textarea
+					.options
 						p
-							i.fa.fa-arrow-circle-up.spriteUp
-							i.fa.fa-arrow-circle-down.spriteDown
-					p.npcName
-						textarea(data-area='name') Nombre
-						<span class="regular">level:</span>
-						textarea.areaNumber(data-area='level') 1
-						<span class="regular">location:</span>
-						textarea.areaNumber(data-area='x') 23
-						textarea.areaNumber(data-area='y') 23
-						<span class="regular">holding: </span>
-						input(name='isHolding', value='isHolding', type='checkbox',checked)
-				.resource
-					p.viewResource(data-url='/articles/test.html') view resource
-					h3 Resource
-					p URL <span class='smallerFont'> case and space sensitive</span>
-					textarea.url(data-area='url') test
-					p.questionType
-						|Question
-						input(name=('radioX') , value='open', type='radio', checked)
-						<span> open</span>
-						input(name=('radioX') , value='truefalse', type='radio')
-						<span> true/false</span>
-						input(name=('radioX') , value='yesno', type='radio')
-						<span> yes/no</span>
-						input(name=('radioX') , value='multiple', type='radio')
-						<span> multiple choice</span>
-					textarea.question(data-area='question') What is the answer?
-					.requiredDiv.questionOptions
-						p Suggested Length
-						textarea.required(data-area='requiredLength', maxlength='3') 50
-					.possibleDiv.questionOptions(style="display:none;")
-						p Choices
-						textarea.possible(data-area='possibleAnswers')
-						textarea.possible(data-area='possibleAnswers')
-						textarea.possible(data-area='possibleAnswers')
-						textarea.possible(data-area='possibleAnswers')
-					.answerDiv.questionOptions(style="display:none;")
-						p Answer
-						textarea.answer(data-area='answer')
-					p Tagline
-					textarea(data-area='tagline', maxlength='24') I am a tagline
-					p Depends on NPC
-					textarea.required(data-area='dependsOn', maxlength='4')
-					p Feedback Correct
-					textarea.question(data-area='feedbackRight') Nice job.
-					p Feedback Wrong
-					textarea.question(data-area='feedbackWrong') Not quite.
-				.prompts
-					h3 Prompts
-					p First Time
-					textarea(data-area='prompt') Answer my question?
-					p Returning After Incorrect
-					textarea(data-area='prompt') Try again.
-					p Returning After Completed
-					textarea(data-area='prompt') Welcome back.
-				.smalltalk(style="display:none;")
-					h3 Dialog
-					p Past
-					textarea(data-area='smalltalk')
-					p Present
-					textarea(data-area='smalltalk')
-					p Future
-					textarea(data-area='smalltalk')
-				.skinSuit
-					p Skin Suit
-					textarea
-				.options
-					p
-						<span class='saveChanges' data-id='-1'>save</span>
-						<span class='deleteNpc' data-id='-1'>delete</span>
+							<span class='saveChanges' data-id='-1'>save</span>
+							<span class='deleteNpc' data-id='-1'>delete</span>
 
 .levelFilter
 	.current 1

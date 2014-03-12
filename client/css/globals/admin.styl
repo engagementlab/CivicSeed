@@ -1,37 +1,59 @@
+h4
+	text-transform capitalize
+
 .console
-	width 800px
+	width 100%
 	margin 25px auto
 	padding 25px
 	background $csLightGray
-	h4
-		text-transform capitalize
-	form
-		margin 12px 0
-		padding 20px 20px 8px
-		border 2px solid #ddd
+	.console-content
+		// margin 12px 0
+		padding 20px
+		border 2px solid $csGray
 		background-color white
+	form
+		margin 20px 0
 
-.monitor
-	.adminLink
-		width 150px
-		cursor pointer
-		padding 10px
-		background $csOrange
-		color white
-		text-align center
-		font-family	$buttonFont
-		border-radius 5px
+.back-to-admin
+	font-family $buttonFont
+	white-space nowrap
+	i
+		margin-right 6px
+		font-size 1.4em
 
-	#questions
-		background $csBlue
-	#chat
-		background $csPurple
-	#addPlayer
-		background $csGreen
-	#startStop
+#admin-startup
+	.loader-button-row
+		margin-top 10px
+	.loader-spinner
+		margin-top -20px
+		margin-left 56px
+	.loader-instructions
+		padding-top 4px
+	button
+		width 120px
+
+#admin-invites
+	textarea
+		width 100%
+
+#admin-monitor
+	.console-buttons
+		width 33%
+		display inline-block
+		margin-top 20px
+	.monitor-button
+		width 90%
+		margin-bottom 10px
 		background $csOrange
+		&#questions
+			background $csBlue
+		&#chat
+			background $csPurple
+		&#addPlayer
+			background $csGreen
+		&#startStop
+			background $csOrange
 	.output
-		margin 20px 0 40px 20px
 		.allChat
 			font-family $buttonFont
 			p
@@ -111,23 +133,7 @@ p.level2
 p.level3
 	background $csOrange
 
-#admin-startup
-	.loader
-		margin 12px 0
-		padding 20px
-		border 2px solid $csGray
-		background-color white
-		.loader-button-row
-			margin-top 10px
-		.loader-spinner
-			margin-top -20px
-			margin-left 56px
-		.loader-instructions
-			padding-top 4px
-		button
-			width 120px
-
-.npcs
+#admin-npcs
 	h3
 		font-size 1.4em
 	label
@@ -147,10 +153,9 @@ p.level3
 	textarea
 		padding 10px
 		height 95px
-		&.question
-			width 800px
+		width 100%
 		&.possible, &.answer
-			width 390px
+			width 45%
 			margin-right 20px
 	button
 		padding 10px
@@ -190,10 +195,12 @@ p.level3
 						cursor pointer
 						&:hover
 							color $csOrange
-			.npcName
+			.npc-basic-info
 				position absolute
 				left 100px
 				top 28px
+				.name
+					width 150px
 				input
 					font-size 1.4em
 					font-weight bold

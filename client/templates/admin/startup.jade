@@ -1,14 +1,21 @@
 .row
-	.span8.offset1
-		h1 Startup
+	.span10.offset1.back-to-admin
+		a(href='/admin')
+			i.fa.fa-arrow-circle-o-left.fa-lg
+			| back
 
 .row
-	.span8.offset1
+	.span10.offset1
+		h1 Startup
+
+		h4 <span class='color-darkorange'>#{environment} Environment</a>
+
+.row
+	.span10.offset1
 		#admin-startup.console
 			h2 Database Initialization
-			h4 <span class='color-darkorange'>#{environment} Environment</a>
 
-			.loader
+			.console-content
 
 				p <strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order. The button will turn green after the loading is complete.
 
@@ -41,7 +48,7 @@
 						button#tileLoadBtn.btn(data-type='tiles') Tiles
 						.loader-spinner.spinner
 					.loader-instructions.span6
-						p After resetting tiles, always update NPCs next so that tile states can be updated with NPC locations.
+						p Reloads tiles. Do this after exporting a new tileset from Tiled. After resetting tiles, always update NPCs next so that tile states can be updated with NPC locations.
 				.loader-button-row.row
 					.loader-button.span2
 						button#botanistLoadBtn.btn(data-type='botanist') Botanist

@@ -1,8 +1,17 @@
-.console
-	h1 Site Administration
-	ul
-		- if(sessionStorage.userRole === 'superadmin')
-			li: a(href="/admin/startup") Startup
-			li: a(href="/admin/npcs") NPCs
-		li: a(href="/admin/invitecodes") Invite Codes
-		li: a(href="/admin/monitor") Monitor
+.row
+	.span10.offset1
+		h1 Site Administration
+
+		h4 <span class='color-darkorange'>#{environment} Environment</a>
+
+.row
+	.span10.offset1
+		#admin-panel.console
+
+			.console-content
+				ul
+					- if(sessionStorage.userRole === 'superadmin')
+						li: a(href="/admin/startup") Startup
+						li: a(href="/admin/npcs") NPCs
+					li: a(href="/admin/invitecodes") Invite Codes
+					li: a(href="/admin/monitor") Monitor

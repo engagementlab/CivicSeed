@@ -1,18 +1,30 @@
+.row
+	.span10.offset1.back-to-admin
+		a(href='/admin')
+			i.fa.fa-arrow-circle-o-left.fa-lg
+			| back
 
-.monitor
-	.row
-		.span12
-			h1 Monitor Panel
-	.row
-		each instance, i in instances
-			.span4
-				h3 Game: #{instance}
-				p.adminLink#players(data-instance='#{instance}') Players
-				p.adminLink#chat(data-instance='#{instance}') Chat Logs
-				p.adminLink#questions(data-instance='#{instance}') Questions
-				p.adminLink#addPlayer(data-instance='#{instance}') Add Player
-				p.adminLink#startStop(data-instance='#{instance}') Start / Stop
-				
-	.row
-		.span12.output
+.row
+	.span10.offset1
+		h1 Monitor Panel
 
+		h4 <span class='color-darkorange'>#{environment} Environment</a>
+
+#admin-monitor
+	.row
+		.span10.offset1
+			each instance, i in instances
+				.console-buttons
+						h3 Game: <span class='color-darkblue'>#{instance}</span>
+						button.monitor-button.btn#players(data-instance='#{instance}') Players
+						button.monitor-button.btn#chat(data-instance='#{instance}') Chat Logs
+						button.monitor-button.btn#questions(data-instance='#{instance}') Questions
+						button.monitor-button.btn#addPlayer(data-instance='#{instance}') Add Player
+						button.monitor-button.btn#startStop(data-instance='#{instance}') Start / Stop
+
+	.row
+		.span10.offset1
+			.console
+				.console-content
+					.output
+						p Click a button above to monitor an aspect of a game session.

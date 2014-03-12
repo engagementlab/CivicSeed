@@ -24,7 +24,7 @@ exports.actions = function (req, res, ss) {
   // req.use('debug');
   req.use('account.authenticated');
 
-  var colorData = require(rootDir + '/data/colors');
+  var colorData = require(rootDir + '/data/colors.json');
 
   var createUserAndSendInvite = function(email, instanceName, i) {
     userModel.findOne({ email: email }, function(err, user) {
@@ -33,7 +33,7 @@ exports.actions = function (req, res, ss) {
         console.error('  Could not find \'actor\' user: %s'.red.inverse, err);
       } else {
         if(!user) {
-          var newColor = colorData.global[i],
+          var newColor = colorData[i],
             tilesheetNum = i + 1;
 
           var password = xkcd.generatePassword();
