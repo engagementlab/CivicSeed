@@ -317,8 +317,8 @@ module.exports.global = [{
 			draw: 0,
 			dropped: 0
 		},
-		botanistState: 0,
-		firstTime: true,
+		botanistState: 2,
+		firstTime: false,
 		resume: [],
 		resumeFeedback: [],
 		seenRobot: false,
@@ -327,7 +327,7 @@ module.exports.global = [{
 		pledges: 5,
 		collaborativeChallenge: false,
 		skinSuit: {
-			head: 'basic',
+			head: 'astronaut',
 			torso: 'basic',
 			legs: 'basic',
 			unlocked: {

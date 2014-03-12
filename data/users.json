@@ -1,0 +1,981 @@
+[
+  {
+    "activeSessionID": null,
+    "firstName": "jimmy",
+    "lastName": "dolan",
+    "school": "Emerson College",
+    "password": "",
+    "email": "c",
+    "role": "superadmin",
+    "gameStarted": true,
+    "profilePublic": true,
+    "profileLink": "kae5e46pxifqolxr",
+    "profileSetup": true,
+    "profileUnlocked": true,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [
+        "Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.",
+        "Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.",
+        "Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.",
+        "Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth."
+      ],
+      "resumeFeedback": [
+        {
+          "resumeIndex": 0,
+          "comment": "hello russell."
+        },
+        {
+          "resumeIndex": 0,
+          "comment": "roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green"
+        }
+      ],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    },
+    "admin": {
+      "instances": [
+        "test",
+        "demo",
+        "boss"
+      ]
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "tufts",
+    "lastName": "admin",
+    "school": "Emerson College",
+    "password": "funcarrots",
+    "email": "tufts",
+    "role": "admin",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "3uk8q5vqvikn8kt9",
+    "profileSetup": true,
+    "profileUnlocked": true,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [
+        "Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.",
+        "Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.",
+        "Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.",
+        "Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth."
+      ],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Michael",
+    "lastName": "Jordan",
+    "school": "North Carolina",
+    "password": "",
+    "email": "m",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": true,
+    "profileLink": "dysbaphy3e0icnmi",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Larry",
+    "lastName": "Bird",
+    "school": "Indiana State",
+    "password": "",
+    "email": "l",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "8ym5dh4b42qehfr",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 65,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Pistol",
+    "lastName": "Pete",
+    "school": "LSU",
+    "password": "",
+    "email": "p",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "7o89d51qd8rjatt9",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 66,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Bill",
+    "lastName": "Russell",
+    "school": "UCLA",
+    "password": "",
+    "email": "b",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "aodeef1qd8rjatt9",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 67,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Julius",
+    "lastName": "Erving",
+    "school": "UMass",
+    "password": "",
+    "email": "e",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "f443ef1qd8rjatt9",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 67,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 2,
+      "firstTime": false,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "astronaut",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Magic",
+    "lastName": "Johnson",
+    "school": "Michigan State",
+    "password": "",
+    "email": "j",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "2o89d51qd3raace9",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 8986,
+          "tagline": "This is correct",
+          "seeded": [],
+          "answers": [
+            "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "multiple",
+          "index": 9536,
+          "tagline": "Wrong square",
+          "seeded": [],
+          "answers": [
+            "D) A daughter of immigrants, bilingual upbringing, latina female"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "yesno",
+          "index": 8542,
+          "tagline": "This piece is wrong",
+          "seeded": [],
+          "answers": [
+            "yes"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 6265,
+          "tagline": "This is a correct piece",
+          "seeded": [],
+          "answers": [
+            "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 4693,
+          "tagline": "Nope",
+          "seeded": [],
+          "answers": [
+            "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "multiple",
+          "index": 4284,
+          "tagline": "Don't place this one",
+          "seeded": [],
+          "answers": [
+            "B) downstream-oriented service"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 2569,
+          "tagline": "Use this one",
+          "seeded": [],
+          "answers": [
+            "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 1608,
+          "tagline": "No not this",
+          "seeded": [],
+          "answers": [
+            "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 2176,
+          "tagline": "This is one of them",
+          "seeded": [],
+          "answers": [
+            "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 4876,
+          "tagline": "Not a puzzle piece",
+          "seeded": [],
+          "answers": [
+            "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
+          ]
+        }
+      ],
+      "resourcesDiscovered": 10,
+      "inventory": [
+        {
+          "name": "correct4",
+          "tagline": "This is correct",
+          "npc": 8986
+        },
+        {
+          "name": "wrong6",
+          "tagline": "Wrong square",
+          "npc": 9536
+        },
+        {
+          "name": "wrong3",
+          "tagline": "This piece is wrong",
+          "npc": 8542
+        },
+        {
+          "name": "correct2",
+          "tagline": "This is a correct piece",
+          "npc": 6265
+        },
+        {
+          "name": "wrong2",
+          "tagline": "Nope",
+          "npc": 4693
+        },
+        {
+          "name": "wrong1",
+          "tagline": "Don't place this one",
+          "npc": 4284
+        },
+        {
+          "name": "correct1",
+          "tagline": "Use this one",
+          "npc": 2569
+        },
+        {
+          "name": "wrong4",
+          "tagline": "No not this",
+          "npc": 1608
+        },
+        {
+          "name": "correct3",
+          "tagline": "This is one of them",
+          "npc": 2176
+        },
+        {
+          "name": "wrong5",
+          "tagline": "Not a puzzle piece",
+          "npc": 4876
+        }
+      ],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 3,
+      "firstTime": false,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "isMuted": true,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Lou",
+    "lastName": "Huang",
+    "school": "University of Pennsylvania",
+    "password": "",
+    "email": "q",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "83e38ubo04bwqaor",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 3,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 8986,
+          "tagline": "This is correct",
+          "seeded": [],
+          "answers": [
+            "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "multiple",
+          "index": 9536,
+          "tagline": "Wrong square",
+          "seeded": [],
+          "answers": [
+            "D) A daughter of immigrants, bilingual upbringing, latina female"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "yesno",
+          "index": 8542,
+          "tagline": "This piece is wrong",
+          "seeded": [],
+          "answers": [
+            "yes"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 6265,
+          "tagline": "This is a correct piece",
+          "seeded": [],
+          "answers": [
+            "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 4693,
+          "tagline": "Nope",
+          "seeded": [],
+          "answers": [
+            "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "multiple",
+          "index": 4284,
+          "tagline": "Don't place this one",
+          "seeded": [],
+          "answers": [
+            "B) downstream-oriented service"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 2569,
+          "tagline": "Use this one",
+          "seeded": [],
+          "answers": [
+            "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 1608,
+          "tagline": "No not this",
+          "seeded": [],
+          "answers": [
+            "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 2176,
+          "tagline": "This is one of them",
+          "seeded": [],
+          "answers": [
+            "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "index": 4876,
+          "tagline": "Not a puzzle piece",
+          "seeded": [],
+          "answers": [
+            "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
+          ]
+        }
+      ],
+      "resourcesDiscovered": 10,
+      "inventory": [
+        {
+          "name": "correct4",
+          "tagline": "This is correct",
+          "npc": 8986
+        },
+        {
+          "name": "wrong6",
+          "tagline": "Wrong square",
+          "npc": 9536
+        },
+        {
+          "name": "wrong3",
+          "tagline": "This piece is wrong",
+          "npc": 8542
+        },
+        {
+          "name": "correct2",
+          "tagline": "This is a correct piece",
+          "npc": 6265
+        },
+        {
+          "name": "wrong2",
+          "tagline": "Nope",
+          "npc": 4693
+        },
+        {
+          "name": "wrong1",
+          "tagline": "Don't place this one",
+          "npc": 4284
+        },
+        {
+          "name": "correct1",
+          "tagline": "Use this one",
+          "npc": 2569
+        },
+        {
+          "name": "wrong4",
+          "tagline": "No not this",
+          "npc": 1608
+        },
+        {
+          "name": "correct3",
+          "tagline": "This is one of them",
+          "npc": 2176
+        },
+        {
+          "name": "wrong5",
+          "tagline": "Not a puzzle piece",
+          "npc": 4876
+        }
+      ],
+      "seeds": {
+        "regular": 50,
+        "draw": 50,
+        "dropped": 1
+      },
+      "botanistState": 3,
+      "firstTime": false,
+      "resume": [],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "isMuted": true,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "Mindy",
+    "lastName": "Mindy",
+    "school": "Tufts University",
+    "password": "mindy",
+    "email": "mindy",
+    "role": "superadmin",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "4cprkae7y5xqolx6",
+    "profileSetup": true,
+    "profileUnlocked": true,
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 0,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": true,
+      "resume": [
+        "Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.",
+        "Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.",
+        "Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.",
+        "Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth."
+      ],
+      "resumeFeedback": [
+        {
+          "resumeIndex": 0,
+          "comment": "this is a feedback response."
+        },
+        {
+          "resumeIndex": 0,
+          "comment": "roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green"
+        }
+      ],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    },
+    "admin": {
+      "instances": []
+    }
+  },
+  {
+    "activeSessionID": null,
+    "firstName": "boss",
+    "lastName": "tester",
+    "school": "testing university",
+    "password": "",
+    "email": "bosstester",
+    "role": "actor",
+    "gameStarted": true,
+    "profilePublic": false,
+    "profileLink": "8ym5dh42qe3dhfr",
+    "profileSetup": true,
+    "profileUnlocked": false,
+    "game": {
+      "instanceName": "boss",
+      "currentLevel": 4,
+      "position": {
+        "x": 64,
+        "y": 77
+      },
+      "resources": [],
+      "resourcesDiscovered": 0,
+      "inventory": [],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 0
+      },
+      "botanistState": 0,
+      "firstTime": false,
+      "resume": [
+        "Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.",
+        "Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna.",
+        "Bell pepper chickweed kohlrabi arugula squash mung bean. Salsify potato scallion pea carrot lentil jícama eggplant plantain bamboo shoot lettuce tigernut arugula broccoli tatsoi. Horseradish endive salad beetroot brussels sprout salsify rutabaga water chestnut aubergine amaranth courgette tomatillo bell pepper radish sorrel gourd seakale okra.",
+        "Taro ricebean radish kohlrabi azuki bean earthnut pea sea lettuce gumbo maize chickpea jícama coriander. Spinach summer purslane artichoke prairie turnip burdock salsify nori spinach kombu grape. Bush tomato kombu yarrow bell pepper gourd onion coriander azuki bean bitterleaf courgette pea sprouts celery tigernut salsify rutabaga wattle seed wakame amaranth."
+      ],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 0,
+      "tilesColored": 0,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "skinSuit": {
+        "head": "basic",
+        "torso": "basic",
+        "legs": "basic",
+        "unlocked": {
+          "head": [
+            "basic"
+          ],
+          "torso": [
+            "basic"
+          ],
+          "legs": [
+            "basic"
+          ]
+        }
+      }
+    }
+  }
+]

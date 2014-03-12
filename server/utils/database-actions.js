@@ -17,6 +17,7 @@ exports.dropCollection = function(collection, callback) {
 
 exports.saveDocuments = function(model, documents, count, callback) {
 	var collectionName = model.collection.collection.collectionName;
+  console.log('CS: '.blue + 'Saving documents for collection: '.magenta + collectionName.yellow.underline + ' ...'.magenta)
 	if(typeof count === 'function') {
 		callback = count;
 	}
@@ -30,7 +31,7 @@ exports.saveDocuments = function(model, documents, count, callback) {
 			// userModel.find(function (err, users) {
 			// 	// handleError('Could not find document: %s', err);
 			// 	// if(err) { return handleError(err); }
-				
+
 			// 	console.log(users);
 			// 	consoleOutput += users;
 
@@ -54,6 +55,7 @@ exports.saveDocuments = function(model, documents, count, callback) {
 
 exports.resetDefaultData = function(model, callback) {
 	var collectionName = model.collection.collection.collectionName;
+  console.log('CS: '.blue + 'Resetting default data for collection: '.magenta + collectionName.yellow.underline + ' ...'.magenta)
 	if(collectionName === 'users') {
 		model.remove({'game.instanceName': 'demo'}, function(err) {
 			if(err) {
