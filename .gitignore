@@ -1,7 +1,4 @@
-/data/map/expanded/
-/data/demo-users.js
-/_HIDDEN
-node_modules
+node_modules/
 bower_components/
 npm-debug.log
 err.log
