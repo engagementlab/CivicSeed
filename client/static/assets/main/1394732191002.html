@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{ ::: Civic Seed ::: }</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="http://fonts.googleapis.com/css?family=Nunito:300,700|Satisfy:400|Arvo:400,700,400italic" rel="stylesheet" type="text/css">
+    <script src="/js/modernizr-2.6.2.min.js"></script>
+    <script>window.CivicSeed = {"VERSION":"0.0.8-7","CACHE":"2014213133630","ENVIRONMENT":"development","CLOUD_PATH":"","CONNECTED":true};</script><link href="/assets/main/1394732191002.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1394732191002.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+window.JT['admin-invitecodes'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),environment = locals_.environment;
+buf.push("<div class=\"row\"><div class=\"span10 offset1 back-to-admin\"><a href=\"/admin\"><i class=\"fa fa-arrow-circle-o-left fa-lg\"></i>back</a></div></div><div class=\"row\"><div class=\"span10 offset1\"><h1>Create New Game</h1><h4><span class='color-darkorange'>" + (jade.escape((jade.interp = environment) == null ? '' : jade.interp)) + " Environment</a></h4></div></div><div class=\"row\"><div class=\"span10 offset1\"><div id=\"admin-invites\" class=\"console\"><div class=\"console-content\"><h3>Create a new group of up to 20 invites.</h3><p><strong class='color-darkblue'>Note.</strong> If more than 20 emails are entered, only the first 20 will be used.</p><form class=\"form-horizontal\"><p></p><div class=\"control-group\"><label for=\"emailList\" class=\"control-label\">Game Name:</label><div class=\"controls\"><input id=\"instanceName\" style=\"margin-bottom: 20px\" placeholder=\"ex. Tufts Round 1\" class=\"span4\"/></div><label for=\"emailList\" class=\"control-label\">Email Addresses:</label><div class=\"controls\"><textarea id=\"emailList\" rows=\"6\" placeholder=\"ex. russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com\" class=\"span4\"></textarea></div></div><div class=\"control-group\"><div class=\"controls\"><button id=\"inviteCodesBtn\" type=\"button\" class=\"btn\">Create and Send Invites</button></div></div><pre id=\"inviteCodes\" class=\"hidden\"></pre></form></div></div></div></div>");;return buf.join("");
+});
+
+window.JT['admin-monitor'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),environment = locals_.environment,instances = locals_.instances;
+buf.push("<div class=\"row\"><div class=\"span10 offset1 back-to-admin\"><a href=\"/admin\"><i class=\"fa fa-arrow-circle-o-left fa-lg\"></i>back</a></div></div><div class=\"row\"><div class=\"span10 offset1\"><h1>Monitor Panel</h1><h4><span class='color-darkorange'>" + (jade.escape((jade.interp = environment) == null ? '' : jade.interp)) + " Environment</a></h4></div></div><div id=\"admin-monitor\"><div class=\"row\"><div class=\"span10 offset1\">");
+// iterate instances
+;(function(){
+  var $$obj = instances;
+  if ('number' == typeof $$obj.length) {
+
+    for (var i = 0, $$l = $$obj.length; i < $$l; i++) {
+      var instance = $$obj[i];
+
+buf.push("<div class=\"console-buttons\"><h3>Game: <span class='color-darkblue'>" + (jade.escape((jade.interp = instance) == null ? '' : jade.interp)) + "</span></h3><button id=\"players\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Players</button><button id=\"chat\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Chat Logs</button><button id=\"questions\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Questions</button><button id=\"addPlayer\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Add Player</button><button id=\"startStop\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Start / Stop</button></div>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var i in $$obj) {
+      $$l++;      var instance = $$obj[i];
+
+buf.push("<div class=\"console-buttons\"><h3>Game: <span class='color-darkblue'>" + (jade.escape((jade.interp = instance) == null ? '' : jade.interp)) + "</span></h3><button id=\"players\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Players</button><button id=\"chat\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Chat Logs</button><button id=\"questions\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Questions</button><button id=\"addPlayer\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Add Player</button><button id=\"startStop\"" + (jade.attr("data-instance", '' + (instance) + '', true, false)) + " class=\"monitor-button btn\">Start / Stop</button></div>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</div></div><div class=\"row\"><div class=\"span10 offset1\"><div class=\"console\"><div class=\"console-content\"><div class=\"output\"><p>Click a button above to monitor an aspect of a game session.</p></div></div></div></div></div></div>");;return buf.join("");
+});
+
+window.JT['admin-npcs'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),environment = locals_.environment,npcs = locals_.npcs;
+buf.push("<div class=\"row\"><div class=\"span10 offset1 back-to-admin\"><a href=\"/admin\"><i class=\"fa fa-arrow-circle-o-left fa-lg\"></i>back</a></div></div><div class=\"row\"><div class=\"span10 offset1\"><h1>NPC Control Panel</h1><h4><span class='color-darkorange'>" + (jade.escape((jade.interp = environment) == null ? '' : jade.interp)) + " Environment</a></h4></div></div><div id=\"admin-npcs\" class=\"row\"><div class=\"span10 offset1\"><div class=\"npc-actions\"><button type=\"button\" class=\"npc-export-button btn\">Export All NPC Data</button><button type=\"button\" class=\"npc-add-button btn\">Add NPC</button></div><div class=\"npc-add-insert-here\"></div>");
+// iterate npcs
+;(function(){
+  var $$obj = npcs;
+  if ('number' == typeof $$obj.length) {
+
+    for (var n = 0, $$l = $$obj.length; n < $$l; n++) {
+      var npc = $$obj[n];
+
+buf.push("<div" + (jade.attr("data-sprite", npc.sprite, true, false)) + (jade.cls(['npc','level' + npc.level +' npc' + npc.id], [null,true])) + ">");
+var formId = 'npc_' + npc.id
+buf.push("<form" + (jade.attr("id", formId, true, false)) + "><div class=\"information\"><div class=\"sprite\"><div class=\"sprite-controls\"><i class=\"fa fa-arrow-circle-up sprite-up\"></i><i class=\"fa fa-arrow-circle-down sprite-down\"></i></div></div><div class=\"npc-basic-info\"><input type=\"text\" data-area=\"name\"" + (jade.attr("value", '' + (npc.name) + '', true, false)) + " placeholder=\"name\" class=\"name\"/><label" + (jade.attr("for", 'npcLevel_' + npc.id, true, false)) + ">level:</label><input" + (jade.attr("id", 'npcLevel_' + npc.id, true, false)) + " type=\"text\" data-area=\"level\"" + (jade.attr("value", '' + (npc.level + 1) + '', true, false)) + " placeholder=\"lvl\" class=\"number\"/><label" + (jade.attr("for", 'npcCoordsX_' + npc.id, true, false)) + ">location:</label><input" + (jade.attr("id", 'npcCoordsX_' + npc.id, true, false)) + " type=\"text\" data-area=\"x\"" + (jade.attr("value", '' + (npc.x) + '', true, false)) + " placeholder=\"x\" class=\"number\"/><input" + (jade.attr("id", 'npcCoordsY_' + npc.id, true, false)) + " type=\"text\" data-area=\"y\"" + (jade.attr("value", '' + (npc.y) + '', true, false)) + " placeholder=\"y\" class=\"number\"/>");
+var npcIsHolding = (npc.isHolding) ? true : false
+buf.push("<label" + (jade.attr("for", 'npcIsHolding_' + npc.id, true, false)) + ">holding:</label><input" + (jade.attr("id", 'npcIsHolding_' + npc.id, true, false)) + " name=\"isHolding\" value=\"isHolding\" type=\"checkbox\"" + (jade.attr("checked", npcIsHolding, true, false)) + " class=\"holding\"/></div></div><div" + (jade.attr("style", (npcIsHolding) ? 'display:block' : 'display:none', true, false)) + " class=\"resource\"><button type=\"button\" class=\"view-resource-button btn\">view resource</button><h3>Resource</h3><label" + (jade.attr("for", 'resourceUrl_' + npc.id, true, false)) + ">URL <small>case and space sensitive</small></label><input" + (jade.attr("id", 'resourceUrl_' + npc.id, true, false)) + " type=\"text\" data-area=\"url\" placeholder=\"numerical id\"" + (jade.attr("value", (npc.resource.url) ? '' + (npc.resource.url) + '' : '', true, false)) + " class=\"url\"/><label" + (jade.attr("for", 'resourceTangram_' + npc.id, true, false)) + ">Tangram Piece</label><input" + (jade.attr("id", 'resourceTangram_' + npc.id, true, false)) + " type=\"text\" data-area=\"shape\"" + (jade.attr("value", (npc.resource.shape) ? '' + (npc.resource.shape) + '' : '', true, false)) + " class=\"url\"/><label" + (jade.attr("for", 'resourceQuestion_' + npc.id, true, false)) + ">Question");
+var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
+var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
+var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
+var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
+buf.push("<div class=\"questionType\"><input" + (jade.attr("id", 'questionOpen_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"open\" type=\"radio\"" + (jade.attr("checked", questionOpen, true, false)) + "/><label" + (jade.attr("for", 'questionOpen_' + npc.id, true, false)) + ">open</label><input" + (jade.attr("id", 'questionTrueFalse_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"truefalse\" type=\"radio\"" + (jade.attr("checked", questionTrueFalse, true, false)) + "/><label" + (jade.attr("for", 'questionTrueFalse_' + npc.id, true, false)) + ">true / false</label><input" + (jade.attr("id", 'questionYesNo_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"yesno\" type=\"radio\"" + (jade.attr("checked", questionYesNo, true, false)) + "/><label" + (jade.attr("for", 'questionYesNo_' + npc.id, true, false)) + ">yes / no</label><input" + (jade.attr("id", 'questionMultiple_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"multiple\" type=\"radio\"" + (jade.attr("checked", questionMultiple, true, false)) + "/><label" + (jade.attr("for", 'questionMultiple_' + npc.id, true, false)) + ">multiple choice</label></div></label><textarea" + (jade.attr("id", 'resourceQuestion_' + npc.id, true, false)) + " data-area=\"question\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.question) == null ? '' : jade.interp)) + "</textarea><div" + (jade.attr("style", (questionOpen) ? 'display:block' : 'display:none', true, false)) + " class=\"requiredDiv questionOptions\"><label" + (jade.attr("for", 'questionSuggestedLength_' + npc.id, true, false)) + ">Suggested Length</label><input" + (jade.attr("id", 'questionSuggestedLength_' + npc.id, true, false)) + " type=\"text\" data-area=\"requiredLength\" maxlength=\"3\"" + (jade.attr("value", (npc.resource.requiredLength) ? '' + (npc.resource.requiredLength) + '' : '', true, false)) + "/></div><div" + (jade.attr("style", (questionMultiple) ? 'display:block' : 'display:none', true, false)) + " class=\"possibleDiv questionOptions\"><label>Choices</label>");
+if ( (questionMultiple))
+{
+// iterate npc.resource.possibleAnswers
+;(function(){
+  var $$obj = npc.resource.possibleAnswers;
+  if ('number' == typeof $$obj.length) {
+
+    for (var c = 0, $$l = $$obj.length; c < $$l; c++) {
+      var choice = $$obj[c];
+
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\">" + (jade.escape((jade.interp = npc.resource.possibleAnswers[c]) == null ? '' : jade.interp)) + "</textarea>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var c in $$obj) {
+      $$l++;      var choice = $$obj[c];
+
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\">" + (jade.escape((jade.interp = npc.resource.possibleAnswers[c]) == null ? '' : jade.interp)) + "</textarea>");
+    }
+
+  }
+}).call(this);
+
+}
+else
+{
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea>");
+}
+buf.push("</div><div" + (jade.attr("style", (!questionOpen) ? 'display:block' : 'display:none', true, false)) + " class=\"answerDiv questionOptions\"><label" + (jade.attr("for", 'questionAnswer_' + npc.id, true, false)) + ">Answer</label><input" + (jade.attr("id", 'questionAnswer_' + npc.id, true, false)) + " type=\"text\" data-area=\"answer\"" + (jade.attr("value", (npc.resource.answer) ? '' + (npc.resource.answer) + '' : '', true, false)) + " class=\"answer\"/></div><label" + (jade.attr("for", 'resourceDependsOn_' + npc.id, true, false)) + ">Depends on NPC</label><input" + (jade.attr("id", 'resourceDependsOn_' + npc.id, true, false)) + " type=\"text\" data-area=\"dependsOn\" maxlength=\"4\"" + (jade.attr("value", (npc.dependsOn) ? '' + (npc.dependsOn) + '' : '', true, false)) + "/><label" + (jade.attr("for", 'resourceCorrect_' + npc.id, true, false)) + ">Feedback Correct</label><textarea" + (jade.attr("id", 'resourceCorrect_' + npc.id, true, false)) + " data-area=\"feedbackRight\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.feedbackRight) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'resourceWrong_' + npc.id, true, false)) + ">Feedback Wrong</label><textarea" + (jade.attr("id", 'resourceWrong_' + npc.id, true, false)) + " data-area=\"feedbackWrong\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.feedbackWrong) == null ? '' : jade.interp)) + "</textarea></div><div" + (jade.attr("style", npcIsHolding?'display:block':'display:none', true, false)) + " class=\"prompts\"><h3>Prompts</h3><label" + (jade.attr("for", 'promptsFirstTime_' + npc.id, true, false)) + ">First Time</label><textarea" + (jade.attr("id", 'promptsFirstTime_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[0]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'promptsAfterIncorrect_' + npc.id, true, false)) + ">Returning After Incorrect</label><textarea" + (jade.attr("id", 'promptsAfterIncorrect_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[1]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'promptsAfterCompleted_' + npc.id, true, false)) + ">Returning After Completed</label><textarea" + (jade.attr("id", 'promptsAfterCompleted_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[2]) == null ? '' : jade.interp)) + "</textarea></div><div" + (jade.attr("style", !npcIsHolding?'display:block':'display:none', true, false)) + " class=\"smalltalk\"><h3>Dialog</h3><label" + (jade.attr("for", 'dialogPast_' + npc.id, true, false)) + ">Past</label><textarea" + (jade.attr("id", 'dialogPast_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"0\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[0]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'dialogPresent_' + npc.id, true, false)) + ">Present</label><textarea" + (jade.attr("id", 'dialogPresent_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"1\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[1]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'dialogFuture_' + npc.id, true, false)) + ">Future</label><textarea" + (jade.attr("id", 'dialogFuture_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"2\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[2]) == null ? '' : jade.interp)) + "</textarea></div><div class=\"skinSuit\"><h3>Skin Suit</h3><input type=\"text\"" + (jade.attr("value", (npc.skinSuit) ? '' + (npc.skinSuit) + '' : '', true, false)) + "/></div><div class=\"options\"><button type=\"button\"" + (jade.attr("data-id", '' + (npc.id) + '', true, false)) + " class=\"npc-save-button btn\">save</button><button type=\"button\"" + (jade.attr("data-id", '' + (npc.id) + '', true, false)) + " class=\"npc-delete-button btn\">delete</button></div></form></div>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var n in $$obj) {
+      $$l++;      var npc = $$obj[n];
+
+buf.push("<div" + (jade.attr("data-sprite", npc.sprite, true, false)) + (jade.cls(['npc','level' + npc.level +' npc' + npc.id], [null,true])) + ">");
+var formId = 'npc_' + npc.id
+buf.push("<form" + (jade.attr("id", formId, true, false)) + "><div class=\"information\"><div class=\"sprite\"><div class=\"sprite-controls\"><i class=\"fa fa-arrow-circle-up sprite-up\"></i><i class=\"fa fa-arrow-circle-down sprite-down\"></i></div></div><div class=\"npc-basic-info\"><input type=\"text\" data-area=\"name\"" + (jade.attr("value", '' + (npc.name) + '', true, false)) + " placeholder=\"name\" class=\"name\"/><label" + (jade.attr("for", 'npcLevel_' + npc.id, true, false)) + ">level:</label><input" + (jade.attr("id", 'npcLevel_' + npc.id, true, false)) + " type=\"text\" data-area=\"level\"" + (jade.attr("value", '' + (npc.level + 1) + '', true, false)) + " placeholder=\"lvl\" class=\"number\"/><label" + (jade.attr("for", 'npcCoordsX_' + npc.id, true, false)) + ">location:</label><input" + (jade.attr("id", 'npcCoordsX_' + npc.id, true, false)) + " type=\"text\" data-area=\"x\"" + (jade.attr("value", '' + (npc.x) + '', true, false)) + " placeholder=\"x\" class=\"number\"/><input" + (jade.attr("id", 'npcCoordsY_' + npc.id, true, false)) + " type=\"text\" data-area=\"y\"" + (jade.attr("value", '' + (npc.y) + '', true, false)) + " placeholder=\"y\" class=\"number\"/>");
+var npcIsHolding = (npc.isHolding) ? true : false
+buf.push("<label" + (jade.attr("for", 'npcIsHolding_' + npc.id, true, false)) + ">holding:</label><input" + (jade.attr("id", 'npcIsHolding_' + npc.id, true, false)) + " name=\"isHolding\" value=\"isHolding\" type=\"checkbox\"" + (jade.attr("checked", npcIsHolding, true, false)) + " class=\"holding\"/></div></div><div" + (jade.attr("style", (npcIsHolding) ? 'display:block' : 'display:none', true, false)) + " class=\"resource\"><button type=\"button\" class=\"view-resource-button btn\">view resource</button><h3>Resource</h3><label" + (jade.attr("for", 'resourceUrl_' + npc.id, true, false)) + ">URL <small>case and space sensitive</small></label><input" + (jade.attr("id", 'resourceUrl_' + npc.id, true, false)) + " type=\"text\" data-area=\"url\" placeholder=\"numerical id\"" + (jade.attr("value", (npc.resource.url) ? '' + (npc.resource.url) + '' : '', true, false)) + " class=\"url\"/><label" + (jade.attr("for", 'resourceTangram_' + npc.id, true, false)) + ">Tangram Piece</label><input" + (jade.attr("id", 'resourceTangram_' + npc.id, true, false)) + " type=\"text\" data-area=\"shape\"" + (jade.attr("value", (npc.resource.shape) ? '' + (npc.resource.shape) + '' : '', true, false)) + " class=\"url\"/><label" + (jade.attr("for", 'resourceQuestion_' + npc.id, true, false)) + ">Question");
+var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
+var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
+var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
+var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
+buf.push("<div class=\"questionType\"><input" + (jade.attr("id", 'questionOpen_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"open\" type=\"radio\"" + (jade.attr("checked", questionOpen, true, false)) + "/><label" + (jade.attr("for", 'questionOpen_' + npc.id, true, false)) + ">open</label><input" + (jade.attr("id", 'questionTrueFalse_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"truefalse\" type=\"radio\"" + (jade.attr("checked", questionTrueFalse, true, false)) + "/><label" + (jade.attr("for", 'questionTrueFalse_' + npc.id, true, false)) + ">true / false</label><input" + (jade.attr("id", 'questionYesNo_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"yesno\" type=\"radio\"" + (jade.attr("checked", questionYesNo, true, false)) + "/><label" + (jade.attr("for", 'questionYesNo_' + npc.id, true, false)) + ">yes / no</label><input" + (jade.attr("id", 'questionMultiple_' + npc.id, true, false)) + (jade.attr("name", ('radio' + npc.id), true, false)) + " value=\"multiple\" type=\"radio\"" + (jade.attr("checked", questionMultiple, true, false)) + "/><label" + (jade.attr("for", 'questionMultiple_' + npc.id, true, false)) + ">multiple choice</label></div></label><textarea" + (jade.attr("id", 'resourceQuestion_' + npc.id, true, false)) + " data-area=\"question\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.question) == null ? '' : jade.interp)) + "</textarea><div" + (jade.attr("style", (questionOpen) ? 'display:block' : 'display:none', true, false)) + " class=\"requiredDiv questionOptions\"><label" + (jade.attr("for", 'questionSuggestedLength_' + npc.id, true, false)) + ">Suggested Length</label><input" + (jade.attr("id", 'questionSuggestedLength_' + npc.id, true, false)) + " type=\"text\" data-area=\"requiredLength\" maxlength=\"3\"" + (jade.attr("value", (npc.resource.requiredLength) ? '' + (npc.resource.requiredLength) + '' : '', true, false)) + "/></div><div" + (jade.attr("style", (questionMultiple) ? 'display:block' : 'display:none', true, false)) + " class=\"possibleDiv questionOptions\"><label>Choices</label>");
+if ( (questionMultiple))
+{
+// iterate npc.resource.possibleAnswers
+;(function(){
+  var $$obj = npc.resource.possibleAnswers;
+  if ('number' == typeof $$obj.length) {
+
+    for (var c = 0, $$l = $$obj.length; c < $$l; c++) {
+      var choice = $$obj[c];
+
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\">" + (jade.escape((jade.interp = npc.resource.possibleAnswers[c]) == null ? '' : jade.interp)) + "</textarea>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var c in $$obj) {
+      $$l++;      var choice = $$obj[c];
+
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\">" + (jade.escape((jade.interp = npc.resource.possibleAnswers[c]) == null ? '' : jade.interp)) + "</textarea>");
+    }
+
+  }
+}).call(this);
+
+}
+else
+{
+buf.push("<textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea>");
+}
+buf.push("</div><div" + (jade.attr("style", (!questionOpen) ? 'display:block' : 'display:none', true, false)) + " class=\"answerDiv questionOptions\"><label" + (jade.attr("for", 'questionAnswer_' + npc.id, true, false)) + ">Answer</label><input" + (jade.attr("id", 'questionAnswer_' + npc.id, true, false)) + " type=\"text\" data-area=\"answer\"" + (jade.attr("value", (npc.resource.answer) ? '' + (npc.resource.answer) + '' : '', true, false)) + " class=\"answer\"/></div><label" + (jade.attr("for", 'resourceDependsOn_' + npc.id, true, false)) + ">Depends on NPC</label><input" + (jade.attr("id", 'resourceDependsOn_' + npc.id, true, false)) + " type=\"text\" data-area=\"dependsOn\" maxlength=\"4\"" + (jade.attr("value", (npc.dependsOn) ? '' + (npc.dependsOn) + '' : '', true, false)) + "/><label" + (jade.attr("for", 'resourceCorrect_' + npc.id, true, false)) + ">Feedback Correct</label><textarea" + (jade.attr("id", 'resourceCorrect_' + npc.id, true, false)) + " data-area=\"feedbackRight\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.feedbackRight) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'resourceWrong_' + npc.id, true, false)) + ">Feedback Wrong</label><textarea" + (jade.attr("id", 'resourceWrong_' + npc.id, true, false)) + " data-area=\"feedbackWrong\" class=\"question\">" + (jade.escape((jade.interp = npc.resource.feedbackWrong) == null ? '' : jade.interp)) + "</textarea></div><div" + (jade.attr("style", npcIsHolding?'display:block':'display:none', true, false)) + " class=\"prompts\"><h3>Prompts</h3><label" + (jade.attr("for", 'promptsFirstTime_' + npc.id, true, false)) + ">First Time</label><textarea" + (jade.attr("id", 'promptsFirstTime_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[0]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'promptsAfterIncorrect_' + npc.id, true, false)) + ">Returning After Incorrect</label><textarea" + (jade.attr("id", 'promptsAfterIncorrect_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[1]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'promptsAfterCompleted_' + npc.id, true, false)) + ">Returning After Completed</label><textarea" + (jade.attr("id", 'promptsAfterCompleted_' + npc.id, true, false)) + " data-area=\"prompt\">" + (jade.escape((jade.interp = npc.dialog.prompts[2]) == null ? '' : jade.interp)) + "</textarea></div><div" + (jade.attr("style", !npcIsHolding?'display:block':'display:none', true, false)) + " class=\"smalltalk\"><h3>Dialog</h3><label" + (jade.attr("for", 'dialogPast_' + npc.id, true, false)) + ">Past</label><textarea" + (jade.attr("id", 'dialogPast_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"0\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[0]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'dialogPresent_' + npc.id, true, false)) + ">Present</label><textarea" + (jade.attr("id", 'dialogPresent_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"1\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[1]) == null ? '' : jade.interp)) + "</textarea><label" + (jade.attr("for", 'dialogFuture_' + npc.id, true, false)) + ">Future</label><textarea" + (jade.attr("id", 'dialogFuture_' + npc.id, true, false)) + " data-area=\"smalltalk\" data-index=\"2\">" + (jade.escape((jade.interp = npc.dialog.smalltalk[2]) == null ? '' : jade.interp)) + "</textarea></div><div class=\"skinSuit\"><h3>Skin Suit</h3><input type=\"text\"" + (jade.attr("value", (npc.skinSuit) ? '' + (npc.skinSuit) + '' : '', true, false)) + "/></div><div class=\"options\"><button type=\"button\"" + (jade.attr("data-id", '' + (npc.id) + '', true, false)) + " class=\"npc-save-button btn\">save</button><button type=\"button\"" + (jade.attr("data-id", '' + (npc.id) + '', true, false)) + " class=\"npc-delete-button btn\">delete</button></div></form></div>");
+    }
+
+  }
+}).call(this);
+
+buf.push("<div class=\"buffer\"></div><div class=\"article\"></div><div id=\"npc-template\" style=\"display:none;\"><div data-sprite=\"0\" class=\"npc level0 npc-1\"><div class=\"row\"><div class=\"span12\"><div class=\"information\"><div class=\"sprite\"><p><i class=\"fa fa-arrow-circle-up sprite-up\"></i><i class=\"fa fa-arrow-circle-down sprite-down\"></i></p></div><p class=\"npc-basic-info\"><textarea data-area=\"name\">Nombre</textarea><span class=\"regular\">level:</span><textarea data-area=\"level\" class=\"areaNumber\">1</textarea><span class=\"regular\">location:</span><textarea data-area=\"x\" class=\"areaNumber\">23</textarea><textarea data-area=\"y\" class=\"areaNumber\">23</textarea><span class=\"regular\">holding: </span><input name=\"isHolding\" value=\"isHolding\" type=\"checkbox\" checked=\"checked\"/></p></div><div class=\"resource\"><p data-url=\"/articles/test.html\" class=\"view-resource-button\">view resource</p><h3>Resource</h3><p>URL <span class='smallerFont'> case and space sensitive</span></p><textarea data-area=\"url\" class=\"url\">test</textarea><p class=\"questionType\">Question<input name=\"radioX\" value=\"open\" type=\"radio\" checked=\"checked\"/><span> open</span><input name=\"radioX\" value=\"truefalse\" type=\"radio\"/><span> true/false</span><input name=\"radioX\" value=\"yesno\" type=\"radio\"/><span> yes/no</span><input name=\"radioX\" value=\"multiple\" type=\"radio\"/><span> multiple choice</span></p><textarea data-area=\"question\" class=\"question\">What is the answer?</textarea><div class=\"requiredDiv questionOptions\"><p>Suggested Length</p><textarea data-area=\"requiredLength\" maxlength=\"3\" class=\"required\">50</textarea></div><div style=\"display:none;\" class=\"possibleDiv questionOptions\"><p>Choices</p><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea><textarea data-area=\"possibleAnswers\" class=\"possible\"></textarea></div><div style=\"display:none;\" class=\"answerDiv questionOptions\"><p>Answer</p><textarea data-area=\"answer\" class=\"answer\"></textarea></div><p>Tagline</p><textarea data-area=\"tagline\" maxlength=\"24\">I am a tagline</textarea><p>Depends on NPC</p><textarea data-area=\"dependsOn\" maxlength=\"4\" class=\"required\"></textarea><p>Feedback Correct</p><textarea data-area=\"feedbackRight\" class=\"question\">Nice job.</textarea><p>Feedback Wrong</p><textarea data-area=\"feedbackWrong\" class=\"question\">Not quite.</textarea></div><div class=\"prompts\"><h3>Prompts</h3><p>First Time</p><textarea data-area=\"prompt\">Answer my question?</textarea><p>Returning After Incorrect</p><textarea data-area=\"prompt\">Try again.</textarea><p>Returning After Completed</p><textarea data-area=\"prompt\">Welcome back.</textarea></div><div style=\"display:none;\" class=\"smalltalk\"><h3>Dialog</h3><p>Past</p><textarea data-area=\"smalltalk\"></textarea><p>Present</p><textarea data-area=\"smalltalk\"></textarea><p>Future</p><textarea data-area=\"smalltalk\"></textarea></div><div class=\"skinSuit\"><p>Skin Suit</p><textarea></textarea></div><div class=\"options\"><p><span class='saveChanges' data-id='-1'>save</span>\n<span class='deleteNpc' data-id='-1'>delete</span></p></div></div></div></div></div></div></div><div class=\"levelFilter\"><div class=\"current\">1</div><div class=\"current\">2</div><div class=\"current\">3</div><div class=\"current\">4</div></div>");;return buf.join("");
+});
+
+window.JT['admin-panel'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),environment = locals_.environment;
+buf.push("<div class=\"row\"><div class=\"span10 offset1\"><h1>Site Administration</h1><h4><span class='color-darkorange'>" + (jade.escape((jade.interp = environment) == null ? '' : jade.interp)) + " Environment</a></h4></div></div><div class=\"row\"><div class=\"span10 offset1\"><div id=\"admin-panel\" class=\"console\"><div class=\"console-content\">");
+if(sessionStorage.userRole === 'superadmin')
+{
+buf.push("<div class=\"row\"><div class=\"span2\"><a href=\"/admin/startup\" class=\"btn\">Startup</a></div><div class=\"admin-instructions span6\"><p>Initializes all data.</p></div></div><div class=\"row\"><div class=\"span2\"><a href=\"/admin/npcs\" class=\"btn\">NPCs</a></div><div class=\"admin-instructions span6\"><p>Sets NPC interaction and speech content.</p></div></div>");
+}
+buf.push("<div class=\"row\"><div class=\"span2\"><a href=\"/admin/invitecodes\" class=\"btn\">Invite Codes</a></div><div class=\"admin-instructions span6\"><p>Begins a new game and sends invite codes to players.</p></div></div><div class=\"row\"><div class=\"span2\"><a href=\"/admin/monitor\" class=\"btn\">Monitor</a></div><div class=\"admin-instructions span6\"><p>Look at information on current games.</p></div></div></div></div></div></div>");;return buf.join("");
+});
+
+window.JT['admin-startup'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),environment = locals_.environment;
+buf.push("<div class=\"row\"><div class=\"span10 offset1 back-to-admin\"><a href=\"/admin\"><i class=\"fa fa-arrow-circle-o-left fa-lg\"></i>back</a></div></div><div class=\"row\"><div class=\"span10 offset1\"><h1>Startup</h1><h4><span class='color-darkorange'>" + (jade.escape((jade.interp = environment) == null ? '' : jade.interp)) + " Environment</a></h4></div></div><div class=\"row\"><div class=\"span10 offset1\"><div id=\"admin-startup\" class=\"console\"><h2>Database Initialization</h2><div class=\"console-content\"><p><strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order from top to bottom. The button will turn green after the loading is complete. Wait until it turns green before clicking the next one!</p><div class=\"row\"><div class=\"span2\"><button id=\"userLoadBtn\" data-type=\"users\" class=\"btn\">Users<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Clears current users; sets up test and demo users.</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"gameLoadBtn\" data-type=\"game\" class=\"btn\">Game<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Clears current game sessions; sets up test and demo games.</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"gameLoadBtn\" data-type=\"colors\" class=\"btn\">Colors<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>??? (No idea what this does.)</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"chatLoadBtn\" data-type=\"chat\" class=\"btn\">Chat<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Clears all chat logs.</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"tileLoadBtn\" data-type=\"tiles\" class=\"btn\">Tiles<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations.</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"botanistLoadBtn\" data-type=\"botanist\" class=\"btn\">Botanist<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Loads default Botanist conversations.</p></div></div><div class=\"row\"><div class=\"span2\"><button id=\"npcLoadBtn\" data-type=\"npcs\" class=\"btn\">NPC<div class=\"spinner\"></div></button></div><div class=\"admin-instructions span6\"><p>Loads default NPC data. <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.</p></div></div></div></div></div></div>");;return buf.join("");
+});
+
+window.JT['game-boss-instructions'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/boss/mini_lab.jpg', true, false)) + " class=\"minilab\"/><h3>How to play</h3><p>This is the basement of my lab. The <strong class='color-darkorange'>Charging Modules</strong> <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/charger.png'> are hidden somewhere here.  To find the charging modules, you’ll need to use the <strong class='color-darkgreen'>Special Seeds</strong> you earned.  These special seeds can detect and reveal the charging modules. Whenever you plant one, the color bursts will be <strong>darker</strong> the <strong>closer</strong> it is to a charging module. It will help guide the way!</p><p>Once you reveal a charging module, you have to <strong>walk over to it</strong>, and disable it by hand. Find all four to shut down the robot!  You might also find some of my other inventions down here. These can give you more <strong class='color-darkgreen'>seeds <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing1.png'></strong>, or more <strong class='color-darkblue'>time <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing2.png'></strong>. Watch out for the <strong class='color-red'>red potion <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing3.png'></strong> which can erase your progress, or the <strong class='color-darkorange'>watch <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing4.png'></strong> that speeds up the timer. If you run out seeds, or run out of time, you’ll have to try again.</p>");;return buf.join("");
+});
+
+window.JT['game-gameboard'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div id=\"gameboard\"><canvas id=\"background\" width=\"960px\" height=\"480px\"></canvas><canvas id=\"characters\" width=\"960px\" height=\"480px\"></canvas><canvas id=\"foreground\" width=\"960px\" height=\"480px\"></canvas><canvas id=\"interface\" width=\"960px\" height=\"480px\"></canvas><canvas id=\"minimap-tile\" width=\"142px\" height=\"132px\" class=\"minimap\"></canvas><canvas id=\"minimap-player\" width=\"142px\" height=\"132px\" class=\"minimap\"></canvas><div id=\"loading\"><p><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/loader.gif', true, false)) + "/></p><p>loading</p></div><div id=\"resource-area\" class=\"gameboard-overlay\"><div class=\"resource-article scrollable\"></div><div class=\"resource-question\"><div class=\"dialog question\"></div><form></form></div><div class=\"resource-content\"><div class=\"dialog\"><span class=\"speaker\"></span><span class=\"message\"></span></div><div class=\"tangram\"></div><div class=\"tagline-input\"><input name=\"tagline\" type=\"text\" value=\"\" placeholder=\"Summarize what you just learned.\" maxLength=\"60\" autofocus=\"autofocus\"/><div class=\"privacy-message\">You’ll need it later!</div></div></div><div class=\"resource-responses\"><div class=\"dialog\"><span class=\"speaker\"></span><span class=\"message\"></span></div><div class=\"responses content-box scrollable\"><p class=\"question\"></p><ul class=\"responses\"></ul></div></div><div class=\"buttons\"><div class=\"left\"><button type=\"button\" class=\"back-button btn btn-info\">Back</button></div><div class=\"right\"><button type=\"button\" class=\"next-button btn btn-success\">Next</button><button type=\"button\" class=\"answer-button btn btn-success\">Answer</button><button type=\"button\" class=\"save-button btn btn-success\">Save</button><button type=\"button\" class=\"close-button btn btn-primary\">Close</button></div></div><div class=\"check\"><div class=\"check-dialog confirm-skimpy\"><p>Are you sure? That seems a bit skimpy...</p><div class=\"buttons\"><button type=\"button\" class=\"sure-button right btn btn-success\">I'm Sure</button><button type=\"button\" class=\"retry-button left btn btn-primary\">I'll Add More</button></div></div><div class=\"check-dialog message-feedback\"><div class=\"feedback\"></div><div class=\"buttons\"><button type=\"button\" class=\"btn btn-primary\">Okay</button></div></div></div><a href=\"\" class=\"close-overlay\"><i class=\"fa fa-times-circle fa-lg\"></i></a></div><div id=\"botanist-area\" class=\"gameboard-overlay background-3\"><div class=\"dialog\"><span class=\"speaker\"></span><span class=\"message\"></span></div><div class=\"botanist-content\"></div><div class=\"botanist-puzzle\"></div><div class=\"buttons\"><div class=\"left\"><button type=\"button\" class=\"back-button btn btn-info\">Back</button><button type=\"button\" class=\"clear-button btn btn-info\">Clear Board</button></div><div class=\"right\"><button type=\"button\" class=\"next-button btn btn-success\">Next</button><button type=\"button\" class=\"answer-button btn btn-success\">Answer</button><button type=\"button\" class=\"save-button btn btn-success\">Save</button><button type=\"button\" class=\"close-button btn btn-primary\">Close</button></div></div><div class=\"check\"><div class=\"check-dialog\"><div class=\"feedback\"></div><div class=\"buttons\"><button type=\"button\" class=\"retryButton btn btn-primary\">Okay</button></div></div></div><a href=\"\" class=\"close-overlay\"><i class=\"fa fa-times-circle fa-lg\"></i></a></div><div id=\"progress-area\" class=\"gameboard-overlay\"><h2>Progress</h2><div class=\"personal-info\"><div class=\"level-images\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/rank/0.png', true, false)) + " class=\"current-level-image\"/><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/rank/1.png', true, false)) + "/><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/rank/2.png', true, false)) + "/><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/rank/3.png', true, false)) + "/></div><div class=\"current-level-name\">Novice gardener</div><div class=\"resources-collected-heading\">Resources collected:</div><div class=\"resources-collected\">0</div><button type=\"button\" class=\"btn collected-button btn-success\">View Answers</button></div><div class=\"color-map tabbable\"><ul class=\"nav nav-tabs\"><li class=\"tab-you active\"><a href=\"#tab1\" data-toggle=\"tab\">you</a></li><li class=\"tab-everyone\"><a href=\"#tab2\" data-toggle=\"tab\">everyone</a></li></ul><div class=\"tab-content\"><div id=\"tab1\" class=\"tab-pane active\"><div class=\"color-map-you\"><img src=\"\" class=\"color-map-image\"/><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/minimap.png', true, false)) + " class=\"minimap\"/></div><div class=\"time-played\"><i class=\"fa fa-clock-o fa-lg\"></i><span class=\"time-played-text\"></span></div><div class=\"time-played-label\">time played</div></div><div id=\"tab2\" class=\"tab-pane\"><div class=\"color-map-everyone\"><img src=\"\" class=\"color-map-image\"/><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/minimap.png', true, false)) + " class=\"minimap\"/></div><div class=\"percent-complete\"><div class=\"progress\"><div class=\"bar\"></div></div></div><div class=\"percent-label\">world color meter</div></div></div></div><div class=\"top-seeders\"><div class=\"top-seeders-heading\">Top seeders</div><div class=\"your-seeds\"></div><ol class=\"top-seeders-ranking\"></ol></div><a href=\"\" class=\"close-overlay\"><i class=\"fa fa-times-circle fa-lg\"></i></a></div><div id=\"collected-resources\" class=\"gameboard-overlay background-3\"><h2>Your Answers</h2><div class=\"displayMyAnswers content-box\">You haven't collected any resources yet.</div><button type=\"button\" class=\"btn back-button btn-info\">Back</button></div><div id=\"help-area\" class=\"gameboard-overlay\"><h2>How To Play</h2><div class=\"content-box\"><p>The goal of the game is to fully color return color to the world, which starts in grayscale. To do this, you must explore, talk to the Calliopeans you see, answer their questions, plant seeds, and find research to complete new seed recipes.</p><h3>The Game Display</h3><p>You can see and interact with the game through your display. This consists of the view screen, the Status Bar, and the Display Icons.</p><h3>The View Screen</h3><p>This shows you the portion of the world you are in, along with any other characters that are in the same location. At the upper right hand corner of the map, you can see a mini map. All players, including you, appear on the mini map as little white dots. The mini-map tells you roughly where you are in the world. The large white block near the center of the mini map represents the Botanist's Garden. You must return here at the end of each level to solve the puzzle.</p><h3>The Status Bar</h3><p>Beneath the view screen, you can see the status bar. This tells you useful information, like what level you're on, when you've entered a new area of the world, and when other players interact with you. The Status Bar can be converted into a chat box by clicking the speech bubble icon in the display.</p><h3>The Icons</h3><p>The seven display icons each have unique functions. You can activate them by clicking the icon or by pressing the associated keyboard shortcut.</p><ul class=\"fa-ul\"><li><i class='fa-li fa fa-briefcase fa-lg'></i> <strong><u>I</u>nventory:</strong> Open and close your inventory</li><li><i class='fa-li fa fa-user fa-lg'></i> <strong><u>C</u>hanging room:</strong> Enter or exit seed mode</li><li><i class='fa-li fa fa-leaf fa-lg'></i> <strong>S<u>e</u>ed:</strong> Enter or exit seed mode</li><!-- li <i class='fa-li fa fa-globe fa-lg'></i> <strong>Globe:</strong> Toggle mini map off and on--><li><i class='fa-li fa fa-list fa-lg'></i> <strong>Game <u>L</u>og:</strong> Display log of game events and chat dialogue.</li><li><i class='fa-li fa fa-desktop fa-lg'></i> <strong><u>P</u>rogress:</strong> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.</li><li><i class='fa-li fa fa-volume-up fa-lg'></i> <strong><u>V</u>olume:</strong> Turn music on or off</li><li><i class='fa-li fa fa-question-circle fa-lg'></i> <strong><u>H</u>elp:</strong> Launch help document</li></ul><h3>Exploring The World</h3><p>To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red.</p><h3>Interacting With Characters and Answering Questions</h3><p>To interact with characters you see, click on that character. This opens up a dialogue box. Most characters will ask you a question and reward you with seeds and puzzle pieces for a right answer, but some share game pointers or offer other observations. When you answer questions correctly, you are rewarded with seeds. If the question was multiple choice, you receive fewer seeds for each wrong answer you submit, so read carefully!</p><p>By default, your answers are private. You can make them public by clicking the “make public” button next to your answer. An “unlock” icon will appear, indicating that others can read your answer. If you accidentally make an answer public, you can make it private again by clicking the “unlock” icon that appears.</p><h3>Planting Seeds</h3><p>To plant a seed, click the leaf icon at the bottom of your display. This puts you in “Seed-Planting Mode.” While you are in Seed-Planting Mode, you can plant a seed by clicking anywhere in the world. A patch of color the same shade as your character will appear. You just brought some color back to the world! To exit seed mode and resume exploring, click the leaf icon again.</p><h3>Paintbrush Seeds</h3><p>Most characters reward you with normal seeds, but the Botanist gives you Paintbrush Seeds which allow you to plant color in custom shapes. If you have any Paintbrush Seeds, clicking the leaf icon brings up a menu of three choices. Click the leftmost icon to plant normal seeds. Plant the middle icon to plant Paintbrush Seeds. The rightmost icon is a mystery you'll have to uncover as you play and explore.</p><h3>Interacting With Other Players</h3><p>There are two ways you can interact with other players in the game. The first way is to chat with them. If you see another player (they'll look just like you, but in a different color) you can chat with them. To do this, click on the speech bubble icon. This transforms the status bar into a chat box. Type your message and hit the “enter” key to chat. Clicking the speech bubble icon again exits chat mode.</p><h3>Seed It!</h3><p>You can also grant bonus seeds to your fellow players. After you answer a question, you'll see all answers that have been made public. If you like another player's answer, click “Seed it!” to grant them a bonus seed. This bonus seed does not come from your supply, it's a bonus seed awarded for excellent answers. These bonus seeds are always mega seeds. You may award up to five bonus seeds to other players each level, and you may award multiple bonus seeds to one response if you feel so inclined.</p><h3>Completing the Recipes</h3><p>The Botanist's notebook contains four recipes for Paintbrush Seeds, which correspond with the four levels of the game. Each recipe also includes a special puzzle. As you explore the world and answer questions, you'll earn research pieces, in addition to seeds, which you will use to answer solve the puzzle.</p><p>When you think you have enough research pieces to solve the puzzle, return to the Botanist. He will show you the outline of the puzzle. You can then drag pieces from your inventory onto the puzzle. The text of the recipe appears next to the puzzle. Look at the text for hints!</p><p>As long as there are any wrong pieces on the board, you cannot solve the riddle. To remove a puzzle piece from the board, drop it into the trash.</p><p>When you think you've correctly solved the riddle, hit “Answer.” If you're correct, you progress to the next level, and earn some Paintbrush Seeds. For each time you answer incorrectly, you will receive less and less seeds. After you complete all four levels, the game is complete and you unlock your civic resume!</p><h3>Your Inventory</h3><p>Every time you answer a question correctly, you gain a research piece. You can view the pieces you've collected at any time by clicking the toolbox icon on your display. From here, you can view the resources again by clicking the puzzle pieces,</p><h3>Your Profile: A Civic Resume</h3><p>After each level, you will be prompted to fill in a section of your civic resume. At the end of the game, your resume is unlocked, enabling you to use it as a public tool for civic engagement. This lets everyone know that you have completed Civic Seed, and are certified by Tufts to engage with their host communities. It also lets organizations and the people you'll work with understand you better, so your goals can be aligned.</p></div><div class=\"buttons\"><div class=\"right\"><button type=\"button\" class=\"close-button btn btn-primary\">Close</button></div></div><a href=\"\" class=\"close-overlay\"><i class=\"fa fa-times-circle fa-lg\"></i></a></div><div id=\"boss-area\" class=\"gameboard-overlay\"><div class=\"dialog\"><span class=\"speaker\"></span><span class=\"message\"></span></div><div class=\"boss-introduction video\"></div><div class=\"boss-resumes\"><div class=\"content-box\"></div></div><div class=\"boss-instructions\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/game/boss/mini_lab.jpg', true, false)) + " class=\"minilab\"/><h3>How to play</h3><p>This is the basement of my lab. The <strong class='color-darkorange'>Charging Modules</strong> <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/charger.png'> are hidden somewhere here.  To find the charging modules, you’ll need to use the <strong class='color-darkgreen'>Special Seeds</strong> you earned.  These special seeds can detect and reveal the charging modules. Whenever you plant one, the color bursts will be <strong>darker</strong> the <strong>closer</strong> it is to a charging module. It will help guide the way!</p><p>Once you reveal a charging module, you have to <strong>walk over to it</strong>, and disable it by hand. Find all four to shut down the robot!  You might also find some of my other inventions down here. These can give you more <strong class='color-darkgreen'>seeds <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing1.png'></strong>, or more <strong class='color-darkblue'>time <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing2.png'></strong>. Watch out for the <strong class='color-red'>red potion <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing3.png'></strong> which can erase your progress, or the <strong class='color-darkorange'>watch <img src='" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/game/boss/thing4.png'></strong> that speeds up the timer. If you run out seeds, or run out of time, you’ll have to try again.</p></div><div class=\"boss-win video\"></div><div class=\"buttons\"><button type=\"button\" class=\"boss-button btn btn-success\">Next</button></div></div><div id=\"skinventory\" class=\"gameboard-overlay background-3\"><h2>Changing Room</h2><p>Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.</p><div class=\"parts\"><div data-part=\"head\" class=\"part head\"></div><div data-part=\"torso\" class=\"part torso\"></div><div data-part=\"legs\" class=\"part legs\"></div></div><div class=\"skinformation\"><h3>You're wearing</h3><p>Nothing!</p></div><a href=\"\" class=\"close-button\"><i class=\"fa fa-times-circle fa-lg\"></i></a></div><div id=\"inventory\"><div class=\"inventory-boxes\"></div><div class=\"inventory-items\"></div><div class=\"inventory-tangram\"></div><button type=\"button\" class=\"close-button btn btn-primary\">Close</button><div class=\"help\">click piece to view resource</div></div><div id=\"status-update\"><span></span></div><div id=\"seedventory\"><div class=\"seed regular-button\"><i title=\"regular seed\" data-placement=\"top\" class=\"fa fa-leaf fa-lg\"></i><span class=\"badge always-show\"></span></div><div class=\"seed draw-button\"><i title=\"paintbrush seed\" data-placement=\"top\" class=\"fa fa-star fa-lg\"></i><span class=\"badge always-show\"></span></div><button type=\"button\" class=\"close-button btn btn-primary\">Close</button></div><div class=\"graffiti\"><p>seeds left: <span></span></p></div><div id=\"speech-bubble\"><div class=\"dialog\"><span class=\"speaker\"></span><span class=\"message\"></span></div><div class=\"buttons\"><button type=\"button\" class=\"next-button btn btn-success\">Next</button><button type=\"button\" class=\"close-button btn btn-primary\">Okay</button><button type=\"button\" class=\"no-button btn btn-primary\">Close</button><button type=\"button\" class=\"yes-button btn btn-success\">View</button></div></div><div id=\"game-log-overlay\" class=\"scrollable\"></div><div id=\"pause-menu\"><p>please re-focus your mind, body, and the window...</p><p><button type=\"button\" class=\"unpause btn btn-success\">Resume Game</button></p></div><div id=\"waiting-for-seed\" class=\"spinner\"><!-- img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')--></div><div id=\"beaming\"></div></div>");;return buf.join("");
+});
+
+window.JT['game-help'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<p>The goal of the game is to fully color return color to the world, which starts in grayscale. To do this, you must explore, talk to the Calliopeans you see, answer their questions, plant seeds, and find research to complete new seed recipes.</p><h3>The Game Display</h3><p>You can see and interact with the game through your display. This consists of the view screen, the Status Bar, and the Display Icons.</p><h3>The View Screen</h3><p>This shows you the portion of the world you are in, along with any other characters that are in the same location. At the upper right hand corner of the map, you can see a mini map. All players, including you, appear on the mini map as little white dots. The mini-map tells you roughly where you are in the world. The large white block near the center of the mini map represents the Botanist's Garden. You must return here at the end of each level to solve the puzzle.</p><h3>The Status Bar</h3><p>Beneath the view screen, you can see the status bar. This tells you useful information, like what level you're on, when you've entered a new area of the world, and when other players interact with you. The Status Bar can be converted into a chat box by clicking the speech bubble icon in the display.</p><h3>The Icons</h3><p>The seven display icons each have unique functions. You can activate them by clicking the icon or by pressing the associated keyboard shortcut.</p><ul class=\"fa-ul\"><li><i class='fa-li fa fa-briefcase fa-lg'></i> <strong><u>I</u>nventory:</strong> Open and close your inventory</li><li><i class='fa-li fa fa-user fa-lg'></i> <strong><u>C</u>hanging room:</strong> Enter or exit seed mode</li><li><i class='fa-li fa fa-leaf fa-lg'></i> <strong>S<u>e</u>ed:</strong> Enter or exit seed mode</li><!-- li <i class='fa-li fa fa-globe fa-lg'></i> <strong>Globe:</strong> Toggle mini map off and on--><li><i class='fa-li fa fa-list fa-lg'></i> <strong>Game <u>L</u>og:</strong> Display log of game events and chat dialogue.</li><li><i class='fa-li fa fa-desktop fa-lg'></i> <strong><u>P</u>rogress:</strong> Show your progress. You can view your seed-planting, other players' planting, review your answers, and see who's in the lead.</li><li><i class='fa-li fa fa-volume-up fa-lg'></i> <strong><u>V</u>olume:</strong> Turn music on or off</li><li><i class='fa-li fa fa-question-circle fa-lg'></i> <strong><u>H</u>elp:</strong> Launch help document</li></ul><h3>Exploring The World</h3><p>To move your character, click anywhere on the screen. Your cursor will appear as a green box if it's possible to move there. If it's not possible to move there, the box will turn red.</p><h3>Interacting With Characters and Answering Questions</h3><p>To interact with characters you see, click on that character. This opens up a dialogue box. Most characters will ask you a question and reward you with seeds and puzzle pieces for a right answer, but some share game pointers or offer other observations. When you answer questions correctly, you are rewarded with seeds. If the question was multiple choice, you receive fewer seeds for each wrong answer you submit, so read carefully!</p><p>By default, your answers are private. You can make them public by clicking the “make public” button next to your answer. An “unlock” icon will appear, indicating that others can read your answer. If you accidentally make an answer public, you can make it private again by clicking the “unlock” icon that appears.</p><h3>Planting Seeds</h3><p>To plant a seed, click the leaf icon at the bottom of your display. This puts you in “Seed-Planting Mode.” While you are in Seed-Planting Mode, you can plant a seed by clicking anywhere in the world. A patch of color the same shade as your character will appear. You just brought some color back to the world! To exit seed mode and resume exploring, click the leaf icon again.</p><h3>Paintbrush Seeds</h3><p>Most characters reward you with normal seeds, but the Botanist gives you Paintbrush Seeds which allow you to plant color in custom shapes. If you have any Paintbrush Seeds, clicking the leaf icon brings up a menu of three choices. Click the leftmost icon to plant normal seeds. Plant the middle icon to plant Paintbrush Seeds. The rightmost icon is a mystery you'll have to uncover as you play and explore.</p><h3>Interacting With Other Players</h3><p>There are two ways you can interact with other players in the game. The first way is to chat with them. If you see another player (they'll look just like you, but in a different color) you can chat with them. To do this, click on the speech bubble icon. This transforms the status bar into a chat box. Type your message and hit the “enter” key to chat. Clicking the speech bubble icon again exits chat mode.</p><h3>Seed It!</h3><p>You can also grant bonus seeds to your fellow players. After you answer a question, you'll see all answers that have been made public. If you like another player's answer, click “Seed it!” to grant them a bonus seed. This bonus seed does not come from your supply, it's a bonus seed awarded for excellent answers. These bonus seeds are always mega seeds. You may award up to five bonus seeds to other players each level, and you may award multiple bonus seeds to one response if you feel so inclined.</p><h3>Completing the Recipes</h3><p>The Botanist's notebook contains four recipes for Paintbrush Seeds, which correspond with the four levels of the game. Each recipe also includes a special puzzle. As you explore the world and answer questions, you'll earn research pieces, in addition to seeds, which you will use to answer solve the puzzle.</p><p>When you think you have enough research pieces to solve the puzzle, return to the Botanist. He will show you the outline of the puzzle. You can then drag pieces from your inventory onto the puzzle. The text of the recipe appears next to the puzzle. Look at the text for hints!</p><p>As long as there are any wrong pieces on the board, you cannot solve the riddle. To remove a puzzle piece from the board, drop it into the trash.</p><p>When you think you've correctly solved the riddle, hit “Answer.” If you're correct, you progress to the next level, and earn some Paintbrush Seeds. For each time you answer incorrectly, you will receive less and less seeds. After you complete all four levels, the game is complete and you unlock your civic resume!</p><h3>Your Inventory</h3><p>Every time you answer a question correctly, you gain a research piece. You can view the pieces you've collected at any time by clicking the toolbox icon on your display. From here, you can view the resources again by clicking the puzzle pieces,</p><h3>Your Profile: A Civic Resume</h3><p>After each level, you will be prompted to fill in a section of your civic resume. At the end of the game, your resume is unlocked, enabling you to use it as a public tool for civic engagement. This lets everyone know that you have completed Civic Seed, and are certified by Tufts to engage with their host communities. It also lets organizations and the people you'll work with understand you better, so your goals can be aligned.</p>");;return buf.join("");
+});
+
+window.JT['game-hud'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div id=\"hud\" class=\"container\"><div class=\"row hud-regular\"><div class=\"span4 hud-player\"><div class=\"hud-button hud-inventory\"><a title=\"(I)nventory\" data-placement=\"top\"><i class=\"fa fa-briefcase fa-lg\"></i></a><span class=\"badge\"></span></div><div class=\"hud-button hud-skinventory\"><a title=\"(C)hanging room\" data-placement=\"top\"><i class=\"fa fa-user fa-lg\"></i></a><span class=\"badge\"></span></div><div class=\"hud-button hud-seed\"><a title=\"S(e)eds\" data-placement=\"top\"><i class=\"fa fa-leaf fa-lg\"></i></a><span class=\"badge always-show\"></span></div></div><div class=\"span4 hud-chat\"><form class=\"form-inline\"><input id=\"chat-input\" type=\"text\" maxlength=\"90\" placeholder=\"chat with other players...\" class=\"input-xlarge\"/><button id=\"chat-submit\" type=\"submit\" class=\"btn\">Chat</button></form></div><div class=\"span4 hud-global\"><div class=\"hud-button hud-log\"><a title=\"Game (L)og\" data-placement=\"top\"><i class=\"fa fa-list fa-lg\"></i></a><span class=\"badge\"></span></div><div class=\"hud-button hud-progress\"><a title=\"(P)rogress\" data-placement=\"top\"><i class=\"fa fa-desktop fa-lg\"></i></a></div><div class=\"hud-button hud-mute\"><a title=\"(V)olume\" data-placement=\"top\"><i class=\"fa fa-volume-up fa-lg\"></i></a></div><div class=\"hud-button hud-help\"><a title=\"(H)elp\" data-placement=\"top\"><i class=\"fa fa-question-circle fa-lg\"></i></a></div></div></div><div class=\"row hud-boss\"><div class=\"span4\"><div class=\"hud-button hud-seed\"><a title=\"S(e)eds\" data-placement=\"top\"><i class=\"fa fa-leaf fa-lg\"></i></a><span class=\"badge always-show\">20</span></div></div><div class=\"span4\"><div class=\"clock\">90</div></div><div class=\"span3\"><div class=\"score\">score: <span>---</span></div></div><div class=\"span1\"><div class=\"hud-button hud-mute\"><a title=\"(V)olume\" data-placement=\"top\"><i class=\"fa fa-volume-up fa-lg\"></i></a></div></div></div></div><div id=\"game-log\" class=\"scrollable\"></div>");;return buf.join("");
+});
+
+window.JT['game-resourcestage'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div id=\"resource-stage\"></div>");;return buf.join("");
+});
+
+window.JT['pages-404'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),badURL = locals_.badURL;
+buf.push("<h1>404'd!</h1>");
+if(typeof badURL === 'string')
+{
+buf.push("<p>\"" + (jade.escape((jade.interp = badURL) == null ? '' : jade.interp)) + "\" is not a valid path. Please find another one. :P</p>");
+}
+else
+{
+buf.push("<p>You have mistakenly come to the wrong universe.</p>");
+};return buf.join("");
+});
+
+window.JT['pages-about'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"about\"><div class=\"row\"><div class=\"span12\"><p class=\"aboutTag\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/other/pigeon.png', true, false)) + "/></p><p class=\"aboutTag\"><em>The color has vanished! Can you help bring it back?</em></p><p>Civic Seed is a multi-player RPG that harnesses the power of online social play to teach and certify students to civically engage with partner communities.</p><p class=\"videoTag\"><iframe src=\"//player.vimeo.com/video/64315985?title=0&amp;byline=0&amp;portrait=0&amp;color=ff9933\" width=\"720\" height=\"406\" frameborder=\"0\" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></p><h2>Civic Engagement</h2><p>Many incoming university students are eager to make an impact on their school's partner communities and give something back to the people who live there. However, to most, the people and challenges of these communities are unknown, and under-trained volunteers can even do more harm than good.</p><p>For local organizations, it's difficult to know which students have the necessary knowledge and skills to make a positive impact, and whose personal goals align with the goals of the organization and the community.</p><h2>The Power of Play</h2><p>In Civic Seed, students get to explore a fantastical world, engage with the people who live there, and work together to solve a mystery and help bring the world back to life. Reflective learning is mixed with puzzle-solving, social gaming, and collaborative art. Learning through play makes it easy to engage with, reflect upon, and apply new knowledge. Civic Seed lets students learn how to tackle issues systematically and internalize information through experience instead of just memorizing for a quiz.</p><h2>Real World Results</h2><p>The Civic Resume- By playing the game, student-players not only learn about civic engagement, they become certified to civically engage with their partner communities. Game actions and responses are recorded and transformed into a civic resume -- a sharable profile, owned by the player, that lets partners understand a student's background, skills, goals, and motivations.</p><p>Real Learning- Players take part in a reflective, collaborative learning process that prepares them to engage effectively in partner communities and make a positive, informed impact.</p><p class=\"creators\">This game was created by the <a href=\"http://engagementgamelab.org\" target=\"_blank\">Engagement Game Lab</a>in partnernship with <a href=\"http://tufts.edu\" target=\"_blank\">Tufts University.</a></p></div></div></div>");;return buf.join("");
+});
+
+window.JT['pages-changeinfo'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"row\"><div class=\"span6\"><h2>Before you get started...</h2><h5>Let us know a little bit about yourself!</h5><div class=\"span6 offset3 moreTopMargin\"><form id=\"changeInfoForm\" method=\"post\" action=\"/change-info\" class=\"well\"><p>What is your name?</p><div class=\"control-group\"><div class=\"controls\"><input id=\"firstname\" type=\"text\" name=\"firstname\" placeholder=\"first\" maxlength=\"20\" class=\"input-large\"/><input id=\"lastname\" type=\"text\" name=\"lastname\" placeholder=\"last\" maxlength=\"20\" class=\"input-large\"/></div></div><p>What school do you attend?</p><div class=\"control-group\"><div class=\"controls\"><input id=\"school\" type=\"text\" name=\"school\" placeholder=\"school name\" maxlength=\"40\" class=\"input-large\"/></div></div><button type=\"submit\" class=\"btn btn-primary btn-large\">Submit</button><p id=\"message\" class=\"moreTopMargin\"></p></form></div></div></div>");;return buf.join("");
+});
+
+window.JT['pages-contactus'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"row\"><div class=\"span6 offset3\"><h2>Contact Us</h2><h5>Found a bug? Having a problem? Let us know...</h5></div></div><div class=\"row\"><div class=\"span6 offset3 moreTopMargin\"><form id=\"contactUs\" method=\"post\" action=\"/contact-us\" class=\"well\"><p>Provide us with your email address and some information and we'll look into the problem.</p><div class=\"control-group\"><div class=\"controls\"><input id=\"username\" type=\"text\" name=\"username\" placeholder=\"Email\" class=\"input-large\"/><textarea id=\"problem\" type=\"text\" name=\"problem\" placeholder=\"details here...\" class=\"input-large\"></textarea></div></div><button type=\"submit\" class=\"btn btn-primary btn-large\">Send</button><p id=\"message\" class=\"moreTopMargin\"></p></form><p class=\"moreTopMargin\">Please be as detailed as possible.</p><p><small>Any additional information you have regarding your issue will be SUPER helpful for us to figure this more quickly.</small></p></div></div>");;return buf.join("");
+});
+
+window.JT['pages-home'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"row homepage\"><div class=\"span7 welcome\"><h1>Welcome to Civic Seed!</h1><h4>Where civic engagement meets social gaming.</h4><p><br> We believe learning becomes even more powerful when you have fun doing it. Civic Seed is an experimental gaming and teaching platform designed to do just that. By playing Civic Seed, you'll learn more about yourself and your peers, Tuft’s host communities, how to build mutually beneficial relationships with them, and the philosophies behind meaningful and effective civic engagement.</p><p>Best of all, you’ll be certified by Tufts to engage with the vibrant host communities it partners with, and build your own Civic Resume as you play!</p></div><div class=\"span3 offset2 welcome\"><p style=\"text-align:center; margin-bottom:0;\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/other/trees.png', true, false)) + "/></p>");
+if ((!sessionStorage.userId))
+{
+buf.push("<form id=\"loginForm\" method=\"post\" action=\"/\" class=\"form-inline\"><input id=\"username\" type=\"text\" name=\"username\" rel=\"popover\" data-content=\"Enter your email.\" data-original-title=\"Email Address\" placeholder=\"Email\" class=\"input\"/><input id=\"password\" type=\"password\" name=\"password\" rel=\"popover\" data-content=\"Super secret password.\" data-original-title=\"Password\" placeholder=\"Password\" class=\"input\"/><button type=\"submit\" class=\"btn btn-primary btn-large moreTopMargin\">Sign In</button><p class=\"moreTopMargin\"><a href=\"/remind-me\">Forget your password?</a></p></form>");
+}
+else
+{
+buf.push("<div class=\"well\"><h2><a" + (jade.attr("href", '/profiles/'+sessionStorage.profileLink, true, false)) + ">Go to Profile</a></h2></div>");
+}
+buf.push("</div></div>");;return buf.join("");
+});
+
+window.JT['pages-introduction'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"introduction\"><h1>Civic Seed Introduction</h1><iframe src=\"http://player.vimeo.com/video/64315985\" width=\"640\" height=\"360\" frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>");
+if ((sessionStorage.userFirstName))
+{
+buf.push("<p><a id=\"startGame\"" + (jade.attr("href", '/profiles/'+sessionStorage.profileLink, true, false)) + ">Your Profile</a></p>");
+}
+buf.push("</div>");;return buf.join("");
+});
+
+window.JT['pages-remindme'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"row\"><div class=\"span6\"><h2>Forget your password?</h2><h5>Let us help you.</h5><div class=\"span6 offset3 moreTopMargin\"><form id=\"remindMeForm\" method=\"post\" action=\"/remind-me\" class=\"well\"><p>Provide us with your email address and we'll reset your password via email.</p><div class=\"control-group\"><div class=\"controls\"><input id=\"username\" type=\"text\" name=\"username\" placeholder=\"Email\" class=\"input-large\"/></div></div><button type=\"submit\" class=\"btn btn-primary btn-large\">Reset</button><p id=\"message\" class=\"moreTopMargin\"></p></form><p class=\"moreTopMargin\">Forget your username?</p><p><small>Please contact your administrator if your email is not working.</small></p></div></div></div>");;return buf.join("");
+});
+
+window.JT['partials-navigation'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+
+buf.push("<div class=\"navbar navbar-fixed-top no-print\"><div class=\"navbar-inner\"><div class=\"container-fluid navPadding\"><a data-toggle=\"collapse\" data-target=\".nav-collapse\" class=\"btn btn-navbar\"><span class=\"fa fa-bar\"></span><span class=\"fa fa-bar\"></span><span class=\"fa fa-bar\"></span></a><a href=\"/\" class=\"brand\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/other/logo.jpg', true, false)) + "/>Civic Seed</a>");
+if(sessionStorage.userFirstName)
+{
+buf.push("<div class=\"btn-group pull-right\"><a data-toggle=\"dropdown\" href=\"#\" class=\"btn btn-primary dropdown-toggle\"><i class=\"fa fa-user\"></i><span class=\"username\">" + (jade.escape((jade.interp = sessionStorage.userFirstName) == null ? '' : jade.interp)) + "</span><span class=\"caret\"></span></a><ul class=\"dropdown-menu\"><li class=\"signOut\"><a href=\"/signout\">Sign Out</a></li></ul></div>");
+}
+buf.push("<div id=\"mainNavigation\" class=\"nav-collapse pull-right\">");
+if(locals && locals.fullPath)
+{
+buf.push("<style>#mainNavigation a[href='" + (jade.escape((jade.interp = locals.fullPath) == null ? '' : jade.interp)) + "'] {\n text-decoration: none;\n}</style>");
+}
+buf.push("<ul class=\"nav\"><li><a href=\"/\">Home</a></li><li><a href=\"/about\">About</a></li><li><a href=\"/profiles\">Profiles</a></li><li><a href=\"/contact\">Contact Us</a></li>");
+if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
+{
+buf.push("<li><a href=\"/admin\">Admin Console</a></li>");
+}
+buf.push("</ul></div></div></div><div class=\"zag\"></div></div>");;return buf.join("");
+});
+
+window.JT['profiles-allprofiles'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),users = locals_.users;
+buf.push("<div class=\"allProfiles\"><h1>Public Profiles</h1><p>Below is a list of all users who have chosen to make their profile publicly available.</p>");
+// iterate users
+;(function(){
+  var $$obj = users;
+  if ('number' == typeof $$obj.length) {
+
+    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+      var user = $$obj[$index];
+
+buf.push("<p><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a></p>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var $index in $$obj) {
+      $$l++;      var user = $$obj[$index];
+
+buf.push("<p><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a></p>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</div>");;return buf.join("");
+});
+
+window.JT['profiles-singleprofile'] = (function template(locals) {
+var buf = [];
+var jade_mixins = {};
+var locals_ = (locals || {}),firstName = locals_.firstName,lastName = locals_.lastName,school = locals_.school,email = locals_.email,profilePublic = locals_.profilePublic,profileUnlocked = locals_.profileUnlocked,resume = locals_.resume,resumeFeedback = locals_.resumeFeedback,colorMap = locals_.colorMap,active = locals_.active;
+buf.push("<div class=\"profiles\">");
+if ( firstName)
+{
+buf.push("<div class=\"row headerRow\"><div class=\"span8\"><p class=\"nombre\">" + (jade.escape((jade.interp = firstName) == null ? '' : jade.interp)) + " " + (jade.escape((jade.interp = lastName) == null ? '' : jade.interp)) + "</p><p class=\"school\"><em>" + (jade.escape((jade.interp = school) == null ? '' : jade.interp)) + "</em></p></div>");
+if ( (sessionStorage.userEmail === email))
+{
+buf.push("<div" + (jade.attr("data-public", profilePublic, true, false)) + " class=\"span3 profileToggle no-print\">");
+if ( profilePublic)
+{
+buf.push("<i title=\"make profile public\" data-placement=\"top\" class=\"fa fa-unlock fa fa-4x\"></i><p>your profile is public</p>");
+}
+else
+{
+buf.push("<i title=\"make profile private\" data-placement=\"top\" class=\"fa fa-lock fa fa-4x\"></i><p>your profile is private</p>");
+}
+buf.push("</div>");
+}
+buf.push("</div>");
+if ( profileUnlocked)
+{
+if ( (sessionStorage.userEmail === email))
+{
+buf.push("<div class=\"row no-print\"><div class=\"span12 box\"><p><a href=\"https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb\" target=\"_blank\" class=\"survey\">Complete this survey!</a></p></div></div><div class=\"row no-print\"><div class=\"span12 instructions\"><p>To edit your profile, click on the text. When you are done, make sure to hit the \"Save\" button.</p></div></div>");
+}
+buf.push("<div class=\"row\"><div class=\"span12 box motivations\">");
+if ( resume[0])
+{
+buf.push("<p" + (jade.attr("data-email", email, true, false)) + "><span class=\"profileTitle\">Motivations </span> <span class='resumeText'> " + (jade.escape((jade.interp = resume[0]) == null ? '' : jade.interp)) + " </span></p>");
+}
+buf.push("</div></div>");
+if ( (resumeFeedback.length > 0))
+{
+buf.push("<div class=\"feedback no-print\"><p class=\"clickForFeedback\">Peer Feedback</p>");
+// iterate resumeFeedback
+;(function(){
+  var $$obj = resumeFeedback;
+  if ('number' == typeof $$obj.length) {
+
+    for (var c = 0, $$l = $$obj.length; c < $$l; c++) {
+      var comment = $$obj[c];
+
+if ( (comment.resumeIndex === 0))
+{
+buf.push("<div class=\"row\"><p>a peer said: " + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div>");
+}
+    }
+
+  } else {
+    var $$l = 0;
+    for (var c in $$obj) {
+      $$l++;      var comment = $$obj[c];
+
+if ( (comment.resumeIndex === 0))
+{
+buf.push("<div class=\"row\"><p>a peer said: " + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div>");
+}
+    }
+
+  }
+}).call(this);
+
+buf.push("</div>");
+}
+buf.push("<div class=\"row\"><div class=\"span12 box background\">");
+if ( resume[1])
+{
+buf.push("<p" + (jade.attr("data-email", email, true, false)) + "><span class=\"profileTitle\">Background & Skills </span> <span class='resumeText'> " + (jade.escape((jade.interp = resume[1]) == null ? '' : jade.interp)) + " </span></p>");
+}
+buf.push("</div></div><div class=\"row\"><div class=\"span12 box goals\">");
+if ( resume[2])
+{
+buf.push("<p" + (jade.attr("data-email", email, true, false)) + "><span class=\"profileTitle\">Personal Goals </span> <span class='resumeText'> " + (jade.escape((jade.interp = resume[2]) == null ? '' : jade.interp)) + " </span></p>");
+}
+buf.push("</div></div><div class=\"row\"><div class=\"span12 box objectives\">");
+if ( resume[3])
+{
+buf.push("<p" + (jade.attr("data-email", email, true, false)) + "><span class=\"profileTitle\">Civic Objectives </span> <span class='resumeText'> " + (jade.escape((jade.interp = resume[3]) == null ? '' : jade.interp)) + " </span></p>");
+}
+buf.push("</div></div>");
+if ( colorMap)
+{
+buf.push("<div class=\"row\"><div class=\"span12 box color-map\"><img" + (jade.attr("src", '' + (colorMap) + '', true, false)) + "/></div></div>");
+}
+if ( (sessionStorage.userEmail === email))
+{
+buf.push("<div class=\"row no-print\"><div class=\"span12\"><p class=\"saveProfileChanges\">Save Changes</p></div></div>");
+}
+}
+else
+{
+if ( (firstName === 'Demo'))
+{
+buf.push("<div class=\"row demo-profile\"><div class=\"span12\"><h1>The Story of Civic Seed</h1><h2>Call to Action</h2><p>At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.</p><p>Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.</p><h2>Exploring the Mystery</h2><p>As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.</p><h2>The Big Reveal</h2><p>After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.</p><p>The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.</p><h2>Boss Battle and Final Sequence</h2><p>Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.</p><p>This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.</p><h2>Features of the full version of Civic Seed</h2><ul><li>Music and sound effects</li><li>Animated intro and finale sequences</li><li>Timed boss level</li><li>Hidden “Easter Egg” seeds</li><li>Heads-up knowledge contests between players</li><li>Sharable Community Service Resumes</li></ul><iframe src=\"http://player.vimeo.com/video/64315985\" width=\"640\" height=\"360\" frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><p class=\"demoUserPlayLink\"><a href=\"/game\">Play the Game</a></p></div></div>");
+}
+else
+{
+buf.push("<div class=\"row\"><div class=\"span12\">");
+if ( (sessionStorage.userEmail === email))
+{
+if ( (active))
+{
+buf.push("<h2>Your profile is locked. Play the game to complete your profile!</h2><p class=\"buttonResume\"><a href=\"/game\">Resume Game</a></p>");
+}
+else
+{
+buf.push("<h2>The game is currently inactive.</h2>");
+}
+}
+else
+{
+buf.push("<h2>This profile has not yet been completed.</h2>");
+}
+buf.push("</div></div>");
+}
+}
+}
+else
+{
+buf.push("<h1>This person does not exist in our database.</h1>");
+}
+buf.push("</div>");;return buf.join("");
+});
+</script>
+    <link rel="stylesheet" type="text/css" media="print" href="/uncompiled-css/print.css">
+  </head>
+  <body>
+    <div id="container" class="container"></div>
+  </body>
+</html>
