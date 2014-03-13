@@ -15,6 +15,7 @@ var self = module.exports = {
 		});
 
 		$app.get('/game', function(req) {
+			$CONTAINER.addClass('game-container')
 			$game.enterGame();
 		});
 
