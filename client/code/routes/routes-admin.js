@@ -43,23 +43,41 @@ var self = module.exports = {
 		});
 
 		$app.get('/admin/npcs', function (req) {
-			ss.rpc('admin.npcs.init', sessionStorage.userId, function(result) {
-				if(result) {
+			ss.rpc('admin.npcs.init', sessionStorage.userId, function (result) {
+				if (result) {
 					//modify results for data output
-					for(var r = 0; r < result.length; r++) {
+					for (var r = 0; r < result.length; r++) {
 						var x = result[r].index % 142;
 						var y = Math.floor(result[r].index / 142);
 						result[r].x = x;
 						result[r].y = y;
 					}
-					// console.log(result);
+
+					// Add a dummy template entry for new NPCs
+					result.push({
+						id:     '-template',
+						newNpc: true,
+						level:  0,
+						x:      '',
+						y:      '',
+						name:   '',
+						sprite: 0,
+						index:  0,
+						resource: {},
+						dialog:  {
+							prompts: [],
+							smalltalk: []
+						}
+					})
+
 					$CONTAINER.append(JT['admin-npcs']({
 						environment: CivicSeed.ENVIRONMENT,
 						npcs: result
 					}));
 					$CONTAINER.addClass('admin-container')
+
 					$('title').text('{ ::: Civic Seed - Admin Panel - NPCs ::: }');
-					// $BODY.attr('class', 'npcsPage');
+
 					npcs.addSprites();
 				} else {
 					console.log('error');

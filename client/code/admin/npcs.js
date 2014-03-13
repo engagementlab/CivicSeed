@@ -4,6 +4,8 @@ var $body
 
 var self = module.exports = {
 
+  newId: 0,
+
   init: function () {
     $body = $(document.body);
     self.setup();
@@ -29,35 +31,51 @@ var self = module.exports = {
       }
     });
 
+    // Save changes to an NPC
     $body.on('click', '.npc-save-button', function () {
-      var id = parseInt($(this).attr('data-id'), 10);
-      self.saveChanges(id);
-    });
+      var id = parseInt($(this).attr('data-id'), 10)
+      self.saveChanges(id)
+    })
 
+    // Delete an NPC
     $body.on('click', '.npc-delete-button', function () {
-      var id = parseInt($(this).attr('data-id'), 10);
-      self.deleteNpc(id);
-    });
+      var id = parseInt($(this).attr('data-id'), 10)
+      self.deleteNpc(id)
+    })
 
+    // Create an NPC
+    $body.on('click', '.npc-create-button', function () {
+      var id = $(this).attr('data-id')
+      self.createNpc(id)
+    })
+
+    // Cancel addition of a new NPC
+    $body.on('click', '.npc-cancel-button', function () {
+      var id = $(this).attr('data-id')
+      self.cancelNpc(id)
+    })
+
+    // Previous NPC sprite
     $body.on('click', '.sprite-up', function () {
       var $npc        = $(this).parents('.npc'),
           spriteId    = $npc.attr('data-sprite'),
           spriteImage = $npc.find('.sprite')
 
       if (spriteId > 0) {
-        spriteId--;
+        spriteId--
         var locY = spriteId * -64,
-            pos  = '0 ' + locY + 'px';
+            pos  = '0 ' + locY + 'px'
 
         spriteImage.css({
           'background-position': pos
-        });
+        })
 
         // Note: for some reason the .data() method on jQuery doesn't work
-        $npc.attr('data-sprite', spriteId);
+        $npc.attr('data-sprite', spriteId)
       }
-    });
+    })
 
+    // Next NPC sprite
     $body.on('click', '.sprite-down', function () {
       var $npc        = $(this).parents('.npc'),
           spriteId    = $npc.attr('data-sprite'),
@@ -65,33 +83,46 @@ var self = module.exports = {
 
       // TODO: Don't hardcode the maximum number of sprites!
       if (spriteId < 53) {
-        spriteId++;
+        spriteId++
         var locY = spriteId * -64,
-            pos  = '0 ' + locY + 'px';
+            pos  = '0 ' + locY + 'px'
 
         spriteImage.css({
           'background-position': pos
-        });
+        })
 
-        $npc.attr('data-sprite', spriteId);
+        $npc.attr('data-sprite', spriteId)
+      }
+    })
+
+    // View the resource that NPC is holding
+    $body.on('click', '.view-resource-button', function () {
+      //get the text from the url textarea
+      var $self      = $(this),
+          parent     = $self.parentsUntil('.npc'),
+          resourceId = parent.find('.url').val()
+
+      // Only display a resource if the user has entered its file name
+      // Note: this does not check if the file is actually present
+      if (resourceId) {
+        var url = '/articles/' + resourceId + '.html'
+        $('.article').empty().load(url, function () {
+          $('.buffer').show()
+          $(this).show()
+        })
+      } else {
+        // If there is nothing entered, flash red on the button
+        $self.addClass('btn-error')
+        setTimeout(function () {
+          $self.removeClass('btn-error')
+        }, 1000)
       }
     });
 
-    $body.on('click', '.view-resource-button', function () {
-      //get the text from the url textarea
-      var parent  = $(this).parentsUntil('.npc'),
-          urlArea = parent.find('.url'),
-          url     = '/articles/' + $(urlArea).val() + '.html';
-
-      $('.article').empty().load(url, function () {
-        $('.buffer').show();
-        $(this).show();
-      });
-    });
-
+    // When button is clicked, add a new NPC
     $body.on('click', '.npc-add-button', function() {
       self.addNpc()
-    });
+    })
 
     // Loads a JSON view of all NPC data.
     // Note; this crashes the server if you attempt to go to it directly without going through the admin.
@@ -99,60 +130,67 @@ var self = module.exports = {
       window.location = '/admin/npcs/export'
     })
 
+    // Hide resource view on mouse click
     $body.on('click', '.article, .buffer', function() {
-      $('.article, .buffer').hide();
-    });
+      $('.article, .buffer').hide()
+    })
 
+    // Toggle display of input boxes depending on whether NPC is holding a resource
     $body.on('change', 'input[type="checkbox"]', function () {
-      //toggle the display for the input boxes
-      var holding   = this.checked ? true : false,
-          parents   = $(this).parentsUntil('.npc'),
-          npcParent = $(parents[parents.length-1]);
+      var holding = this.checked ? true : false,
+          $npc    = $(this).parents('.npc')
 
       if (holding) {
-        $(npcParent).find('.resource').show();
-        $(npcParent).find('.prompts').show();
-        $(npcParent).find('.smalltalk').hide();
+        $npc.find('.resource').show()
+        $npc.find('.prompts').show()
+        $npc.find('.smalltalk').hide()
       } else {
-        $(npcParent).find('.resource').hide();
-        $(npcParent).find('.prompts').hide();
-        $(npcParent).find('.smalltalk').show();
+        $npc.find('.resource').hide()
+        $npc.find('.prompts').hide()
+        $npc.find('.smalltalk').show()
       }
-    });
+    })
 
+    // Toggle display of answer inputs depending on the type of question NPC is asking
     $body.on('change', '.questionType input[type="radio"]', function () {
       var questionType = $(this).val(),
-          parents      = $(this).parentsUntil('.npc'),
-          npcParent    = $(parents[parents.length-1]);
+          $npc         = $(this).parents('.npc')
 
-      $(npcParent).find('.questionOptions').hide();
+      $npc.find('.questionOptions').hide();
 
-      if (questionType === 'open') {
-        $(npcParent).find('.requiredDiv').show();
-      } else {
-        if (questionType === 'multiple') {
-          $(npcParent).find('.possibleDiv').show();
-        }
-        $(npcParent).find('.answerDiv').show();
+      // Display response fields depending on question type
+      switch (questionType) {
+        case 'open':
+          // Open-ended response
+          $npc.find('.requiredDiv').show()
+          break
+        case 'multiple':
+          // Multiple-choice response
+          $npc.find('.possibleDiv').show()
+          break
+        default:
+          // Binary-choice response, e.g. true/false or yes/no
+          $npc.find('.answerDiv').show()
+          break
       }
-    });
+    })
   },
 
   addSprites: function () {
     var npc = $('.npc'),
-        url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')';
+        url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')'
 
     npc.each(function (i) {
       var sprite = $(this).data('sprite'),
           locY   = sprite * -64,
           pos    = '0 ' + locY + 'px',
-          info   = $(this).find('.sprite');
+          info   = $(this).find('.sprite')
 
         info.css({
         'background-image':    url,
         'background-position': pos
-      });
-    });
+      })
+    })
   },
 
   saveChanges: function (id) {
@@ -276,16 +314,21 @@ var self = module.exports = {
           npcClass = 'npc' + updates.id;
       npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
       //options buttons
-      var saveButton = npc.find('.npc-save-button'),
-          deleteButton = npc.find('.npc-delete-button');
-      $(saveButton).attr('data-id', updates.id);
-      $(deleteButton).attr('data-id', updates.id);
+      var $saveButton = npc.find('.npc-create-button'),
+          $deleteButton = npc.find('.npc-cancel-button');
+      $saveButton.attr('data-id', updates.id);
+      $deleteButton.attr('data-id', updates.id);
       ss.rpc('admin.npcs.addNpc', updates, function (err) {
         if (err) {
           apprise(err);
         } else {
-          var saveButton = npc.find('.npc-save-button');
-          $(saveButton).addClass('btn-success');
+          var $saveButton = npc.find('.npc-create-button');
+
+          $saveButton.addClass('btn-success').addClass('npc-save-button').removeClass('npc-create-button').text('npc created!')
+          $deleteButton.addClass('npc-delete-button').removeClass('npc-cancel-button').text('delete')
+          setTimeout(function () {
+            $saveButton.removeClass('btn-success').text('save')
+          }, 2000)
         }
       });
     } else {
@@ -297,9 +340,17 @@ var self = module.exports = {
           var levelClass = 'level' + updates.level,
             npcClass = 'npc' + updates.id;
             npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
-          $(saveButton).addClass('btn-success');
+          $saveButton.addClass('btn-success');
         }
       });
+    }
+  },
+
+  createNpc: function (id) {
+    // If the ID is negative, delegate this feature to .saveChanges()
+    // TODO: Don't put everything into one large function!
+    if (id < 0) {
+      self.saveChanges(id)
     }
   },
 
@@ -310,15 +361,13 @@ var self = module.exports = {
 
       //this means it has never been saved, delete it from client
       if (id < 0) {
-        npc.fadeOut(function() {
-          this.remove();
-        });
+        self.cancelNpc(id)
       } else {
         ss.rpc('admin.npcs.deleteNpc', id, function (err,res) {
           if (err) {
             console.log(err);
           } else {
-            npc.fadeOut(function() {
+            npc.slideUp(function() {
               this.remove();
             });
           }
@@ -327,30 +376,30 @@ var self = module.exports = {
     }
   },
 
-  addNpc: function () {
-    //TODO: figure out id (inc +1 on prev highest)
-    //var clone = $('#npc-template .npc').clone();
+  // Cancel creation of a new NPC
+  cancelNpc: function (id) {
+    var npc = $('.npc' + id);
 
+    npc.slideUp(function() {
+      this.remove();
+    });
+  },
+
+  addNpc: function () {
     // TODO: Theoretically, we should be building the NPC page from templates
     // which would have made this the easiest thing to do. However, we don't do
     // that, and it's not a good idea to have multiple, repeated HTML code that
     // do the same thing. So, we're doing this:
+    var newId = self.newId--
 
-    // Create a clone of the first NPC on the page (assumes they already exist.)
-    var clone = $('#admin-npcs').find('.npc').first().clone()
-
-    // Empties all values for inputs and textareas
-    $(clone).find('input').val('')
-    $(clone).find('textarea').val('')
-
-    // Set the NPC to a smalltalk-only, non-resource-holding NPC by default.
-    $(clone).find('input.holding')[0].checked = false
-    $(clone).find('.resource').hide()
-    $(clone).find('.prompts').hide()
-    $(clone).find('.smalltalk').show()
+    // Create a clone of the NPC template
+    var clone = $('.npc-template').last().clone()
+    $(clone).find('[data-id]').attr('data-id', newId)
 
     // Add it in the beginning, near the 'Add NPC' button.
     $(clone).insertAfter('.npc-add-insert-here')
+    $(clone).slideDown()
+    $(clone).addClass('npc' + newId)
   },
 
   // Generic input prettification. This may be more useful elsewhere as well.

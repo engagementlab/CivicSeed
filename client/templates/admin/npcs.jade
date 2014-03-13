@@ -130,89 +130,15 @@
 						input(type='text', value=(npc.skinSuit) ? '#{npc.skinSuit}' : '')
 
 					.options
-						button.npc-save-button.btn(type='button', data-id='#{npc.id}') save
-						button.npc-delete-button.btn(type='button', data-id='#{npc.id}') delete
+						- if (!(npc.id >= 0))
+							button.npc-create-button.btn(type='button', data-id='#{npc.id}') create
+							button.npc-cancel-button.btn(type='button', data-id='#{npc.id}') cancel
+						- else
+							button.npc-save-button.btn(type='button', data-id='#{npc.id}') save
+							button.npc-delete-button.btn(type='button', data-id='#{npc.id}') delete
 
 		.buffer
 		.article
-
-		#npc-template(style="display:none;")
-			.npc(class='level0 npc-1', data-sprite='0')
-				.row
-					.span12
-						.information
-							.sprite
-								p
-									i.fa.fa-arrow-circle-up.sprite-up
-									i.fa.fa-arrow-circle-down.sprite-down
-							p.npc-basic-info
-								textarea(data-area='name') Nombre
-								<span class="regular">level:</span>
-								textarea.areaNumber(data-area='level') 1
-								<span class="regular">location:</span>
-								textarea.areaNumber(data-area='x') 23
-								textarea.areaNumber(data-area='y') 23
-								<span class="regular">holding: </span>
-								input(name='isHolding', value='isHolding', type='checkbox',checked)
-						.resource
-							p.view-resource-button(data-url='/articles/test.html') view resource
-							h3 Resource
-							p URL <span class='smallerFont'> case and space sensitive</span>
-							textarea.url(data-area='url') test
-							p.questionType
-								|Question
-								input(name=('radioX') , value='open', type='radio', checked)
-								<span> open</span>
-								input(name=('radioX') , value='truefalse', type='radio')
-								<span> true/false</span>
-								input(name=('radioX') , value='yesno', type='radio')
-								<span> yes/no</span>
-								input(name=('radioX') , value='multiple', type='radio')
-								<span> multiple choice</span>
-							textarea.question(data-area='question') What is the answer?
-							.requiredDiv.questionOptions
-								p Suggested Length
-								textarea.required(data-area='requiredLength', maxlength='3') 50
-							.possibleDiv.questionOptions(style="display:none;")
-								p Choices
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
-							.answerDiv.questionOptions(style="display:none;")
-								p Answer
-								textarea.answer(data-area='answer')
-							p Tagline
-							textarea(data-area='tagline', maxlength='24') I am a tagline
-							p Depends on NPC
-							textarea.required(data-area='dependsOn', maxlength='4')
-							p Feedback Correct
-							textarea.question(data-area='feedbackRight') Nice job.
-							p Feedback Wrong
-							textarea.question(data-area='feedbackWrong') Not quite.
-						.prompts
-							h3 Prompts
-							p First Time
-							textarea(data-area='prompt') Answer my question?
-							p Returning After Incorrect
-							textarea(data-area='prompt') Try again.
-							p Returning After Completed
-							textarea(data-area='prompt') Welcome back.
-						.smalltalk(style="display:none;")
-							h3 Dialog
-							p Past
-							textarea(data-area='smalltalk')
-							p Present
-							textarea(data-area='smalltalk')
-							p Future
-							textarea(data-area='smalltalk')
-						.skinSuit
-							p Skin Suit
-							textarea
-						.options
-							p
-								<span class='saveChanges' data-id='-1'>save</span>
-								<span class='deleteNpc' data-id='-1'>delete</span>
 
 .levelFilter
 	.current 1

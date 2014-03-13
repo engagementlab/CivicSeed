@@ -8,6 +8,9 @@
 		&.btn-success
 			// Needed to overwrite CSS priority
 			background $csGreen !important
+		&.btn-error
+			// Needed to overwrite CSS priority
+			background $csRed !important
 	.back-to-admin
 		font-family $buttonFont
 		white-space nowrap
@@ -172,7 +175,7 @@ p.level3
 			margin-right 20px
 	.npc-actions
 		margin-top 20px
-	.npc-delete-button
+	.npc-delete-button, .npc-cancel-button
 		position absolute
 		right 20px
 	.npc
@@ -244,6 +247,8 @@ p.level3
 			background $csLightGreen
 		.options
 			background $csPurple
+	.npc-template
+		display none
 
 .article
 	display none
