@@ -1,44 +1,45 @@
 var self = module.exports = {
 
-	loadRoutes: function($app) {
+	loadRoutes: function ($app) {
 
 		require('/admin').init();
 		var npcs = require('/npcs');
 		npcs.init();
 
-		$app.get('/admin', function(req) {
+		$app.get('/admin', function (req) {
 			$CONTAINER.append(JT['admin-panel']({
+				environment: CivicSeed.ENVIRONMENT,
 				message: 'User admin panel.'
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel ::: }');
-			$BODY.attr('class', 'adminPage');
 		});
 
-		$app.get('/admin/startup', function(req) {
+		$app.get('/admin/startup', function (req) {
 			$CONTAINER.append(JT['admin-startup']({
 				title: 'Startup',
-				bodyClass: 'admin startup',
+				// bodyClass: 'admin startup',
 				environment: CivicSeed.ENVIRONMENT,
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));
 			$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
-			$BODY.attr('class', 'adminPage startupPage');
 		});
 
-		$app.get('/admin/monitor', function(req) {
+		$app.get('/admin/monitor', function (req) {
 			ss.rpc('admin.monitor.getInstanceNames', sessionStorage.userId, function(err, info) {
 				if(err) {
 					apprise(err);
 				} else {
-					$CONTAINER.append(JT['admin-monitor']({instances: info}));
+					$CONTAINER.append(JT['admin-monitor']({
+						environment: CivicSeed.ENVIRONMENT,
+						instances: info
+					}));
 					$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
-					$BODY.attr('class', 'adminPage');
 				}
 			});
 		});
 
-		$app.get('/admin/npcs', function(req) {
+		$app.get('/admin/npcs', function (req) {
 			ss.rpc('admin.npcs.init', sessionStorage.userId, function(result) {
 				if(result) {
 					//modify results for data output
@@ -49,9 +50,12 @@ var self = module.exports = {
 						result[r].y = y;
 					}
 					// console.log(result);
-					$CONTAINER.append(JT['admin-npcs']({npcs: result}));
+					$CONTAINER.append(JT['admin-npcs']({
+						environment: CivicSeed.ENVIRONMENT,
+						npcs: result
+					}));
 					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
-					$BODY.attr('class', 'npcsPage');
+					// $BODY.attr('class', 'npcsPage');
 					npcs.addSprites();
 				} else {
 					console.log('error');
@@ -59,11 +63,11 @@ var self = module.exports = {
 			});
 		});
 
-		$app.get('/admin/invitecodes', function(req) {
+		$app.get('/admin/invitecodes', function (req) {
 			$CONTAINER.append(JT['admin-invitecodes']({
 				title: 'Startup',
-				bodyClass: 'admin startup',
-				nodeEnv: 'nodeEnv',
+				// bodyClass: 'admin startup',
+				environment: CivicSeed.ENVIRONMENT,
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));

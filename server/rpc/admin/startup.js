@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 var rootDir = process.cwd(),
     fs      = require('fs'),

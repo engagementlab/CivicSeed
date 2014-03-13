@@ -23,10 +23,10 @@ var self = module.exports = {
 					dataType = button.data().type;
 
 			button.removeClass('btn-success')
-			button.next('.loader-spinner').show()
+			button.find('.spinner').show()
 			ss.rpc('admin.startup.loadData', dataType, function(res) {
 				button.addClass('btn-success');
-				button.next('.loader-spinner').fadeOut()
+				button.find('.spinner').fadeOut()
 			});
 		});
 	},
