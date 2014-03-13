@@ -343,7 +343,12 @@ var _resources = {
     //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 
     if (npcLevel < playerLevel) {
-      // When does this ever happen?
+      // This can happen because not all tangram pieces need to be obtained to
+      // solve the botanist's puzzle. The player only needs the "correct" ones.
+      // As a result, if a player goes back to talk to an NPC they haven't talked
+      // to, they can still complete it, but will no longer obtain the tangram piece
+      // since it is no longer necessary.
+      // The player will still obtain seeds and skin rewards.
       dialogue = feedback + ' Here, take ' + _resources.seedsToAdd + ' seeds!'
     }
     else {
