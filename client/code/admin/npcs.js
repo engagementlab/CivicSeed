@@ -1,3 +1,5 @@
+'use strict';
+
 var $body
 
 var self = module.exports = {
@@ -88,9 +90,7 @@ var self = module.exports = {
     });
 
     $body.on('click', '.npc-add-button', function() {
-      //TODO: figure out id (inc +1 on prev highest)
-      var clone = $('#npc-template .npc').clone();
-      $(clone).insertAfter('.npc-add-insert-here');
+      self.addNpc()
     });
 
     // Loads a JSON view of all NPC data.
@@ -105,9 +105,9 @@ var self = module.exports = {
 
     $body.on('change', 'input[type="checkbox"]', function () {
       //toggle the display for the input boxes
-      var holding = this.checked ? true : false;
-        parents = $(this).parentsUntil('.npc'),
-        npcParent = $(parents[parents.length-1]);
+      var holding   = this.checked ? true : false,
+          parents   = $(this).parentsUntil('.npc'),
+          npcParent = $(parents[parents.length-1]);
 
       if (holding) {
         $(npcParent).find('.resource').show();
@@ -139,7 +139,7 @@ var self = module.exports = {
   },
 
   addSprites: function () {
-    var npc = $('.npc');
+    var npc = $('.npc'),
         url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')';
 
     npc.each(function (i) {
@@ -304,7 +304,7 @@ var self = module.exports = {
   },
 
   deleteNpc: function (id) {
-    var confirm = prompt('please type "delete" to permanently remove the npc.');
+    var confirm = prompt('Please type "delete" to permanently remove this NPC.');
     if (confirm === 'delete') {
       var npc = $('.npc' + id);
 
@@ -325,6 +325,32 @@ var self = module.exports = {
         });
       }
     }
+  },
+
+  addNpc: function () {
+    //TODO: figure out id (inc +1 on prev highest)
+    //var clone = $('#npc-template .npc').clone();
+
+    // TODO: Theoretically, we should be building the NPC page from templates
+    // which would have made this the easiest thing to do. However, we don't do
+    // that, and it's not a good idea to have multiple, repeated HTML code that
+    // do the same thing. So, we're doing this:
+
+    // Create a clone of the first NPC on the page (assumes they already exist.)
+    var clone = $('#admin-npcs').find('.npc').first().clone()
+
+    // Empties all values for inputs and textareas
+    $(clone).find('input').val('')
+    $(clone).find('textarea').val('')
+
+    // Set the NPC to a smalltalk-only, non-resource-holding NPC by default.
+    $(clone).find('input.holding')[0].checked = false
+    $(clone).find('.resource').hide()
+    $(clone).find('.prompts').hide()
+    $(clone).find('.smalltalk').show()
+
+    // Add it in the beginning, near the 'Add NPC' button.
+    $(clone).insertAfter('.npc-add-insert-here')
   },
 
   // Generic input prettification. This may be more useful elsewhere as well.
