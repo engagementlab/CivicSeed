@@ -1229,6 +1229,9 @@ function _setDomSelectors() {
 
 // on init, set local and global variables for all player info
 function _setPlayerInformation(info) {
+  // Ensure that flags start from a clean state
+  $game.removeFlag()
+
   // private
   _seeds = info.game.seeds;
   _previousSeedsDropped = _seeds.dropped;

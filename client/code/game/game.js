@@ -443,11 +443,9 @@ var $game = module.exports = {
 
   // save and exit game
   exitGame: function (callback) {
-    // console.log('exiting game!');
-    sessionStorage.removeItem('isPlaying');
-    $game.running = false;
-    // TODO: fade out, instead of abrupt stop???
+    // Kill the audio
     $game.$audio.stopAll();
+
     // save out all current status of player to db on exit
     if (!$game.bossModeUnlocked) {
       $game.$player.saveTimeToDB();
@@ -461,6 +459,11 @@ var $game = module.exports = {
         callback();
       }
     });
+
+    // Clear all state flags and things
+    sessionStorage.removeItem('isPlaying');
+    $game.running = false;
+    $game.removeFlag()
   },
 
   //startup boss level if player finished game and boss level is unlocked

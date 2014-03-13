@@ -398,13 +398,16 @@
         "legs": "basic",
         "unlocked": {
           "head": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "torso": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "legs": [
-            "basic"
+            "basic",
+            "astronaut"
           ]
         }
       }
