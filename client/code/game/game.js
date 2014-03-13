@@ -672,6 +672,9 @@ var _game = {
           $game.tick();
           $game.$player.displayNpcComments()
 
+          // Turn on minimap view on gameboard
+          $game.$input.showMinimap()
+
           // Things to do if the player has not completed the tutorial
           if ($game.checkFlag('first-time') === true) {
             $game.alert('Welcome to Civic Seed!')

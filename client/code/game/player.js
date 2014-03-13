@@ -535,7 +535,8 @@ var $player = $game.$player = {
   // Simulates giving a map to the player
   giveMapToPlayer: function () {
     // Turn on minimap view on gameboard
-    $game.$input.showMinimap()
+    // NOTE: Currently always on by default.
+    // $game.$input.showMinimap()
 
     // Enable minimap view on progress window
     $('#progress-area .minimap').show()
