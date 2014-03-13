@@ -72,6 +72,14 @@ var $npc = $game.$npc = {
     // TODO: This should be deprecated eventually
     $game.$player.npcOnDeck = false
 
+    // HACK: Invisible NPCs on signs.
+    /*
+    if (npc.name === 'Sign') {
+      $npc.showSpeechBubble(npc.name, npc.getSmalltalk())
+      return
+    }
+    */
+
     // NPC interaction to display if the player has not finished speaking with Botanist
     // (1) If the player attempts to roam the world before completing the tutorial
     if ($game.checkFlag('first-time') === true) {

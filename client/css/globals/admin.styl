@@ -1,5 +1,19 @@
-h4
-	text-transform capitalize
+.admin-container
+	h4
+		text-transform capitalize
+	button
+		background $csOrange
+		&:not(:last-of-type)
+			margin-right 10px
+		&.btn-success
+			// Needed to overwrite CSS priority
+			background $csGreen !important
+	.back-to-admin
+		font-family $buttonFont
+		white-space nowrap
+		i
+			margin-right 6px
+			font-size 1.4em
 
 .console
 	width 100%
@@ -26,13 +40,6 @@ h4
 			left 37%
 	.admin-instructions
 		padding-top 4px
-
-.back-to-admin
-	font-family $buttonFont
-	white-space nowrap
-	i
-		margin-right 6px
-		font-size 1.4em
 
 #admin-startup
 	button
@@ -163,17 +170,11 @@ p.level3
 		&.possible, &.answer
 			width 45%
 			margin-right 20px
-	button
-		padding 10px
-		border 0
-		font-family $buttonFont
-		text-align center
-		line-height 1em
-		color white
-		background $csOrange
-		border-radius 3px
-		&:hover
-			background $csLightOrange
+	.npc-actions
+		margin-top 20px
+	.npc-delete-button
+		position absolute
+		right 20px
 	.npc
 		margin 20px 0
 		color white
@@ -188,9 +189,10 @@ p.level3
 			height 90px
 			.sprite
 				position absolute
-				width 64px
+				width 32px
 				height 64px
 				top 16px
+				background-repeat no-repeat
 				.sprite-controls
 					position absolute
 					top 6px
@@ -219,13 +221,11 @@ p.level3
 					color $csBlack
 		.resource
 			background $csGreen
-			.viewResource
+			.view-resource-button
 				position absolute
 				right 20px
-				width 100px
+				top 20px
 				background $csPurple
-				&:hover
-					background lighten($csPurple, 20%)
 			.questionType
 				display inline-block
 				margin-left 20px
@@ -244,26 +244,12 @@ p.level3
 			background $csLightGreen
 		.options
 			background $csPurple
-			button
-				font-size 1.4em
-			.deleteNpc
-				position absolute
-				right 20px
-		.justSaved
-			background $csLightGreen
-	.addDiv
-		margin 20px 0
-		button.addNpc
-			padding 20px
-			width 100%
-			font-size 1.8em
-			background $csGreen
 
 .article
 	display none
 	top 20%
 	margin 0 auto
-	width 900px
+	width 780px
 	height 360px
 	overflow auto
 	background $cloudUrl('img/bg/grey.png')

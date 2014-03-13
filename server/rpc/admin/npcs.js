@@ -119,7 +119,18 @@ exports.actions = function(req, res, ss) {
 							});
 					}
 				});
+		},
+
+		exportNpcs: function() {
+			npcModel.find(function (err, npcs) {
+				if (err) {
+					res(err);
+				} else {
+					res(npcs);
+				}
+			});
 		}
+
 	};
 };
 
@@ -203,8 +214,8 @@ npcHelpers = {
 						callback('cant place npc there');
 					}
 				}
-			});	
+			});
 		}
-		
+
 	}
 };

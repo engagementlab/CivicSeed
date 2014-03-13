@@ -11,6 +11,7 @@ var self = module.exports = {
 				environment: CivicSeed.ENVIRONMENT,
 				message: 'User admin panel.'
 			}));
+			$CONTAINER.addClass('admin-container')
 			$('title').text('{ ::: Civic Seed - Admin Panel ::: }');
 		});
 
@@ -22,6 +23,7 @@ var self = module.exports = {
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));
+			$CONTAINER.addClass('admin-container')
 			$('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }');
 		});
 
@@ -34,6 +36,7 @@ var self = module.exports = {
 						environment: CivicSeed.ENVIRONMENT,
 						instances: info
 					}));
+					$CONTAINER.addClass('admin-container')
 					$('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }');
 				}
 			});
@@ -54,10 +57,25 @@ var self = module.exports = {
 						environment: CivicSeed.ENVIRONMENT,
 						npcs: result
 					}));
-					$('title').text('{ ::: Civic Seed - NPC Panel - Monitor ::: }');
+					$CONTAINER.addClass('admin-container')
+					$('title').text('{ ::: Civic Seed - Admin Panel - NPCs ::: }');
 					// $BODY.attr('class', 'npcsPage');
 					npcs.addSprites();
 				} else {
+					console.log('error');
+				}
+			});
+		});
+
+		$app.get('/admin/npcs/export', function (req) {
+			ss.rpc('admin.npcs.exportNpcs', function (result) {
+				if (result) {
+					// TODO: This is hacky.
+					// It should actually send a document of MIME type application/json
+					// instead of just overwriting the HTML page.
+					document.write(JSON.stringify(result))
+				}
+				else {
 					console.log('error');
 				}
 			});
@@ -71,6 +89,8 @@ var self = module.exports = {
 				// consoleOutput: consoleOutput,
 				message: 'Startup admin panel.'
 			}));
+			$CONTAINER.addClass('admin-container')
+			$('title').text('{ ::: Civic Seed - Admin Panel - Invite Codes ::: }');
 		});
 
 	}

@@ -1,15 +1,13 @@
-var $body,
-	_sprites = null;
+var $body
 
 var self = module.exports = {
 
-	init: function() {
-		$body = $(document.body);
-		self.setup();
-		self.loadSprites();
-	},
+  init: function () {
+    $body = $(document.body);
+    self.setup();
+  },
 
-	setup: function() {
+  setup: function () {
 
     // Intercept default browser button actions
     $('button').on('click', function (e) {
@@ -17,322 +15,317 @@ var self = module.exports = {
       return false
     })
 
-		$body.on('click', '.levelFilter div', function() {
-			var level = parseInt($(this).text(),10);
-			$(this).toggleClass('current');
-			var show = $(this).hasClass('current'),
-				npcSel = '.level' + (level - 1);
-			if (show) {
-				$(npcSel).show();
-			} else {
-				$(npcSel).hide();
-			}
-		});
+    $body.on('click', '.levelFilter div', function() {
+      var level = parseInt($(this).text(),10);
+      $(this).toggleClass('current');
+      var show = $(this).hasClass('current'),
+        npcSel = '.level' + (level - 1);
+      if (show) {
+        $(npcSel).show();
+      } else {
+        $(npcSel).hide();
+      }
+    });
 
-		$body.on('click', '.saveChanges', function() {
-			var id = parseInt($(this).attr('data-id'),10);
-			self.saveChanges(id);
-		});
+    $body.on('click', '.npc-save-button', function () {
+      var id = parseInt($(this).attr('data-id'), 10);
+      self.saveChanges(id);
+    });
 
-		$body.on('click', '.deleteNpc', function() {
-			var id = parseInt($(this).attr('data-id'),10);
-			self.deleteNpc(id);
-		});
+    $body.on('click', '.npc-delete-button', function () {
+      var id = parseInt($(this).attr('data-id'), 10);
+      self.deleteNpc(id);
+    });
 
-		$body.on('click', '.spriteUp', function() {
-			var parents = $(this).parentsUntil('.npcs'),
-				npc = $(parents[parents.length-1]),
-				sprite = npc.attr('data-sprite'),
-				bg = $(parents[1]);
-			if (sprite > 0) {
-				sprite--;
-				var locY = sprite * -64,
-					pos = '0 ' + locY + 'px';
-				bg.css({
-					'background-position': pos
-				});
-				npc.attr('data-sprite', sprite);
-			}
-		});
+    $body.on('click', '.sprite-up', function () {
+      var $npc        = $(this).parents('.npc'),
+          spriteId    = $npc.attr('data-sprite'),
+          spriteImage = $npc.find('.sprite')
 
-		$body.on('click', '.spriteDown', function() {
-			var parents = $(this).parentsUntil('.npcs'),
-				npc = $(parents[parents.length-1]),
-				sprite = npc.attr('data-sprite'),
-				bg = $(parents[1]);
-			if (sprite < 53) {
-				sprite++;
-				var locY = sprite * -64,
-					pos = '0 ' + locY + 'px';
-				bg.css({
-					'background-position': pos
-				});
-				npc.attr('data-sprite', sprite);
-			}
-		});
+      if (spriteId > 0) {
+        spriteId--;
+        var locY = spriteId * -64,
+            pos  = '0 ' + locY + 'px';
 
-		$body.on('click', '.viewResource', function() {
-			//get the text from the url textarea
-			var parent = $(this).parentsUntil('.npc'),
-				urlArea = parent.find('.url'),
-				url = '/articles/' + $(urlArea).val() + '.html';
+        spriteImage.css({
+          'background-position': pos
+        });
 
-			$('.article').empty().load(url,function() {
-				$('.buffer').show();
-				$(this).show();
-			});
-		});
+        // Note: for some reason the .data() method on jQuery doesn't work
+        $npc.attr('data-sprite', spriteId);
+      }
+    });
 
-		$body.on('click', '.addNpc', function() {
-			//TODO: figure out id (inc +1 on prev highest)
-			var clone = $('.npcTemplate .npc').clone();
-			$(clone).insertBefore('.addDiv');
-		});
+    $body.on('click', '.sprite-down', function () {
+      var $npc        = $(this).parents('.npc'),
+          spriteId    = $npc.attr('data-sprite'),
+          spriteImage = $npc.find('.sprite')
 
-		$body.on('click', '.article, .buffer', function() {
-			$('.article, .buffer').hide();
-		});
+      // TODO: Don't hardcode the maximum number of sprites!
+      if (spriteId < 53) {
+        spriteId++;
+        var locY = spriteId * -64,
+            pos  = '0 ' + locY + 'px';
 
-		$body.on('change', 'input[type="checkbox"]', function () {
-			//toggle the display for the input boxes
-			var holding = this.checked ? true : false;
-				parents = $(this).parentsUntil('.npcs'),
-				npcParent = $(parents[parents.length-1]);
+        spriteImage.css({
+          'background-position': pos
+        });
 
-			if (holding) {
-				$(npcParent).find('.resource').show();
-				$(npcParent).find('.prompts').show();
-				$(npcParent).find('.smalltalk').hide();
-			} else {
-				$(npcParent).find('.resource').hide();
-				$(npcParent).find('.prompts').hide();
-				$(npcParent).find('.smalltalk').show();
-			}
-		});
+        $npc.attr('data-sprite', spriteId);
+      }
+    });
 
-		$body.on('change', 'input[type="radio"]', function () {
-			var questionType = $(this).val(),
-				parents = $(this).parentsUntil('.npcs'),
-				npcParent = $(parents[parents.length-1]);
-			$(npcParent).find('.questionOptions').hide();
+    $body.on('click', '.view-resource-button', function () {
+      //get the text from the url textarea
+      var parent  = $(this).parentsUntil('.npc'),
+          urlArea = parent.find('.url'),
+          url     = '/articles/' + $(urlArea).val() + '.html';
 
-			if (questionType === 'open') {
-				$(npcParent).find('.requiredDiv').show();
-			} else {
-				if (questionType === 'multiple') {
-					$(npcParent).find('.possibleDiv').show();
-				}
-				$(npcParent).find('.answerDiv').show();
-			}
-		});
-	},
+      $('.article').empty().load(url, function () {
+        $('.buffer').show();
+        $(this).show();
+      });
+    });
 
-	loadSprites: function() {
-		_sprites = new Image();
-		_sprites.src = CivicSeed.CLOUD_PATH + '/img/game/npcs.png';
-		_sprites.onload = function() {
+    $body.on('click', '.npc-add-button', function() {
+      //TODO: figure out id (inc +1 on prev highest)
+      var clone = $('#npc-template .npc').clone();
+      $(clone).insertAfter('.npc-add-insert-here');
+    });
 
-			// _tilesheetCanvas = document.createElement('canvas');
-			// _tilesheetCanvas.setAttribute('width', _currentTilesheet.width);
-			// _tilesheetCanvas.setAttribute('height', _currentTilesheet.height);
-			// _tilesheetContext = _tilesheetCanvas.getContext('2d');
-		};
-	},
+    // Loads a JSON view of all NPC data.
+    // Note; this crashes the server if you attempt to go to it directly without going through the admin.
+    $body.on('click', '.npc-export-button', function () {
+      window.location = '/admin/npcs/export'
+    })
 
-	addSprites: function() {
-		var npc = $('.npc');
-			url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')';
-		npc.each(function(i){
-			var sprite = $(this).attr('data-sprite'),
-				locY = sprite * -64,
-				pos = '0 ' + locY + 'px',
-				info = $(this).find('.sprite');
+    $body.on('click', '.article, .buffer', function() {
+      $('.article, .buffer').hide();
+    });
 
-				info.css({
-				'background-image': url,
-				'background-repeat': 'no-repeat',
-				'background-position': pos
-			});
-		});
-	},
+    $body.on('change', 'input[type="checkbox"]', function () {
+      //toggle the display for the input boxes
+      var holding = this.checked ? true : false;
+        parents = $(this).parentsUntil('.npc'),
+        npcParent = $(parents[parents.length-1]);
 
-	saveChanges: function(id) {
-		var npc = $('.npcs').find('.npc' + id),
-			informationAreas = npc.find('.information textarea, .information input'),
-			resourceAreas = npc.find('.resource textarea, .resource input'),
-			promptAreas = npc.find('.prompts textarea'),
-			smalltalkAreas = npc.find('.smalltalk textarea'),
-			skinSuitArea = npc.find('.skinSuit input'),
-			holding = npc.find('.information .holding')[0].checked,
-			questionType = npc.find('.resource input:checked').val(),
-			sprite = parseInt(npc.attr('data-sprite'),10),
-			updates = {
-				id: id,
-				isHolding: holding,
-				resource: {
-					url: null,
-					shape: null,
-					questionType: questionType,
-					answer: null,
-					question: null,
-					possibleAnswers: [],
-					feedbackRight: null,
-					feedbackWrong: null
-				},
-				dependsOn: null,
-				dialog: {
-					prompts: [],
-					smalltalk: []
-				},
-				level: null,
-				sprite: sprite,
-				index: null,
-				name: null,
-				skinSuit: null
-			};
+      if (holding) {
+        $(npcParent).find('.resource').show();
+        $(npcParent).find('.prompts').show();
+        $(npcParent).find('.smalltalk').hide();
+      } else {
+        $(npcParent).find('.resource').hide();
+        $(npcParent).find('.prompts').hide();
+        $(npcParent).find('.smalltalk').show();
+      }
+    });
 
-		//update information
+    $body.on('change', '.questionType input[type="radio"]', function () {
+      var questionType = $(this).val(),
+          parents      = $(this).parentsUntil('.npc'),
+          npcParent    = $(parents[parents.length-1]);
+
+      $(npcParent).find('.questionOptions').hide();
+
+      if (questionType === 'open') {
+        $(npcParent).find('.requiredDiv').show();
+      } else {
+        if (questionType === 'multiple') {
+          $(npcParent).find('.possibleDiv').show();
+        }
+        $(npcParent).find('.answerDiv').show();
+      }
+    });
+  },
+
+  addSprites: function () {
+    var npc = $('.npc');
+        url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')';
+
+    npc.each(function (i) {
+      var sprite = $(this).data('sprite'),
+          locY   = sprite * -64,
+          pos    = '0 ' + locY + 'px',
+          info   = $(this).find('.sprite');
+
+        info.css({
+        'background-image':    url,
+        'background-position': pos
+      });
+    });
+  },
+
+  saveChanges: function (id) {
+    var npc = $('#admin-npcs').find('.npc' + id),
+        informationAreas = npc.find('.information textarea, .information input'),
+        resourceAreas    = npc.find('.resource textarea, .resource input'),
+        promptAreas      = npc.find('.prompts textarea'),
+        smalltalkAreas   = npc.find('.smalltalk textarea'),
+        skinSuitArea     = npc.find('.skinSuit input'),
+        holding          = npc.find('.information .holding')[0].checked,
+        questionType     = npc.find('.resource input:checked').val(),
+        sprite           = parseInt(npc.attr('data-sprite'), 10),
+        updates = {
+          id: id,
+          isHolding: holding,
+          resource: {
+            url: null,
+            shape: null,
+            questionType: questionType,
+            answer: null,
+            question: null,
+            possibleAnswers: [],
+            feedbackRight: null,
+            feedbackWrong: null
+          },
+          dependsOn: null,
+          dialog: {
+            prompts: [],
+            smalltalk: []
+          },
+          level: null,
+          sprite: sprite,
+          index: null,
+          name: null,
+          skinSuit: null
+        };
+
+    //update information
     var x,y;
     informationAreas.each(function(i) {
       var area = $(this).attr('data-area'),
           val  = self._prettify(this.value);
 
-			if (area === 'name') {
-				updates.name = val;
-			} else if (area === 'level') {
-				updates.level = parseInt(val, 10) - 1;
-			} else if (area === 'x') {
-				x = parseInt(val, 10);
-			} else if (area === 'y') {
-				y = parseInt(val, 10);
-			}
-		});
+      if (area === 'name') {
+        updates.name = val;
+      } else if (area === 'level') {
+        updates.level = parseInt(val, 10) - 1;
+      } else if (area === 'x') {
+        x = parseInt(val, 10);
+      } else if (area === 'y') {
+        y = parseInt(val, 10);
+      }
+    });
 
-		updates.index = (y * 142) + x;
+    updates.index = (y * 142) + x;
 
-		resourceAreas.each(function(i) {
-			var area = $(this).attr('data-area'),
-				val =  self._prettify(this.value);
-			if (area === 'url') {
-				updates.resource.url = val;
-			} else if (area === 'shape') {
-				updates.resource.shape = val;
-			} else if (area === 'question') {
-				updates.resource.question = val;
-			} else if (area === 'possibleAnswers') {
-				updates.resource.possibleAnswers.push(val);
-			} else if (area === 'answer') {
-				updates.resource.answer = val;
-			} else if (area === 'requiredLength') {
-				updates.resource.requiredlength = parseInt(val, 10);
-			} else if (area === 'dependsOn') {
-				updates.dependsOn = parseInt(val,10);
-			} else if (area === 'feedbackRight') {
-				updates.resource.feedbackRight = val;
-			} else if (area === 'feedbackWrong') {
-				updates.resource.feedbackWrong = val;
-			}
-		});
+    resourceAreas.each(function(i) {
+      var area = $(this).attr('data-area'),
+        val =  self._prettify(this.value);
+      if (area === 'url') {
+        updates.resource.url = val;
+      } else if (area === 'shape') {
+        updates.resource.shape = val;
+      } else if (area === 'question') {
+        updates.resource.question = val;
+      } else if (area === 'possibleAnswers') {
+        updates.resource.possibleAnswers.push(val);
+      } else if (area === 'answer') {
+        updates.resource.answer = val;
+      } else if (area === 'requiredLength') {
+        updates.resource.requiredlength = parseInt(val, 10);
+      } else if (area === 'dependsOn') {
+        updates.dependsOn = parseInt(val,10);
+      } else if (area === 'feedbackRight') {
+        updates.resource.feedbackRight = val;
+      } else if (area === 'feedbackWrong') {
+        updates.resource.feedbackWrong = val;
+      }
+    });
 
-		promptAreas.each(function(i) {
-			var area = $(this).attr('data-area'),
-				val = self._prettify(this.value);
+    promptAreas.each(function(i) {
+      var area = $(this).attr('data-area'),
+        val = self._prettify(this.value);
 
-			if (area === 'prompt') {
-				updates.dialog.prompts.push(val);
-			}
-		});
+      if (area === 'prompt') {
+        updates.dialog.prompts.push(val);
+      }
+    });
 
-		smalltalkAreas.each(function(i) {
+    smalltalkAreas.each(function(i) {
 
-			var area = $(this).attr('data-area'),
-				val = self._prettify(this.value);
+      var area = $(this).attr('data-area'),
+        val = self._prettify(this.value);
 
-			if (area === 'smalltalk') {
-				updates.dialog.smalltalk.push(val);
-			}
-		});
+      if (area === 'smalltalk') {
+        updates.dialog.smalltalk.push(val);
+      }
+    });
 
-		var skinVal = skinSuitArea.val();
-		// console.log(skinVal);
-		if (skinVal && skinVal.length > 0) {
-			updates.skinSuit = skinVal;
-		}
+    var skinVal = skinSuitArea.val();
+    // console.log(skinVal);
+    if (skinVal && skinVal.length > 0) {
+      updates.skinSuit = skinVal;
+    }
 
-		//this means it is a new one, do not save, but add new in db
-		if (id < 0) {
-			//figure out id
-			var max = 0;
-			$('.saveChanges').each(function(i){
-				var id = parseInt($(this).data('id'),10);
-				if (id > max) {
-					max = id;
-				}
-			});
-			max++;
-			updates.id = max;
-			//TODO: update information on client
-			//.npc: level, npc
-			var levelClass = 'level' + updates.level,
-				npcClass = 'npc' + updates.id;
-			npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
-			//options buttons
-			var saveButton = npc.find('.saveChanges'),
-				deleteButton = npc.find('.deleteNpc');
-			$(saveButton).attr('data-id', updates.id);
-			$(deleteButton).attr('data-id', updates.id);
-			ss.rpc('admin.npcs.addNpc', updates, function(err) {
-				if (err) {
-					apprise(err);
-				} else {
-					var saveButton = npc.find('.saveChanges');
-					$(saveButton).addClass('justSaved');
-					setTimeout(function(){
-						$(saveButton).removeClass('justSaved');
-					}, 1000);
-				}
-			});
-		} else {
-			ss.rpc('admin.npcs.updateInformation', updates, function(err) {
-				if (err) {
-					apprise(err);
-				} else {
-					var saveButton = npc.find('.saveChanges');
-					var levelClass = 'level' + updates.level,
-						npcClass = 'npc' + updates.id;
-						npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
-					$(saveButton).addClass('justSaved');
-					setTimeout(function(){
-						$(saveButton).removeClass('justSaved');
-					}, 1000);
-				}
-			});
-		}
-	},
+    //this means it is a new one, do not save, but add new in db
+    if (id < 0) {
+      //figure out id
+      var max = 0;
+      $('.npc-save-button').each(function(i){
+        var id = parseInt($(this).data('id'),10);
+        if (id > max) {
+          max = id;
+        }
+      });
+      max++;
+      updates.id = max;
+      //TODO: update information on client
+      //.npc: level, npc
+      var levelClass = 'level' + updates.level,
+          npcClass = 'npc' + updates.id;
+      npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+      //options buttons
+      var saveButton = npc.find('.npc-save-button'),
+          deleteButton = npc.find('.npc-delete-button');
+      $(saveButton).attr('data-id', updates.id);
+      $(deleteButton).attr('data-id', updates.id);
+      ss.rpc('admin.npcs.addNpc', updates, function (err) {
+        if (err) {
+          apprise(err);
+        } else {
+          var saveButton = npc.find('.npc-save-button');
+          $(saveButton).addClass('btn-success');
+        }
+      });
+    } else {
+      ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+        if (err) {
+          apprise(err);
+        } else {
+          var saveButton = npc.find('.npc-save-button');
+          var levelClass = 'level' + updates.level,
+            npcClass = 'npc' + updates.id;
+            npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+          $(saveButton).addClass('btn-success');
+        }
+      });
+    }
+  },
 
-	deleteNpc: function(id) {
-		var confirm = prompt('please type "delete" to permanently remove the npc.');
-		if (confirm === 'delete') {
-			var npc = $('.npc' + id);
+  deleteNpc: function (id) {
+    var confirm = prompt('please type "delete" to permanently remove the npc.');
+    if (confirm === 'delete') {
+      var npc = $('.npc' + id);
 
-			//this means it has never been saved, delete it from client
-			if (id < 0) {
-				npc.fadeOut(function() {
-					this.remove();
-				});
-			} else {
-				ss.rpc('admin.npcs.deleteNpc',id, function(err,res) {
-					if (err) {
-						console.log(err);
-					} else {
-						npc.fadeOut(function() {
-							this.remove();
-						});
-					}
-				});
-			}
-		}
-	},
+      //this means it has never been saved, delete it from client
+      if (id < 0) {
+        npc.fadeOut(function() {
+          this.remove();
+        });
+      } else {
+        ss.rpc('admin.npcs.deleteNpc', id, function (err,res) {
+          if (err) {
+            console.log(err);
+          } else {
+            npc.fadeOut(function() {
+              this.remove();
+            });
+          }
+        });
+      }
+    }
+  },
 
   // Generic input prettification. This may be more useful elsewhere as well.
   _prettify: function (input) {
