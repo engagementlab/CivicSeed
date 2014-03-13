@@ -383,7 +383,8 @@ var $input = $game.$input = module.exports = {
           break
         case 77:  // 'm'
           // Toggles minimap.
-          $input.toggleMinimap()
+          // Currently disabled because there's currently no way for the player to know how to get this back in the UI.
+          // $input.toggleMinimap()
           break
         case 67:  // 'c'
           // Changing room
@@ -596,18 +597,38 @@ var $input = $game.$input = module.exports = {
     $input.resetUI()
     $game.$log.clearUnread()
 
-    if (!$('#game-log').is(':visible')) {
-      $('#game-log-overlay').hide()
-      var h = $(window).height();
-      $('html, body').stop().animate({
-        scrollTop: h
-      }, 250);
-      $('#game-log').show()
+    if ($('#game-log').is(':visible')) {
+      $input.hideGameLog()
+      $input.showGameLogOverlay()
     }
     else {
-      $('#game-log').hide()
-      $('#game-log-overlay').fadeIn(200)
+      $input.hideGameLogOverlay()
+      $input.showGameLog()
     }
+  },
+
+  showGameLogOverlay: function () {
+    $('#game-log-overlay').fadeIn(200)
+
+    // Display a highlight HUD button for this
+    $input.activeHUDButton('.hud-log')
+  },
+
+  hideGameLogOverlay: function () {
+    $('#game-log-overlay').hide()
+    $input.inactiveHUDButton('.hud-log')
+  },
+
+  showGameLog: function () {
+    var h = $(window).height();
+    $('html, body').stop().animate({
+      scrollTop: h
+    }, 250);
+    $('#game-log').show()
+  },
+
+  hideGameLog: function () {
+    $('#game-log').hide()
   },
 
   toggleProgress: function () {
@@ -746,7 +767,7 @@ var _input = {
       case 'TOWN':
         if ($game.checkFlag('teleport-town')) {
           _input.outfitLog('Teleporting to ' + $game.world.northeast.name + '!')
-          $game.$player.beam({x: 99, y: 29})
+          $game.$player.beam({x: 98, y: 31})
         }
         else return false
         break
@@ -760,7 +781,7 @@ var _input = {
       case 'PORT':
         if ($game.checkFlag('teleport-port')) {
           _input.outfitLog('Teleporting to ' + $game.world.southwest.name + '!')
-          $game.$player.beam({x: 47, y: 99})
+          $game.$player.beam({x: 33, y: 99})
         }
         else return false
         break
@@ -801,6 +822,7 @@ var _input = {
         break
       case 'ding me':
         _input.cheatLog('Leveling up!')
+        $game.$player.emptyInventory()
         $game.$player.nextLevel()
         break
       case 'suit alors':
