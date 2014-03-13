@@ -687,7 +687,7 @@ var _game = {
           }
 
           // Set up a nudge for the botanist, in case it needs to happen
-          $game.$botanist._nudgePlayerTimeout = window.setTimeout($botanist.nudgePlayer, 4000)
+          $game.$botanist._nudgePlayerTimeout = window.setTimeout($game.$botanist.nudgePlayer, 4000)
         });
       }
     });
