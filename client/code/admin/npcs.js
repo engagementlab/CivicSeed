@@ -4,7 +4,7 @@ var $body
 
 var self = module.exports = {
 
-  newId: 0,
+  newId: -1,
 
   init: function () {
     $body = $(document.body);
