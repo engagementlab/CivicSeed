@@ -762,6 +762,10 @@ var $player = $game.$player = {
     return _seeds.dropped;
   },
 
+  getMoveSpeed: function () {
+    return _player.moveSpeed;
+  },
+
   // Gets a specific item at index or all items in inventory
   getInventory: function (index) {
     return (index !== undefined) ? _inventory[index] : _inventory
@@ -1128,6 +1132,10 @@ var $player = $game.$player = {
     }
 
     $game.$skins.changeSkin(_skinSuit)
+  },
+
+  setMoveSpeed: function (multiplier) {
+    _player.moveSpeed = multiplier || 1
   }
 
 }
@@ -1139,6 +1147,8 @@ var $player = $game.$player = {
  **/
 
 var _player = {
+
+  moveSpeed: 1,
 
   // * * * * * * *   INVENTORY   * * * * * * *
 
@@ -1448,12 +1458,12 @@ function _move() {
   }
   //if we no done, then step through it yo.
   else {
+    var currentSpeed = $player.getMoveSpeed()
 
     //increment the current step
-    $game.$player.currentStep += 1;
-
+    $game.$player.currentStep += 1 * currentSpeed
     //if it the first one, then figure out the direction to face
-    if ($game.$player.currentStep === 1) {
+    if ($game.$player.currentStep === 1 * currentSpeed) {
       _currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
       _currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
       //set the previous offsets to 0 because the last visit

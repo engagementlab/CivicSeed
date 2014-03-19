@@ -694,6 +694,9 @@ var _game = {
 
           // Set up a nudge for the botanist, in case it needs to happen
           $game.$botanist._nudgePlayerTimeout = window.setTimeout($game.$botanist.nudgePlayer, 4000)
+
+          // Apply skin flags ?
+          $game.$skins.applyFlags()
         });
       }
     });

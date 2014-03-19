@@ -195,8 +195,25 @@ var $skins = $game.$skins = {
     $game.$render.createCanvasForPlayer($game.$player.id, false)
     $skins.renderSkinformation()
 
-    // Hack to re-render NPC comments
-    $game.$player.displayNpcComments()
+    // Immediately execute anything based on flags
+    $skins.applyFlags()
+  },
+
+  applyFlags: function () {
+    // If local radar, re-render NPC comments
+    if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
+      $game.$player.displayNpcComments()
+    }
+
+    // If speed goes up, change player speed
+    if ($game.checkFlag('speed-max')) {
+      $game.$player.setMoveSpeed(2)
+    } else if ($game.checkFlag('speed-up')) {
+      $game.$player.setMoveSpeed(1.5)
+    } else {
+      // Reset
+      $game.$player.setMoveSpeed()
+    }
   }
 
 }
