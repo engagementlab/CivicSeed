@@ -199,15 +199,9 @@ var _boss = {
     videoEl.id = 'boss-cutscene-' + number
     videoEl.classList.add('cutscene')
     videoEl.style.display = 'none'
-    videoEl.addEventListener('canplaythrough', _listenerFunction)
-    videoEl.addEventListener('error', function (e) {
-      $game.debug('Boss cutscene video error')
-    })
 
-    function _listenerFunction (e) {
-      videoEl.removeEventListener('canplaythrough', _listenerFunction)
-      document.getElementById('boss-cutscene').appendChild(videoEl)
-    }
+    // Add the cutscene element to the game board
+    document.getElementById('boss-cutscene').appendChild(videoEl)
   },
 
   showOverlay: function (section) {
@@ -678,6 +672,14 @@ var _boss = {
     $('#boss-cutscene').fadeIn('fast')
     $game.setFlag('playing-cutscene')
     videoEl.style.display = 'block'
+
+    /*
+    // Not used
+    videoEl.addEventListener('canplaythrough', _listenerFunction)
+    function _listenerFunction (e) {
+      videoEl.removeEventListener('canplaythrough', _listenerFunction)
+    }
+    */
 
     // Set up actions to perform after the video has finished
     videoEl.addEventListener('ended', _onVideoHasFinishedPlaying)
