@@ -6,7 +6,7 @@ var self = module.exports = {
 
 		$body = $(document.body);
 
-		$body.on('click', '.saveProfileChanges', function() {
+		$body.on('click', '.save-profile-button', function() {
 			var updates = [];
 			var info = $('.resumeText');
 			$.each(info, function(i, text) {
