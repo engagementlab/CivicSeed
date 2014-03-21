@@ -35,7 +35,7 @@ var self = module.exports = {
 		app.use(function(req, res, next) {
 			// res.send(404, 'Sorry cant find that!');
 			CivicSeed.SocketStream = false;
-			res.render(rootDir + '/client/views/app.jade', {
+			res.render(rootDir + '/client/views/main.jade', {
 				title: '404 - Page Not Found',
 				CivicSeed: JSON.stringify(CivicSeed),
 				SocketStream: ''
