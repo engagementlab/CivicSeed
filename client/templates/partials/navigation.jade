@@ -1,38 +1,36 @@
-.navbar.navbar-fixed-top.no-print
-	.navbar-inner
-		.container-fluid.navPadding
-			a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-				span.fa.fa-bar
-				span.fa.fa-bar
-				span.fa.fa-bar
+.navbar.navbar-default.navbar-fixed-top.no-print
+	.container-fluid
+		.navbar-header
+			button.navbar-toggle(type='button', data-toggle='collapse', data-target='#main-navigation')
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
 
-			a.brand(href='/')
+			a.navbar-brand(href='/')
 				img(src='#{CivicSeed.CLOUD_PATH}/img/other/logo.jpg')
 				| Civic Seed
 
+		#main-navigation.navbar-collapse.collapse
+
 			- if(sessionStorage.userFirstName)
-				.btn-group.pull-right
-					a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
-						i.fa.fa-user
-						span.username #{sessionStorage.userFirstName}
-						span.caret
-					ul.dropdown-menu
-						//- li: a(href='/profiles') Profiles
-						//- li.divider
-						li.signOut: a(href='/signout') Sign Out
+				ul.nav.navbar-right
+					li.dropdown
+						a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown', href='#')
+							i.fa.fa-user
+							span.username #{sessionStorage.userFirstName}
+							span.caret
+						ul.dropdown-menu
+							//- li: a(href='/profiles') Profiles
+							//- li.divider
+							li.signOut: a(href='/signout') Sign Out
 
+			ul.nav.navbar-nav.navbar-right
+				li: a(href='/') Home
+				li: a(href='/about') About
+				li: a(href='/profiles') Profiles
+				li: a(href='/contact') Contact Us
+				- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
+					li: a(href='/admin') Admin Console
 
-			#mainNavigation.nav-collapse.pull-right
-				- if(locals && locals.fullPath)
-					style.
-						#mainNavigation a[href='#{locals.fullPath}'] {
-							text-decoration: none;
-						}
-				ul.nav
-					li: a(href='/') Home
-					li: a(href='/about') About
-					li: a(href='/profiles') Profiles
-					li: a(href='/contact') Contact Us
-					- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
-						li: a(href='/admin') Admin Console
 	.zag
+

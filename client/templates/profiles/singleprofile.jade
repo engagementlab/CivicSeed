@@ -1,11 +1,11 @@
 .profiles
 	if firstName
 		.row.headerRow
-			.span8
+			.col-md-8
 				p.nombre #{firstName} #{lastName}
 				p.school <em>#{school}</em>
 			if (sessionStorage.userEmail === email)
-				.span3.profileToggle.no-print(data-public=profilePublic)
+				.col-md-3.profileToggle.no-print(data-public=profilePublic)
 					if profilePublic
 						i.fa.fa-unlock.fa.fa-4x(title='make profile public', data-placement='top')
 						p your profile is public
@@ -15,14 +15,14 @@
 		if profileUnlocked
 			if (sessionStorage.userEmail === email)
 				.row.no-print
-					.span12.box
+					.col-md-12.box
 						p
 							a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
 				.row.no-print
-					.span12.instructions
+					.col-md-12.instructions
 						p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 			.row
-				.span12.box.motivations
+				.col-md-12.box.motivations
 					if resume[0]
 						p(data-email=email) <span class="profileTitle">Motivations </span> <span class='resumeText'> #{resume[0]} </span>
 			if (resumeFeedback.length > 0)
@@ -35,29 +35,29 @@
 
 
 			.row
-				.span12.box.background
+				.col-md-12.box.background
 					if resume[1]
 						p(data-email=email) <span class="profileTitle">Background & Skills </span> <span class='resumeText'> #{resume[1]} </span>
 			.row
-				.span12.box.goals
+				.col-md-12.box.goals
 					if resume[2]
 						p(data-email=email) <span class="profileTitle">Personal Goals </span> <span class='resumeText'> #{resume[2]} </span>
 			.row
-				.span12.box.objectives
+				.col-md-12.box.objectives
 					if resume[3]
 						p(data-email=email) <span class="profileTitle">Civic Objectives </span> <span class='resumeText'> #{resume[3]} </span>
 			if colorMap
 				.row
-					.span12.box.color-map
+					.col-md-12.box.color-map
 						img(src='#{colorMap}')
 			if (sessionStorage.userEmail === email)
 				.row.no-print
-					.span12
+					.col-md-12
 						button.btn.save-profile-button Save Changes
 		else
 			if (firstName === 'Demo')
 				.row.demo-profile
-					.span12
+					.col-md-12
 						h1 The Story of Civic Seed
 						h2 Call to Action
 						p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
@@ -83,7 +83,7 @@
 							a(href='/game') Play the Game
 			else
 				.row
-					.span12
+					.col-md-12
 						if (sessionStorage.userEmail === email)
 							if (active)
 								h2 Your profile is locked. Play the game to complete your profile!

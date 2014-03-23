@@ -1,17 +1,17 @@
 .row
-	.span10.offset1.back-to-admin
+	.col-md-10.col-md-offset-1.back-to-admin
 		a(href='/admin')
 			i.fa.fa-arrow-circle-o-left.fa-lg
 			| back
 
 .row
-	.span10.offset1
+	.col-md-10.col-md-offset-1
 		h1 Create New Game
 
 		h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 .row
-	.span10.offset1
+	.col-md-10.col-md-offset-1
 		#admin-invites.console
 
 			.console-content
@@ -28,15 +28,15 @@
 					//- div.control-group
 					//- 	label.control-label(for='sessionName') Session Name:
 					//- 	div.controls
-					//- 		input#sessionName.span4(type='text', placeholder='Give this session a name...')
+					//- 		input#sessionName.col-md-4(type='text', placeholder='Give this session a name...')
 					div.control-group
 						label.control-label(for='emailList') Game Name:
 						div.controls
-							input#instanceName.span4(style='margin-bottom: 20px', placeholder='ex. Tufts Round 1')
-							//- textarea#emailList.span4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
+							input#instanceName.col-md-4(style='margin-bottom: 20px', placeholder='ex. Tufts Round 1')
+							//- textarea#emailList.col-md-4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
 						label.control-label(for='emailList') Email Addresses:
 						div.controls
-							textarea#emailList.span4(rows='6', placeholder='ex. russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com')
+							textarea#emailList.col-md-4(rows='6', placeholder='ex. russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com')
 					div.control-group
 
 						div.controls
@@ -49,7 +49,7 @@
 					//- 	label.control-label(for='sessionSelect') Existing Session:
 					//- 	div.controls
 					//- 		//- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
-					//- 		select#sessionSelect.span4
+					//- 		select#sessionSelect.col-md-4
 					//- 			//- {{#each invitees}}
 					//- 			//- 	option value='{{this}}'>{{this}}
 					//- 			//- {{/each}}

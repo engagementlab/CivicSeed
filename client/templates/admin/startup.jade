@@ -1,17 +1,17 @@
 .row
-	.span10.offset1.back-to-admin
+	.col-md-10.col-md-offset-1.back-to-admin
 		a(href='/admin')
 			i.fa.fa-arrow-circle-o-left.fa-lg
 			| back
 
 .row
-	.span10.offset1
+	.col-md-10.col-md-offset-1
 		h1 Startup
 
 		h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 .row
-	.span10.offset1
+	.col-md-10.col-md-offset-1
 		#admin-startup.console
 			h2 Database Initialization
 
@@ -20,46 +20,46 @@
 				p <strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order from top to bottom. The button will turn green after the loading is complete. Wait until it turns green before clicking the next one!
 
 				.row
-					.span2
+					.col-md-2
 						button#userLoadBtn.btn(data-type='users') Users
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Clears current users; sets up test and demo users.
 				.row
-					.span2
+					.col-md-2
 						button#gameLoadBtn.btn(data-type='game') Game
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Clears current game sessions; sets up test and demo games.
 				.row
-					.span2
+					.col-md-2
 						button#gameLoadBtn.btn(data-type='colors') Colors
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p ??? (No idea what this does.)
 				.row
-					.span2
+					.col-md-2
 						button#chatLoadBtn.btn(data-type='chat') Chat
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Clears all chat logs.
 				.row
-					.span2
+					.col-md-2
 						button#tileLoadBtn.btn(data-type='tiles') Tiles
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations.
 				.row
-					.span2
+					.col-md-2
 						button#botanistLoadBtn.btn(data-type='botanist') Botanist
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Loads default Botanist conversations.
 				.row
-					.span2
+					.col-md-2
 						button#npcLoadBtn.btn(data-type='npcs') NPC
 							.spinner
-					.admin-instructions.span6
+					.admin-instructions.col-md-6
 						p Loads default NPC data. <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.
 
 				//- button#resourcesLoadBtn.btn(data-type='resources') Preload Resources
