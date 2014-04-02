@@ -11,22 +11,22 @@
 			.console-content
 				- if(sessionStorage.userRole === 'superadmin')
 					.row
-						.col-md-2
+						.col-sm-3
 							a.btn(href='/admin/startup') Startup
-						.admin-instructions.col-md-6
+						.admin-instructions.col-sm-9
 							p Initializes all data.
 					.row
-						.col-md-2
+						.col-sm-3
 							a.btn(href='/admin/npcs') NPCs
-						.admin-instructions.col-md-6
+						.admin-instructions.col-sm-9
 							p Sets NPC interaction and speech content.
 				.row
-					.col-md-2
+					.col-sm-3
 						a.btn(href='/admin/invitecodes') Invite Codes
-					.admin-instructions.col-md-6
+					.admin-instructions.col-sm-9
 						p Begins a new game and sends invite codes to players.
 				.row
-					.col-md-2
+					.col-sm-3
 						a.btn(href='/admin/monitor') Monitor
-					.admin-instructions.col-md-6
+					.admin-instructions.col-sm-9
 						p Look at information on current games.
