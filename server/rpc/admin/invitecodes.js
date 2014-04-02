@@ -7,16 +7,7 @@ var rootDir = process.cwd(),
     gameModel = service.useModel('game', 'preload'),
     colorModel = service.useModel('color', 'preload'),
     emailListLength,
-    emailIterator,
-    singleHtml;
-
-var html  = '<h2>Why hello there, #{firstName}!</h2>';
-    html += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
-    html += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
-    html += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
-    html += '<strong>#{password}</strong></p>';
-    html += '<p>Your username is your email: <strong>#{email}</strong></p>';
-    html += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org/">here.</a></h3>';
+    emailIterator;
 
 exports.actions = function (req, res, ss) {
 
@@ -26,18 +17,24 @@ exports.actions = function (req, res, ss) {
 
   var colorData = require(rootDir + '/data/colors.json');
 
-  var createUserAndSendInvite = function(email, instanceName, i) {
-    userModel.findOne({ email: email }, function(err, user) {
+  var createUserAndSendInvite = function (email, instanceName, i) {
+
+    // Note: All invites assume a NEW USER. This means if the user is
+    // already in the system, this OVERWRITES their account.
+
+    // TODO: Figure out how to work around this properly.
+
+    userModel.findOne({ email: email }, function (err, user) {
       var nameParts;
-      if(err) {
+      if (err) {
         console.error('  Could not find \'actor\' user: %s'.red.inverse, err);
       } else {
-        if(!user) {
+//        if (!user) {
           var newColor = colorData[i],
             tilesheetNum = i + 1;
 
           var password = xkcd.generatePassword();
-          accountHelpers.hashPassword(password, function(hashedPassword) {
+          accountHelpers.hashPassword(password, function (hashedPassword) {
             nameParts = email.split('@');
             user = new userModel();
             user.firstName = nameParts[0];
@@ -88,15 +85,14 @@ exports.actions = function (req, res, ss) {
               }
             };
             console.log('Created user: ' + user.email);
-            user.save(function(err) {
-              if(err) {
+            user.save(function (err) {
+              if (err) {
                 console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err);
               } else {
-                singleHtml = html.replace('#{firstName}', user.firstName);
-                singleHtml = singleHtml.replace('#{password}', password);
-                singleHtml = singleHtml.replace('#{email}', user.email);
-                emailUtil.sendEmail('Greetings from Civic Seed', singleHtml, user.email);
-                if(i === emailListLength - 1) {
+                sendInviteEmail(user.firstName, password, user.email)
+
+                // If this is the last e-mail to send, close the e-mail connection
+                if (i === emailListLength - 1) {
                   emailUtil.closeEmailConnection();
                   console.log('All emails have been sent...');
                   res(true);
@@ -104,22 +100,37 @@ exports.actions = function (req, res, ss) {
               }
             });
           });
-        } else {
-          if(i === emailListLength - 1) {
-            emailUtil.closeEmailConnection();
-            console.log('All emails have been sent...');
-            res(true);
-          }
-        }
+//        } else {
+//          sendInviteEmail(user.firstName, password, user.email)
+//        }
       }
     });
   };
 
+  var sendInviteEmail = function (firstName, password, email) {
+    // Set up email template
+    var content  = '<h2>Why hello there, #{firstName}!</h2>';
+        content += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
+        content += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
+        content += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
+        content += '<strong>#{password}</strong></p>';
+        content += '<p>Your username is your email: <strong>#{email}</strong></p>';
+        content += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org/">here.</a></h3>';
+
+    // Replace strings with custom content
+    content = content.replace('#{firstName}', firstName);
+    content = content.replace('#{password}', password);
+    content = content.replace('#{email}', email);
+
+    // Send e-mail
+    emailUtil.sendEmail('Greetings from Civic Seed', content, email);
+  }
+
   return {
 
-    sendInvites: function(emailList, instanceName, i) {
+    sendInvites: function (emailList, instanceName, i) {
 
-      if(req.session.role && (req.session.role === 'superadmin' || req.session.role === 'admin')) {
+      if (req.session.role && (req.session.role === 'superadmin' || req.session.role === 'admin')) {
         // emailList = ['russell@engagementgamelab.org', 'russell@russellgoldenberg.com', 'russell_goldenberg@emerson.edu', 'samuel.a.liberty@gmail.com', 'thebookofrobert@gmail.com', 'langbert@gmail.com', 'arxpoetica@gmail.com'];
 
         console.log('\n\n   * * * * * * * * * * * *   Sending User Invites via Email   * * * * * * * * * * * *   \n\n'.yellow);
@@ -128,9 +139,10 @@ exports.actions = function (req, res, ss) {
 
         //emailList = emailList.slice(0, 20); --> doing this on front now
         emailListLength = emailList.length;
-        for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+
+        for (emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
           var email = emailList[emailIterator].toLowerCase();
-          if(i) {
+          if (i) {
             createUserAndSendInvite(email, instanceName, i);
           } else {
             createUserAndSendInvite(email, instanceName, emailIterator);
