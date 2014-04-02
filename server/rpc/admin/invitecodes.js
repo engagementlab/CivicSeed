@@ -1,11 +1,13 @@
-var rootDir = process.cwd(),
-    emailUtil = require(rootDir + '/server/utils/email'),
+var rootDir        = process.cwd(),
+    config         = require(rootDir + '/config'),
+    nodeEnv        = config.get('ENVIRONMENT'),
+    emailUtil      = require(rootDir + '/server/utils/email'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-    xkcd = require('xkcd-pwgen'),
-    service = require(rootDir + '/service'),
-    userModel = service.useModel('user', 'preload'),
-    gameModel = service.useModel('game', 'preload'),
-    colorModel = service.useModel('color', 'preload'),
+    xkcd           = require('xkcd-pwgen'),
+    service        = require(rootDir + '/service'),
+    userModel      = service.useModel('user', 'preload'),
+    gameModel      = service.useModel('game', 'preload'),
+    colorModel     = service.useModel('color', 'preload'),
     emailListLength,
     emailIterator;
 
@@ -108,14 +110,20 @@ exports.actions = function (req, res, ss) {
   };
 
   var sendInviteEmail = function (firstName, password, email) {
+    var content = ''
+
     // Set up email template
-    var content  = '<h2>Why hello there, #{firstName}!</h2>';
-        content += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
-        content += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
-        content += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
-        content += '<strong>#{password}</strong></p>';
-        content += '<p>Your username is your email: <strong>#{email}</strong></p>';
-        content += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org/">here.</a></h3>';
+    if (nodeEnv !== 'production') {
+    // Add a message to indicate a test invite (NOT from production server)
+      content += '<p><strong style="color:red;">This is a test invite from the Civic Seed Development server. Do not attempt to sign up for the game through this e-mail.</strong></p>';
+    }
+    content += '<h2>Why hello there, #{firstName}!</h2>';
+    content += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
+    content += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
+    content += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
+    content += '<strong>#{password}</strong></p>';
+    content += '<p>Your username is your email: <strong>#{email}</strong></p>';
+    content += '<h3 style="color:green;">You can get started by going <a href="http://civicseed.org/">here.</a></h3>';
 
     // Replace strings with custom content
     content = content.replace('#{firstName}', firstName);
