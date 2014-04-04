@@ -15,8 +15,8 @@
 				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
 				p.moreTopMargin: a(href='/remind-me') Forget your password?
 		else
-			.well
-				h2: a(href='/profiles/'+sessionStorage.profileLink) Go to Profile
+			div
+				a.btn.btn-info.go-to-profile(href='/profiles/'+sessionStorage.profileLink) Go to Profile
 //- .iconInfo(style='font-size:28px;')
 //- 			p
 //- 				br

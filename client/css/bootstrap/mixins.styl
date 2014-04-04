@@ -29,7 +29,7 @@ clearfix()
 /// THIS PART HAS BEEN MANUALLY ADDED AFTER STYLUS CONVERSION ///////////////////
 .clearfix
   clearfix()
-/////////////////////////////////////////////////////////////////////////////////  
+/////////////////////////////////////////////////////////////////////////////////
 
 
 // WebKit-style focus
@@ -59,7 +59,7 @@ size(width, height)
 
 square(size)
   size(size, size)
-  
+
 
 // Placeholder text
 placeholder(color=input-color-placeholder)
@@ -104,7 +104,7 @@ hide-text()
 // New mixin to use as of v3.0.1
 text-hide()
   hide-text()
-  
+
 
 // CSS3 PROPERTIES
 // --------------------------------------------------
@@ -130,10 +130,13 @@ border-left-radius(radius)
 // Note: Deprecated `.box-shadow()` as of v3.1.0 since all of Bootstrap's
 //   supported browsers that have box shadow capabilities now support the
 //   standard `box-shadow` property.
+/*
+// CIVIC SEED EDIT - Remove this mixin, not needed
 box-shadow(shadow)
   -webkit-box-shadow shadow
   // iOS <4.3 & Android <4.1
   box-shadow shadow
+*/
 
 // Transitions
 transition(transition)
@@ -519,13 +522,13 @@ pagination-size(padding-vertical, padding-horizontal, font-size, border-radius)
     &:first-child
       > a, > span
         border-left-radius(border-radius)
-        
+
 
 
     &:last-child
       > a, > span
         border-right-radius(border-radius)
-        
+
 
 
 
@@ -570,7 +573,7 @@ progress-bar-variant(color)
   background-color color
   .progress-striped &
     gradient-striped()
-    
+
 
 
 // Responsive utilities
@@ -746,7 +749,7 @@ float-grid-columns(class)
     if index <= grid-columns
       item = unquote(".col-" + class + "-" + index + "")
       col((index + 1), unquote("" + list + ", " + item + ""))
-    else 
+    else
       {list}
         float left
   // initial
@@ -789,7 +792,7 @@ make-grid(class)
   loop-grid-columns(grid-columns, class, push)
   loop-grid-columns(grid-columns, class, offset)
 
-//// MANUALLY MODIFIED CODE ENDS //////////////////////////////////////////////// 
+//// MANUALLY MODIFIED CODE ENDS ////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
 // Form validation states
@@ -805,13 +808,13 @@ form-control-validation(text-color=rgb(85, 85, 85, 1), border-color=rgb(204, 204
   .form-control
     border-color border-color
     box-shadow(inset 0 1px 1px rgba(0, 0, 0, 0.075))
-    
+
     // Redeclare so transitions work
     &:focus
       border-color darken(border-color, 10%)
       shadow = inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px lighten(border-color, 20%)
       box-shadow(shadow)
-      
+
 
 
   // Set validation states also for addons
@@ -843,7 +846,7 @@ form-control-focus(color=input-border-focus)
     border-color color
     outline 0
     box-shadow(unquote("inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px " + color-rgba + ""))
-    
+
 
 
 // Form control sizing

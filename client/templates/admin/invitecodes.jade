@@ -16,30 +16,30 @@
 
 			.console-content
 
-				h2 Create a new group of up to 20 invites.
+				h2 Create a new group of invites.
 
-				p <strong class='color-darkblue'>Note.</strong> If more than 20 emails are entered, only the first 20 will be used.
+				p <strong class='color-darkblue'>Instructions.</strong> Please set a new game name and include up to twenty (20) e-mail addresses.
 
-				form.form-horizontal
+				p <strong class='color-red'>Warning!</strong> This creates a new user account for each e-mail address. If the user is already in the system, this will overwrite their profile without warning!
 
-					p
-					//- p(style='font-size:12px') <em>ALSO NOTE: if you have previously sent invites, this new send will cancel and invalidate those invites.
+				form
 
 					//- div.control-group
 					//- 	label.control-label(for='sessionName') Session Name:
 					//- 	div.controls
 					//- 		input#sessionName.col-md-4(type='text', placeholder='Give this session a name...')
-					div.control-group
-						label.control-label(for='emailList') Game Name:
-						div.controls
-							input#instanceName.col-md-4(style='margin-bottom: 20px', placeholder='ex. Tufts Round 1')
-							//- textarea#emailList.col-md-4(rows='6', placeholder='Enter a list of comma-separated email addresses...')
-						label.control-label(for='emailList') Email Addresses:
-						div.controls
-							textarea#emailList.col-md-4(rows='6', placeholder='ex. russell@engagementgamelab.org, russell@russellgoldenberg.com, russell_goldenberg@emerson.edu, samuel.a.liberty@gmail.com, thebookofrobert@gmail.com, langbert@gmail.com, arxpoetica@gmail.com')
-					div.control-group
-
-						div.controls
+					.row.control-group
+						.col-sm-3
+							label.control-label(for='emailList') Game Name:
+						.col-sm-9.controls
+							input#instanceName(placeholder='ex. Tufts Round 1')
+					.row
+						.col-sm-3
+							label.control-label(for='emailList') Email Addresses:
+						.col-sm-9.controls
+							textarea#emailList(rows='6', placeholder='Enter a list of comma-separated email addresses. Note: more than twenty e-mail addresses will be ignored!')
+					.row.control-group
+						.col-sm-9.col-sm-offset-3.controls
 							//- .btn-success
 							button#inviteCodesBtn.btn(type='button') Create and Send Invites
 

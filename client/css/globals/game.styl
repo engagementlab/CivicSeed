@@ -1,1005 +1,1007 @@
 @font-face
-	font-family 'InconsolataMedium'
-	src $cloudUrl('fonts/Inconsolata-webfont.woff') format('woff'),
-		$cloudUrl('fonts/Inconsolata-webfont.ttf') format('truetype')
-	font-weight normal
-	font-style normal
+  font-family 'InconsolataMedium'
+  src $cloudUrl('fonts/Inconsolata-webfont.woff') format('woff'),
+    $cloudUrl('fonts/Inconsolata-webfont.ttf') format('truetype')
+  font-weight normal
+  font-style normal
 
 .game-container, .game-container .container
-	width 970px !important
+  width 970px !important
+  padding 0
 
 #gameboard
-	// cursor none
-	position relative
-	box-sizing content-box
-	width 960px
-	height 480px
-	margin 0 auto
-	padding 0
-	border 4px solid $csBlack
-	z-index 0
-	background #eee
-	color #333
-	-webkit-touch-callout none
-	user-select none
-	cursor default
-	.cutscene-background
-		background black
-		width 960px
-		height 480px
-		display none
-		position absolute
-		z-index 9999
-		top 0
-		left 0
-		.cutscene
-			position absolute
-			width 960px
-			height 480px
-	.defeatedRobot
-		text-align center
+  // cursor none
+  position relative
+  box-sizing content-box
+  width 960px
+  height 480px
+  margin 0 auto
+  padding 0
+  border 4px solid $csBlack
+  z-index 0
+  background #eee
+  color #333
+  -webkit-touch-callout none
+  user-select none
+  cursor default
+  .cutscene-background
+    background black
+    width 960px
+    height 480px
+    display none
+    position absolute
+    z-index 9999
+    top 0
+    left 0
+    .cutscene
+      position absolute
+      width 960px
+      height 480px
+  .defeatedRobot
+    text-align center
 
 canvas
-	position absolute
-	cursor none
+  position absolute
+  cursor none
 
 #background
-	z-index 0
-	&.lab-background
-		background $cloudUrl('img/game/lab_bg.png') no-repeat center center
+  z-index 0
+  &.lab-background
+    background $cloudUrl('img/game/lab_bg.png') no-repeat center center
 
 #characters
-	z-index 20
+  z-index 20
 
 #foreground
-	z-index 30
+  z-index 30
 
 #interface
-	z-index 40
+  z-index 40
 
 .minimap
-	right 0px
+  right 0px
 
 #minimap-tile
-	display none
-	z-index 50
-	background rgba(20,20,20,0.3)
+  display none
+  z-index 50
+  background rgba(20,20,20,0.3)
 
 #minimap-player
-	display none
-	z-index 55
-	background rgba(20,20,20,0.8)
+  display none
+  z-index 55
+  background rgba(20,20,20,0.8)
 
 .gameboard-overlay
-	display none
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	z-index 10000
-	padding 20px
-	background #efefef
-	background-image $cloudUrl('img/bg/grey.png')
-	box-shadow $csUIDropShadow
-	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-		background-image $cloudUrl('img/bg/grey@2x.png')
-		background-size 397px
-	h1, h2, h3, h4, h5, h6
-		font-weight bold
-	h2
-		color $csBlue
-	h3
-		color $csDarkGreen
-	a, .close-overlay
-		i.fa // Font-Awesome X 'close' button
-			position absolute
-			top 12px
-			right 12px
-			font-size 36px
-	&.background-3
-		background-image $cloudUrl('img/bg/tri.png')
-		@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-			background-image $cloudUrl('img/bg/tri@2x.png')
-			background-size 188px
-	.buttons
-		position absolute
-		bottom 20px
-		left 0
-		width 100%
-		height 30px
-		button
-			display inline-block
-			margin 0 auto
-		.left
-			position absolute
-			left 20px
-			button
-				margin 0 10px 0 0
-		.right
-			position absolute
-			right 20px
-			button
-				margin 0 0 0 16px
-	.check
-		display none
-		position absolute
-		top 0
-		left 0
-		width 100%
-		height 100%
-		background-color rgba(255,255,255,0.75)
-		z-index 11000
-		.check-dialog
-			position absolute
-			left 280px
-			top 140px
-			width 360px
-			height auto
-			min-height 60px
-			padding 14px
-			text-align center
-			color $csLightGray
-			background $csPurple
-			box-shadow $csUIDropShadow
-			.buttons
-				position relative
-				margin-top 30px
-				margin-bottom -20px
-				height 32px
-				button
-					margin 0 auto
-				.right
-					position absolute
-					right 0px
-				.left
-					position absolute
-					left 0px
-		.check-skimpy
-			display none
+  display none
+  position absolute
+  top 15px
+  left 15px
+  width 930px
+  height 450px
+  z-index 10000
+  padding 20px
+  background #efefef
+  background-image $cloudUrl('img/bg/grey.png')
+  box-shadow $csUIDropShadow
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
+    background-image $cloudUrl('img/bg/grey@2x.png')
+    background-size 397px
+  h1, h2, h3, h4, h5, h6
+    font-weight bold
+  h2
+    color $csBlue
+    font-weight bold
+  h3
+    color $csDarkGreen
+  a, .close-overlay
+    i.fa // Font-Awesome X 'close' button
+      position absolute
+      top 12px
+      right 12px
+      font-size 36px
+  &.background-3
+    background-image $cloudUrl('img/bg/tri.png')
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
+      background-image $cloudUrl('img/bg/tri@2x.png')
+      background-size 188px
+  .buttons
+    position absolute
+    bottom 20px
+    left 0
+    width 100%
+    height 30px
+    button
+      display inline-block
+      margin 0 auto
+    .left
+      position absolute
+      left 20px
+      button
+        margin 0 10px 0 0
+    .right
+      position absolute
+      right 20px
+      button
+        margin 0 0 0 16px
+  .check
+    display none
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    background-color rgba(255,255,255,0.75)
+    z-index 11000
+    .check-dialog
+      position absolute
+      left 280px
+      top 140px
+      width 360px
+      height auto
+      min-height 60px
+      padding 14px
+      text-align center
+      color $csLightGray
+      background $csPurple
+      box-shadow $csUIDropShadow
+      .buttons
+        position relative
+        margin-top 30px
+        margin-bottom -20px
+        height 32px
+        button
+          margin 0 auto
+        .right
+          position absolute
+          right 0px
+        .left
+          position absolute
+          left 0px
+    .check-skimpy
+      display none
 
 .content-box
-	height 320px
-	padding 16px
-	overflow auto
-	border 3px solid $csGray
-	background-color #eee
-	user-select text
-	cursor text
+  height 320px
+  padding 16px
+  overflow auto
+  border 3px solid $csGray
+  background-color #eee
+  user-select text
+  cursor text
 
 .scrollable
-	overflow auto
+  overflow auto
 
 #loading
-	margin 150px 0 0 0
-	text-align center
-	color $csBlack
+  margin 150px 0 0 0
+  text-align center
+  color $csBlack
 
 #botanist-area
-	z-index 9990
-	// A transition animation occurs whenever this area changes in height
-	-webkit-transition height .3s
-	transition height .3s
-	&.puzzle-mode
-		height 390px
-		.botanist-puzzle
-			top 20px
-	.dialog
-		// See also .dialog at .resourceArea
-		padding-right 50px
-	.botanist-content
-		.seed-chips, .minimap
-			margin-top 30px
-			margin-bottom 20px
-			text-align center
-	.botanist-puzzle
-		position absolute
-		top 40px
-		left 0
-		height 360px
-		padding 0
-		display none
-		.puzzle-svg
-			position absolute
-			top 0
-			left 0
-			width 930px
-			height 380px
-		path
-			cursor -webkit-grab
-			cursor -moz-grab
-			&.dragging
-				cursor -webkit-grabbing
-				cursor -moz-grabbing
-		.trash
-			position absolute
-			top 170px
-			right -6px
-			cursor pointer
-			z-index 40000
-			&.active
-				opacity 0.5
-	textarea
-		height 280px
-		margin-top 20px
+  z-index 9990
+  // A transition animation occurs whenever this area changes in height
+  -webkit-transition height .3s
+  transition height .3s
+  &.puzzle-mode
+    height 390px
+    .botanist-puzzle
+      top 20px
+  .dialog
+    // See also .dialog at .resourceArea
+    padding-right 50px
+  .botanist-content
+    .seed-chips, .minimap
+      margin-top 30px
+      margin-bottom 20px
+      text-align center
+  .botanist-puzzle
+    position absolute
+    top 40px
+    left 0
+    height 360px
+    padding 0
+    display none
+    .puzzle-svg
+      position absolute
+      top 0
+      left 0
+      width 930px
+      height 380px
+    path
+      cursor -webkit-grab
+      cursor -moz-grab
+      &.dragging
+        cursor -webkit-grabbing
+        cursor -moz-grabbing
+    .trash
+      position absolute
+      top 170px
+      right -6px
+      cursor pointer
+      z-index 40000
+      &.active
+        opacity 0.5
+  textarea
+    font-family $buttonFont
+    width 800px
+    // height 150px
+    height 280px
+    max-width 800px
+    margin-top 20px
+    resize none
 
 //#botanist-area .answer-button, #botanist-area .clear-button, #botanist-area i
-//	z-index 9999
+//  z-index 9999
 
 #resource-area
-	.resource-content
-		display none
-		.tangram
-			position absolute
-			bottom 120px
-			left 0
-			width 100%
-			height 250px
-			img
-				margin-left 45px
-				height 250px
-		.tagline-input
-			position absolute
-			left 0
-			bottom 50px
-			width 100%
-			text-align center
-			input
-				width 400px
-	.resource-responses
-		display none
-		ul
-			font-family $buttonFont
-			margin 0
-			li.response
-				position relative
-				padding 14px 140px 5px 14px
-				margin 10px 0
-				min-height 42px
-				background $csLightGreen
-				color $csBlack
-				list-style none
-				span
-					margin-right 5px
-					color white
-				p
-					// Prevent extremely long words from breaking the box.
-					overflow hidden
-					text-overflow ellipsis
-				.public-button, .private-button, .pledge-button
-					position absolute
-					right 10px
-					bottom 10px
-					i.fa
-						margin-left 6px
-						color $csDarkBlue
-				&.response-notice
-					background: $csLightGray
-			li.your-response
-				user-select text
-				cursor text
-				background $csLightBlue
-	.dialog
-		padding-right 50px
-		margin-bottom 20px
-	.question
-		font-size 1.2em
-		color $csBlack
-	.privacy-message
-		color $csDarkOrange
-	.resource-article
-		display none
-		margin-right 30px  // And not overlap the X button
-		height 360px
-		padding 20px
-		border 3px solid $csGray
-		background #333
-		overflow auto
-		color #eee
-		user-select text
-		cursor text
-		h1, h2, h3, h4, h5, h6
-			// Allow all size headers to be used in resource text
-			// Verify line-height issues with these.
-			color $csBlue
-			margin-bottom 0.5em
-		h2
-			// This is default. The line-height override fixes multiple line issues.
-			line-height 1.4em
-		p, blockquote, li
-			// Shouldn't have to set these properties that specifically for the parent
-			// div - something is overriding it.
-			font-family $buttonFont
-			font-size 1.1em
-		p + h2, ul + h2, blockquote + h2
-			margin-top 0.75em
-		ul
-			list-style-type square
-		li
-			margin 5px 20px
-		.resource-video
-			text-align center
-			background $cloudUrl('img/bg/loading.png') no-repeat center center
-			margin-top 18px     // Ideally, vertically centered. Fake it till you make it
-		.resource-external
-			margin 150px 0 0 0  // Fake vertical centering
-			font-size 1.5em
-			text-align center
-		.lede
-			margin 90px 60px 0
-			font-size 1.5em
-			line-height 1.4em
-			text-align center
-	.resource-question
-		display none
-		form
-			margin 20px 0 0
-		textarea
-			width 100%
-			height 200px
-			padding 10px
-		input[type='radio']
-			// Somewhere the alignment is actually incorrect
-			margin 0 10px 0 20px
-			line-height 24px
-		label
-			// Overrides display: block elsewhere (bootstrap?)
-			display inline-block
+  .resource-content
+    display none
+    .tangram
+      position absolute
+      bottom 120px
+      left 0
+      width 100%
+      height 250px
+      img
+        margin-left 45px
+        height 250px
+    .tagline-input
+      position absolute
+      left 0
+      bottom 50px
+      width 100%
+      text-align center
+      input
+        width 400px
+  .resource-responses
+    display none
+    ul
+      font-family $buttonFont
+      padding-left 20px
+      li.response
+        position relative
+        padding 16px 140px 8px 16px
+        margin 10px 0
+        min-height 42px
+        background $csLightGreen
+        color $csBlack
+        list-style none
+        span
+          margin-right 5px
+          color white
+        p
+          // Prevent extremely long words from breaking the box.
+          overflow hidden
+          text-overflow ellipsis
+        .public-button, .private-button, .pledge-button
+          position absolute
+          right 10px
+          bottom 10px
+          i.fa
+            margin-left 6px
+            color $csDarkBlue
+        &.response-notice
+          background: $csLightGray
+      li.your-response
+        user-select text
+        cursor text
+        background $csLightBlue
+  .dialog
+    padding-right 50px
+    margin-bottom 20px
+  .question
+    font-size 1.2em
+    color $csBlack
+  .privacy-message
+    margin-top 10px
+    color $csDarkOrange
+  .resource-article
+    display none
+    margin-right 30px  // And not overlap the X button
+    height 360px
+    padding 20px
+    border 3px solid $csGray
+    background #333
+    overflow auto
+    color #eee
+    user-select text
+    cursor text
+    h1, h2, h3, h4, h5, h6
+      // Allow all size headers to be used in resource text
+      // Verify line-height issues with these.
+      color $csBlue
+      margin-bottom 0.5em
+      margin-top 0
+    h2
+      // This is default. The line-height override fixes multiple line issues.
+      line-height 1.4em
+    p, blockquote, li
+      // Shouldn't have to set these properties that specifically for the parent
+      // div - something is overriding it.
+      font-family $buttonFont
+      font-size 1.1em
+    p + h2, ul + h2, blockquote + h2
+      margin-top 0.75em
+    ul
+      list-style-type square
+    li
+      margin 5px 20px
+    .resource-video
+      text-align center
+      background $cloudUrl('img/bg/loading.png') no-repeat center center
+      margin-top 18px     // Ideally, vertically centered. Fake it till you make it
+    .resource-external
+      margin 150px 0 0 0  // Fake vertical centering
+      font-size 1.5em
+      text-align center
+    .lede
+      margin 90px 60px 0
+      font-size 1.5em
+      line-height 1.4em
+      text-align center
+  .resource-question
+    display none
+    form
+      margin 20px 0 0
+    textarea
+      width 100%
+      height 200px
+      padding 10px
+    input[type='radio']
+      // Somewhere the alignment is actually incorrect
+      margin 0 10px 0 20px
+      line-height 24px
+    label
+      // Overrides display: block elsewhere (bootstrap?)
+      display inline-block
 
 #resource-stage
-	display none
+  display none
 
 #progress-area
-	h2
-		color $csGreen
-		font-size 3.5em
-	.personal-info
-		position absolute
-		left 20px
-		bottom 20px
-		width 280px
-		height 330px
-		padding 10px
-		// border 3px solid $csLightOrange
-		background $csGray
-		color white
-		.level-images
-			img
-				margin 7px
-				border 2px solid rbga(0,0,0,0)
-			.current-level-image
-				border 2px solid $csLightOrange
-		.resources-collected-heading
-			position absolute
-			top 230px
-			left 20px
-			font-size 1.5em
-		.resources-collected
-			position absolute
-			font-family $buttonFont
-			top 280px
-			right 20px
-			font-size 2em
-		.current-level-name
-			position absolute
-			width 230px
-			font-size 1.4em
-			line-height 1.4em
-			text-align left
-			left 20px
-			top 90px
-		.collected-button
-			position absolute
-			top 275px
-			left 20px
+  h2
+    color $csGreen
+    font-size 3.5em
+  .personal-info
+    position absolute
+    left 20px
+    bottom 20px
+    width 280px
+    height 330px
+    padding 10px
+    // border 3px solid $csLightOrange
+    background $csGray
+    color white
+    .level-images
+      img
+        margin 7px
+        border 2px solid rbga(0,0,0,0)
+      .current-level-image
+        border 2px solid $csLightOrange
+    .resources-collected-heading
+      position absolute
+      top 230px
+      left 20px
+      font-size 1.5em
+    .resources-collected
+      position absolute
+      font-family $buttonFont
+      top 280px
+      right 20px
+      font-size 2em
+    .current-level-name
+      position absolute
+      width 230px
+      font-size 1.4em
+      line-height 1.4em
+      text-align left
+      left 20px
+      top 90px
+    .collected-button
+      position absolute
+      top 275px
+      left 20px
 
-	.color-map
-		position absolute
-		// Hack
-		bottom 42px
-		left 325px
-		width 310px
-		height 360px
-		margin 0
-		padding 0
-		ul.nav.nav-tabs
-			margin 0
-			border 0
-			li
-				margin 0
-				padding 0
-				width 155px
-				a
-					font-family $bodyFont
-					font-size 1.2em
-					border 0
-					color white
-					text-align center
-			li.tab-you, li.active.tab-you, li.active.tab-you a, li.tab-you a:hover
-				background $csLightOrange
-			li.tab-everyone, li.active.tab-everyone, li.active.tab-everyone a, li.tab-everyone a:hover
-				background $csOrange
-		.tab-content
-			div
-				color #fff
-				position absolute
-		#tab1
-			background $csLightOrange
-		#tab2
-			background $csOrange
-		.tab-pane
-			width 310px
-			height 350px
-		.color-map-you,
-		.color-map-everyone
-			position absolute
-			top 20px
-			left 12px
-			background #fff
-			width 284px
-			height 264px
-			img
-				position absolute
-				left 0
-				top 0
-				width 100%
-				height 100%
-			img.minimap
-				display none
-				opacity 0.25
-		.time-played, .percent-complete
-			font-family $buttonFont
-			font-size 1.3em
-			top 295px
-		.time-played
-			left 12px
-			.time-played-text
-				margin-left 8px
-		.percent-complete
-			left 10px
-			right 10px
-			.progress
-				width 100%
-		.time-played-label, .percent-label
-			top 320px
-			color #efefef
-		.time-played-label
-			left 12px
-		.percent-label
-			right 12px
-	.top-seeders
-		position absolute
-		bottom 20px
-		right 20px
-		width 250px
-		height 330px
-		background $csLightGreen
-		color #333
-		overflow hidden
-		.top-seeders-heading, .your-seeds
-			font-size 1.2em
-			color white
-			text-align center
-			padding 5px 0 5px 0
-			background $csGreen
-		.your-seeds
-			position absolute
-			bottom 0
-			font-family $buttonFont
-			width 100%
-		ol.top-seeders-ranking
-			margin-top 15px
-			padding-left 15px
-			li
-				font-family $buttonFont
-				font-size .8em
+  .color-map
+    position absolute
+    // Hack
+    bottom 42px
+    left 325px
+    width 310px
+    height 360px
+    margin 0
+    padding 0
+    ul.nav.nav-tabs
+      margin 0
+      border 0
+      li
+        margin 0
+        padding 0
+        width 155px
+        a
+          font-family $bodyFont
+          font-size 1.2em
+          border 0
+          color white
+          text-align center
+      li.tab-you, li.active.tab-you, li.active.tab-you a, li.tab-you a:hover
+        background $csLightOrange
+      li.tab-everyone, li.active.tab-everyone, li.active.tab-everyone a, li.tab-everyone a:hover
+        background $csOrange
+    .tab-content
+      div
+        color #fff
+        position absolute
+    #tab1
+      background $csLightOrange
+    #tab2
+      background $csOrange
+    .tab-pane
+      width 310px
+      height 350px
+    .color-map-you,
+    .color-map-everyone
+      position absolute
+      top 20px
+      left 12px
+      background #fff
+      width 284px
+      height 264px
+      img
+        position absolute
+        left 0
+        top 0
+        width 100%
+        height 100%
+      img.minimap
+        display none
+        opacity 0.25
+    .time-played, .percent-complete
+      font-family $buttonFont
+      font-size 1.3em
+      top 295px
+    .time-played
+      left 12px
+      .time-played-text
+        margin-left 8px
+    .percent-complete
+      left 10px
+      right 10px
+      .progress
+        width 100%
+    .time-played-label, .percent-label
+      top 320px
+      color #efefef
+    .time-played-label
+      left 12px
+    .percent-label
+      right 12px
+  .top-seeders
+    position absolute
+    bottom 20px
+    right 20px
+    width 250px
+    height 330px
+    background $csLightGreen
+    color #333
+    overflow hidden
+    .top-seeders-heading, .your-seeds
+      font-size 1.2em
+      color white
+      text-align center
+      padding 5px 0 5px 0
+      background $csGreen
+    .your-seeds
+      position absolute
+      bottom 0
+      font-family $buttonFont
+      width 100%
+    ol.top-seeders-ranking
+      margin-top 15px
+      padding-left 15px
+      li
+        font-family $buttonFont
+        font-size .8em
 
 #collected-resources
-	box-shadow none
-	.back-button
-		position absolute
-		bottom 20px
-		left 20px
-	.displayMyAnswers
-		height 320px
-		.theQuestion
-			font-size 1.1em
-		.theAnswer
-			position relative
-			margin 15px 0
-			font-family $buttonFont
-			background $csLightGreen
-			.seededCount
-				position absolute
-				top 6px
-				right 6px
-				font-family $buttonFont
-				background $csPurple
-				padding 3px
-				border-radius 4px
-				line-height 1
-				color #fff
-			.answerText
-				width 780px
-				padding 5px 10px
-	// .playerAnswers
-	// 	color $csBlack
-	// 	list-style none
-	// 	padding 5px 5px 5px 10px
-	// 	margin 15px 15px 10px 15px
-	// 	position relative
-	// 	background #dedede
-	// 	background $csLightGreen
+  box-shadow none
+  .back-button
+    position absolute
+    bottom 20px
+    left 20px
+  .displayMyAnswers
+    height 320px
+    .theQuestion
+      font-size 1.1em
+    .theAnswer
+      position relative
+      margin 15px 0
+      font-family $buttonFont
+      background $csLightGreen
+      .seededCount
+        position absolute
+        top 6px
+        right 6px
+        font-family $buttonFont
+        background $csPurple
+        padding 3px
+        border-radius 4px
+        line-height 1
+        color #fff
+      .answerText
+        width 780px
+        padding 5px 10px
+  // .playerAnswers
+  //  color $csBlack
+  //  list-style none
+  //  padding 5px 5px 5px 10px
+  //  margin 15px 15px 10px 15px
+  //  position relative
+  //  background #dedede
+  //  background $csLightGreen
 
 #skinventory
-	.parts
-		margin-bottom 10px
-		text-align center
-		.part
-			// margin 0 auto 10px
-			margin 0 0 10px 14px
-			.outer
-				cursor pointer
-				float left
-				position relative
-				// bugged
-				// display inline-block
-				width 60px
-				height 100%
-				margin-right 20px
-				padding 10px
-				border 3px solid $csLightGray
-				background-color #f4f4f4
-				.badge-new
-					display none
-					position absolute
-					top -8px
-					right -8px
-					font-size 18px
-					color $csYellow
-				.inner
-					width 32px   // Lock in at width of sprite
-					height 100%
-					margin 0 auto
-					font-size 1.5em
-					text-align center
-					color $csBlue
-					i  // Overrides font-awesome line-height
-						line-height inherit !important
-				&:not(.locked):hover
-					border 3px solid $csGreen
-					background-color white
-				&:last-of-type
-					margin-right 0
-			.locked
-				&:hover
-					i
-						color $csRed
-			.equipped
-				border 3px solid $csDarkGreen
-				background-color white
-		.head
-			height 54px
-			.inner
-				line-height 30px                // Positioning for lock
-				background-position 0 0         // Positioning for sprite
-		.torso
-			height 42px
-			.inner
-				line-height 18px                // Positioning for lock
-				background-position 0 -30px     // Positioning for sprite
-		.legs
-			height 42px
-			.inner
-				line-height 18px                // Positioning for lock
-				background-position 0 -45px     // Positioning for sprite
+  .parts
+    margin-bottom 10px
+    text-align center
+    .part
+      // margin 0 auto 10px
+      margin 0 0 10px 14px
+      .outer
+        cursor pointer
+        float left
+        position relative
+        // bugged
+        // display inline-block
+        width 60px
+        height 100%
+        margin-right 20px
+        padding 10px
+        border 3px solid $csLightGray
+        background-color #f4f4f4
+        .badge-new
+          display none
+          position absolute
+          top -8px
+          right -8px
+          font-size 18px
+          color $csYellow
+        .inner
+          width 32px   // Lock in at width of sprite
+          height 100%
+          margin 0 auto
+          font-size 1.5em
+          text-align center
+          color $csBlue
+          i  // Overrides font-awesome line-height
+            line-height inherit !important
+        &:not(.locked):hover
+          border 3px solid $csGreen
+          background-color white
+        &:last-of-type
+          margin-right 0
+      .locked
+        &:hover
+          i
+            color $csRed
+      .equipped
+        border 3px solid $csDarkGreen
+        background-color white
+    .head
+      height 54px
+      .inner
+        line-height 30px                // Positioning for lock
+        background-position 0 0         // Positioning for sprite
+    .torso
+      height 42px
+      .inner
+        line-height 18px                // Positioning for lock
+        background-position 0 -30px     // Positioning for sprite
+    .legs
+      height 42px
+      .inner
+        line-height 18px                // Positioning for lock
+        background-position 0 -45px     // Positioning for sprite
 
 // Pause menu has been disabled in the game
 #pause-menu
-	position absolute
-	top 15px
-	left 15px
-	width 930px
-	height 450px
-	background $cloudUrl('img/bg/maze.png') #efefef
-	box-shadow $csUIDropShadow
-	padding 0
-	z-index 9999
-	display none
-	p
-		text-align center, Sans-serif
-		color $csBlack
-		font-size 2em
-		margin-top 100px
+  position absolute
+  top 15px
+  left 15px
+  width 930px
+  height 450px
+  background $cloudUrl('img/bg/maze.png') #efefef
+  box-shadow $csUIDropShadow
+  padding 0
+  z-index 9999
+  display none
+  p
+    text-align center, Sans-serif
+    color $csBlack
+    font-size 2em
+    margin-top 100px
 
 #boss-area
-	display none
-	.video
-		margin 20px 0 0 0
-		text-align center
-		background $cloudUrl('img/bg/loading.png') no-repeat center center
-	.boss-resumes
-		display none
-		.content-box // Extends generic .content-box
-			height 280px
-			margin-top 15px
-		.resume-response
-			margin-bottom 20px
-		.resume-question   // Match with resource .question
-			font-size 1.2em
-			color $csBlack
-		.resume-answer     // Similar to resource .answer
-			font-family $buttonFont
-			padding 14px 20px
-			margin 10px 0
-			background $csLightGreen
-			span
-				color white
-		.resume-response-prompt    // Similar to resource .response-notice
-			font-family $buttonFont
-			padding 14px 20px
-			margin 10px 0
-			background $csLightGray
-			p
-				font-weight bold
-	.boss-instructions
-		display none
-		margin-top 20px
-		img.minilab
-			float left
-			margin-right 20px
-		p
-			line-height 32px
-		span, strong
-			white-space nowrap
-	.content
-	.buttons
-		text-align center
+  display none
+  .video
+    margin 20px 0 0 0
+    text-align center
+    background $cloudUrl('img/bg/loading.png') no-repeat center center
+  .boss-resumes
+    display none
+    .content-box // Extends generic .content-box
+      height 280px
+      margin-top 15px
+    .resume-response
+      margin-bottom 20px
+    .resume-question   // Match with resource .question
+      font-size 1.2em
+      color $csBlack
+    .resume-answer     // Similar to resource .answer
+      font-family $buttonFont
+      padding 14px 20px
+      margin 10px 0
+      background $csLightGreen
+      span
+        color white
+    .resume-response-prompt    // Similar to resource .response-notice
+      font-family $buttonFont
+      padding 14px 20px
+      margin 10px 0
+      background $csLightGray
+      p
+        font-weight bold
+  .boss-instructions
+    display none
+    margin-top 20px
+    img.minilab
+      float left
+      margin-right 20px
+    p
+      line-height 32px
+    span, strong
+      white-space nowrap
+  .content
+  .buttons
+    text-align center
 
 // END LARGE OVERLAYS
 
 #inventory,
 #seedventory
-	position absolute
-	bottom 15px
-	left 15px
-	width 930px
-	height 60px
-	background rgba(50,50,50,0.9)
-	padding 0
-	z-index 9000
-	display none
-	button
-		position absolute
-		top 15px
-		right 15px
+  position absolute
+  bottom 15px
+  left 15px
+  width 930px
+  height 60px
+  background rgba(50,50,50,0.9)
+  padding 0
+  z-index 9000
+  display none
+  button
+    position absolute
+    top 15px
+    right 15px
 
 #inventory
-	.inventory-boxes,
-	.inventory-items
-		position absolute
-		top 0
-		left 0
-		height 99%
-		width 100%
-	.inventory-tangram
-		position absolute
-		right 100px
-	.inventory-box,
-	.inventory-item
-		float left
-		margin 12px 0 10px 20px
-		width 32px
-		height 32px
-	.inventory-box
-		border 1px dashed gray
-	.inventory-item
-		cursor pointer
-	.help
-		position absolute
-		right 0
-		top 20px
-		width 250px
-		padding-right 20px
-		color $csLightBlue
-		line-height 1.2em
-		text-align right
-		display none
+  .inventory-boxes,
+  .inventory-items
+    position absolute
+    top 0
+    left 0
+    height 99%
+    width 100%
+  .inventory-tangram
+    position absolute
+    right 100px
+  .inventory-box,
+  .inventory-item
+    float left
+    margin 12px 0 10px 20px
+    width 32px
+    height 32px
+  .inventory-box
+    border 1px dashed gray
+  .inventory-item
+    cursor pointer
+  .help
+    position absolute
+    right 0
+    top 20px
+    width 250px
+    padding-right 20px
+    color $csLightBlue
+    line-height 1.2em
+    text-align right
+    display none
 
 #seedventory
-	padding-left 10px
-	font-size 24px
-	.seed
-		display inline-block
-		position relative
-		margin 20px 20px 0 10px
-		width 48px
-		cursor pointer
-		color #333             // default seed button color is empty
-		&.active
-			color #eee           // color for active seeds
-		&.selected
-			color $csOrange      // color for selected seed
-		&.active:hover, &.selected:hover
-			color $csGreen       // color for hover
+  padding-left 10px
+  font-size 24px
+  .seed
+    display inline-block
+    position relative
+    margin 20px 20px 0 10px
+    width 48px
+    cursor pointer
+    color #333             // default seed button color is empty
+    &.active
+      color #eee           // color for active seeds
+    &.selected
+      color $csOrange      // color for selected seed
+    &.active:hover, &.selected:hover
+      color $csGreen       // color for hover
 
 .graffiti
-	position absolute
-	display none
-	bottom 15px
-	left 15px
-	width 125px
-	height 36px
-	background rgba(50,50,50,0.9)
-	z-index 9400
-	font-size 24px
-	cursor pointer
-	p
-		color white
-		padding 5px 10px 5px 10px
-		span
-			color $csLightGreen
-			text-align right
-			float right
+  position absolute
+  display none
+  bottom 15px
+  left 15px
+  width 125px
+  height 36px
+  background rgba(50,50,50,0.9)
+  z-index 9400
+  font-size 24px
+  cursor pointer
+  p
+    color white
+    padding 5px 10px 5px 10px
+    span
+      color $csLightGreen
+      text-align right
+      float right
 
 #hud
-	margin-top 20px
-	margin-bottom 20px
-	-webkit-touch-callout none
-	user-select none
-	.hud-button
-		position relative
-		display inline-block
-		width 48px
-		height 48px
-		margin 0 10px
-		font-size 20px
-		text-align center
-		line-height 48px
-		background-color #f1f1f1
-		box-shadow 0 0 0 4px $csLightGray
-		border-radius 50%
-		cursor pointer
-		&:hover
-			box-shadow 0 0 0 4px $csLightGreen
-			background-color white
-			color $csOrange
-		a
-			display block
-			height 100%
-			width 100%
-			color $csDarkBlue
-	.hud-button-highlight
-		box-shadow 0 0 0 4px $csOrange
-	.hud-button-active
-		background white
-		box-shadow 0 0 0 4px $csGreen
-	.hud-regular
-		margin-left -10px
-		.hud-global
-			text-align right
-	.hud-chat
-		padding-top 8px
-		input
-			border 3px solid $csLightGray
-			background white
-			width 75%
-			&:focus
-				border 3px solid $csGreen
-				box-shadow none
-		button
-			margin-left 10px
-			background #333
-	.hud-boss
-		display none
-		.clock
-			color $csBlue
-			font-size 1.5em
-			font-family	$buttonFont
-			text-align center
-			line-height 36px
-		.score
-			text-align right
-			line-height 36px
-			color $csOrange
-			font-size 1.2em
-		.hud-mute
-			float left
+  margin-top 20px
+  margin-bottom 20px
+  -webkit-touch-callout none
+  user-select none
+  .hud-button
+    position relative
+    display inline-block
+    width 48px
+    height 48px
+    margin 0 10px
+    font-size 20px
+    text-align center
+    line-height 48px
+    background-color #f1f1f1
+    box-shadow 0 0 0 4px $csLightGray
+    border-radius 50%
+    cursor pointer
+    &:hover
+      box-shadow 0 0 0 4px $csLightGreen
+      background-color white
+      color $csOrange
+    a
+      display block
+      height 100%
+      width 100%
+      color $csDarkBlue
+  .hud-button-highlight
+    box-shadow 0 0 0 4px $csOrange
+  .hud-button-active
+    background white
+    box-shadow 0 0 0 4px $csGreen
+  .hud-regular
+    margin-left -10px
+    .hud-global
+      text-align right
+  .hud-chat
+    padding-top 8px
+    input
+      border 3px solid $csLightGray
+      background white
+      width 75%
+      &:focus
+        border 3px solid $csGreen
+        box-shadow none
+    button
+      margin-left 10px
+      background #333
+  .hud-boss
+    display none
+    .clock
+      color $csBlue
+      font-size 1.5em
+      font-family $buttonFont
+      text-align center
+      line-height 36px
+    .score
+      text-align right
+      line-height 36px
+      color $csOrange
+      font-size 1.2em
+    .hud-mute
+      float left
 
 // Generic dialog styles
 .dialog
-	.speaker
-		font-size 1.2em
-		font-weight 700
-		color $csBlue
-		&:after
-			content ':'
-			margin-right 0.25em   // Workaround for minifier which will trim whitespace from the content declaration, if you used ': ' instead
+  .speaker
+    font-size 1.2em
+    font-weight 700
+    color $csBlue
+    &:after
+      content ':'
+      margin-right 0.25em   // Workaround for minifier which will trim whitespace from the content declaration, if you used ': ' instead
 
 // Speech bubble for players
 .player-chat
-	position absolute
-	z-index 100
-	padding 5px 10px
-	height 32px
-	font-size 16px
-	font-family $buttonFont
-	line-height 1.4
-	text-align center
-	white-space nowrap
-	background rgba(0,0,0,0.75)
-	color #eee
-	border-radius 10px
+  position absolute
+  z-index 100
+  padding 5px 10px
+  height 32px
+  font-size 16px
+  font-family $buttonFont
+  line-height 1.4
+  text-align center
+  white-space nowrap
+  background rgba(0,0,0,0.75)
+  color #eee
+  border-radius 10px
 .player-chat-pointer
-	content ''
-	position absolute
-	z-index 100
-	width 0
-	border-width 12px 10px 0 0
-	border-style solid
-	border-color rgba(0,0,0,0.75) transparent
-	&.flipped-horizontal
-		border-width 12px 0 0 10px
-		margin-left -32px
-		&.flipped-vertical
-			border-width 0 0 12px 10px
-	&.flipped-vertical
-		border-width 0 10px 12px 0
+  content ''
+  position absolute
+  z-index 100
+  width 0
+  border-width 12px 10px 0 0
+  border-style solid
+  border-color rgba(0,0,0,0.75) transparent
+  &.flipped-horizontal
+    border-width 12px 0 0 10px
+    margin-left -32px
+    &.flipped-vertical
+      border-width 0 0 12px 10px
+  &.flipped-vertical
+    border-width 0 10px 12px 0
 
 #speech-bubble
-	display none
-	z-index 9600
-	position absolute
-	top 20px
-	left 20px
-	width 920px
-	padding 14px
-	background #efefef
-	color $csBlack
-	box-shadow $csUIDropShadow
-	background-image $cloudUrl('img/bg/grey.png')
-	@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-		background-image $cloudUrl('img/bg/grey@2x.png')
-		background-size 397px
-	.dialog
-		margin 0
-		padding 0
-		&.fit
-			width 760px
-	.buttons
-		position absolute
-		bottom 10px
-		right 6px
-	button
-		display none
-		float right
-		margin 0 6px
+  display none
+  z-index 9600
+  position absolute
+  top 20px
+  left 20px
+  width 920px
+  padding 14px
+  background #efefef
+  color $csBlack
+  box-shadow $csUIDropShadow
+  background-image $cloudUrl('img/bg/grey.png')
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
+    background-image $cloudUrl('img/bg/grey@2x.png')
+    background-size 397px
+  .dialog
+    margin 0
+    padding 0
+    &.fit
+      width 760px
+  .buttons
+    position absolute
+    bottom 10px
+    right 6px
+  button
+    display none
+    float right
+    margin 0 6px
 
 .debug p
-	float left
-	margin-left 20px
-
-textarea
-	font-family $buttonFont
-	width 800px
-	height 150px
-	max-width 800px
-	resize none
+  float left
+  margin-left 20px
 
 .badge
-	// Used only on buttons on HUD and seedventory
-	display none
-	position absolute
-	top -12px
-	right -4px
-	padding 3px
-	border-radius 4px
-	font-family $buttonFont
-	line-height 1.2em
-	color #333
-	background-color $csYellow
+  // Used only on buttons on HUD and seedventory
+  display none
+  position absolute
+  top -12px
+  right -4px
+  padding 3px
+  border-radius 4px
+  font-family $buttonFont
+  line-height 1.2em
+  color #333
+  background-color $csYellow
 
 #waiting-for-seed
-	// May be removed if css .spinner works better
-	//width 32px
-	//height 32px
-	z-index 99999
-	position absolute
-	display none
+  // May be removed if css .spinner works better
+  //width 32px
+  //height 32px
+  z-index 99999
+  position absolute
+  display none
 
 #beaming
-	display none
-	position absolute
-	top 0
-	left 0
-	width 100%
-	height 100%
-	background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
-	background-size cover
-	z-index 40000
+  display none
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+  background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
+  background-size cover
+  z-index 40000
 
 .message
-	font-family $bodyFont
+  font-family $bodyFont
 
 #game-log
-	width 100%
-	height 200px
-	background #333
-	// background rgba(50,50,50,0.9)
-	margin-bottom 80px
+  width 100%
+  height 200px
+  background #333
+  // background rgba(50,50,50,0.9)
+  margin-bottom 80px
 
 #game-log-overlay
-	display none
-	position absolute
-	left 20px
-	bottom 20px
-	width 500px
-	height 120px
-	background rgba(50,50,50,0.3)
-	text-shadow 1px 1px 0 $csBlack
+  display none
+  position absolute
+  left 20px
+  bottom 20px
+  width 500px
+  height 120px
+  background rgba(50,50,50,0.3)
+  text-shadow 1px 1px 0 $csBlack
 
 #game-log, #game-log-overlay
-	z-index 4000
-	overflow-y auto
-	overflow-x hidden
-	text-overflow ellipsis
-	padding 10px
-	p
-		padding 0
-		margin 2px
-		font-family $buttonFont
-		.date
-			color $csLightBlue
-			font-family $mono
-			font-size .8em
-			margin-right 8px
-		.playerName
-			color $csLightGreen
-			margin-right 4px
-	p.globalChat
-		color #fff
-	p.status
-		color $csLightOrange
+  z-index 4000
+  overflow-y auto
+  overflow-x hidden
+  text-overflow ellipsis
+  padding 10px
+  p
+    padding 0
+    margin 2px
+    font-family $buttonFont
+    .date
+      color $csLightBlue
+      font-family $mono
+      font-size .8em
+      margin-right 8px
+    .playerName
+      color $csLightGreen
+      margin-right 4px
+  p.globalChat
+    color #fff
+  p.status
+    color $csLightOrange
 
 #status-update
-	display none
-	position absolute
-	bottom 90px
-	width 100%
-	text-align center
-	font-size 16px
-	font-family $buttonFont
-	height 20px
-	margin 0
-	z-index 45000
-	color #eee
-	span
-		background rgba(0,0,0,0.75)
-		padding 5px 10px
+  display none
+  position absolute
+  bottom 90px
+  width 100%
+  text-align center
+  font-size 16px
+  font-family $buttonFont
+  height 20px
+  margin 0
+  z-index 45000
+  color #eee
+  span
+    background rgba(0,0,0,0.75)
+    padding 5px 10px
 
 .npc-bubble
-	position absolute
-	z-index 9000
-	width 32px
-	height 32px
-	font-family $mono
-	text-align center
-	line-height 32px
-	border-radius 50%
-	background rgba(50,50,50,0.7)
-	color $csLightGreen
-	cursor pointer
-	&.npc-bubble-exclaim
-		font-weight bold
-		font-size 1.25em
-		color $csYellow
+  position absolute
+  z-index 9000
+  width 32px
+  height 32px
+  font-family $mono
+  text-align center
+  line-height 32px
+  border-radius 50%
+  background rgba(50,50,50,0.7)
+  color $csLightGreen
+  cursor pointer
+  &.npc-bubble-exclaim
+    font-weight bold
+    font-size 1.25em
+    color $csYellow
 
 .tooltip
-	font-family $buttonFont
-	font-size 13px
+  font-family $buttonFont
+  font-size 13px
 
 svg.tangram-svg
-	// see also .puzzle-svg
-	width 100%
-	height 250px
+  // see also .puzzle-svg
+  width 100%
+  height 250px
 
