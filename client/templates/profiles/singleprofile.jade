@@ -14,79 +14,81 @@
 							else
 								i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
 								p your profile is private
-			if profileUnlocked
-				if (sessionStorage.userEmail === email)
-					.row.no-print
-						.col-sm-12
-							a.btn.btn-primary.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
-					.row.no-print
-						.col-sm-12.instructions
-							p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
-				.row
-					.col-sm-12.motivations
-						if resume[0]
-							h2 Motivations
-							p.resume-text(data-email=email) <span class='resumeText'> #{resume[0]} </span>
-							if (resumeFeedback.length > 0)
-								.feedback.no-print
-									button.btn-info.btn-lg Peer Feedback
-									each comment, c in resumeFeedback
-										if (comment.resumeIndex === 0)
-											.row
-												.col-sm-12
-													.comment
-														h4 A peer said:
-														p #{comment.comment}
-				.row
-					.col-sm-12.background
-						if resume[1]
-							h2 Background & Skills
-							p.resume-text(data-email=email) <span class='resumeText'> #{resume[1]} </span>
-				.row
-					.col-sm-12.goals
-						if resume[2]
-							h2 Personal Goals
-							p.resume-text(data-email=email) <span class='resumeText'> #{resume[2]} </span>
-				.row
-					.col-sm-12.objectives
-						if resume[3]
-							h2 Civic Objectives
-							p.resume-text(data-email=email) <span class='resumeText'> #{resume[3]} </span>
-				if colorMap
-					.row
-						.col-sm-12.color-map
-							img(src='#{colorMap}')
-				if (sessionStorage.userEmail === email)
-					.row.no-print
-						.col-sm-12
-							button.btn.save-profile-button Save Changes
+
+			if (firstName === 'Demo')
+				.row.demo-profile
+					.col-sm-12
+						h1 The Story of Civic Seed
+						h2 Call to Action
+						p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
+						p Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.
+						h2 Exploring the Mystery
+						p As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.
+						h2 The Big Reveal
+						p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.
+						p The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.
+						h2 Boss Battle and Final Sequence
+						p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.
+						p This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.
+						h2 Features of the full version of Civic Seed
+						ul
+							li Music and sound effects
+							li Animated intro and finale sequences
+							li Timed boss level
+							li Hidden “Easter Egg” seeds
+							li Heads-up knowledge contests between players
+							li Sharable Community Service Resumes
+						<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+						p.demoUserPlayLink
+							a.btn.btn-primary.btn-lg(href='/game') Play the Game
+
 			else
-				if (firstName === 'Demo')
-					.row.demo-profile
-						.col-sm-12
-							h1 The Story of Civic Seed
-							h2 Call to Action
-							p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
-							p Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.
-							h2 Exploring the Mystery
-							p As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.
-							h2 The Big Reveal
-							p After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.
-							p The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.
-							h2 Boss Battle and Final Sequence
-							p Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.
-							p This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.
-							h2 Features of the full version of Civic Seed
-							ul
-								li Music and sound effects
-								li Animated intro and finale sequences
-								li Timed boss level
-								li Hidden “Easter Egg” seeds
-								li Heads-up knowledge contests between players
-								li Sharable Community Service Resumes
-							<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-							p.demoUserPlayLink
-								a(href='/game') Play the Game
+				if profileUnlocked
+					if (sessionStorage.userEmail === email)
+						.row.no-print
+							.col-sm-12
+								a.btn.btn-primary.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
+						.row.no-print
+							.col-sm-12.instructions
+								p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
+					if resume[0]
+						.row
+							.col-sm-12.motivations
+								h2 Motivations
+								p.resume-text(data-email=email) <span class='resumeText'> #{resume[0]} </span>
+								if (resumeFeedback.length > 0)
+									.feedback.no-print
+										button.btn-info.btn-lg Peer Feedback
+										each comment, c in resumeFeedback
+											if (comment.resumeIndex === 0)
+												.row
+													.col-sm-12
+														.comment
+															h4 A peer said:
+															p #{comment.comment}
+					if resume[1]
+						.row
+							.col-sm-12.background
+								h2 Background & Skills
+								p.resume-text(data-email=email) <span class='resumeText'> #{resume[1]} </span>
+					if resume[2]
+						.row
+							.col-sm-12.goals
+								h2 Personal Goals
+								p.resume-text(data-email=email) <span class='resumeText'> #{resume[2]} </span>
+					if resume[3]
+						.row
+							.col-sm-12.objectives
+								h2 Civic Objectives
+								p.resume-text(data-email=email) <span class='resumeText'> #{resume[3]} </span>
+					if colorMap
+						.row
+							.col-sm-12.color-map
+								img(src='#{colorMap}')
+					if (sessionStorage.userEmail === email)
+						.row.no-print
+							.col-sm-12
+								button.btn.save-profile-button Save Changes
 				else
 					.row
 						.col-sm-8
