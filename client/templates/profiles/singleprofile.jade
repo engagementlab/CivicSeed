@@ -1,64 +1,69 @@
-.row.profiles
+.row.user-profile
 	.col-md-10.col-md-offset-1
 		if firstName
-			.row.headerRow
-				.col-md-8
-					p.nombre #{firstName} #{lastName}
-					p.school <em>#{school}</em>
+			.row
+				.col-xs-8
+					h1.nombre #{firstName} #{lastName}
+					h2.school <em>#{school}</em>
 				if (sessionStorage.userEmail === email)
-					.col-md-3.profileToggle.no-print(data-public=profilePublic)
-						if profilePublic
-							i.fa.fa-unlock.fa.fa-4x(title='make profile public', data-placement='top')
-							p your profile is public
-						else
-							i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
-							p your profile is private
+					.col-xs-4.profileToggle.no-print(data-public=profilePublic)
+						.public-lock
+							if profilePublic
+								i.fa.fa-unlock-alt.fa.fa-4x(title='make profile public', data-placement='top')
+								p your profile is public
+							else
+								i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
+								p your profile is private
 			if profileUnlocked
 				if (sessionStorage.userEmail === email)
 					.row.no-print
-						.col-md-12.box
-							p
-								a.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
+						.col-sm-12
+							a.btn.btn-primary.survey(href='https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb', target='_blank') Complete this survey!
 					.row.no-print
-						.col-md-12.instructions
+						.col-sm-12.instructions
 							p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 				.row
-					.col-md-12.box.motivations
+					.col-sm-12.motivations
 						if resume[0]
-							p(data-email=email) <span class="profileTitle">Motivations </span> <span class='resumeText'> #{resume[0]} </span>
-				if (resumeFeedback.length > 0)
-					.feedback.no-print
-						p.clickForFeedback Peer Feedback
-						each comment, c in resumeFeedback
-							if (comment.resumeIndex === 0)
-								.row
-									p a peer said: #{comment.comment}
-
-
+							h2 Motivations
+							p.resume-text(data-email=email) <span class='resumeText'> #{resume[0]} </span>
+							if (resumeFeedback.length > 0)
+								.feedback.no-print
+									button.btn-info.btn-lg Peer Feedback
+									each comment, c in resumeFeedback
+										if (comment.resumeIndex === 0)
+											.row
+												.col-sm-12
+													.comment
+														h4 A peer said:
+														p #{comment.comment}
 				.row
-					.col-md-12.box.background
+					.col-sm-12.background
 						if resume[1]
-							p(data-email=email) <span class="profileTitle">Background & Skills </span> <span class='resumeText'> #{resume[1]} </span>
+							h2 Background & Skills
+							p.resume-text(data-email=email) <span class='resumeText'> #{resume[1]} </span>
 				.row
-					.col-md-12.box.goals
+					.col-sm-12.goals
 						if resume[2]
-							p(data-email=email) <span class="profileTitle">Personal Goals </span> <span class='resumeText'> #{resume[2]} </span>
+							h2 Personal Goals
+							p.resume-text(data-email=email) <span class='resumeText'> #{resume[2]} </span>
 				.row
-					.col-md-12.box.objectives
+					.col-sm-12.objectives
 						if resume[3]
-							p(data-email=email) <span class="profileTitle">Civic Objectives </span> <span class='resumeText'> #{resume[3]} </span>
+							h2 Civic Objectives
+							p.resume-text(data-email=email) <span class='resumeText'> #{resume[3]} </span>
 				if colorMap
 					.row
-						.col-md-12.box.color-map
+						.col-sm-12.color-map
 							img(src='#{colorMap}')
 				if (sessionStorage.userEmail === email)
 					.row.no-print
-						.col-md-12
+						.col-sm-12
 							button.btn.save-profile-button Save Changes
 			else
 				if (firstName === 'Demo')
 					.row.demo-profile
-						.col-md-12
+						.col-sm-12
 							h1 The Story of Civic Seed
 							h2 Call to Action
 							p At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.
@@ -84,16 +89,16 @@
 								a(href='/game') Play the Game
 				else
 					.row
-						.col-md-12
+						.col-sm-8
 							if (sessionStorage.userEmail === email)
 								if (active)
-									h2 Your profile is locked. Play the game to complete your profile!
+									h3 Your profile is locked. Play the game to complete your profile!
 									p
 										a.btn.btn-info.btn-lg(href='/game') Resume Game
 								else
-									h2 The game is currently inactive.
+									h3 The game is currently inactive.
 							else
-								h2 This profile has not yet been completed.
+								h3 This profile has not yet been completed.
 
 		else
 			h1 This person does not exist in our database.

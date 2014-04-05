@@ -59,9 +59,9 @@ var self = module.exports = {
 			});
 		});
 
-		$body.on('click', '.feedback', function() {
-			var row = $(this).find('.row');
-			$(row).toggleClass('hideth');
+		$body.on('click', '.feedback button', function() {
+			var row = $(this).parent().find('.row');
+			$(row).toggle();
 		});
 	}
 };

@@ -76,8 +76,8 @@ canvas
   position absolute
   top 15px
   left 15px
-  width 930px
-  height 450px
+  right 15px
+  bottom 15px
   z-index 10000
   padding 20px
   background #efefef
@@ -91,8 +91,10 @@ canvas
   h2
     color $csBlue
     font-weight bold
+    margin-top 0
   h3
     color $csDarkGreen
+    margin-top 0
   a, .close-overlay
     i.fa // Font-Awesome X 'close' button
       position absolute
@@ -257,7 +259,7 @@ canvas
     display none
     ul
       font-family $buttonFont
-      padding-left 20px
+      padding-left 0
       li.response
         position relative
         padding 16px 140px 8px 16px
@@ -326,6 +328,9 @@ canvas
       list-style-type square
     li
       margin 5px 20px
+    img
+      // Force images to fit content area
+      max-width 100%
     .resource-video
       text-align center
       background $cloudUrl('img/bg/loading.png') no-repeat center center
@@ -386,7 +391,7 @@ canvas
     .resources-collected
       position absolute
       font-family $buttonFont
-      top 280px
+      bottom 20px
       right 20px
       font-size 2em
     .current-level-name
@@ -399,13 +404,13 @@ canvas
       top 90px
     .collected-button
       position absolute
-      top 275px
+      bottom 24px
       left 20px
 
   .color-map
     position absolute
     // Hack
-    bottom 42px
+    bottom 54px
     left 325px
     width 310px
     height 360px
@@ -498,10 +503,8 @@ canvas
       width 100%
     ol.top-seeders-ranking
       margin-top 15px
-      padding-left 15px
       li
         font-family $buttonFont
-        font-size .8em
 
 #collected-resources
   box-shadow none
@@ -672,7 +675,8 @@ canvas
   position absolute
   bottom 15px
   left 15px
-  width 930px
+  right 15px
+  width auto
   height 60px
   background rgba(50,50,50,0.9)
   padding 0
@@ -680,8 +684,8 @@ canvas
   display none
   button
     position absolute
-    top 15px
-    right 15px
+    top 14px
+    right 14px
 
 #inventory
   .inventory-boxes,
@@ -689,19 +693,19 @@ canvas
     position absolute
     top 0
     left 0
-    height 99%
-    width 100%
+    right 0
+    bottom 0
   .inventory-tangram
     position absolute
     right 100px
   .inventory-box,
   .inventory-item
     float left
-    margin 12px 0 10px 20px
+    margin 14px 0 10px 20px
     width 32px
     height 32px
   .inventory-box
-    border 1px dashed gray
+    border 1px dashed #777
   .inventory-item
     cursor pointer
   .help
