@@ -131,17 +131,23 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *       PROGRESS WINDOW INTERACTIONS        * * * * * * * */
 
-    $BODY.on('click', '.tabbable li a', function (e) {
-      e.preventDefault()
-      return false
+    // You vs Everyone progress map tabs
+    $BODY.on('click', '.tab-you', function () {
+      $('#tab-you-pane').show()
+      $('#tab-everyone-pane').hide()
     })
 
-    //view all player resource answers
+    $BODY.on('click', '.tab-everyone', function () {
+      $('#tab-everyone-pane').show()
+      $('#tab-you-pane').hide()
+    })
+
+    // View all player resource answers
     $BODY.on('click', '.collected-button', function () {
       $('#collected-resources').show()
     })
 
-    //go back to progress menu from player resource answers
+    // Go back to progress menu from player resource answers
     $BODY.on('click', '#collected-resources .back-button', function () {
       $('#collected-resources').hide()
     })

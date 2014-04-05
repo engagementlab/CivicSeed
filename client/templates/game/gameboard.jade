@@ -88,13 +88,11 @@
 			.resources-collected 0
 			button.btn.collected-button.btn-success(type='button') View Answers
 		.color-map.tabbable
-			ul.nav.nav-tabs
-				li.tab-you.active
-					a(href='#tab1', data-toggle='tab') you
-				li.tab-everyone
-					a(href='#tab2', data-toggle='tab') everyone
+			.tabs
+				.tab-you you
+				.tab-everyone everyone
 			.tab-content
-				#tab1.tab-pane.active
+				#tab-you-pane.tab-pane.active
 					.color-map-you
 						img.color-map-image(src='')
 						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
@@ -102,7 +100,7 @@
 						i.fa.fa-clock-o.fa-lg
 						span.time-played-text
 					.time-played-label time played
-				#tab2.tab-pane
+				#tab-everyone-pane.tab-pane
 					.color-map-everyone
 						img.color-map-image(src='')
 						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')

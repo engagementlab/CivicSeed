@@ -410,36 +410,35 @@ canvas
   .color-map
     position absolute
     // Hack
-    bottom 54px
+    bottom 50px
     left 325px
     width 310px
     height 360px
     margin 0
     padding 0
-    ul.nav.nav-tabs
-      margin 0
+    .tabs
+      font-family $bodyFont
+      font-size 1.2em
       border 0
-      li
-        margin 0
-        padding 0
+      color white
+      text-align center
+      cursor pointer
+      div
+        display inline-block
         width 155px
-        a
-          font-family $bodyFont
-          font-size 1.2em
-          border 0
-          color white
-          text-align center
-      li.tab-you, li.active.tab-you, li.active.tab-you a, li.tab-you a:hover
+        height 40px
+        line-height 40px
+      .tab-you
         background $csLightOrange
-      li.tab-everyone, li.active.tab-everyone, li.active.tab-everyone a, li.tab-everyone a:hover
+      .tab-everyone
         background $csOrange
     .tab-content
       div
         color #fff
         position absolute
-    #tab1
+    #tab-you-pane
       background $csLightOrange
-    #tab2
+    #tab-everyone-pane
       background $csOrange
     .tab-pane
       width 310px
@@ -797,12 +796,13 @@ canvas
       border 3px solid $csLightGray
       background white
       width 75%
+      outline none !important
       &:focus
         border 3px solid $csGreen
         box-shadow none
     button
       margin-left 10px
-      background #333
+      margin-top -2px
   .hud-boss
     display none
     .clock

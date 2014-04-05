@@ -1,6 +1,6 @@
 #hud.container
 	.row.hud-regular
-		.col-md-4.hud-player
+		.col-xs-4.hud-player
 			.hud-button.hud-inventory
 				a(title='(I)nventory', data-placement='top')
 					i.fa.fa-briefcase.fa-lg
@@ -13,11 +13,11 @@
 				a(title='S(e)eds', data-placement='top')
 					i.fa.fa-leaf.fa-lg
 				span.badge.always-show
-		.col-md-4.hud-chat
+		.col-xs-4.hud-chat
 			form.form-inline
 				input#chat-input.input-xlarge(type='text', maxlength='90', placeholder='chat with other players...')
-				button#chat-submit.btn(type='submit') Chat
-		.col-md-4.hud-global
+				button#chat-submit.btn.btn-info(type='submit') Chat
+		.col-xs-4.hud-global
 			.hud-button.hud-log
 				a(title='Game (L)og', data-placement='top')
 					i.fa.fa-list.fa-lg
@@ -32,16 +32,16 @@
 				a(title='(H)elp', data-placement='top')
 					i.fa.fa-question-circle.fa-lg
 	.row.hud-boss
-		.col-md-4
+		.col-xs-4
 			.hud-button.hud-seed
 				a(title='S(e)eds', data-placement='top')
 					i.fa.fa-leaf.fa-lg
 				span.badge.always-show 20
-		.col-md-4
+		.col-xs-4
 			.clock 90
-		.col-md-3
+		.col-xs-3
 			.score score: <span>---</span>
-		.col-md-1
+		.col-xs-1
 			.hud-button.hud-mute
 				a(title='(V)olume', data-placement='top')
 					i.fa.fa-volume-up.fa-lg
