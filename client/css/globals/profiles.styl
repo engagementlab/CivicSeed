@@ -14,62 +14,64 @@
 			padding 10px
 			color white
 
-.headerRow
-	padding 20px 0 0 0
+.user-profile
+	margin-bottom 40px // Should be a generic page property?
+	.row
+		margin-top 20px
+	.school
+		margin-top 0
+		font-size 1.5em
+	.public-lock
+		margin-top 20px // Match h1.nombre
+	.resume-text
+		font-size 1.5em
+		font-family $buttonFont
+		line-height 1.2
+	h2
+		margin-top 0
+	.motivations
+		h2
+			color $csDarkGreen
+		p
+			color $csGreen
+	.background
+		h2
+			color $csDarkOrange
+		p
+			color $csOrange
+	.goals
+		h2
+			color $csLightGray2
+		p
+			color $csGray
+	.objectives
+		h2
+			color $csDarkBlue
+		p
+			color $csBlue
+	.feedback
+		.row
+			display none
+			margin-top 10px
+		.comment
+			padding 5px 10px
+			background $csPurple
+			font-family $buttonFont
+			p
+				color white
+			h4
+				color rgba(255,255,255,0.75)
+				font-size 1em
+
 .withPlayer
 	text-align center
 	img
 		padding 5px 10px
 		border 4px solid $csGray
 
-.nombre
-	font-family $bodyFont
-	font-weight 700
-	font-size 3em
-	color $csGray
-	padding 0 0 15px 0
-.school
-	font-family $bodyFont
-	font-weight 300
-	font-size 2em
-	color $csLightGray2
-.box
-	padding 20px 0 0 0
-	p
-		font-size 1.7em
-		font-weight 700
-		font-family $buttonFont
-		line-height 1.2
-	.profileTitle
-		padding 0 10px 0 0
-		font-family $bodyFont
-		font-weight 700
-		font-size 1.5em
-	.resumeText
-		-webkit-user-modify read-write
-		-moz-user-modify read-write
-		font-weight 700
-.motivations
-	.profileTitle
-		color $csDarkGreen
-	p
-		color $csGreen
-.background
-	.profileTitle
-		color $csDarkOrange
-	p
-		color $csOrange
-.goals
-	.profileTitle
-		color $csLightGray2
-	p
-		color $csGray
-.objectives
-	.profileTitle
-		color $csDarkBlue
-	p
-		color $csBlue
-
+.resumeText
+	-webkit-user-modify read-write
+	-moz-user-modify read-write
 
 
 .info
@@ -101,24 +103,6 @@ h3.linkage {
 	font-size: 1.5em;
 	margin-top:10px;
 }
-.buttonResume
-	margin-top 30px
-	a
-		font-size 1.5em
-		line-height 1.5em
-		background $csGreen
-		color white
-		padding 10px
-
-p a.survey
-	background $csGreen
-	padding 10px
-	color white
-
-.instructions
-	margin-top 30px
-	p
-		font-size 1.3em
 
 .color-map
 	text-align center
@@ -138,32 +122,3 @@ p a.survey
 		text-align right
 		clear both
 
-.profiles
-	.feedback
-		cursor pointer
-		.clickForFeedback
-			color white
-			width 18%
-			text-align center
-			padding 5px
-			text-align center
-			font-family $buttonFont
-			font-size 1.4em
-			background $csPurple
-			margin 0
-		.row
-			margin 10px 20px 0 0
-			display none
-			background $csPurple
-			color white
-			padding 10px 10px 0 10px
-		.hideth
-			display block
-	.allProfiles
-		h1
-			color $csGreen
-			margin-bottom 20px
-		p
-			font-size 1.3em
-			color $gray
-			margin 20px 0

@@ -1,16 +1,33 @@
 .row
-	.span6.offset3
+	.col-md-8.col-md-offset-2
 		h2 Contact Us
-		h5 Found a bug? Having a problem? Let us know...
+		p Found a bug? Having a problem? Let us know!
 .row
-	.span6.offset3.moreTopMargin
-		form.well#contactUs(method='post', action='/contact-us')
-			p Provide us with your email address and some information and we'll look into the problem.
-			.control-group
-				.controls
-					input#username.input-large(type='text', name='username', placeholder='Email')
-					textarea#problem.input-large(type='text', name='problem', placeholder='details here...')
-			button.btn.btn-primary.btn-large(type='submit') Send
-			p#message.moreTopMargin
-		p.moreTopMargin Please be as detailed as possible.
-		p: small Any additional information you have regarding your issue will be SUPER helpful for us to figure this more quickly.
+
+
+.row
+	.col-md-8.col-md-offset-2
+		#contact-form.console
+
+			.console-content
+
+				form#contactUs(method='post', action='/contact-us')
+
+					.row
+						.col-sm-12
+							p Provide us with your email address and some information and we'll look into the problem. <strong class='color-darkgreen'>Please be as detailed as possible. Thank you!</strong>
+					.row.control-group
+						.col-sm-3
+							label.control-label(for='emailList') Your e-mail:
+						.col-sm-9.controls
+							input#username(type='text', name='username', placeholder='')
+					.row
+						.col-sm-3
+							label.control-label(for='emailList') Your message:
+						.col-sm-9.controls
+							textarea#problem(rows='6', type='text', name='problem', placeholder='Enter your message here...')
+					.row.control-group
+						.col-sm-9.col-sm-offset-3.controls
+							button.btn(type='submit') Send
+							p
+								strong.color-darkblue#message

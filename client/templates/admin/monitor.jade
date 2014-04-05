@@ -1,18 +1,18 @@
 .row
-	.span10.offset1.back-to-admin
+	.col-md-10.col-md-offset-1.back-to-admin
 		a(href='/admin')
 			i.fa.fa-arrow-circle-o-left.fa-lg
 			| back
 
 .row
-	.span10.offset1
+	.col-md-10.col-md-offset-1
 		h1 Monitor Panel
 
 		h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 #admin-monitor
 	.row
-		.span10.offset1
+		.col-md-10.col-md-offset-1
 			each instance, i in instances
 				.console-buttons
 						h3 Game: <span class='color-darkblue'>#{instance}</span>
@@ -23,7 +23,7 @@
 						button.monitor-button.btn#startStop(data-instance='#{instance}') Start / Stop
 
 	.row
-		.span10.offset1
+		.col-md-10.col-md-offset-1
 			.console
 				.console-content
 					.output

@@ -2,7 +2,6 @@
 	h4
 		text-transform capitalize
 	button
-		background $csOrange
 		&:not(:last-of-type)
 			margin-right 10px
 		&.btn-success
@@ -27,30 +26,33 @@
 		padding 20px
 		border 2px solid $csGray
 		background-color white
-	form
-		margin 20px 0
+		.row
+			margin-bottom 10px
+	h2
+		margin-top 10px
+		font-weight normal
+		color $csDarkGreen
 	a.btn
 		display block
-		width 120px
-		background-color $csOrange
-		margin-bottom 10px
+		color white
 		font-family $buttonFont
 	button
 		position relative
 		.spinner
 			position absolute
 			top 0
-			left 37%
+			left 50%
+			margin-left -5px
 	.admin-instructions
 		padding-top 4px
 
 #admin-startup
 	button
-		width 120px
+		width 100%
 
 #admin-invites
-	textarea
-		width 100%
+	form
+		margin-top 20px
 
 #admin-monitor
 	.console-buttons
@@ -152,8 +154,12 @@ p.level3
 #admin-npcs
 	h3
 		font-size 1.4em
+		margin-top 0
 	label
 		color white
+		display block
+		margin-top 10px
+		font-weight normal
 	small
 		color rgba(255,255,255,0.75)
 		font-size 0.85em
