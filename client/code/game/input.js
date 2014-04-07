@@ -443,11 +443,11 @@ var $input = $game.$input = module.exports = {
 
   toggleMinimap: function () {
     if ($game.checkFlag('first-time') === true) return // Disables if it's player's first time in the game.
-    $('#minimap-player').toggle()
+    $('.minimap').toggle()
   },
 
   showMinimap: function () {
-    $('#minimap-player').show()
+    $('.minimap').show()
   },
 
   // Toggles Seed Mode.

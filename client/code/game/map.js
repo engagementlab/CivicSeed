@@ -180,6 +180,9 @@ var $map = $game.$map = {
     $.each($game.$map.miniMap, function (key, player) {
       $game.$render.renderMiniPlayer(player);
     });
+
+    // Render radar
+    $game.$render.minimapRadar.update();
   },
 
   //put new color on the map

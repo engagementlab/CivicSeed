@@ -200,9 +200,10 @@ var $skins = $game.$skins = {
   },
 
   applyFlags: function () {
-    // If local radar, re-render NPC comments
+    // If radar, re-render NPC comments & update minimap
     if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
       $game.$player.displayNpcComments()
+      $game.$render.minimapRadar.update()
     }
 
     // If speed goes up, change player speed

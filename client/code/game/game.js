@@ -252,6 +252,7 @@ var $game = module.exports = {
       $game.$map.stepDirection = null;
     });
     $game.$player.displayNpcComments()
+    $game.$render.minimapRadar.update()
     $game.$player.saveTimeToDB();
   },
 
@@ -674,6 +675,7 @@ var _game = {
           $game.$render.renderAllTiles();
           $game.tick();
           $game.$player.displayNpcComments()
+          $game.$render.minimapRadar.update()
 
           // Turn on minimap view on gameboard
           $game.$input.showMinimap()

@@ -909,6 +909,7 @@ var $player = $game.$player = {
     _player.saveResourceToDb(realResource);
     //display npc bubble for comment num
     $game.$player.displayNpcComments();
+    $game.$render.minimapRadar.update()
 
   },
 
@@ -954,7 +955,7 @@ var $player = $game.$player = {
       }
       // If player has a rader that can sense if NPCs have a resource to give
       else if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
-        // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards at an earlier level if the player skipped them)
+        // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards from a lower-level NPC if the player skipped it earlier)
         if ($game.$npc.getNpc(npcIndex).isHolding === true && !_resources[npcIndex] && $player.getLevel() >= $game.$npc.getLevel(npcIndex)) {
           contents = '!'
           message  = 'This character has something for you!'

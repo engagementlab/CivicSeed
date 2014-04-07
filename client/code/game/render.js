@@ -25,6 +25,7 @@ var _tilesheets = {},
     _interfaceContext     = null,
     _minimapPlayerContext = null,
     _minimapTileContext   = null,
+    _minimapRadarContext  = null,
 
     _prevMouseX = 0,
     _prevMouseY = 0,
@@ -71,6 +72,7 @@ var $render = $game.$render = {
     _interfaceContext     = _render.initCanvas('interface')
     _minimapPlayerContext = _render.initCanvas('minimap-player')
     _minimapTileContext   = _render.initCanvas('minimap-tile')
+    _minimapRadarContext  = _render.initCanvas('minimap-radar')
 
     // Interface canvas - style for player names
     _interfaceContext.lineWidth    = 6
@@ -789,6 +791,8 @@ var $render = $game.$render = {
     );
   },
 
+  // Create a ping effect on the minimap to attract the player's attention to a specific location
+  // TODO ! This was never completed.
   pingMinimap: function (location) {
     var context = _render.createCanvas('minimap-ping', 142, 132, true, {
       right: '0',
@@ -803,6 +807,82 @@ var $render = $game.$render = {
       20
     );
     $('#minimap-ping').remove()
+  },
+
+  // Show radar for NPCs still holding resources
+  minimapRadar: {
+    /*
+    // Not used.
+    // Canvas for radar is hardcoded into game template.
+    context: null,
+
+    create: function () {
+      $render.minimapRadar.context = _render.createCanvas('minimap-radar', 142, 132, true, {
+                        right: '0',
+                        zIndex: '6'
+                      })
+      var context = $render.minimapRadar.context
+
+      context.fillStyle = $render.colors.yellow
+    },
+
+    destroy: function () {
+      $('#minimap-radar').remove()
+    },
+
+    update: function () {
+    },
+    */
+
+    update: function () {
+      $render.minimapRadar.clear()
+
+      var local     = $game.checkFlag('local-radar'),
+          global    = $game.checkFlag('global-radar'),
+          npcs      = {},
+          resources = $game.$player.getResources()
+
+      // If player doesn't have radar on, exit
+      if (!local && !global) return false
+
+      // Depending on radar, get NPCs
+      if (global === true) {
+        npcs = $game.$npc.getNpcData()
+      } else if (local === true) {
+        var onscreen = $game.$npc.getOnScreenNpcs()
+        for (var n = 0; n < onscreen.length; n++) {
+          var npc = $game.$npc.getNpc(onscreen[n])
+          npcs[npc.index] = npc
+        }
+      }
+
+      // Render the dot for each NPC
+      $.each(npcs, function (key, npc) {
+        // Check
+        // - If NPC is holding a resource
+        // - If player does not already have that resource
+        // - If NPC level is less than or equal to Player's current level
+        if (npc.isHolding === true && !resources[npc.index] && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
+          $game.$render.minimapRadar.drawDot(npc.info)
+        }
+      })
+    },
+
+    clear: function () {
+      _render.clearContext(_minimapRadarContext)
+    },
+
+    drawDot: function (location) {
+      var context = _minimapRadarContext
+      context.fillStyle = $render.colors.yellow
+      context.fillRect(
+        location.x,
+        location.y,
+        2,
+        2
+      );
+    }
+
   },
 
   //clear the botanist from the canvas

@@ -174,6 +174,7 @@ var $resources = $game.$resources = {
     _resources.data[stringId].playerAnswers.push(data);
     //update the npc bubbles on screen
     $game.$player.displayNpcComments()
+    $game.$render.minimapRadar.update()
   },
 
   //moreve an answer (this means they made it private and it was previously public)
