@@ -934,10 +934,12 @@ var $player = $game.$player = {
           contents = null,
           message  = null
 
+      var theResource = _resources[npcIndex]
+
       // If player has obtained the NPC's resource
-      if (_resources[npcIndex]) {
+      if (theResource && theResource.result === true) {
         // For open-ended questions
-        if (_resources[npcIndex].questionType === 'open') {
+        if (theResource.questionType === 'open') {
           contents = $game.$resources.getNumResponses(npcIndex)
           if (contents > 0) {
             message = 'Click to view ' + contents + ' public answers'
@@ -956,7 +958,7 @@ var $player = $game.$player = {
       // If player has a rader that can sense if NPCs have a resource to give
       else if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
         // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards from a lower-level NPC if the player skipped it earlier)
-        if ($game.$npc.getNpc(npcIndex).isHolding === true && !_resources[npcIndex] && $player.getLevel() >= $game.$npc.getLevel(npcIndex)) {
+        if ($game.$npc.getNpc(npcIndex).isHolding === true && (!theResource || theResource.result === false) && $player.getLevel() >= $game.$npc.getLevel(npcIndex)) {
           contents = '!'
           message  = 'This character has something for you!'
           _addBubble(npcIndex, contents, message)

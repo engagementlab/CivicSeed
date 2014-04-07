@@ -862,7 +862,8 @@ var $render = $game.$render = {
         // - If NPC is holding a resource
         // - If player does not already have that resource
         // - If NPC level is less than or equal to Player's current level
-        if (npc.isHolding === true && !resources[npc.index] && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
+        var theResource = resources[npc.index]
+        if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
           $game.$render.minimapRadar.drawDot(npc.info)
         }
       })
