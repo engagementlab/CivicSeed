@@ -554,7 +554,7 @@ var _botanist = {
       //  This is a special screen that occurs only during the tutorial.
       case 5:
         _botanist.say('The pieces you need to complete this puzzle lie in Brightwood Forest, located in the northwest.')
-        content.innerHTML = '<div class="minimap"><img src="/img/game/minimap.png"></div><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>'
+        content.innerHTML = '<div class="botanist-minimap"><img src="/img/game/minimap.png"></div><p>Go out and talk to the people you see. When you think you have all the pieces, come back to the center of the map and talk to me. Good luck!</p>'
         content.style.display = 'block'
 
         _addButton('close', null, function () {
