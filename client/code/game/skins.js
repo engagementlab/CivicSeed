@@ -640,9 +640,9 @@ var _skins = {
         'effect': 'You gain 10 paintbrush seeds every time you click “Seed it!” on a friend’s response.',
         'flag': 'pledge-reward',
         'parts': {
-          'head': 'dinosaur',
-          'torso': 'cone',
-          'legs': 'cone'
+          'head': 'cone',
+          'torso': 'dinosaur',
+          'legs': 'dinosaur'
         }
       }
     }
