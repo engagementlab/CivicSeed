@@ -92,7 +92,7 @@ var $skins = $game.$skins = {
         skins      = this.getSets()
 
     function _render (skin, part) {
-      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '" title="(locked)" data-placement="bottom"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
+      var skinHTML   = '<div class="outer locked" data-name="' + skin.id + '"><div class="inner"><i class="fa fa-lock"></i></div><div class="badge-new"><i class="fa fa-star"></i></div></div>',
           $part      = $('.' + part),
           $el        = $(skinHTML)
 
@@ -109,10 +109,15 @@ var $skins = $game.$skins = {
         }
       }
 
-      // Bind actions
-      $el.on('mouseenter', function () {
-        $(this).tooltip('show')
+      // Set tooltip behavior
+      $el.tooltip({
+        placement: 'bottom',
+        container: 'body',
+        trigger: 'hover',
+        title: '(locked)'
       })
+
+      // Bind actions
       $el.on('click', function () {
         // If marked as 'new', this hides it
         $(this).find('.badge-new:visible').hide()
@@ -282,6 +287,7 @@ var _skins = {
 
     $el.removeClass('locked')
     $el.attr('title', skin[part].name)
+    $el.attr('data-original-title', skin[part].name)  // Force Bootstrap to update tooltip
     $inner.css('backgroundImage', 'url(' + bg + ')')
     $inner.find('i').remove()
     $inner.html('')
