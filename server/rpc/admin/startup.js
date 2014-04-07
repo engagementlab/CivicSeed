@@ -166,20 +166,26 @@ var _startup = {
   },
 
   loadTiles: function (req, res, ss) {
-    var tileData;
+    var tileData = require(rootDir + '/data/tiles.json')
 
     console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
 
-    tileData = require(rootDir + '/data/tiles.json')
+    // Set up tile data object
+    var data = tileData.layers // This is an array of unnamed objects, we want to name them
+    var tileObject = {}
+    for (var i = 0; i < tileData.layers.length; i ++) {
+      tileObject[tileData.layers[i].name] = tileData.layers[i]
+    }
+
+    // Construct database
     dbActions.dropCollection('tiles', function () {
       var i,
-          tileObject       = tileData,
-          backgroundArray  = tileObject.layers[0].data,
-          background2Array = tileObject.layers[2].data,
-          background3Array = tileObject.layers[3].data,
-          foregroundArray  = tileObject.layers[4].data,
-          foreground2Array = tileObject.layers[5].data,
-          tileStateArray   = tileObject.layers[6].data,
+          backgroundArray  = tileObject.texture.data,       // layer name 'texture'
+          background2Array = tileObject.background1.data,   // layer name 'background1'
+          background3Array = tileObject.background2.data,   // layer name 'background2'
+          foregroundArray  = tileObject.foreground1.data,   // layer name 'foreground1'
+          foreground2Array = tileObject.foreground2.data,   // layer name 'foreground2'
+          tileStateArray   = tileObject.tilestate.data,     // layer name 'tilestate'
           numberOfTiles    = backgroundArray.length,
           mapTilesWidth    = 142,
           mapTilesHeight   = 132,
@@ -222,10 +228,10 @@ var _startup = {
           y: mapY,
           tileState: tileStateVal,
           isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
-          background: backgroundArray[i],
+          background:  backgroundArray[i],
           background2: background2Array[i],
           background3: background3Array[i],
-          foreground: foregroundArray[i],
+          foreground:  foregroundArray[i],
           foreground2: foreground2Array[i],
           mapIndex: i
         });

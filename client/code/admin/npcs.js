@@ -336,10 +336,10 @@ var self = module.exports = {
         if (err) {
           apprise(err);
         } else {
-          var saveButton = npc.find('.npc-save-button');
+          var $saveButton = npc.find('.npc-save-button');
           var levelClass = 'level' + updates.level,
-            npcClass = 'npc' + updates.id;
-            npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+              npcClass = 'npc' + updates.id;
+          npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
           $saveButton.addClass('btn-success');
         }
       });
