@@ -30,7 +30,7 @@
     height 480px
     display none
     position absolute
-    z-index 9999
+    z-index 5000
     top 0
     left 0
     .cutscene
@@ -80,7 +80,7 @@ canvas
   left 15px
   right 15px
   bottom 15px
-  z-index 10000
+  z-index 1000
   padding 20px
   background #efefef
   background-image $cloudUrl('img/bg/grey.png')
@@ -135,7 +135,7 @@ canvas
     width 100%
     height 100%
     background-color rgba(255,255,255,0.75)
-    z-index 11000
+    z-index 1100
     .check-dialog
       position absolute
       left 280px
@@ -182,7 +182,7 @@ canvas
   color $csBlack
 
 #botanist-area
-  z-index 9990
+  z-index 990
   // A transition animation occurs whenever this area changes in height
   -webkit-transition height .3s
   transition height .3s
@@ -222,7 +222,7 @@ canvas
       top 170px
       right -6px
       cursor pointer
-      z-index 40000
+      z-index 1000
       &.active
         opacity 0.5
   textarea
@@ -233,9 +233,6 @@ canvas
     max-width 800px
     margin-top 20px
     resize none
-
-//#botanist-area .answer-button, #botanist-area .clear-button, #botanist-area i
-//  z-index 9999
 
 #resource-area
   .resource-content
@@ -273,10 +270,6 @@ canvas
         span
           margin-right 5px
           color white
-        p
-          // Prevent extremely long words from breaking the box.
-          overflow hidden
-          text-overflow ellipsis
         .public-button, .private-button, .pledge-button
           position absolute
           right 10px
@@ -681,7 +674,7 @@ canvas
   height 60px
   background rgba(50,50,50,0.9)
   padding 0
-  z-index 9000
+  z-index 1100
   display none
   button
     position absolute
@@ -745,7 +738,7 @@ canvas
   width 125px
   height 36px
   background rgba(50,50,50,0.9)
-  z-index 9400
+  z-index 940
   font-size 24px
   cursor pointer
   p
@@ -863,7 +856,7 @@ canvas
 
 #speech-bubble
   display none
-  z-index 9600
+  z-index 960
   position absolute
   top 20px
   left 20px
@@ -911,7 +904,7 @@ canvas
   // May be removed if css .spinner works better
   //width 32px
   //height 32px
-  z-index 99999
+  z-index 4000
   position absolute
   display none
 
@@ -924,7 +917,7 @@ canvas
   height 100%
   background $cloudUrl('img/game/teleport.gif') #eee no-repeat center center
   background-size cover
-  z-index 40000
+  z-index 4000
 
 .message
   font-family $bodyFont
@@ -947,7 +940,7 @@ canvas
   text-shadow 1px 1px 0 $csBlack
 
 #game-log, #game-log-overlay
-  z-index 4000
+  z-index 900
   overflow-y auto
   overflow-x hidden
   text-overflow ellipsis
@@ -979,7 +972,7 @@ canvas
   font-family $buttonFont
   height 20px
   margin 0
-  z-index 45000
+  z-index 4500
   color #eee
   span
     background rgba(0,0,0,0.75)
@@ -987,7 +980,7 @@ canvas
 
 .npc-bubble
   position absolute
-  z-index 9000
+  z-index 890
   width 32px
   height 32px
   font-family $mono
