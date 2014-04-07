@@ -18,8 +18,6 @@ var _curFrame = 0,
 
     _previousSeedsDropped = null,
 
-    $graffiti = null,
-    $graffitiNum = null,
     _startTime = null,
 
     _seeds = null,
@@ -114,9 +112,6 @@ var $player = $game.$player = {
         id: $game.$player.id
       };
 
-      // setup DOM selectors
-      _setDomSelectors();
-
       _updateTotalSeeds();
       _updateRenderInfo();
 
@@ -140,8 +135,6 @@ var $player = $game.$player = {
 
     _previousSeedsDropped = null;
 
-    $graffiti = null;
-    $graffitiNum = null;
     _startTime = null;
 
     _seeds = null;
@@ -600,8 +593,10 @@ var $player = $game.$player = {
       msg = 'Click anywhere to plant a seed and watch color bloom there'
     } else {
       msg = 'Paintbrush mode activated - click and drag to draw'
-      $graffiti.show();
-      $graffitiNum.text(_seeds.draw);
+
+      var graffitiEl = document.getElementById('graffiti')
+      graffitiEl.style.display = 'block'
+      graffitiEl.querySelector('.remaining').textContent = _seeds.draw
     }
     $game.alert(msg)
   },
@@ -1050,7 +1045,7 @@ var $player = $game.$player = {
         //add to array and color if we haven't done it
         if (!_drawSeeds[index]) {
           $game.$player.addSeeds('draw', -1);
-          $graffitiNum.text(_seeds.draw);
+          document.getElementById('graffiti').querySelector('.remaining').textContent = _seeds.draw
           drawLocal = true;
           _drawSeeds[index] = {
             x: currentTile.x,
@@ -1233,13 +1228,6 @@ var _player = {
   }
 }
 
-//setup all the dom elements for reuse
-function _setDomSelectors() {
-  //set variables for dom selectors
-  $graffiti = $('.graffiti');
-  $graffitiNum = $('.graffiti p span');
-}
-
 // on init, set local and global variables for all player info
 function _setPlayerInformation(info) {
   // Ensure that flags start from a clean state
@@ -1385,7 +1373,7 @@ function _sendSeedBomb(data) {
           $game.$player.seedMode = false;
           _renderInfo.colorNum = _playerColorNum;
           $game.$player.seedPlanting = false;
-          $graffiti.hide();
+          document.getElementById('graffiti').style.display = 'none'
           $game.alert('You are out of seeds!')
           $('.hud-seed').removeClass('hud-button-active');
           $game.$player.saveMapImage(true);

@@ -499,9 +499,9 @@ var $input = $game.$input = module.exports = {
     if ($game.$player.seedventoryShowing) {
       $input.closeSeedventory()
     }
+    document.getElementById('graffiti').style.display = 'none'
     $BODY.off('mousedown touchend', '#gameboard');
     $BODY.off('mouseup touchend', '#gameboard');
-    $('.graffiti').hide();
     $game.$mouse.drawMode = false;
     $game.$player.seedPlanting = false;
     $game.$player.resetRenderColor();
