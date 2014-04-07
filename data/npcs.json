@@ -1482,9 +1482,9 @@
   {
     "dependsOn": null,
     "id": 51,
-    "index": 12249,
+    "index": 12352,
     "isHolding": true,
-    "level": 3,
+    "level": 2,
     "name": "Banksi",
     "sprite": 42,
     "skinSuit": null,
