@@ -48,7 +48,9 @@
 						if postgameSurveyLink
 							.row.no-print
 								.col-sm-12
-									a.btn.btn-primary.survey(href='#{postgameSurveyLink}', target='_blank') Please complete this survey!
+									p
+										strong Please complete the post-game survey!
+									a.btn.btn-primary.survey(href='#{postgameSurveyLink}', target='_blank') Click here to open the survey
 						.row.no-print
 							.col-sm-12.instructions
 								p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
@@ -95,11 +97,6 @@
 						.col-sm-8
 							if (sessionStorage.userEmail === email)
 								if (active)
-									if pregameSurveyLink
-										.row.no-print
-											.col-sm-12
-												p If you have not yet completed the pre-game survey, please <a href='#{pregameSurveyLink}' target='_blank'>do it now</a>. Thanks!
-
 									h3 Your profile is locked. Play the game to complete your profile!
 									p
 										a.btn.btn-info.btn-lg(href='/game') Resume Game

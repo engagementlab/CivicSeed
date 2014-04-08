@@ -17,7 +17,7 @@ These instructions assume that the production server is already up and running a
 1. Make sure you in the root folder of the `CivicSeed` repository.
 2. Start `mongod` and `redis-server`, as if running a local server.
 3. Start the server with `SS_ENV=production SS_PACK=1 npm start`. You’ll know it’s done when 3 files (HTML, CSS and JS) are created and the server has started.
-4. Exit out of the server safely.
+4. You can now exit out of the server (Ctrl-C).
 
 #### Push assets to remotes.
 

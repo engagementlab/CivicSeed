@@ -21,7 +21,6 @@ var self = module.exports = {
 						//reroute to change info
 						Davis.location.assign('change-info');
 					} else {
-						info.pregameSurveyLink = CivicSeed.SURVEY_PREGAME_LINK;
 						info.postgameSurveyLink = CivicSeed.SURVEY_POSTGAME_LINK;
 						// console.log(info);
 						$CONTAINER.append(JT['profiles-singleprofile'](info));
