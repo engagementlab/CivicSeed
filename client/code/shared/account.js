@@ -47,31 +47,31 @@ var $account = module.exports = {
 			}
 			return false;
 		});
-		$body.on('submit', '#remindMeForm', function() {
+		$body.on('submit', '#password-reminder-form', function() {
 			var email = document.getElementById('username').value.toLowerCase();
 			ss.rpc('shared.account.remindMeMyPassword', email, function(response) {
 				if(response) {
 					$('#username').val('');
-					$('#message').removeClass('error').text('A reminder email was successfully sent to you! ✔');
+					$('.server-response').removeClass('error').text('A reminder email was successfully sent to you! ✔');
 				} else {
-					$('#message').addClass('error').text('There was an error. Please enter the correct email.');
+					$('.server-response').addClass('error').text('There was an error. Please enter the correct email.');
 				}
 			});
 			return false;
 		});
-		$body.on('submit', '#contactUs', function() {
-			var email = document.getElementById('username').value,
-				problem = document.getElementById('problem').value;
-			ss.rpc('shared.account.sendProblem', email, problem, function(response) {
-				if(response) {
-					$('#message').removeClass('error').text('Thanks! We\'ll get on it right away.');
+		$body.on('submit', '#contact-form', function() {
+			var email   = document.getElementById('email').value,
+					message = document.getElementById('message').value;
+			ss.rpc('shared.account.sendMessage', email, message, function (response) {
+				if (response) {
+					$('.server-response').removeClass('error').text('We got it! Thanks!');
 				} else {
-					$('#message').addClass('error').text('There was an error. Email civicseed@gmail.com directly please.');
+					$('.server-response').addClass('error').text('There was an error. Email civicseed@gmail.com directly please.');
 				}
 			});
 			return false;
 		});
-		$body.on('submit', '#changeInfoForm', function() {
+		$body.on('submit', '#change-info-form', function() {
 			var first = document.getElementById('firstname').value.trim(),
 				last = document.getElementById('lastname').value.trim(),
 				school = document.getElementById('school').value.trim();
@@ -91,7 +91,7 @@ var $account = module.exports = {
 						Davis.location.assign('/introduction');
 					}
 					else {
-						$('#message').addClass('error').text('There was an error. Please panic.');
+						$('.server-response').addClass('error').text('There was an error. Please panic.');
 					}
 				});
 			} else {

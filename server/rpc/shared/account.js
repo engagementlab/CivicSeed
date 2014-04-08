@@ -241,12 +241,12 @@ exports.actions = function(req, res, ss) {
 			});
 		},
 
-    sendProblem: function (email, problem) {
-      var problemHTML  = '<h2>BUG! ahhhhh!</h2>';
-          problemHTML += '<p>User: ' + email + '</p>';
-          problemHTML += '<p>Problem: ' + problem + '</p>';
+    sendMessage: function (email, message) {
+      var messageHTML  = '<h2>Civic Seed contact form submission</h2>';
+          messageHTML += '<p><strong>E-mail:</strong> ' + email + '</p>';
+          messageHTML += '<p><strong>Message:</strong> ' + message + '</p>';
       emailUtil.openEmailConnection();
-      emailUtil.sendEmail('User submitted issue', problemHTML, emailTo);
+      emailUtil.sendEmail('Civic Seed contact form submission', messageHTML, emailTo);
       // TODO: close connection on *** CALLBACK ***
       emailUtil.closeEmailConnection();
       res(true);

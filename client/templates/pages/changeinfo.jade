@@ -9,7 +9,7 @@
 
 			.console-content
 
-				form#changeInfoForm(method='post', action='/change-info')
+				form#change-info-form(method='post', action='/change-info')
 
 					if pregameSurveyLink
 						.row.no-print
@@ -32,5 +32,6 @@
 					.row.control-group
 						.col-sm-8.col-sm-offset-4.controls
 							button.btn(type='submit') Submit
-							p
-								strong.color-darkblue#message
+					.row
+						.col-sm-8.col-sm-offset-4
+							.server-response

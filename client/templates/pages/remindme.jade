@@ -9,7 +9,7 @@
 
 			.console-content
 
-				form#remindMeForm(method='post', action='/remind-me')
+				form#password-reminder-form(method='post', action='/remind-me')
 					.row
 						.col-sm-12
 							p Provide us with your email address and we'll reset your password via email.
@@ -21,8 +21,9 @@
 					.row.control-group
 						.col-sm-9.col-sm-offset-3.controls
 							button.btn(type='submit') Reset
-							p
-								strong.color-darkblue#message
+					.row
+						.col-sm-9.col-sm-offset-3
+							.server-response
 
 .row
 	.col-md-10.col-md-offset-1
