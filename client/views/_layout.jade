@@ -17,11 +17,15 @@ html(class='no-js', lang='en')
 
 		script(src='/js/modernizr-2.6.2.min.js')
 
+		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/normalize.css')
+		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/main.css')
+		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/font-awesome.min.css')
+
 		script window.CivicSeed = !{CivicSeed};
 
 		!= SocketStream
 
-		link(rel='stylesheet', type='text/css', media='print', href='#{cloudPath}/uncompiled-css/print.css')
+		link(rel='stylesheet', type='text/css', media='print', href='#{cloudPath}/css/print.css')
 
 	body
 
