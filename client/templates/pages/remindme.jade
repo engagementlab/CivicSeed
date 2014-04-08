@@ -1,14 +1,30 @@
 .row
-	.col-md-6
+	.col-md-10.col-md-offset-1
 		h2 Forget your password?
-		h5 Let us help you.
-		.col-md-6.col-md-offset-3.moreTopMargin
-			form.well#remindMeForm(method='post', action='/remind-me')
-				p Provide us with your email address and we'll reset your password via email.
-				.control-group
-					.controls
-						input#username.input-large(type='text', name='username', placeholder='Email')
-				button.btn.btn-primary.btn-large(type='submit') Reset
-				p#message.moreTopMargin
-			p.moreTopMargin Forget your username?
-			p: small Please contact your administrator if your email is not working.
+		p Let us help you.
+
+.row
+	.col-md-10.col-md-offset-1
+		.console
+
+			.console-content
+
+				form#remindMeForm(method='post', action='/remind-me')
+					.row
+						.col-sm-12
+							p Provide us with your email address and we'll reset your password via email.
+					.row.control-group
+						.col-sm-3
+							label.control-label(for='username') Your username:
+						.col-sm-9.controls
+							input#username(type='text', name='username', placeholder='Email')
+					.row.control-group
+						.col-sm-9.col-sm-offset-3.controls
+							button.btn(type='submit') Reset
+							p
+								strong.color-darkblue#message
+
+.row
+	.col-md-10.col-md-offset-1
+		h4 Forget your username?
+		p: small Please contact your administrator if your email is not working.

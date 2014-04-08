@@ -36,7 +36,8 @@ var $account = module.exports = {
 			$account.authenticate(email, password);
 			return false;
 		});
-		$body.on('click', '.dropdown-sign-out', function() {
+		$body.on('click', '.dropdown-sign-out', function (e) {
+			e.preventDefault();
 			if(sessionStorage.isPlaying === 'true') {
 				$game.exitGame(function() {
 					$account.deAuthenticate();
