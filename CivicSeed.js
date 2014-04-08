@@ -14,7 +14,9 @@ var _CivicSeed = {
 		String(now.getSeconds()) : String(version),
 	ENVIRONMENT: nodeEnv,
 	CLOUD_PATH: config.get('CLOUD_PATH'),
-	CONNECTED: true
+	CONNECTED: true,
+	SURVEY_POSTGAME_LINK: config.get('SURVEY_POSTGAME_LINK'),
+	SURVEY_PREGAME_LINK: config.get('SURVEY_PREGAME_LINK')
 };
 
 var self = module.exports = {

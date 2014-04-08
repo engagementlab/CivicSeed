@@ -110,7 +110,8 @@ exports.actions = function (req, res, ss) {
   };
 
   var sendInviteEmail = function (firstName, password, email) {
-    var content = ''
+    var content = '',
+        pregameSurveyLink = config.get('SURVEY_PREGAME_LINK')
 
     // Set up email template
     if (nodeEnv !== 'production') {
@@ -119,7 +120,9 @@ exports.actions = function (req, res, ss) {
     }
     content += '<h2>Why hello there, #{firstName}!</h2>';
     content += '<p style="color:green;">WELCOME TO CIVIC SEED!</p>';
-    content += '<p>Please complete <a href="http://bit.ly/CivicSeed">this survey</a> before playing the game.</p>';
+    if (pregameSurveyLink) {
+      content += '<p>Please complete <a href="' + pregameSurveyLink + '">this survey</a> before playing the game.</p>';
+    }
     content += '<p><a href="http://xkcd.com/936/">xkcd</a> generated you a fine password: ';
     content += '<strong>#{password}</strong></p>';
     content += '<p>Your username is your email: <strong>#{email}</strong></p>';

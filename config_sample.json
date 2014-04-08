@@ -7,5 +7,7 @@
   "REDIS_DB": "[redis_db]",
   "MONGO_URL": "mongodb://192.168.1.xxx/[mongo_db]",
   "EMAIL_SERVICE": "Mailgun",
-  "CLOUD_PATH": ""
+  "CLOUD_PATH": "",
+  "SURVEY_PREGAME_LINK": "",
+  "SURVEY_POSTGAME_LINK": ""
 }

@@ -7,5 +7,7 @@
   "REDIS_DB": "civic_dev_db",
   "MONGO_URL": "mongodb://localhost/civic_dev_db",
   "EMAIL_SERVICE": "Mailgun",
-  "CLOUD_PATH": ""
+  "CLOUD_PATH": "",
+  "SURVEY_PREGAME_LINK": "http://bit.ly/CivicSeed",
+  "SURVEY_POSTGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb"
 }

@@ -5,8 +5,10 @@ var self = module.exports = {
 		profile.init();
 
 		$app.get('/profiles', function(req) {
-			ss.rpc('shared.profiles.getAllProfiles', function(users) {
-				$CONTAINER.append(JT['profiles-allprofiles']({users: users}));
+			ss.rpc('shared.profiles.getAllProfiles', function (users) {
+				$CONTAINER.append(JT['profiles-allprofiles']({
+					users: users
+				}));
 			});
 		});
 
@@ -19,9 +21,11 @@ var self = module.exports = {
 						//reroute to change info
 						Davis.location.assign('change-info');
 					} else {
+						info.pregameSurveyLink = CivicSeed.SURVEY_PREGAME_LINK;
+						info.postgameSurveyLink = CivicSeed.SURVEY_POSTGAME_LINK;
 						// console.log(info);
 						$CONTAINER.append(JT['profiles-singleprofile'](info));
-					}	
+					}
 				}
 			});
 		});
