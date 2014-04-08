@@ -154,7 +154,10 @@ exports.actions = function (req, res, ss) {
         for (emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
           var email = emailList[emailIterator].toLowerCase();
           if (i) {
+            // Not entirely sure what the difference is between i and iterator, but the #add-player-button from the Admin panel (see ./client/code/admin/admin.js) provides a digit for i.
+            // It needs to return "true" for the admin panel to report an OK message on apprise.
             createUserAndSendInvite(email, instanceName, i);
+            res(true);
           } else {
             createUserAndSendInvite(email, instanceName, emailIterator);
           }
@@ -164,11 +167,11 @@ exports.actions = function (req, res, ss) {
       }
     },
 
-    newGameInstance: function(info) {
+    newGameInstance: function (info) {
       gameModel
       .where('instanceName').equals(info.instanceName)
       .select('instanceName')
-      .find(function(err, results) {
+      .find(function (err, results) {
         //if it doesn't exist, create new game instance
         if(err) {
           res(true, false);
@@ -188,7 +191,7 @@ exports.actions = function (req, res, ss) {
           newGame.instanceName = info.instanceName;
           newGame.resourceResponses = {};
 
-          newGame.save(function(err) {
+          newGame.save(function (err) {
             if(err) {
               console.log(error);
               res(true, false);
@@ -208,7 +211,7 @@ exports.actions = function (req, res, ss) {
                 a: 0.3
               };
               color.curColor = 'rgba(255,0,0,0.3)';
-              color.save(function(err, okay) {
+              color.save(function (err, okay) {
                 if(err) {
                   console.log(err);
                 } else if(okay) {
@@ -246,14 +249,13 @@ exports.actions = function (req, res, ss) {
       });
     },
 
-    getCount: function(instanceName) {
+    getCount: function (instanceName) {
       //get count of players in current instance, if < 20 add new one
-      userModel
-      .count({'game.instanceName': instanceName}, function(err, count) {
-        if(err) {
+      userModel.count({'game.instanceName': instanceName}, function (err, count) {
+        if (err) {
           res(false);
         } else {
-          if(count >= 20) {
+          if (count >= 20) {
             res(false);
           } else {
             res(count);
