@@ -1,12 +1,12 @@
 {
-  "name": "CivicSeed-testing",
+  "name": "CivicSeed",
   "authors": [
     "Robert Hall <@americanyak>",
     "Russell Goldenberg <@russellgoldenberg>",
     "Lou Huang <@louh>"
   ],
   "description": "Social gaming for civic training",
-  "version": "0.0.8-7",
+  "version": "0.0.9-1",
   "keywords": [
     "social",
     "civic",
