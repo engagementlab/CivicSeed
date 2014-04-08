@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link href="http://fonts.googleapis.com/css?family=Nunito:300,700|Satisfy:400|Arvo:400,700,400italic" rel="stylesheet" type="text/css">
     <script src="/js/modernizr-2.6.2.min.js"></script>
-    <script>window.CivicSeed = {"VERSION":"0.0.8-7","CACHE":"201437174814","ENVIRONMENT":"development","CLOUD_PATH":"","CONNECTED":true};</script><link href="/assets/main/1396907294668.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1396907294668.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+    <script>window.CivicSeed = {"VERSION":"0.0.9-1","CACHE":"20143720557","ENVIRONMENT":"development","CLOUD_PATH":"","CONNECTED":true,"SURVEY_POSTGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb","SURVEY_PREGAME_LINK":"http://bit.ly/CivicSeed"};</script><link href="/assets/main/1396915558143.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1396915558143.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
 window.JT['admin-invitecodes'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
@@ -260,7 +260,7 @@ window.JT['pages-contactus'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
 
-buf.push("<div class=\"row\"><div class=\"col-md-8 col-md-offset-2\"><h2>Contact Us</h2><p>Found a bug? Having a problem? Let us know!</p></div></div><div class=\"row\"></div><div class=\"row\"><div class=\"col-md-8 col-md-offset-2\"><div id=\"contact-form\" class=\"console\"><div class=\"console-content\"><form id=\"contactUs\" method=\"post\" action=\"/contact-us\"><div class=\"row\"><div class=\"col-sm-12\"><p>Provide us with your email address and some information and we'll look into the problem. <strong class='color-darkgreen'>Please be as detailed as possible. Thank you!</strong></p></div></div><div class=\"row control-group\"><div class=\"col-sm-3\"><label for=\"emailList\" class=\"control-label\">Your e-mail:</label></div><div class=\"col-sm-9 controls\"><input id=\"username\" type=\"text\" name=\"username\" placeholder=\"\"/></div></div><div class=\"row\"><div class=\"col-sm-3\"><label for=\"emailList\" class=\"control-label\">Your message:</label></div><div class=\"col-sm-9 controls\"><textarea id=\"problem\" rows=\"6\" type=\"text\" name=\"problem\" placeholder=\"Enter your message here...\"></textarea></div></div><div class=\"row control-group\"><div class=\"col-sm-9 col-sm-offset-3 controls\"><button type=\"submit\" class=\"btn\">Send</button><p><strong id=\"message\" class=\"color-darkblue\"></strong></p></div></div></form></div></div></div></div>");;return buf.join("");
+buf.push("<div class=\"row\"><div class=\"col-md-10 col-md-offset-1\"><h2>Contact Us</h2><p>Found a bug? Having a problem? Let us know!</p></div></div><div class=\"row\"><div class=\"col-md-10 col-md-offset-1\"><div id=\"contact-form\" class=\"console\"><div class=\"console-content\"><form id=\"contactUs\" method=\"post\" action=\"/contact-us\"><div class=\"row\"><div class=\"col-sm-12\"><p>Provide us with your email address and some information and we'll look into the problem. <strong class='color-darkgreen'>Please be as detailed as possible. Thank you!</strong></p></div></div><div class=\"row control-group\"><div class=\"col-sm-3\"><label for=\"emailList\" class=\"control-label\">Your e-mail:</label></div><div class=\"col-sm-9 controls\"><input id=\"username\" type=\"text\" name=\"username\" placeholder=\"\"/></div></div><div class=\"row\"><div class=\"col-sm-3\"><label for=\"emailList\" class=\"control-label\">Your message:</label></div><div class=\"col-sm-9 controls\"><textarea id=\"problem\" rows=\"6\" type=\"text\" name=\"problem\" placeholder=\"Enter your message here...\"></textarea></div></div><div class=\"row control-group\"><div class=\"col-sm-9 col-sm-offset-3 controls\"><button type=\"submit\" class=\"btn\">Send</button><p><strong id=\"message\" class=\"color-darkblue\"></strong></p></div></div></form></div></div></div></div>");;return buf.join("");
 });
 
 window.JT['pages-home'] = (function template(locals) {
@@ -319,7 +319,7 @@ window.JT['profiles-allprofiles'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
 var locals_ = (locals || {}),users = locals_.users;
-buf.push("<div class=\"row all-profiles\"><div class=\"col-md-8 col-md-offset-2\"><h2>Public Profiles</h2><p>Below is a list of all users who have chosen to make their profile publicly available.</p>");
+buf.push("<div class=\"row all-profiles\"><div class=\"col-md-10 col-md-offset-1\"><h2>Public Profiles</h2><p>Below is a list of all users who have chosen to make their profile publicly available.</p>");
 // iterate users
 ;(function(){
   var $$obj = users;
@@ -348,7 +348,7 @@ buf.push("</div></div>");;return buf.join("");
 window.JT['profiles-singleprofile'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
-var locals_ = (locals || {}),firstName = locals_.firstName,lastName = locals_.lastName,school = locals_.school,email = locals_.email,profilePublic = locals_.profilePublic,profileUnlocked = locals_.profileUnlocked,resume = locals_.resume,resumeFeedback = locals_.resumeFeedback,colorMap = locals_.colorMap,active = locals_.active;
+var locals_ = (locals || {}),firstName = locals_.firstName,lastName = locals_.lastName,school = locals_.school,email = locals_.email,profilePublic = locals_.profilePublic,profileUnlocked = locals_.profileUnlocked,postgameSurveyLink = locals_.postgameSurveyLink,resume = locals_.resume,resumeFeedback = locals_.resumeFeedback,colorMap = locals_.colorMap,active = locals_.active,pregameSurveyLink = locals_.pregameSurveyLink;
 buf.push("<div class=\"row user-profile\"><div class=\"col-md-10 col-md-offset-1\">");
 if ( firstName)
 {
@@ -369,7 +369,7 @@ buf.push("</div></div>");
 buf.push("</div>");
 if ( (firstName === 'Demo'))
 {
-buf.push("<div class=\"row demo-profile\"><div class=\"col-sm-12\"><h1>The Story of Civic Seed</h1><h2>Call to Action</h2><p>At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.</p><p>Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.</p><h2>Exploring the Mystery</h2><p>As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot - T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times -- and that each time this happens, the people replant the color seeds.</p><h2>The Big Reveal</h2><p>After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.</p><p>The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.</p><h2>Boss Battle and Final Sequence</h2><p>Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.</p><p>This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.</p><h2>Features of the full version of Civic Seed</h2><ul><li>Music and sound effects</li><li>Animated intro and finale sequences</li><li>Timed boss level</li><li>Hidden “Easter Egg” seeds</li><li>Heads-up knowledge contests between players</li><li>Sharable Community Service Resumes</li></ul><iframe src=\"http://player.vimeo.com/video/64315985\" width=\"640\" height=\"360\" frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><p class=\"demoUserPlayLink\"><a href=\"/game\" class=\"btn btn-primary btn-lg\">Play the Game</a></p></div></div>");
+buf.push("<div class=\"row demo-profile\"><div class=\"col-sm-12\"><h1>The Story of Civic Seed</h1><h2>Call to Action</h2><p>At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.</p><p>Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.</p><h2>Exploring the Mystery</h2><p>As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times&mdash;and that each time this happens, the people replant the color seeds.</p><h2>The Big Reveal</h2><p>After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.</p><p>The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.</p><h2>Boss Battle and Final Sequence</h2><p>Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.</p><p>This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.</p><h2>Features of the full version of Civic Seed</h2><ul><li>Music and sound effects</li><li>Animated intro and finale sequences</li><li>Timed boss level</li><li>Hidden “Easter Egg” seeds</li><li>Heads-up knowledge contests between players</li><li>Sharable Community Service Resumes</li></ul><iframe src=\"http://player.vimeo.com/video/64315985\" width=\"640\" height=\"360\" frameborder=\"0\" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><p class=\"demoUserPlayLink\"><a href=\"/game\" class=\"btn btn-primary btn-lg\">Play the Game</a></p></div></div>");
 }
 else
 {
@@ -377,7 +377,11 @@ if ( profileUnlocked)
 {
 if ( (sessionStorage.userEmail === email))
 {
-buf.push("<div class=\"row no-print\"><div class=\"col-sm-12\"><a href=\"https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb\" target=\"_blank\" class=\"btn btn-primary survey\">Complete this survey!</a></div></div><div class=\"row no-print\"><div class=\"col-sm-12 instructions\"><p>To edit your profile, click on the text. When you are done, make sure to hit the \"Save\" button.</p></div></div>");
+if ( postgameSurveyLink)
+{
+buf.push("<div class=\"row no-print\"><div class=\"col-sm-12\"><a" + (jade.attr("href", '' + (postgameSurveyLink) + '', true, false)) + " target=\"_blank\" class=\"btn btn-primary survey\">Please complete this survey!</a></div></div>");
+}
+buf.push("<div class=\"row no-print\"><div class=\"col-sm-12 instructions\"><p>To edit your profile, click on the text. When you are done, make sure to hit the \"Save\" button.</p></div></div>");
 }
 if ( resume[0])
 {
@@ -445,6 +449,10 @@ if ( (sessionStorage.userEmail === email))
 {
 if ( (active))
 {
+if ( pregameSurveyLink)
+{
+buf.push("<div class=\"row no-print\"><div class=\"col-sm-12\"><p>If you have not yet completed the pre-game survey, please <a href='" + (jade.escape((jade.interp = pregameSurveyLink) == null ? '' : jade.interp)) + "' target='_blank'>do it now</a>. Thanks!</p></div></div>");
+}
 buf.push("<h3>Your profile is locked. Play the game to complete your profile!</h3><p><a href=\"/game\" class=\"btn btn-info btn-lg\">Resume Game</a></p>");
 }
 else
