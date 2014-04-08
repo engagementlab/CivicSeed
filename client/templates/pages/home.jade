@@ -9,11 +9,12 @@
 	.col-md-4.col-md-offset-1.col-sm-6.col-sm-offset-3.text-center
 		img(src='#{CivicSeed.CLOUD_PATH}/img/other/trees.png')
 		if(!sessionStorage.userId)
-			form.form-inline#loginForm(method='post', action='/')
+			form.form-inline#login-form(method='post', action='/')
 				input#username.input(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
 				input#password.input(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
-				button.btn.btn-primary.btn-large.moreTopMargin(type='submit') Sign In
-				p.moreTopMargin: a(href='/remind-me') Forget your password?
+				button.btn.btn-primary.btn-large(type='submit') Sign In
+				p
+					a(href='/remind-me') Forget your password?
 		else
 			div
 				a.btn.btn-info.go-to-profile(href='/profiles/'+sessionStorage.profileLink) Go to Profile

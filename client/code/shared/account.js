@@ -30,7 +30,7 @@ var $account = module.exports = {
 
 	accountHandlers: function() {
 		var $body = $(document.body);
-		$body.on('submit', '#loginForm', function() {
+		$body.on('submit', '#login-form', function() {
 			var email = document.getElementById('username').value.toLowerCase(),
 				password = document.getElementById('password').value;
 			$account.authenticate(email, password);

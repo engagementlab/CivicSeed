@@ -1,7 +1,10 @@
-.introduction
-	h1 Civic Seed Introduction
-	<iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-	
-	if(sessionStorage.userFirstName)
-		p
-			a#startGame(href='/profiles/'+sessionStorage.profileLink) Your Profile
+.row
+  .col-md-10.col-md-offset-1.introduction
+    h2 Civic Seed Introduction
+    <iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+
+if(sessionStorage.userFirstName)
+  .row
+    .col-md-10.col-md-offset-1
+      p
+        a.btn.btn-info.btn-lg#startGame(href='/profiles/'+sessionStorage.profileLink) Go to your profile
