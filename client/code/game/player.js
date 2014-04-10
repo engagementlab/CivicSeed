@@ -112,7 +112,7 @@ var $player = $game.$player = {
         id: $game.$player.id
       };
 
-      _updateTotalSeeds();
+      _player.updateTotalSeeds();
       _updateRenderInfo();
 
       // we are ready, let everyone know dat
@@ -307,8 +307,17 @@ var $player = $game.$player = {
         return false;
       }
       else {
-        options.sz = 3;
-        _calculateSeeds(options);
+        // Default paint radius
+        options.sz = 3
+        options.radius = 1
+
+        // If powered up, increase paint radius
+        if ($game.checkFlag('paint-up-1')) options.radius++
+        if ($game.checkFlag('paint-up-2')) options.radius++
+        if ($game.checkFlag('paint-up-3')) options.radius++
+        if ($game.checkFlag('paint-max')) options.radius = 4
+
+        _player.calculateSeeds(options);
         return true;
       }
     }
@@ -340,7 +349,7 @@ var $player = $game.$player = {
           y2: bottomRightTile.y,
           kind: 'draw'
         };
-        _sendSeedBomb(data);
+        _player.sendSeedBomb(data);
         return true;
       }
     }
@@ -663,8 +672,8 @@ var $player = $game.$player = {
       seeds: _seeds
     })
 
-    //update hud
-    _updateTotalSeeds();
+    // Update HUD
+    _player.updateTotalSeeds();
   },
 
   // Add seeds to a specific type of seed
@@ -1201,6 +1210,175 @@ var _player = {
       .on('dragstart',{npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart);
   },
 
+  // * * * * * * *   SEEDING   * * * * * * *
+
+  // Fgure out which tiles to color when a seed is dropped
+  calculateSeeds: function (options) {
+    var mode  = options.mode,
+        tiles = []
+
+    // Get the tiles that need to be bombed
+    if (options.radius > 1) {
+      // If radius, send a circular bomb
+      // Radius
+      //   0 = No seeds
+      //   1 = Single dot
+      //   2 = Normal 3x3 area
+      //   3 and up = Circular seed drop area
+      tiles = _getTilesInCircle(options.mX, options.mY, options.radius)
+    } else {
+      // Send a square bomb
+      tiles = _getTilesInSquare(options.mX, options.mY, options.sz)
+    }
+
+    // Add additional info
+    for (var i in tiles) {
+      tiles[i].mapIndex     = tiles[i].y * $game.TOTAL_WIDTH + tiles[i].x
+      tiles[i].instanceName = $game.$player.instanceName
+    }
+
+    // Utility function for getting an array of all points a radius from a particular X,Y
+    function _getTilesInCircle (x, y, r) {
+      var tiles = [];
+
+      for (var j = x - r; j <= x + r; j++)
+        for (var k = y - r; k <= y + r; k++)
+          if ((_distance({ x: j, y: k }, { x: x, y: y }) <= r) &&
+              (_isInMap(j, k))) tiles.push({ x: j, y: k });
+
+      return tiles;
+    }
+
+    // Utility function for getting an array of all points in a square around X,Y
+    function _getTilesInSquare (x, y, sz) {
+      var tiles  = [],
+          mid     = Math.floor(sz / 2),
+          cornerX = x - mid,
+          cornerY = y - mid
+
+      for (var j = cornerX; j < cornerX + sz; j++)
+        for (var k = cornerY; k < cornerY + sz; k++)
+          if (_isInMap(j, k)) tiles.push({ x: j, y: k })
+
+      return tiles
+    }
+
+    // Utility function for finding the distance from a point
+    function _distance (p1, p2) {
+      var dx = p2.x - p1.x; dx *= dx;
+      var dy = p2.y - p1.y; dy *= dy;
+      return Math.sqrt( dx + dy );
+    }
+
+    // Utility function for verifying if a point is on the map
+    function _isInMap (x, y) {
+      return (x > -1 && x < $game.TOTAL_WIDTH && y > -1 && y < $game.TOTAL_HEIGHT) ? true : false
+    }
+
+    if (tiles.length > 0) {
+      // Set a correct size for the bounding box if radius mode
+      if (options.radius > 1) options.sz = (options.radius - 1) * 2 + 3
+
+      var origX = options.mX - Math.floor(options.sz / 2),
+          origY = options.mY - Math.floor(options.sz / 2)
+
+      _player.sendSeedBomb({
+        bombed: tiles,
+        options: options,
+        x1: origX,
+        y1: origY,
+        x2: origX + options.sz,
+        y2: origY + options.sz,
+        kind: 'regular'
+      });
+    }
+  },
+
+  //plant the seed on the server and wait for response and update hud and map
+  sendSeedBomb: function (data) {
+    var waitingEl = document.getElementById('waiting-for-seed')
+
+    //set a waiting boolean so we don't plant more until receive data back from rpc
+    $game.$player.awaitingBomb = true;
+    $game.setFlag('awaiting-seed')
+
+    //send the data to the rpc
+    var info = {
+      id: $game.$player.id,
+      name: $game.$player.firstName,
+      x1: data.x1,
+      y1: data.y1,
+      x2: data.x2,
+      y2: data.y2,
+      tilesColored: _tilesColored,
+      instanceName: $game.$player.instanceName,
+      kind: data.kind
+    };
+
+    var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
+
+    $(waitingEl)
+      .css({
+        top: loc.y * 32,
+        left: loc.x * 32
+      })
+      .show();
+
+    ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
+      $game.$player.awaitingBomb = false;
+      $game.removeFlag('awaiting-seed')
+
+      $(waitingEl).fadeOut();
+      if (result > 0) {
+        _seeds.dropped += 1;   //increase the drop count for the player
+        $game.$audio.playTriggerFx('seedDrop');  //play sound clip
+        _tilesColored += result;
+
+        if (data.kind === 'regular') {
+          $game.$player.addSeeds('regular', -1);
+
+          // If player is out of seeds, end it
+          if (_seeds.regular === 0) {
+            _endSeedMode()
+          }
+        }
+        else {
+          $game.$player.addSeeds('draw', 0);
+          if (_seeds.draw === 0) {
+            _endSeedMode()
+            // Other actions unique to draw mode
+            $game.$mouse.drawMode = false;
+            $BODY.off('mousedown touchstart', '#gameboard');
+            document.getElementById('graffiti').style.display = 'none'
+          }
+        }
+      }
+    });
+  },
+
+  // Generic end seed mode
+  endSeedMode: function() {
+    $game.$player.seedMode = false;
+    _renderInfo.colorNum = _playerColorNum;
+    $game.$player.seedPlanting = false;
+    $game.alert('You are out of seeds!')
+    $('.hud-seed').removeClass('hud-button-active');
+    $game.$player.saveMapImage(true);
+    //TODO: save seed values to DB
+    _saveSeedsToDB();
+  },
+
+  // Update seed counts
+  updateTotalSeeds: function () {
+    _totalSeeds = _seeds.regular + _seeds.draw;
+
+    $game.setBadgeCount('.hud-seed', _totalSeeds)
+    $game.setBadgeCount('.regular-button', _seeds.regular)
+    $game.setBadgeCount('.draw-button', _seeds.draw)
+  },
+
+  // * * * * * * *   DATABASE   * * * * * * *
+
   // Save a new resource to the database
   saveResourceToDb: function (resource) {
     ss.rpc('game.player.saveResource', {
@@ -1265,133 +1443,6 @@ function _setPlayerInformation(info) {
   if (info.game.firstTime === true) {
     $game.setFlag('first-time')
   }
-
-}
-
-//figure out what color to make which tiles when a seed is dropped
-function _calculateSeeds(options) {
-  var mid = Math.floor(options.sz / 2),
-    origX = options.mX - mid,
-    origY = options.mY - mid,
-    sX = options.x - mid,
-    sY = options.y - mid,
-    bombed = [],
-    mode = options.mode,
-    square = null,
-    tempRGB = null,
-    tempIndex = null,
-    b = 0;
-
-  //start at the top left corner and loop through (vertical first)
-  while(b < options.sz) {
-    var a = 0;
-    while(a < options.sz) {
-      //only add if it is in the map!
-      if (origX + a > -1 && origX + a < $game.TOTAL_WIDTH && origY + b > -1 && origY + b < $game.TOTAL_HEIGHT) {
-        tempIndex = (origY+b) * $game.TOTAL_WIDTH + (origX + a);
-        square = {
-          x: origX + a,
-          y: origY + b,
-          mapIndex: tempIndex,
-          instanceName: $game.$player.instanceName
-        };
-        bombed.push(square);
-      }
-      a += 1;
-    }
-    b += 1;
-  }
-
-  if (bombed.length > 0) {
-    var sendData = {bombed: bombed, options: options, x1: origX, y1: origY, x2: origX + options.sz, y2: origY + options.sz, kind: 'regular'};
-    _sendSeedBomb(sendData);
-  }
-}
-
-//plant the seed on the server and wait for response and update hud and map
-function _sendSeedBomb(data) {
-  var waitingEl = document.getElementById('waiting-for-seed')
-
-  //set a waiting boolean so we don't plant more until receive data back from rpc
-  $game.$player.awaitingBomb = true;
-  $game.setFlag('awaiting-seed')
-
-  //send the data to the rpc
-  var info = {
-    id: $game.$player.id,
-    name: $game.$player.firstName,
-    x1: data.x1,
-    y1: data.y1,
-    x2: data.x2,
-    y2: data.y2,
-    tilesColored: _tilesColored,
-    instanceName: $game.$player.instanceName,
-    kind: data.kind
-  };
-
-  var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
-
-  $(waitingEl)
-    .css({
-      top: loc.y * 32,
-      left: loc.x * 32
-    })
-    .show();
-
-  ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
-    $game.$player.awaitingBomb = false;
-    $game.removeFlag('awaiting-seed')
-
-    $(waitingEl).fadeOut();
-    if (result > 0) {
-      _seeds.dropped += 1;
-      //increase the drop count for the player
-      //play sound clip
-      $game.$audio.playTriggerFx('seedDrop');
-      _tilesColored += result;
-      //update seed count in HUD
-      // console.log(data.kind, _seeds.draw);
-      if (data.kind === 'regular') {
-        $game.$player.addSeeds('regular', -1);
-        //bounce outta seed options.mode
-        if (_seeds.regular === 0) {
-          $game.$player.seedMode = false;
-          _renderInfo.colorNum = _playerColorNum;
-          $game.$player.seedPlanting = false;
-          $game.alert('You are out of seeds!')
-          $('.hud-seed').removeClass('hud-button-active');
-          $game.$player.saveMapImage(true);
-          //TODO: save seed values to DB
-          _saveSeedsToDB();
-        }
-      }
-      else {
-        $game.$player.addSeeds('draw', 0);
-        if (_seeds.draw === 0) {
-          $game.$mouse.drawMode = false;
-          $BODY.off('mousedown touchstart', '#gameboard');
-          $game.$player.seedMode = false;
-          _renderInfo.colorNum = _playerColorNum;
-          $game.$player.seedPlanting = false;
-          document.getElementById('graffiti').style.display = 'none'
-          $game.alert('You are out of seeds!')
-          $('.hud-seed').removeClass('hud-button-active');
-          $game.$player.saveMapImage(true);
-          //TODO: save seed values to DB
-          _saveSeedsToDB();
-        }
-      }
-    }
-  });
-}
-
-//update seed counts
-function _updateTotalSeeds() {
-  _totalSeeds = _seeds.regular + _seeds.draw;
-
-  $game.setBadgeCount('.hud-seed', _totalSeeds)
-  $game.setBadgeCount('.regular-button', _seeds.regular)
-  $game.setBadgeCount('.draw-button', _seeds.draw)
 }
 
 // calculate new render information based on the player's position
