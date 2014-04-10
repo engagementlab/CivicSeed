@@ -1219,12 +1219,8 @@ var _player = {
 
     // Get the tiles that need to be bombed
     if (options.radius > 1) {
-      // If radius, send a circular bomb
-      // Radius
-      //   0 = No seeds
-      //   1 = Single dot
-      //   2 = Normal 3x3 area
-      //   3 and up = Circular seed drop area
+      // If radius is more than 1, send a circular bomb
+      // A radius of 1 is equal to a 3x3 area
       tiles = _getTilesInCircle(options.mX, options.mY, options.radius)
     } else {
       // Send a square bomb
