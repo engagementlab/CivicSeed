@@ -458,12 +458,6 @@ var _map = {
       while(c < cLength) {
         var found = false;
         while(!found) {
-          console.log({
-            a: a,
-            b: b,
-            c: c,
-            tile: _nextTiles[a][b]
-          })
           if (_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
             _nextTiles[a][b].colored = true;
             found = true;
