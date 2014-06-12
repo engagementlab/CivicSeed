@@ -11,4 +11,4 @@ If you are looking for developer documentation, see the `doc/` folder in this re
 
 ### License
 
-Copyright (c) 2014 Engagement Game Lab. License: MIT (see [LICENSE](https://github.com/engagementgamelab/CivicSeed/blob/master/LICENSE.md)).
+Copyright (c) 2014 Engagement Game Lab. License: MIT (see [LICENSE](https://github.com/engagementgamelab/CivicSeed/blob/master/LICENSE)).
