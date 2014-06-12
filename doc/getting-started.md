@@ -41,8 +41,3 @@ Once these databases are running (see configuration below), start the app:
   [or]
   $ nodemon
 
-## Local installation and startup
-
-*Note that Civic Seed runs on . Civic Seed also utilizes the SocketStream framework to run on web sockets. Civic Seed is currently only built to run in the Chrome, Firefox, and Safari.*
-
-

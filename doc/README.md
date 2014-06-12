@@ -19,4 +19,5 @@ Welcome to the Civic Seed developer documentation. This is a work in progress.
 
 ### Troubleshooting
 
+* [Browser compatibility](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/browser-compatibility.md)
 * [Troubleshooting](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/troubleshooting.md)
