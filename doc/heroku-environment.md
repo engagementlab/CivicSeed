@@ -1,6 +1,8 @@
-# Setting up a Heroku deployment
+# Deploying to Heroku
 
-A Heroku development environment is handy because they're free and easy to set up, and we can have multiple servers to test different multiplayer instances if we wish. Here is how you set it up. (We'll assume you already have a Heroku account with any SSH keys uploaded and command line tools installed, including the [Heroku Toolbelt](https://toolbelt.heroku.com/).)
+A Heroku development environment is handy because they're free and easy to set up, and we can have multiple servers to test different multiplayer instances if we wish. Civic Seed currently uses Heroku to host staging and testing environments.
+
+Here is how you set it up. (We'll assume you already have a Heroku account with any SSH keys uploaded and command line tools installed, including the [Heroku Toolbelt](https://toolbelt.heroku.com/).)
 
 1. Create an app, either through the site or command line `heroku apps:create civicseed-dev`. The app name can be something of your choosing.
 2. Make sure Heroku is properly set as a Git remote for the Civic Seed repository so that we can push to it later.
