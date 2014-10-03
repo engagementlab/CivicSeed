@@ -1,22 +1,22 @@
-
 # Environmental Configuration
 
 All environments will need to set up their local environment configurations. How this happens will depend on the environment you are on.
 
+CivicSeed uses `nconf` to create runtime configuration and environment variables. `nconf` looks for a json config file in the project root folder, based on the environment. The file is named such: `config_[environment].json`. For example, in `PRODUCTION` the config file looked for by `nconf` is `config_production.json`. The exception to this is the local/development file which is called simply `config.json`. An example config file looks like this:
 
-CivicSeed uses `nconf` to create runtime configuration and environment variables. `nconf` looks for a json config file in the project root folder, based on the environment. The file is named such: `config_[environment].json`. For example, in `PRODUCTION` the config file looked for by `nconf` is `config_production.json`. The exception to this is the local/development file which is called simply `config.json`. An example config file includes the following variables:
-
-  {
-    "NAME": "Civic Seed",
-    "PORT": 80,
-    "USE_REDIS": true,
-    "REDIS_HOST": "sample.redis.host.com",
-    "REDIS_PORT": 6379,
-    "REDIS_DB": "civicseed",
-    "MONGO_URL": "mongodb://sample-user@sample.mongodb.host.com:10099/civicseed",
-    "EMAIL_SERVICE": "Mailgun",
-    "CLOUD_PATH": "http://sample.cloud.path.com"
-  }
+```json
+{
+  "NAME": "Civic Seed",
+  "PORT": 80,
+  "USE_REDIS": true,
+  "REDIS_HOST": "sample.redis.host.com",
+  "REDIS_PORT": 6379,
+  "REDIS_DB": "civicseed",
+  "MONGO_URL": "mongodb://sample-user@sample.mongodb.host.com:10099/civicseed",
+  "EMAIL_SERVICE": "Mailgun",
+  "CLOUD_PATH": "http://sample.cloud.path.com"
+}
+```
 
 #### Environment Variables
 
