@@ -21,23 +21,34 @@ Optionally, the following tools may be used during the development process. You 
 
 First, clone the repository (or fork it):
 
-  $ git clone https://github.com/engagementgamelab/CivicSeed.git
+```
+git clone https://github.com/engagementgamelab/CivicSeed.git
+```
 
 Then install the project:
 
-  $ cd CivicSeed
-  $ npm install
+```
+cd CivicSeed
+npm install
+```
 
 Set up your [environment variables](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/environment-configuration.md).
 
-Ensure that both REDIS and MongoDB are running in the background.
+Start the app. REDIS and MongoDB should be running in the background. If they have not started, you may do so all in one command from the `CivicSeed` directory (assuming `redis-server` and `mongod` paths are set).
 
-  $ redis-server
-  $ mongod
+```
+redis-server & mongod & npm start
+```
 
-Once these databases are running (see configuration below), start the app:
+If REDIS and MongoDB are already running, you can just start the app with
 
-  $ npm start
-  [or]
-  $ nodemon
+```
+npm start
+```
+
+[or]
+
+```
+nodemon
+```
 
