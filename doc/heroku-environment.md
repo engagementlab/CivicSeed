@@ -51,7 +51,7 @@ heroku config:set EMAIL_TO='email@domain.com'
 ```
 You will need to obtain actual values for `EMAIL_USER`, `EMAIL_PW` and `EMAIL_TO`.
 
-It is not necessary to set other environment variables, like `REDIS_PW`, since those will automatically be created from the Redis To Go module.
+It is not necessary to set other environment variables that are not included in the list above. For instance, the `REDIS_PW` environment variable does not need to be set on the Heroku environment since Civic Seed will parse those from the variables created by the Redis To Go add-on.
 
 
 ### Resetting everything
