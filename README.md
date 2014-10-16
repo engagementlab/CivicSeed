@@ -6,7 +6,7 @@ The game is currently in alpha development phase.
 
 You can learn more about the game by visiting [the website](http://civicseed.org/).
 
-If you are looking for developer documentation, see the `doc/` folder in this repository.
+If you are looking for developer documentation, see [the `doc/` folder in this repository](doc/).
 
 
 ### License
