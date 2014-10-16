@@ -14,7 +14,7 @@
   ],
   "private": true,
   "homepage": "http://engagementgamelab.org/2012/08/civic-seed/",
-  "main": "./bin/server",
+  "main": "./app.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/engagementgamelab/CivicSeed.git"
@@ -23,22 +23,24 @@
     "node": ">= 0.10.2"
   },
   "dependencies": {
-    "socketstream": "~0.3.10",
-    "ss-stylus": "~0.1.6",
-    "express": "~3.3.5",
-    "mongoose": "~3.1.1",
-    "redis": "~0.8.1",
-    "colors": "~0.6.0",
-    "nodemailer": "~0.3.37",
-    "nconf": "~0.6.4",
-    "walk": "~2.2.1",
+    "bcrypt": "~0.8.0",
+    "colors": "~1.0.3",
+    "errorhandler": "^1.2.2",
+    "express": "~4.9.7",
+    "jade": "~1.7.0",
+    "mongoose": "~3.8.17",
+    "morgan": "~1.3.2",
+    "nconf": "~0.6.9",
+    "nodemailer": "~1.3.0",
+    "redis": "~0.12.1",
+    "socketstream": "~0.3.11",
     "ss-clientjade": "~0.0.7",
-    "jade": "~1.0.0",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
-    "ss-less": "~0.1.1",
-    "xkcd-pwgen": "0.0.1",
-    "stylus": "~0.42.3",
-    "bcrypt": "~0.7.6"
+    "ss-less": "~0.1.3",
+    "ss-stylus": "~0.1.8",
+    "stylus": "~0.49.2",
+    "walk": "~2.3.4",
+    "xkcd-pwgen": "0.0.1"
   },
   "devDependencies": {
     "mocha": "*",
@@ -46,6 +48,6 @@
   },
   "subdomain": "civicseed-testing",
   "scripts": {
-    "start": "node ./bin/server"
+    "start": "node app"
   }
 }

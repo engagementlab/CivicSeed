@@ -8,7 +8,7 @@ These instructions assume that the production server is already up and running a
 
 * A local repository of CivicSeed.
 * The `.pem` file that's required to log in to the S3 instance over SSH. **Never push this file to GitHub or a remote repository otherwise you risk compromising access to your S3 instance to third parties.**
-* The `s3cmd` tool installed on your local machine.
+* The `s3cmd` tool installed on your local machine. (TODO: Configure this for access?)
 
 ### Step by step instructions
 
@@ -35,4 +35,4 @@ Copy and paste this command:
 #### On the S3 instance
 
 1. Pull the latest repository from GitHub. Change the folder `cd CivicSeed` and then `git pull origin`.
-2. Restart the server. `forever -o out.log -e err.log restart bin/server` Note that for some server-side changes you may need to completely stop the server and then start it again from scratch. `forever stopall` then `forever -o out.log -e err.log start bin/server`
+2. Restart the server. `forever -o out.log -e err.log restart app` Note that for some server-side changes you may need to completely stop the server and then start it again from scratch. `forever stopall` then `forever -o out.log -e err.log start app`

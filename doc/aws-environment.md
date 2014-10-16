@@ -165,17 +165,17 @@ Civic Seed can be installed from GitHub. Civic Seed also relies on forever to ke
 To start the app:
 
   $ cd ~/CivicSeed/
-  $ forever -o out.log -e err.log start bin/server
+  $ forever -o out.log -e err.log start app
 
 If the app is already running, to avoid downtime, use the restart command instead (for example, if you've just updated using `git pull`):
 
-  $ forever -o out.log -e err.log restart bin/server
+  $ forever -o out.log -e err.log restart app
 
 #### Updating the App
 
   $ git pull origin
   $ npm update
-  $ forever -o out.log -e err.log restart bin/server
+  $ forever -o out.log -e err.log restart app
 
 #### Troubleshooting
 

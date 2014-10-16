@@ -1,7 +1,8 @@
 node_modules/
 bower_components/
-npm-debug.log
-err.log
-out.log
+.DS_Store
+Thumbs.db
 dump.rdb
+*.log
 *.pem
+*.env

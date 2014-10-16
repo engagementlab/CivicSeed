@@ -1,6 +1,6 @@
 var rootDir       = process.cwd(),
     nodemailer    = require('nodemailer'),
-    config        = require(rootDir + '/config'),
+    config        = require(rootDir + '/app/config'),
     accountName   = config.get('NAME'),
     emailUser     = config.get('EMAIL_USER'),
     emailPassword = config.get('EMAIL_PW'),
