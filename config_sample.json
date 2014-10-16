@@ -4,7 +4,6 @@
   "USE_REDIS": true,
   "REDIS_HOST": "192.168.1.xxx",
   "REDIS_PORT": 6379,
-  "REDIS_DB": "[redis_db]",
   "MONGO_URL": "mongodb://192.168.1.xxx/[mongo_db]",
   "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "",

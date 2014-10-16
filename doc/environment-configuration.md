@@ -11,7 +11,6 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
   "USE_REDIS": true,
   "REDIS_HOST": "sample.redis.host.com",
   "REDIS_PORT": 6379,
-  "REDIS_DB": "civicseed",
   "MONGO_URL": "mongodb://sample-user@sample.mongodb.host.com:10099/civicseed",
   "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "http://sample.cloud.path.com"
