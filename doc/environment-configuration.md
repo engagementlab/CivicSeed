@@ -1,6 +1,14 @@
-# Environmental Configuration
+# Environment Configuration
 
-All environments will need to set up their local environment configurations. How this happens will depend on the environment you are on.
+Each environment will need to be configured. CivicSeed understands three environments:
+
+* **Development** A local development instance of CivicSeed. This is assumed to be the case if the system doesn't specify the following two.
+* **Production** The live production deployment. This is currently running in an Amazon S3 environment.
+* **Heroku** A staging instance on Heroku.
+
+Configuration that is safe to store publicly are located in the `config/` folder. Variables that need to remain private must be set on each environment and are not stored here.
+
+## Configuration files
 
 CivicSeed uses `nconf` to create runtime configuration and environment variables. `nconf` looks for a json config file in the project root folder, based on the environment. The file is named such: `config_[environment].json`. For example, in `PRODUCTION` the config file looked for by `nconf` is `config_production.json`. The exception to this is the local/development file which is called simply `config.json`. An example config file looks like this:
 
@@ -17,7 +25,7 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
 }
 ```
 
-#### Environment Variables
+## Environment variables
 
 Certain variables, like authentication credentials, should not be stored in configuration files because this poses a security risk. The following environment variables are required to run Civic Seed and should be not be set in the configuration files:
 

@@ -8,7 +8,7 @@ These instructions assume that the production server is already up and running a
 
 * A local repository of CivicSeed.
 * The `.pem` file that's required to log in to the S3 instance over SSH. **Never push this file to GitHub or a remote repository otherwise you risk compromising access to your S3 instance to third parties.**
-* The `s3cmd` tool installed on your local machine.
+* The `s3cmd` tool installed on your local machine. (TODO: There may be configuration needed for this; include these instructions.)
 
 ### Step by step instructions
 
