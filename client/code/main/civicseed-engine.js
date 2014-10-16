@@ -11,7 +11,7 @@ var self = module.exports = {
 			window.$CONTAINER = $('#container');
 
 			// game specific:
-			window.$game = require('/game');
+			window.$game = require('/game.main');
 
 			self.setupRouter();
 
