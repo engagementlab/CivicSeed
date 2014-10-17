@@ -23,7 +23,7 @@
     "node": ">= 0.10.2"
   },
   "dependencies": {
-    "bcrypt": "~0.7.6",
+    "bcrypt": "~0.8.0",
     "colors": "~0.6.0",
     "express": "~3.17.8",
     "jade": "~1.0.0",
@@ -31,7 +31,7 @@
     "nconf": "~0.6.4",
     "nodemailer": "~0.3.37",
     "redis": "~0.8.1",
-    "socketstream": "~0.3.10",
+    "socketstream": "~0.3.11",
     "ss-clientjade": "~0.0.7",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
     "ss-less": "~0.1.1",
