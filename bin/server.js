@@ -4,7 +4,6 @@ var rootDir     = process.cwd() || '.'
 
 var ss          = require('socketstream'),
     express     = require('express'),
-    morgan      = require('morgan'),
     ssJade      = require('ss-jade'),
     ssStylus    = require('ss-stylus')
 
@@ -45,13 +44,13 @@ service.connectMongoose(app, function(databases) {
 
   // Logger
   if (NODE_ENV === 'development') {
-    app.use(morgan('dev'))
+    app.use(express.logger('dev'))
   } else {
-    app.use(morgan('common'))
+    app.use(express.logger('default'))
   }
 
-	app.use(express.bodyParser());
-	app.use(express.methodOverride());
+	// app.use(express.bodyParser());
+	// app.use(express.methodOverride());
 	app.use(app.router);
 	// app.use(express.cookieParser());
 	// app.use(express.session({secret: 'secret'}));
