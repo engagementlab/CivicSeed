@@ -6,12 +6,12 @@
     - This script looks at the NODE_ENV environment variable to know
       what environment CivicSeed is running in.
 
-      - 'development'     local development instance
+      - 'development'     local development instance (default)
       - 'production'      production environment, generally Amazon S3
       - 'heroku'          remote testing environment, specifically Heroku
 
     - Configuration variables for each environment is stored in the
-      assciated `config_environment.json` file
+      associated `config/environment.json` file
     - Authentication credentials should NEVER be stored in these files
       because they could be made available through a public repository,
       like GitHub. Instead, they should ALWAYS be stored on the environment
