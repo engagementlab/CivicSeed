@@ -1,16 +1,17 @@
-var rootDir = process.cwd();
+var rootDir   = process.cwd()
 
-var fs = require('fs');
-var nconf = require('nconf');
-var colors = require('colors');
-var bcrypt = require('bcrypt');
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
+var fs        = require('fs'),
+    nconf     = require('nconf'),
+    colors    = require('colors'),
+    bcrypt    = require('bcrypt'),
+    mongoose  = require('mongoose')
 
+var Schema    = mongoose.Schema,
+    ObjectId  = Schema.ObjectId
 
-var nodeEnv = process.env.NODE_ENV || require('express')().get('env');
-var configFilename = nodeEnv !== 'development' ? '/config_' + nodeEnv + '.json' : '/config.json';
+var NODE_ENV = process.env.NODE_ENV || require('express')().get('env');
+
+var configFilename = NODE_ENV !== 'development' ? '/config/' + NODE_ENV + '.json' : '/config/default.json';
 
 var accountHelpers = require(rootDir + '/server/utils/account-helpers');
 
@@ -18,7 +19,7 @@ nconf.argv().env().file({
 	file: process.env.configFile || rootDir + configFilename
 });
 
-if (nodeEnv === 'heroku') {
+if (NODE_ENV === 'heroku') {
   console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')
   nconf.set('MONGO_URL', process.env.MONGOHQ_URL)
 }
