@@ -1,73 +1,55 @@
+'use strict';
+
+var nodemailer    = require('nodemailer'),
+    htmlToText    = require('nodemailer-html-to-text').htmlToText
+
 var rootDir       = process.cwd(),
-    nodemailer    = require('nodemailer'),
     config        = require(rootDir + '/config'),
-    accountName   = config.get('NAME'),
-    emailUser     = config.get('EMAIL_USER'),
-    emailPassword = config.get('EMAIL_PW'),
-    emailService  = config.get('EMAIL_SERVICE'),
-    smtpTransport,
+    NAME          = config.get('NAME'),
+    EMAIL_USER    = config.get('EMAIL_USER'),
+    EMAIL_PW      = config.get('EMAIL_PW'),
+    EMAIL_SERVICE = config.get('EMAIL_SERVICE')
+
+var transporter,
     mailOptions   = {
-      from: accountName + ' <' + emailUser + '>',
-      replyTo: emailUser,
+      from: NAME + ' <' + EMAIL_USER + '>',
       to: '',
+      replyTo: EMAIL_USER,
       subject: '',
-      html: '',
-      generateTextFromHTML: true
+      text: '',
+      html: ''
     }
 
 var self = module.exports = {
 
   openEmailConnection: function () {
-    smtpTransport = nodemailer.createTransport('SMTP', {
-      service: emailService,
+    transporter = nodemailer.createTransport({
+      service: EMAIL_SERVICE,
       auth: {
-        user: emailUser,
-        pass: emailPassword
+        user: EMAIL_USER,
+        pass: EMAIL_PW
       }
     })
   },
 
   sendEmail: function (subject, html, email) {
+    mailOptions.to      = email
     mailOptions.subject = subject
     mailOptions.html    = html
-    mailOptions.to      = email
-    smtpTransport.sendMail(mailOptions, function (err, response) {
+
+    transporter.use('compile', htmlToText())
+
+    transporter.sendMail(mailOptions, function (err, response) {
       if (err) {
-        console.error('ERROR sending email to ' + email + ' via ' + emailService + '!', err)
-      }
-      else {
-        console.log('Message sent to ' + email + ' via ' + emailService +': ' + response.message)
+        console.error('ERROR sending email to ' + email + ' via ' + EMAIL_SERVICE + '!', err)
+      } else {
+        console.log('Message sent to ' + email + ' via ' + EMAIL_SERVICE +': ' + response.response)
       }
     })
   },
 
   closeEmailConnection: function () {
-    smtpTransport.close()
+    transporter.close()
   }
 
 }
-
-// mailPassword = require('./password.js'),
-// super_secret = mailPassword.gmail,
-
-// exports.sendPassword = function(whom,it,callback){
-//     var passOptions = {
-//     from: "codenberg@gmail.com", // sender address
-//     to: whom, // list of receivers
-//     subject: "Forgot Something?", // Subject line
-//     html: "<h2>You Dummy!</h2><p>You forgot your password huh? Well, <a href='tbd'>go here</a> to reset it.</p>"
-//     }
-//     transport.sendMail(passOptions, function(error, response){
-//         if(error){
-//             console.log(error);
-//             return callback(true,null);
-//         }
-//         else{
-//             console.log("Message sent: " + response.message);
-//             return callback(null,true)
-//         }
-
-//         // if you don't want to use this transport object anymore, uncomment following line
-//         smtpTransport.close(); // shut down the connection pool, no more messages
-//     });
-// }
