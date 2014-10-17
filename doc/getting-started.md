@@ -16,8 +16,9 @@ Civic Seed is a Node.js-based application which also requires REDIS and MongoDB 
 Optionally, the following tools may be used during the development process. You do not need to install them until you need them.
   * [S3 Tools](http://s3tools.org/s3cmd) - command line tools to assist with [deploying to an Amazon S3 instance](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/amazon-s3-production-environment.md)
   * [Heroku Toolbelt](https://toolbelt.heroku.com/) - command line tools to assist with [deploying to a Heroku environment](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/heroku-environment.md)
-  * [Tiled](http://www.mapeditor.org/) - Map editor for generating [tilesheets](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/tilesheets.md) for the game.
-  * [Bower](http://bower.io/) - Front end package manager. Some libraries have been retrieved via Bower, but this is very optional.
+  * [Tiled](http://www.mapeditor.org/) - map editor for generating [tilesheets](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/tilesheets.md) for the game.
+  * [Bower](http://bower.io/) - front end package manager. Some libraries have been retrieved via Bower, but this is very optional.
+  * [Nodemon](http://nodemon.io/) - command line Node server wrapper that automatically restarts it when server-side scripts change.
 
 
 ## Local installation and startup
@@ -56,7 +57,7 @@ You can verify that this database exists by running `mongo` and then running `sh
 ```
 npm start
 ```
-or
+or, if you're using Nodemon:
 
 ```
 nodemon
@@ -65,5 +66,5 @@ nodemon
 You may do so all in one command from the `CivicSeed` directory (assuming `redis-server` and `mongod` paths are set).
 
 ```
-redis-server & mongod & npm start
+redis-server & mongod & nodemon
 ```
