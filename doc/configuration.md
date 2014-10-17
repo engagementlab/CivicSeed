@@ -27,18 +27,34 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
 
 ## Environment variables
 
-Certain variables, like authentication credentials, should not be stored in configuration files because this poses a security risk. The following environment variables are required to run Civic Seed and should be not be set in the configuration files:
+Certain variables cannot or should not be stored in the configuration files, and must be stored in the server environment.
+
+#### Environment
+
+`NODE_ENV` needs to be set on the environment so that the Civic Seed application can bootstrap itself and know which configuration file to load.
+
+* For the Amazon S3 production server, set `NODE_ENV=production`
+* For any staging or testing servers on Heroku, set `NODE_ENV=heroku`
+* For a local development environment, set `NODE_ENV=development`. Note that if NODE_ENV is missing, Civic Seed will _assume_ a development environment.
+
+`SS_ENV` is an optional environment for SocketStream. As of the most recent version of SocketStream, `NODE_ENV` automatically overwrites `SS_ENV` so this may be deprecated.
+
+#### Authentication
+
+Authentication credentials should not be stored in the configuration files because this poses a security risk.
 
 * `REDIS_PW` - Password for the Redis database.
 * `EMAIL_USER` - User account name for the mailing service used by Nodemailer.
 * `EMAIL_PW` - Account password for the mailing service used by Nodemailer.
 * `EMAIL_TO` - E-mail address that feedback from within Civic Seed should be sent to.
-* `NODE_ENV` - Set to `production` on Amazon S3 and `heroku` on Heroku.
-* `SS_ENV` - Set to `production` on Amazon S3.
 
-Your actual environment (e.g. Heroku or Amazon S3) may set other environment variables (e.g. `MONGOHQ_URL`).
+#### Other
 
-To pass environment variables directly to Civic Seed without storing it, type any number of them consecutively before running `npm start`, for instance: `EMAIL_USER=user@domain.com EMAIL_PW=password EMAIL_TO=otheruser@otherdomain.com npm start`
+The Heroku or Amazon S3 instances may set other environment variables (e.g. `MONGOHQ_URL`, which comes from a Heroku add-on). These happen automatically assuming the servers have been provisioned correctly, so we won't cover those here.
+
+#### Using an `.env` file
+
+You can now use an `.env` file in the Civic Seed project root directory to store environment variables. These will be loaded as if they were stored on the server environment itself, so it keeps you from having to pollute a `.bash_profile` or other similar file. The `.env` file is ignored by Git, but you can back it up in another secure location.
 
 
 #### Account Emails

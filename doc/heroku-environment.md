@@ -40,7 +40,7 @@ You should receive log messages from heroku stating that the superuser admin has
 
 ### Environment variables
 
-You can set all environment variables through the command line. (Alternatively you can use Heroku's dashboard interface if you desire.)
+You can set all [environment variables](configuration.md) through the command line. (Alternatively you can use Heroku's dashboard interface if you desire.)
 
 ```
 heroku config:set NODE_ENV='heroku'
