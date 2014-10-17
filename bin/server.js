@@ -42,8 +42,14 @@ service.connectMongoose(app, function(databases) {
 
 	app.set('views', rootDir + '/client/views');
 	app.set('view engine', 'jade');
-  app.use(morgan('common'))
-	//app.use(express.logger(':method :url :status'));
+
+  // Logger
+  if (NODE_ENV === 'development') {
+    app.use(morgan('dev'))
+  } else {
+    app.use(morgan('common'))
+  }
+
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);

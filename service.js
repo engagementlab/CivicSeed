@@ -17,7 +17,7 @@ var self = module.exports = {
 			self.db = mongoose.createConnection(config.get('MONGO_URL'));
 			self.db.on('error', console.error.bind(console, '  CONNECTION ERROR: '.red.inverse));
 			self.db.once('open', function () {
-				console.log('   * * * * * * * * * * * *   MongoDB: connection to '.green + app.get('env').yellow.inverse);
+				console.log('\n   * * * * * * * * * * * *   MongoDB: connection to '.green + app.get('env').yellow.inverse + '\n');
 				if(typeof callback === 'function') {
 					callback({ mongooseDb: self.db });
 				}
