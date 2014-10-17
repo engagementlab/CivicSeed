@@ -8,7 +8,8 @@
 	.col-md-10.col-md-offset-1
 		h1 Startup
 
-		h4 <span class='color-darkorange'>#{environment} Environment</a>
+		h4
+			span.color-darkorange #{environment} Environment
 
 .row
 	.col-md-10.col-md-offset-1
@@ -49,7 +50,7 @@
 						button#tileLoadBtn.btn(data-type='tiles') Tiles
 							.spinner
 					.admin-instructions.col-sm-9
-						p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations.
+						p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations. <strong>This may take a while.</strong>
 				.row
 					.col-sm-3
 						button#botanistLoadBtn.btn(data-type='botanist') Botanist
