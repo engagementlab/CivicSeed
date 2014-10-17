@@ -25,17 +25,17 @@ var rootDir        = process.cwd(),
     env            = require('node-env-file'),
     fs             = require('fs')
 
-var NODE_ENV       = process.env.NODE_ENV || require(rootDir + '/bin/server').app.get('env'),
-    configFilename = NODE_ENV !== 'development' ? '/config/' + NODE_ENV + '.json' : '/config/default.json'
-
-var json           = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8'))
-
 // Read environment variables from an optional .env, if present
 env(__dirname + '/.env', {verbose: true, overwrite: true})
 
+var NODE_ENV       = process.env.NODE_ENV || 'development',
+    CONFIG_FILE    = process.env.CONFIG_FILE || rootDir + '/config/' + NODE_ENV + '.json'
+
+var json           = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8'))
+
 // Hierarchical configuration with nconf
 nconf.argv().env().file({
-  file: process.env.configFile || rootDir + configFilename
+  file: CONFIG_FILE
 });
 
 nconf.set('VERSION', json.version);

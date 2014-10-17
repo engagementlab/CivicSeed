@@ -35,7 +35,7 @@ cd CivicSeed
 npm install
 ```
 
-**3.** Set up your [environment variables](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/environment-configuration.md).
+**3.** Set up your [environment variables](configuration.md).
 
 **4.** Run MongoDB and REDIS in the background.
 

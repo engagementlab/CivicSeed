@@ -1,22 +1,25 @@
 var rootDir   = process.cwd()
 
-var fs        = require('fs'),
-    nconf     = require('nconf'),
-    colors    = require('colors'),
-    bcrypt    = require('bcrypt'),
-    mongoose  = require('mongoose')
+var fs          = require('fs'),
+    nconf       = require('nconf'),
+    env         = require('node-env-file'),
+    colors      = require('colors'),
+    bcrypt      = require('bcrypt'),
+    mongoose    = require('mongoose')
 
-var Schema    = mongoose.Schema,
-    ObjectId  = Schema.ObjectId
+var Schema      = mongoose.Schema,
+    ObjectId    = Schema.ObjectId
 
-var NODE_ENV = process.env.NODE_ENV || require('express')().get('env');
+// Read environment variables from an optional .env, if present
+env(rootDir + '/.env', {verbose: true, overwrite: true})
 
-var configFilename = NODE_ENV !== 'development' ? '/config/' + NODE_ENV + '.json' : '/config/default.json';
+var NODE_ENV    = process.env.NODE_ENV || 'development',
+    CONFIG_FILE = rootDir + '/config/' + NODE_ENV + '.json'
 
 var accountHelpers = require(rootDir + '/server/utils/account-helpers');
 
 nconf.argv().env().file({
-	file: process.env.configFile || rootDir + configFilename
+  file: CONFIG_FILE
 });
 
 if (NODE_ENV === 'heroku') {
@@ -28,7 +31,6 @@ var _db;
 var _userModel;
 var _superAdminUser;
 
-console.log(nconf.get('MONGO_URL'));
 _db = mongoose.createConnection(nconf.get('MONGO_URL'));
 _db.on('error', console.error.bind(console, ' CONNECTION ERROR: '.red.inverse));
 _db.once('open', function() {
