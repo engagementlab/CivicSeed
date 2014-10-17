@@ -1335,13 +1335,13 @@ var _player = {
 
           // If player is out of seeds, end it
           if (_seeds.regular === 0) {
-            _endSeedMode()
+            _player.endSeedMode()
           }
         }
         else {
           $game.$player.addSeeds('draw', 0);
           if (_seeds.draw === 0) {
-            _endSeedMode()
+            _player.endSeedMode()
             // Other actions unique to draw mode
             $game.$mouse.drawMode = false;
             $BODY.off('mousedown touchstart', '#gameboard');
