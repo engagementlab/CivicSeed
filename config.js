@@ -32,7 +32,7 @@ nconf.argv().env().file({
 });
 
 nconf.set('VERSION', json.version);
-nconf.set('ENVIRONMENT', NODE_ENV);
+nconf.set('NODE_ENV', NODE_ENV);
 
 // Get authentication credentials stored as environment variables.
 nconf.set('EMAIL_USER', process.env.EMAIL_USER || '')

@@ -1,21 +1,28 @@
 #!/usr/bin/env node
 
-var rootDir     = process.cwd() || '.',
-    ss          = require('socketstream'),
+var rootDir     = process.cwd() || '.'
+
+var ss          = require('socketstream'),
     express     = require('express'),
-    app         = exports.app = express(),
+    morgan      = require('morgan'),
     ssJade      = require('ss-jade'),
-    ssStylus    = require('ss-stylus'),
-    config      = require(rootDir + '/config'),
-    port        = config.get('PORT'),
-    nodeEnv     = config.get('ENVIRONMENT'),
-    cloudPath   = config.get('CLOUD_PATH'),
-    useRedis    = config.get('USE_REDIS'),
-    service     = require(rootDir + '/service'),
+    ssStylus    = require('ss-stylus')
+
+var app         = exports.app = express()
+
+var config      = require(rootDir + '/config')
+
+var PORT        = config.get('PORT'),
+    NODE_ENV    = config.get('NODE_ENV'),
+    CLOUD_PATH  = config.get('CLOUD_PATH'),
+    USE_REDIS   = config.get('USE_REDIS')
+
+var service     = require(rootDir + '/service'),
     controllers = require(rootDir + '/controllers'),
-    CivicSeed   = require(rootDir + '/CivicSeed'),
-    server,
-    redisConfig;
+    CivicSeed   = require(rootDir + '/CivicSeed')
+
+var server,
+    redisConfig
 
 console.log('\n\n     ___      _               _                       ___                       _   '.red);
 console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red);
@@ -35,7 +42,8 @@ service.connectMongoose(app, function(databases) {
 
 	app.set('views', rootDir + '/client/views');
 	app.set('view engine', 'jade');
-	app.use(express.logger(':method :url :status'));
+  app.use(morgan('common'))
+	//app.use(express.logger(':method :url :status'));
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(app.router);
@@ -52,28 +60,25 @@ service.connectMongoose(app, function(databases) {
 	// Code Formatters
 	ss.client.formatters.add(ssJade, {
 		locals: {
-			// title: 'Hollow :: Home',
 			CivicSeed: JSON.stringify(CivicSeed.getGlobals())
 		}
 	});
 	ssStylus.prependStylus(
-		'$cloudPath = \'' + cloudPath + '/\'\n' +
+		'$cloudPath = \'' + CLOUD_PATH + '/\'\n' +
 		'$cache = \'' + CivicSeed.get('CACHE') + '\''
 	);
 	ss.client.formatters.add(ssStylus);
 
-	// // Server-side compiled templates for client
-	// ss.client.templateEngine.use(require('ss-hogan'));
-
+	// Server-side compiled templates for client
 	ss.client.templateEngine.use(require('ss-clientjade'),null,{ globals: ['CivicSeed', 'sessionStorage'] });
 
-	if(nodeEnv === 'development') {
+	if (NODE_ENV === 'development') {
 		service.getAndSetNetworkIp();
 		app.locals.pretty = true;
 	}
 
 	// use redis
-	if(useRedis) {
+	if (USE_REDIS) {
 		console.log('   * * * * * * * * * * * *   Configuring REDIS DB Service   * * * * * * * * * * * *   '.yellow);
 		redisConfig = {
 			host: config.get('REDIS_HOST'),
@@ -95,31 +100,28 @@ service.connectMongoose(app, function(databases) {
 
 	controllers.loadAll(app, service, function() {
 
-		if(nodeEnv === 'development') {
+		if (NODE_ENV === 'development') {
 			app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 			// See: https://github.com/socketstream/ss-jade/pull/4
 			// ss.client.formatters.add(ssJade, { prettyHTML: true });
 			ssJade.addCompileOptions({ pretty: true });
 		}
 
-		if(nodeEnv === 'testing' || nodeEnv === 'production') {
+		if (NODE_ENV === 'testing' || NODE_ENV === 'production') {
 			ss.client.packAssets({
 				cdn: {
-					js: function(file) { return cloudPath + file.path; },
-					css: function(file) { return cloudPath + file.path; },
-					html: function(file) { return cloudPath + file.path; }
+					js: function(file) { return CLOUD_PATH + file.path; },
+					css: function(file) { return CLOUD_PATH + file.path; },
+					html: function(file) { return CLOUD_PATH + file.path; }
 				}
 			});
-			// var oneYear = 31557600000;
-			// app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
-			// app.use(express.errorHandler());
 		}
 
 		// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 		// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>> START THE APP
 		// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 
-		server = app.listen(port, function() {
+		server = app.listen(PORT, function() {
 
 			var local = server.address();
 			console.log('   * * * * * * * * * * * *   Express server listening @ http://%s:%d/ in ' + '%s'.yellow.inverse + ' mode\n\n', local.address, local.port, app.settings.env);
