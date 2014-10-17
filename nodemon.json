@@ -1,0 +1,12 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    "client/*"
+  ],
+  "verbose": true,
+  "watch": [
+    "*.js",
+    "bin/",
+    "server/"
+  ]
+}
