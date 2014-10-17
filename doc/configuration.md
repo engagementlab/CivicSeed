@@ -60,8 +60,6 @@ If you really need to, you can set `CONFIG_FILE` in the environment to specify a
 
 ####  Account Emails
 
-Civic Seed requires an SMTP service that can send multiple emails to users. [Mailgun](http://www.mailgun.com/) is a recommended service that can send out 1000s of emails for free. (Google limits to 200 msg/day by comparison.) Refer to [Nodemailer documentation](http://www.nodemailer.com/docs/smtp) for a list of supported mail services. You can set it using the `EMAIL_SERVICE` variable in the configuration file.
+Civic Seed requires an SMTP service that can send multiple emails to users. If email service or credentials are not provided, or are incorrect, Civic Seed will still run but any features that send e-mail will fail.
 
-Use the email and password provided by this service for the above `EMAIL_USER`, `EMAIL_PW`, and `EMAIL_TO` configuration variables.
-
-(TODO: What happens if no SMTP service is provided? Civic Seed should still run if the settings are not provided.)
+[Mailgun](http://www.mailgun.com/) is a recommended service that can send out thousands of emails for free. (Google limits to 200 msg/day by comparison.) Refer to [Nodemailer documentation](https://github.com/andris9/nodemailer-wellknown#supported-services) for a list of supported mail services. You can set it using the `EMAIL_SERVICE` variable in the configuration file. Use the email and password provided by this service for the above `EMAIL_USER`, `EMAIL_PW`, and `EMAIL_TO` configuration variables.
