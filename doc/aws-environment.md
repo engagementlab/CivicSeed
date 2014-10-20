@@ -21,7 +21,7 @@ Setting the ulimit to the correct number (probably) depends on the instance type
 
 Again, this number should be adjusted to fit the instance type and server setup.
 
-After setting `ulimits` for each instance, reboot the instances.
+After setting the `ulimit` for each instance, reboot the instances.
 
 #### Port routing with `iptables`
 
