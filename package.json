@@ -20,7 +20,7 @@
     "url": "git://github.com/engagementgamelab/CivicSeed.git"
   },
   "engines": {
-    "node": ">= 0.10.2"
+    "node": "0.10.x"
   },
   "dependencies": {
     "bcrypt": "~0.8.0",
