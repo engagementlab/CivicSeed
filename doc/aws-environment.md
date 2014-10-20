@@ -3,7 +3,7 @@
 Civic Seed currently deploys to AWS instances for its production server. The following instructions are for setting up a new environment on AWS, redeploying new code and starting/restarting the server. A simplified set of instructions for just updating the AWS instance can be found [here](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/amazon-s3-production-environment.md).
 
 
-#### Adjust Instances `ulimit`
+#### Adjust instances with `ulimit`
 
 Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. CivicSeed runs on REDIS, MongoDB, and Node.js instances, and this step needs to happen (first) for all instances involved. To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
 
@@ -19,15 +19,27 @@ Again, this number should be adjusted to fit the instance type and server setup.
 
 After setting ulimits for each instance, reboot the instances.
 
-#### Port Routing via IP Tables
+#### Port routing with `iptables`
 
-SSH into the Node.js instance (after setting the `ulimit`) and setup an iptable entry to redirect port 80 listening to port 8000 (so you can run your app without `sudo`). (More information on this is available at [this gist](https://gist.github.com/kentbrew/776580).)
+SSH into the Node.js instance (after setting the `ulimit`) and setup an `iptables` entry to redirect EC2's port 80 listening to port 8000, which allows us to run a Node app without `sudo`. (More information on this is available at [this gist](https://gist.github.com/kentbrew/776580).)
 
-  $ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000
+```
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000
+```
 
-To list what routes exist in the iptables, run the following command:
+To list what routes exist in the `iptables`, run the following command. You should see the following `REDIRECT` line. If you do not see it, add it using the command above.
 
-  $ sudo iptables -t nat -L
+```
+$ sudo iptables -t nat -L
+Chain PREROUTING (policy ACCEPT)
+target     prot opt source               destination         
+REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:http redir ports 8000
+
+[...]
+```
+
+Without this, the server will not be reachable.
+
 
 #### Mongo DB
 
