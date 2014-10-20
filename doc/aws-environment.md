@@ -25,7 +25,7 @@ After setting the `ulimit` for each instance, reboot the instances.
 
 #### Port routing with `iptables`
 
-SSH into the Node.js instance (after setting the `ulimit`) and setup an `iptables` entry to redirect EC2's port 80 listening to port 8000, which allows us to run a Node app without `sudo`. (More information on this is available at [this gist](https://gist.github.com/kentbrew/776580).)
+SSH into the Node.js instance and set up an `iptables` entry to redirect EC2's port 80 listening to port 8000, which allows us to run a Node app without `sudo`. (More information on this is available at [this gist](https://gist.github.com/kentbrew/776580).)
 
 ```
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000
@@ -43,6 +43,8 @@ REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:http redir
 ```
 
 Without this, the server will not be reachable.
+
+__NOTE:__ You may have to redo this if the server is rebooted. That is why this should occur after the `ulimit` step, for instance.
 
 
 #### Mongo DB
