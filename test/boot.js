@@ -26,7 +26,7 @@ nconf.argv().env().file({
 });
 
 if (NODE_ENV === 'heroku') {
-  console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')
+  console.log('\n   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   \n'.magenta)
   nconf.set('MONGO_URL', process.env.MONGOHQ_URL)
 }
 
