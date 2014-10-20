@@ -7,17 +7,21 @@ Civic Seed currently deploys to AWS instances for its production server. The fol
 
 Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. CivicSeed runs on REDIS, MongoDB, and Node.js instances, and this step needs to happen (first) for all instances involved. To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
 
-  $ ulimit -n
+```
+ulimit -n
+```
 
 Setting the ulimit to the correct number (probably) depends on the instance type, however, following [this stackoverlow answer](http://stackoverflow.com/questions/11342167/how-to-increase-ulimit-on-amazon-ec2-instance/11345256#11345256) `20000` appears to be a good number. You will need to open the `/etc/security/limits.conf` file and set hard and soft limits:
 
-  #<domain> <type> <item> <value>
-  * soft nofile 20000
-  * hard nofile 20000
+```
+#<domain>   <type>  <item>   <value>
+*           soft    nofile   20000
+*           hard    nofile   20000
+```
 
 Again, this number should be adjusted to fit the instance type and server setup.
 
-After setting ulimits for each instance, reboot the instances.
+After setting `ulimits` for each instance, reboot the instances.
 
 #### Port routing with `iptables`
 
