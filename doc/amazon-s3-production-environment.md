@@ -54,13 +54,13 @@ s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014
    cd CivicSeed
    git pull origin
    ```
-2. Restart the server.
+2. Restart the application.
    
    ```
    forever -o out.log -e err.log restart bin/server
    ```
    
-   Note that for some server-side changes you may need to completely stop the server and then start it again from scratch.
+   Note that for some server-side changes you may need to completely stop the application and then start it again from scratch.
 
    ```
    forever stopall
