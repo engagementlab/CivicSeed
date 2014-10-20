@@ -4,7 +4,7 @@ var nodemailer    = require('nodemailer'),
     htmlToText    = require('nodemailer-html-to-text').htmlToText
 
 var rootDir       = process.cwd(),
-    config        = require(rootDir + '/config'),
+    config        = require(rootDir + '/app/config'),
     NAME          = config.get('NAME'),
     EMAIL_USER    = config.get('EMAIL_USER'),
     EMAIL_PW      = config.get('EMAIL_PW'),

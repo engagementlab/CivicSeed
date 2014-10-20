@@ -1,5 +1,5 @@
 var rootDir = process.cwd(),
-	CivicSeed = require(rootDir + '/CivicSeed').getGlobals(),
+	CivicSeed = require(rootDir + '/app/CivicSeed').getGlobals(),
 	ss = require('socketstream');
 
 var self = module.exports = {

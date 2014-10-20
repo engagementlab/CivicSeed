@@ -1,5 +1,5 @@
 var rootDir = process.cwd(),
-	config = require(rootDir + '/config'),
+	config = require(rootDir + '/app/config'),
 	serverHelpers = require(rootDir + '/server/utils/server-helpers'),
 	mongoose = require('mongoose'),
 	Schema = mongoose.Schema,

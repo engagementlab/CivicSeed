@@ -26,7 +26,7 @@ var rootDir        = process.cwd(),
     fs             = require('fs')
 
 // Read environment variables from an optional .env, if present
-env(__dirname + '/.env', {verbose: true, overwrite: true})
+env(rootDir + '/.env', {verbose: true, overwrite: true})
 
 var NODE_ENV       = process.env.NODE_ENV || 'development',
     CONFIG_FILE    = process.env.CONFIG_FILE || rootDir + '/config/' + NODE_ENV + '.json'

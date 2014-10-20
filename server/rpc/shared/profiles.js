@@ -1,5 +1,5 @@
 var rootDir = process.cwd();
-var service = require(rootDir + '/service');
+var service = require(rootDir + '/app/service');
 var UserModel = service.useModel('user');
 var GameModel = service.useModel('game');
 

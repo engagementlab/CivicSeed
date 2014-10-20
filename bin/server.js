@@ -9,16 +9,16 @@ var ss          = require('socketstream'),
 
 var app         = exports.app = express()
 
-var config      = require(rootDir + '/config')
+var config      = require(rootDir + '/app/config')
 
 var PORT        = config.get('PORT'),
     NODE_ENV    = config.get('NODE_ENV'),
     CLOUD_PATH  = config.get('CLOUD_PATH'),
     USE_REDIS   = config.get('USE_REDIS')
 
-var service     = require(rootDir + '/service'),
-    controllers = require(rootDir + '/controllers'),
-    CivicSeed   = require(rootDir + '/CivicSeed')
+var service     = require(rootDir + '/app/service'),
+    controllers = require(rootDir + '/app/controllers'),
+    CivicSeed   = require(rootDir + '/app/CivicSeed')
 
 var server,
     redisConfig

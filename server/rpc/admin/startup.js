@@ -3,8 +3,8 @@
 var rootDir = process.cwd(),
     fs      = require('fs'),
 
-    config         = require(rootDir + '/config'),
-    service        = require(rootDir + '/service'),
+    config         = require(rootDir + '/app/config'),
+    service        = require(rootDir + '/app/service'),
     dbActions      = require(rootDir + '/server/utils/database-actions'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
 

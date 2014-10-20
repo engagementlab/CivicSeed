@@ -1,5 +1,5 @@
 var rootDir  = process.cwd(),
-    config   = require(rootDir + '/config'),
+    config   = require(rootDir + '/app/config'),
     VERSION  = config.get('VERSION'),
     NODE_ENV = config.get('NODE_ENV')
     now      = new Date()

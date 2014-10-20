@@ -1,5 +1,5 @@
 var rootDir = process.cwd();
-var service = require(rootDir + '/service');
+var service = require(rootDir + '/app/service');
 
 exports.dropCollection = function(collection, callback) {
 	var dbCollections = service.db.collections;
