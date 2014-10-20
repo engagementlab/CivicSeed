@@ -11,7 +11,10 @@ var Schema      = mongoose.Schema,
     ObjectId    = Schema.ObjectId
 
 // Read environment variables from an optional .env, if present
-env(rootDir + '/.env', {verbose: true, overwrite: true})
+var envFile = rootDir + '/.env'
+if (fs.existsSync(envFile)) {
+  env(envFile, {verbose: true, overwrite: true})
+}
 
 var NODE_ENV    = process.env.NODE_ENV || 'development',
     CONFIG_FILE = rootDir + '/config/' + NODE_ENV + '.json'
