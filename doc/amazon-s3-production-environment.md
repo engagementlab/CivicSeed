@@ -27,14 +27,17 @@ These instructions assume that the production server is already up and running a
 
 #### Push assets to remotes.
 
-1. Push new assets to GitHub. `git push origin master`
+1. Push new assets to GitHub. 
+
+   ```
+   git push origin master
+   ```
+
 2. **(optional)** If you have new static assets, push them to S3. Static assets include images, vendor stylesheets, and anything else in the `static/` directory.
 
-Copy and paste this command:
-
-```
-s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
-```
+   ```
+   s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
+   ```
 
 #### Login to the S3 instance.
 
