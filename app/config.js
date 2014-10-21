@@ -23,7 +23,8 @@
 var rootDir        = process.cwd(),
     nconf          = require('nconf'),
     env            = require('node-env-file'),
-    fs             = require('fs')
+    fs             = require('fs'),
+    winston        = require('winston')
 
 // Read environment variables from an optional .env, if present
 var envFile = rootDir + '/.env'
@@ -39,10 +40,10 @@ var json           = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8
 // Hierarchical configuration with nconf
 nconf.argv().env().file({
   file: CONFIG_FILE
-});
+})
 
-nconf.set('VERSION', json.version);
-nconf.set('NODE_ENV', NODE_ENV);
+nconf.set('VERSION', json.version)
+nconf.set('NODE_ENV', NODE_ENV)
 
 // Get authentication credentials stored as environment variables.
 nconf.set('EMAIL_USER', process.env.EMAIL_USER || '')
@@ -55,7 +56,7 @@ nconf.set('REDIS_PW',   process.env.REDIS_PW   || '')
 // These use slightly different names we parse them here and add them via nconf.
 // Heroku still relies on the existence of the config_heroku.json file but unused settings are removed in it.
 if (NODE_ENV === 'heroku') {
-  console.log('   * * * * * * * * * * * *   Heroku Dev Environment   * * * * * * * * * * * *   ')
+  winston.info('Configuring Heroku environment ...'.yellow)
   nconf.set('MONGO_URL', process.env.MONGOHQ_URL)
 
   // Set up RedisToGo on Heroku environment
@@ -66,4 +67,4 @@ if (NODE_ENV === 'heroku') {
   nconf.set('REDIS_PW', rtg.auth.split(':')[1])
 }
 
-module.exports = nconf;
+module.exports = nconf
