@@ -2,10 +2,11 @@
 
 var rootDir     = process.cwd() || '.'
 
-var ss          = require('socketstream'),
-    express     = require('express'),
+var express     = require('express'),
+    ss          = require('socketstream'),
     ssJade      = require('ss-jade'),
-    ssStylus    = require('ss-stylus')
+    ssStylus    = require('ss-stylus'),
+    winston     = require('winston')
 
 var app         = exports.app = express()
 
@@ -61,6 +62,12 @@ service.connectMongoose(app, function(databases) {
 	// ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ - ~ --- >>>
 
 	console.log('   * * * * * * * * * * * *   Configuring SocketStream   * * * * * * * * * * * *   '.yellow);
+
+  // Winston logger
+  ss.api.log.info   = winston.info
+  ss.api.log.debug  = winston.info
+  ss.api.log.error  = winston.error
+  ss.api.log.warn   = winston.warn
 
 	// Code Formatters
 	ss.client.formatters.add(ssJade, {
