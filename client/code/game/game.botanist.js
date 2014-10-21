@@ -175,7 +175,7 @@ var $botanist = $game.$botanist = {
       _botanist.resetContent()
       if (document.getElementById('botanist-area').classList.contains('puzzle-mode')) _botanist.clearPuzzleMode()
       $botanist.clearBoard()
-      $('.inventory-item').css('opacity',1);
+      $('.inventory-item').css('opacity', 1)
 
       // Remove flags
       $game.removeFlag('visible-botanist-overlay')

@@ -718,7 +718,9 @@ var $input = $game.$input = module.exports = {
     // Also simultaneously cancel out of resources, botanist, and speechbubbles.
     $game.$npc.hideSpeechBubble()
     //$game.$resources.hideResource()
-    //$game.$botanist.hideOverlay()
+    if ($game.checkFlag('botanist-chatting') || $game.checkFlag('visible-botanist-overlay')) {
+      $game.$botanist.hideOverlay()
+    }
 
     // Unfocus chat input box
     document.getElementById('chat-input').blur()
