@@ -17,23 +17,23 @@ var _CivicSeed = {
   CONNECTED: true,
   SURVEY_POSTGAME_LINK: config.get('SURVEY_POSTGAME_LINK'),
   SURVEY_PREGAME_LINK: config.get('SURVEY_PREGAME_LINK')
-};
+}
 
 var self = module.exports = {
 
   getGlobals: function () {
-    return _CivicSeed;
+    return _CivicSeed
   },
 
   get: function (key) {
-    var value = _CivicSeed[key];
-    return value ? value : false;
+    var value = _CivicSeed[key]
+    return value ? value : false
   },
 
   set: function (key, value) {
-    if(typeof key === 'string' && value) {
-      _CivicSeed[key] = value;
+    if (typeof key === 'string' && value) {
+      _CivicSeed[key] = value
     }
   }
 
-};
+}

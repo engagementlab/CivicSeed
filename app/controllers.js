@@ -1,15 +1,19 @@
-var rootDir = process.cwd();
+var rootDir = process.cwd()
+
+var winston = require('winston')
 
 var self = module.exports = {
 
-	loadAll: function(app, service, callback) {
+  loadAll: function (app, service, callback) {
 
-		console.log('\n\n   * * * * * * * * * * * *   Loading Controllers   * * * * * * * * * * * *   '.yellow);
-		require(rootDir + '/server/controllers/app-control').init(app, service);
+    winston.info('Loading controllers ...'.yellow)
+    require(rootDir + '/server/controllers/app-control').init(app, service)
 
-		console.log('   * * * * * * * * * * * *   All controllers loaded...\n\n'.green);
-		if(typeof callback === 'function') { callback(); }
+    winston.info('All controllers loaded.'.green)
+    if (typeof callback === 'function') {
+      callback()
+    }
 
-	}
+  }
 
-};
+}
