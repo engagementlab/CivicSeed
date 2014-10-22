@@ -1,37 +1,37 @@
 .row
-	.col-md-10.col-md-offset-1
-		h2 Before you get started...
-		p Tell us a little bit about yourself!
+  .col-md-10.col-md-offset-1
+    h2 Before you get started...
+    p Tell us a little bit about yourself!
 
 .row
-	.col-md-10.col-md-offset-1
-		.console
+  .col-md-10.col-md-offset-1
+    .console
 
-			.console-content
+      .console-content
 
-				form#change-info-form(method='post', action='/change-info')
+        form#change-info-form(method='post', action='/change-info')
 
-					if pregameSurveyLink
-						.row.no-print
-							.col-sm-4
-								strong If you have not yet completed the pre-game survey, please do it now.
-							.col-sm-8.controls
-								a.btn.btn-info.survey(href='#{pregameSurveyLink}', target='_blank') Click here to open the survey/!
-					.row.control-group
-						.col-sm-4
-							label.control-label(for='firstname') What is your name?
-						.col-sm-4.controls
-							input#firstname(type='text', name='firstname', placeholder='first', maxlength='20')
-						.col-sm-4.controls
-							input#lastname(type='text', name='lastname', placeholder='last', maxlength='20')
-					.row.control-group
-						.col-sm-4
-							label.control-label(for='school') What school do you attend?
-						.col-sm-8.controls
-							input#school(type='text', name='school', placeholder='school name', maxlength='40')
-					.row.control-group
-						.col-sm-8.col-sm-offset-4.controls
-							button.btn(type='submit') Submit
-					.row
-						.col-sm-8.col-sm-offset-4
-							.server-response
+          if pregameSurveyLink
+            .row.no-print
+              .col-sm-4
+                strong If you have not yet completed the pre-game survey, please do it now.
+              .col-sm-8.controls
+                a.btn.btn-info.survey(href='#{pregameSurveyLink}', target='_blank') Click here to open the survey/!
+          .row.control-group
+            .col-sm-4
+              label.control-label(for='firstname') What is your name?
+            .col-sm-4.controls
+              input#firstname(type='text', name='firstname', placeholder='first', maxlength='20')
+            .col-sm-4.controls
+              input#lastname(type='text', name='lastname', placeholder='last', maxlength='20')
+          .row.control-group
+            .col-sm-4
+              label.control-label(for='school') What school do you attend?
+            .col-sm-8.controls
+              input#school(type='text', name='school', placeholder='school name', maxlength='40')
+          .row.control-group
+            .col-sm-8.col-sm-offset-4.controls
+              button.btn(type='submit') Submit
+          .row
+            .col-sm-8.col-sm-offset-4
+              .server-response

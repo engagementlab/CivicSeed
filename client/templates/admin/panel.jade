@@ -1,32 +1,32 @@
 .row
-	.col-md-10.col-md-offset-1
-		h1 Site Administration
+  .col-md-10.col-md-offset-1
+    h1 Site Administration
 
-		h4 <span class='color-darkorange'>#{environment} Environment</a>
+    h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 .row
-	.col-md-10.col-md-offset-1
-		#admin-panel.console
+  .col-md-10.col-md-offset-1
+    #admin-panel.console
 
-			.console-content
-				- if(sessionStorage.userRole === 'superadmin')
-					.row
-						.col-sm-3
-							a.btn(href='/admin/startup') Startup
-						.admin-instructions.col-sm-9
-							p Initializes all data.
-					.row
-						.col-sm-3
-							a.btn(href='/admin/npcs') NPCs
-						.admin-instructions.col-sm-9
-							p Sets NPC interaction and speech content.
-				.row
-					.col-sm-3
-						a.btn(href='/admin/invitecodes') Invite Codes
-					.admin-instructions.col-sm-9
-						p Begins a new game and sends invite codes to players.
-				.row
-					.col-sm-3
-						a.btn(href='/admin/monitor') Monitor
-					.admin-instructions.col-sm-9
-						p Look at information on current games.
+      .console-content
+        - if(sessionStorage.userRole === 'superadmin')
+          .row
+            .col-sm-3
+              a.btn(href='/admin/startup') Startup
+            .admin-instructions.col-sm-9
+              p Initializes all data.
+          .row
+            .col-sm-3
+              a.btn(href='/admin/npcs') NPCs
+            .admin-instructions.col-sm-9
+              p Sets NPC interaction and speech content.
+        .row
+          .col-sm-3
+            a.btn(href='/admin/invitecodes') Invite Codes
+          .admin-instructions.col-sm-9
+            p Begins a new game and sends invite codes to players.
+        .row
+          .col-sm-3
+            a.btn(href='/admin/monitor') Monitor
+          .admin-instructions.col-sm-9
+            p Look at information on current games.

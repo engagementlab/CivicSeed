@@ -1,33 +1,33 @@
 .navbar.navbar-default.navbar-fixed-top.no-print
-	.container-fluid
-		.navbar-header
-			button.navbar-toggle(type='button', data-toggle='collapse', data-target='#main-navigation')
-				span.icon-bar
-				span.icon-bar
-				span.icon-bar
+  .container-fluid
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='#main-navigation')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
 
-			a(href='/')
-				img.logo(src='#{CivicSeed.CLOUD_PATH}/img/logo.png')
+      a(href='/')
+        img.logo(src='#{CivicSeed.CLOUD_PATH}/img/logo.png')
 
-		#main-navigation.navbar-collapse.collapse
+    #main-navigation.navbar-collapse.collapse
 
-			ul.nav.navbar-nav.navbar-right
-				li: a(href='/') Home
-				li: a(href='/about') About
-				li: a(href='/profiles') Profiles
-				li: a(href='/contact') Contact Us
-				- if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
-					li: a(href='/admin') Admin Console
-				- if(sessionStorage.userFirstName)
-					li.dropdown
-						button.dropdown-toggle(data-toggle='dropdown')
-							i.fa.fa-user
-							span.username #{sessionStorage.userFirstName}
-							span.caret
-						ul.dropdown-menu
-							//- li: a(href='/profiles') Profiles
-							//- li.divider
-							li
-								a.dropdown-sign-out(href='/signout') Sign Out
-	.zag
+      ul.nav.navbar-nav.navbar-right
+        li: a(href='/') Home
+        li: a(href='/about') About
+        li: a(href='/profiles') Profiles
+        li: a(href='/contact') Contact us
+        - if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
+          li: a(href='/admin') Admin console
+        - if(sessionStorage.userFirstName)
+          li.dropdown
+            button.dropdown-toggle(data-toggle='dropdown')
+              i.fa.fa-user
+              span.username #{sessionStorage.userFirstName}
+              span.caret
+            ul.dropdown-menu
+              //- li: a(href='/profiles') My profile
+              //- li.divider
+              li
+                a.dropdown-sign-out(href='/signout') Sign out
+  .zag
 

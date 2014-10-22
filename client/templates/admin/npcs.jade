@@ -1,147 +1,147 @@
 .row
-	.col-md-10.col-md-offset-1.back-to-admin
-		a(href='/admin')
-			i.fa.fa-arrow-circle-o-left.fa-lg
-			| back
+  .col-md-10.col-md-offset-1.back-to-admin
+    a(href='/admin')
+      i.fa.fa-arrow-circle-o-left.fa-lg
+      | back
 
 .row
-	.col-md-10.col-md-offset-1
-		h1 NPC Control Panel
+  .col-md-10.col-md-offset-1
+    h1 NPC Control Panel
 
-		h4 <span class='color-darkorange'>#{environment} Environment</a>
+    h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 #admin-npcs.row
-	.col-md-10.col-md-offset-1
-		.npc-actions
-			button.npc-export-button.btn(type='button') Export All NPC Data
-			button.npc-add-button.btn(type='button') Add NPC
+  .col-md-10.col-md-offset-1
+    .npc-actions
+      button.npc-export-button.btn(type='button') Export All NPC Data
+      button.npc-add-button.btn(type='button') Add NPC
 
-		.npc-add-insert-here
+    .npc-add-insert-here
 
-		each npc, n in npcs
-			.npc(class='level' + npc.level +' npc' + npc.id, data-sprite=npc.sprite)
-				- var formId = 'npc_' + npc.id
-				form(id=formId)
-					.information
-						.sprite
-							.sprite-controls
-								i.fa.fa-arrow-circle-up.sprite-up
-								i.fa.fa-arrow-circle-down.sprite-down
-						.npc-basic-info
-							input.name(type='text', data-area='name', value='#{npc.name}', placeholder='name')
+    each npc, n in npcs
+      .npc(class='level' + npc.level +' npc' + npc.id, data-sprite=npc.sprite)
+        - var formId = 'npc_' + npc.id
+        form(id=formId)
+          .information
+            .sprite
+              .sprite-controls
+                i.fa.fa-arrow-circle-up.sprite-up
+                i.fa.fa-arrow-circle-down.sprite-down
+            .npc-basic-info
+              input.name(type='text', data-area='name', value='#{npc.name}', placeholder='name')
 
-							label(for='npcLevel_' + npc.id) level:
-							input.number(id='npcLevel_' + npc.id, type='text', data-area='level', value='#{npc.level + 1}', placeholder='lvl')
+              label(for='npcLevel_' + npc.id) level:
+              input.number(id='npcLevel_' + npc.id, type='text', data-area='level', value='#{npc.level + 1}', placeholder='lvl')
 
-							label(for='npcCoordsX_' + npc.id) location:
-							input.number(id='npcCoordsX_' + npc.id, type='text', data-area='x', value='#{npc.x}', placeholder='x')
-							input.number(id='npcCoordsY_' + npc.id, type='text', data-area='y', value='#{npc.y}', placeholder='y')
+              label(for='npcCoordsX_' + npc.id) location:
+              input.number(id='npcCoordsX_' + npc.id, type='text', data-area='x', value='#{npc.x}', placeholder='x')
+              input.number(id='npcCoordsY_' + npc.id, type='text', data-area='y', value='#{npc.y}', placeholder='y')
 
-							- var npcIsHolding = (npc.isHolding) ? true : false
-							label(for='npcIsHolding_' + npc.id) holding:
-							input.holding(id='npcIsHolding_' + npc.id, name='isHolding', value='isHolding', type='checkbox', checked=npcIsHolding)
+              - var npcIsHolding = (npc.isHolding) ? true : false
+              label(for='npcIsHolding_' + npc.id) holding:
+              input.holding(id='npcIsHolding_' + npc.id, name='isHolding', value='isHolding', type='checkbox', checked=npcIsHolding)
 
-					.resource(style=(npcIsHolding) ? 'display:block' : 'display:none')
-						button.view-resource-button.btn(type='button') view resource
+          .resource(style=(npcIsHolding) ? 'display:block' : 'display:none')
+            button.view-resource-button.btn(type='button') view resource
 
-						h3 Resource
+            h3 Resource
 
-						label(for='resourceUrl_' + npc.id) URL <small>case and space sensitive</small>
-						input.url(id='resourceUrl_' + npc.id, type='text', data-area='url', placeholder='numerical id', value=(npc.resource.url) ? '#{npc.resource.url}' : '')
+            label(for='resourceUrl_' + npc.id) URL <small>case and space sensitive</small>
+            input.url(id='resourceUrl_' + npc.id, type='text', data-area='url', placeholder='numerical id', value=(npc.resource.url) ? '#{npc.resource.url}' : '')
 
-						label(for='resourceTangram_' + npc.id) Tangram Piece
-						input.url(id='resourceTangram_' + npc.id, type='text', data-area='shape', value=(npc.resource.shape) ? '#{npc.resource.shape}' : '')
+            label(for='resourceTangram_' + npc.id) Tangram Piece
+            input.url(id='resourceTangram_' + npc.id, type='text', data-area='shape', value=(npc.resource.shape) ? '#{npc.resource.shape}' : '')
 
-						label(for='resourceQuestion_' + npc.id) Question
-							- var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
-							- var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
-							- var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
-							- var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
+            label(for='resourceQuestion_' + npc.id) Question
+              - var questionOpen      = (npc.resource.questionType === 'open')      ? true : false
+              - var questionTrueFalse = (npc.resource.questionType === 'truefalse') ? true : false
+              - var questionYesNo     = (npc.resource.questionType === 'yesno')     ? true : false
+              - var questionMultiple  = (npc.resource.questionType === 'multiple')  ? true : false
 
-							.questionType
-								input(id='questionOpen_' + npc.id, name=('radio' + npc.id) , value='open', type='radio', checked=questionOpen)
-								label(for='questionOpen_' + npc.id) open
+              .questionType
+                input(id='questionOpen_' + npc.id, name=('radio' + npc.id) , value='open', type='radio', checked=questionOpen)
+                label(for='questionOpen_' + npc.id) open
 
-								input(id='questionTrueFalse_' + npc.id, name=('radio' + npc.id) , value='truefalse', type='radio', checked=questionTrueFalse)
-								label(for='questionTrueFalse_' + npc.id) true / false
+                input(id='questionTrueFalse_' + npc.id, name=('radio' + npc.id) , value='truefalse', type='radio', checked=questionTrueFalse)
+                label(for='questionTrueFalse_' + npc.id) true / false
 
-								input(id='questionYesNo_' + npc.id, name=('radio' + npc.id) , value='yesno', type='radio', checked=questionYesNo)
-								label(for='questionYesNo_' + npc.id) yes / no
+                input(id='questionYesNo_' + npc.id, name=('radio' + npc.id) , value='yesno', type='radio', checked=questionYesNo)
+                label(for='questionYesNo_' + npc.id) yes / no
 
-								input(id='questionMultiple_' + npc.id, name=('radio' + npc.id) , value='multiple', type='radio', checked=questionMultiple)
-								label(for='questionMultiple_' + npc.id) multiple choice
+                input(id='questionMultiple_' + npc.id, name=('radio' + npc.id) , value='multiple', type='radio', checked=questionMultiple)
+                label(for='questionMultiple_' + npc.id) multiple choice
 
-						textarea.question(id='resourceQuestion_' + npc.id, data-area='question') #{npc.resource.question}
+            textarea.question(id='resourceQuestion_' + npc.id, data-area='question') #{npc.resource.question}
 
-						.requiredDiv.questionOptions(style=(questionOpen) ? 'display:block' : 'display:none')
-							label(for='questionSuggestedLength_' + npc.id) Suggested Length
-							input(id='questionSuggestedLength_' + npc.id, type='text', data-area='requiredLength', maxlength='3', value=(npc.resource.requiredLength) ? '#{npc.resource.requiredLength}' : '')
+            .requiredDiv.questionOptions(style=(questionOpen) ? 'display:block' : 'display:none')
+              label(for='questionSuggestedLength_' + npc.id) Suggested Length
+              input(id='questionSuggestedLength_' + npc.id, type='text', data-area='requiredLength', maxlength='3', value=(npc.resource.requiredLength) ? '#{npc.resource.requiredLength}' : '')
 
-						.possibleDiv.questionOptions(style=(questionMultiple) ? 'display:block' : 'display:none')
-							label Choices
-							if (questionMultiple)
-								each choice, c in npc.resource.possibleAnswers
-									textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[c]}
-							else
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
-								textarea.possible(data-area='possibleAnswers')
+            .possibleDiv.questionOptions(style=(questionMultiple) ? 'display:block' : 'display:none')
+              label Choices
+              if (questionMultiple)
+                each choice, c in npc.resource.possibleAnswers
+                  textarea.possible(data-area='possibleAnswers') #{npc.resource.possibleAnswers[c]}
+              else
+                textarea.possible(data-area='possibleAnswers')
+                textarea.possible(data-area='possibleAnswers')
+                textarea.possible(data-area='possibleAnswers')
+                textarea.possible(data-area='possibleAnswers')
 
-						.answerDiv.questionOptions(style=(!questionOpen) ? 'display:block' : 'display:none')
-							label(for='questionAnswer_' + npc.id) Answer
-							input.answer(id='questionAnswer_' + npc.id, type='text', data-area='answer', value=(npc.resource.answer) ? '#{npc.resource.answer}' : '')
+            .answerDiv.questionOptions(style=(!questionOpen) ? 'display:block' : 'display:none')
+              label(for='questionAnswer_' + npc.id) Answer
+              input.answer(id='questionAnswer_' + npc.id, type='text', data-area='answer', value=(npc.resource.answer) ? '#{npc.resource.answer}' : '')
 
-						label(for='resourceDependsOn_' + npc.id) Depends on NPC
-						input(id='resourceDependsOn_' + npc.id, type='text', data-area='dependsOn', maxlength='4', value=(npc.dependsOn) ? '#{npc.dependsOn}' : '')
+            label(for='resourceDependsOn_' + npc.id) Depends on NPC
+            input(id='resourceDependsOn_' + npc.id, type='text', data-area='dependsOn', maxlength='4', value=(npc.dependsOn) ? '#{npc.dependsOn}' : '')
 
-						label(for='resourceCorrect_' + npc.id) Feedback Correct
-						textarea.question(id='resourceCorrect_' + npc.id, data-area='feedbackRight') #{npc.resource.feedbackRight}
+            label(for='resourceCorrect_' + npc.id) Feedback Correct
+            textarea.question(id='resourceCorrect_' + npc.id, data-area='feedbackRight') #{npc.resource.feedbackRight}
 
-						label(for='resourceWrong_' + npc.id) Feedback Wrong
-						textarea.question(id='resourceWrong_' + npc.id, data-area='feedbackWrong') #{npc.resource.feedbackWrong}
+            label(for='resourceWrong_' + npc.id) Feedback Wrong
+            textarea.question(id='resourceWrong_' + npc.id, data-area='feedbackWrong') #{npc.resource.feedbackWrong}
 
-					.prompts(style=npcIsHolding?'display:block':'display:none')
-						h3 Prompts
+          .prompts(style=npcIsHolding?'display:block':'display:none')
+            h3 Prompts
 
-						label(for='promptsFirstTime_' + npc.id) First Time
-						textarea(id='promptsFirstTime_' + npc.id, data-area='prompt') #{npc.dialog.prompts[0]}
+            label(for='promptsFirstTime_' + npc.id) First Time
+            textarea(id='promptsFirstTime_' + npc.id, data-area='prompt') #{npc.dialog.prompts[0]}
 
-						label(for='promptsAfterIncorrect_' + npc.id) Returning After Incorrect
-						textarea(id='promptsAfterIncorrect_' + npc.id, data-area='prompt') #{npc.dialog.prompts[1]}
+            label(for='promptsAfterIncorrect_' + npc.id) Returning After Incorrect
+            textarea(id='promptsAfterIncorrect_' + npc.id, data-area='prompt') #{npc.dialog.prompts[1]}
 
-						label(for='promptsAfterCompleted_' + npc.id) Returning After Completed
-						textarea(id='promptsAfterCompleted_' + npc.id, data-area='prompt') #{npc.dialog.prompts[2]}
+            label(for='promptsAfterCompleted_' + npc.id) Returning After Completed
+            textarea(id='promptsAfterCompleted_' + npc.id, data-area='prompt') #{npc.dialog.prompts[2]}
 
-					.smalltalk(style=!npcIsHolding?'display:block':'display:none')
-						h3 Dialog
+          .smalltalk(style=!npcIsHolding?'display:block':'display:none')
+            h3 Dialog
 
-						label(for='dialogPast_' + npc.id) Past
-						textarea(id='dialogPast_' + npc.id, data-area='smalltalk', data-index='0') #{npc.dialog.smalltalk[0]}
+            label(for='dialogPast_' + npc.id) Past
+            textarea(id='dialogPast_' + npc.id, data-area='smalltalk', data-index='0') #{npc.dialog.smalltalk[0]}
 
-						label(for='dialogPresent_' + npc.id) Present
-						textarea(id='dialogPresent_' + npc.id, data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
+            label(for='dialogPresent_' + npc.id) Present
+            textarea(id='dialogPresent_' + npc.id, data-area='smalltalk', data-index='1') #{npc.dialog.smalltalk[1]}
 
-						label(for='dialogFuture_' + npc.id) Future
-						textarea(id='dialogFuture_' + npc.id, data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
+            label(for='dialogFuture_' + npc.id) Future
+            textarea(id='dialogFuture_' + npc.id, data-area='smalltalk', data-index='2') #{npc.dialog.smalltalk[2]}
 
-					.skinSuit
-						h3 Skin Suit
-						input(type='text', value=(npc.skinSuit) ? '#{npc.skinSuit}' : '')
+          .skinSuit
+            h3 Skin Suit
+            input(type='text', value=(npc.skinSuit) ? '#{npc.skinSuit}' : '')
 
-					.options
-						- if (!(npc.id >= 0))
-							button.npc-create-button.btn(type='button', data-id='#{npc.id}') create
-							button.npc-cancel-button.btn(type='button', data-id='#{npc.id}') cancel
-						- else
-							button.npc-save-button.btn(type='button', data-id='#{npc.id}') save
-							button.npc-delete-button.btn(type='button', data-id='#{npc.id}') delete
+          .options
+            - if (!(npc.id >= 0))
+              button.npc-create-button.btn(type='button', data-id='#{npc.id}') create
+              button.npc-cancel-button.btn(type='button', data-id='#{npc.id}') cancel
+            - else
+              button.npc-save-button.btn(type='button', data-id='#{npc.id}') save
+              button.npc-delete-button.btn(type='button', data-id='#{npc.id}') delete
 
-		.buffer
-		.article
+    .buffer
+    .article
 
 .levelFilter
-	.current 1
-	.current 2
-	.current 3
-	.current 4
+  .current 1
+  .current 2
+  .current 3
+  .current 4

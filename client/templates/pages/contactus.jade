@@ -1,31 +1,31 @@
 .row
-	.col-md-10.col-md-offset-1
-		h2 Contact Us
-		p Found a bug? Having a problem? Let us know!
+  .col-md-10.col-md-offset-1
+    h2 Contact Us
+    p Found a bug? Having a problem? Let us know!
 
 .row
-	.col-md-10.col-md-offset-1
-		.console
+  .col-md-10.col-md-offset-1
+    .console
 
-			.console-content
+      .console-content
 
-				form#contact-form(method='post', action='/contact-us')
-					.row
-						.col-sm-12
-							p We look forward to hearing from you! Please write your message below and provide us with your email address. <strong class='color-darkgreen'>If you’re experiencing a problem with the game, please be as detailed as possible so we can look into it. Thank you!</strong>
-					.row.control-group
-						.col-sm-3
-							label.control-label(for='emailList') Your e-mail:
-						.col-sm-9.controls
-							input#email(type='text', name='email', placeholder='')
-					.row
-						.col-sm-3
-							label.control-label(for='emailList') Your message:
-						.col-sm-9.controls
-							textarea#message(rows='6', type='text', name='message', placeholder='Enter your message here...')
-					.row.control-group
-						.col-sm-9.col-sm-offset-3.controls
-							button.btn(type='submit') Send
-					.row
-						.col-sm-9.col-sm-offset-3
-							.server-response
+        form#contact-form(method='post', action='/contact-us')
+          .row
+            .col-sm-12
+              p We look forward to hearing from you! Please write your message below and provide us with your email address. <strong class='color-darkgreen'>If you’re experiencing a problem with the game, please be as detailed as possible so we can look into it. Thank you!</strong>
+          .row.control-group
+            .col-sm-3
+              label.control-label(for='emailList') Your e-mail:
+            .col-sm-9.controls
+              input#email(type='text', name='email', placeholder='')
+          .row
+            .col-sm-3
+              label.control-label(for='emailList') Your message:
+            .col-sm-9.controls
+              textarea#message(rows='6', type='text', name='message', placeholder='Enter your message here...')
+          .row.control-group
+            .col-sm-9.col-sm-offset-3.controls
+              button.btn(type='submit') Send
+          .row
+            .col-sm-9.col-sm-offset-3
+              .server-response

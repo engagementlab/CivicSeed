@@ -1,31 +1,31 @@
 .row
-	.col-md-10.col-md-offset-1
-		h2 Forget your password?
-		p Let us help you.
+  .col-md-10.col-md-offset-1
+    h2 Forget your password?
+    p Let us help you.
 
 .row
-	.col-md-10.col-md-offset-1
-		.console
+  .col-md-10.col-md-offset-1
+    .console
 
-			.console-content
+      .console-content
 
-				form#password-reminder-form(method='post', action='/remind-me')
-					.row
-						.col-sm-12
-							p Provide us with your email address and we'll reset your password via email.
-					.row.control-group
-						.col-sm-3
-							label.control-label(for='username') Your username:
-						.col-sm-9.controls
-							input#username(type='text', name='username', placeholder='Email')
-					.row.control-group
-						.col-sm-9.col-sm-offset-3.controls
-							button.btn(type='submit') Reset
-					.row
-						.col-sm-9.col-sm-offset-3
-							.server-response
+        form#password-reminder-form(method='post', action='/remind-me')
+          .row
+            .col-sm-12
+              p Provide us with your email address and we'll reset your password via email.
+          .row.control-group
+            .col-sm-3
+              label.control-label(for='username') Your username:
+            .col-sm-9.controls
+              input#username(type='text', name='username', placeholder='Email')
+          .row.control-group
+            .col-sm-9.col-sm-offset-3.controls
+              button.btn(type='submit') Reset
+          .row
+            .col-sm-9.col-sm-offset-3
+              .server-response
 
 .row
-	.col-md-10.col-md-offset-1
-		h4 Forget your username?
-		p: small Please contact your administrator if your email is not working.
+  .col-md-10.col-md-offset-1
+    h4 Forget your username?
+    p: small Please contact your administrator if your email is not working.

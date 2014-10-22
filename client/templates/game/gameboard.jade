@@ -1,202 +1,202 @@
 #gameboard
-	canvas#background(width='960px', height='480px')
-	canvas#characters(width='960px', height='480px')
-	canvas#foreground(width='960px', height='480px')
-	canvas#interface(width='960px', height='480px')
-	canvas#minimap-tile.minimap(width='142px', height='132px')
-	canvas#minimap-player.minimap(width='142px', height='132px')
-	canvas#minimap-radar.minimap(width='142px', height='132px')
+  canvas#background(width='960px', height='480px')
+  canvas#characters(width='960px', height='480px')
+  canvas#foreground(width='960px', height='480px')
+  canvas#interface(width='960px', height='480px')
+  canvas#minimap-tile.minimap(width='142px', height='132px')
+  canvas#minimap-player.minimap(width='142px', height='132px')
+  canvas#minimap-radar.minimap(width='142px', height='132px')
 
-	#loading
-		p
-			img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
-		p loading
+  #loading
+    p
+      img(src='#{CivicSeed.CLOUD_PATH}/img/game/loader.gif')
+    p loading
 
-	#resource-area.gameboard-overlay
-		.resource-article.scrollable
-		.resource-question
-			.dialog.question
-			form
-		.resource-content
-			.dialog
-				span.speaker
-				span.message
-			.tangram
-			.tagline-input
-				input(name='tagline', type='text', value='', placeholder='Summarize what you just learned.', maxLength='60', autofocus)
-				.privacy-message You’ll need it later!
-		.resource-responses
-			.dialog
-				span.speaker
-				span.message
-			.responses.content-box.scrollable
-				p.question
-				ul.responses
-		.buttons
-			.left
-				button.back-button.btn.btn-info(type='button') Back
-			.right
-				button.next-button.btn.btn-success(type='button') Next
-				button.answer-button.btn.btn-success(type='button') Answer
-				button.save-button.btn.btn-success(type='button') Save
-				button.close-button.btn.btn-primary(type='button') Close
-		.check
-			.check-dialog.confirm-skimpy
-				p Are you sure? That seems a bit skimpy...
-				.buttons
-					button.sure-button.right.btn.btn-success(type='button') I'm Sure
-					button.retry-button.left.btn.btn-primary(type='button') I'll Add More
-			.check-dialog.message-feedback
-				.feedback
-				.buttons
-					button.btn.btn-primary(type='button') Okay
-		a.close-overlay(href='')
-			i.fa.fa-times-circle.fa-lg
+  #resource-area.gameboard-overlay
+    .resource-article.scrollable
+    .resource-question
+      .dialog.question
+      form
+    .resource-content
+      .dialog
+        span.speaker
+        span.message
+      .tangram
+      .tagline-input
+        input(name='tagline', type='text', value='', placeholder='Summarize what you just learned.', maxLength='60', autofocus)
+        .privacy-message You’ll need it later!
+    .resource-responses
+      .dialog
+        span.speaker
+        span.message
+      .responses.content-box.scrollable
+        p.question
+        ul.responses
+    .buttons
+      .left
+        button.back-button.btn.btn-info(type='button') Back
+      .right
+        button.next-button.btn.btn-success(type='button') Next
+        button.answer-button.btn.btn-success(type='button') Answer
+        button.save-button.btn.btn-success(type='button') Save
+        button.close-button.btn.btn-primary(type='button') Close
+    .check
+      .check-dialog.confirm-skimpy
+        p Are you sure? That seems a bit skimpy...
+        .buttons
+          button.sure-button.right.btn.btn-success(type='button') I'm Sure
+          button.retry-button.left.btn.btn-primary(type='button') I'll Add More
+      .check-dialog.message-feedback
+        .feedback
+        .buttons
+          button.btn.btn-primary(type='button') Okay
+    a.close-overlay(href='')
+      i.fa.fa-times-circle.fa-lg
 
-	#botanist-area.gameboard-overlay.background-3
-		.dialog
-			span.speaker
-			span.message
-		.botanist-content
-		.botanist-puzzle
-		.buttons
-			.left
-				button.back-button.btn.btn-info(type='button') Back
-				button.clear-button.btn.btn-info(type='button') Clear Board
-			.right
-				button.next-button.btn.btn-success(type='button') Next
-				button.answer-button.btn.btn-success(type='button') Answer
-				button.save-button.btn.btn-success(type='button') Save
-				button.close-button.btn.btn-primary(type='button') Close
-		.check
-			.check-dialog
-				.feedback
-				.buttons
-					button.retryButton.btn.btn-primary(type='button') Okay
-		a.close-overlay(href='')
-			i.fa.fa-times-circle.fa-lg
+  #botanist-area.gameboard-overlay.background-3
+    .dialog
+      span.speaker
+      span.message
+    .botanist-content
+    .botanist-puzzle
+    .buttons
+      .left
+        button.back-button.btn.btn-info(type='button') Back
+        button.clear-button.btn.btn-info(type='button') Clear Board
+      .right
+        button.next-button.btn.btn-success(type='button') Next
+        button.answer-button.btn.btn-success(type='button') Answer
+        button.save-button.btn.btn-success(type='button') Save
+        button.close-button.btn.btn-primary(type='button') Close
+    .check
+      .check-dialog
+        .feedback
+        .buttons
+          button.retryButton.btn.btn-primary(type='button') Okay
+    a.close-overlay(href='')
+      i.fa.fa-times-circle.fa-lg
 
-	#progress-area.gameboard-overlay
-		h2 Progress
-		.personal-info
-			.level-images
-				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').current-level-image
-				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')
-				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
-				img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
-			.current-level-name Novice gardener
-			.resources-collected-heading Resources collected:
-			.resources-collected 0
-			button.btn.collected-button.btn-success(type='button') View Answers
-		.color-map.tabbable
-			.tabs
-				.tab-you you
-				.tab-everyone everyone
-			.tab-content
-				#tab-you-pane.tab-pane.active
-					.color-map-you
-						img.color-map-image(src='')
-						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
-					.time-played
-						i.fa.fa-clock-o.fa-lg
-						span.time-played-text
-					.time-played-label time played
-				#tab-everyone-pane.tab-pane
-					.color-map-everyone
-						img.color-map-image(src='')
-						img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
-					.percent-complete
-						.progress
-							.bar
-					.percent-label world color meter
-		.top-seeders
-			.top-seeders-heading Top seeders
-			.your-seeds
-			ol.top-seeders-ranking
-		a.close-overlay(href='')
-			i.fa.fa-times-circle.fa-lg
+  #progress-area.gameboard-overlay
+    h2 Progress
+    .personal-info
+      .level-images
+        img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').current-level-image
+        img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')
+        img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
+        img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
+      .current-level-name Novice gardener
+      .resources-collected-heading Resources collected:
+      .resources-collected 0
+      button.btn.collected-button.btn-success(type='button') View Answers
+    .color-map.tabbable
+      .tabs
+        .tab-you you
+        .tab-everyone everyone
+      .tab-content
+        #tab-you-pane.tab-pane.active
+          .color-map-you
+            img.color-map-image(src='')
+            img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+          .time-played
+            i.fa.fa-clock-o.fa-lg
+            span.time-played-text
+          .time-played-label time played
+        #tab-everyone-pane.tab-pane
+          .color-map-everyone
+            img.color-map-image(src='')
+            img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+          .percent-complete
+            .progress
+              .bar
+          .percent-label world color meter
+    .top-seeders
+      .top-seeders-heading Top seeders
+      .your-seeds
+      ol.top-seeders-ranking
+    a.close-overlay(href='')
+      i.fa.fa-times-circle.fa-lg
 
-	#collected-resources.gameboard-overlay.background-3
-		h2 Your Answers
-		.displayMyAnswers.content-box You haven't collected any resources yet.
-		button.btn.back-button.btn-info(type='button') Back
+  #collected-resources.gameboard-overlay.background-3
+    h2 Your Answers
+    .displayMyAnswers.content-box You haven't collected any resources yet.
+    button.btn.back-button.btn-info(type='button') Back
 
-	#help-area.gameboard-overlay
-		h2 How To Play
-		.content-box
-			include help
-		.buttons
-			.right
-				button.close-button.btn.btn-primary(type='button') Close
-		a.close-overlay(href='')
-			i.fa.fa-times-circle.fa-lg
+  #help-area.gameboard-overlay
+    h2 How To Play
+    .content-box
+      include help
+    .buttons
+      .right
+        button.close-button.btn.btn-primary(type='button') Close
+    a.close-overlay(href='')
+      i.fa.fa-times-circle.fa-lg
 
-	#boss-area.gameboard-overlay
-		.dialog
-			span.speaker
-			span.message
-		.boss-introduction.video
-		.boss-resumes
-			.content-box
-		.boss-instructions
-			include boss-instructions
-		.boss-win.video
-		.buttons
-			button.boss-button.btn.btn-success(type='button') Next
+  #boss-area.gameboard-overlay
+    .dialog
+      span.speaker
+      span.message
+    .boss-introduction.video
+    .boss-resumes
+      .content-box
+    .boss-instructions
+      include boss-instructions
+    .boss-win.video
+    .buttons
+      button.boss-button.btn.btn-success(type='button') Next
 
-	#skinventory.gameboard-overlay.background-3
-		h2 Changing Room
-		p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
-		.parts
-			.part.head(data-part='head')
-			.part.torso(data-part='torso')
-			.part.legs(data-part='legs')
-		.skinformation
-			h3 You're wearing
-			p Nothing!
-		a.close-button(href='')
-			i.fa.fa-times-circle.fa-lg
+  #skinventory.gameboard-overlay.background-3
+    h2 Changing Room
+    p Customize your suit! Mix and match different parts to create your look.  Unlock more pieces by talking to other characters in the world.
+    .parts
+      .part.head(data-part='head')
+      .part.torso(data-part='torso')
+      .part.legs(data-part='legs')
+    .skinformation
+      h3 You're wearing
+      p Nothing!
+    a.close-button(href='')
+      i.fa.fa-times-circle.fa-lg
 
-	#inventory
-		.inventory-boxes
-		.inventory-items
-		.inventory-tangram
-		button.close-button.btn.btn-primary(type='button') Close
-		.help click piece to view resource
+  #inventory
+    .inventory-boxes
+    .inventory-items
+    .inventory-tangram
+    button.close-button.btn.btn-primary(type='button') Close
+    .help click piece to view resource
 
-	#status-update
-		span
+  #status-update
+    span
 
-	#seedventory
-		.seed.regular-button
-			i.fa.fa-leaf.fa-lg(title='regular seed', data-placement='top')
-			span.badge.always-show
-		.seed.draw-button
-			i.fa.fa-star.fa-lg(title='paintbrush seed', data-placement='top')
-			span.badge.always-show
-		button.close-button.btn.btn-primary(type='button') Close
+  #seedventory
+    .seed.regular-button
+      i.fa.fa-leaf.fa-lg(title='regular seed', data-placement='top')
+      span.badge.always-show
+    .seed.draw-button
+      i.fa.fa-star.fa-lg(title='paintbrush seed', data-placement='top')
+      span.badge.always-show
+    button.close-button.btn.btn-primary(type='button') Close
 
-	#graffiti
-		| seeds left: <span class='remaining'></span>
+  #graffiti
+    | seeds left: <span class='remaining'></span>
 
-	#speech-bubble
-		.dialog
-			span.speaker
-			span.message
-		.buttons
-			button.next-button.btn.btn-success(type='button') Next
-			button.close-button.btn.btn-primary(type='button') Okay
-			button.no-button.btn.btn-primary(type='button') Close
-			button.yes-button.btn.btn-success(type='button') View
+  #speech-bubble
+    .dialog
+      span.speaker
+      span.message
+    .buttons
+      button.next-button.btn.btn-success(type='button') Next
+      button.close-button.btn.btn-primary(type='button') Okay
+      button.no-button.btn.btn-primary(type='button') Close
+      button.yes-button.btn.btn-success(type='button') View
 
-	#game-log-overlay.scrollable
+  #game-log-overlay.scrollable
 
-	#pause-menu
-		p please re-focus your mind, body, and the window...
-		p
-			button.unpause.btn.btn-success(type='button') Resume Game
+  #pause-menu
+    p please re-focus your mind, body, and the window...
+    p
+      button.unpause.btn.btn-success(type='button') Resume Game
 
-	#waiting-for-seed.spinner
-		// img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
+  #waiting-for-seed.spinner
+    // img(src='#{CivicSeed.CLOUD_PATH}/img/game/spinloader.gif')
 
-	#beaming
+  #beaming

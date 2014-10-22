@@ -1,32 +1,32 @@
 doctype html
 html(class='no-js', lang='en')
-	head
+  head
 
-		- var parsedCivicSeed = JSON.parse(CivicSeed);
-		- var cloudPath = parsedCivicSeed.CLOUD_PATH;
+    - var parsedCivicSeed = JSON.parse(CivicSeed);
+    - var cloudPath = parsedCivicSeed.CLOUD_PATH;
 
-		meta(charset='utf-8')
-		meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
 
-		title { ::: Civic Seed ::: }
+    title { ::: Civic Seed ::: }
 
-		meta(name='viewport', content='width=device-width')
-		meta(name='description', content='')
-		meta(name='author', content='')
-		link(href='http://fonts.googleapis.com/css?family=Nunito:300,700|Arvo:400,700,400italic', rel='stylesheet', type='text/css')
+    meta(name='viewport', content='width=device-width')
+    meta(name='description', content='')
+    meta(name='author', content='')
+    link(href='http://fonts.googleapis.com/css?family=Nunito:300,700|Arvo:400,700,400italic', rel='stylesheet', type='text/css')
 
-		script(src='/js/modernizr-2.6.2.min.js')
+    script(src='/js/modernizr-2.6.2.min.js')
 
-		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/normalize.css')
-		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/main.css')
-		link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/font-awesome.min.css')
+    link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/normalize.css')
+    link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/main.css')
+    link(rel='stylesheet', type='text/css', href='#{cloudPath}/css/font-awesome.min.css')
 
-		script window.CivicSeed = !{CivicSeed};
+    script window.CivicSeed = !{CivicSeed};
 
-		!= SocketStream
+    != SocketStream
 
-		link(rel='stylesheet', type='text/css', media='print', href='#{cloudPath}/css/print.css')
+    link(rel='stylesheet', type='text/css', media='print', href='#{cloudPath}/css/print.css')
 
-	body
+  body
 
-		block content
+    block content

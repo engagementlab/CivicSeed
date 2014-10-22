@@ -1,310 +1,310 @@
 .admin-container
-	h4
-		text-transform capitalize
-	button
-		&:not(:last-of-type)
-			margin-right 10px
-		&.btn-success
-			// Needed to overwrite CSS priority
-			background $csGreen !important
-		&.btn-error
-			// Needed to overwrite CSS priority
-			background $csRed !important
-	.back-to-admin
-		font-family $buttonFont
-		white-space nowrap
-		i
-			margin-right 6px
-			font-size 1.4em
+  h4
+    text-transform capitalize
+  button
+    &:not(:last-of-type)
+      margin-right 10px
+    &.btn-success
+      // Needed to overwrite CSS priority
+      background $csGreen !important
+    &.btn-error
+      // Needed to overwrite CSS priority
+      background $csRed !important
+  .back-to-admin
+    font-family $buttonFont
+    white-space nowrap
+    i
+      margin-right 6px
+      font-size 1.4em
 
 .console
-	width 100%
-	margin 25px auto
-	padding 25px
-	background $csLightGray
-	.console-content
-		padding 20px
-		border 2px solid $csGray
-		background-color white
-		.row
-			margin-bottom 10px
-	h2
-		margin-top 10px
-		font-weight normal
-		color $csDarkGreen
-	a.btn
-		display block
-		color white
-		font-family $buttonFont
-	button
-		position relative
-		.spinner
-			position absolute
-			top 0
-			left 50%
-			margin-left -5px
-	.admin-instructions
-		padding-top 4px
-	.control-group
-		.controls
-			input
-				width 100%
-	.server-response
-		font-weight bold
-		color $csDarkBlue
-		&.error
-			color $csRed
+  width 100%
+  margin 25px auto
+  padding 25px
+  background $csLightGray
+  .console-content
+    padding 20px
+    border 2px solid $csGray
+    background-color white
+    .row
+      margin-bottom 10px
+  h2
+    margin-top 10px
+    font-weight normal
+    color $csDarkGreen
+  a.btn
+    display block
+    color white
+    font-family $buttonFont
+  button
+    position relative
+    .spinner
+      position absolute
+      top 0
+      left 50%
+      margin-left -5px
+  .admin-instructions
+    padding-top 4px
+  .control-group
+    .controls
+      input
+        width 100%
+  .server-response
+    font-weight bold
+    color $csDarkBlue
+    &.error
+      color $csRed
 
 #admin-startup
-	button
-		width 100%
+  button
+    width 100%
 
 #admin-invites
-	form
-		margin-top 20px
+  form
+    margin-top 20px
 
 #admin-monitor
-	.console-buttons
-		width 33%
-		display inline-block
-		margin-top 20px
-	.monitor-button
-		width 90%
-		margin-bottom 10px
-		background $csOrange
-		&#questions
-			background $csBlue
-		&#chat
-			background $csPurple
-		&#addPlayer
-			background $csGreen
-		&#startStop
-			background $csOrange
-	.output
-		.allChat
-			font-family $buttonFont
-			p
-				margin 20px 0
-			.time
-				color white
-				font-size .8em
-				padding 11px 7px 7px 7px
-				background $csGray
-			.who
-					padding 5px
-					color white
-					font-size 1.2em
-					background $csPurple
-			p:nth-of-type(even)
-				.what
-					padding 5px
-					color white
-					font-size 1.2em
-					background $csBlue
-			p:nth-of-type(odd)
-				.what
-					padding 5px
-					color white
-					font-size 1.2em
-					background $csGreen
-		.question
-			font-family $bodyFont
-			cursor pointer
-			margin 0
-			margin-top 20px
-			color white
-			padding 10px
-			font-size 1.2em
+  .console-buttons
+    width 33%
+    display inline-block
+    margin-top 20px
+  .monitor-button
+    width 90%
+    margin-bottom 10px
+    background $csOrange
+    &#questions
+      background $csBlue
+    &#chat
+      background $csPurple
+    &#addPlayer
+      background $csGreen
+    &#startStop
+      background $csOrange
+  .output
+    .allChat
+      font-family $buttonFont
+      p
+        margin 20px 0
+      .time
+        color white
+        font-size .8em
+        padding 11px 7px 7px 7px
+        background $csGray
+      .who
+          padding 5px
+          color white
+          font-size 1.2em
+          background $csPurple
+      p:nth-of-type(even)
+        .what
+          padding 5px
+          color white
+          font-size 1.2em
+          background $csBlue
+      p:nth-of-type(odd)
+        .what
+          padding 5px
+          color white
+          font-size 1.2em
+          background $csGreen
+    .question
+      font-family $bodyFont
+      cursor pointer
+      margin 0
+      margin-top 20px
+      color white
+      padding 10px
+      font-size 1.2em
 
-		.answer
-			background $csGray
-			color white
-			padding 10px
-			margin 0
-			position relative
-			p
-				width 90%
-				font-size 1.2em
-				font-family $buttonFont
-			.extras
-				position absolute
-				right 10px
-				top 10px
-				i
-					color #eee
-					margin 5px
+    .answer
+      background $csGray
+      color white
+      padding 10px
+      margin 0
+      position relative
+      p
+        width 90%
+        font-size 1.2em
+        font-family $buttonFont
+      .extras
+        position absolute
+        right 10px
+        top 10px
+        i
+          color #eee
+          margin 5px
 
-		.allQuestion
-			margin-bottom 30px
-			p
-				color white
-				padding 10px
-				margin 0
-				font-size 1.2em
-				font-family $buttonFont
-			p.allPlayerAnswers
-				background $csGray
-			p.mainQ
-				font-family $bodyFont
-				cursor pointer
-				margin-top 20px
-	.deletePlayer
-		margin-top -10px
-		margin-left 10px
+    .allQuestion
+      margin-bottom 30px
+      p
+        color white
+        padding 10px
+        margin 0
+        font-size 1.2em
+        font-family $buttonFont
+      p.allPlayerAnswers
+        background $csGray
+      p.mainQ
+        font-family $bodyFont
+        cursor pointer
+        margin-top 20px
+  .deletePlayer
+    margin-top -10px
+    margin-left 10px
 p.level0
-	background $csGreen
+  background $csGreen
 p.level1
-	background $csPurple
+  background $csPurple
 p.level2
-	background $csBlue
+  background $csBlue
 p.level3
-	background $csOrange
+  background $csOrange
 
 #admin-npcs
-	h3
-		font-size 1.4em
-		margin-top 0
-	label
-		color white
-		display block
-		margin-top 10px
-		font-weight normal
-	small
-		color rgba(255,255,255,0.75)
-		font-size 0.85em
-		margin-left 8px
-	input, textarea
-		border 2px solid $csGray
-		background white !important
-	input
-		&.number
-			width 65px
-			margin-right 6px
-			text-align center
-	textarea
-		padding 10px
-		height 95px
-		width 100%
-		&.possible, &.answer
-			width 45%
-			margin-right 20px
-	.npc-actions
-		margin-top 20px
-	.npc-delete-button, .npc-cancel-button
-		position absolute
-		right 20px
-	.npc
-		margin 20px 0
-		color white
-		position relative
-		user-select none
-		.information, .resource, .smalltalk, .prompts, .skinSuit, .options
-			position relative
-			padding 20px
-		.information
-			background $csLightGray
-			color $csBlack
-			height 90px
-			.sprite
-				position absolute
-				width 32px
-				height 64px
-				top 16px
-				background-repeat no-repeat
-				.sprite-controls
-					position absolute
-					top 6px
-					left 45px
-					font-size 1.5em
-					color $csGray
-					i
-						cursor pointer
-						&:hover
-							color $csOrange
-			.npc-basic-info
-				position absolute
-				left 100px
-				top 28px
-				.name
-					width 150px
-				input
-					font-size 1.4em
-					font-weight bold
-				label
-					display inline-block
-					margin 0 10px
-					font-size 1.3em
-					line-height 1.6
-					font-family $bodyFont
-					color $csBlack
-		.resource
-			background $csGreen
-			.view-resource-button
-				position absolute
-				right 20px
-				top 20px
-				background $csPurple
-			.questionType
-				display inline-block
-				margin-left 20px
-				input
-					display inline-block
-				label
-					display inline-block
-					margin 0 10px 0 6px
-					color rgba(255,255,255,0.75)
-					font-size 0.85em
-		.smalltalk
-			background $csOrange
-		.prompts
-			background $csBlue
-		.skinSuit
-			background $csLightGreen
-		.options
-			background $csPurple
-	.npc-template
-		display none
+  h3
+    font-size 1.4em
+    margin-top 0
+  label
+    color white
+    display block
+    margin-top 10px
+    font-weight normal
+  small
+    color rgba(255,255,255,0.75)
+    font-size 0.85em
+    margin-left 8px
+  input, textarea
+    border 2px solid $csGray
+    background white !important
+  input
+    &.number
+      width 65px
+      margin-right 6px
+      text-align center
+  textarea
+    padding 10px
+    height 95px
+    width 100%
+    &.possible, &.answer
+      width 45%
+      margin-right 20px
+  .npc-actions
+    margin-top 20px
+  .npc-delete-button, .npc-cancel-button
+    position absolute
+    right 20px
+  .npc
+    margin 20px 0
+    color white
+    position relative
+    user-select none
+    .information, .resource, .smalltalk, .prompts, .skinSuit, .options
+      position relative
+      padding 20px
+    .information
+      background $csLightGray
+      color $csBlack
+      height 90px
+      .sprite
+        position absolute
+        width 32px
+        height 64px
+        top 16px
+        background-repeat no-repeat
+        .sprite-controls
+          position absolute
+          top 6px
+          left 45px
+          font-size 1.5em
+          color $csGray
+          i
+            cursor pointer
+            &:hover
+              color $csOrange
+      .npc-basic-info
+        position absolute
+        left 100px
+        top 28px
+        .name
+          width 150px
+        input
+          font-size 1.4em
+          font-weight bold
+        label
+          display inline-block
+          margin 0 10px
+          font-size 1.3em
+          line-height 1.6
+          font-family $bodyFont
+          color $csBlack
+    .resource
+      background $csGreen
+      .view-resource-button
+        position absolute
+        right 20px
+        top 20px
+        background $csPurple
+      .questionType
+        display inline-block
+        margin-left 20px
+        input
+          display inline-block
+        label
+          display inline-block
+          margin 0 10px 0 6px
+          color rgba(255,255,255,0.75)
+          font-size 0.85em
+    .smalltalk
+      background $csOrange
+    .prompts
+      background $csBlue
+    .skinSuit
+      background $csLightGreen
+    .options
+      background $csPurple
+  .npc-template
+    display none
 
 .article
-	display none
-	top 20%
-	margin 0 auto
-	width 780px
-	height 360px
-	overflow auto
-	background $cloudUrl('img/bg/grey.png')
-	position fixed
-	border-radius 5px
-	padding 20px
-	cursor pointer
+  display none
+  top 20%
+  margin 0 auto
+  width 780px
+  height 360px
+  overflow auto
+  background $cloudUrl('img/bg/grey.png')
+  position fixed
+  border-radius 5px
+  padding 20px
+  cursor pointer
 
 .buffer
-	position fixed
-	display none
-	top 0
-	left 0
-	background #222
-	background rgba(0,0,0,.7)
-	width 100%
-	height 100%
+  position fixed
+  display none
+  top 0
+  left 0
+  background #222
+  background rgba(0,0,0,.7)
+  width 100%
+  height 100%
 
 .levelFilter
-	position fixed
-	top 176px
-	left 0px
-	margin 0
-	padding 0
-	background rgba(100,100,100,0.5)
-	div
-		margin 0
-		padding 10px 20px
-		border 2px solid #fff
-		text-align right
-		font-family $buttonFont
-		font-size 1.5em
-		color #fff
-		cursor pointer
-	.current
-		background $csOrange
-		&:hover
-			background $csLightOrange
+  position fixed
+  top 176px
+  left 0px
+  margin 0
+  padding 0
+  background rgba(100,100,100,0.5)
+  div
+    margin 0
+    padding 10px 20px
+    border 2px solid #fff
+    text-align right
+    font-family $buttonFont
+    font-size 1.5em
+    color #fff
+    cursor pointer
+  .current
+    background $csOrange
+    &:hover
+      background $csLightOrange

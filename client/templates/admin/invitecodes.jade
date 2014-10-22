@@ -1,59 +1,59 @@
 .row
-	.col-md-10.col-md-offset-1.back-to-admin
-		a(href='/admin')
-			i.fa.fa-arrow-circle-o-left.fa-lg
-			| back
+  .col-md-10.col-md-offset-1.back-to-admin
+    a(href='/admin')
+      i.fa.fa-arrow-circle-o-left.fa-lg
+      | back
 
 .row
-	.col-md-10.col-md-offset-1
-		h1 Create New Game
+  .col-md-10.col-md-offset-1
+    h1 Create New Game
 
-		h4 <span class='color-darkorange'>#{environment} Environment</a>
+    h4 <span class='color-darkorange'>#{environment} Environment</a>
 
 .row
-	.col-md-10.col-md-offset-1
-		#admin-invites.console
+  .col-md-10.col-md-offset-1
+    #admin-invites.console
 
-			.console-content
+      .console-content
 
-				h2 Create a new group of invites.
+        h2 Create a new group of invites.
 
-				p <strong class='color-darkblue'>Instructions.</strong> Please set a new game name and include up to twenty (20) e-mail addresses.
+        p <strong class='color-darkblue'>Instructions.</strong> Please set a new game name and include up to twenty (20) e-mail addresses.
 
-				p <strong class='color-red'>Warning!</strong> This creates a new user account for each e-mail address. If the user is already in the system, this will overwrite their profile without warning!
+        p <strong class='color-red'>Warning!</strong> This creates a new user account for each e-mail address. If the user is already in the system, this will overwrite their profile without warning!
 
-				form
+        form
 
-					//- div.control-group
-					//- 	label.control-label(for='sessionName') Session Name:
-					//- 	div.controls
-					//- 		input#sessionName.col-md-4(type='text', placeholder='Give this session a name...')
-					.row.control-group
-						.col-sm-3
-							label.control-label(for='emailList') Game Name:
-						.col-sm-9.controls
-							input#instanceName(placeholder='ex. Tufts Round 1')
-					.row
-						.col-sm-3
-							label.control-label(for='emailList') Email Addresses:
-						.col-sm-9.controls
-							textarea#emailList(rows='6', placeholder='Enter a list of comma-separated email addresses. Note: more than twenty e-mail addresses will be ignored!')
-					.row.control-group
-						.col-sm-9.col-sm-offset-3.controls
-							//- .btn-success
-							button#inviteCodesBtn.btn(type='button') Create and Send Invites
+          //- div.control-group
+          //-   label.control-label(for='sessionName') Session Name:
+          //-   div.controls
+          //-     input#sessionName.col-md-4(type='text', placeholder='Give this session a name...')
+          .row.control-group
+            .col-sm-3
+              label.control-label(for='emailList') Game Name:
+            .col-sm-9.controls
+              input#instanceName(placeholder='ex. Tufts Round 1')
+          .row
+            .col-sm-3
+              label.control-label(for='emailList') Email Addresses:
+            .col-sm-9.controls
+              textarea#emailList(rows='6', placeholder='Enter a list of comma-separated email addresses. Note: more than twenty e-mail addresses will be ignored!')
+          .row.control-group
+            .col-sm-9.col-sm-offset-3.controls
+              //- .btn-success
+              button#inviteCodesBtn.btn(type='button') Create and Send Invites
 
-					//- p Select an existing session to apply an action:
+          //- p Select an existing session to apply an action:
 
-					//- div.control-group
-					//- 	label.control-label(for='sessionSelect') Existing Session:
-					//- 	div.controls
-					//- 		//- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
-					//- 		select#sessionSelect.col-md-4
-					//- 			//- {{#each invitees}}
-					//- 			//- 	option value='{{this}}'>{{this}}
-					//- 			//- {{/each}}
-					//- 		button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
-					//- 		button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
+          //- div.control-group
+          //-   label.control-label(for='sessionSelect') Existing Session:
+          //-   div.controls
+          //-     //- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
+          //-     select#sessionSelect.col-md-4
+          //-       //- {{#each invitees}}
+          //-       //-   option value='{{this}}'>{{this}}
+          //-       //- {{/each}}
+          //-     button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
+          //-     button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
 
-					pre#inviteCodes.hidden
+          pre#inviteCodes.hidden
