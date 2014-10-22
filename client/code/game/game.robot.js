@@ -1,38 +1,38 @@
 'use strict';
 
-var _coords = [
-      {x: 0, y: 14},
-      {x: 113, y: 27},
-      {x: 113, y: 79},
-      {x: 0, y: 79},
-      {x: 0, y: 0},
-      {x: 0, y: 0}
-      ],
-    _positions = [
-      {x: 7, y: 20, d: -1, target: -3},
-      {x: 137, y: 33, d: 1, target: 145},
-      {x: 137, y: 124, d: 1, target: 145},
-      {x: 7, y: 84, d: -1, target: -3},
-      {x: 0, y: 0, d: 0, target: 0},
-      {x: 0, y: 0, d: 0, target: 0}
-      ],
-    _info = null,
-    _renderInfo = null,
-    _onScreen = false,
-    _triggered = false;
+var $robot = $game.$robot = (function () {
 
-var $robot = $game.$robot = {
+  var _coords = [
+        {x: 0, y: 14},
+        {x: 113, y: 27},
+        {x: 113, y: 79},
+        {x: 0, y: 79},
+        {x: 0, y: 0},
+        {x: 0, y: 0}
+        ],
+      _positions = [
+        {x: 7, y: 20, d: -1, target: -3},
+        {x: 137, y: 33, d: 1, target: 145},
+        {x: 137, y: 124, d: 1, target: 145},
+        {x: 7, y: 84, d: -1, target: -3},
+        {x: 0, y: 0, d: 0, target: 0},
+        {x: 0, y: 0, d: 0, target: 0}
+        ],
+      _info = null,
+      _renderInfo = null,
+      _onScreen = false,
+      _triggered = false;
 
-  ready: false,
-  active: false,
-  currentStep: 0,
-  numSteps: 16,
-  counter: Math.floor(Math.random() * 64),
-  curFrame: 0,
-  numFrames: 4,
-  isMoving: false,
+  var ready = false,
+      active = false,
+      currentStep = 0,
+      numSteps = 16,
+      counter = Math.floor(Math.random() * 64),
+      curFrame = 0,
+      numFrames = 4,
+      isMoving = false
 
-  init: function (callback) {
+  function init (callback) {
     if ($game.bossModeUnlocked) {
       callback();
     } else {
@@ -51,54 +51,56 @@ var $robot = $game.$robot = {
         srcY: 0
       };
       if (!$game.$player.seenRobot) {
-        $game.$robot.setPosition();
+        setPosition();
       }
       callback();
     }
-  },
+  }
 
-  resetInit: function () {
+  function resetInit () {
     _info = null;
     _renderInfo = null;
     _onScreen = false;
     _triggered = false;
 
-    $game.$robot.ready= false;
-    $game.$robot.active= false;
-    $game.$robot.currentStep= 0;
-    $game.$robot.counter= Math.floor(Math.random() * 64);
-    $game.$robot.curFrame= 0;
-    $game.$robot.isMoving= false;
-  },
+    ready = false;
+    active = false;
+    currentStep = 0;
+    counter = Math.floor(Math.random() * 64);
+    curFrame = 0;
+    isMoving = false;
+  }
 
-  setPosition: function () {
+  function setPosition () {
     _info = _positions[$game.$player.currentLevel];
     _info.offX = 0;
     _info.offY = 0;
     _info.prevOffX = 0;
     _info.prevOffY = 0;
     _renderInfo.dir = _positions[$game.$player.currentLevel].d;
-    $game.$robot.isMoving = false;
-    $game.$robot.active = true;
-    $game.$robot.counter = Math.floor(Math.random() * 64);
-    $game.$robot.curFrame = 0;
-    $game.$robot.currentStep = 0;
+
+    isMoving = false;
+    active = true;
+    counter = Math.floor(Math.random() * 64);
+    curFrame = 0;
+    currentStep = 0;
+
     if (_renderInfo.dir === -1) {
       _renderInfo.srcY = 0;
     } else {
       _renderInfo.srcY = 64;
     }
-  },
+  }
 
-  update: function () {
-    if ($game.$robot.active) {
+  function update () {
+    if (active) {
       //if it is live, then update movement
       if (_onScreen) {
         if (_triggered) {
-          $game.$robot.move();
+          move();
         }
         else {
-          $game.$robot.idleCheckTrigger();
+          idleCheckTrigger();
         }
       }
       //if not, check if we need to turn it live
@@ -109,9 +111,9 @@ var $robot = $game.$robot = {
         }
       }
     }
-  },
+  }
 
-  updateRenderInfo: function () {
+  function updateRenderInfo () {
     //must pass true so we get the coords EVEN tho it doesn't exist for off screen stuff
     var loc = $game.$map.masterToLocal(_info.x, _info.y, true);
     if (loc) {
@@ -125,7 +127,7 @@ var $robot = $game.$robot = {
       _renderInfo.curX = curX,
       _renderInfo.curY = curY;
 
-      if ($game.$robot.isMoving) {
+      if (isMoving) {
         //left
         if (_renderInfo.dir === -1) {
           _renderInfo.srcY = 0;
@@ -140,22 +142,21 @@ var $robot = $game.$robot = {
         }
       }
     }
+  }
 
-  },
-
-  idleCheckTrigger: function () {
-    $game.$robot.currentStep++;
-    if ($game.$robot.currentStep % 8 === 0) {
-      if ($game.$robot.currentStep > $game.$robot.numSteps) {
-        $game.$robot.currentStep = 0;
+  function idleCheckTrigger () {
+    currentStep++;
+    if (currentStep % 8 === 0) {
+      if (currentStep > numSteps) {
+        currentStep = 0;
       }
-      $game.$robot.curFrame++;
-      if ($game.$robot.curFrame === $game.$robot.numFrames) {
-        $game.$robot.curFrame = 0;
+      curFrame++;
+      if (curFrame === numFrames) {
+        curFrame = 0;
       }
-      _renderInfo.srcX = $game.TILE_SIZE * $game.$robot.curFrame * 2;
+      _renderInfo.srcX = $game.TILE_SIZE * curFrame * 2;
     }
-    $game.$robot.updateRenderInfo();
+    updateRenderInfo();
 
     //check distance between player and robot
     var playerPos = $game.$player.getPosition(),
@@ -168,44 +169,47 @@ var $robot = $game.$robot = {
       $game.$audio.playTriggerFx('robot');
       $game.statusUpdate({message:'You just saw a strange robot!', input:'status', screen: true, log: true});
       $game.$player.seenRobot = true;
-      $game.$robot.isMoving = true;
-      $game.$robot.currentStep = 0;
-      $game.$robot.counter = 0;
-      $game.$robot.curFrame = 0;
+      isMoving = true;
+      currentStep = 0;
+      counter = 0;
+      curFrame = 0;
       var info = {
         id: $game.$player.id,
         seenRobot: $game.$player.seenRobot
       };
       ss.rpc('game.player.updateGameInfo', info);
     }
-  },
+  }
 
-  move: function () {
+  function move () {
+    var currentStepIncX,
+        currentStepIncY
+
     if (_onScreen) {
       //if the steps between the tiles has finished,
       //update the master location, and reset steps to go on to next move
-      if ($game.$robot.currentStep >= $game.$robot.numSteps) {
-        $game.$robot.currentStep = 0;
-        //$game.$robot.info.x = $game.$robot.seriesOfMoves[$game.$robot.currentMove].masterX;
-        //$game.$robot.info.y = $game.$robot.seriesOfMoves[$game.$robot.currentMove].masterY;
+      if (currentStep >= numSteps) {
+        currentStep = 0;
+        //info.x = seriesOfMoves[currentMove].masterX;
+        //info.y = seriesOfMoves[currentMove].masterY;
         _info.x += _info.d;
       }
 
       //check to see if done
       if (_info.x === _info.target) {
         _onScreen = false;
-        $game.$robot.active = false;
+        active = false;
       }
 
       //if not, step through it
       else {
         //increment the current step
-        $game.$robot.currentStep += 1;
+        currentStep += 1;
 
         //if it the first one, then figure out the direction to face
-        if ($game.$robot.currentStep === 1) {
-          $game.$robot.currentStepIncX = _info.d;
-          $game.$robot.currentStepIncY = 0;
+        if (currentStep === 1) {
+          currentStepIncX = _info.d;
+          currentStepIncY = 0;
           //set the previous offsets to 0 because the last visit
           //was the actual rounded master
           _info.prevOffX = 0;
@@ -218,47 +222,59 @@ var $robot = $game.$robot = {
           _info.prevOffX = _info.offX;
           _info.prevOffY = _info.offY;
           //set direction for sprite sheets
-          if ($game.$robot.currentStep % 4 === 0) {
-            // console.log('currentStep', $game.$robot.currentStep);
-            _renderInfo.srcX = $game.TILE_SIZE * ($game.$robot.currentStep / 4) * 2 - 64;
+          if (currentStep % 4 === 0) {
+            // console.log('currentStep', currentStep);
+            _renderInfo.srcX = $game.TILE_SIZE * (currentStep / 4) * 2 - 64;
           }
         }
 
-        _info.offX = $game.$robot.currentStep * $game.$robot.currentStepIncX;
-        _info.offY = $game.$robot.currentStep * $game.$robot.currentStepIncY;
+        _info.offX = currentStep * currentStepIncX;
+        _info.offY = currentStep * currentStepIncY;
 
         //try only changing the src (frame) every X frames
-        // if (($game.$robot.currentStep - 1) % 8 === 0) {
-        //  $game.$robot.curFrame += 1;
-        //  if ($game.$robot.curFrame >= $game.$robot.numFrames) {
-        //    $game.$robot.curFrame = 0;
+        // if ((currentStep - 1) % 8 === 0) {
+        //  curFrame += 1;
+        //  if (curFrame >= numFrames) {
+        //    curFrame = 0;
         //  }
         // }
-      // $game.$robot.info.srcX = $game.$robot.curFrame * $game.TILE_SIZE,
-        $game.$robot.updateRenderInfo();
+      // info.srcX = curFrame * $game.TILE_SIZE,
+        updateRenderInfo();
       }
     }
-  },
-
-  clear: function () {
-    $game.$render.clearRobot(_renderInfo);
-  },
-
-  getRenderInfo: function () {
-    if (_onScreen) {
-      return _renderInfo;
-    }
-    else {
-      return false;
-    }
-  },
-
-  getLoc: function () {
-    return _coords[$game.$player.currentLevel];
-  },
-
-  disable: function () {
-    _onScreen = false;
   }
 
-}
+  function clear () {
+    $game.$render.clearRobot(_renderInfo);
+  }
+
+  function getRenderInfo () {
+    if (_onScreen) {
+      return _renderInfo
+    } else {
+      return false
+    }
+  }
+
+  function getLoc () {
+    return _coords[$game.$player.currentLevel]
+  }
+
+  function disable () {
+    _onScreen = false
+  }
+
+  // Expose 'public' methods
+  $robot = {
+    init: init,
+    resetInit: resetInit,
+    update: update,
+    disable: disable,
+    clear: clear,
+    setPosition: setPosition,
+    getRenderInfo: getRenderInfo
+  }
+
+  return $robot
+
+}())
