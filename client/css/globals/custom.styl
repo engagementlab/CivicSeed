@@ -11,20 +11,17 @@ body
   height 70px
   padding-bottom 10px
   border-bottom 0
-  .container-fluid
+  .navbar-header
     padding-left 30px
-    padding-right 30px
   .logo
     height 64px
     margin-top 2px
   .navbar-nav
     margin-top 16px
+    margin-right 20px
     li
-      border-right 1px solid $csLightGray
       line-height 1
       font-size 1.1em
-      &:last-of-type
-        border none
   .nav
     & > li > a
       color $csGray
@@ -34,13 +31,11 @@ body
         color $csOrange
         text-shadow 0 1px 0 rgba(0,0,0,0.25)
     button
-      padding 5px 15px
+      padding 5px 10px
   .navbar-toggle
     margin-top 18px
   .dropdown
-    margin-left 20px
-    margin-top 16px
-    margin-right 10px
+    margin 3px 20px 0 10px
     .username
       margin 0 6px
     .caret
@@ -51,6 +46,10 @@ body
     width 100%
     height 10px
     bottom -10px   // set height = bottom
+  .navbar-collapse
+    border-top 0
+    background-color white
+    margin 0
 
 .form-inline
   // Override extra margin below forms

@@ -1,17 +1,20 @@
-lesscss-percentage(n)
-  (n * 100)%
 // Media objects
-// Source: http://stubbornella.org/content/?p=497
+// Source http://stubbornella.org/content/?p=497
 // --------------------------------------------------
+
+
 // Common styles
 // -------------------------
+
 // Clear the floats
-.media, .media-body
+.media,
+.media-body
   overflow hidden
   zoom 1
 
 // Proper spacing between instances of .media
-.media, .media .media
+.media,
+.media .media
   margin-top 15px
 
 .media:first-child
@@ -25,8 +28,10 @@ lesscss-percentage(n)
 .media-heading
   margin 0 0 5px
 
+
 // Media image alignment
 // -------------------------
+
 .media
   > .pull-left
     margin-right 10px
@@ -37,8 +42,8 @@ lesscss-percentage(n)
 
 // Media list variation
 // -------------------------
+
 // Undo default ul/ol styles
 .media-list
   padding-left 0
   list-style none
-
