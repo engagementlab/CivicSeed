@@ -5,6 +5,12 @@ body
   margin-top 110px
   font-family $bodyFont
 
+.container-fluid
+  padding-left 0
+  padding-right 0
+  > .navbar-header
+    margin-right 0
+
 .navbar
   user-select none
   background-color white
@@ -17,8 +23,8 @@ body
     height 64px
     margin-top 2px
   .navbar-nav
-    margin-top 16px
-    margin-right 20px
+    margin-top 15px
+    margin-right 15px !important
     li
       line-height 1
       font-size 1.1em
@@ -50,6 +56,9 @@ body
     border-top 0
     background-color white
     margin 0
+    border-bottom 1px solid #e8e8e8
+    @media (min-width $grid-float-breakpoint)
+      border-bottom 0
 
 .form-inline
   // Override extra margin below forms
