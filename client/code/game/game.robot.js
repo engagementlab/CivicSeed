@@ -1,4 +1,4 @@
-'use strict';
+//'use strict';
 
 var $robot = $game.$robot = (function () {
 
@@ -33,9 +33,7 @@ var $robot = $game.$robot = (function () {
       isMoving = false
 
   function init (callback) {
-    if ($game.bossModeUnlocked) {
-      callback();
-    } else {
+    if (!$game.bossModeUnlocked) {
       //create things position and render info based on players state
       _info = {
         x: 0,
@@ -53,7 +51,10 @@ var $robot = $game.$robot = (function () {
       if (!$game.$player.seenRobot) {
         setPosition();
       }
-      callback();
+    }
+
+    if (typeof callback === 'function') {
+      callback()
     }
   }
 
@@ -118,9 +119,9 @@ var $robot = $game.$robot = (function () {
     var loc = $game.$map.masterToLocal(_info.x, _info.y, true);
     if (loc) {
       var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS / 2,
-        prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS / 2,
-        curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS / 2,
-        curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS / 2;
+          prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS / 2,
+          curX  = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS / 2,
+          curY  = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS / 2;
 
       _renderInfo.prevX = prevX,
       _renderInfo.prevY = prevY;
@@ -182,8 +183,8 @@ var $robot = $game.$robot = (function () {
   }
 
   function move () {
-    var currentStepIncX,
-        currentStepIncY
+    var currentStepIncX = _info.d,
+        currentStepIncY = 0
 
     if (_onScreen) {
       //if the steps between the tiles has finished,
@@ -208,8 +209,6 @@ var $robot = $game.$robot = (function () {
 
         //if it the first one, then figure out the direction to face
         if (currentStep === 1) {
-          currentStepIncX = _info.d;
-          currentStepIncY = 0;
           //set the previous offsets to 0 because the last visit
           //was the actual rounded master
           _info.prevOffX = 0;
