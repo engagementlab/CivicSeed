@@ -82,7 +82,7 @@ On your local machine:
 
 Before initializing data, we need to make sure there's a super admin to create startup data. To create a temporary user, open a new terminal window and run the following command in the `/CivicSeed` project directory:
 
-  $ node test/boot
+  $ node bin/boot
 
 This command will load a temporary super admin user with username `temp` and password `temp`. This will allow you to authenticate and initialize the rest of the database.
 

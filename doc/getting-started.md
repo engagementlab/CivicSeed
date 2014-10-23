@@ -47,7 +47,7 @@ redis-server & mongod &
 **5.** On first startup, you must initialize a database super user in Mongo.
 
 ```
-node test/boot
+node bin/boot
 ```
 
 You can verify that this database exists by running `mongo` and then running `show dbs`. A Civic Seed database with the name given by the `MONGO_URL` configuration variable should be present.

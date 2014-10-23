@@ -30,9 +30,9 @@ You should see two environment variables set, `MONGOHQ_URL` and `REDISTOGO_URL`.
   git push heroku master
   ```
 
-7. To run the first boot of the server, we need to run `node test/boot` through Foreman, like so:
+7. To run the first boot of the server, we need to run `node bin/boot` through Foreman, like so:
   ```
-  heroku run node test/boot
+  heroku run node bin/boot
   ```
 You should receive log messages from heroku stating that the superuser admin has been saved to MongoDB.
 
