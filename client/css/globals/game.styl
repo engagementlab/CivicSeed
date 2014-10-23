@@ -47,7 +47,11 @@ canvas
 #background
   z-index 0
   &.lab-background
-    background $cloudUrl('img/game/lab_bg.png') no-repeat center center
+    background-image $cloudUrl('img/game/lab_bg.png')
+  &.custom-background
+    background-repeat no-repeat
+    background-position center center
+    background-color $csBlack
 
 #characters
   z-index 20

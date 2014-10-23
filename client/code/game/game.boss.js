@@ -13,14 +13,18 @@ var $boss = $game.$boss = {
   // Initialize boss mode
   init: function (callback) {
     $('.hud-regular').fadeOut('fast')
-    document.getElementById('background').classList.add('lab-background')
+    //document.getElementById('background').classList.add('custom-background')
+    //document.getElementById('background').classList.add('lab-background')
+    $game.$room.create('lab')
     $game.setFlag('boss-mode')
     _boss.createGrid()
 
     _boss.setupCutsceneVideos()
     _boss.showOverlay(0)
 
-    if (typeof callback === 'function') callback()
+    if (typeof callback === 'function') {
+      callback()
+    }
   },
 
   // Start seed mode. Called via $input

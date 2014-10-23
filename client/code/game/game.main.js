@@ -43,7 +43,8 @@ var _stepNumber = 0,
   $input,
   $chat,
   $log,
-  $boss;
+  $boss,
+  $room;
 
 // PUBLIC EXPORTS
 var $game = module.exports = {
@@ -121,6 +122,7 @@ var $game = module.exports = {
     $chat       = require('/game.chat')
     $log        = require('/game.log')
     $boss       = require('/game.boss')
+    $room       = require('/game.room')
 
     // events recevied by RPC
     $events.init();
