@@ -21,7 +21,7 @@ var self = module.exports = {
       self.db = mongoose.createConnection(config.get('MONGO_URL'))
       self.db.on('error', function (err) {
         // err is not a string; have to force it
-        winston.error('MongoDB: '.blue + '%s'.red, err.toString())
+        winston.error('MongoDB: '.blue + ' %s '.white.bgRed, err.toString())
       })
       self.db.once('open', function () {
         winston.info('MongoDB: '.blue + 'Connected to '.green + app.get('env').yellow.inverse)
