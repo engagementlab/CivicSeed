@@ -29,7 +29,7 @@ var rootDir        = process.cwd(),
 // Read environment variables from an optional .env, if present
 var envFile = rootDir + '/.env'
 if (fs.existsSync(envFile)) {
-  env(envFile, {verbose: true, overwrite: true})
+  env(envFile, {verbose: false, overwrite: true})
 }
 
 var NODE_ENV       = process.env.NODE_ENV || 'development',
