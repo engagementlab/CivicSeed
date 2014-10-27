@@ -54,7 +54,10 @@ CivicSeed uses `nconf` to create runtime configuration and environment variables
 }
 ```
 
+Environment variables take precedence over whatever is in the configuration file, so to override any configuration file variable just declare it in the environment or in the `.env` file.
+
 If you really need to, you can set `CONFIG_FILE` in the environment to specify a custom configuration filename that does not match the `NODE_ENV`.
+
 
 ## Other notes about configuration
 
