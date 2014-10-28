@@ -11,7 +11,10 @@ Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure 
 ulimit -n
 ```
 
-Setting the ulimit to the correct number (probably) depends on the instance type, however, following [this stackoverlow answer](http://stackoverflow.com/questions/11342167/how-to-increase-ulimit-on-amazon-ec2-instance/11345256#11345256) `20000` appears to be a good number. You will need to open the `/etc/security/limits.conf` file and set hard and soft limits:
+Setting the ulimit to the correct number (probably) depends on the instance type, however, following [this stackoverlow answer](http://stackoverflow.com/questions/11342167/how-to-increase-ulimit-on-amazon-ec2-instance/11345256#11345256) `20000` appears to be a good number. You will need to set hard and soft limits:
+```
+sudo nano /etc/security/limits.conf
+```
 
 ```
 #<domain>   <type>  <item>   <value>
@@ -126,23 +129,32 @@ scp -i yourpemkey.pem ec2-user@ipaddress:file_name.json ~/Desktop
 
 *Note, when the users are reloaded, this also deletes the `temp` super admin user.*
 
-#### REDIS
+#### Redis service
 
-CivicSeed uses REDIS for "pubsub" real-time communication and RPC listeners for game interaction (and more). Again, follow [this guide](http://www.codingsteps.com/install-redis-2-6-on-amazon-ec2-linux-ami-or-centos/) to install REDIS on an AWS EC2 instance. (There does not seem to be any good Amazon Marketplace instances at this time.)
+CivicSeed uses Redis for "pubsub" real-time communication and RPC listeners for game interaction (and more). 
 
-[TODO: why was this command necessary???]
+1. On the AWS EC2 console, launch a generic instance of Amazon Linux on type `t2.micro` (there does not seem to be any good Amazon Marketplace instances at this time, _that we know about_). Add it to the private subnet for Civic Seed VPC. Name it `civicseed-redis`. Create a security group that includes an inbound rule for TCP port 6379 (the default port Redis listens on). You can allow it to be reached from anywhere (setting of `0.0.0.0/0` or if you know the IP range for your VPC use that).
+2. Login to the Redis instance via SSH. [Ensure that the instance can reach the Internet](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
+3. Run `sudo yum install update` if prompted by the instance.
+4. Set `ulimit` as described above. Reboot the server for changes to take effect.
+5. Install Redis, following this [this guide](http://www.codingsteps.com/install-redis-2-6-on-amazon-ec2-linux-ami-or-centos/). You may want to use the latest version of Redis instead of 2.6. So far version 2.8.17 works. **NOTE:** These instructions tell you to add `bind 127.0.0.1` to `redis.conf` -- ignore that instruction, since you want Redis to listen on incoming IPs. **Do not start the Redis server on this step yet.**
+6. According to the [Redis Administration Setup Hints](http://redis.io/topics/admin) you want to run this command:
+
+   ```
+   sudo sysctl vm.overcommit_memory=1
+   ```
+
+   Or, `sudo vi /etc/sysctl.conf` and add `vm.overcommit_memory=1` to end. (This may be more permanent?)
+7. Finally, run Redis as a daemon.
+
+   ```
+   sudo service redis-server start
+   ```
+
+If you ever need to restart the server (say, after making changes to configuration)
 
 ```
-sudo sysctl vm.overcommit_memory=1
-```
-
-[or?] `sudo vi /etc/sysctl.conf` and add `vm.overcommit_memory=1` to end
-
-To run the REDIS database as a daemon:
-
-```
-cd /home/ec2-user/redis-2.6.0-rc3
-sudo service redis-server start
+sudo service redis-server restart
 ```
 
 ### Deployment
