@@ -60,12 +60,12 @@ These instructions assume that the production server is already up and running a
 2. Restart the application.
    
    ```
-   forever -o out.log -e err.log restart bin/server
+   forever -o out.log -e err.log restart bin/server.js
    ```
    
    Note that for some server-side changes you may need to completely stop the application and then start it again from scratch.
 
    ```
    forever stopall
-   forever -o out.log -e err.log start bin/server
+   forever -o out.log -e err.log start bin/server.js
    ```
