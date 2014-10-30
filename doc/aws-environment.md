@@ -224,13 +224,13 @@ sudo service redis-server restart
 Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.)
 
 ```
-NODE_ENV=production SS_PACK=1 npm start
+SS_PACK=1 npm start
 ```
 
 You'll need to use the `sudo` command if you're using a production client port lower than 1024:
 
 ```
-sudo NODE_ENV=production SS_PACK=1 npm start
+sudo SS_PACK=1 npm start
 ```
 
 Once the app is running and assets are packed, make sure to commit the compiled assets (`/client/assets/*`) to git and push them up to where you're hosting static assets.

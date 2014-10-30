@@ -19,7 +19,7 @@ These instructions assume that the production server environment is already up a
 3. Start the server.
 
    ```
-   NODE_ENV=production SS_PACK=1 npm start
+   SS_PACK=1 npm start
    ```
    You’ll know it’s done when 3 files (HTML, CSS and JS) are created and the server has started.
 
