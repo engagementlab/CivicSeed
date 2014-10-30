@@ -33,7 +33,7 @@ console.log('  '.green + '"'.white + '`-'.green + '0'.white + '-'.green + '0'.wh
 console.log('\n\n')
 
 // Setup database services, based on the config
-service.connectMongoose(app, function(databases) {
+service.connectMongoose(app, function (databases) {
 
   // ~ - ~ - ~ --- >>>
   // ~ - ~ - ~ --- >>> EXPRESS

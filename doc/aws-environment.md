@@ -2,10 +2,72 @@
 
 Civic Seed currently deploys to AWS instances for its production server. The following instructions are for setting up a new environment on AWS, redeploying new code and starting/restarting the server. A simplified set of instructions for just updating the AWS instance can be found [here](https://github.com/engagementgamelab/CivicSeed/blob/master/doc/amazon-s3-production-environment.md).
 
+**NOTE** Amazon AWS is a pretty complex set up. They have also adjusted some of their processes and services over time, so portions of these instructions below may become obsolete in the future unexpectedly. When that happens be sure to verify steps with the [AWS Documentation](http://aws.amazon.com/documentation/), and searching the Internet (e.g. Stack Overflow) is your friend.
+
+## Overview
+
+As of November 2014, Civic Seed uses four EC2 instances, connected in a Virtual Private Cloud (VPC) and one S3 bucket. First, set up the VPC.
+
+### Setting up the Virtual Private Cloud
+
+We only need [a basic VPC](http://docs.aws.amazon.com/AmazonVPC/latest/GettingStartedGuide/GetStarted.html) so you can use the VPC wizard to set up a simple one. It should have a public subnet and a private subnet (the EC2 instances are split across these, as described below). Name it "Civic Seed". You also need to [set up an Internet gateway](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Internet_Gateway.html) and assign an elastic IP to the VPC.
+
+### Launching EC2 instances
+
+The EC2 instances are:
+
+* A public web server which hosts the Civic Seed repository, runs Node.js, and serves files.
+* A private server that runs Redis.
+* A private server that runs MongoDB.
+* A public NAT server which routes outbound Internet traffic from the private servers (for instance, to download software updates.)
+
+These are the [general instructions for launching an Amazon EC2 instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-instance_linux.html). Specific instructions for each instance are below.
+
+### Creating a S3 bucket
+
+Setting up an S3 bucket is fairly easy. Civic Seed expects the bucket to be named `civicseed`. Buckets use a shared namespace across all of Amazon AWS, so deployments that want their own S3 bucket will need to create a new one and modify the code as needed.
+
+Make sure to [double check CORS permissions](https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html#how-do-i-enable-cors) so that Civic Seed can access assets.
+
+## Access credentials (SSH)
+
+Working with AWS EC2 instances through a terminal requires SSH and [a private key file](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) to log in. This file is created when the servers were set up for the first time, so you should continue to use the same one for all Civic Seed-related serevers. For Civic Seed this file is called `civicseed-prod.pem`. (There is also a `civicseed.pem` for an older server environment floating around.)
+
+Never check this file into Git and never store it in a publicly accessible location.
+
+Make sure the permissions are set correctly (Amazon will refuse to let you log in if permissions on this file are too loose):
+
+```
+chmod 400 civicseed-prod.pem
+```
+
+To login to an AWS instance:
+
+```
+ssh -i civicseed-prod.pem ec2-user@[aws-public-ip]
+```
+
+To ease the login process, you can add the private key file to a Mac OSX keychain. Then you can login like so:
+
+```
+ssh-add -K civicseed-prod.pem
+ssh ec2-user@[aws-public-ip]
+```
+
+To login to a private instance, login to the public instance first with the `-A` parameter. This "forwards" your credentials through the servers so that you do not need to have a `.pem` file present on the public AWS instance itself.
+
+```
+ssh -A ec2-user@[aws-public-ip]
+```
+
+## Launching and configuring EC2 instances
+
+
+
 
 #### Adjust instances with `ulimit`
 
-Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. CivicSeed runs on REDIS, MongoDB, and Node.js instances, and this step needs to happen (first) for all instances involved. To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
+Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. CivicSeed runs on REDIS, MongoDB, and Node.js instances, and this step needs to happen (first) for all instances involved. (If you are starting a MongoDB instance from the AWS Marketplace, it should [already be set](http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/).) To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
 
 ```
 ulimit -n
@@ -39,7 +101,7 @@ To list what routes exist in the `iptables`, run the following command. You shou
 ```
 $ sudo iptables -t nat -L
 Chain PREROUTING (policy ACCEPT)
-target     prot opt source               destination         
+target     prot opt source               destination
 REDIRECT   tcp  --  anywhere             anywhere             tcp dpt:http redir ports 8000
 
 [...]
@@ -131,7 +193,7 @@ scp -i yourpemkey.pem ec2-user@ipaddress:file_name.json ~/Desktop
 
 #### Redis service
 
-CivicSeed uses Redis for "pubsub" real-time communication and RPC listeners for game interaction (and more). 
+CivicSeed uses Redis for "pubsub" real-time communication and RPC listeners for game interaction (and more).
 
 1. On the AWS EC2 console, launch a generic instance of Amazon Linux on type `t2.micro` (there does not seem to be any good Amazon Marketplace instances at this time, _that we know about_). Add it to the private subnet for Civic Seed VPC. Name it `civicseed-redis`. Create a security group that includes an inbound rule for TCP port 6379 (the default port Redis listens on). You can allow it to be reached from anywhere (setting of `0.0.0.0/0` or if you know the IP range for your VPC use that).
 2. Login to the Redis instance via SSH. [Ensure that the instance can reach the Internet](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
@@ -162,13 +224,13 @@ sudo service redis-server restart
 Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.)
 
 ```
-SS_ENV=production SS_PACK=1 npm start
+NODE_ENV=production SS_PACK=1 npm start
 ```
 
 You'll need to use the `sudo` command if you're using a production client port lower than 1024:
 
 ```
-sudo SS_ENV=production SS_PACK=1 npm start
+sudo NODE_ENV=production SS_PACK=1 npm start
 ```
 
 Once the app is running and assets are packed, make sure to commit the compiled assets (`/client/assets/*`) to git and push them up to where you're hosting static assets.
@@ -187,12 +249,12 @@ Once installed, run the following command (found at the [s3cmd website](http://s
 s3cmd --configure
 ```
 
-You will need your S3 Access Key and Secret Key handy for the configuration.
+You will need your [S3 user access key and secret key handy for the configuration](http://blogs.aws.amazon.com/security/post/Tx1R9KDN9ISZ0HF/Where-s-my-secret-access-key). For all other configuration options (e.g. encryption) that is up to you, but you can press Enter to skip those.
 
-Once the configuration is setup, make sure you are in the root of the Civic Seed game folder (`cd CivicSeed`). From the root folder run the following command to sync the static folder with S3.
+Once the configuration is set up, make sure you are in the root of the Civic Seed game folder (`cd CivicSeed`). From the root folder run the following command to sync the static folder with S3.
 
 ```
-s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2014 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
+s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2015 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
 ```
 
 #### Caching
