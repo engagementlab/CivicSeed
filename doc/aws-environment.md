@@ -97,33 +97,40 @@ This is the instance that will host and run the Node.js repository.
     ```
     sudo yum update
     ```
+
 13. Install Git.
     ```
     sudo yum install git
     ```
+
 14. [Install Node.js and NPM](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#enterprise-linux-and-fedora)
     ```
     curl -sL https://rpm.nodesource.com/setup | sudo bash -
     sudo yum install -y nodejs
     curl -L https://npmjs.org/install.sh | sudo sh
     ```
-14. Install additional dependencies that are needed for node packages (e.g. bcrypt seems to require a few of these)
+
+15. Install additional dependencies that are needed for node packages (e.g. bcrypt seems to require a few of these)
     ```
     sudo yum install gcc-c++ make
     sudo yum install openssl-devel
     ```
-15. Clone the CivicSeed repository from GitHub.
+
+16. Clone the CivicSeed repository from GitHub.
     ```
     git clone https://github.com/engagementgamelab/CivicSeed.git ~/CivicSeed
     ```
-16. Install node dependencies. Civic Seed also relies on forever to keep the app running, so make sure to install this as a global dependency.
+
+17. Install node dependencies. Civic Seed also relies on forever to keep the app running, so make sure to install this as a global dependency.
     ```
     npm install
     sudo npm install -g forever
     ```
-17. Set `ulimit` (see below) and reboot the server. Wait for it to finish then SSH log in again.
-18. Set the `iptables` configuration (see below) to forward port 80 web traffic to the Node server listening on port 8000.
-19. Set up environment variables (see [environment configuration document](configuration.md)). This step will be complete after setting up the Redis and MongoDB configuration as well, in case you need to override private IPs you can do it here or update `config/production.json`
+
+18. Set `ulimit` (see below) and reboot the server. Wait for it to finish then SSH log in again.
+19. Set the `iptables` configuration (see below) to forward port 80 web traffic to the Node server listening on port 8000.
+20. Set up environment variables (see [environment configuration document](configuration.md)). This step will be complete after setting up the Redis and MongoDB configuration as well, in case you need to override private IPs you can do it here or update `config/production.json`
+
     ```
     touch .env
     vi .env
