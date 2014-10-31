@@ -6,7 +6,7 @@ Civic Seed currently deploys to AWS instances for its production server. The fol
 
 ## Overview
 
-As of November 2014, Civic Seed uses four EC2 instances, connected in a Virtual Private Cloud (VPC) and one S3 bucket. First, set up the VPC.
+As of November 2014, Civic Seed uses four EC2 server instances, connected in a Virtual Private Cloud (VPC), one S3 bucket for static assets, and a Route 53 hosted zone for the domain name. First, set up the VPC.
 
 ### Setting up the Virtual Private Cloud
 
@@ -21,13 +21,25 @@ The EC2 instances are:
 * A private server that runs MongoDB.
 * A public NAT server which routes outbound Internet traffic from the private servers (for instance, to download software updates.)
 
-These are the [general instructions for launching an Amazon EC2 instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-instance_linux.html). Specific instructions for each instance are below.
+These are the [general instructions for launching an Amazon EC2 instance](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-instance_linux.html). Specific instructions for each instance are further down below.
 
 ### Creating a S3 bucket
 
 Setting up an S3 bucket is fairly easy. Civic Seed expects the bucket to be named `civicseed`. Buckets use a shared namespace across all of Amazon AWS, so deployments that want their own S3 bucket will need to create a new one and modify the code as needed.
 
 Make sure to [double check CORS permissions](https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html#how-do-i-enable-cors) so that Civic Seed can access assets.
+
+### Setting up Route 53
+
+A Route 53 hosted zone allows the civiseed.org domain name to point at the Amazon EC2 web instance. Here are the basic steps for setting it up.
+
+1. Go to the Route 53 console in AWS, and create a new Hosted Zone for "civicseed.org"
+2. Once it is created, select it, and go to its record set. It should already have a name server (NS) record and a SOA record.
+3. Add an A record. Set the value to the Civic Seed web EC2 instance’s public IP. Leave all other fields alone.
+4. Set up TXT records [required by the Mailgun service](http://documentation.mailgun.com/user_manual.html#verifying-your-domain), which we use to send mail from civicseed.org. The first is a TXT record whose value is `"v=spf1 include:mailgun.org ~all"` ([SPF](http://www.openspf.org/Introduction)) (include quotes). The second is a TXT record for [DKIM](http://www.dkim.org/#introduction) and is a crypto string. Get that from the Mailgun account.
+5. Finally, click on the hosted zone and take note of the "delegation set." These will be the name servers that you must provide to the domain registrar (for civicseed.org, the registrar is GoDaddy.)
+6. Set (or change) the nameservers for `civicseed.org` on the platform host. Wait some time for the DNS changes to propagate through the Internet.
+
 
 ## Access credentials (SSH)
 
@@ -60,14 +72,184 @@ To login to a private instance, login to the public instance first with the `-A`
 ssh -A ec2-user@[aws-public-ip]
 ```
 
+
 ## Launching and configuring EC2 instances
 
+Here is how to launch and configure each EC2 instance, as of November 2014.
+
+### Public web (Node.js) instance
+
+This is the instance that will host and run the Node.js repository.
+
+1. From the EC2 console, click the “Launch Instance” button.
+2. On the “Choose AMI” step, select the default Amazon Linux AMI (HVM) instance.
+3. On “Choose Instance Type”, select the “t2.micro” micro instance.
+4. Next step - set up VPC. Connect with the Civic Seed VPC set up above. Make sure it is using the public subnet.
+4. Click “Review and Launch.”
+5. On the “Review Instance Launch” step you will be told the security group is insecure. Click on “Edit” to configure the security group.
+6. Name it “civicseed-1” (it can be anything really)
+7. Add an HTTP rule for port 80
+8. Continue to launch the instance.
+9. Set up a key pair file if there is not already one. It should already be there, so if it's in the list, associate it with `civicseed-prod.pem`
+10. Wait for the initialization to finish.
+11. SSH into the instance (see access credentials, above).
+12. Update the server software if needed.
+    ```
+    sudo yum update
+    ```
+13. Install Git.
+    ```
+    sudo yum install git
+    ```
+14. [Install Node.js and NPM](https://github.com/joyent/node/wiki/installing-node.js-via-package-manager#enterprise-linux-and-fedora)
+    ```
+    curl -sL https://rpm.nodesource.com/setup | sudo bash -
+    sudo yum install -y nodejs
+    curl -L https://npmjs.org/install.sh | sudo sh
+    ```
+14. Install additional dependencies that are needed for node packages (e.g. bcrypt seems to require a few of these)
+    ```
+    sudo yum install gcc-c++ make
+    sudo yum install openssl-devel
+    ```
+15. Clone the CivicSeed repository from GitHub.
+    ```
+    git clone https://github.com/engagementgamelab/CivicSeed.git ~/CivicSeed
+    ```
+16. Install node dependencies. Civic Seed also relies on forever to keep the app running, so make sure to install this as a global dependency.
+    ```
+    npm install
+    sudo npm install -g forever
+    ```
+17. Set `ulimit` (see below) and reboot the server. Wait for it to finish then SSH log in again.
+18. Set the `iptables` configuration (see below) to forward port 80 web traffic to the Node server listening on port 8000.
+19. Set up environment variables (see [environment configuration document](configuration.md)). This step will be complete after setting up the Redis and MongoDB configuration as well, in case you need to override private IPs you can do it here or update `config/production.json`
+    ```
+    touch .env
+    vi .env
+    ```
+
+### Public NAT instance
+
+You need to make sure that a [NAT instance is set up to handle external communications](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html). This instance will be on the VPC's public subnet. A route table, associated with the private subnet, is set to direct web traffic to the NAT instance. Follow Amazon’s instructions to make sure that servers in the private subnet, like Redis, can reach the Internet, so that you can actually install things.
+
+If you set up the VPC with a wizard, there should already be an instance in the public subnet you can use as a NAT, but if you need to customize it for any reason it may be easier to launch a new one from scratch.
 
 
+### Private Redis instance
+
+CivicSeed uses Redis for "pubsub" real-time communication and RPC listeners for game interaction (and more). Launching a Redis instance will follow much of the instructions above, with some differences.
+
+1. On the AWS EC2 console, launch a generic instance of Amazon Linux on type `t2.micro` (there does not seem to be any good Amazon Marketplace instances at this time, _that we know about_). Add it to the private subnet for Civic Seed VPC. Name it `civicseed-redis`. Create a security group that includes an inbound rule for TCP port 6379 (the port Redis listens on). Change the source IPs to the IP range of the public subnet on your VPC (probably `10.0.0.0/24`). You do not need to add a port 80 since Redis will not listen for any HTTP traffic.
+2. Login to the Redis instance via SSH. [Ensure that the instance can reach the Internet](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
+3. Run `sudo yum install update` if prompted by the instance.
+4. Set `ulimit` as described below. Reboot the server for changes to take effect.
+5. Install Redis, following this [this guide](http://www.codingsteps.com/install-redis-2-6-on-amazon-ec2-linux-ami-or-centos/). You may want to use the latest version of Redis instead of 2.6. So far version 2.8.17 works. **NOTE:** These instructions tell you to add `bind 127.0.0.1` to `redis.conf` -- ignore that instruction, since you want Redis to listen on incoming IPs. **Do not start the Redis server on this step yet.**
+6. According to the [Redis Administration Setup Hints](http://redis.io/topics/admin) you want to run this command:
+
+   ```
+   sudo sysctl vm.overcommit_memory=1
+   ```
+
+   Or, `sudo vi /etc/sysctl.conf` and add `vm.overcommit_memory=1` to end. (This may be more permanent?)
+7. Finally, run Redis as a daemon.
+
+   ```
+   sudo service redis-server start
+   ```
+8. Logout. Make sure you note the private IP address of the Redis server from the AWS console and update the configuration on the Node.js instance if needed.
+
+If you ever need to restart the server (say, after making changes to configuration)
+
+```
+sudo service redis-server restart
+```
+
+
+### Private MongoDB instance
+
+CivicSeed uses MongoDB for a data store. Please follow [this guide](http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/) to install an AWS EC2 instance. Amazon Marketplace MongoDB instances are built to just work out of the box on startup.
+
+1. When launching an instance, go to the AWS market place and select the most basic tier MongoDB official AMI "MongoDB with 1000 IOPS."  Put in the CivicSeed VPC and in the private subnet.
+2. In the security group, allow inbound traffic on custom TCP port 27017. Set the source IP to anywhere in the public subnet IP range (likely `10.0.0.0/24`).
+3. Once instance is up, SSH into the private instance. If the NAT gateway is set up correctly this instance should also have external web access.
+4. Update the server if needed.
+   ```
+   sudo yum update
+   ```
+5. Not sure if the service is already started as part of the AMI, but this doesn't hurt:
+   ```
+   sudo service mongod start
+   ```
+6. Logout. Make sure you note the private IP address of the MongoDB server from the AWS console and update the configuration on the Node.js instance if needed.
+
+You can test the mongo-to-node instance connection by running the following command:
+
+```
+MONGO_CON=mongodb://[private ip]/test node ~/CivicSeed/test/server/test-connect-mongo.js
+```
+
+
+### Running Civic Seed
+
+Once all the instances are set up, hooked up, and running, you are ready to start the Civic Seed program!
+
+#### Start Up
+
+To start the app:
+
+```
+cd ~/CivicSeed/
+forever -o out.log -e err.log start bin/server
+```
+
+If the app is already running, to avoid downtime, use the restart command instead (for example, if you've just updated using `git pull`):
+
+```
+forever -o out.log -e err.log restart bin/server
+```
+
+#### Updating the App
+
+```
+git pull origin
+npm update
+forever -o out.log -e err.log restart bin/server
+```
+
+#### Troubleshooting
+
+You can list check the running instance:
+
+```
+forever list
+```
+
+Or check the logs:
+
+```
+cat err.log
+cat out.log
+```
+
+To check the environment variables:
+
+```
+set
+```
+
+To actually stop the server:
+
+```
+forever stopall
+```
+
+
+## How-to's for various things
 
 #### Adjust instances with `ulimit`
 
-Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. CivicSeed runs on REDIS, MongoDB, and Node.js instances, and this step needs to happen (first) for all instances involved. (If you are starting a MongoDB instance from the AWS Marketplace, it should [already be set](http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/).) To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
+Because CivicSeed uses web sockets, we need to check the `ulimit` and make sure the number is sufficiently high. Amazon's default AMIs apparently leave it really low. Make sure you set the `ulimit` for the Node.js and Redis instances (if you are starting a MongoDB instance from the AWS Marketplace, it should [already be set](http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/).) To check the current `ulimit` of an instance, SSH into the given instance, and run the following command:
 
 ```
 ulimit -n
@@ -112,15 +294,7 @@ Without this, the server will not be reachable.
 __NOTE:__ You may have to redo this if the server is rebooted. That is why this should occur after the `ulimit` step, for instance.
 
 
-#### Mongo DB
-
-CivicSeed uses MongoDB for a data store. Please follow [this guide](http://docs.mongodb.org/ecosystem/platforms/amazon-ec2/) to install an AWS EC2 instance. Amazon Marketplace MongoDB instances are built to just work out of the box on startup, but you'll want to check that you're passing the right internal IP to the CivicSeed environment config file (listed above under "environment configuration").
-
-You can test the mongo-to-node instance connection by running the following command:
-
-```
-MONGO_CON=[connectionString] node ~/CivicSeed/test/server/test-connect-mongo.js
-```
+#### Mongo DB admin tasks
 
 You can view the MongoDB logs if needed:
 
@@ -191,34 +365,6 @@ scp -i yourpemkey.pem ec2-user@ipaddress:file_name.json ~/Desktop
 
 *Note, when the users are reloaded, this also deletes the `temp` super admin user.*
 
-#### Redis service
-
-CivicSeed uses Redis for "pubsub" real-time communication and RPC listeners for game interaction (and more).
-
-1. On the AWS EC2 console, launch a generic instance of Amazon Linux on type `t2.micro` (there does not seem to be any good Amazon Marketplace instances at this time, _that we know about_). Add it to the private subnet for Civic Seed VPC. Name it `civicseed-redis`. Create a security group that includes an inbound rule for TCP port 6379 (the default port Redis listens on). You can allow it to be reached from anywhere (setting of `0.0.0.0/0` or if you know the IP range for your VPC use that).
-2. Login to the Redis instance via SSH. [Ensure that the instance can reach the Internet](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html).
-3. Run `sudo yum install update` if prompted by the instance.
-4. Set `ulimit` as described above. Reboot the server for changes to take effect.
-5. Install Redis, following this [this guide](http://www.codingsteps.com/install-redis-2-6-on-amazon-ec2-linux-ami-or-centos/). You may want to use the latest version of Redis instead of 2.6. So far version 2.8.17 works. **NOTE:** These instructions tell you to add `bind 127.0.0.1` to `redis.conf` -- ignore that instruction, since you want Redis to listen on incoming IPs. **Do not start the Redis server on this step yet.**
-6. According to the [Redis Administration Setup Hints](http://redis.io/topics/admin) you want to run this command:
-
-   ```
-   sudo sysctl vm.overcommit_memory=1
-   ```
-
-   Or, `sudo vi /etc/sysctl.conf` and add `vm.overcommit_memory=1` to end. (This may be more permanent?)
-7. Finally, run Redis as a daemon.
-
-   ```
-   sudo service redis-server start
-   ```
-
-If you ever need to restart the server (say, after making changes to configuration)
-
-```
-sudo service redis-server restart
-```
-
 ### Deployment
 
 Before deploying the application, you'll want to pack the assets locally for production. (Technically this can be done in production, but it's not advised.)
@@ -282,66 +428,4 @@ Other helps:
 
 ```
   ... --add-header='Content-Encoding: gzip' ... ???
-```
-
-### Running Civic Seed
-
-#### Install the App
-
-Civic Seed can be installed from GitHub. Civic Seed also relies on forever to keep the app running, so make sure to install this as a global dependency. SSH into the AWS Node.js instance and run:
-
-```
-git clone https://github.com/engagementgamelab/CivicSeed.git ~/CivicSeed
-npm install
-npm install -g forever
-```
-
-#### Start Up
-
-To start the app:
-
-```
-cd ~/CivicSeed/
-forever -o out.log -e err.log start bin/server
-```
-
-If the app is already running, to avoid downtime, use the restart command instead (for example, if you've just updated using `git pull`):
-
-```
-forever -o out.log -e err.log restart bin/server
-```
-
-#### Updating the App
-
-```
-git pull origin
-npm update
-forever -o out.log -e err.log restart bin/server
-```
-
-#### Troubleshooting
-
-You can list check the running instance:
-
-```
-forever list
-```
-
-Or check the logs:
-
-```
-cat err.log
-cat out.log
-```
-
-To check the environment variables:
-
-```
-set
-```
-
-To actually stop the server:
-
-```
-forever stopall
 ```
