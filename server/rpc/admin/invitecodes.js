@@ -75,6 +75,7 @@ exports.actions = function (req, res, ss) {
               tilesColored: 0,
               pledges: 5,
               collaborativeChallenge: false,
+              playerColor: 0,
               skinSuit: {
                 head: 'basic',
                 torso: 'basic',

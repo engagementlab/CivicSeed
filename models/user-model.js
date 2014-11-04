@@ -55,6 +55,7 @@ module.exports = function(mongoose, db, Schema, ObjectId) {
 			tilesColored: Number,
 			pledges: Number,
 			collaborativeChallenge: Boolean,
+			playerColor: Number,
 			skinSuit: {
 				head: String,
 				torso: String,
