@@ -50,7 +50,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 1,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -118,7 +118,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 2,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -174,7 +174,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 3,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -230,7 +230,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 4,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -286,7 +286,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 5,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -342,7 +342,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 6,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -398,7 +398,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 7,
       "skinSuit": {
         "head": "astronaut",
         "torso": "basic",
@@ -620,7 +620,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 8,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -839,7 +839,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 9,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -909,7 +909,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 10,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",
@@ -973,7 +973,7 @@
       "tilesColored": 0,
       "pledges": 5,
       "collaborativeChallenge": false,
-      "playerColor": 0,
+      "playerColor": 11,
       "skinSuit": {
         "head": "basic",
         "torso": "basic",

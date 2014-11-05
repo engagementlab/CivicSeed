@@ -115,6 +115,8 @@ var $player = $game.$player = {
       _player.updateTotalSeeds();
       _updateRenderInfo();
 
+      console.log(playerInfo.game.playerColor)
+
       // we are ready, let everyone know dat
       $game.$player.ready = true;
       callback();

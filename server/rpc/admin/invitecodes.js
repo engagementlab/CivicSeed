@@ -33,7 +33,7 @@ exports.actions = function (req, res, ss) {
       } else {
 //        if (!user) {
           var newColor = colorData[i],
-            tilesheetNum = i + 1;
+              tilesheetNum = i + 1;
 
           var password = xkcd.generatePassword();
           accountHelpers.hashPassword(password, function (hashedPassword) {
@@ -75,7 +75,7 @@ exports.actions = function (req, res, ss) {
               tilesColored: 0,
               pledges: 5,
               collaborativeChallenge: false,
-              playerColor: 0,
+              playerColor: generatePlayerColor(),
               skinSuit: {
                 head: 'basic',
                 torso: 'basic',
@@ -109,6 +109,11 @@ exports.actions = function (req, res, ss) {
       }
     });
   };
+
+  var generatePlayerColor = function () {
+    // TODO: Only return numbers that have not already been used per game session.
+    return Math.floor(Math.random() * 23) + 1
+  }
 
   var sendInviteEmail = function (firstName, password, email) {
     var content = '',

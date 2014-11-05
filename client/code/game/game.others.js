@@ -1,6 +1,6 @@
-'use others';
+'use strict';
 
-_onScreenPlayers = {};
+var _onScreenPlayers = {};
 
 var $others = $game.$others = {
   ready: false,
