@@ -1,56 +1,56 @@
 var self = module.exports = {
 
-	init: function() {
+  init: function () {
 
-		if(!CivicSeed.initialized) {
+    if (!CivicSeed.initialized) {
 
-			// self.registerModulesAndGlobals();
-			window.$WINDOW = $(window);
-			window.$HTML = $('html');
-			window.$BODY = $(document.body);
-			window.$CONTAINER = $('#container');
+      // self.registerModulesAndGlobals();
+      window.$WINDOW = $(window)
+      window.$HTML = $('html')
+      window.$BODY = $(document.body)
+      window.$CONTAINER = $('#container')
 
-			// game specific:
-			window.$game = require('/game.main');
+      // game specific:
+      window.$game = require('/game.main')
 
-			self.setupRouter();
+      self.setupRouter()
 
-			require('/account').accountHandlers();
+      require('/account').accountHandlers()
 
-			CivicSeed.initialized = true;
+      CivicSeed.initialized = true
 
-		}
+    }
 
-	},
+  },
 
-	setupRouter: function() {
+  setupRouter: function () {
 
-		var $app;
+    var $app
 
-		Davis(function() {
+    Davis(function () {
 
-			$app = this;
+      $app = this
 
-			require('/routes-middleware.js').loadMiddleware($app);
-			require('/routes-main').loadRoutes($app);
-			require('/routes-account').loadRoutes($app);
-			require('/routes-admin').loadRoutes($app);
-			require('/routes-profile').loadRoutes($app);
-			// should always be last
-			require('/routes-errors').loadRoutes($app);
+      require('/routes.middleware').loadMiddleware($app)
+      require('/routes.main').loadRoutes($app)
+      require('/routes.account').loadRoutes($app)
+      require('/routes.admin').loadRoutes($app)
+      require('/routes.profile').loadRoutes($app)
+      // should always be last
+      require('/routes.errors').loadRoutes($app)
 
-			$app.configure(function(config) {
-				// config.linkSelector = 'a.davis';
-				// config.formSelector = 'form.davis';
-				// config.throwErrors = true;
-				// config.handleRouteNotFound = false;
-				config.generateRequestOnPageLoad = true;
-			});
+      $app.configure(function (config) {
+        // config.linkSelector = 'a.davis'
+        // config.formSelector = 'form.davis'
+        // config.throwErrors = true
+        // config.handleRouteNotFound = false
+        config.generateRequestOnPageLoad = true
+      })
 
-			$app.start();
+      $app.start()
 
-		});
+    })
 
-	}
+  }
 
-};
+}
