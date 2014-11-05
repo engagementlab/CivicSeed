@@ -1,28 +1,28 @@
-module.exports = function(mongoose, db, Schema, ObjectId) {
+module.exports = function (mongoose, db, Schema, ObjectId) {
 
-	var gameSchema = new Schema({
-		players: Number,
-		seedsDropped: Number,
-		seedsDroppedGoal: Number,
-		active: Boolean,
-		bossModeUnlocked: Boolean,
-		leaderboard: [{
-			name: String,
-			count: Number
-		}],
-		resourceCount: [Number],
-		instanceName: String,
-		resourceResponses: [{
-			npc: Number,
-			id: String,
-			name: String,
-			answer: String,
-			madePublic: Boolean
-		}]
-	});
+  var gameSchema = new Schema({
+    players: Number,
+    seedsDropped: Number,
+    seedsDroppedGoal: Number,
+    active: Boolean,
+    bossModeUnlocked: Boolean,
+    leaderboard: [{
+      name: String,
+      count: Number
+    }],
+    resourceCount: [Number],
+    instanceName: String,
+    resourceResponses: [{
+      npc: Number,
+      id: String,
+      name: String,
+      answer: String,
+      madePublic: Boolean
+    }]
+  })
 
-	var GameModel = db.model('Game', gameSchema, 'game');
+  var GameModel = db.model('Game', gameSchema, 'game')
 
-	return GameModel;
+  return GameModel
 
-};
+}

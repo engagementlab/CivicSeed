@@ -1,15 +1,13 @@
 var rootDir = process.cwd(),
-
-  emailUtil = require(rootDir + '/server/utils/email'),
-  colorHelpers = null,
-  dbHelpers = null,
-
-  // _games = {},
-  _service,
-  _userModel,
-  _tileModel,
-  _gameModel,
-  _colorModel;
+    emailUtil = require(rootDir + '/server/utils/email'),
+    colorHelpers = null,
+    dbHelpers = null,
+    // _games = {},
+    _service,
+    _userModel,
+    _tileModel,
+    _gameModel,
+    _colorModel;
 
 exports.actions = function (req, res, ss) {
 
@@ -30,11 +28,11 @@ exports.actions = function (req, res, ss) {
         _colorModel = _service.useModel('color', 'ss');
       }
 
-        playerInfo = {
-          id: req.session.userId,
-          firstName: req.session.firstName,
-          game: null
-        };
+      playerInfo = {
+        id: req.session.userId,
+        firstName: req.session.firstName,
+        game: null
+      };
 
       dbHelpers.getUserGameInfo(req.session.userId, function (game) {
         if (game) {

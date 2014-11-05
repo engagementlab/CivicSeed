@@ -1426,6 +1426,7 @@ function _setPlayerInformation(info) {
   if (!_resources) {
     _resources = {};
   }
+
   // public
   $game.$player.id = info.id;
   $game.$player.firstName = info.firstName;
@@ -1433,6 +1434,7 @@ function _setPlayerInformation(info) {
   $game.$player.instanceName = info.game.instanceName;
   $game.$player.seenRobot = info.game.seenRobot;
   $game.$player.isMuted = info.game.isMuted
+  $game.$player.playerColor = info.game.playerColor
 
   $game.$botanist.setState(info.game.botanistState)
 
