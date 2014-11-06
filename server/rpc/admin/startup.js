@@ -142,7 +142,7 @@ var _startup = {
               tilesColored: 0,
               pledges: 5,
               collaborativeChallenge: false,
-              playerColor: Math.floor(Math.random() * 23) + 1,
+              playerColor: Math.floor(Math.random() * 24) + 1,
               skinSuit: {
                 head: 'basic',
                 torso: 'basic',

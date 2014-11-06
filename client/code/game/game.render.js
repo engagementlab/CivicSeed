@@ -88,7 +88,7 @@ var $render = $game.$render = {
     _foregroundContext.lineWidth = 4;
     _foregroundContext.save();
 
-    _playerColorNum = $game.$player.getColorNum();
+    _playerColorNum = $game.$player.getColorIndex();
     _playerLevelNum = $game.$player.currentLevel;
     $render.loadTilesheets(0);
 
@@ -220,18 +220,26 @@ var $render = $game.$render = {
 
     var next = num + 1,
         skinsList = $game.$skins.getSetsList(),
-        filename = skinsList[num],
-        skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png';
+        numberOfColors = 24,
+        filename = null
 
-    var skinSuitImage = new Image();
-    skinSuitImage.src = skinSuitFile;
+    if (skinsList[num]) {
+      filename = skinsList[num]
+    } else {
+      // Loads player colors and stores on canvas in the format of 'basic/x'
+      // where x is a number between 1 and 24 (inclusive)
+      filename = 'basic/' + (num - skinsList.length + 1)
+    }
+
+    var skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png'
+    var skinSuitImage = new Image()
+    skinSuitImage.src = skinSuitFile
 
     skinSuitImage.onload = function () {
-
-      _offscreenSkinSuitCanvas[filename] = document.createElement('canvas');
-      _offscreenSkinSuitCanvas[filename].setAttribute('width', skinSuitImage.width);
-      _offscreenSkinSuitCanvas[filename].setAttribute('height', skinSuitImage.height);
-      _offscreenSkinSuitContext[filename] = _offscreenSkinSuitCanvas[filename].getContext('2d');
+      _offscreenSkinSuitCanvas[filename] = document.createElement('canvas')
+      _offscreenSkinSuitCanvas[filename].setAttribute('width', skinSuitImage.width)
+      _offscreenSkinSuitCanvas[filename].setAttribute('height', skinSuitImage.height)
+      _offscreenSkinSuitContext[filename] = _offscreenSkinSuitCanvas[filename].getContext('2d')
 
       _offscreenSkinSuitContext[filename].drawImage(
         skinSuitImage,
@@ -239,16 +247,15 @@ var $render = $game.$render = {
         0
       );
 
-      if (next === skinsList.length) {
-        $render.ready = true;
-        _skinSuitWidth = skinSuitImage.width;
-        _skinSuitHeight = skinSuitImage.height;
-        $game.$skins.renderSkinventory();
-        $render.createCanvasForPlayer($game.$player.id, false);
-        return;
-      }
-      else {
-        $render.loadSkinSuitImages(next);
+      if (next >= (skinsList.length + numberOfColors)) {
+        $render.ready = true
+        _skinSuitWidth = skinSuitImage.width
+        _skinSuitHeight = skinSuitImage.height
+        $game.$skins.renderSkinventory()
+        $render.createCanvasForPlayer($game.$player.id, false)
+        return
+      } else {
+        $render.loadSkinSuitImages(next)
       }
     };
 
@@ -476,7 +483,7 @@ var $render = $game.$render = {
   createCanvasForPlayer: function (id, suit) {
     //if it exists, clear it
     if (_offscreenPlayersContext[id]) {
-      _offscreenPlayersContext[id].clearRect(0,0,_skinSuitWidth,_skinSuitHeight);
+      _offscreenPlayersContext[id].clearRect(0, 0, _skinSuitWidth, _skinSuitHeight);
     } else {
       _offscreenPlayersCanvas[id] = document.createElement('canvas');
       _offscreenPlayersCanvas[id].setAttribute('width', _skinSuitWidth);
@@ -487,16 +494,28 @@ var $render = $game.$render = {
     if (!skinSuit) {
       skinSuit = $game.$player.getSkinSuit();
     }
+
+    // If basic suit, set to render player color
+    var playerColor = $game.$player.getColorIndex()
+    if (skinSuit.head === 'basic') {
+      skinSuit.head = 'basic/' + playerColor
+    }
+    if (skinSuit.torso === 'basic') {
+      skinSuit.torso = 'basic/' + playerColor
+    }
+    if (skinSuit.legs === 'basic') {
+      skinSuit.legs = 'basic/' + playerColor
+    }
+
     //draw the head, torso, and legs
     var h = $game.TILE_SIZE * 2,
-      numRows = Math.floor(_skinSuitHeight / h);
+        numRows = Math.floor(_skinSuitHeight / h);
 
     var r = 0;
     //draw all the heads from this spritesheet
-    var headHeight = 30,
-      torsoHeight = 15,
-      legsHeight = 19;
-
+    var headHeight  = 30,
+        torsoHeight = 15,
+        legsHeight  = 19
 
     for(r = 0; r < numRows; r++) {
       _offscreenPlayersContext[id].drawImage(

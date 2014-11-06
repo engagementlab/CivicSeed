@@ -115,8 +115,6 @@ var $player = $game.$player = {
       _player.updateTotalSeeds();
       _updateRenderInfo();
 
-      console.log(playerInfo.game.playerColor)
-
       // we are ready, let everyone know dat
       $game.$player.ready = true;
       callback();
@@ -726,8 +724,9 @@ var $player = $game.$player = {
   },
 
   //get the players image number (corresponds to 2.png for example)
-  getColorNum: function () {
-    return _renderInfo.colorNum;
+  getColorIndex: function () {
+    //return _renderInfo.colorNum;
+    return $game.$player.playerColor
   },
 
   //get all the render info to draw player
@@ -755,7 +754,8 @@ var $player = $game.$player = {
   },
 
   getSkinSuit: function () {
-    return _skinSuit;
+    var skinId = _skinSuit
+    return skinId
   },
 
   // Get seeds

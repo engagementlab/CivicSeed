@@ -111,8 +111,10 @@ exports.actions = function (req, res, ss) {
   };
 
   var generatePlayerColor = function () {
+    var numberOfColors = 24
+
     // TODO: Only return numbers that have not already been used per game session.
-    return Math.floor(Math.random() * 23) + 1
+    return Math.floor(Math.random() * numberOfColors) + 1
   }
 
   var sendInviteEmail = function (firstName, password, email) {

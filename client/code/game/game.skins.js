@@ -12,7 +12,7 @@ var $skins = $game.$skins = {
 
   ready: false,
 
-  // Returns an array of skin names (sets, not special outfits)
+  // Returns an array of skin names (sets, not special outfits, not basic colors)
   getSetsList: function () {
     var data = _skins.data.outfits,
         list = []
