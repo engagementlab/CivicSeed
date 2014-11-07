@@ -1,3 +1,5 @@
+'use strict';
+
 var rootDir = process.cwd()
 
 var winston = require('winston')

@@ -3,6 +3,7 @@ window.ss = require('socketstream')
 ss.server.on('ready', function () {
   $(function () {
     require('/civicseed-engine').init()
+    require('/apprise-fix').init()
   })
 })
 
