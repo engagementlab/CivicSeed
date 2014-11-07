@@ -1,7 +1,8 @@
 'use strict';
 
 var nodemailer    = require('nodemailer'),
-    htmlToText    = require('nodemailer-html-to-text').htmlToText
+    htmlToText    = require('nodemailer-html-to-text').htmlToText,
+    winston       = require('winston')
 
 var rootDir       = process.cwd(),
     config        = require(rootDir + '/app/config'),
@@ -32,18 +33,26 @@ var self = module.exports = {
     })
   },
 
-  sendEmail: function (subject, html, email) {
+  sendEmail: function (subject, html, email, callback) {
     mailOptions.to      = email
     mailOptions.subject = subject
     mailOptions.html    = html
+
+    self.openEmailConnection()
 
     transporter.use('compile', htmlToText())
 
     transporter.sendMail(mailOptions, function (err, response) {
       if (err) {
-        console.error('ERROR sending email to ' + email + ' via ' + EMAIL_SERVICE + '!', err)
+        winston.error('ERROR sending email to ' + email + ' via ' + EMAIL_SERVICE + '!', err)
+        self.closeEmailConnection()
       } else {
-        console.log('Message sent to ' + email + ' via ' + EMAIL_SERVICE +': ' + response.response)
+        winston.info('Message sent to ' + email + ' via ' + EMAIL_SERVICE +': ' + response.response)
+        self.closeEmailConnection()
+      }
+
+      if (typeof callback === 'function') {
+        callback(err, response)
       }
     })
   },

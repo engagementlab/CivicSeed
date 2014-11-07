@@ -4,12 +4,6 @@
   button
     &:not(:last-of-type)
       margin-right 10px
-    &.btn-success
-      // Needed to overwrite CSS priority
-      background $csGreen !important
-    &.btn-error
-      // Needed to overwrite CSS priority
-      background $csRed !important
   .back-to-admin
     font-family $buttonFont
     white-space nowrap
@@ -38,6 +32,12 @@
     font-family $buttonFont
   button
     position relative
+    &.btn-success
+      // Needed to overwrite CSS priority
+      background $csGreen !important
+    &.btn-error
+      // Needed to overwrite CSS priority
+      background $csRed !important
     .spinner
       position absolute
       top 0
