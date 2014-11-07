@@ -42,15 +42,26 @@ var $skins = $game.$skins = (function () {
     var skinventory = $game.$player.getSkinventory()
 
     if (part !== undefined) {
-      // Specify a part to unlock
-      skinventory[part].push(skin)
-      $game.addBadgeCount('.hud-skinventory', 1)
+      // If part already exists, skip.
+      if (!_.contains(skinventory[part], skin)) {
+        // Specify a part to unlock
+        skinventory[part].push(skin)
+        $game.addBadgeCount('.hud-skinventory', 1)
+      }
     } else {
       // Assume all parts of the skin is unlocked
-      skinventory.head.push(skin)
-      skinventory.torso.push(skin)
-      skinventory.legs.push(skin)
-      $game.addBadgeCount('.hud-skinventory', 3)
+      if (!_.contains(skinventory.head, skin)) {
+        skinventory.head.push(skin)
+        $game.addBadgeCount('.hud-skinventory', 1)
+      }
+      if (!_.contains(skinventory.torso, skin)) {
+        skinventory.torso.push(skin)
+        $game.addBadgeCount('.hud-skinventory', 1)
+      }
+      if (!_.contains(skinventory.legs, skin)) {
+        skinventory.legs.push(skin)
+        $game.addBadgeCount('.hud-skinventory', 1)
+      }
     }
 
     // Update skinventory
