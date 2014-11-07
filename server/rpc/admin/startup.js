@@ -1,20 +1,20 @@
 'use strict';
 
 var rootDir = process.cwd(),
-    fs      = require('fs'),
+    fs      = require('fs')
 
-    config         = require(rootDir + '/app/config'),
+var config         = require(rootDir + '/app/config'),
     service        = require(rootDir + '/app/service'),
     dbActions      = require(rootDir + '/server/utils/database-actions'),
-    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
+    accountHelpers = require(rootDir + '/server/utils/account-helpers')
 
-    userModel      = service.useModel('user', 'preload'),
+var userModel      = service.useModel('user', 'preload'),
     tileModel      = service.useModel('tile', 'preload'),
     colorModel     = service.useModel('color', 'preload'),
     npcModel       = service.useModel('npc', 'preload'),
     botanistModel  = service.useModel('botanist', 'preload'),
     gameModel      = service.useModel('game', 'preload'),
-    chatModel      = service.useModel('chat', 'preload');
+    chatModel      = service.useModel('chat', 'preload')
 
 var _JSONClone = function (json) {
   return JSON.parse(JSON.stringify(json))
@@ -22,9 +22,8 @@ var _JSONClone = function (json) {
 
 exports.actions = function (req, res, ss) {
 
-  req.use('session');
-  // req.use('debug');
-  req.use('account.authenticated');
+  req.use('session')
+  req.use('account.authenticated')
 
   return {
     loadData: function (dataType) {
@@ -57,8 +56,8 @@ exports.actions = function (req, res, ss) {
         }
       }
     }
-  };
-};
+  }
+}
 
 var _startup = {
   loadUsers: function (req, res, ss) {
@@ -238,7 +237,7 @@ var _startup = {
         });
       }
 
-      dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function() {
+      dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function () {
         res('Data loaded: tiles');
       });
     });
@@ -258,7 +257,7 @@ var _startup = {
       mapIndex: 0
     }];
 
-    dbActions.resetDefaultData(colorModel, function(err) {
+    dbActions.resetDefaultData(colorModel, function (err) {
       if(err) {
         apprise(err);
       } else {
@@ -273,8 +272,8 @@ var _startup = {
     var botanistData = require(rootDir + '/data/botanist.json');
     console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Botanist   * * * * * * * * * * * *   \n\n'.yellow);
 
-    dbActions.dropCollection('botanists', function() {
-      dbActions.saveDocuments(botanistModel, botanistData, function() {
+    dbActions.dropCollection('botanists', function () {
+      dbActions.saveDocuments(botanistModel, botanistData, function () {
         res('Data loaded: botanist');
       });
     });
@@ -284,10 +283,10 @@ var _startup = {
     var npcData = require(rootDir + '/data/npcs.json');
     console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCS   * * * * * * * * * * * *   \n\n'.yellow);
 
-    dbActions.dropCollection('npcs', function() {
-      dbActions.saveDocuments(npcModel, npcData, function() {
+    dbActions.dropCollection('npcs', function () {
+      dbActions.saveDocuments(npcModel, npcData, function () {
         //go thru npc data, save tilestate at that tile
-        dbActions.saveNpcTilestate(tileModel, npcData, function(err) {
+        dbActions.saveNpcTilestate(tileModel, npcData, function (err) {
           if(err) {
             console.log('error saving tilestate');
           } else {
@@ -335,8 +334,8 @@ var _startup = {
 
   loadChat: function (req, res, ss) {
     console.log('\n\n   * * * * * * * * * * * *   Deleting Chat Logs   * * * * * * * * * * * *   \n\n'.yellow);
-    dbActions.resetDefaultData(chatModel, function(err) {
-      if(err) {
+    dbActions.resetDefaultData(chatModel, function (err) {
+      if (err) {
         apprise(err);
       } else {
         res('Chat logs deleted');
