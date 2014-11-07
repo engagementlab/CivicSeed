@@ -754,8 +754,49 @@ var $player = $game.$player = {
   },
 
   getSkinSuit: function () {
-    var skinId = _skinSuit
-    return skinId
+    var data = _skinSuit
+    // We need to return this data as a
+    // separate object to prevent other
+    // scripts from writing directly to it
+    return {
+      head:   data.head,
+      torso:  data.torso,
+      legs:   data.legs
+    }
+  },
+
+  // When the player changes skin, update client model and save to db
+  setSkinSuit: function (name, part) {
+    // Update model
+    if (part !== undefined) {
+      _skinSuit[part] = name
+    } else {
+      // Assume entire suit
+      _skinSuit.head  = name
+      _skinSuit.torso = name
+      _skinSuit.legs  = name
+    }
+
+    // Change skin on database
+    ss.rpc('game.player.changeSkinSuit', {
+      id:       $game.$player.id,
+      skinSuit: _skinSuit
+    })
+  },
+
+  // Returns a clone of the skinventory data
+  getSkinventory: function () {
+    var data = _skinSuit
+    return data.unlocked
+  },
+
+  // Updates the skinventory on the database
+  setSkinventory: function (skinventory) {
+    _skinSuit.unlocked = skinventory
+    ss.rpc('game.player.updateGameInfo', {
+      id:       $game.$player.id,
+      skinSuit: _skinSuit
+    })
   },
 
   // Get seeds
@@ -1128,21 +1169,6 @@ var $player = $game.$player = {
     }
   },
 
-  //change up the skin suit the player is wearing and save to db
-  setSkinSuit: function (name, part) {
-    if (part !== undefined) {
-      _skinSuit[part] = name
-    }
-    else {
-      // Assume entire suit
-      _skinSuit.head  = name
-      _skinSuit.torso = name
-      _skinSuit.legs  = name
-    }
-
-    $game.$skins.changeSkin(_skinSuit)
-  },
-
   setMoveSpeed: function (multiplier) {
     _player.moveSpeed = multiplier || 1
   }
@@ -1405,7 +1431,7 @@ var _player = {
 }
 
 // on init, set local and global variables for all player info
-function _setPlayerInformation(info) {
+function _setPlayerInformation (info) {
   // Ensure that flags start from a clean state
   $game.removeFlag()
 

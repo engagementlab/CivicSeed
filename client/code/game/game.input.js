@@ -164,15 +164,15 @@ var $input = $game.$input = module.exports = {
     // Click to equip a new skin part
     $BODY.on('click', '#skinventory .outer', function () {
       if (!$(this).hasClass('locked')) {
-        var part = $(this).parent().data('part')
         var name = $(this).data('name')
+        var part = $(this).parent().data('part')
 
         // Set highlight class
         $(this).parent().children().removeClass('equipped')
         $(this).addClass('equipped')
 
         // Set suit
-        $game.$player.setSkinSuit(name, part)
+        $game.$skins.changePlayerSkin(name, part)
       }
     })
 

@@ -251,7 +251,7 @@ var $render = $game.$render = {
         $render.ready = true
         _skinSuitWidth = skinSuitImage.width
         _skinSuitHeight = skinSuitImage.height
-        $game.$skins.renderSkinventory()
+        $game.$skins.renderSkinventoryUI()
         $render.createCanvasForPlayer($game.$player.id, false)
         return
       } else {
@@ -490,9 +490,9 @@ var $render = $game.$render = {
       _offscreenPlayersCanvas[id].setAttribute('height', _skinSuitHeight);
       _offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
     }
-    var skinSuit = suit;
+    var skinSuit = suit
     if (!skinSuit) {
-      skinSuit = $game.$player.getSkinSuit();
+      skinSuit = $game.$player.getSkinSuit()
     }
 
     // If basic suit, set to render player color
