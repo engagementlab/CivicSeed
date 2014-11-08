@@ -154,7 +154,6 @@ exports.actions = function (req, res, ss) {
 
         console.log('\n\n   * * * * * * * * * * * *   Sending User Invites via Email   * * * * * * * * * * * *   \n\n'.yellow);
         console.log(emailList.join(', ') + '\n\n');
-        emailUtil.openEmailConnection();
 
         //emailList = emailList.slice(0, 20); --> doing this on front now
         emailListLength = emailList.length;

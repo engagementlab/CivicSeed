@@ -10,7 +10,7 @@ var rootDir        = process.cwd(),
     service        = require(rootDir + '/app/service'),
     UserModel      = service.useModel('user'),
     GameModel      = service.useModel('game'),
-    emailTo        = config.get('EMAIL_TO'),
+    EMAIL_TO       = config.get('EMAIL_TO'),
     _countdown     = 10,
     singleHtml
 
@@ -227,18 +227,21 @@ exports.actions = function (req, res, ss) {
             singleHtml = html.replace('#{firstName}', user.firstName);
             singleHtml = singleHtml.replace('#{email}', user.email);
             singleHtml = singleHtml.replace('#{password}', password);
+
             user.save(function (err) {
-              emailUtil.openEmailConnection();
-              emailUtil.sendEmail('Password reset from Civic Seed', singleHtml, user.email);
-              // TODO: close connection on *** CALLBACK ***
-              emailUtil.closeEmailConnection();
-              res(true);
-            });
-          });
+              emailUtil.sendEmail('Password reset from Civic Seed', singleHtml, user.email, function (err, response) {
+                if (err) {
+                  res(false)
+                } else {
+                  res(true)
+                }
+              })
+            })
+          })
         } else {
-          res(false);
+          res(false)
         }
-      });
+      })
     },
 
     sendMessage: function (email, message) {
@@ -246,7 +249,7 @@ exports.actions = function (req, res, ss) {
                           <p><strong>E-mail:</strong> ' + email + '</p>\
                           <p><strong>Message:</strong> ' + message + '</p>'
 
-      emailUtil.sendEmail('Civic Seed contact form submission', messageHTML, emailTo, function (err, response) {
+      emailUtil.sendEmail('Civic Seed contact form submission', messageHTML, EMAIL_TO, function (err, response) {
         if (err) {
           res(false)
         } else {

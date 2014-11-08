@@ -588,7 +588,7 @@ colorHelpers = {
           var emailListLength = users.length,
             html = null,
             subject = null;
-          emailUtil.openEmailConnection();
+
           for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
             //not done
             if (users[emailIterator].game.currentLevel < 4) {
@@ -606,7 +606,7 @@ colorHelpers = {
               emailUtil.sendEmail(subject, html, users[emailIterator].email);
             }
           }
-          emailUtil.closeEmailConnection();
+
         }
       });
   }
