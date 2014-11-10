@@ -683,7 +683,7 @@ var _resources = {
     // [2] Else, close and retry
     $el.find('.retry-button').on('click', function () {
       $resources.hideCheckMessage(callback)
-    }).show()
+    }).show().focus()
     $el.fadeIn(200)
   },
 
