@@ -19,7 +19,7 @@
   "dependencies": {
     "d3": "~3.4.1",
     "jquery": "~2.1.0",
-    "bootstrap-stylus": "~3.2.0",
-    "bootstrap": "~3.2.0"
+    "bootstrap-stylus": "~3.3.0",
+    "bootstrap": "~3.3.0"
   }
 }

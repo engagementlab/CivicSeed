@@ -36,7 +36,7 @@
     "socketstream": "~0.3.11",
     "ss-clientjade": "~0.0.7",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
-    "ss-stylus": "https://github.com/louh/ss-stylus/tarball/master",
+    "ss-stylus": "~0.1.9",
     "stylus": "~0.49.2",
     "winston": "~0.8.1",
     "xkcd-pwgen": "0.0.1"
