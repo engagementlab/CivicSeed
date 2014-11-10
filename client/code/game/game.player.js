@@ -434,7 +434,7 @@ var $player = $game.$player = {
     // Prevent check from occurring if player has already been teleported to the Botanist once this level and game session.
     if ($game.checkFlag('botanist-teleported') === true) return false
 
-    // Prevent check from occurring of the player was inside the inventory when this function was called
+    // Prevent check from occurring if the player was inside the inventory when this function was called
     if ($game.checkFlag('viewing-inventory') === true) return false
 
     // Prevent check from occurring if player is a Master Gardener

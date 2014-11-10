@@ -14,6 +14,7 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
     profileSetup: Boolean,
     profileUnlocked: Boolean,
     gameStarted: Boolean,
+    avatar: String,
     game: {
       instanceName: String,
       currentLevel: Number,

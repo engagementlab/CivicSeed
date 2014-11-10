@@ -136,9 +136,9 @@ var $resources = $game.$resources = {
     $check.show()
 
     $el.find('.feedback').text(message)
-    $el.find('button').on('click', function () {
+    $el.find('.btn-primary').on('click', function () {
       $resources.hideCheckMessage(callback)
-    }).show()
+    }).show().focus()
     $el.fadeIn(200)
   },
 
