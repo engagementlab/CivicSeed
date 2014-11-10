@@ -129,17 +129,19 @@ var $resources = $game.$resources = {
 
   // Display messages on checking user input
   showCheckMessage: function (message, callback) {
-    var $check = $('#resource-area .check'),
-        $el    = $check.find('.message-feedback')
+    var $check      = $('#resource-area .check'),
+        $el         = $check.find('.message-feedback'),
+        $confirmBtn = $el.find('.btn-primary')
 
     $check.find('.check-dialog').hide()
     $check.show()
 
     $el.find('.feedback').text(message)
-    $el.find('.btn-primary').on('click', function () {
+    $confirmBtn.on('click', function () {
       $resources.hideCheckMessage(callback)
-    }).show().focus()
+    }).show()
     $el.fadeIn(200)
+    $confirmBtn.focus()
   },
 
   hideCheckMessage: function (callback) {
@@ -683,8 +685,9 @@ var _resources = {
     // [2] Else, close and retry
     $el.find('.retry-button').on('click', function () {
       $resources.hideCheckMessage(callback)
-    }).show().focus()
+    }).show()
     $el.fadeIn(200)
+    $el.find('.retry-button').focus()
   },
 
   // Check whether the Player made the correct response
