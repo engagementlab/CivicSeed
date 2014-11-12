@@ -343,6 +343,16 @@ var _npc = {
       name: npc.name,
       id: npc.id,
       index: npc.index,
+
+      // TODO: temporarily calculate position from index, if position data not available;
+      // eventually we should make sure all position data is available and stored.
+      position: {
+        x: npc.index % $game.TOTAL_WIDTH,
+        y: Math.floor(npc.index / $game.TOTAL_WIDTH)
+        // x: npc.position.x,
+        // y: npc.position.y
+      },
+
       dialog: npc.dialog,
       dependsOn: npc.dependsOn,
       level: npc.level,
@@ -375,10 +385,9 @@ var _npc = {
       update: function () {
         var check = $game.checkFlag('in-transit')
         if (!check) {
-          npcObject.idle();
-        }
-        else {
-          npcObject.getMaster();
+          npcObject.idle()
+        } else {
+          npcObject.getMaster()
         }
       },
 

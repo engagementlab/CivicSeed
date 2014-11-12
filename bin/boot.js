@@ -31,9 +31,7 @@ if (NODE_ENV === 'heroku') {
 
 var accountHelpers = require(rootDir + '/server/utils/account-helpers')
 
-var Schema   = mongoose.Schema,
-    ObjectId = Schema.ObjectId,
-    _db,
+var _db,
     _userModel,
     _superAdminUser
 
@@ -43,7 +41,7 @@ _db.on('error', function (err) {
 })
 _db.once('open', function () {
   winston.info('MongoDB connection opened ...'.blue)
-  _userModel = require(rootDir + '/models/user-model')(mongoose, _db, Schema, ObjectId)
+  _userModel = require(rootDir + '/models/user-model')(_db, mongoose.Schema)
   _db.collections['users'].drop(function (error) {
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash('temp', salt, function (err, hash) {

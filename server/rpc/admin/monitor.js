@@ -3,16 +3,14 @@ var service, gameModel, npcModel, chatModel, userModel;
 var monitorHelpers = null;
 
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
-exports.actions = function(req, res, ss) {
+exports.actions = function (req, res, ss) {
 
-  req.use('session');
-  // req.use('debug');
+  req.use('session')
 
   return {
 
     init: function(id) {
       service = ss.service;
-      console.log('rpc.admin.initAdmin'.rainbow);
       gameModel = service.useModel('game', 'ss');
       npcModel = service.useModel('npc', 'ss');
       chatModel = service.useModel('chat', 'ss');

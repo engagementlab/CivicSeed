@@ -1,4 +1,6 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var InviteeSchema = new Schema({
     sessionName: String,
@@ -10,5 +12,4 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
   var InviteeModel = db.model('Invitee', InviteeSchema, 'invitees')
 
   return InviteeModel
-
 }

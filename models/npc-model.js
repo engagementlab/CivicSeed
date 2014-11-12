@@ -1,8 +1,14 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var npcSchema = new Schema({
     id: Number,
     index: Number,
+    position: {
+      x: Number,
+      y: Number
+    },
     name: String,
     level: Number,
     sprite: Number,
@@ -26,8 +32,7 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
     skinSuit: String
   })
 
-  var NpcModel = db.model('npc', npcSchema, 'npcs')
+  var NpcModel = db.model('Npc', npcSchema, 'npcs')
 
   return NpcModel
-
 }

@@ -1,4 +1,6 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var gameSchema = new Schema({
     players: Number,
@@ -24,5 +26,4 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
   var GameModel = db.model('Game', gameSchema, 'game')
 
   return GameModel
-
 }

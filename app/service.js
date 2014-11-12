@@ -7,9 +7,6 @@ var rootDir       = process.cwd(),
 var mongoose      = require('mongoose'),
     winston       = require('winston')
 
-var Schema        = mongoose.Schema,
-    ObjectId      = Schema.ObjectId
-
 var self = module.exports = {
 
   db: null,
@@ -35,28 +32,33 @@ var self = module.exports = {
   },
 
   useModel: function (modelName, state) {
-    if (state === 'preload') {
-      winston.info('CS: '.blue + 'Preloading model for SS RPC: '.green + modelName.yellow.underline)
-    } else if (state === 'ss') {
-      winston.info('CS: '.blue + 'Importing model '.magenta + modelName.yellow.underline + ' into socket stream RPC.'.magenta)
-    } else {
-      winston.info('CS: '.blue + 'Import model '.blue + modelName.yellow.underline + ' into following controller: '.blue)
-    }
-    return require(rootDir + '/models/' + modelName + '-model')(mongoose, self.db, Schema, ObjectId)
-  },
+    var log = ''
 
-  useModule: function (moduleName, state) {
-    return require(rootDir + '/modules/' + moduleName)
+    switch (state) {
+      case 'preload':
+        log = 'Preloading model for SS RPC: '.green + modelName.yellow.underline
+        break
+      case 'ss':
+        log = 'Importing model '.magenta + modelName.yellow.underline + ' into socket stream RPC.'.magenta
+        break
+      default:
+        log = 'Importing model '.blue + modelName.yellow.underline + ' into controller: '.blue + state.yellow
+        break
+    }
+
+    winston.info('CS: '.blue + log)
+
+    return require(rootDir + '/models/' + modelName + '-model')(self.db, mongoose.Schema)
   },
 
   getAndSetNetworkIp: function (callback) {
     serverHelpers.getNetworkIPs(function (err, ips) {
       if (err || !ips.length) {
         config.set('IP', 'localhost')
-        winston.warn('Civic Seed:'.yellow + ' could not find network ip. Defaulting to \'localhost.\''.red)
+        winston.warn('CS:'.blue + ' Could not find network IP. Defaulting to \'localhost.\''.red)
       } else {
         config.set('IP', ips[0]);
-        winston.info('Civic Seed:'.yellow + ' running on network ip: ' + ips[0].yellow)
+        winston.info('CS:'.blue + ' Running on network IP: ' + ips[0].yellow)
       }
       if (typeof callback === 'function') {
         callback()

@@ -1,4 +1,6 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var UserSchema = new Schema({
     activeSessionID: String,
@@ -74,9 +76,7 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
     }
   })
 
-  //the third param specifies an exact collection to look for in the DB
   var UserModel = db.model('User', UserSchema, 'users')
 
   return UserModel
-
 }

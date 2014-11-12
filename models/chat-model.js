@@ -1,4 +1,6 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var ChatSchema = new Schema({
     id: String,
@@ -12,5 +14,4 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
   var chatModel = db.model('Chat', ChatSchema, 'chat')
 
   return chatModel
-
 }

@@ -1,14 +1,15 @@
 'use strict';
 
-var $body
+var $body,
+    $util = require('/util')
 
 var self = module.exports = {
 
   newId: -1,
 
   init: function () {
-    $body = $(document.body);
-    self.setup();
+    $body = $(document.body)
+    self.setup()
   },
 
   setup: function () {
@@ -160,16 +161,19 @@ var self = module.exports = {
 
       // Display response fields depending on question type
       switch (questionType) {
+
+        // Open-ended response
         case 'open':
-          // Open-ended response
           $npc.find('.requiredDiv').show()
           break
+
+        // Multiple-choice response
         case 'multiple':
-          // Multiple-choice response
           $npc.find('.possibleDiv').show()
           break
+
+        // Binary-choice response, e.g. true/false or yes/no
         default:
-          // Binary-choice response, e.g. true/false or yes/no
           $npc.find('.answerDiv').show()
           break
       }
@@ -224,32 +228,45 @@ var self = module.exports = {
           level: null,
           sprite: sprite,
           index: null,
+          position: {
+            x: null,
+            y: null
+          },
           name: null,
           skinSuit: null
         };
 
     //update information
-    var x,y;
-    informationAreas.each(function(i) {
-      var area = $(this).attr('data-area'),
-          val  = self._prettify(this.value);
+    var x, y
 
-      if (area === 'name') {
-        updates.name = val;
-      } else if (area === 'level') {
-        updates.level = parseInt(val, 10) - 1;
-      } else if (area === 'x') {
-        x = parseInt(val, 10);
-      } else if (area === 'y') {
-        y = parseInt(val, 10);
+    informationAreas.each(function (i) {
+      var area = $(this).attr('data-area'),
+          val  = $util.prettyString(this.value)
+
+      switch (area) {
+        case 'name':
+          updates.name = val
+          break
+        case 'level':
+          updates.level = parseInt(val, 10) - 1
+          break
+        case 'x':
+          x = parseInt(val, 10)
+          break
+        case 'y':
+          y = parseInt(val, 10)
+          break
       }
-    });
+    })
 
-    updates.index = (y * 142) + x;
+    updates.index = (y * 142) + x // TODO: Deprecate reliance on the index. This hard codes the GAME_WIDTH constant as well; bad!
+    updates.position.x = x
+    updates.position.y = y
 
-    resourceAreas.each(function(i) {
+    resourceAreas.each(function (i) {
       var area = $(this).attr('data-area'),
-        val =  self._prettify(this.value);
+          val  =  $util.prettyString(this.value)
+
       if (area === 'url') {
         updates.resource.url = val;
       } else if (area === 'shape') {
@@ -271,19 +288,18 @@ var self = module.exports = {
       }
     });
 
-    promptAreas.each(function(i) {
+    promptAreas.each(function (i) {
       var area = $(this).attr('data-area'),
-        val = self._prettify(this.value);
+          val  = $util.prettyString(this.value)
 
       if (area === 'prompt') {
         updates.dialog.prompts.push(val);
       }
     });
 
-    smalltalkAreas.each(function(i) {
-
+    smalltalkAreas.each(function (i) {
       var area = $(this).attr('data-area'),
-        val = self._prettify(this.value);
+          val  = $util.prettyString(this.value)
 
       if (area === 'smalltalk') {
         updates.dialog.smalltalk.push(val);
@@ -295,6 +311,8 @@ var self = module.exports = {
     if (skinVal && skinVal.length > 0) {
       updates.skinSuit = skinVal;
     }
+
+    console.log(updates)
 
     //this means it is a new one, do not save, but add new in db
     if (id < 0) {
@@ -318,6 +336,7 @@ var self = module.exports = {
           $deleteButton = npc.find('.npc-cancel-button');
       $saveButton.attr('data-id', updates.id);
       $deleteButton.attr('data-id', updates.id);
+
       ss.rpc('admin.npcs.addNpc', updates, function (err) {
         if (err) {
           apprise(err);
@@ -400,23 +419,6 @@ var self = module.exports = {
     $(clone).insertAfter('.npc-add-insert-here')
     $(clone).slideDown()
     $(clone).addClass('npc' + newId)
-  },
-
-  // Generic input prettification. This may be more useful elsewhere as well.
-  _prettify: function (input) {
-    var output = input.toString()
-
-    // Trim trailing whitespace & collapse whitespace in the interior of a string
-    output = output.trim().replace(/\s+/g, ' ')
-
-    // Replace straight quotes with curly quotes
-    output = output.replace(/"([^"]*)"/g, '“$1”')  // Replaces straight quotes around any number of non-quotation marks
-    output = output.replace(/([A-Za-z])\'([A-Za-z])/, '$1’$2')    // Replaces ' between any letter characters
-    output = output.replace(/(\s)\'([A-Za-z])/g, '$1‘$2')         // Replaces ' at the start of a word
-    output = output.replace(/([A-Za-z])\'(\s)/g, '$1’$2')         // Replaces ' at the end of a word
-    output = output.replace(/^\'/gm, '‘')                         // Replaces ' at the start of a line
-
-    return output
   }
 
-};
+}

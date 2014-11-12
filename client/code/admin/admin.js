@@ -25,10 +25,11 @@ var self = module.exports = {
       button.removeClass('btn-success')
       button.find('.spinner').show()
       ss.rpc('admin.startup.loadData', dataType, function (res) {
+        console.log(res)
         button.addClass('btn-success');
         button.find('.spinner').fadeOut()
-      });
-    });
+      })
+    })
   },
 
   setupInviteCodes: function () {

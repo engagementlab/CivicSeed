@@ -261,61 +261,65 @@ var $render = $game.$render = {
 
   },
 
-  //render a frame on every tick, clear canvases and draw updated content
+  // Render a frame on every tick, clear canvases and draw updated content
   renderFrame: function () {
     // $game.$others.clear();
     // $game.$player.clear();
     // $game.$npc.clear();
     // $game.$botanist.clear();
     // $game.$robot.clear();
-    $render.clearAll();
+    $render.clearAll()
 
-    //only re-render all the tiles if the viewport is tranisitioning
+    // Only re-render all the tiles if the viewport is tranisitioning
     if ($game.checkFlag('in-transit')) {
-      $render.renderAllTiles();
+      $render.renderAllTiles()
     }
 
     $render.makeQueue(function (all) {
-      var a = all.length;
+      var a = all.length
       while(--a > -1) {
-        if (all[a].kind === 'npc') {
-          $render.renderNpc(all[a]);
-        }
-        else if (all[a].kind === 'botanist') {
-          $render.renderBotanist(all[a]);
-        }
-        else if (all[a].kind === 'robot') {
-          $render.renderRobot(all[a]);
-        }
-        else {
-          $render.renderPlayer(all[a]);
+        switch (all[a].kind) {
+          case 'npc':
+            $render.renderNpc(all[a])
+            break
+          case 'botanist':
+            $render.renderBotanist(all[a])
+            break
+          case 'robot':
+            $render.renderRobot(all[a])
+            break
+          default:
+            $render.renderPlayer(all[a])
+            break
         }
       }
-    });
+    })
   },
 
-  //create order for drawing all characters (other players, your player, npcs, botanist, robot)
+  // Create queue for drawing all characters (other players, your player, npcs, botanist, robot)
   makeQueue: function (callback) {
-    var playerInfo = $game.$player.getRenderInfo(),
-      order        = [playerInfo],
-      order2       = $game.$others.getRenderInfo(),
-      order3       = $game.$npc.getRenderInfo(),
-      botanistInfo = $game.$botanist.getRenderInfo(),
-      robotInfo    = $game.$robot.getRenderInfo();
+    var playerInfo   = $game.$player.getRenderInfo(),
+        order        = [playerInfo],
+        order2       = $game.$others.getRenderInfo(),
+        order3       = $game.$npc.getRenderInfo(),
+        botanistInfo = $game.$botanist.getRenderInfo(),
+        robotInfo    = $game.$robot.getRenderInfo()
 
-    var finalOrder = order.concat(order2, order3);
+    var finalOrder   = order.concat(order2, order3)
 
     if (botanistInfo) {
-      finalOrder.push(botanistInfo);
-    }
-    if (robotInfo) {
-      finalOrder.push(robotInfo);
+      finalOrder.push(botanistInfo)
     }
 
-    finalOrder.sort(function (a, b){
-      return b.curY-a.curY;
-    });
-    callback(finalOrder);
+    if (robotInfo) {
+      finalOrder.push(robotInfo)
+    }
+
+    finalOrder.sort(function (a, b) {
+      return b.curY - a.curY
+    })
+
+    callback(finalOrder)
   },
 
   //figure out the information to draw on a tile

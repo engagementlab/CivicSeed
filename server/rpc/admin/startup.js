@@ -1,12 +1,15 @@
 'use strict';
 
 var rootDir = process.cwd(),
-    fs      = require('fs')
+    fs      = require('fs'),
+    path    = require('path'),
+    winston = require('winston')
 
 var config         = require(rootDir + '/app/config'),
     service        = require(rootDir + '/app/service'),
     dbActions      = require(rootDir + '/server/utils/database-actions'),
-    accountHelpers = require(rootDir + '/server/utils/account-helpers')
+    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
+    filename       = path.relative(rootDir, module.filename)
 
 var userModel      = service.useModel('user', 'preload'),
     tileModel      = service.useModel('tile', 'preload'),
@@ -28,6 +31,8 @@ exports.actions = function (req, res, ss) {
   return {
     loadData: function (dataType) {
       if (req.session.role && req.session.role === 'superadmin') {
+        winston.info(filename + ' Loading data for collection: '.magenta + dataType.yellow.underline + ' ...'.magenta)
+
         switch (dataType) {
           case 'users':
             _startup.loadUsers(req, res, ss)
@@ -51,6 +56,7 @@ exports.actions = function (req, res, ss) {
             _startup.loadChat(req, res, ss)
             break
           default:
+            winston.error(filename + ' A request was made to load a data type that does not exist.'.yellow)
             // Nothing.
             break
         }
@@ -67,19 +73,16 @@ var _startup = {
         numDemoUsers   = 16,
         demoUsers      = [];
 
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Users   * * * * * * * * * * * *   \n\n'.yellow);
-
     hashUserData(0);
 
     function hashUserData (i) {
       if (i < userData.length) {
         accountHelpers.hashPassword(userData[i].password, function (hashedPassword) {
-          console.log('CS: '.blue + 'Hashing password for user '.green + i + ' ('.yellow + userData[i].firstName.yellow + ')'.yellow + ' ...'.green)
-          userDataCopy[i].password = hashedPassword.hash;
-          hashUserData(++i);
-        });
-      }
-      else {
+          winston.info('CS: '.blue + 'Hashing password for user '.green + i + ' ('.yellow + userData[i].firstName.yellow + ')'.yellow + ' ...'.green)
+          userDataCopy[i].password = hashedPassword.hash
+          hashUserData(++i)
+        })
+      } else {
         // dbActions.dropCollection('users', function() {
         //  dbActions.saveDocuments(userModel, userDataCopy, function() {
         //    hashDemoData(0);
@@ -99,8 +102,8 @@ var _startup = {
     };
 
     function hashDemoData (i) {
-      if( i < numDemoUsers) {
-        accountHelpers.hashPassword('demo', function(hashedPassword) {
+      if (i < numDemoUsers) {
+        accountHelpers.hashPassword('demo', function (hashedPassword) {
           //create demo users
           var newColor = colorData[i-1];
           var d = {
@@ -269,14 +272,15 @@ var _startup = {
   },
 
   loadBotanist: function (req, res, ss) {
-    var botanistData = require(rootDir + '/data/botanist.json');
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Botanist   * * * * * * * * * * * *   \n\n'.yellow);
+    var botanistData = require(rootDir + '/data/botanist.json')
 
-    dbActions.dropCollection('botanists', function () {
+    winston.info('CS: '.blue + 'Loading botanist data ...'.yellow)
+
+    dbActions.dropCollection('botanist', function () {
       dbActions.saveDocuments(botanistModel, botanistData, function () {
-        res('Data loaded: botanist');
-      });
-    });
+        res('Data loaded: botanist')
+      })
+    })
   },
 
   loadNpcs: function (req, res, ss) {

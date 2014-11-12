@@ -1,4 +1,6 @@
-module.exports = function (mongoose, db, Schema, ObjectId) {
+'use strict';
+
+module.exports = function (db, Schema) {
 
   var botanistSchema = new Schema({
     id: Number,
@@ -33,8 +35,7 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
     ]
   })
 
-  var BotanistModel = db.model('botanist', botanistSchema, 'botanists')
+  var BotanistModel = db.model('Botanist', botanistSchema, 'botanist')
 
   return BotanistModel
-
 }
