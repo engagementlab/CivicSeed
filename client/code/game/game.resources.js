@@ -110,9 +110,9 @@ var $resources = $game.$resources = {
 
   // Activated when clicking on something that is specific to viewing answers
   examineResponses: function (index) {
-    var overlay        = document.getElementById('resource-area'),
-        el             = overlay.querySelector('.resource-responses'),
-        resource       = _resources.data[index]
+    var overlay  = document.getElementById('resource-area'),
+        el       = overlay.querySelector('.resource-responses'),
+        resource = _resources.data[index]
 
     _resources.addContent(index, 4)
 
@@ -153,21 +153,16 @@ var $resources = $game.$resources = {
 
   //get the shape svg info for a specific resource
   getShape: function (index) {
-    var stringId = String(index),
-      shapeName = _resources.data[stringId].shape;
-    return _resources.shapes[$game.$player.currentLevel][shapeName];
-  },
+    var stringId  = String(index),
+        shapeName = _resources.data[stringId].shape
 
-  getShapeName: function (index) {
-    var stringId = String(index),
-      shapeName = _resources.data[stringId].shape;
-    return shapeName;
+    return _resources.shapes[$game.$player.currentLevel][shapeName]
   },
 
   //get the tagline for the resource
   getTagline: function (index) {
-    var stringId = String(index);
-    return _resources.data[stringId].tagline;
+    var stringId = String(index)
+    return _resources.data[stringId].tagline
   },
 
   //add an answer to the player answers for the specific resource
@@ -626,7 +621,7 @@ var _resources = {
     function _checkBotanistCallback () {
       // A callback function. If a resource was just collected, check to see if player shoud be automatically teleported to the botanist.
       if (!isRevisit) {
-        $game.$player.checkBotanistState()
+        $game.$botanist.checkState()
       }
     }
   },

@@ -565,52 +565,62 @@
         {
           "name": "correct4",
           "tagline": "This is correct",
-          "npc": 8986
+          "npc": 8986,
+          "index": 8986
         },
         {
           "name": "wrong6",
           "tagline": "Wrong square",
-          "npc": 9536
+          "npc": 9536,
+          "index": 9536
         },
         {
           "name": "wrong3",
           "tagline": "This piece is wrong",
-          "npc": 8542
+          "npc": 8542,
+          "index": 8542
         },
         {
           "name": "correct2",
           "tagline": "This is a correct piece",
-          "npc": 6265
+          "npc": 6265,
+          "index": 6265
         },
         {
           "name": "wrong2",
           "tagline": "Nope",
-          "npc": 4693
+          "npc": 4693,
+          "index": 4693
         },
         {
           "name": "wrong1",
           "tagline": "Don't place this one",
-          "npc": 4284
+          "npc": 4284,
+          "index": 4284
         },
         {
           "name": "correct1",
           "tagline": "Use this one",
-          "npc": 2569
+          "npc": 2569,
+          "index": 2569
         },
         {
           "name": "wrong4",
           "tagline": "No not this",
-          "npc": 1608
+          "npc": 1608,
+          "index": 1608
         },
         {
           "name": "correct3",
           "tagline": "This is one of them",
-          "npc": 2176
+          "npc": 2176,
+          "index": 2176
         },
         {
           "name": "wrong5",
           "tagline": "Not a puzzle piece",
-          "npc": 4876
+          "npc": 4876,
+          "index": 4876
         }
       ],
       "seeds": {
@@ -635,13 +645,16 @@
         "legs": "basic",
         "unlocked": {
           "head": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "torso": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "legs": [
-            "basic"
+            "basic",
+            "astronaut"
           ]
         }
       }
@@ -785,52 +798,62 @@
         {
           "name": "correct4",
           "tagline": "This is correct",
-          "npc": 8986
+          "npc": 8986,
+          "index": 8986
         },
         {
           "name": "wrong6",
           "tagline": "Wrong square",
-          "npc": 9536
+          "npc": 9536,
+          "index": 9536
         },
         {
           "name": "wrong3",
           "tagline": "This piece is wrong",
-          "npc": 8542
+          "npc": 8542,
+          "index": 8542
         },
         {
           "name": "correct2",
           "tagline": "This is a correct piece",
-          "npc": 6265
+          "npc": 6265,
+          "index": 6265
         },
         {
           "name": "wrong2",
           "tagline": "Nope",
-          "npc": 4693
+          "npc": 4693,
+          "index": 4693
         },
         {
           "name": "wrong1",
           "tagline": "Don't place this one",
-          "npc": 4284
+          "npc": 4284,
+          "index": 4284
         },
         {
           "name": "correct1",
           "tagline": "Use this one",
-          "npc": 2569
+          "npc": 2569,
+          "index": 2569
         },
         {
           "name": "wrong4",
           "tagline": "No not this",
-          "npc": 1608
+          "npc": 1608,
+          "index": 1608
         },
         {
           "name": "correct3",
           "tagline": "This is one of them",
-          "npc": 2176
+          "npc": 2176,
+          "index": 2176
         },
         {
           "name": "wrong5",
           "tagline": "Not a puzzle piece",
-          "npc": 4876
+          "npc": 4876,
+          "index": 4876
         }
       ],
       "seeds": {

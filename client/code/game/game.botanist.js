@@ -88,6 +88,64 @@ var $botanist = $game.$botanist = {
     return _botanist.state
   },
 
+  // Check to see if player is holding all of the correct pieces necessary
+  // to solve the puzzle. If so, set Botanist state to 3 (ready to solve).
+  checkState: function () {
+
+    // Prevent check from occurring if Botanist state is not at 2 or 3
+    // (resource collecting mode)
+    if ($botanist.getState() < 2) return false
+
+    // Prevent check from occurring if player has already been teleported
+    // to the Botanist once this level and game session.
+    if ($game.checkFlag('botanist-teleported') === true) return false
+
+    // Prevent check from occurring if the player was inside the inventory
+    // when this function was called
+    if ($game.checkFlag('viewing-inventory') === true) return false
+
+    // Prevent check from occurring if player is a Master Gardener
+    if ($game.$player.getLevel() > 4) return false
+
+    // Get an array containing all the correct tangram pieces for this level,
+    // and an object containing all the resources player has obtained this
+    // level (inventory)
+    var pieces    = $botanist.tangram[$game.$player.currentLevel].answer,
+        inventory = $game.$player.getInventory()
+
+    console.log(inventory)
+    // Look through player's inventory to see if it matches a correct piece
+    for (var i = 0; i < pieces.length; i++) {
+      var piece = pieces[i].id,
+          found = false
+
+      for (var j = 0; j < inventory.length; j++) {
+        if (inventory[j].name === piece) {
+          found = true
+          break
+        }
+      }
+      // Exit check if player does not hold a correct piece.
+      if (!found) return false
+    }
+
+    // If we made it here, that means player is holding all the necessary pieces.
+    $botanist.setState(3)
+
+    // If player is holding ALL the pieces obtainable this level, beam the player directly to the Botanist so that they don't keep wasting time.
+    if (inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
+      // Immediately lock player from moving
+      $game.setFlag('in-transit')
+
+      // Teleport
+      $game.alert('You collected all the pieces, to the botanist!')
+      $game.setFlag('botanist-teleported')
+      setTimeout(function () {
+        $game.$player.beam({x: 70, y: 74})
+      }, 1500)
+    }
+  },
+
   //determine what to show the player when they click on the botanist
   show: function () {
     var level = $game.$player.currentLevel
@@ -129,7 +187,7 @@ var $botanist = $game.$botanist = {
           $botanist.show()
         })
         break
-      // 1 = Player has looked at the instructions / tutorial, and needs to obtain the puzzle piece for that level.
+      // 1 = Player has looked at the instructions / tutorial, and needs to obtain the tangram puzzle for that level.
       case 1:
         _botanist.showPrompt(0)
         break
