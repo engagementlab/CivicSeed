@@ -1146,29 +1146,14 @@ var _player = {
     }
   },
 
-  // this happens on load to put all items from DB -> inventory
-  fillInventoryHUD: function () {
-    var inventory = $player.getInventory()
-
-    $game.setBadgeCount('.hud-inventory', inventory.length)
-
-    for (var i = 0; i < inventory.length; i++) {
-      _player.addToInventoryHUD(inventory[i])
-    }
-
-    // If the player has gotten the riddle, put the tangram in the inventory + bind actions
-    if ($game.$botanist.getState() > 1) {
-      $player.putTangramPuzzleInInventory();
-    }
-  },
-
-  // Add an item to the inventory, add to HUD and bind actions to it
+  // Add an item to the inventory
   addToInventory: function (data) {
     // Store in internal data
     _inventory.push(data)
     _player.addToInventoryHUD(data)
   },
 
+  // Add an item to inventory HUD and bind actions to it
   addToInventoryHUD: function (data) {
     // Add resource image to inventory HUD
     var className   = 'r' + data.name,
@@ -1177,7 +1162,7 @@ var _player = {
 
     $('#inventory > .inventory-items').prepend('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
 
-    $game.setBadgeCount('.hud-inventory', $player.getInventory().length)
+    $game.addBadgeCount('.hud-inventory', 1)
 
     // Bind actions
     $('img.inventory-item.' + className)
@@ -1188,6 +1173,21 @@ var _player = {
         $game.$resources.examineResource(data.npc)
       })
       .on('dragstart', {npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart)
+  },
+
+  // Convenience funtion to load all items in player's inventory from DB
+  // into the player's inventory HUD - this is called on game load
+  fillInventoryHUD: function () {
+    var inventory = $player.getInventory()
+
+    for (var i = 0; i < inventory.length; i++) {
+      _player.addToInventoryHUD(inventory[i])
+    }
+
+    // If the player has gotten the riddle, put the tangram in the inventory + bind actions
+    if ($game.$botanist.getState() > 1) {
+      $player.putTangramPuzzleInInventory();
+    }
   },
 
   // * * * * * * *   SEEDING   * * * * * * *

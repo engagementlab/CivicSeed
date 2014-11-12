@@ -35,6 +35,7 @@ module.exports = function (mongoose, db, Schema, ObjectId) {
       inventory: [{
         name: String,
         tagline: String,
+        index: Number,
         npc: Number
       }],
       seeds: {
