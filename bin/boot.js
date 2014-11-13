@@ -41,7 +41,8 @@ _db.on('error', function (err) {
 })
 _db.once('open', function () {
   winston.info('MongoDB connection opened ...'.blue)
-  _userModel = require(rootDir + '/models/user-model')(_db, mongoose.Schema)
+  var model = require(rootDir + '/models/user')
+  _userModel = _db.model(model.name, new mongoose.Schema(model.schema), model.collection)
   _db.collections['users'].drop(function (error) {
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash('temp', salt, function (err, hash) {
