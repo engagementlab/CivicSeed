@@ -484,7 +484,7 @@ var $render = $game.$render = {
   },
 
   //create a canvas for each active player
-  createCanvasForPlayer: function (id, suit) {
+  createCanvasForPlayer: function (id, skinSuit, playerColor) {
     //if it exists, clear it
     if (_offscreenPlayersContext[id]) {
       _offscreenPlayersContext[id].clearRect(0, 0, _skinSuitWidth, _skinSuitHeight);
@@ -494,13 +494,16 @@ var $render = $game.$render = {
       _offscreenPlayersCanvas[id].setAttribute('height', _skinSuitHeight);
       _offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
     }
-    var skinSuit = suit
+
     if (!skinSuit) {
       skinSuit = $game.$player.getSkinSuit()
     }
 
+    if (!playerColor) {
+      playerColor = $game.$player.getColorIndex() || 0
+    }
+
     // If basic suit, set to render player color
-    var playerColor = $game.$player.getColorIndex()
     if (skinSuit.head === 'basic') {
       skinSuit.head = 'basic/' + playerColor
     }

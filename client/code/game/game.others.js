@@ -26,13 +26,12 @@ var $others = $game.$others = {
     //check if player is on our screen (or near it....)
     //don't add it if its yourself
     if (player._id != $game.$player.id) {
-
       //set inview if nearby
-      var newbie = $game.$others.createOther(player);
-      _onScreenPlayers[newbie.id] = newbie;
-      newbie.updateRenderInfo();
-      $game.$render.createCanvasForPlayer(newbie.id, newbie.skinSuit);
-      $game.$map.addPlayer(newbie.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)');
+      var newbie = $game.$others.createOther(player)
+      _onScreenPlayers[newbie.id] = newbie
+      newbie.updateRenderInfo()
+      $game.$render.createCanvasForPlayer(newbie.id, newbie.skinSuit, newbie.playerColor)
+      $game.$map.addPlayer(newbie.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)')
     }
   },
 
@@ -138,6 +137,7 @@ var $others = $game.$others = {
       rank: player.game.rank,
       level: player.game.currentLevel,
       skinSuit: player.game.skinSuit,
+      playerColor: player.game.playerColor,
 
       info: {
         x: player.game.position.x,
