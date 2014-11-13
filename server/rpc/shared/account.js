@@ -1,7 +1,6 @@
 'use strict';
 
 var rootDir        = process.cwd(),
-    path           = require('path'),
     bcrypt         = require('bcrypt'),
     xkcd           = require('xkcd-pwgen'),
     winston        = require('winston'),
@@ -9,8 +8,8 @@ var rootDir        = process.cwd(),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
     emailUtil      = require(rootDir + '/server/utils/email'),
     service        = require(rootDir + '/app/service'),
-    UserModel      = service.useModel('user', path.relative(rootDir, module.filename)),
-    GameModel      = service.useModel('game', path.relative(rootDir, module.filename)),
+    UserModel      = service.useModel('user', 'rpc.shared.account'),
+    GameModel      = service.useModel('game', 'rpc.shared.account'),
     EMAIL_TO       = config.get('EMAIL_TO'),
     _countdown     = 10,
     singleHtml

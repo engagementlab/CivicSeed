@@ -2,14 +2,13 @@
 
 var rootDir = process.cwd(),
     fs      = require('fs'),
-    path    = require('path'),
     winston = require('winston')
 
 var config         = require(rootDir + '/app/config'),
     service        = require(rootDir + '/app/service'),
     dbActions      = require(rootDir + '/server/utils/database-actions'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-    filename       = path.relative(rootDir, module.filename)
+    filename       = 'rpc.admin.startup'
 
 var userModel      = service.useModel('user', 'preload'),
     tileModel      = service.useModel('tile', 'preload'),

@@ -1,10 +1,9 @@
 'use strict';
 
 var rootDir   = process.cwd(),
-    path      = require('path'),
     service   = require(rootDir + '/app/service'),
-    UserModel = service.useModel('user', path.relative(rootDir, module.filename)),
-    GameModel = service.useModel('game', path.relative(rootDir, module.filename))
+    UserModel = service.useModel('user', 'rpc.shared.profiles'),
+    GameModel = service.useModel('game', 'rpc.shared.profiles')
 
 exports.actions = function (req, res, ss) {
 

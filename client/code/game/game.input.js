@@ -206,48 +206,51 @@ var $input = $game.$input = module.exports = {
       return false
     })
 
-    //make your comment public
+    // Make your comment public
     $BODY.on('click', '.public-button button', function () {
       $game.$player.makePublic($(this).attr('data-npc'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
+      // This toggling does not reflect success / error conditions from server
       $(this).parent().removeClass('public-button').addClass('private-button')
       $(this).parent().find('i').removeClass('fa-lock').addClass('fa-unlock-alt')
       $(this).text('Make Private')
-    });
+    })
 
-    //make your comment private
+    // Make your comment private
     $BODY.on('click', '.private-button button', function () {
       $game.$player.makePrivate($(this).attr('data-npc'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
+      // This toggling does not reflect success / error conditions from server
       $(this).parent().removeClass('private-button').addClass('public-button')
       $(this).parent().find('i').removeClass('fa-unlock-alt').addClass('fa-lock')
       $(this).text('Make Public')
-    });
+    })
 
-    //pledge a seed to a comment
+    // Pledge a seed to a comment
     $BODY.on('click', '.pledge-button button', function () {
       var info = {
-        id: $(this).attr('data-player'),
+        id:      $(this).attr('data-player'),
         pledger: $game.$player.firstName,
-        npc: $(this).attr('data-npc')
-      };
-      var pledges = $game.$player.getPledges();
+        npc:     $(this).attr('data-npc')
+      }
+
+      var pledges = $game.$player.getPledges()
+
       if (pledges > 0) {
         ss.rpc('game.player.pledgeSeed', info, function (r) {
-          $game.$player.updatePledges(-1);
+          $game.$player.updatePledges(-1)
           $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
           if ($game.checkFlag('pledge-reward')) {
             $game.$player.addSeeds('draw', 10)
             _input.outfitLog('You gained 10 paintbrush seeds for seeding another player’s response.')
           }
-        });
-      }
-      else {
+        })
+      } else {
         $game.$resources.showCheckMessage('You cannot seed any more answers this level.')
       }
-    });
+    })
 
     /* * * * * * * *       BOTANIST OVERLAY INTERACTIONS       * * * * * * * *
 
@@ -305,8 +308,8 @@ var $input = $game.$input = module.exports = {
     })
 
     $BODY.on('click', '#game-log', function () {
-      $game.$log.clearUnread();
-    });
+      $game.$log.clearUnread()
+    })
 
     //pause menu if we want it
     // $WINDOW.blur(function (e) {

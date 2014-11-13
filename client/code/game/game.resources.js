@@ -165,29 +165,30 @@ var $resources = $game.$resources = {
     return _resources.data[stringId].tagline
   },
 
-  //add an answer to the player answers for the specific resource
+  // Add an answer to the player answers for the specific resource
   addAnswer: function (data) {
-    var stringId = String(data.npc);
-    _resources.data[stringId].playerAnswers.push(data);
-    //update the npc bubbles on screen
+    var stringId = String(data.npc)
+    _resources.data[stringId].playerAnswers.push(data)
+
+    // Update the npc bubbles on screen
     $game.$player.displayNpcComments()
     $game.$render.minimapRadar.update()
   },
 
-  //moreve an answer (this means they made it private and it was previously public)
+  // Remove an answer (this means they made it private and it was previously public)
   removeAnswer: function (data) {
-    var stringId = String(data.npc);
+    var stringId = String(data.npc)
     var found = false,
-      i = 0;
-    // console.log(_resources.data[stringId].playerAnswers);
-    while(!found) {
+        i     = 0
+
+    while (!found) {
       if (_resources.data[stringId].playerAnswers[i].id === data.id) {
         _resources.data[stringId].playerAnswers.splice(i, 1);
-        found = true;
+        found = true
       }
-      i++;
+      i++
       if (i >= _resources.data[stringId].playerAnswers.length) {
-        found = true;
+        found = true
       }
     }
 

@@ -2,9 +2,7 @@
 
 var rootDir   = process.cwd(),
     fs        = require('fs'),
-    path      = require('path'),
-    winston   = require('winston'),
-    filename  = path.relative(rootDir, module.filename)
+    winston   = require('winston')
 
 var dbActions = require(rootDir + '/server/utils/database-actions')
 
@@ -16,7 +14,7 @@ exports.actions = function (req, res, ss) {
   return {
 
     export: function (name) {
-      var collection = ss.service.useModel(name, filename)
+      var collection = ss.service.useModel(name, 'admin.db')
       collection.find(function (err, data) {
         if (err) {
           res(err)

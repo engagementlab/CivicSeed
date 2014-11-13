@@ -28,7 +28,7 @@ var $botanist = $game.$botanist = {
   ready:   false,
 
   init: function (callback) {
-    ss.rpc('game.npc.loadBotanist', function (data) {
+    ss.rpc('game.botanist.load', function (data) {
       _botanist.data    = data
 
       $botanist.index   = _botanist.data.id

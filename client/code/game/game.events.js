@@ -63,12 +63,16 @@ var $events = $game.$events = module.exports = {
     });
 
     ss.event.on('ss-addAnswer', function (data, chan) {
-      $game.$resources.addAnswer(data);
-    });
+      if (data) {
+        $game.$resources.addAnswer(data)
+      }
+    })
 
     ss.event.on('ss-removeAnswer', function (data, chan) {
-      $game.$resources.removeAnswer(data);
-    });
+      if (data) {
+        $game.$resources.removeAnswer(data)
+      }
+    })
 
     //level change for a player
     ss.event.on('ss-levelChange', function (data, chan) {

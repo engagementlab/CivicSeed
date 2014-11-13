@@ -24,7 +24,7 @@ var $npc = $game.$npc = {
       })
       $npc.ready = true
       callback()
-    });
+    })
   },
 
   resetInit: function () {
@@ -37,16 +37,15 @@ var $npc = $game.$npc = {
   update: function () {
     //if is moving, move
     $.each(_npc.data, function (key, npc) {
-      npc.update();
-    });
+      npc.update()
+    })
   },
 
   //clear all npcs to draw fresh
   clear: function () {
-    //if is moving, move
     $.each(_npc.data, function (key, npc) {
-      npc.clear();
-    });
+      npc.clear()
+    })
   },
 
   //get render info for all npcs to draw them
@@ -288,7 +287,7 @@ var $npc = $game.$npc = {
 
   //get all npc data
   getNpcData: function () {
-    return _npc.data;
+    return _npc.data
   },
 
   //get a specific name of npc
@@ -347,10 +346,10 @@ var _npc = {
       // TODO: temporarily calculate position from index, if position data not available;
       // eventually we should make sure all position data is available and stored.
       position: {
-        x: npc.index % $game.TOTAL_WIDTH,
-        y: Math.floor(npc.index / $game.TOTAL_WIDTH)
-        // x: npc.position.x,
-        // y: npc.position.y
+        //x: npc.index % $game.TOTAL_WIDTH,
+        //y: Math.floor(npc.index / $game.TOTAL_WIDTH)
+        x: npc.position.x,
+        y: npc.position.y
       },
 
       dialog: npc.dialog,
@@ -366,16 +365,16 @@ var _npc = {
       skinSuit: npc.skinSuit,
 
       info: {
-        x: npc.index % $game.TOTAL_WIDTH,
-        y: Math.floor(npc.index / $game.TOTAL_WIDTH),
+        x: npc.position.x, // npc.index % $game.TOTAL_WIDTH,
+        y: npc.position.y, // Math.floor(npc.index / $game.TOTAL_WIDTH),
         spriteY: npc.sprite * 64
       },
 
       renderInfo: {
-        prevX: (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-        prevY: (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
-        curX: (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-        curY: (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+        prevX: npc.position.x * $game.TILE_SIZE, // (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+        prevY: npc.position.y * $game.TILE_SIZE, // (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
+        curX:  npc.position.x * $game.TILE_SIZE, // (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
+        curY:  npc.position.x * $game.TILE_SIZE, // (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
         srcX: 0,
         srcY: 0,
         kind: 'npc'
@@ -398,17 +397,16 @@ var _npc = {
           var prevX = loc.x * $game.TILE_SIZE,
               prevY = loc.y * $game.TILE_SIZE,
               curX  = loc.x * $game.TILE_SIZE,
-              curY  = loc.y * $game.TILE_SIZE;
+              curY  = loc.y * $game.TILE_SIZE
 
-          npcObject.renderInfo.prevX = prevX;
-          npcObject.renderInfo.prevY = prevY;
+          npcObject.renderInfo.prevX = prevX
+          npcObject.renderInfo.prevY = prevY
 
-          npcObject.renderInfo.curX = curX;
-          npcObject.renderInfo.curY = curY;
-          npcObject.onScreen = true;
-        }
-        else {
-          npcObject.onScreen = false;
+          npcObject.renderInfo.curX = curX
+          npcObject.renderInfo.curY = curY
+          npcObject.onScreen = true
+        } else {
+          npcObject.onScreen = false
         }
       },
 
