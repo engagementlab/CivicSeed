@@ -29,6 +29,7 @@ exports.actions = function (req, res, ss) {
   req.use('account.authenticated')
 
   return {
+
     loadData: function (dataType) {
       if (req.session.role && req.session.role === 'superadmin') {
         winston.info(filename + ' Loading data for collection: '.magenta + dataType.yellow.underline + ' ...'.magenta)
@@ -66,14 +67,15 @@ exports.actions = function (req, res, ss) {
 }
 
 var _startup = {
-  loadUsers: function (req, res, ss) {
-    var userData       = require(rootDir + '/data/users.json'),
-        colorData      = require(rootDir + '/data/colors.json'),
-        userDataCopy   = _JSONClone(userData),
-        numDemoUsers   = 16,
-        demoUsers      = [];
 
-    hashUserData(0);
+  loadUsers: function (req, res, ss) {
+    var userData     = require(rootDir + '/data/users.json'),
+        colorData    = require(rootDir + '/data/colors.json'),
+        userDataCopy = _JSONClone(userData),
+        numDemoUsers = 16,
+        demoUsers    = []
+
+    hashUserData(0)
 
     function hashUserData (i) {
       if (i < userData.length) {
@@ -83,11 +85,6 @@ var _startup = {
           hashUserData(++i)
         })
       } else {
-        // dbActions.dropCollection('users', function() {
-        //  dbActions.saveDocuments(userModel, userDataCopy, function() {
-        //    hashDemoData(0);
-        //  });
-        // });
         dbActions.resetDefaultData(userModel, function (err) {
           if (err) {
             apprise(err);
@@ -171,8 +168,6 @@ var _startup = {
   loadTiles: function (req, res, ss) {
     var tileData = require(rootDir + '/data/tiles.json')
 
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Tiles   * * * * * * * * * * * *   \n\n'.yellow);
-
     // Set up tile data object
     var data = tileData.layers // This is an array of unnamed objects, we want to name them
     var tileObject = {}
@@ -247,7 +242,6 @@ var _startup = {
   },
 
   loadColors: function (req, res, ss) {
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Colors   * * * * * * * * * * * *   \n\n'.yellow);
     var colors = [{
       instanceName: 'test',
       x: 0,
@@ -274,60 +268,54 @@ var _startup = {
   loadBotanist: function (req, res, ss) {
     var botanistData = require(rootDir + '/data/botanist.json')
 
-    winston.info('CS: '.blue + 'Loading botanist data ...'.yellow)
-
     dbActions.dropCollection('botanist', function () {
-      dbActions.saveDocuments(botanistModel, botanistData, function () {
-        res('Data loaded: botanist')
+      dbActions.saveDocuments(botanistModel, botanistData, function (err) {
+        if (err) {
+          winston.error('Error saving botanist data.')
+          res(err)
+        } else {
+          res('Data loaded: botanist')
+        }
       })
     })
   },
 
   loadNpcs: function (req, res, ss) {
-    var npcData = require(rootDir + '/data/npcs.json');
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading NPCS   * * * * * * * * * * * *   \n\n'.yellow);
+    var npcData = require(rootDir + '/data/npcs.json')
 
     dbActions.dropCollection('npcs', function () {
       dbActions.saveDocuments(npcModel, npcData, function () {
         //go thru npc data, save tilestate at that tile
         dbActions.saveNpcTilestate(tileModel, npcData, function (err) {
-          if(err) {
-            console.log('error saving tilestate');
+          if (err) {
+            console.log('error saving tilestate')
           } else {
-            res('Data loaded: npcs');
+            res('Data loaded: npcs')
           }
-        });
-      });
-    });
+        })
+      })
+    })
   },
 
   loadGame: function (req, res, ss) {
-    var gameData = require(rootDir + '/data/game.json');
+    var gameData = require(rootDir + '/data/game.json')
 
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Game   * * * * * * * * * * * *   \n\n'.yellow);
-
-    // dbActions.dropCollection('game', function() {
-    //  dbActions.saveDocuments(gameModel, gameData.global, function() {
-    //    res('Data loaded: game');
-    //  });
-    // });
     dbActions.resetDefaultData(gameModel, function (err) {
       if (err) {
-        apprise(err);
-      }
-      else {
+        apprise(err)
+      } else {
         dbActions.saveDocuments(gameModel, gameData, function () {
-          res('Data loaded: game');
-        });
+          res('Data loaded: game')
+        })
       }
-    });
+    })
   },
 
   loadResources: function (req, res, ss) {
   // Note: this function was deprecated / removed / or never implemented?  --LH
   /*
     var resourceData = require(rootDir + '/data/resources')
-    console.log('\n\n   * * * * * * * * * * * *   Pre-Loading Resources   * * * * * * * * * * * *   \n\n'.yellow);
+
     dbActions.dropCollection('resources', function() {
       dbActions.saveDocuments(resourceModel, resourceData.global, function() {
         res('Data loaded: resources');
@@ -337,17 +325,13 @@ var _startup = {
   },
 
   loadChat: function (req, res, ss) {
-    console.log('\n\n   * * * * * * * * * * * *   Deleting Chat Logs   * * * * * * * * * * * *   \n\n'.yellow);
     dbActions.resetDefaultData(chatModel, function (err) {
       if (err) {
-        apprise(err);
+        apprise(err)
       } else {
-        res('Chat logs deleted');
+        res('Chat logs deleted')
       }
-    });
-    // dbActions.dropCollection('chat', function() {
-    //  res('Chat logs deleted');
-    // });
+    })
   }
 }
 

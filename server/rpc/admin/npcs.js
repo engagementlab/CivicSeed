@@ -1,7 +1,7 @@
 'use strict';
 
-var service, npcModel, tileModel
-var npcHelpers = null
+var service, npcModel, tileModel,
+    npcHelpers  = null
 
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
@@ -86,54 +86,43 @@ exports.actions = function (req, res, ss) {
       })
     },
 
-    addNpc: function(info) {
+    addNpc: function (info) {
       npcModel
-        .create(info, function(err,result) {
+        .create(info, function (err,result) {
           if(err) {
-            res(err);
+            res(err)
           } else if(result) {
-            npcHelpers.addNpcTile(info.index, function(err) {
-              res(err);
-            });
+            npcHelpers.addNpcTile(info.index, function (err) {
+              res(err)
+            })
           }
-        });
+        })
     },
 
-    deleteNpc: function(id) {
+    deleteNpc: function (id) {
       npcModel
         .where('id').equals(id)
-        .find(function(err,npc) {
-          if(err) {
-            res(err);
-          } else if(npc) {
-            var index = npc[0].index;
+        .find(function (err, npc) {
+          if (err) {
+            res(err)
+          } else if (npc) {
+            var index = npc[0].index
             npcModel
               .where('id').equals(id)
-              .remove(function(err,result) {
-                if(err) {
-                  res(err);
+              .remove(function (err, result) {
+                if (err) {
+                  res(err)
                 } else {
-                  npcHelpers.removeNpcTile(index, function(err) {
-                    res(err);
-                  });
+                  npcHelpers.removeNpcTile(index, function (err) {
+                    res(err)
+                  })
                 }
-              });
+              })
           }
-        });
-    },
-
-    exportNpcs: function() {
-      npcModel.find(function (err, npcs) {
-        if (err) {
-          res(err);
-        } else {
-          res(npcs);
-        }
-      });
+        })
     }
-
-  };
-};
+  }
+}
 
 npcHelpers = {
   addNpcTile: function(index, callback) {

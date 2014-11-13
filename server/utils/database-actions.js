@@ -12,7 +12,7 @@ module.exports = {
     dbCollections[collection].drop(function (err) {
 
       if (err) {
-        winston.error('  Could not drop database collection: %s  '.yellow.inverse, err)
+        winston.warn('  Could not drop database collection: %s  '.yellow.inverse, err)
       } else {
         winston.info('CS: '.blue + 'Database collection dropped: '.magenta + collection.yellow.underline)
       }
@@ -65,7 +65,7 @@ module.exports = {
 
     winston.info('CS: '.blue + 'Resetting default data for collection: '.magenta + collectionName.yellow.underline + ' ...'.magenta)
 
-    if(collectionName === 'users') {
+    if (collectionName === 'users') {
       model.remove({'game.instanceName': 'demo'}, function (err) {
         if (err) {
           callback(err)

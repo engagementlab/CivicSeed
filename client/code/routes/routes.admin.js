@@ -80,19 +80,18 @@ var self = module.exports = {
         } else {
           console.log('error')
         }
-      });
-    });
+      })
+    })
 
     $app.get('/admin/npcs/export', function (req) {
-      ss.rpc('admin.npcs.exportNpcs', function (result) {
-        if (result) {
+      ss.rpc('admin.db.export', 'npc', function (res) {
+        if (res) {
           // TODO: This is hacky.
           // It should actually send a document of MIME type application/json
           // instead of just overwriting the HTML page.
-          document.write(JSON.stringify(result))
-        }
-        else {
-          console.log('error')
+          document.write(JSON.stringify(res))
+        } else {
+          console.log('Error exporting NPC data.')
         }
       })
     })
