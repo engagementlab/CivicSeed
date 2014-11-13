@@ -12,8 +12,8 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/profiles/:random', function (req) {
-      ss.rpc('shared.profiles.getProfileInformation', req.params['random'], function (info) {
+    $app.get('/profiles/:playerId', function (req) {
+      ss.rpc('shared.profiles.getProfileInformation', req.params['playerId'], function (info) {
         if (!info) {
           console.log('error!')
         } else {
@@ -23,6 +23,21 @@ var self = module.exports = {
           } else {
             info.postgameSurveyLink = CivicSeed.SURVEY_POSTGAME_LINK
             $CONTAINER.append(JT['profiles-singleprofile'](info))
+          }
+        }
+      })
+    })
+
+    $app.get('/resume/:playerId', function (req) {
+      ss.rpc('shared.profiles.getProfileInformation', req.params['playerId'], function (info) {
+        if (!info) {
+          console.log('error!')
+        } else {
+          if (!info.profileSetup && sessionStorage.userEmail === info.email) {
+            //reroute to change info
+            Davis.location.assign('change-info')
+          } else {
+            $CONTAINER.append(JT['profiles-resume'](info))
           }
         }
       })

@@ -1,10 +1,13 @@
 .row.user-profile
   .col-md-10.col-md-offset-1
-    if firstName
+    if !firstName
+      h1 This person does not exist in our database.
+    else
       .row
         .col-xs-8
-          h1.nombre #{firstName} #{lastName}
+          h1.name #{firstName} #{lastName}
           h2.school <em>#{school}</em>
+
         if (sessionStorage.userEmail === email)
           .col-xs-4.profileToggle.no-print(data-public=profilePublic)
             .public-lock
@@ -39,8 +42,9 @@
               li Heads-up knowledge contests between players
               li Sharable Community Service Resumes
             <iframe src="http://player.vimeo.com/video/64315985" width="640" height="360" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
-            p.demoUserPlayLink
-              a.btn.btn-primary.btn-lg(href='/game') Play the Game
+        .row
+          .col-sm-12
+            a.btn.btn-info.btn-lg(href='/game') Play the Game
 
       else
         if profileUnlocked
@@ -51,6 +55,9 @@
                   p
                     strong Please complete the post-game survey!
                   a.btn.btn-primary.survey(href='#{postgameSurveyLink}', target='_blank') Click here to open the survey
+            .row.no-print
+              .col-sm-12
+                a.btn.btn-info.btn-lg(href='/resume/' + sessionStorage.profileLink) See your Civic Resume
             .row.no-print
               .col-sm-12.instructions
                 p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
@@ -98,12 +105,12 @@
               if (sessionStorage.userEmail === email)
                 if (active)
                   h3 Your profile is locked. Play the game to complete your profile!
-                  p
-                    a.btn.btn-info.btn-lg(href='/game') Resume Game
                 else
                   h3 The game is currently inactive.
               else
                 h3 This profile has not yet been completed.
-
-    else
-      h1 This person does not exist in our database.
+          .row
+            .col-sm-8
+              if (sessionStorage.userEmail === email)
+                if (active)
+                  a.btn.btn-info.btn-lg(href='/game') Resume Game

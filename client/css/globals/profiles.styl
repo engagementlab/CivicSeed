@@ -2,27 +2,17 @@
   p, li
     font-family $buttonFont
     font-size 1.2em
-    color #333
   h1
     color $csGreen
-  h2
-    color $csBlue
-  .demoUserPlayLink
-    margin 30px 0 30px 0
-    a
-      background $csGreen
-      padding 10px
-      color white
 
 .user-profile
-  margin-bottom 40px // Should be a generic page property?
-  .row
-    margin-top 20px
+  .row:not(:first-of-type)
+    margin-top 2em
   .school
     margin-top 0
     font-size 1.5em
   .public-lock
-    margin-top 20px // Match h1.nombre
+    margin-top 2em // Match h1.name
   .resume-text
     font-size 1.5em
     font-family $buttonFont
@@ -62,6 +52,79 @@
       h4
         color rgba(255,255,255,0.75)
         font-size 1em
+
+.civic-resume
+  .profile-image
+    margin 1em auto
+    width 100px
+    height 100px
+    border 4px solid $csBlue
+    border-radius 50%
+    background-color $csLightGray
+    background-position center center
+    background-size cover
+    font-size 1rem
+    overflow hidden
+    user-select none
+    &:hover
+      border-color $csLightBlue
+      cursor pointer
+      .uploader
+        display block
+    .uploader
+      display none
+      width 100%
+      height 100%
+      padding-top 1em
+      background-color rgba(0,0,0,0.5)
+      text-align center
+      color white
+      font-size 1.5em
+      p
+        line-height 1.1em
+    .upload-icon
+      font-size 1.8em
+
+  .name, .school
+    margin 0 auto
+  .name
+    color $csDarkGreen
+  .school
+    color $csGray
+  .resume-address
+    color $csGray
+    p
+      margin 0
+  .resume-content
+    margin-top 1em
+    border-top 4px solid $csLightGray
+    padding-top 2em
+  .resume-headers
+    @media screen and (min-width $screen-sm-min)
+      text-align right
+    h3
+      margin-top 0
+      color $csDarkBlue
+  .resume-text
+    font-family $buttonFont
+    padding-bottom 1em
+    @media screen and (min-width $screen-sm-min)
+      border-left 2px solid $csLightGray
+      min-height 6em
+    ul
+      list-style-type none
+      padding-left 0
+  .footer  // Do not use?
+    height 3em
+    text-align center
+    @media screen and (min-width $screen-sm-min)
+      background-color #dbff85
+      margin-top 60px
+    img
+      margin-bottom 30px
+      @media screen and (min-width $screen-sm-min)
+        margin-top -60px
+        margin-bottom 0
 
 .withPlayer
   text-align center

@@ -13,22 +13,10 @@
       form.form-inline#login-form(method='post', action='/')
         input#username.input(type='text', name='username', rel='popover', data-content='Enter your email.', data-original-title='Email Address', placeholder='Email')
         input#password.input(type='password', name='password', rel='popover', data-content='Super secret password.', data-original-title='Password', placeholder='Password')
-        button.btn.btn-primary.btn-large(type='submit') Sign In
+        button.btn.btn-primary.btn-lg(type='submit') Sign In
         p
           a(href='/remind-me') Forget your password?
     else
       div
-        a.btn.btn-info.btn-lg.go-to-profile(href='/profiles/'+sessionStorage.profileLink) Go to Profile
-//- .iconInfo(style='font-size:28px;')
-//-       p
-//-         br
-//-         i.fa.fa-book.fa-lg
-//-         span(style='font-size:20px;') Equip yourself with the necessary knowledge.
-//-     .iconInfo(style='font-size:28px;')
-//-       p
-//-         i.fa.fa-group.fa-lg
-//-         span(style='font-size:20px;') Make lasting connections with people inside and outside of your peer group.
-//-     .iconInfo(style='font-size:28px;')
-//-       p
-//-         i.fa.fa-trophy.fa-lg
-//-         span(style='font-size:20px;') Have fun while learning!
+        a.btn.btn-info.btn-lg.profile(href='/profiles/' + sessionStorage.profileLink) Go to Profile
+        a.btn.btn-info.btn-lg.resume(href='/resume/' + sessionStorage.profileLink) See your Civic Resume

@@ -11,8 +11,8 @@ exports.actions = function (req, res, ss) {
 
   return {
 
-    getProfileInformation: function (random) {
-      UserModel.findOne({ profileLink: random }, function (err, user) {
+    getProfileInformation: function (playerId) {
+      UserModel.findOne({ profileLink: playerId }, function (err, user) {
         if (err) {
           console.log(err);
           res({firstName: false});
