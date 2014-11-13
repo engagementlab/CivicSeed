@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function (db, Schema) {
+module.exports = {
 
-  var npcSchema = new Schema({
+  name: 'Npc',
+  collection: 'npcs',
+  schema: {
     id: Number,
     index: Number,
     position: {
@@ -30,9 +32,6 @@ module.exports = function (db, Schema) {
       shape: String
     },
     skinSuit: String
-  })
+  }
 
-  var NpcModel = db.model('Npc', npcSchema, 'npcs')
-
-  return NpcModel
 }

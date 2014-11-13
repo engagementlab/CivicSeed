@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function (db, Schema) {
+module.exports = {
 
-  var gameSchema = new Schema({
+  name: 'Game',
+  collection: 'game',
+  schema: {
     players: Number,
     seedsDropped: Number,
     seedsDroppedGoal: Number,
@@ -21,9 +23,6 @@ module.exports = function (db, Schema) {
       answer: String,
       madePublic: Boolean
     }]
-  })
+  }
 
-  var GameModel = db.model('Game', gameSchema, 'game')
-
-  return GameModel
 }

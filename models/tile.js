@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function (db, Schema) {
+module.exports = {
 
-  var TileSchema = new Schema({
+  name: 'Tile',
+  collection: 'tiles',
+  schema: {
     x: Number,
     y: Number,
     tileState: Number,
@@ -13,9 +15,6 @@ module.exports = function (db, Schema) {
     foreground: Number,
     foreground2: Number,
     mapIndex: Number
-  })
+  }
 
-  var TileModel = db.model('Tile', TileSchema, 'tiles')
-
-  return TileModel
 }

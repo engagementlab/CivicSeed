@@ -48,7 +48,9 @@ var self = module.exports = {
 
     winston.info('CS: '.blue + log)
 
-    return require(rootDir + '/models/' + modelName + '-model')(self.db, mongoose.Schema)
+    var model = require(rootDir + '/models/' + modelName)
+
+    return self.db.model(model.name, new mongoose.Schema(model.schema), model.collection)
   },
 
   getAndSetNetworkIp: function (callback) {

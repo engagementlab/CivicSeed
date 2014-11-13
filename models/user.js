@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function (db, Schema) {
+module.exports = {
 
-  var UserSchema = new Schema({
+  name: 'User',
+  collection: 'users',
+  schema: {
     activeSessionID: String,
     gameChannel: String, // not sure what type this should be...
     firstName: String,
@@ -74,9 +76,6 @@ module.exports = function (db, Schema) {
     admin: {
       instances: [String]
     }
-  })
+  }
 
-  var UserModel = db.model('User', UserSchema, 'users')
-
-  return UserModel
 }

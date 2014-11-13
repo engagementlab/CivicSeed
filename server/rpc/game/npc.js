@@ -6,14 +6,13 @@ exports.actions = function (req, res, ss) {
 
   req.use('session')
 
-  var UserModel = ss.service.useModel('user', 'ss'),
-      NpcModel  = ss.service.useModel('npc', 'ss'),
-      GameModel = ss.service.useModel('game', 'ss')
+  var Npc  = ss.service.db.model('Npc'),
+      Game = ss.service.db.model('Game')
 
   return {
 
     getNpcById: function (npcId) {
-      NpcModel.find({ id: npcId }, function (err, npc) {
+      Npc.find({ id: npcId }, function (err, npc) {
         if (err) {
           winston.error('  Could not find NPC: %s  '.red.inverse, err)
         } else {
@@ -23,7 +22,7 @@ exports.actions = function (req, res, ss) {
     },
 
     getNpcs: function () {
-      NpcModel.find(function (err, npcs) {
+      Npc.find(function (err, npcs) {
         if (err) {
           winston.error('  Could not find NPCs: %s  '.red.inverse, err)
         } else {
@@ -33,7 +32,7 @@ exports.actions = function (req, res, ss) {
     },
 
     saveResponse: function (data) {
-      GameModel.where('instanceName').equals(data.instanceName)
+      Game.where('instanceName').equals(data.instanceName)
         .find(function (err, game) {
         if (err) {
           winston.error('  Could not find resource', err)
@@ -57,7 +56,7 @@ exports.actions = function (req, res, ss) {
     },
 
     getResponses: function (instance) {
-      GameModel.where('instanceName').equals(instance)
+      Game.where('instanceName').equals(instance)
         .select('resourceResponses')
         .find(function (err, responses) {
           if (err) {
@@ -69,7 +68,7 @@ exports.actions = function (req, res, ss) {
     },
 
     makeResponsePublic: function (data) {
-      GameModel.where('instanceName').equals(data.instanceName)
+      Game.where('instanceName').equals(data.instanceName)
         .find(function (err, game) {
           if (err) {
             winston.error('Could not find game', err)
@@ -109,7 +108,7 @@ exports.actions = function (req, res, ss) {
     },
 
     makeResponsePrivate: function (data) {
-      GameModel.where('instanceName').equals(data.instanceName)
+      Game.where('instanceName').equals(data.instanceName)
         .find(function (err, game) {
           if (err) {
             winston.error('Could not find game', err)

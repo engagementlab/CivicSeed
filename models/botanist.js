@@ -1,8 +1,10 @@
 'use strict';
 
-module.exports = function (db, Schema) {
+module.exports = {
 
-  var botanistSchema = new Schema({
+  name: 'Botanist',
+  collection: 'botanist',
+  schema: {
     id: Number,
     x: Number,
     y: Number,
@@ -33,9 +35,6 @@ module.exports = function (db, Schema) {
         ]
       }
     ]
-  })
+  }
 
-  var BotanistModel = db.model('Botanist', botanistSchema, 'botanist')
-
-  return BotanistModel
 }

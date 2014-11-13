@@ -4,12 +4,12 @@ exports.actions = function (req, res, ss) {
 
   req.use('session')
 
-  var BotanistModel = ss.service.useModel('botanist', 'ss')
+  var Botanist = ss.service.db.model('Botanist')
 
   return {
 
     load: function () {
-      BotanistModel.findOne(function (err, data) {
+      Botanist.findOne(function (err, data) {
         res(data)
       })
     }
