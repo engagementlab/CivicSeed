@@ -26,21 +26,8 @@ $game.$mouse = (function () {
     _prevY = _curY
 
     // Limit extreme values to gameboard width and height
-    if (tempX > $game.VIEWPORT_WIDTH - 1) {
-      _curX = $game.VIEWPORT_WIDTH - 1
-    } else if (tempX < 0) {
-      _curX = 0
-    } else {
-      _curX = tempX
-    }
-
-    if (tempY > $game.VIEWPORT_HEIGHT - 1) {
-      _curY = $game.VIEWPORT_HEIGHT - 1
-    } else if (tempY < 0) {
-      _curY = 0
-    } else {
-      _curY = tempY
-    }
+    _curX = Math.max(Math.min($game.VIEWPORT_WIDTH  - 1, tempX), 0)
+    _curY = Math.max(Math.min($game.VIEWPORT_HEIGHT - 1, tempY), 0)
 
     // If the mouse cursor is pointing on a different tile,
     // re-render the cursor
