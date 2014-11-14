@@ -18,41 +18,34 @@ $game.flags = (function () {
   // Private holder of flags
   var _FLAGS = {}
 
-  function clearAll () {
-    _FLAGS = {}
-  }
-
   // Expose 'public' methods
   return {
 
     // Checks to see if a game state flag is set
     check: function (flag) {
       // Returns true if a given flag is found, and false if not
-      return (_FLAGS[flag]) ? true : false
+      return (flag in _FLAGS)
     },
 
     // Sets a current game state flag
     set: function (flag) {
-      // Returns true if able to be set
-      if (!this.check(flag)) {
+      if (flag) {
         _FLAGS[flag] = true
-        return true
-      } else {
-        // Returns false if flag was not set (e.g. it was already set)
-        return false
       }
     },
 
     // Remove one or all game state flags
     unset: function (flag) {
-      if (flag) {
-        delete _FLAGS[flag]
-      } else {
-        // If no flag is given, clear all flags
-        clearAll()
-      }
+      // Always returns true, even if the flag did not exist
+      return delete _FLAGS[flag]
     },
 
+    // Clear all game state flags
+    unsetAll: function () {
+      _FLAGS = {}
+    },
+
+    // Returns an array of all currently set game flags
     get: function () {
       var list = []
       for (var i in _FLAGS) {

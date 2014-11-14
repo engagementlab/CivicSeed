@@ -453,7 +453,7 @@ var $game = module.exports = {
     // Clear all state flags and things
     sessionStorage.removeItem('isPlaying');
     $game.running = false;
-    $game.flags.unset()
+    $game.flags.unsetAll()
   },
 
   //startup boss level if player finished game and boss level is unlocked

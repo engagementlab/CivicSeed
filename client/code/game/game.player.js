@@ -1383,7 +1383,7 @@ var _player = {
 // on init, set local and global variables for all player info
 function _setPlayerInformation (info) {
   // Ensure that flags start from a clean state
-  $game.flags.unset()
+  $game.flags.unsetAll()
 
   // private
   _seeds = info.game.seeds;
