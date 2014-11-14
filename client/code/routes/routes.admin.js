@@ -3,11 +3,15 @@ var self = module.exports = {
   loadRoutes: function ($app) {
 
     require('/admin').init()
+    require('/export').init()
+
     var npcs = require('/npcs')
     npcs.init()
 
     $app.get('/admin', function (req) {
       $CONTAINER.append(JT['admin-panel']({
+        id: 'admin',
+        title: 'Site administration',
         environment: CivicSeed.ENVIRONMENT,
         message: 'User admin panel.'
       }))
@@ -31,6 +35,7 @@ var self = module.exports = {
           apprise(err)
         } else {
           $CONTAINER.append(JT['admin-monitor']({
+            title: 'Monitor',
             environment: CivicSeed.ENVIRONMENT,
             instances: info
           }))
@@ -69,6 +74,7 @@ var self = module.exports = {
           })
 
           $CONTAINER.append(JT['admin-npcs']({
+            title: 'NPC Control panel',
             environment: CivicSeed.ENVIRONMENT,
             npcs: result
           }))
@@ -83,8 +89,18 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/admin/npcs/export', function (req) {
-      ss.rpc('admin.db.export', 'Npc', function (res) {
+    $app.get('/admin/export', function (req) {
+      $CONTAINER.append(JT['admin-export']({
+        title: 'Export data',
+        environment: CivicSeed.ENVIRONMENT,
+        message: 'Export database information.'
+      }))
+      $CONTAINER.addClass('admin-container')
+      $('title').text('{ ::: Civic Seed - Admin Panel - Export ::: }')
+    })
+
+    $app.get('/admin/export/:collection', function (req) {
+      ss.rpc('admin.db.export', req.params['collection'], function (res) {
         if (res) {
           // TODO: This is hacky.
           // It should actually send a document of MIME type application/json
@@ -98,9 +114,9 @@ var self = module.exports = {
 
     $app.get('/admin/invitecodes', function (req) {
       $CONTAINER.append(JT['admin-invitecodes']({
-        title: 'Startup',
+        title: 'Create new game',
         environment: CivicSeed.ENVIRONMENT,
-        message: 'Startup admin panel.'
+        message: 'Send invite codes.'
       }))
       $CONTAINER.addClass('admin-container')
       $('title').text('{ ::: Civic Seed - Admin Panel - Invite Codes ::: }')

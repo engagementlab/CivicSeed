@@ -1,0 +1,13 @@
+if id !== 'admin'
+  .row
+    .col-md-10.col-md-offset-1.back-to-admin
+      a(href='/admin')
+        i.fa.fa-arrow-circle-o-left.fa-lg
+        | back
+
+.row
+  .col-md-10.col-md-offset-1
+    h1 #{title}
+
+    h4
+      span.color-darkorange #{environment} Environment

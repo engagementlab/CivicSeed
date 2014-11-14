@@ -174,7 +174,6 @@ exports.actions = function (req, res, ss) {
     }
   };
 
-
   var dbHelpers = {
     saveInfo: function (info) {
       if (info && info.id) {
@@ -219,7 +218,7 @@ exports.actions = function (req, res, ss) {
         }
       });
     }
-   };
+  }
 
   return {
     // MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
@@ -245,7 +244,7 @@ exports.actions = function (req, res, ss) {
 
     tellOthers: function (info) {
       //send player info to all others
-      ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', {info: info});
+      ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', { info: info })
     },
 
     exitPlayer: function (player) {

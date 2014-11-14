@@ -1,15 +1,4 @@
-.row
-  .col-md-10.col-md-offset-1.back-to-admin
-    a(href='/admin')
-      i.fa.fa-arrow-circle-o-left.fa-lg
-      | back
-
-.row
-  .col-md-10.col-md-offset-1
-    h1 Startup
-
-    h4
-      span.color-darkorange #{environment} Environment
+include _header
 
 .row
   .col-md-10.col-md-offset-1
@@ -23,46 +12,43 @@
 
         .row
           .col-sm-3
-            button#userLoadBtn.btn(data-type='users') Users
+            button.btn(data-type='users') Users
               .spinner
           .admin-instructions.col-sm-9
             p Clears current users; sets up test and demo users.
         .row
           .col-sm-3
-            button#gameLoadBtn.btn(data-type='game') Game
+            button.btn(data-type='game') Game
               .spinner
           .admin-instructions.col-sm-9
             p Clears current game sessions; sets up test and demo games.
         .row
           .col-sm-3
-            button#gameLoadBtn.btn(data-type='colors') Colors
+            button.btn(data-type='colors') Colors
               .spinner
           .admin-instructions.col-sm-9
             p Loads game colors.
         .row
           .col-sm-3
-            button#chatLoadBtn.btn(data-type='chat') Chat
+            button.btn(data-type='chat') Chat
               .spinner
           .admin-instructions.col-sm-9
             p Clears all chat logs.
         .row
           .col-sm-3
-            button#tileLoadBtn.btn(data-type='tiles') Tiles
+            button.btn(data-type='tiles') Tiles
               .spinner
           .admin-instructions.col-sm-9
             p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations. <strong>This may take a while.</strong>
         .row
           .col-sm-3
-            button#botanistLoadBtn.btn(data-type='botanist') Botanist
+            button.btn(data-type='botanist') Botanist
               .spinner
           .admin-instructions.col-sm-9
             p Loads default Botanist conversations.
         .row
           .col-sm-3
-            button#npcLoadBtn.btn(data-type='npcs') NPC
+            button.btn(data-type='npcs') NPC
               .spinner
           .admin-instructions.col-sm-9
             p Loads default NPC data. <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.
-
-        //- button#resourcesLoadBtn.btn(data-type='resources') Preload Resources
-        //- pre #{consoleOutput}

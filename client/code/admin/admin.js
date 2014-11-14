@@ -1,4 +1,6 @@
-var $body;
+'use strict';
+
+var $body
 
 var self = module.exports = {
 
@@ -9,24 +11,24 @@ var self = module.exports = {
 
   init: function () {
 
-    $body = $(document.body);
+    $body = $(document.body)
 
     // NEED TO DO SOME SORT OF RPC CALL HERE TO MAKE SURE THIS NEVER CAN JUST HAPPEN UNLESS YOU HAVE THE RIGHT ROLE
-    self.setupLoaders();
-    self.setupInviteCodes();
-    self.setupMonitor();
+    self.setupLoaders()
+    self.setupInviteCodes()
+    self.setupMonitor()
   },
 
   setupLoaders: function () {
     $body.on('click', '#admin-startup button', function (event) {
       var button   = $(this),
-          dataType = button.data().type;
+          dataType = button.data().type
 
       button.removeClass('btn-success')
       button.find('.spinner').show()
       ss.rpc('admin.startup.loadData', dataType, function (res) {
         console.log(res)
-        button.addClass('btn-success');
+        button.addClass('btn-success')
         button.find('.spinner').fadeOut()
       })
     })

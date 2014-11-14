@@ -1,8 +1,4 @@
-.row
-  .col-md-10.col-md-offset-1
-    h1 Site Administration
-
-    h4 <span class='color-darkorange'>#{environment} Environment</a>
+include _header
 
 .row
   .col-md-10.col-md-offset-1
@@ -30,3 +26,8 @@
             a.btn(href='/admin/monitor') Monitor
           .admin-instructions.col-sm-9
             p Look at information on current games.
+        .row
+          .col-sm-3
+            a.btn(href='/admin/export') Export
+          .admin-instructions.col-sm-9
+            p Export data.

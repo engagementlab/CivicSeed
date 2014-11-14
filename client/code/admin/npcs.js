@@ -126,9 +126,8 @@ var self = module.exports = {
     })
 
     // Loads a JSON view of all NPC data.
-    // Note; this crashes the server if you attempt to go to it directly without going through the admin.
     $body.on('click', '.npc-export-button', function () {
-      window.location = '/admin/npcs/export'
+      window.location = '/admin/export/npc'
     })
 
     // Hide resource view on mouse click

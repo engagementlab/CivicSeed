@@ -14,8 +14,18 @@ exports.actions = function (req, res, ss) {
   return {
 
     export: function (name) {
-      var collection = ss.service.db.model(name)
+      // Ensure that the passed name has an uppercase first letter
+      var model = name.charAt(0).toUpperCase() + name.slice(1)
 
+      // Check to see if the model exists
+      try {
+        var collection = ss.service.db.model(model)
+      } catch (e) {
+        res({ error: e })
+        return false
+      }
+
+      // Return database collection with meta fields stripped
       collection
         .find()
         .select('-__v -_id')
