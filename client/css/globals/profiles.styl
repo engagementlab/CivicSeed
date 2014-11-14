@@ -55,6 +55,7 @@
 
 .civic-resume
   .profile-image
+    position relative
     margin 1em auto
     width 100px
     height 100px
@@ -67,10 +68,14 @@
     overflow hidden
     user-select none
     &:hover
-      border-color $csLightBlue
-      cursor pointer
       .uploader
         display block
+    &:active
+      // Note: this works pretty poorly in Chrome because
+      // the browser is actually busy opening UI
+      // (and maybe doesn't work in Firefox at all)
+      animation blink-border 250ms 2 step-start
+      -webkit-animation blink-border 250ms 2 step-start
     .uploader
       display none
       width 100%
@@ -84,9 +89,19 @@
         line-height 1.1em
         font-size 1.3em
         padding 0.25em 1em
+      input
+        position absolute
+        top 0
+        bottom 0
+        left 0
+        right 0
+        padding 0
+        border 0
+        background-color transparent
+        opacity 0
+        cursor pointer
     .upload-icon
       font-size 3em
-
   .name, .school
     margin 0 auto
   .name
@@ -127,6 +142,20 @@
       @media screen and (min-width $screen-sm-min)
         margin-top -60px
         margin-bottom 0
+
+
+vendors = webkit
+@keyframes blink-border {
+  0% {
+    border-color $csBlue
+  }
+  50% {
+    border-color $csOrange
+  }
+  100% {
+    border-color $csBlue
+  }
+}
 
 .withPlayer
   text-align center
