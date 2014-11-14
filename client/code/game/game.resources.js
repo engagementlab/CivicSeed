@@ -63,7 +63,7 @@ var $resources = $game.$resources = {
         resource = _resources.data[index]
 
     // Load resource content, then display.
-    $game.setFlag('visible-resource-overlay')
+    $game.flags.set('visible-resource-overlay')
     _resources.loadArticle(resource, function () {
       $game.$audio.playTriggerFx('windowShow')
       $game.$audio.fadeLow()
@@ -77,7 +77,7 @@ var $resources = $game.$resources = {
   examineResource: function (index) {
     // HIDES (not closes) the inventory, then show resource
     // Set a flag that remembers we were in the inventory
-    $game.setFlag('viewing-inventory')
+    $game.flags.set('viewing-inventory')
     $game.$input.hideInventory(function () {
       $resources.showResource(index)
     })
@@ -93,7 +93,7 @@ var $resources = $game.$resources = {
 
       // Clean up background globals & game state flags
       _resources.temporaryAnswer = ''
-      $game.removeFlag('visible-resource-overlay')
+      $game.flags.unset('visible-resource-overlay')
 
       // Clear resource stage
       _resources.unloadArticle()
@@ -102,7 +102,7 @@ var $resources = $game.$resources = {
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
-      if ($game.checkFlag('viewing-inventory') === true) $game.$input.showInventory()
+      if ($game.flags.check('viewing-inventory') === true) $game.$input.showInventory()
 
       if (typeof callback === 'function') callback()
     })
@@ -122,7 +122,7 @@ var $resources = $game.$resources = {
       el.style.display = 'none'
     })
     if ($(overlay).is(':hidden')) {
-      $game.setFlag('visible-resource-overlay')
+      $game.flags.set('visible-resource-overlay')
       $(overlay).fadeIn(300)
     }
   },
@@ -427,7 +427,7 @@ var _resources = {
         playerLevel  = $game.$player.getLevel(),
         answer       = $game.$player.getAnswer(index),
         isAnswered   = (answer && answer.result) ? true : false,
-        isRevisit    = $game.checkFlag('viewing-inventory'),
+        isRevisit    = $game.flags.check('viewing-inventory'),
         resource     = _resources.data[index]
 
     var $article     = $('#resource-stage .pages > section'),

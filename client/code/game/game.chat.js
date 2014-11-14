@@ -130,14 +130,14 @@ var _chat = {
   // Set a flag to indicate if a player has a chat bubble on screen
   flag: function (bool) {
     if (bool === true) {
-      $game.setFlag('chatting')
+      $game.flags.set('chatting')
       return true
     }
     else if (bool === false) {
-      $game.removeFlag('chatting')
+      $game.flags.unset('chatting')
       return false
     }
-    return $game.checkFlag('chatting')
+    return $game.flags.check('chatting')
   },
 
   // Place the chat centered above player, or if too big then left/right align with screen edge

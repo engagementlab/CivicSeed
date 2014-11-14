@@ -167,10 +167,10 @@ var $others = $game.$others = {
           otherPlayer.move();
           otherPlayer.getMaster = true;
         }
-        else if (!$game.checkFlag('in-transit')) {
+        else if (!$game.flags.check('in-transit')) {
           otherPlayer.idle();
         }
-        else if ($game.checkFlag('in-transit')) {
+        else if ($game.flags.check('in-transit')) {
           otherPlayer.getMaster = true;
         }
 

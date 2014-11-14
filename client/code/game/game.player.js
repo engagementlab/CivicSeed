@@ -174,7 +174,7 @@ var $player = $game.$player = {
 
   //calculate movements and what to render for every game tick
   update: function () {
-    var inTransit = $game.checkFlag('in-transit')
+    var inTransit = $game.flags.check('in-transit')
 
     if ($game.$player.isMoving) {
       _move();
@@ -200,7 +200,7 @@ var $player = $game.$player = {
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
   beginMove: function (x, y) {
     // Clear HUD
-    if ($game.checkFlag('visible-inventory')) $game.$input.closeInventory()
+    if ($game.flags.check('visible-inventory')) $game.$input.closeInventory()
 
     var loc    = $player.getLocalPosition(),
         master = {x: x, y: y}
@@ -310,10 +310,10 @@ var $player = $game.$player = {
         options.radius = 1
 
         // If powered up, increase paint radius
-        if ($game.checkFlag('paint-up-1')) options.radius++
-        if ($game.checkFlag('paint-up-2')) options.radius++
-        if ($game.checkFlag('paint-up-3')) options.radius++
-        if ($game.checkFlag('paint-max')) options.radius = 4
+        if ($game.flags.check('paint-up-1')) options.radius++
+        if ($game.flags.check('paint-up-2')) options.radius++
+        if ($game.flags.check('paint-up-3')) options.radius++
+        if ($game.flags.check('paint-max')) options.radius = 4
 
         _player.calculateSeeds(options);
         return true;
@@ -489,7 +489,7 @@ var $player = $game.$player = {
     $game.$player.currentLevel += 1;
     $game.$player.seenRobot = false;
     $game.$botanist.setState(0);
-    $game.removeFlag('botanist-teleported')
+    $game.flags.unset('botanist-teleported')
     _pledges = 5;
     // $game.$render.loadTilesheet($game.$player.currentLevel, true);
 
@@ -803,8 +803,8 @@ var $player = $game.$player = {
 
   // Transport player magically (or scientifically) to any location in the game world
   beam: function (location) {
-    $game.setFlag('is-beaming')
-    $game.setFlag('in-transit')
+    $game.flags.set('is-beaming')
+    $game.flags.set('in-transit')
     $game.$input.resetUI()
     $game.$chat.clearAllChats()
     $('#beaming').show()
@@ -832,7 +832,7 @@ var $player = $game.$player = {
     $game.$map.firstStart(function () {
       $game.$render.renderAllTiles();
       setTimeout(function () {
-        $game.removeFlag('is-beaming')
+        $game.flags.unset('is-beaming')
         $('#beaming').fadeOut()
         // Use default viewport transition end function
         $game.endTransition()
@@ -951,7 +951,7 @@ var $player = $game.$player = {
         _addBubble(npcIndex, contents, message)
       }
       // If player has a rader that can sense if NPCs have a resource to give
-      else if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
+      else if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
         // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards from a lower-level NPC if the player skipped it earlier)
         if ($game.$npc.getNpc(npcIndex).isHolding === true && (!theResource || theResource.result === false) && $player.getLevel() >= $game.$npc.getLevel(npcIndex)) {
           contents = '!'
@@ -1080,7 +1080,7 @@ var $player = $game.$player = {
       }
     } else {
       $game.$player.dropSeed({mode: 'draw'});
-      $game.removeFlag('draw-mode')
+      $game.flags.unset('draw-mode')
       $game.$player.seedMode = false;
       $BODY.off('mousedown touchstart', '#gameboard');
       $game.$player.seedPlanting = false;
@@ -1113,7 +1113,7 @@ var $player = $game.$player = {
   //turns off draw mode if no seeds left
   checkSeedLevel: function () {
     if (_seeds.draw <= 0) {
-      $game.removeFlag('draw-mode')
+      $game.flags.unset('draw-mode')
     }
   },
 
@@ -1273,7 +1273,7 @@ var _player = {
     var waitingEl = document.getElementById('waiting-for-seed')
 
     //set a waiting boolean so we don't plant more until receive data back from rpc
-    $game.setFlag('awaiting-seed')
+    $game.flags.set('awaiting-seed')
 
     //send the data to the rpc
     var info = {
@@ -1298,7 +1298,7 @@ var _player = {
       .show();
 
     ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
-      $game.removeFlag('awaiting-seed')
+      $game.flags.unset('awaiting-seed')
 
       $(waitingEl).fadeOut();
       if (result > 0) {
@@ -1321,7 +1321,7 @@ var _player = {
             _player.endSeedMode()
 
             // Other actions unique to draw mode
-            $game.removeFlag('draw-mode')
+            $game.flags.unset('draw-mode')
             $BODY.off('mousedown touchstart', '#gameboard')
             document.getElementById('graffiti').style.display = 'none'
           }
@@ -1383,7 +1383,7 @@ var _player = {
 // on init, set local and global variables for all player info
 function _setPlayerInformation (info) {
   // Ensure that flags start from a clean state
-  $game.removeFlag()
+  $game.flags.unset()
 
   // private
   _seeds = info.game.seeds;
@@ -1417,7 +1417,7 @@ function _setPlayerInformation (info) {
   $game.$botanist.setState(info.game.botanistState)
 
   if (info.game.firstTime === true) {
-    $game.setFlag('first-time')
+    $game.flags.set('first-time')
   }
 }
 

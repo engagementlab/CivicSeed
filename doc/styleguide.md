@@ -31,7 +31,7 @@ Admittedly, the change in developers for CivicSeed over time has resulted in a m
 * Whenever possible, do not rely on global variables to remember game state or data. Store variables on each script's private namespace (e.g. `_script`) or on the global namespace (e.g. `$script`) if necessary.
 * When referring to variables or functions on its own namespace do not use the `$game` prefix.
 * When referring to variables or functions on another namespace, try to store it as a local variable first to make updating names across functions easier to handle, unless doing so will make the function harder to read.
-* If it is necessary to remember some aspect of the game state for retrieval by other parts of the script use the `$game.setFlag()` and `$game.checkFlag()` methods (see also `flags.md`).
+* If it is necessary to remember some aspect of the game state for retrieval by other parts of the script use the `$game.flags.set()` and `$game.flags.check()` methods (see also `flags.md`).
 * Keep in mind DRY (Don't Repeat Yourself). If it looks like you are repeating code, create a separate function for it.
 
 ## General

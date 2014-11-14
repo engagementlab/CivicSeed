@@ -89,7 +89,12 @@ var self = module.exports = {
           // TODO: This is hacky.
           // It should actually send a document of MIME type application/json
           // instead of just overwriting the HTML page.
-          document.write(JSON.stringify(res))
+          console.log(res)
+          var exported = []
+          for (var i = 0; i < res.length; i++) {
+            exported.push(_.omit(res[0], ['_id', '__v']))
+          }
+          document.write(JSON.stringify(exported))
         } else {
           console.log('Error exporting NPC data.')
         }

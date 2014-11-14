@@ -98,11 +98,11 @@ var $botanist = $game.$botanist = {
 
     // Prevent check from occurring if player has already been teleported
     // to the Botanist once this level and game session.
-    if ($game.checkFlag('botanist-teleported') === true) return false
+    if ($game.flags.check('botanist-teleported') === true) return false
 
     // Prevent check from occurring if the player was inside the inventory
     // when this function was called
-    if ($game.checkFlag('viewing-inventory') === true) return false
+    if ($game.flags.check('viewing-inventory') === true) return false
 
     // Prevent check from occurring if player is a Master Gardener
     if ($game.$player.getLevel() > 4) return false
@@ -135,11 +135,11 @@ var $botanist = $game.$botanist = {
     // If player is holding ALL the pieces obtainable this level, beam the player directly to the Botanist so that they don't keep wasting time.
     if (inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
       // Immediately lock player from moving
-      $game.setFlag('in-transit')
+      $game.flags.set('in-transit')
 
       // Teleport
       $game.alert('You collected all the pieces, to the botanist!')
-      $game.setFlag('botanist-teleported')
+      $game.flags.set('botanist-teleported')
       setTimeout(function () {
         $game.$player.beam({x: 70, y: 74})
       }, 1500)
@@ -171,7 +171,7 @@ var $botanist = $game.$botanist = {
     }
 
     // If this is the player's first time in the game, player should complete the tutorial first.
-    if ($game.checkFlag('first-time') === true) {
+    if ($game.flags.check('first-time') === true) {
       _botanist.doTutorial()
       return
     }
@@ -218,7 +218,7 @@ var $botanist = $game.$botanist = {
   // Shows the botanist's riddle when clicked on from the player's inventory
   showPuzzlePageFromInventory: function () {
     // Set a flag that remembers we were in the inventory
-    $game.setFlag('viewing-inventory')
+    $game.flags.set('viewing-inventory')
     $game.$input.hideInventory(function () {
       _botanist.showOverlay(0)
     })
@@ -236,9 +236,9 @@ var $botanist = $game.$botanist = {
       $('.inventory-item').css('opacity', 1)
 
       // Remove flags
-      $game.removeFlag('visible-botanist-overlay')
-      $game.removeFlag('solving-puzzle')
-      $game.removeFlag('botanist-chatting')  // Just in case it was accidentally not removed
+      $game.flags.unset('visible-botanist-overlay')
+      $game.flags.unset('solving-puzzle')
+      $game.flags.unset('botanist-chatting')  // Just in case it was accidentally not removed
 
       // If they just beat a level, then show progreess
       if ($game.$botanist.getState() === 0 && $game.$player.currentLevel < 4) {
@@ -283,7 +283,7 @@ var $botanist = $game.$botanist = {
 
   // Things to do if the player has completed level 4
   finishedAllBotanistPuzzles: function () {
-    $game.setFlag('completed-all-puzzles')
+    $game.flags.set('completed-all-puzzles')
     $botanist.setState(2)
   },
 
@@ -379,7 +379,7 @@ var _botanist = {
   // Botanist speech bubble. This is a wrapper function for $npc.showSpeechBubble()
   chat: function (dialogue, prompt, callback) {
     // Set botanist chat status; this prevents people from cancelling dialogue with the botanist.
-    $game.setFlag('botanist-chatting')
+    $game.flags.set('botanist-chatting')
 
     // If there isn't a prompt already, force dialogue to be a prompt, otherwise it freezes player interaction forever
     if (!_.isFunction(prompt) && !_.isArray(dialogue)) {
@@ -388,7 +388,7 @@ var _botanist = {
 
     // Use $npc.showSpeechBubble() to display the chat bubble
     $game.$npc.showSpeechBubble($botanist.name, dialogue, prompt, function () {
-      $game.removeFlag('botanist-chatting')
+      $game.flags.unset('botanist-chatting')
       if (typeof callback === 'function') callback()
     })
   },
@@ -459,7 +459,7 @@ var _botanist = {
   // Remove player's first time flag & update this on the server.
   completeTutorial: function () {
     // After removing this flag, doTutorial() will no longer be called.
-    $game.removeFlag('first-time')
+    $game.flags.unset('first-time')
     ss.rpc('game.player.updateGameInfo', {
       id:        $game.$player.id,
       firstTime: false
@@ -483,7 +483,7 @@ var _botanist = {
 
   showOverlay: function (section) {
     var overlay = document.getElementById('botanist-area')
-    $game.setFlag('visible-botanist-overlay')
+    $game.flags.set('visible-botanist-overlay')
     this.addContent(section)
     $(overlay).fadeIn(300)
   },
@@ -511,7 +511,7 @@ var _botanist = {
         _botanist.showPuzzlePageContent()
 
         // Special case for tutorial
-        if ($game.checkFlag('first-time')) {
+        if ($game.flags.check('first-time')) {
           _addButton('next', 5)
           break
         }
@@ -526,14 +526,14 @@ var _botanist = {
           }
 
           // If inventory was showing previously, re-open the inventory
-          if ($game.checkFlag('viewing-inventory') === true) $game.$input.showInventory()
+          if ($game.flags.check('viewing-inventory') === true) $game.$input.showInventory()
         })
         break
       // [SECTION 01] SOLVING THE BOTANISTS'S PUZZLE.
       case 1:
         // Setup classes and flags
         document.getElementById('botanist-area').classList.add('puzzle-mode')
-        $game.setFlag('solving-puzzle')
+        $game.flags.set('solving-puzzle')
 
         // Setup contents
         _botanist.say('OK. Take the pieces you have gathered and drop them into the outline to create your seeds.')
@@ -1180,7 +1180,7 @@ var _botanist = {
 
   // Hide and reset inventory view to non-puzzle state
   resetInventoryInterface: function () {
-    $game.removeFlag('viewing-inventory')
+    $game.flags.unset('viewing-inventory')
     $game.$input.closeInventory(function () {
       document.querySelector('#inventory .inventory-tangram').style.display = 'block'
       document.querySelector('#inventory .close-button').style.display = 'block'

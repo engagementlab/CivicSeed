@@ -19,7 +19,7 @@ var $input = $game.$input = module.exports = {
 
     // Update cursor on mouse move
     $BODY.on('mousemove', '#gameboard', function (e) {
-      if (!$game.checkFlag('in-transit') && $game.running) {
+      if (!$game.flags.check('in-transit') && $game.running) {
         $game.$mouse.onMove({
           event: e,
           x:     e.pageX,
@@ -47,7 +47,7 @@ var $input = $game.$input = module.exports = {
 
     // Prevent clicking of any HUD button if resource or botanist overlays are shown
     $BODY.on('click', '.hud-button', function (e) {
-      if ($game.checkFlag('visible-resource-overlay') || $game.checkFlag('visible-botanist-overlay')) {
+      if ($game.flags.check('visible-resource-overlay') || $game.flags.check('visible-botanist-overlay')) {
         e.stopImmediatePropagation()
       }
     })
@@ -118,10 +118,10 @@ var $input = $game.$input = module.exports = {
 
       $BODY.on('mousedown touchstart', '#gameboard', function () {
         $game.$player.drawFirstSeed()
-        $game.setFlag('draw-mode')
+        $game.flags.set('draw-mode')
       })
       $BODY.on('mouseup touchend', '#gameboard', function () {
-        $game.removeFlag('draw-mode')
+        $game.flags.unset('draw-mode')
       })
     })
 
@@ -243,7 +243,7 @@ var $input = $game.$input = module.exports = {
         ss.rpc('game.player.pledgeSeed', info, function (r) {
           $game.$player.updatePledges(-1)
           $game.$resources.showCheckMessage('Thanks! (they will say). You can seed ' + (pledges - 1) + ' more answers this level.')
-          if ($game.checkFlag('pledge-reward')) {
+          if ($game.flags.check('pledge-reward')) {
             $game.$player.addSeeds('draw', 10)
             _input.outfitLog('You gained 10 paintbrush seeds for seeding another player’s response.')
           }
@@ -446,7 +446,7 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleMinimap: function () {
-    if ($game.checkFlag('first-time') === true) return // Disables if it's player's first time in the game.
+    if ($game.flags.check('first-time') === true) return // Disables if it's player's first time in the game.
     $('.minimap').toggle()
   },
 
@@ -456,7 +456,7 @@ var $input = $game.$input = module.exports = {
 
   // Toggles Seed Mode.
   toggleSeedMode: function () {
-    if ($game.$player.seedMode === true || $game.checkFlag('seed-mode') === true) {
+    if ($game.$player.seedMode === true || $game.flags.check('seed-mode') === true) {
       $input.endSeedMode()
     } else {
       $input.startSeedMode()
@@ -469,14 +469,14 @@ var $input = $game.$input = module.exports = {
     $input.resetUI()
 
     $game.$player.seedMode = true
-    $game.setFlag('seed-mode')
+    $game.flags.set('seed-mode')
     $input.activeHUDButton('.hud-seed')
 
     // Force update of mouse cursor
     $game.$mouse.updateCursor()
 
     // Special controls for boss mode
-    if ($game.checkFlag('boss-mode')) {
+    if ($game.flags.check('boss-mode')) {
       $game.$boss.startSeedMode()
     }
     // If player has multiple types of seeds, open up the seed inventory
@@ -498,14 +498,14 @@ var $input = $game.$input = module.exports = {
 
   endSeedMode: function () {
     $game.$player.seedMode = false
-    $game.removeFlag('seed-mode')
+    $game.flags.unset('seed-mode')
     if ($game.$player.seedventoryShowing) {
       $input.closeSeedventory()
     }
     document.getElementById('graffiti').style.display = 'none'
     $BODY.off('mousedown touchend', '#gameboard');
     $BODY.off('mouseup touchend', '#gameboard');
-    $game.removeFlag('draw-mode')
+    $game.flags.unset('draw-mode')
     $game.$player.seedPlanting = false;
     $game.$player.resetRenderColor();
     $input.inactiveHUDButton('.hud-seed')
@@ -523,21 +523,21 @@ var $input = $game.$input = module.exports = {
       if (seeds.regular > 0) $('.regular-button').addClass('active')
       if (seeds.draw > 0) $('.draw-button').addClass('active')
       $game.$player.seedventoryShowing = true;
-      $game.setFlag('viewing-seedventory')
+      $game.flags.set('viewing-seedventory')
     })
   },
 
   closeSeedventory: function () {
     $('#seedventory').slideUp(300, function () {
       $game.$player.seedventoryShowing = false;
-      $game.removeFlag('viewing-seedventory')
+      $game.flags.unset('viewing-seedventory')
     })
   },
 
   // Shows the inventory overlay only.
   // Used to restore inventory overlay after reviewing an inventory item / resource.
   showInventory: function (callback) {
-    $game.setFlag('visible-inventory')
+    $game.flags.set('visible-inventory')
     $('#inventory').slideDown(300, function () {
       if (typeof callback === 'function') callback()
     })
@@ -547,7 +547,7 @@ var $input = $game.$input = module.exports = {
   // Used to temporarily hide the inventory with the intention of re-opening it.
   hideInventory: function (callback) {
     $('#inventory').slideUp(300, function () {
-      $game.removeFlag('visible-inventory')
+      $game.flags.unset('visible-inventory')
       if (typeof callback === 'function') callback()
     })
   },
@@ -577,19 +577,19 @@ var $input = $game.$input = module.exports = {
   closeInventory: function (callback) {
     this.hideInventory(function () {
       $input.inactiveHUDButton('.hud-inventory')
-      $game.removeFlag('viewing-inventory')
+      $game.flags.unset('viewing-inventory')
       if (typeof callback === 'function') callback()
     })
   },
 
   toggleSkinventory: function () {
-    return ($game.checkFlag('visible-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
+    return ($game.flags.check('visible-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
   },
 
   openSkinventory: function () {
     $input.resetUI()
     $input.activeHUDButton('.hud-skinventory')
-    $game.setFlag('visible-skinventory')
+    $game.flags.set('visible-skinventory')
     $('#skinventory').show()
 
     // Reset badge count
@@ -597,7 +597,7 @@ var $input = $game.$input = module.exports = {
   },
 
   closeSkinventory: function () {
-    $game.removeFlag('visible-skinventory')
+    $game.flags.unset('visible-skinventory')
     $input.inactiveHUDButton('.hud-skinventory')
     $('#skinventory').hide()
   },
@@ -641,36 +641,36 @@ var $input = $game.$input = module.exports = {
   },
 
   toggleProgress: function () {
-    return ($game.checkFlag('visible-progress') === true) ? $input.closeProgress() : $input.openProgress()
+    return ($game.flags.check('visible-progress') === true) ? $input.closeProgress() : $input.openProgress()
   },
 
   openProgress: function () {
     $input.resetUI()
     $input.activeHUDButton('.hud-progress')
-    $game.setFlag('visible-progress')
+    $game.flags.set('visible-progress')
     $game.updateProgressOverlay()
     $('#progress-area').show()
   },
 
   closeProgress: function () {
-    $game.removeFlag('visible-progress')
+    $game.flags.unset('visible-progress')
     $input.inactiveHUDButton('.hud-progress')
     $('#progress-area').hide()
   },
 
   toggleHelp: function () {
-    return ($game.checkFlag('visible-help') === true) ? $input.closeHelp() : $input.openHelp()
+    return ($game.flags.check('visible-help') === true) ? $input.closeHelp() : $input.openHelp()
   },
 
   openHelp: function () {
     $input.resetUI()
     $input.activeHUDButton('.hud-help')
-    $game.setFlag('visible-help')
+    $game.flags.set('visible-help')
     $('#help-area').show()
   },
 
   closeHelp: function () {
-    $game.removeFlag('visible-help')
+    $game.flags.unset('visible-help')
     $input.inactiveHUDButton('.hud-help')
     $('#help-area').hide()
   },
@@ -721,7 +721,7 @@ var $input = $game.$input = module.exports = {
     // Also simultaneously cancel out of resources, botanist, and speechbubbles.
     $game.$npc.hideSpeechBubble()
     //$game.$resources.hideResource()
-    if ($game.checkFlag('botanist-chatting') || $game.checkFlag('visible-botanist-overlay')) {
+    if ($game.flags.check('botanist-chatting') || $game.flags.check('visible-botanist-overlay')) {
       $game.$botanist.hideOverlay()
     }
 
@@ -745,18 +745,18 @@ var _input = {
   isNewActionAllowed: function () {
     //check all the game states (if windows are open ,in transit, etc.) to begin a new action
     return (
-      !$game.checkFlag('in-transit') &&
+      !$game.flags.check('in-transit') &&
       !$game.$player.isMoving &&
       !$game.$player.seedventoryShowing &&
       $game.running &&
-      !$game.checkFlag('botanist-chatting') &&
-      !$game.checkFlag('visible-skinventory') &&
-      !$game.checkFlag('visible-help') &&
-      !$game.checkFlag('visible-progress') &&
-      !$game.checkFlag('visible-resource-overlay') &&
-      !$game.checkFlag('visible-botanist-overlay') &&
-      !$game.checkFlag('visible-boss-overlay') &&
-      !$game.checkFlag('playing-cutscene')
+      !$game.flags.check('botanist-chatting') &&
+      !$game.flags.check('visible-skinventory') &&
+      !$game.flags.check('visible-help') &&
+      !$game.flags.check('visible-progress') &&
+      !$game.flags.check('visible-resource-overlay') &&
+      !$game.flags.check('visible-botanist-overlay') &&
+      !$game.flags.check('visible-boss-overlay') &&
+      !$game.flags.check('playing-cutscene')
     ) ? true : false
   },
 
@@ -769,28 +769,28 @@ var _input = {
   trigger: function (input) {
     switch (input) {
       case 'FOREST':
-        if ($game.checkFlag('teleport-forest')) {
+        if ($game.flags.check('teleport-forest')) {
           _input.outfitLog('Teleporting to ' + $game.world.northwest.name + '!')
           $game.$player.beam({x: 15, y: 22})
         }
         else return false
         break
       case 'TOWN':
-        if ($game.checkFlag('teleport-town')) {
+        if ($game.flags.check('teleport-town')) {
           _input.outfitLog('Teleporting to ' + $game.world.northeast.name + '!')
           $game.$player.beam({x: 98, y: 31})
         }
         else return false
         break
       case 'RANCH':
-        if ($game.checkFlag('teleport-ranch')) {
+        if ($game.flags.check('teleport-ranch')) {
           _input.outfitLog('Teleporting to ' + $game.world.southeast.name + '!')
           $game.$player.beam({x: 131, y: 96})
         }
         else return false
         break
       case 'PORT':
-        if ($game.checkFlag('teleport-port')) {
+        if ($game.flags.check('teleport-port')) {
           _input.outfitLog('Teleporting to ' + $game.world.southwest.name + '!')
           $game.$player.beam({x: 33, y: 99})
         }
@@ -850,8 +850,8 @@ var _input = {
       case 'pleasantville':
         _input.cheatLog('Welcome to Pleasantville!')
         $game.bossModeUnlocked = true
-        $game.setFlag('boss-mode-unlocked')
-        $game.setFlag('boss-mode-ready')
+        $game.flags.set('boss-mode-unlocked')
+        $game.flags.set('boss-mode-ready')
         $game.$player.currentLevel = 4
         $game.toBossLevel()
         break

@@ -26,6 +26,7 @@ $game.$mouse = (function () {
     _prevY = _curY
 
     // Limit extreme values to gameboard width and height
+    // Verified speed checking: http://jsperf.com/constraining
     _curX = Math.max(Math.min($game.VIEWPORT_WIDTH  - 1, tempX), 0)
     _curY = Math.max(Math.min($game.VIEWPORT_HEIGHT - 1, tempY), 0)
 
@@ -36,7 +37,7 @@ $game.$mouse = (function () {
 
       // If we are in draw seed mode (e.g. the player is dragging the mouse)
       // then perform draw seed action here.
-      if ($game.checkFlag('draw-mode')) {
+      if ($game.flags.check('draw-mode')) {
         $game.$player.drawSeed({
           x: _curX,
           y: _curY
@@ -63,7 +64,7 @@ $game.$mouse = (function () {
 
       // If the player is in seed mode, determine if drop seed or exit seed mode
       if ($game.$player.seedMode) {
-        if ($game.checkFlag('awaiting-seed') === false) {
+        if ($game.flags.check('awaiting-seed') === false) {
           var m = {
             mouse:  true,
             x:      _curX,
@@ -88,14 +89,14 @@ $game.$mouse = (function () {
           //if the player isn't "searching" for a path it is a green tile, move
           if (state === -1 && !$game.$player.pathfinding) {
             $game.$player.beginMove(_curX,_curY)
-            if ($game.checkFlag('npc-chatting')) {
+            if ($game.flags.check('npc-chatting')) {
               $game.$npc.hideSpeechBubble()
             }
           }
           //they clicked on an NPC
           else if (state >= 0 ) {
             if (state !== $game.$botanist.index && !$game.$player.pathfinding) {
-              if ($game.checkFlag('npc-chatting')) {
+              if ($game.flags.check('npc-chatting')) {
                 $game.$npc.hideSpeechBubble()
               }
               $game.$npc.selectNpc(state)

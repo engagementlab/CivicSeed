@@ -170,7 +170,7 @@ var $skins = $game.$skins = (function () {
         content += '<br><strong><span class="color-orange">Outfit bonus:</span> <span class="color-blue">' + outfit.effect + '</span></strong>'
       }
       if (outfit.flag) {
-        $game.setFlag(outfit.flag)
+        $game.flags.set(outfit.flag)
       }
     }
     else {
@@ -193,7 +193,7 @@ var $skins = $game.$skins = (function () {
 
       // Set individual part flags as well
       if (skins[skin][part].flag) {
-        $game.setFlag(skins[skin][part].flag)
+        $game.flags.set(skins[skin][part].flag)
       }
 
       return string
@@ -217,15 +217,15 @@ var $skins = $game.$skins = (function () {
 
   function applyFlags () {
     // If radar, re-render NPC comments & update minimap
-    if (($game.checkFlag('local-radar') || $game.checkFlag('global-radar'))) {
+    if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
       $game.$player.displayNpcComments()
       $game.$render.minimapRadar.update()
     }
 
     // If speed goes up, change player speed
-    if ($game.checkFlag('speed-max')) {
+    if ($game.flags.check('speed-max')) {
       $game.$player.setMoveSpeed(2)
-    } else if ($game.checkFlag('speed-up')) {
+    } else if ($game.flags.check('speed-up')) {
       $game.$player.setMoveSpeed(1.5)
     } else {
       // Reset
@@ -256,7 +256,7 @@ var $skins = $game.$skins = (function () {
         flags       = _.compact(_.union(outfitFlags, partFlags))
 
     // Clear all flags
-    _.each(flags, $game.removeFlag)
+    _.each(flags, $game.flags.unset)
   }
 
   // If parts are part of an outfit, returns an object containing outfit data.

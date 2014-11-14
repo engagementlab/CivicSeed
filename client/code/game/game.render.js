@@ -271,7 +271,7 @@ var $render = $game.$render = {
     $render.clearAll()
 
     // Only re-render all the tiles if the viewport is tranisitioning
-    if ($game.checkFlag('in-transit')) {
+    if ($game.flags.check('in-transit')) {
       $render.renderAllTiles()
     }
 
@@ -863,8 +863,8 @@ var $render = $game.$render = {
     update: function () {
       $render.minimapRadar.clear()
 
-      var local     = $game.checkFlag('local-radar'),
-          global    = $game.checkFlag('global-radar'),
+      var local     = $game.flags.check('local-radar'),
+          global    = $game.flags.check('global-radar'),
           npcs      = {},
           resources = $game.$player.getResources()
 

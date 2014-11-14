@@ -19,6 +19,7 @@ var $npc = $game.$npc = {
     //load all the npc info from the DB store it in an array
     //where the index is the id of the npc / mapIndex
     ss.rpc('game.npc.getNpcs', function (response) {
+      console.log(response)
       $.each(response, function (key, npc) {
        _npc.add(npc)
       })
@@ -30,7 +31,7 @@ var $npc = $game.$npc = {
   resetInit: function () {
     $npc.ready      = false
     $npc.hideTimer  = null
-    $npc.isResource = false;
+    $npc.isResource = false
   },
 
   //update all npcs (for movement and rendering)
@@ -81,7 +82,7 @@ var $npc = $game.$npc = {
 
     // NPC interaction to display if the player has not finished speaking with Botanist
     // (1) If the player attempts to roam the world before completing the tutorial
-    if ($game.checkFlag('first-time') === true) {
+    if ($game.flags.check('first-time') === true) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
     }
     // (2) If the player attempts to roam the world before the Botanist is done talking
@@ -119,7 +120,7 @@ var $npc = $game.$npc = {
     }
 
     // Set global chat state
-    $game.setFlag('npc-chatting')
+    $game.flags.set('npc-chatting')
 
     // Play sound effect
     $game.$audio.playTriggerFx('npcBubble')
@@ -237,7 +238,7 @@ var $npc = $game.$npc = {
     clearTimeout($game.$npc.hideTimer)
     var $el = $('#speech-bubble')
 
-    $game.removeFlag('npc-chatting')
+    $game.flags.unset('npc-chatting')
     $el.find('.next-button').off('click')
     $el.find('.close-button').off('click')
     $el.find('.yes-button').off('click')
@@ -330,8 +331,12 @@ var _npc = {
   add: function (npc) {
     var newbie = _npc.create(npc)
 
-    newbie.getMaster();
-    _npc.data[npc.index] = newbie;
+    newbie.getMaster()
+
+    // To switch from referring to NPCs by id instead of index
+    // Just do it here
+    //_npc.data[npc.id] = newbie
+    _npc.data[npc.index] = newbie
   },
 
   //create an npc with all its data bound to it
@@ -382,7 +387,7 @@ var _npc = {
 
       //update the npc's rendering
       update: function () {
-        var check = $game.checkFlag('in-transit')
+        var check = $game.flags.check('in-transit')
         if (!check) {
           npcObject.idle()
         } else {

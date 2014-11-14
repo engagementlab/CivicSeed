@@ -14,7 +14,7 @@ var $boss = $game.$boss = {
   init: function (callback) {
     $('.hud-regular').fadeOut('fast')
     document.getElementById('background').classList.add('lab-background')
-    $game.setFlag('boss-mode')
+    $game.flags.set('boss-mode')
     _boss.createGrid()
 
     _boss.setupCutsceneVideos()
@@ -207,14 +207,14 @@ var _boss = {
   showOverlay: function (section) {
     var overlay = document.getElementById('boss-area')
     overlay.style.display = 'block'
-    $game.setFlag('visible-boss-overlay')
+    $game.flags.set('visible-boss-overlay')
     _boss.addContent(section)
   },
 
   hideOverlay: function (callback) {
     var overlay = document.getElementById('boss-area')
     $(overlay).fadeOut('fast', function () {
-      $game.removeFlag('visible-boss-overlay')
+      $game.flags.unset('visible-boss-overlay')
       if (typeof callback === 'function') callback()
     })
   },
@@ -670,7 +670,7 @@ var _boss = {
         videoEl    = document.getElementById('boss-cutscene-' + (_boss.theCharger.id - 1))
 
     $('#boss-cutscene').fadeIn('fast')
-    $game.setFlag('playing-cutscene')
+    $game.flags.set('playing-cutscene')
     videoEl.style.display = 'block'
 
     /*
@@ -702,7 +702,7 @@ var _boss = {
     $('#boss-cutscene').fadeOut('fast', function () {
       // Hide the video & unset flags
       $('#boss-cutscene .cutscene').hide()
-      $game.removeFlag('playing-cutscene')
+      $game.flags.unset('playing-cutscene')
 
       if (typeof callback === 'function') callback()
     })
@@ -772,7 +772,7 @@ var _boss = {
   // Show fail screen & gear up for a reset
   fail: function () {
     $game.$input.inactiveHUDButton('.hud-boss .hud-seed')
-    $game.removeFlag('seed-mode')
+    $game.flags.unset('seed-mode')
     $game.$player.seedMode = false;
     $game.$player.resetRenderColor()
     _boss.clock.pause()

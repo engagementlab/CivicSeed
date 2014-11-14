@@ -1,49 +1,36 @@
 'use strict';
 
 var _lastTime = 0;
-window.requestAnimationFrame = (function () {
-  return window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    function (callback, element) {
-      var currTime = new Date().getTime();
-      var timeToCall = Math.max(0, 16 - (currTime - _lastTime));
-      var id = window.setTimeout(function () { callback(currTime + timeToCall); }, timeToCall);
-      _lastTime = currTime + timeToCall;
-      return id;
-    };
-}());
 
 // PRIVATE GAME VARS
 var _stepNumber = 0,
-  _stats = null,
-  _levelNames = [
-    'Level 1: Looking Inward',
-    'Level 2: Expanding Outward',
-    'Level 3: Working Together',
-    'Level 4: Looking Forward',
-    'Game Over: Profile Unlocked'
-  ],
-  _displayTimeout = null,
-  $map,
-  $render,
-  $npc,
-  $resources,
-  $skins,
-  $player,
-  $others,
-  $robot,
-  $botanist,
-  $mouse,
-  $audio,
-  $pathfinder,
-  $events,
-  $input,
-  $chat,
-  $log,
-  $boss;
+    _stats      = null,
+    _levelNames = [
+      'Level 1: Looking Inward',
+      'Level 2: Expanding Outward',
+      'Level 3: Working Together',
+      'Level 4: Looking Forward',
+      'Game Over: Profile Unlocked'
+    ],
+    _displayTimeout = null,
+    $flags,
+    $map,
+    $render,
+    $npc,
+    $resources,
+    $skins,
+    $player,
+    $others,
+    $robot,
+    $botanist,
+    $mouse,
+    $audio,
+    $pathfinder,
+    $events,
+    $input,
+    $chat,
+    $log,
+    $boss
 
 // PUBLIC EXPORTS
 var $game = module.exports = {
@@ -106,6 +93,7 @@ var $game = module.exports = {
     console.log('Initializing all modules')
 
     // Instantiating code (if not already done)
+    $flags      = require('/game.flags')
     $map        = require('/game.map')
     $render     = require('/game.render')
     $npc        = require('/game.npc')
@@ -164,7 +152,7 @@ var $game = module.exports = {
     _displayTimeout = null;
 
     $game.currentTiles = [];
-    $game.removeFlag('in-transit');
+    $game.flags.unset('in-transit');
     $game.running = false;
     $game.ready = false;
     $game.resourceCount = [];
@@ -220,7 +208,7 @@ var $game = module.exports = {
 
   //starts a transition from one viewport to another
   beginTransition: function () {
-    $game.setFlag('in-transit');
+    $game.flags.set('in-transit');
     _stepNumber = 0;
     $game.$chat.hideChat();
     $game.$others.hideAllChats();
@@ -244,7 +232,7 @@ var $game = module.exports = {
 
   //resumes normal state of being able to walk and enables chat etc.
   endTransition: function () {
-    $game.removeFlag('in-transit');
+    $game.flags.unset('in-transit');
     $game.$player.isMoving = false;
     $game.$player.resetRenderValues();
     $game.$others.resetRenderValues();
@@ -465,7 +453,7 @@ var $game = module.exports = {
     // Clear all state flags and things
     sessionStorage.removeItem('isPlaying');
     $game.running = false;
-    $game.removeFlag()
+    $game.flags.unset()
   },
 
   //startup boss level if player finished game and boss level is unlocked
@@ -479,41 +467,9 @@ var $game = module.exports = {
     $game.$others.disable();
     _game.setBoundaries();
     _game.startGame(true);
-  },
-
-  // Checks to see if a game state flag is set
-  checkFlag: function (flag) {
-    // Returns true if a given flag is found, and false if not
-    return _.contains(_game.flags, flag)
-  },
-
-  // Sets a current game state flag
-  setFlag: function (flag) {
-    // Returns true if able to be set
-    if (!this.checkFlag(flag)) {
-      _game.flags.push(flag)
-      return true
-    }
-    // Returns false if flag was not set (e.g. it was already set)
-    else return false
-  },
-
-  // Remove one or all game state flags
-  removeFlag: function (flag) {
-    if (flag) {
-      _game.flags = _.reject(_game.flags, function (item) { return item === flag })
-    }
-    // If no flag is given, clear all flags
-    else {
-      _game.flags = []
-    }
-  },
-
-  listFlags: function () {
-    console.log('All currently set game flags: ' + _game.flags)
   }
 
-};
+}
 
 /**
   *
@@ -522,8 +478,6 @@ var $game = module.exports = {
  **/
 
 var _game = {
-
-  flags: [],
 
   // At start of the game, append DOM elements
   kickOffGame: function () {
@@ -682,7 +636,7 @@ var _game = {
           $game.$input.showMinimap()
 
           // Things to do if the player has not completed the tutorial
-          if ($game.checkFlag('first-time') === true) {
+          if ($game.flags.check('first-time') === true) {
             $game.alert('Welcome to Civic Seed!')
           }
           // Things to do if this is not the player's first time here
