@@ -36,10 +36,8 @@ var $map = $game.$map = {
 
     $game.$map.addPlayer(id, position.x, position.y, color)
 
-    ss.rpc('game.map.init', function () {
-      $game.$map.ready = true
-      callback()
-    })
+    $game.$map.ready = true
+    callback()
   },
 
   resetInit: function () {

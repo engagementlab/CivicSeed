@@ -1,18 +1,98 @@
 'use strict';
 
-var service, npcModel, tileModel,
-    npcHelpers  = null
-
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
 
   req.use('session')
 
+  var npcModel  = ss.service.db.model('Npc'),
+      tileModel = ss.service.db.model('Tile')
+
+  var npcHelpers = {
+    addNpcTile: function(index, callback) {
+      tileModel.where('mapIndex').equals(index)
+        .find(function (err, tiles) {
+          if (err) {
+            callback('could not find tile');
+          } else if (tiles) {
+            if (tiles[0].tileState === -1) {
+              tiles[0].tileState = index
+              tiles[0].save(function (err, saved) {
+                if (err) {
+                  callback('could not save tile')
+                } else if (saved) {
+                  callback()
+                }
+              })
+            }
+          }
+        })
+    },
+
+    removeNpcTile: function(index, callback) {
+      tileModel.where('mapIndex').equals(index)
+        .find(function (err, tiles) {
+          if (err) {
+            callback('could not find tile')
+          } else if (tiles) {
+            tiles[0].tileState = -1
+            tiles[0].save(function (err, saved) {
+              if (err) {
+                callback('could not save tile')
+              } else if (saved) {
+                callback()
+              }
+            })
+          }
+        })
+    },
+
+    updateTiles: function(oldIndex, newIndex, callback) {
+      //update new tile, make sure we can change it
+      if (oldIndex === newIndex) {
+        callback()
+      } else {
+        tileModel.where('mapIndex').equals(newIndex)
+        .find(function (err, newTiles) {
+          if (err) {
+            callback('could not find new tile')
+          } else if (newTiles) {
+            if(newTiles[0].tileState === -1) {
+              newTiles[0].tileState = newIndex
+              newTiles[0].save(function (err, saved) {
+                if (err) {
+                  callback('could not save new tiles')
+                } else if (saved) {
+                  //update the old tile so it doesnt have an npc
+                  tileModel.where('mapIndex').equals(oldIndex)
+                    .find(function (err, oldTiles) {
+                      if (err) {
+                        callback('could not find old tile')
+                      } else if (oldTiles) {
+                        oldTiles[0].tileState = -1;
+                        oldTiles[0].save(function (err, saved) {
+                          if (err) {
+                            callback('could not save old tiles')
+                          } else if (saved) {
+                            callback()
+                          }
+                        })
+                      }
+                  })
+                }
+              })
+            } else {
+              callback('cant place npc there')
+            }
+          }
+        })
+      }
+
+    }
+  }
+
   return {
     init: function (id) {
-      service = ss.service
-      npcModel = service.useModel('npc', 'ss')
-      tileModel = service.useModel('tile', 'ss')
       npcModel
         .find()
         .sort('level')
@@ -121,88 +201,5 @@ exports.actions = function (req, res, ss) {
           }
         })
     }
-  }
-}
-
-npcHelpers = {
-  addNpcTile: function(index, callback) {
-    tileModel.where('mapIndex').equals(index)
-      .find(function (err, tiles) {
-        if (err) {
-          callback('could not find tile');
-        } else if (tiles) {
-          if (tiles[0].tileState === -1) {
-            tiles[0].tileState = index
-            tiles[0].save(function (err, saved) {
-              if (err) {
-                callback('could not save tile')
-              } else if (saved) {
-                callback()
-              }
-            })
-          }
-        }
-      })
-  },
-
-  removeNpcTile: function(index, callback) {
-    tileModel.where('mapIndex').equals(index)
-      .find(function (err, tiles) {
-        if (err) {
-          callback('could not find tile')
-        } else if (tiles) {
-          tiles[0].tileState = -1
-          tiles[0].save(function (err, saved) {
-            if (err) {
-              callback('could not save tile')
-            } else if (saved) {
-              callback()
-            }
-          })
-        }
-      })
-  },
-
-  updateTiles: function(oldIndex, newIndex, callback) {
-    //update new tile, make sure we can change it
-    if (oldIndex === newIndex) {
-      callback()
-    } else {
-      tileModel.where('mapIndex').equals(newIndex)
-      .find(function (err, newTiles) {
-        if (err) {
-          callback('could not find new tile')
-        } else if (newTiles) {
-          if(newTiles[0].tileState === -1) {
-            newTiles[0].tileState = newIndex
-            newTiles[0].save(function (err, saved) {
-              if (err) {
-                callback('could not save new tiles')
-              } else if (saved) {
-                //update the old tile so it doesnt have an npc
-                tileModel.where('mapIndex').equals(oldIndex)
-                  .find(function (err, oldTiles) {
-                    if (err) {
-                      callback('could not find old tile')
-                    } else if (oldTiles) {
-                      oldTiles[0].tileState = -1;
-                      oldTiles[0].save(function (err, saved) {
-                        if (err) {
-                          callback('could not save old tiles')
-                        } else if (saved) {
-                          callback()
-                        }
-                      })
-                    }
-                })
-              }
-            })
-          } else {
-            callback('cant place npc there')
-          }
-        }
-      })
-    }
-
   }
 }

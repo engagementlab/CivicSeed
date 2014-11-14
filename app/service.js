@@ -31,26 +31,11 @@ var self = module.exports = {
     }
   },
 
-  useModel: function (modelName, state) {
-    var log = ''
+  useModel: function (modelFilename) {
+    var model = require(rootDir + '/models/' + modelFilename)
 
-    switch (state) {
-      case 'preload':
-        log = 'Preloading model for SS RPC: '.green + modelName.yellow.underline
-        break
-      case 'ss':
-        log = 'Importing model '.magenta + modelName.yellow.underline + ' into socket stream RPC.'.magenta
-        break
-      default:
-        log = 'Importing model '.blue + modelName.yellow.underline + ' into controller: '.blue + state.yellow
-        break
-    }
-
-    winston.info('CS: '.blue + log)
-
-    var model = require(rootDir + '/models/' + modelName)
-
-    return self.db.model(model.name, new mongoose.Schema(model.schema), model.collection)
+    winston.info('CS: '.blue + 'Preloading model for SS RPC: '.green + model.name.yellow.underline)
+    return self.db.model(model.name, new mongoose.Schema(model.schema, { collection: model.collection }))
   },
 
   getAndSetNetworkIp: function (callback) {

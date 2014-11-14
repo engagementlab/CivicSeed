@@ -7,9 +7,6 @@ var rootDir        = process.cwd(),
     config         = require(rootDir + '/app/config'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
     emailUtil      = require(rootDir + '/server/utils/email'),
-    service        = require(rootDir + '/app/service'),
-    UserModel      = service.useModel('user', 'rpc.shared.account'),
-    GameModel      = service.useModel('game', 'rpc.shared.account'),
     EMAIL_TO       = config.get('EMAIL_TO'),
     _countdown     = 10,
     singleHtml
@@ -22,7 +19,10 @@ var html = '<h2>Password reminder for #{firstName}</h2>\
 
 exports.actions = function (req, res, ss) {
 
-  req.use('session');
+  req.use('session')
+
+  var UserModel = ss.service.db.model('User'),
+      GameModel = ss.service.db.model('Game')
 
   var _setUserSession = function (user) {
     req.session.setUserId(user.id);
@@ -47,7 +47,21 @@ exports.actions = function (req, res, ss) {
       profileSetup: req.session.profileSetup,
       profileLink: req.session.profileLink
     };
-  };
+  }
+
+  var dbHelpers = {
+    checkGameActive: function (instance, callback) {
+      GameModel
+        .where('instanceName').equals(instance)
+        .findOne(function (err, game) {
+          if (err) {
+            callback(false)
+          } else {
+            callback(game.active)
+          }
+        })
+    }
+  }
 
   return {
 
@@ -301,18 +315,4 @@ exports.actions = function (req, res, ss) {
 
   };
 
-};
-
-var dbHelpers = {
-  checkGameActive: function (instance, callback) {
-    GameModel
-      .where('instanceName').equals(instance)
-      .findOne(function (err, game) {
-        if(err) {
-          callback(false);
-        } else {
-          callback(game.active);
-        }
-      });
-  }
 };

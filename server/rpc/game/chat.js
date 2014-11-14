@@ -1,18 +1,15 @@
 'use strict';
 
-var service,
-    chatModel
-
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
 
   req.use('session')
 
+  var chatModel = ss.service.db.model('Chat')
+
   return {
 
     init: function () {
-      service = ss.service
-      chatModel = service.useModel('chat', 'ss')
     },
 
     sendMessage: function (data) {

@@ -592,9 +592,7 @@ var _game = {
     // var percentString = _stats.percent + '%';
     // $('.hud-progress .badge').text(percentString);
 
-    //init chat rpc
-    ss.rpc('game.chat.init');
-    _game.startGame();
+    _game.startGame()
   },
 
   //calculates the bounding box for the current viewport to get the right tiles

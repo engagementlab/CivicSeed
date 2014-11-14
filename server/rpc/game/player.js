@@ -1,34 +1,231 @@
+'use strict';
+
 var rootDir = process.cwd(),
-    emailUtil = require(rootDir + '/server/utils/email'),
-    colorHelpers = null,
-    dbHelpers = null,
-    // _games = {},
-    _service,
-    _userModel,
-    _tileModel,
-    _gameModel,
-    _colorModel;
+    emailUtil = require(rootDir + '/server/utils/email')
 
 exports.actions = function (req, res, ss) {
 
-  req.use('session');
-  // req.use('debug');
-  //req.use('account.authenticated');
+  req.use('session')
+
+  var _userModel  = ss.service.db.model('User'),
+      _tileModel  = ss.service.db.model('Tile'),
+      _gameModel  = ss.service.db.model('Game'),
+      _colorModel = ss.service.db.model('Color')
+
+  var colorHelpers = {
+    modifyTiles: function (oldTiles, bombed) {
+      //curIndex ALWAYS increases, but bomb only does if we found
+      //the matching tile, tricky
+      var bIndex = bombed.length,
+        insertTiles = [];
+
+      //go thru each new tile (bombed)
+      while(--bIndex > -1) {
+        //unoptimized version:
+        var oIndex = oldTiles.length,
+          found = false;
+        //stop when we find it
+        while(--oIndex > -1) {
+          if (oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
+            found = true;
+            oIndex = -1;
+          }
+        }
+        if (!found) {
+          insertTiles.push(bombed[bIndex]);
+        }
+      }
+      return insertTiles;
+    },
+
+    saveTiles: function (tiles, callback) {
+      var save = function () {
+        _colorModel.create(tiles, function (err,suc) {
+          callback();
+        });
+      };
+      if (tiles.length > 0) {
+        save();
+      } else {
+        callback();
+      }
+    },
+
+    gameColorUpdate: function (newInfo, instanceName, callback) {
+      //access our global game model for status updates
+      _gameModel
+        .where('instanceName').equals(instanceName)
+        .find(function (err, results) {
+        if (err) {
+          console.log('error finding instance');
+        } else {
+          //add tile count to our progress
+          var result = results[0],
+            oldCount = result.seedsDropped,
+            newCount = oldCount + newInfo.numBombs,
+            bossModeUnlocked = result.bossModeUnlocked,
+            seedsDroppedGoal = result.seedsDroppedGoal;
+
+          //update leadeboard
+          var oldBoard = result.leaderboard,
+            ob = oldBoard.length,
+            found = false,
+            updateBoard = false,
+            newGuy = {
+              name: newInfo.name,
+              count: newInfo.newCount
+            };
+
+
+          //if this is the first player on the leadeboard, push em and update status
+          if (ob === 0) {
+            oldBoard.push(newGuy);
+            updateBoard = true;
+          } else {
+            //if new guy exists, update him
+            while(--ob > -1) {
+              if (oldBoard[ob].name === newGuy.name) {
+                oldBoard[ob].count = newGuy.count;
+                found = true;
+                updateBoard = true;
+                continue;
+              }
+            }
+            //add new guy
+            if (!found) {
+              //onlly add him if he deserves to be on there!
+              if (oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length-1]) {
+                oldBoard.push(newGuy);
+                updateBoard = true;
+              }
+            }
+            //sort them
+            oldBoard.sort(function (a, b) {
+              return b.count-a.count;
+            });
+            //get rid of the last one if too many
+            if (oldBoard.length > 10) {
+              oldBoard.pop();
+            }
+          }
+
+          //check if the world is fully colored
+          var gameisover = false;
+          if (newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
+            //change the game state
+            result.set('bossModeUnlocked', true);
+            console.log('game over!');
+            //send out emails
+            gameisover = true;
+            colorHelpers.endGameEmails(instanceName);
+          }
+          //save all changes
+          result.set('seedsDropped', newCount);
+          result.set('leaderboard', oldBoard);
+          result.save();
+
+          var returnInfo = {
+            updateBoard: updateBoard,
+            board: oldBoard,
+            dropped: newCount
+          };
+          callback(returnInfo, gameisover);
+        }
+      });
+    },
+
+    endGameEmails: function (instanceName) {
+      //set boss mode unlocked here for specific instance
+
+      //send out emails to players who have completed game
+      _userModel
+        .where('role').equals('actor')
+        .where('game.instanceName').equals(instanceName)
+        .select('email game.currentLevel')
+        .find(function (err, users) {
+          if (err) {
+            res(false);
+          }
+          else if (users) {
+            var emailListLength = users.length,
+              html = null,
+              subject = null;
+
+            for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+              //not done
+              if (users[emailIterator].game.currentLevel < 4) {
+                html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
+                html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
+                subject = 'Update!';
+
+              } else {
+                html = '<h2 style="color:green;">The Color has Returned!</h2>';
+                html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
+                subject = 'Breaking News!';
+              }
+              //TODO remove this check (this is to not send out test player emails?)
+              if (users[emailIterator].email.length > 6) {
+                emailUtil.sendEmail(subject, html, users[emailIterator].email);
+              }
+            }
+
+          }
+        });
+    }
+  };
+
+
+  var dbHelpers = {
+    saveInfo: function (info) {
+      if (info && info.id) {
+        _userModel.findById(info.id, function (err, user) {
+          if (err) {
+            console.log(err);
+          } else if (user) {
+            for(var prop in info) {
+              if (prop !== 'id') {
+                user.game[prop] = info[prop];
+              }
+            }
+            user.save();
+          }
+        });
+      }
+    },
+
+    saveFeedback: function (info, index) {
+      _userModel.findById(info[index].id, function (err,user) {
+        if (err) {
+          console.log(err);
+        } else if (user) {
+          user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index});
+          user.save(function (err,okay) {
+            //keep savin til we aint got none
+            index++;
+            if (index < info.length) {
+              dbHelpers.saveFeedback(info,index);
+            }
+          });
+        }
+      });
+    },
+
+    getUserGameInfo: function (id, callback) {
+      _userModel.findById(id, function (err,user) {
+        if (err) {
+          callback(false);
+        } else if (user) {
+          callback(user.game);
+        }
+      });
+    }
+   };
 
   return {
     // MUST MAKE IT SO YOU CAN ONLY INIT ONCE PER SESSION
     init: function () {
 
-      // load models and database _service only once
-      if (!_service) {
-        _service = ss.service;
-        _userModel = _service.useModel('user', 'ss');
-        _tileModel = _service.useModel('tile', 'ss');
-        _gameModel = _service.useModel('game', 'ss');
-        _colorModel = _service.useModel('color', 'ss');
-      }
-
-      playerInfo = {
+      var playerInfo = {
         id: req.session.userId,
         firstName: req.session.firstName,
         game: null
@@ -449,211 +646,3 @@ exports.actions = function (req, res, ss) {
     }
   };
 };
-
-colorHelpers = {
-  modifyTiles: function (oldTiles, bombed) {
-    //curIndex ALWAYS increases, but bomb only does if we found
-    //the matching tile, tricky
-    var bIndex = bombed.length,
-      insertTiles = [];
-
-    //go thru each new tile (bombed)
-    while(--bIndex > -1) {
-      //unoptimized version:
-      var oIndex = oldTiles.length,
-        found = false;
-      //stop when we find it
-      while(--oIndex > -1) {
-        if (oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-          found = true;
-          oIndex = -1;
-        }
-      }
-      if (!found) {
-        insertTiles.push(bombed[bIndex]);
-      }
-    }
-    return insertTiles;
-  },
-
-  saveTiles: function (tiles, callback) {
-    var save = function () {
-      _colorModel.create(tiles, function (err,suc) {
-        callback();
-      });
-    };
-    if (tiles.length > 0) {
-      save();
-    } else {
-      callback();
-    }
-  },
-
-  gameColorUpdate: function (newInfo, instanceName, callback) {
-    //access our global game model for status updates
-    _gameModel
-      .where('instanceName').equals(instanceName)
-      .find(function (err, results) {
-      if (err) {
-        console.log('error finding instance');
-      } else {
-        //add tile count to our progress
-        var result = results[0],
-          oldCount = result.seedsDropped,
-          newCount = oldCount + newInfo.numBombs,
-          bossModeUnlocked = result.bossModeUnlocked,
-          seedsDroppedGoal = result.seedsDroppedGoal;
-
-        //update leadeboard
-        var oldBoard = result.leaderboard,
-          ob = oldBoard.length,
-          found = false,
-          updateBoard = false,
-          newGuy = {
-            name: newInfo.name,
-            count: newInfo.newCount
-          };
-
-
-        //if this is the first player on the leadeboard, push em and update status
-        if (ob === 0) {
-          oldBoard.push(newGuy);
-          updateBoard = true;
-        } else {
-          //if new guy exists, update him
-          while(--ob > -1) {
-            if (oldBoard[ob].name === newGuy.name) {
-              oldBoard[ob].count = newGuy.count;
-              found = true;
-              updateBoard = true;
-              continue;
-            }
-          }
-          //add new guy
-          if (!found) {
-            //onlly add him if he deserves to be on there!
-            if (oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length-1]) {
-              oldBoard.push(newGuy);
-              updateBoard = true;
-            }
-          }
-          //sort them
-          oldBoard.sort(function (a, b) {
-            return b.count-a.count;
-          });
-          //get rid of the last one if too many
-          if (oldBoard.length > 10) {
-            oldBoard.pop();
-          }
-        }
-
-        //check if the world is fully colored
-        var gameisover = false;
-        if (newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
-          //change the game state
-          result.set('bossModeUnlocked', true);
-          console.log('game over!');
-          //send out emails
-          gameisover = true;
-          colorHelpers.endGameEmails(instanceName);
-        }
-        //save all changes
-        result.set('seedsDropped', newCount);
-        result.set('leaderboard', oldBoard);
-        result.save();
-
-        var returnInfo = {
-          updateBoard: updateBoard,
-          board: oldBoard,
-          dropped: newCount
-        };
-        callback(returnInfo, gameisover);
-      }
-    });
-  },
-
-  endGameEmails: function (instanceName) {
-    //set boss mode unlocked here for specific instance
-
-    //send out emails to players who have completed game
-    _userModel
-      .where('role').equals('actor')
-      .where('game.instanceName').equals(instanceName)
-      .select('email game.currentLevel')
-      .find(function (err, users) {
-        if (err) {
-          res(false);
-        }
-        else if (users) {
-          var emailListLength = users.length,
-            html = null,
-            subject = null;
-
-          for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
-            //not done
-            if (users[emailIterator].game.currentLevel < 4) {
-              html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
-              html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
-              subject = 'Update!';
-
-            } else {
-              html = '<h2 style="color:green;">The Color has Returned!</h2>';
-              html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
-              subject = 'Breaking News!';
-            }
-            //TODO remove this check (this is to not send out test player emails?)
-            if (users[emailIterator].email.length > 6) {
-              emailUtil.sendEmail(subject, html, users[emailIterator].email);
-            }
-          }
-
-        }
-      });
-  }
-};
-
-dbHelpers = {
-  saveInfo: function (info) {
-    if (info && info.id) {
-      _userModel.findById(info.id, function (err, user) {
-        if (err) {
-          console.log(err);
-        } else if (user) {
-          for(var prop in info) {
-            if (prop !== 'id') {
-              user.game[prop] = info[prop];
-            }
-          }
-          user.save();
-        }
-      });
-    }
-  },
-
-  saveFeedback: function (info, index) {
-    _userModel.findById(info[index].id, function (err,user) {
-      if (err) {
-        console.log(err);
-      } else if (user) {
-        user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index});
-        user.save(function (err,okay) {
-          //keep savin til we aint got none
-          index++;
-          if (index < info.length) {
-            dbHelpers.saveFeedback(info,index);
-          }
-        });
-      }
-    });
-  },
-
-  getUserGameInfo: function (id, callback) {
-    _userModel.findById(id, function (err,user) {
-      if (err) {
-        callback(false);
-      } else if (user) {
-        callback(user.game);
-      }
-    });
-  }
- };

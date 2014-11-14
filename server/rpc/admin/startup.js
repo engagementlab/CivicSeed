@@ -10,13 +10,13 @@ var config         = require(rootDir + '/app/config'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
     filename       = 'rpc.admin.startup'
 
-var userModel      = service.useModel('user', 'preload'),
-    tileModel      = service.useModel('tile', 'preload'),
-    colorModel     = service.useModel('color', 'preload'),
-    npcModel       = service.useModel('npc', 'preload'),
-    botanistModel  = service.useModel('botanist', 'preload'),
-    gameModel      = service.useModel('game', 'preload'),
-    chatModel      = service.useModel('chat', 'preload')
+var userModel      = service.useModel('user'),
+    tileModel      = service.useModel('tile'),
+    colorModel     = service.useModel('color'),
+    npcModel       = service.useModel('npc'),
+    botanistModel  = service.useModel('botanist'),
+    gameModel      = service.useModel('game'),
+    chatModel      = service.useModel('chat')
 
 var _JSONClone = function (json) {
   return JSON.parse(JSON.stringify(json))

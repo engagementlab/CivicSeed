@@ -4,20 +4,19 @@ var rootDir        = process.cwd(),
     emailUtil      = require(rootDir + '/server/utils/email'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
     xkcd           = require('xkcd-pwgen'),
-    service        = require(rootDir + '/app/service'),
-    userModel      = service.useModel('user', 'preload'),
-    gameModel      = service.useModel('game', 'preload'),
-    colorModel     = service.useModel('color', 'preload'),
     emailListLength,
     emailIterator;
 
 exports.actions = function (req, res, ss) {
 
-  req.use('session');
-  // req.use('debug');
-  req.use('account.authenticated');
+  req.use('session')
+  req.use('account.authenticated')
 
-  var colorData = require(rootDir + '/data/colors.json');
+  var userModel  = ss.service.db.model('User'),
+      gameModel  = ss.service.db.model('Game'),
+      colorModel = ss.service.db.model('Color')
+
+  var colorData = require(rootDir + '/data/colors.json')
 
   var createUserAndSendInvite = function (email, instanceName, i) {
 

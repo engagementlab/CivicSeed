@@ -1,29 +1,61 @@
-var service, gameModel, npcModel, chatModel, userModel;
-
-var monitorHelpers = null;
+'use strict';
 
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
 
   req.use('session')
 
+  var gameModel = ss.service.db.model('Game'),
+      npcModel  = ss.service.db.model('Npc'),
+      chatModel = ss.service.db.model('Chat'),
+      userModel = ss.service.db.model('User')
+
+  var monitorHelpers = {
+
+    getInstances: function(instances, callback) {
+      //console.log(instances);
+      var numInstances = instances.length,
+        cur = 0,
+        allInstances = [];
+      var getNext = function() {
+        monitorHelpers.getInstanceData(instances[cur], function(result) {
+          allInstances.push(result);
+          cur++;
+          if(cur < numInstances) {
+            getNext();
+          }
+          else {
+            callback(allInstances);
+          }
+        });
+      };
+      getNext();
+    },
+    getInstanceData: function(instance) {
+      gameModel
+        .where('instanceName').equals(instance)
+        .find(function(err,result) {
+          if(err) {
+
+          } else {
+            return result[0];
+          }
+        });
+    }
+  };
+
   return {
 
-    init: function(id) {
-      service = ss.service;
-      gameModel = service.useModel('game', 'ss');
-      npcModel = service.useModel('npc', 'ss');
-      chatModel = service.useModel('chat', 'ss');
-      userModel = service.useModel('user', 'ss');
+    init: function (id) {
       npcModel
         .where('isHolding').equals(true)
         .select('index resource.question level resource.questionType')
-        .find(function(err, npcs) {
-          res(err,npcs);
-      });
+        .find(function (err, npcs) {
+          res(err,npcs)
+      })
     },
 
-    getInstanceNames: function(id) {
+    getInstanceNames: function (id) {
       userModel
         .findById(id, function(err,data) {
           if(err) {
@@ -102,38 +134,4 @@ exports.actions = function (req, res, ss) {
     }
   };
 
-};
-
-monitorHelpers = {
-
-  getInstances: function(instances, callback) {
-    //console.log(instances);
-    var numInstances = instances.length,
-      cur = 0,
-      allInstances = [];
-    var getNext = function() {
-      monitorHelpers.getInstanceData(instances[cur], function(result) {
-        allInstances.push(result);
-        cur++;
-        if(cur < numInstances) {
-          getNext();
-        }
-        else {
-          callback(allInstances);
-        }
-      });
-    };
-    getNext();
-  },
-  getInstanceData: function(instance) {
-    gameModel
-      .where('instanceName').equals(instance)
-      .find(function(err,result) {
-        if(err) {
-
-        } else {
-          return result[0];
-        }
-      });
-  }
-};
+}

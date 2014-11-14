@@ -109,7 +109,7 @@ module.exports = {
   },
 
   saveNpcTilestate: function (model, npcData, callback) {
-    var tileModel = service.useModel('tile', 'ss'),
+    var tileModel = model,
         i = 0
 
     function saveTile (index) {

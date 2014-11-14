@@ -1,7 +1,5 @@
 [
   {
-    "_id": "531f38a0551d69652f004995",
-    "__v": 0,
     "dependsOn": null,
     "id": 0,
     "index": 2569,
@@ -35,7 +33,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f004996",
     "dependsOn": null,
     "id": 1,
     "index": 4284,
@@ -44,7 +41,6 @@
     "name": "Hoots",
     "sprite": 1,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "B) downstream-oriented service",
       "feedbackRight": "Exactly! Maybe you could also think about which approach appeals to you the most.",
@@ -74,7 +70,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f004997",
     "dependsOn": 4284,
     "id": 2,
     "index": 4693,
@@ -83,7 +78,6 @@
     "name": "Squirls",
     "skinSuit": "octopus",
     "sprite": 2,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Very interesting!",
@@ -109,8 +103,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f00499a",
-    "__v": 0,
     "dependsOn": null,
     "id": 5,
     "index": 8956,
@@ -136,7 +128,38 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f004998",
+    "dependsOn": null,
+    "id": 4,
+    "index": 8542,
+    "isHolding": true,
+    "level": 0,
+    "name": "Foxy",
+    "sprite": 4,
+    "skinSuit": null,
+    "resource": {
+      "answer": "yes",
+      "feedbackRight": "You are SO right.",
+      "feedbackWrong": "Are you sure about that? Maybe take another look.",
+      "question": "Based on the quote, do you think Dr. Nieto would agree with the following statement? “People who help others out of a sense of charity are not approaching service from a productive angle.”",
+      "questionType": "yesno",
+      "shape": "wrong3",
+      "url": "8542",
+      "possibleAnswers": []
+    },
+    "dialog": {
+      "prompts": [
+        "Ah! Bonjour, my friend! Welcome to my French corner of ze forest! You’re on a some sort of quest, no? Perhaps you find the color, oui? Help me and I will help you!",
+        "Oh no! Maybe you need another attempt. Try again, oui?",
+        "Q: How many seeds does it take to fully recolor our world? A: We’ll never know unless you dare to find out!"
+      ],
+      "smalltalk": []
+    },
+    "position": {
+      "x": 22,
+      "y": 60
+    }
+  },
+  {
     "dependsOn": null,
     "id": 3,
     "index": 6265,
@@ -145,7 +168,6 @@
     "name": "Rabby",
     "skinSuit": "astronaut",
     "sprite": 3,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That will give me a lot to think about.",
@@ -171,41 +193,31 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f004999",
     "dependsOn": null,
-    "id": 4,
-    "index": 8542,
-    "isHolding": true,
-    "level": 0,
-    "name": "Foxy",
-    "sprite": 4,
+    "id": 50,
+    "index": 15668,
+    "isHolding": false,
+    "level": 3,
+    "name": "Mageline",
+    "sprite": 41,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
-      "answer": "yes",
-      "feedbackRight": "You are SO right.",
-      "feedbackWrong": "Are you sure about that? Maybe take another look.",
-      "question": "Based on the quote, do you think Dr. Nieto would agree with the following statement? “People who help others out of a sense of charity are not approaching service from a productive angle.”",
-      "questionType": "yesno",
-      "shape": "wrong3",
-      "url": "8542",
       "possibleAnswers": []
     },
     "dialog": {
-      "prompts": [
-        "Ah! Bonjour, my friend! Welcome to my French corner of ze forest! You’re on a some sort of quest, no? Perhaps you find the color, oui? Help me and I will help you!",
-        "Oh no! Maybe you need another attempt. Try again, oui?",
-        "Q: How many seeds does it take to fully recolor our world? A: We’ll never know unless you dare to find out!"
-      ],
-      "smalltalk": []
+      "prompts": [],
+      "smalltalk": [
+        "1",
+        "I wonder who could have built that robot? You know, the Botanist builds things sometimes. He made those special seeds!",
+        "I wonder who could have built that robot?"
+      ]
     },
     "position": {
-      "x": 22,
-      "y": 60
+      "x": 48,
+      "y": 110
     }
   },
   {
-    "_id": "531f38a0551d69652f00499b",
     "dependsOn": null,
     "id": 6,
     "index": 2176,
@@ -214,7 +226,6 @@
     "name": "RoggaBogga",
     "skinSuit": "dinosaur",
     "sprite": 6,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That will give me a lot to think about.",
@@ -240,7 +251,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f00499c",
     "dependsOn": null,
     "id": 7,
     "index": 1608,
@@ -249,7 +259,6 @@
     "name": "Goku",
     "skinSuit": "penguin",
     "sprite": 7,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Thanks for sharing that.",
@@ -275,7 +284,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f00499d",
     "dependsOn": 6265,
     "id": 8,
     "index": 4876,
@@ -284,7 +292,6 @@
     "name": "Quix",
     "skinSuit": "cactus",
     "sprite": 8,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "I can think of 42 reasons why that’s a great answer.",
@@ -310,7 +317,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f00499f",
     "dependsOn": null,
     "id": 10,
     "index": 9536,
@@ -319,7 +325,6 @@
     "name": "Malo",
     "sprite": 10,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "D) Brown hair, bilingual, New Yorker",
       "feedbackRight": "Nailed it! We should totally hang out after this.",
@@ -349,7 +354,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a1",
     "dependsOn": null,
     "id": 12,
     "index": 8427,
@@ -358,7 +362,6 @@
     "name": "Fork",
     "sprite": 12,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -376,7 +379,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a2",
     "dependsOn": null,
     "id": 13,
     "index": 1549,
@@ -385,7 +387,6 @@
     "name": "Awaa",
     "sprite": 13,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -403,7 +404,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a3",
     "dependsOn": null,
     "id": 14,
     "index": 1517,
@@ -412,7 +412,6 @@
     "name": "Hampton",
     "sprite": 14,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Interesting. Very interesting!",
@@ -438,7 +437,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a4",
     "dependsOn": null,
     "id": 15,
     "index": 359,
@@ -447,7 +445,6 @@
     "name": "Frampton",
     "sprite": 15,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That’s great! Thanks for sharing!",
@@ -473,7 +470,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a5",
     "dependsOn": null,
     "id": 16,
     "index": 3338,
@@ -482,7 +478,6 @@
     "name": "Nosezo",
     "sprite": 16,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "true",
       "feedbackRight": "Great work!",
@@ -507,7 +502,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a6",
     "dependsOn": null,
     "id": 17,
     "index": 4338,
@@ -516,7 +510,6 @@
     "name": "Siri",
     "sprite": 17,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -534,7 +527,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a7",
     "dependsOn": null,
     "id": 18,
     "index": 6177,
@@ -543,7 +535,6 @@
     "name": "Chiklet",
     "sprite": 18,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "false",
       "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
@@ -568,34 +559,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a8",
-    "dependsOn": null,
-    "id": 19,
-    "index": 7082,
-    "isHolding": false,
-    "level": 1,
-    "name": "Hummer",
-    "sprite": 19,
-    "skinSuit": null,
-    "__v": 0,
-    "resource": {
-      "possibleAnswers": []
-    },
-    "dialog": {
-      "prompts": [],
-      "smalltalk": [
-        "I wonder why the color keeps disappearing? It happens again and again!",
-        "Aunty Hums used to tell me stories about the great color thief and how it stole all of the life from our community. Then a hero helped rally the community together to get it back. A real hero is someone who inspires others. That’s what my Hums used to say and she was a wise woman!",
-        "Did you help everyone in the forest already? I know they got hit pretty hard by the grayness."
-      ]
-    },
-    "position": {
-      "x": 124,
-      "y": 49
-    }
-  },
-  {
-    "_id": "531f38a0551d69652f0049a9",
     "dependsOn": null,
     "id": 20,
     "index": 7052,
@@ -604,7 +567,6 @@
     "name": "Dewdrop",
     "sprite": 20,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "true",
       "feedbackRight": "Exactly right!",
@@ -629,7 +591,31 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ab",
+    "dependsOn": null,
+    "id": 19,
+    "index": 7082,
+    "isHolding": false,
+    "level": 1,
+    "name": "Hummer",
+    "sprite": 19,
+    "skinSuit": null,
+    "resource": {
+      "possibleAnswers": []
+    },
+    "dialog": {
+      "prompts": [],
+      "smalltalk": [
+        "I wonder why the color keeps disappearing? It happens again and again!",
+        "Aunty Hums used to tell me stories about the great color thief and how it stole all of the life from our community. Then a hero helped rally the community together to get it back. A real hero is someone who inspires others. That’s what my Hums used to say and she was a wise woman!",
+        "Did you help everyone in the forest already? I know they got hit pretty hard by the grayness."
+      ]
+    },
+    "position": {
+      "x": 124,
+      "y": 49
+    }
+  },
+  {
     "dependsOn": null,
     "id": 22,
     "index": 6773,
@@ -638,7 +624,6 @@
     "name": "BeepBoop",
     "skinSuit": "cone",
     "sprite": 22,
-    "__v": 0,
     "resource": {
       "answer": "true",
       "feedbackRight": "Bingo! Now that’s what I’m talkin’ about!",
@@ -663,7 +648,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ad",
     "dependsOn": null,
     "id": 24,
     "index": 9170,
@@ -672,7 +656,6 @@
     "name": "Blooper",
     "skinSuit": null,
     "sprite": 24,
-    "__v": 0,
     "resource": {
       "shape": "correct2",
       "url": "9170",
@@ -702,7 +685,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ae",
     "dependsOn": null,
     "id": 25,
     "index": 2649,
@@ -711,7 +693,6 @@
     "name": "Dex",
     "skinSuit": null,
     "sprite": 13,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Insightful response, thanks!",
@@ -737,7 +718,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049af",
     "dependsOn": null,
     "id": 26,
     "index": 3075,
@@ -746,7 +726,6 @@
     "name": "Isosceles",
     "sprite": 25,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Neat!",
@@ -776,7 +755,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b0",
     "dependsOn": null,
     "id": 27,
     "index": 5063,
@@ -785,7 +763,6 @@
     "name": "Zork",
     "skinSuit": "ninja",
     "sprite": 25,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -803,7 +780,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b1",
     "dependsOn": null,
     "id": 28,
     "index": 2803,
@@ -812,7 +788,6 @@
     "name": "Bluesy",
     "skinSuit": null,
     "sprite": 42,
-    "__v": 0,
     "resource": {
       "answer": "A) Somerville, Chinatown, and Medford",
       "feedbackRight": "Yup, that’s right!",
@@ -842,7 +817,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b2",
     "dependsOn": null,
     "id": 29,
     "index": 3229,
@@ -851,7 +825,6 @@
     "name": "Goose",
     "skinSuit": null,
     "sprite": 10,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That’s an idea!",
@@ -877,7 +850,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b3",
     "dependsOn": null,
     "id": 30,
     "index": 3373,
@@ -886,7 +858,6 @@
     "name": "Starby",
     "sprite": 34,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -904,7 +875,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b4",
     "dependsOn": null,
     "id": 31,
     "index": 4655,
@@ -913,7 +883,6 @@
     "name": "Apollo",
     "sprite": 4,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -931,7 +900,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ac",
     "dependsOn": null,
     "id": 23,
     "index": 8898,
@@ -940,7 +908,6 @@
     "name": "Beholder",
     "sprite": 23,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -958,7 +925,64 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b6",
+    "dependsOn": null,
+    "id": 34,
+    "index": 17599,
+    "isHolding": true,
+    "level": 2,
+    "name": "Forky",
+    "sprite": 25,
+    "skinSuit": null,
+    "resource": {
+      "answer": "",
+      "feedbackRight": "You got your helping hat on. I dig it.",
+      "feedbackWrong": "",
+      "question": "Is there a comment from a student’s journal that you relate to or that you disagree with? Explain.",
+      "questionType": "open",
+      "requiredLength": 100,
+      "shape": "correct1",
+      "url": "17599",
+      "possibleAnswers": []
+    },
+    "dialog": {
+      "prompts": [
+        "Welcome to our Ranch! It’s pretty cool, right? Like, a cool ranch? That reminds me of my favorite snack... wait, what were we doing again? Oh yeah! Busting that color swiping robot! You might need this thing.",
+        "Get your head out of the dirt and get on this!",
+        "Glad I could help. Make sure you talk to everyone else around the ranch. If you find a snack, hit me up."
+      ],
+      "smalltalk": []
+    },
+    "position": {
+      "x": 133,
+      "y": 123
+    }
+  },
+  {
+    "dependsOn": null,
+    "id": 46,
+    "index": 17959,
+    "isHolding": false,
+    "level": 3,
+    "name": "Quinto",
+    "skinSuit": null,
+    "sprite": 37,
+    "resource": {
+      "possibleAnswers": []
+    },
+    "dialog": {
+      "prompts": [],
+      "smalltalk": [
+        "1",
+        "I see you’ve come! The time is here to reflect on what you’ve done.",
+        "You still have a long way to go. Come back later and I will teach the ways of social SCIENCE!"
+      ]
+    },
+    "position": {
+      "x": 67,
+      "y": 126
+    }
+  },
+  {
     "dependsOn": null,
     "id": 33,
     "index": 5206,
@@ -967,7 +991,6 @@
     "name": "Blobby",
     "sprite": 46,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Thanks for sharing that!",
@@ -997,42 +1020,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b7",
-    "dependsOn": null,
-    "id": 34,
-    "index": 17599,
-    "isHolding": true,
-    "level": 2,
-    "name": "Forky",
-    "sprite": 25,
-    "skinSuit": null,
-    "__v": 0,
-    "resource": {
-      "answer": "",
-      "feedbackRight": "You got your helping hat on. I dig it.",
-      "feedbackWrong": "",
-      "question": "Is there a comment from a student’s journal that you relate to or that you disagree with? Explain.",
-      "questionType": "open",
-      "requiredLength": 100,
-      "shape": "correct1",
-      "url": "17599",
-      "possibleAnswers": []
-    },
-    "dialog": {
-      "prompts": [
-        "Welcome to our Ranch! It’s pretty cool, right? Like, a cool ranch? That reminds me of my favorite snack... wait, what were we doing again? Oh yeah! Busting that color swiping robot! You might need this thing.",
-        "Get your head out of the dirt and get on this!",
-        "Glad I could help. Make sure you talk to everyone else around the ranch. If you find a snack, hit me up."
-      ],
-      "smalltalk": []
-    },
-    "position": {
-      "x": 133,
-      "y": 123
-    }
-  },
-  {
-    "_id": "531f38a0551d69652f0049b9",
     "dependsOn": null,
     "id": 36,
     "index": 18552,
@@ -1041,7 +1028,6 @@
     "name": "Scallop",
     "skinSuit": null,
     "sprite": 27,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1059,7 +1045,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ba",
     "dependsOn": null,
     "id": 37,
     "index": 14588,
@@ -1068,7 +1053,6 @@
     "name": "PenPen",
     "sprite": 28,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "shape": "correct3",
       "url": "14588",
@@ -1100,7 +1084,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049bb",
     "dependsOn": null,
     "id": 38,
     "index": 14464,
@@ -1109,7 +1092,6 @@
     "name": "Combover",
     "sprite": 29,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Thanks for that! Keep fighting the good fight.",
@@ -1135,7 +1117,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049bc",
     "dependsOn": null,
     "id": 39,
     "index": 15326,
@@ -1144,7 +1125,6 @@
     "name": "Funguy",
     "sprite": 30,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1162,7 +1142,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049bd",
     "dependsOn": null,
     "id": 40,
     "index": 12760,
@@ -1171,7 +1150,6 @@
     "name": "Rapscallion",
     "skinSuit": null,
     "sprite": 31,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That sounds like a great start. Now keep your commitment to us and bring back all the color!",
@@ -1197,7 +1175,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049be",
     "dependsOn": null,
     "id": 41,
     "index": 11752,
@@ -1206,7 +1183,6 @@
     "name": "Oriole",
     "sprite": 32,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "shape": "wrong1",
       "url": "11752",
@@ -1231,7 +1207,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049bf",
     "dependsOn": null,
     "id": 42,
     "index": 14706,
@@ -1240,7 +1215,6 @@
     "name": "Toad",
     "skinSuit": null,
     "sprite": 33,
-    "__v": 0,
     "resource": {
       "answer": "true",
       "feedbackRight": "That’s true. The poverty threshold for a single individual under the age of 65 is $11,334. Seems low, huh?",
@@ -1265,7 +1239,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c0",
     "dependsOn": null,
     "id": 43,
     "index": 16547,
@@ -1274,7 +1247,6 @@
     "name": "Threepee",
     "sprite": 34,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Thanks for your answer!",
@@ -1300,7 +1272,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c1",
     "dependsOn": null,
     "id": 44,
     "index": 10891,
@@ -1309,7 +1280,6 @@
     "name": "Beanie",
     "sprite": 35,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1327,7 +1297,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c2",
     "dependsOn": null,
     "id": 45,
     "index": 10774,
@@ -1336,7 +1305,6 @@
     "name": "Vogon",
     "skinSuit": null,
     "sprite": 36,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Way to take action!",
@@ -1362,34 +1330,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c3",
-    "dependsOn": null,
-    "id": 46,
-    "index": 17959,
-    "isHolding": false,
-    "level": 3,
-    "name": "Quinto",
-    "skinSuit": null,
-    "sprite": 37,
-    "__v": 0,
-    "resource": {
-      "possibleAnswers": []
-    },
-    "dialog": {
-      "prompts": [],
-      "smalltalk": [
-        "1",
-        "I see you’ve come! The time is here to reflect on what you’ve done.",
-        "You still have a long way to go. Come back later and I will teach the ways of social SCIENCE!"
-      ]
-    },
-    "position": {
-      "x": 67,
-      "y": 126
-    }
-  },
-  {
-    "_id": "531f38a0551d69652f0049c4",
     "dependsOn": null,
     "id": 47,
     "index": 17525,
@@ -1398,7 +1338,6 @@
     "name": "Archibald",
     "skinSuit": null,
     "sprite": 38,
-    "__v": 0,
     "resource": {
       "answer": "D) Before you even begin",
       "feedbackRight": "Right on!",
@@ -1428,7 +1367,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c5",
     "dependsOn": null,
     "id": 48,
     "index": 12708,
@@ -1437,7 +1375,6 @@
     "name": "Esther",
     "sprite": 39,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1455,7 +1392,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c6",
     "dependsOn": null,
     "id": 49,
     "index": 13696,
@@ -1464,7 +1400,6 @@
     "name": "Brumble",
     "sprite": 40,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Great! Now go find my friend Goober to talk more about how you’ll reflect on things.",
@@ -1490,34 +1425,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c7",
-    "dependsOn": null,
-    "id": 50,
-    "index": 15668,
-    "isHolding": false,
-    "level": 3,
-    "name": "Mageline",
-    "sprite": 41,
-    "skinSuit": null,
-    "__v": 0,
-    "resource": {
-      "possibleAnswers": []
-    },
-    "dialog": {
-      "prompts": [],
-      "smalltalk": [
-        "1",
-        "I wonder who could have built that robot? You know, the Botanist builds things sometimes. He made those special seeds!",
-        "I wonder who could have built that robot?"
-      ]
-    },
-    "position": {
-      "x": 48,
-      "y": 110
-    }
-  },
-  {
-    "_id": "531f38a0551d69652f0049c8",
     "dependsOn": null,
     "id": 51,
     "index": 12352,
@@ -1526,7 +1433,6 @@
     "name": "Banksi",
     "sprite": 42,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That’s important to think about.",
@@ -1552,7 +1458,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049c9",
     "dependsOn": null,
     "id": 52,
     "index": 13246,
@@ -1561,7 +1466,6 @@
     "name": "Grebulon",
     "sprite": 43,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That’s something I can get behind.",
@@ -1587,7 +1491,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ca",
     "dependsOn": null,
     "id": 53,
     "index": 14380,
@@ -1596,7 +1499,6 @@
     "name": "Prefect",
     "sprite": 44,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Awesome! I want to take a class on towels, and their relevance to galactic travel.",
@@ -1622,7 +1524,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049cb",
     "dependsOn": null,
     "id": 54,
     "index": 15656,
@@ -1631,7 +1532,6 @@
     "name": "Ford",
     "skinSuit": null,
     "sprite": 45,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1649,7 +1549,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049cc",
     "dependsOn": null,
     "id": 55,
     "index": 16929,
@@ -1658,7 +1557,6 @@
     "name": "Tali",
     "sprite": 46,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1676,7 +1574,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049cd",
     "dependsOn": null,
     "id": 56,
     "index": 16920,
@@ -1685,7 +1582,6 @@
     "name": "Boomer",
     "sprite": 47,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That sounds great. I know you can do it!",
@@ -1711,7 +1607,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049ce",
     "dependsOn": 13696,
     "id": 57,
     "index": 15638,
@@ -1720,7 +1615,6 @@
     "name": "Goober",
     "sprite": 48,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "That’s really great. Thank you!",
@@ -1746,7 +1640,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049cf",
     "dependsOn": null,
     "id": 58,
     "index": 16912,
@@ -1755,7 +1648,6 @@
     "name": "Crumb",
     "sprite": 49,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "I like it!",
@@ -1781,7 +1673,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049d0",
     "dependsOn": null,
     "id": 59,
     "index": 15626,
@@ -1790,7 +1681,6 @@
     "name": "Derp",
     "sprite": 50,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "true",
       "feedbackRight": "Yup! Amazing, huh?",
@@ -1815,7 +1705,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049d1",
     "dependsOn": null,
     "id": 60,
     "index": 13360,
@@ -1824,7 +1713,6 @@
     "name": "Overcoat",
     "skinSuit": null,
     "sprite": 51,
-    "__v": 0,
     "resource": {
       "answer": "D) All of these",
       "feedbackRight": "Perfect!",
@@ -1855,7 +1743,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049d2",
     "dependsOn": null,
     "id": 61,
     "index": 10800,
@@ -1864,7 +1751,6 @@
     "name": "Smalls",
     "sprite": 52,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1882,7 +1768,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049d4",
     "dependsOn": null,
     "id": 63,
     "index": 9556,
@@ -1891,7 +1776,6 @@
     "name": "Wiggin",
     "skinSuit": null,
     "sprite": 53,
-    "__v": 0,
     "resource": {
       "url": "test",
       "shape": null,
@@ -1920,7 +1804,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f00499e",
     "dependsOn": null,
     "id": 9,
     "index": 6707,
@@ -1929,7 +1812,6 @@
     "name": "Bunzo",
     "sprite": 9,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "possibleAnswers": []
     },
@@ -1947,7 +1829,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049a0",
     "dependsOn": null,
     "id": 11,
     "index": 8986,
@@ -1956,7 +1837,6 @@
     "name": "Jawa",
     "sprite": 11,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Very revealing, but of course there’s more to you than that.",
@@ -1982,7 +1862,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049d3",
     "dependsOn": null,
     "id": 62,
     "index": 9847,
@@ -1991,7 +1870,6 @@
     "name": "Ender",
     "sprite": 52,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "url": "test",
       "shape": null,
@@ -2020,7 +1898,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049aa",
     "dependsOn": null,
     "id": 21,
     "index": 9069,
@@ -2029,7 +1906,6 @@
     "name": "Zeebo",
     "sprite": 21,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "I think that’s probably true.",
@@ -2055,7 +1931,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b5",
     "dependsOn": null,
     "id": 32,
     "index": 5219,
@@ -2064,7 +1939,6 @@
     "name": "Toaster",
     "sprite": 10,
     "skinSuit": null,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "Hm, interesting. Thanks for sharing!",
@@ -2090,7 +1964,6 @@
     }
   },
   {
-    "_id": "531f38a0551d69652f0049b8",
     "dependsOn": null,
     "id": 35,
     "index": 16297,
@@ -2099,7 +1972,6 @@
     "name": "ChickenBob",
     "skinSuit": null,
     "sprite": 26,
-    "__v": 0,
     "resource": {
       "answer": "",
       "feedbackRight": "I believe I can fly. I believe if you try you can fill the sky with color.",

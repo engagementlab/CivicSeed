@@ -14,15 +14,19 @@ exports.actions = function (req, res, ss) {
   return {
 
     export: function (name) {
-      var collection = ss.service.useModel(name, 'admin.db')
-      collection.find(function (err, data) {
-        if (err) {
-          res(err)
-        } else {
-          winston.info('CS: '.blue + 'Exporting '.magenta + name.yellow.underline + ' to client ...'.magenta)
-          res(data)
-        }
-      })
+      var collection = ss.service.db.model(name)
+
+      collection
+        .find()
+        .select('-__v -_id')
+        .exec(function (err, data) {
+          if (err) {
+            res(err)
+          } else {
+            winston.info('CS: '.blue + 'Exporting '.magenta + name.yellow.underline + ' to client ...'.magenta)
+            res(data)
+          }
+        })
     },
 
     nuke: function (collection) {
