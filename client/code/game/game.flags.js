@@ -37,7 +37,7 @@ $game.flags = (function () {
     // Remove one or all game state flags
     unset: function (flag) {
       // Always returns true, even if the flag did not exist
-      return delete _FLAGS[flag]
+      delete _FLAGS[flag]
     },
 
     // Clear all game state flags
