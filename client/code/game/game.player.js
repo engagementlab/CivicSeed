@@ -58,7 +58,6 @@ var $player = $game.$player = {
   npcOnDeck: false,
   ready: false,
   seedMode: false,
-  awaitingBomb: false,
   pathfinding: false,
 
   init: function (callback) {
@@ -170,7 +169,6 @@ var $player = $game.$player = {
     $game.$player.npcOnDeck= false;
     $game.$player.ready= false;
     $game.$player.seedMode= false;
-    $game.$player.awaitingBomb= false;
     $game.$player.pathfinding= false;
   },
 
@@ -1082,7 +1080,7 @@ var $player = $game.$player = {
       }
     } else {
       $game.$player.dropSeed({mode: 'draw'});
-      $game.$mouse.drawMode = false;
+      $game.removeFlag('draw-mode')
       $game.$player.seedMode = false;
       $BODY.off('mousedown touchstart', '#gameboard');
       $game.$player.seedPlanting = false;
@@ -1115,7 +1113,7 @@ var $player = $game.$player = {
   //turns off draw mode if no seeds left
   checkSeedLevel: function () {
     if (_seeds.draw <= 0) {
-      $game.$mouse.drawMode = false;
+      $game.removeFlag('draw-mode')
     }
   },
 
@@ -1275,7 +1273,6 @@ var _player = {
     var waitingEl = document.getElementById('waiting-for-seed')
 
     //set a waiting boolean so we don't plant more until receive data back from rpc
-    $game.$player.awaitingBomb = true;
     $game.setFlag('awaiting-seed')
 
     //send the data to the rpc
@@ -1301,7 +1298,6 @@ var _player = {
       .show();
 
     ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
-      $game.$player.awaitingBomb = false;
       $game.removeFlag('awaiting-seed')
 
       $(waitingEl).fadeOut();
@@ -1319,17 +1315,19 @@ var _player = {
           }
         }
         else {
-          $game.$player.addSeeds('draw', 0);
+          $game.$player.addSeeds('draw', 0)
+
           if (_seeds.draw === 0) {
             _player.endSeedMode()
+
             // Other actions unique to draw mode
-            $game.$mouse.drawMode = false;
-            $BODY.off('mousedown touchstart', '#gameboard');
+            $game.removeFlag('draw-mode')
+            $BODY.off('mousedown touchstart', '#gameboard')
             document.getElementById('graffiti').style.display = 'none'
           }
         }
       }
-    });
+    })
   },
 
   // Generic end seed mode

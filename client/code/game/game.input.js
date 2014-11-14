@@ -108,21 +108,22 @@ var $input = $game.$input = module.exports = {
     $BODY.on('click', '#seedventory .regular-button', function () {
       $('.regular-button').addClass('selected')
       $game.$player.startSeeding('regular')
-    });
+    })
 
     // Select draw seed
     $BODY.on('click', '#seedventory .draw-button', function () {
       $('.draw-button').addClass('selected')
 
-      $game.$player.startSeeding('draw');
+      $game.$player.startSeeding('draw')
+
       $BODY.on('mousedown touchstart', '#gameboard', function () {
-        $game.$player.drawFirstSeed();
-        $game.$mouse.drawMode = true;
-      });
+        $game.$player.drawFirstSeed()
+        $game.setFlag('draw-mode')
+      })
       $BODY.on('mouseup touchend', '#gameboard', function () {
-        $game.$mouse.drawMode = false;
-      });
-    });
+        $game.removeFlag('draw-mode')
+      })
+    })
 
     // Close Seed inventory
     $BODY.on('click', '#seedventory .close-button', function () {
@@ -457,8 +458,7 @@ var $input = $game.$input = module.exports = {
   toggleSeedMode: function () {
     if ($game.$player.seedMode === true || $game.checkFlag('seed-mode') === true) {
       $input.endSeedMode()
-    }
-    else {
+    } else {
       $input.startSeedMode()
     }
   },
@@ -505,7 +505,7 @@ var $input = $game.$input = module.exports = {
     document.getElementById('graffiti').style.display = 'none'
     $BODY.off('mousedown touchend', '#gameboard');
     $BODY.off('mouseup touchend', '#gameboard');
-    $game.$mouse.drawMode = false;
+    $game.removeFlag('draw-mode')
     $game.$player.seedPlanting = false;
     $game.$player.resetRenderColor();
     $input.inactiveHUDButton('.hud-seed')

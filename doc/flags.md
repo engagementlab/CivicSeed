@@ -37,6 +37,8 @@ The following table documents flags that are currently set in CivicSeed.
 | `first-time`   | Set a player has joined the game for the first time with a new account, and has not yet completed the tutorial.|
 | `solving-puzzle` | The player is currently attempting to solve the botanist's tangram puzzle.|
 | `seed-mode` | The player is currently in seed mode. This can mean currently planting a seed or viewing the seed inventory.|
+| `draw-mode` | The player is currently in seed draw mode. This mean currently using the seed drawing mode.|
+| `awaiting-seed` | This flag is set when a seed plant request is sent to the server & removed when the server responds, throttling multiple plant requests from the player. |
 | `boss-mode-ready` | The player has completed the game and is ready to play the boss level. |
 | `boss-mode-unlocked` | The world color meter has hit a point where the boss mode is unlocked for all players. |
 | `boss-mode` | The player is currently playing the boss level. |

@@ -103,6 +103,8 @@ var $game = module.exports = {
   instantiated: false,
 
   init: function (callback) {
+    console.log('Initializing all modules')
+
     // Instantiating code (if not already done)
     $map        = require('/game.map')
     $render     = require('/game.render')
@@ -140,6 +142,7 @@ var $game = module.exports = {
 
   //must reset every module because init won't be called since the app was already loaded once (if they navigate to profile and back for example)
   reInit: function () {
+    console.log('Resetting all modules')
     $game.resetInit();
     $game.$map.resetInit();
     $game.$render.resetInit();
@@ -149,7 +152,6 @@ var $game = module.exports = {
     $game.$others.resetInit();
     $game.$robot.resetInit();
     $game.$botanist.resetInit();
-    $game.$mouse.resetInit();
     $game.$audio.resetInit();
     $game.$log.resetInit();
   },
@@ -182,23 +184,22 @@ var $game = module.exports = {
     ss.rpc('shared.account.checkGameSession', function (response) {
       // YOU KNOW, THIS COULD ALL HAPPEN ELSEWHERE?
       if (!$game.instantiated) {
-        $game.init();
-      }
-      else {
-        $game.reInit();
+        $game.init()
+      } else {
+        $game.reInit()
       }
 
       if (response.status) {
         sessionStorage.setItem('isPlaying', true);
         _game.kickOffGame()
-      }
-      else {
+      } else {
         if (response.profileLink) {
-            Davis.location.assign('/profiles/' + response.profileLink);
+            Davis.location.assign('/profiles/' + response.profileLink)
         }
-        apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>');
+
+        apprise('There seems to have been an error accessing the game.<br><br><span style="display:block;font-size:11px;text-align:center;">(If you think there is a problem, please contact the website administrator.)</span>')
       }
-    });
+    })
   },
 
   // pause menu on browser tab unfocus (currently disabled)
