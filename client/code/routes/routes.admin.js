@@ -1,14 +1,17 @@
+'use strict';
+
 var self = module.exports = {
 
-  loadRoutes: function ($app) {
+  loadRoutes: function (app) {
 
     require('/admin').init()
     require('/export').init()
+    require('/invitecodes').init()
 
     var npcs = require('/npcs')
     npcs.init()
 
-    $app.get('/admin', function (req) {
+    app.get('/admin', function (req) {
       $CONTAINER.append(JT['admin-panel']({
         id: 'admin',
         title: 'Site administration',
@@ -19,7 +22,7 @@ var self = module.exports = {
       $('title').text('{ ::: Civic Seed - Admin Panel ::: }')
     })
 
-    $app.get('/admin/startup', function (req) {
+    app.get('/admin/startup', function (req) {
       $CONTAINER.append(JT['admin-startup']({
         title: 'Startup',
         environment: CivicSeed.ENVIRONMENT,
@@ -29,7 +32,7 @@ var self = module.exports = {
       $('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }')
     })
 
-    $app.get('/admin/monitor', function (req) {
+    app.get('/admin/monitor', function (req) {
       ss.rpc('admin.monitor.getInstanceNames', sessionStorage.userId, function (err, info) {
         if (err) {
           apprise(err)
@@ -45,7 +48,7 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/admin/npcs', function (req) {
+    app.get('/admin/npcs', function (req) {
       ss.rpc('admin.npcs.init', sessionStorage.userId, function (result) {
         if (result) {
           //modify results for data output
@@ -89,7 +92,7 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/admin/export', function (req) {
+    app.get('/admin/export', function (req) {
       $CONTAINER.append(JT['admin-export']({
         title: 'Export data',
         environment: CivicSeed.ENVIRONMENT,
@@ -99,7 +102,7 @@ var self = module.exports = {
       $('title').text('{ ::: Civic Seed - Admin Panel - Export ::: }')
     })
 
-    $app.get('/admin/export/:collection', function (req) {
+    app.get('/admin/export/:collection', function (req) {
       ss.rpc('admin.db.export', req.params['collection'], function (res) {
         if (res) {
           // TODO: This is hacky.
@@ -107,12 +110,12 @@ var self = module.exports = {
           // instead of just overwriting the HTML page.
           document.write(JSON.stringify(res))
         } else {
-          console.log('Error exporting NPC data.')
+          document.write('Error exporting data.')
         }
       })
     })
 
-    $app.get('/admin/invitecodes', function (req) {
+    app.get('/admin/invitecodes', function (req) {
       $CONTAINER.append(JT['admin-invitecodes']({
         title: 'Create new game',
         environment: CivicSeed.ENVIRONMENT,

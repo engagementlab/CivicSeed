@@ -1,3 +1,5 @@
+'use strict';
+
 var actorRoutes = [
   '/game'
 ]
@@ -8,15 +10,16 @@ var adminRoutes = [
 ]
 var superadminRoutes = [
   '/admin/startup',
+  '/admin/export',
   '/admin/npcs'
 ]
 
 var self = module.exports = {
 
-  loadMiddleware: function ($app) {
+  loadMiddleware: function (app) {
 
     // check if user experiences/authentic
-    $app.before(function (req) {
+    app.before(function (req) {
 
       var fullPath = req.fullPath
       var userRole = sessionStorage.getItem('userRole')

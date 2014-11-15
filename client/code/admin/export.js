@@ -18,8 +18,7 @@ var self = module.exports = (function () {
     setupExportButtons: function () {
 
       $body.on('click', '#admin-export button', function () {
-        var button   = $(this),
-            dataType = button.data().type
+        var dataType = $(this).data().type
 
         window.location = '/admin/export/' + dataType
       })

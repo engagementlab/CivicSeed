@@ -111,7 +111,7 @@ service.connectMongoose(app, function (databases) {
   // connect mongoose to ss internal API
   ss.api.add('db', databases.mongooseDb)
 
-  controllers.loadAll(app, service, function() {
+  controllers.loadAll(app, service, function () {
 
     if (NODE_ENV === 'development') {
       app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
@@ -135,7 +135,7 @@ service.connectMongoose(app, function (databases) {
     // ~ - ~ - ~ --- >>> START THE APP
     // ~ - ~ - ~ --- >>>
 
-    server = app.listen(PORT, function() {
+    server = app.listen(PORT, function () {
 
       var local = server.address()
       winston.info('Express server listening @ http://%s:%d/ in '.magenta + '%s'.yellow.inverse + ' mode'.magenta, local.address, local.port, app.settings.env)

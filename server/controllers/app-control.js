@@ -1,8 +1,6 @@
 'use strict';
 
-var rootDir   = process.cwd(),
-    CivicSeed = require(rootDir + '/app/CivicSeed').getGlobals(),
-    ss        = require('socketstream')
+var ss = require('socketstream')
 
 var self = module.exports = {
 
@@ -13,7 +11,7 @@ var self = module.exports = {
       css: ['styles.styl'],
       code: [
         'libs/jquery.min.js',
-        'libs/davis-0.9.6.min.js',
+        'libs/davis.min.js',
         'libs/underscore-min.js',
         'libs/backbone-min.js',
         'libs/bootstrap.min.js',
@@ -31,17 +29,6 @@ var self = module.exports = {
 
     ss.http.route('/', function (req, res) {
       res.serveClient('main')
-    })
-
-    // 404'd
-    // TODO: Verify if this is ever reached - I suspect it is not --LH
-    app.use(function (req, res, next) {
-      CivicSeed.SocketStream = false
-      res.render(rootDir + '/client/views/main.jade', {
-        title: '404 - Page Not Found',
-        CivicSeed: JSON.stringify(CivicSeed),
-        SocketStream: ''
-      })
     })
 
   }

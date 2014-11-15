@@ -1,10 +1,12 @@
+'use strict';
+
 var self = module.exports = {
 
-  loadRoutes: function ($app) {
+  loadRoutes: function (app) {
     var profile = require('/profile')
     profile.init()
 
-    $app.get('/profiles', function (req) {
+    app.get('/profiles', function (req) {
       ss.rpc('shared.profiles.getAllProfiles', function (users) {
         $CONTAINER.append(JT['profiles-allprofiles']({
           users: users
@@ -12,7 +14,7 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/profiles/:playerId', function (req) {
+    app.get('/profiles/:playerId', function (req) {
       ss.rpc('shared.profiles.getProfileInformation', req.params['playerId'], function (info) {
         if (!info) {
           console.log('error!')
@@ -28,7 +30,7 @@ var self = module.exports = {
       })
     })
 
-    $app.get('/resume/:playerId', function (req) {
+    app.get('/resume/:playerId', function (req) {
       ss.rpc('shared.profiles.getProfileInformation', req.params['playerId'], function (info) {
         if (!info) {
           console.log('error!')

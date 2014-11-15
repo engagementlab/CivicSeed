@@ -1,8 +1,11 @@
+'use strict';
+
 var rootDir        = process.cwd(),
     config         = require(rootDir + '/app/config'),
     nodeEnv        = config.get('ENVIRONMENT'),
     emailUtil      = require(rootDir + '/server/utils/email'),
     accountHelpers = require(rootDir + '/server/utils/account-helpers'),
+    winston        = require('winston'),
     xkcd           = require('xkcd-pwgen'),
     emailListLength,
     emailIterator;
@@ -94,11 +97,14 @@ exports.actions = function (req, res, ss) {
                 sendInviteEmail(user.firstName, password, user.email)
 
                 // If this is the last e-mail to send, close the e-mail connection
+                // NOTE: Emails in util are currently automatically closed
+                /*
                 if (i === emailListLength - 1) {
                   emailUtil.closeEmailConnection();
                   console.log('All emails have been sent...');
                   res(true);
                 }
+                */
               }
             });
           });
@@ -184,7 +190,7 @@ exports.actions = function (req, res, ss) {
         } else if(results.length > 0) {
           res(false, true);
         } else {
-          newGame = new gameModel();
+          var newGame = new gameModel();
           newGame.players = 0;
           newGame.seedsDropped = 0;
           newGame.seedsDroppedGoal = info.numPlayers * 130; //130 is magic number (see calculation in trello)
@@ -205,7 +211,7 @@ exports.actions = function (req, res, ss) {
             else {
               console.log('game instance has been created');
               //put a single color in the world so we don't get an error when it searches
-              color = new colorModel();
+              var color = new colorModel();
               color.instanceName = info.instanceName;
               color.x = 0;
               color.y = 0;

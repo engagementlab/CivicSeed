@@ -25,31 +25,28 @@ var self = module.exports = {
 
   setupRouter: function () {
 
-    var $app
+    // Note: Davis.js has not been actively
+    // supported since v0.9.9 in 2012.
 
-    Davis(function () {
+    var app = Davis(function () {
 
-      $app = this
-
-      require('/routes.middleware').loadMiddleware($app)
-      require('/routes.main').loadRoutes($app)
-      require('/routes.account').loadRoutes($app)
-      require('/routes.admin').loadRoutes($app)
-      require('/routes.profile').loadRoutes($app)
-      // should always be last
-      require('/routes.errors').loadRoutes($app)
-
-      $app.configure(function (config) {
-        // config.linkSelector = 'a.davis'
-        // config.formSelector = 'form.davis'
-        // config.throwErrors = true
-        // config.handleRouteNotFound = false
-        config.generateRequestOnPageLoad = true
-      })
-
-      $app.start()
+      require('/routes.middleware').loadMiddleware(this)
+      require('/routes.main').loadRoutes(this)
+      require('/routes.account').loadRoutes(this)
+      require('/routes.admin').loadRoutes(this)
+      require('/routes.profile').loadRoutes(this)
+      // Should always be last
+      require('/routes.errors').loadRoutes(this)
 
     })
+
+    app.configure(function (config) {
+      config.throwErrors = true
+      config.handleRouteNotFound = false
+      config.generateRequestOnPageLoad = true
+    })
+
+    app.start()
 
   }
 

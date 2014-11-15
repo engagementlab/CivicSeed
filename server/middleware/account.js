@@ -1,3 +1,5 @@
+'use strict';
+
 // Only let a request through if the session has been authenticated
 exports.authenticated = function (framework) {
   return function (req, res, next) {
