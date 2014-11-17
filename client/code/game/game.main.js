@@ -232,17 +232,19 @@ var $game = module.exports = {
 
   //resumes normal state of being able to walk and enables chat etc.
   endTransition: function () {
-    $game.flags.unset('in-transit');
-    $game.$player.isMoving = false;
-    $game.$player.resetRenderValues();
-    $game.$others.resetRenderValues();
-    //now that the transition has ended, create a new grid
-    $game.$map.createPathGrid(function () {
-      $game.$map.stepDirection = null;
-    });
+    $game.flags.unset('in-transit')
+    $game.flags.unset('is-moving')
+
+    // Now that the transition has ended, create a new grid
+    $game.$pathfinder.createPathGrid()
+    $game.$map.stepDirection = null
+
+    // Other updates
+    $game.$player.resetRenderValues()
+    $game.$others.resetRenderValues()
     $game.$player.displayNpcComments()
     $game.$render.minimapRadar.update()
-    $game.$player.saveTimeToDB();
+    $game.$player.saveTimeToDB()
   },
 
   //the game loop, if it is running, call all the updates and render
@@ -250,14 +252,14 @@ var $game = module.exports = {
     if ($game.running) {
       // if ($game.$player.currentLevel < 4 || (!$game.bossModeUnlocked && $game.$player.currentLevel > 3)) {
       if (!$game.bossModeUnlocked) {
-        $game.$others.update();
-        $game.$npc.update();
-        $game.$botanist.update();
-        $game.$robot.update();
+        $game.$others.update()
+        $game.$npc.update()
+        $game.$botanist.update()
+        $game.$robot.update()
       }
-      $game.$player.update();
-      $game.$render.renderFrame();
-      window.requestAnimationFrame($game.tick);
+      $game.$player.update()
+      $game.$render.renderFrame()
+      window.requestAnimationFrame($game.tick)
     }
   },
 
@@ -622,11 +624,11 @@ var _game = {
     $game.$map.firstStart(function () {
       if (!ingame) {
         $('#loading').fadeOut(function () {
-          $(this).remove();
-          $game.ready = true;
-          $game.running = true;
-          $game.$render.renderAllTiles();
-          $game.tick();
+          $(this).remove()
+          $game.ready = true
+          $game.running = true
+          $game.$render.renderAllTiles()
+          $game.tick()
           $game.$player.displayNpcComments()
           $game.$render.minimapRadar.update()
 
@@ -652,9 +654,9 @@ var _game = {
 
           // Apply skin flags ?
           $game.$skins.applyFlags()
-        });
+        })
       }
-    });
+    })
   }
 
 }

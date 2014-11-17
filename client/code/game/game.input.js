@@ -478,18 +478,15 @@ var $input = $game.$input = module.exports = {
     // Special controls for boss mode
     if ($game.flags.check('boss-mode')) {
       $game.$boss.startSeedMode()
-    }
-    // If player has multiple types of seeds, open up the seed inventory
-    else if (seeds.draw > 0) {
+    } else if (seeds.draw > 0) {
+      // If player has multiple types of seeds, open up the seed inventory
       $input.openSeedventory(seeds)
-    }
-    // Otherwise, go straight to regular seed planting mode
-    else if (seeds.regular > 0) {
+    } else if (seeds.regular > 0) {
+      // Otherwise, go straight to regular seed planting mode
       $game.$player.seedPlanting = true
       $game.$player.seedMode = 'regular'
       $game.alert('Click anywhere to plant a seed and watch color bloom there')
-    }
-    else {
+    } else {
       // No seeds, cancel out of seed mode.
       $game.alert('You have no seeds!')
       $game.$input.endSeedMode()
@@ -499,7 +496,7 @@ var $input = $game.$input = module.exports = {
   endSeedMode: function () {
     $game.$player.seedMode = false
     $game.flags.unset('seed-mode')
-    if ($game.$player.seedventoryShowing) {
+    if ($game.flags.check('visible-seedventory') === true) {
       $input.closeSeedventory()
     }
     document.getElementById('graffiti').style.display = 'none'
@@ -522,15 +519,13 @@ var $input = $game.$input = module.exports = {
     $('#seedventory').slideDown(300, function () {
       if (seeds.regular > 0) $('.regular-button').addClass('active')
       if (seeds.draw > 0) $('.draw-button').addClass('active')
-      $game.$player.seedventoryShowing = true;
-      $game.flags.set('viewing-seedventory')
+      $game.flags.set('visible-seedventory')
     })
   },
 
   closeSeedventory: function () {
     $('#seedventory').slideUp(300, function () {
-      $game.$player.seedventoryShowing = false;
-      $game.flags.unset('viewing-seedventory')
+      $game.flags.unset('visible-seedventory')
     })
   },
 
@@ -745,11 +740,11 @@ var _input = {
   isNewActionAllowed: function () {
     //check all the game states (if windows are open ,in transit, etc.) to begin a new action
     return (
-      !$game.flags.check('in-transit') &&
-      !$game.$player.isMoving &&
-      !$game.$player.seedventoryShowing &&
       $game.running &&
+      !$game.flags.check('in-transit') &&
+      !$game.flags.check('is-moving') &&
       !$game.flags.check('botanist-chatting') &&
+      !$game.flags.check('visible-seedventory') &&
       !$game.flags.check('visible-skinventory') &&
       !$game.flags.check('visible-help') &&
       !$game.flags.check('visible-progress') &&

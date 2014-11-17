@@ -12,8 +12,8 @@ exports.actions = function (req, res, ss) {
     getProfileInformation: function (playerId) {
       UserModel.findOne({ profileLink: playerId }, function (err, user) {
         if (err) {
-          console.log(err);
-          res({firstName: false});
+          console.log(err)
+          res({ firstName: false })
         } else if (user) {
 
           var profileInfo = {

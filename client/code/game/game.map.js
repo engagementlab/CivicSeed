@@ -1,8 +1,6 @@
 'use strict';
 
 var _nextTiles = null,
-    _gridTiles = null,
-    _graph = null,
     _nextX = 0,
     _nextY = 0,
     _stepX = 0,
@@ -42,8 +40,6 @@ var $map = $game.$map = {
 
   resetInit: function () {
     _nextTiles = null;
-    _gridTiles = null;
-    _graph = null;
     _nextX = 0;
     _nextY = 0;
     _stepX = 0;
@@ -70,62 +66,28 @@ var $map = $game.$map = {
 
   //pull down current viewport tiles, create the pathfinding grid
   firstStart: function (callback) {
+    // Boss mode map
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
       $('#minimap-player').hide()
       _map.setupBossMap()
-      $game.$map.createPathGrid(function () {
-        callback();
-      }, true);
-    }
-    else {
+
+      // Create path grid for boss map
+      $game.$pathfinder.createPathGrid(true)
+    } else {
       var info = {
             x:    $game.masterX,
             y:    $game.masterY,
             numX: $game.VIEWPORT_WIDTH,
             numY: $game.VIEWPORT_HEIGHT
-          };
+          }
       _map.getTiles(info, function () {
         _map.copyTileArray(function () {
-          $game.$map.createPathGrid(function () {
-            callback();
-          });
-        });
-      });
-    }
-  },
-
-  //create the go/nogo tiles based on tile data, if bypass then all are go tiles
-  createPathGrid: function (callback, bypass) {
-    _gridTiles = null;
-    _graph = null;
-    _gridTiles = new Array($game.VIEWPORT_HEIGHT);
-
-    var y = $game.VIEWPORT_HEIGHT;
-
-    while(--y >= 0) {
-      _gridTiles[y] = new Array($game.VIEWPORT_WIDTH);
-
-      var x = $game.VIEWPORT_WIDTH;
-      while(--x >= 0) {
-        if (bypass) {
-          _gridTiles[y][x] = 1;
-        } else {
-          //the pathfinding takes 1 means its clear 0 not
-          var val = $game.$map.getTileState(x, y),
-            tempNoGo;
-          if (val === -1) {
-            tempNoGo = 1;
-          }
-          else {
-            tempNoGo = 0;
-          }
-          _gridTiles[y][x] = tempNoGo;
-        }
-      }
+          $game.$pathfinder.createPathGrid()
+        })
+      })
     }
 
-    _graph = new Graph(_gridTiles);
-    callback();
+    if (typeof callback === 'function') callback()
   },
 
   //return if a tile is go or nogo (with special exception for NPCs)
@@ -219,17 +181,6 @@ var $map = $game.$map = {
         $('.color-map-everyone').append('<img src="'+ data[index] + '" class="color-map-image">');
       }
       $('.color-map-everyone').append('<img src="'+ myImage + '" class="color-map-image">');
-    });
-  },
-
-  //calculate a path using pathfinding
-  findPath: function (local, master, callback) {
-    //calc local for start point for pathfinding
-    var start = _graph.nodes[local.y][local.x],
-      end = _graph.nodes[master.y][master.x];
-
-    $game.$astar.search(_graph.nodes, start, end, function (result) {
-      callback(result);
     });
   },
 
@@ -390,16 +341,14 @@ var $map = $game.$map = {
     var local = {
       x: x - _leftEdge,
       y: y - _topEdge
-    };
+    }
 
     if (local.y <= $game.VIEWPORT_HEIGHT-1 && local.y >= 0 && local.x <= $game.VIEWPORT_WIDTH -1 && local.x >= 0) {
-      return local;
+      return local
+    } else if (offscreen) {
+      return local
     } else {
-      if (offscreen) {
-        return local;
-      } else {
-        return false;
-      }
+      return false
     }
   },
 

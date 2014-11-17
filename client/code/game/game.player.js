@@ -52,13 +52,10 @@ var $player = $game.$player = {
   seriesOfMoves: null,
   currentMove: 0,
   currentStep: 0,
-  isMoving: false,
-  seedventoryShowing: false,
   seedPlanting: false,
   npcOnDeck: false,
   ready: false,
   seedMode: false,
-  pathfinding: false,
 
   init: function (callback) {
     //get the players info from the db, alerts other users of presence
@@ -163,32 +160,28 @@ var $player = $game.$player = {
     $game.$player.seriesOfMoves= null;
     $game.$player.currentMove= 0;
     $game.$player.currentStep= 0;
-    $game.$player.isMoving= false;
-    $game.$player.seedventoryShowing= false;
     $game.$player.seedPlanting= false;
     $game.$player.npcOnDeck= false;
     $game.$player.ready= false;
     $game.$player.seedMode= false;
-    $game.$player.pathfinding= false;
   },
 
   //calculate movements and what to render for every game tick
   update: function () {
-    var inTransit = $game.flags.check('in-transit')
+    if ($game.flags.check('is-moving') === true) {
+      _move()
+      _getMaster = true
+    } else {
+      if ($game.flags.check('in-transit') === true) {
+        _getMaster = true
+      } else {
+        _idle()
+      }
+    }
 
-    if ($game.$player.isMoving) {
-      _move();
-      _getMaster = true;
-    }
-    else if (inTransit === true) {
-      _getMaster = true;
-    }
-    else if (inTransit === false) {
-      _idle();
-    }
     //this keeps us from doing this query every frame
     if (_getMaster) {
-      _updateRenderInfo();
+      _updateRenderInfo()
     }
   },
 
@@ -200,29 +193,31 @@ var $player = $game.$player = {
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
   beginMove: function (x, y) {
     // Clear HUD
-    if ($game.flags.check('visible-inventory')) $game.$input.closeInventory()
+    if ($game.flags.check('visible-inventory')) {
+      $game.$input.closeInventory()
+    }
 
     var loc    = $player.getLocalPosition(),
-        master = {x: x, y: y}
+        master = {x: x, y: y},
+        path
 
     /*  Removing this prevents function from exiting if player stays in the same spot, which helps for reactivating NPCs.
     if (loc.x === x && loc.y === y) {
       return;
     }*/
 
-    $game.$player.pathfinding = true;
+    $game.flags.set('pathfinding')
     _info.offX = 0;
     _info.offY = 0;
 
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-      $game.$map.findPath({x: _info.x, y: _info.y}, {x: x, y: y}, function (result) {
-        $game.$player.pathfinding = false;
-        if (result.length > 0) {
-          _sendMoveInfo(result);
-        }
-      });
-    }
-    else {
+      path = $game.$pathfinder.findPath({x: _info.x, y: _info.y}, master)
+
+      $game.flags.unset('pathfinding')
+      if (path.length > 0) {
+        _sendMoveInfo(path)
+      }
+    } else {
       // Check if it is an edge of the world
       var isEdge = $game.$map.isMapEdge(x, y)
 
@@ -239,23 +234,23 @@ var $player = $game.$player = {
         $game.alert('Edge of the world!')
       }
 
-      $game.$map.findPath(loc, master, function (result) {
-        $game.$player.pathfinding = false;
-        if (result.length > 0) {
-          _sendMoveInfo(result);
+      path = $game.$pathfinder.findPath(loc, master)
 
-          ss.rpc('game.player.movePlayer', result, $game.$player.id, function () {
-            var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
-                masterEndY = $game.$map.currentTiles[master.x][master.y].y
+      $game.flags.unset('pathfinding')
+      if (path.length > 0) {
+        _sendMoveInfo(path)
 
-            $game.$audio.update(masterEndX, masterEndY);
+        ss.rpc('game.player.movePlayer', path, $game.$player.id, function () {
+          var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
+              masterEndY = $game.$map.currentTiles[master.x][master.y].y
 
-          });
+          $game.$audio.update(masterEndX, masterEndY)
 
-        } else {
-          $game.$player.npcOnDeck = false;
-        }
-      });
+        })
+      } else {
+        $game.$player.npcOnDeck = false
+      }
+
     }
   },
 
@@ -534,7 +529,7 @@ var $player = $game.$player = {
   startSeeding: function (choice) {
     $game.$player.seedMode = choice;
     $('#seedventory').slideUp(function () {
-      $game.$player.seedventoryShowing = false;
+      $game.flags.unset('visible-seedventory')
       $game.$player.seedPlanting = true;
     });
     var msg;
@@ -824,19 +819,19 @@ var $player = $game.$player = {
         startX = divX * ($game.VIEWPORT_WIDTH - 2),
         startY = divY * ($game.VIEWPORT_HEIGHT - 2);
 
-    $game.masterX = startX;
-    $game.masterY = startY;
+    $game.masterX = startX
+    $game.masterY = startY
 
     //update npcs, other players?
-    $game.$map.setBoundaries();
+    $game.$map.setBoundaries()
     $game.$map.firstStart(function () {
-      $game.$render.renderAllTiles();
+      $game.$render.renderAllTiles()
       setTimeout(function () {
         $game.flags.unset('is-beaming')
         $('#beaming').fadeOut()
         // Use default viewport transition end function
         $game.endTransition()
-      }, 1000);
+      }, 1000)
 
       // Publish beam status
       ss.rpc('game.player.beam', {
@@ -1444,7 +1439,7 @@ function _updateRenderInfo() {
 function _move() {
   /** IMPORTANT note: x and y are really flipped!!! **/
   //update the step
-  $game.$player.isMoving = true;
+  $game.flags.set('is-moving')
 
   //if the steps between the tiles has finished,
   //update the master location, and reset steps to go on to next move
@@ -1468,7 +1463,7 @@ function _move() {
       _info.prevOffX = 0
       _info.prevOffY = 0
 
-      $game.$player.isMoving = false;
+      $game.flags.unset('is-moving')
       $game.$boss.endMove(_info);
     } else {
       _endMove();
@@ -1494,20 +1489,15 @@ function _move() {
       //since the character will be in different rows
       //will be 0,1,2,3
       if (_currentStepIncX === 1) {
-        _direction = 2;
+        _direction = 2
+      } else if (_currentStepIncX === -1) {
+        _direction = 1
+      } else if (_currentStepIncY === -1) {
+        _direction = 4
+      } else {
+        _direction = 3
       }
-      else if (_currentStepIncX === -1) {
-        _direction = 1;
-      }
-      else if (_currentStepIncY === -1) {
-        _direction = 4;
-      }
-      else {
-        _direction = 3;
-      }
-    }
-
-    else {
+    } else {
       _info.prevOffX = _info.offX;
       _info.prevOffY = _info.offY;
     }
@@ -1529,12 +1519,11 @@ function _move() {
 
 //once the move is sent out to all players, update the players next moves
 function _sendMoveInfo(moves) {
-  $game.$player.seriesOfMoves = new Array(moves.length);
-  $game.$player.seriesOfMoves = moves;
-  $game.$player.currentMove = 1;
-  $game.$player.currentStep = 0;
-  $game.$player.isMoving = true;
-  $game.$chat.hideChat();
+  $game.$player.seriesOfMoves = moves
+  $game.$player.currentMove = 0
+  $game.$player.currentStep = 0
+  $game.flags.set('is-moving')
+  $game.$chat.hideChat()
 }
 
 //when a move is done, decide waht to do next (if it is a transition) and save position to DB
@@ -1550,7 +1539,8 @@ function _endMove() {
   _info.prevOffX= 0;
   _info.prevOffY= 0;
 
-  $game.$player.isMoving = false;
+  $game.flags.unset('is-moving')
+
   if (_willTravel) {
     var beginTravel = function (){
       if ($game.$map.dataLoaded){
@@ -1562,8 +1552,7 @@ function _endMove() {
       }
     };
     beginTravel();
-  }
-  else {
+  } else {
     //trigger npc to popup _info and stuff
     if ($game.$player.npcOnDeck) {
       var index = $game.$player.npcOnDeck

@@ -87,7 +87,7 @@ $game.$mouse = (function () {
           //determine if the player can go to new tile
           var state = $game.$map.getTileState(_curX, _curY)
           //if the player isn't "searching" for a path it is a green tile, move
-          if (state === -1 && !$game.$player.pathfinding) {
+          if (state === -1 && !$game.flags.check('pathfinding')) {
             $game.$player.beginMove(_curX,_curY)
             if ($game.flags.check('npc-chatting')) {
               $game.$npc.hideSpeechBubble()
@@ -95,7 +95,7 @@ $game.$mouse = (function () {
           }
           //they clicked on an NPC
           else if (state >= 0 ) {
-            if (state !== $game.$botanist.index && !$game.$player.pathfinding) {
+            if (state !== $game.$botanist.index && !$game.flags.check('pathfinding')) {
               if ($game.flags.check('npc-chatting')) {
                 $game.$npc.hideSpeechBubble()
               }
