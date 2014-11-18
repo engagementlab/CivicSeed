@@ -298,7 +298,6 @@ var self = $game.$others = (function () {
     },
 
     resetInit: function () {
-      //this()
       _onScreenPlayers = {}
       self.ready = false
     },

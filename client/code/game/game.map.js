@@ -419,11 +419,11 @@ var _map = {
 
   //copy over new tiles to current tiles
   copyTileArray: function (callback) {
-    $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH)
+    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH]
 
     var i = $game.VIEWPORT_WIDTH
     while(--i >= 0) {
-      $game.$map.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT)
+      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
       var j = $game.VIEWPORT_HEIGHT
       while(--j >= 0) {
         $game.$map.currentTiles[i][j] = _nextTiles[i][j]
