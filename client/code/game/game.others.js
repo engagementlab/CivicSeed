@@ -13,7 +13,7 @@
 
 var self = $game.$others = (function () {
 
-  var _onScreenPlayers = {};
+  var _onScreenPlayers = {}
 
   function Player (player) {
     this.name             = player.firstName
@@ -279,7 +279,7 @@ var self = $game.$others = (function () {
 
   Player.prototype.skinSuitChange = function (info) {
     this.skinSuit = info.skinSuit
-    $game.$render.createCanvasForPlayer(info.id, info.skinSuit)
+    $game.$render.createCanvasForPlayer(info.id, info.skinSuit, info.playerColor)
   }
 
   return {
@@ -298,9 +298,9 @@ var self = $game.$others = (function () {
     },
 
     resetInit: function () {
-      this()
-//      _onScreenPlayers = {};
-//      self.ready = false;
+      //this()
+      _onScreenPlayers = {}
+      self.ready = false
     },
 
     add: function (player) {

@@ -524,7 +524,7 @@ var $render = $game.$render = {
         torsoHeight = 15,
         legsHeight  = 19
 
-    for(r = 0; r < numRows; r++) {
+    for (r = 0; r < numRows; r++) {
       _offscreenPlayersContext[id].drawImage(
         _offscreenSkinSuitCanvas[skinSuit.head],
         0,
@@ -535,10 +535,10 @@ var $render = $game.$render = {
         r * h,
         _skinSuitWidth,
         headHeight
-      );
+      )
     }
     //draw all the torso from this spritesheet
-    for(r = 0; r < numRows; r++) {
+    for (r = 0; r < numRows; r++) {
       _offscreenPlayersContext[id].drawImage(
         _offscreenSkinSuitCanvas[skinSuit.torso],
         0,

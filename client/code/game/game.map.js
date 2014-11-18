@@ -63,6 +63,7 @@ var $map = $game.$map = {
 
       // Create path grid for boss map
       $game.$pathfinder.createPathGrid(true)
+      if (typeof callback === 'function') callback()
     } else {
       var info = {
             x:    $game.masterX,
@@ -71,13 +72,13 @@ var $map = $game.$map = {
             numY: $game.VIEWPORT_HEIGHT
           }
       _map.getTiles(info, function () {
+        // TODO map.getTiles() is async; is copyTileArray ?
         _map.copyTileArray(function () {
           $game.$pathfinder.createPathGrid()
+          if (typeof callback === 'function') callback()
         })
       })
     }
-
-    if (typeof callback === 'function') callback()
   },
 
   //return if a tile is go or nogo (with special exception for NPCs)
@@ -418,20 +419,19 @@ var _map = {
 
   //copy over new tiles to current tiles
   copyTileArray: function (callback) {
-    // $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH);
-    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
+    $game.$map.currentTiles = new Array($game.VIEWPORT_WIDTH)
 
-    var i = $game.VIEWPORT_WIDTH;
+    var i = $game.VIEWPORT_WIDTH
     while(--i >= 0) {
-      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
-      var j = $game.VIEWPORT_HEIGHT;
+      $game.$map.currentTiles[i] = new Array($game.VIEWPORT_HEIGHT)
+      var j = $game.VIEWPORT_HEIGHT
       while(--j >= 0) {
-        $game.$map.currentTiles[i][j] = _nextTiles[i][j];
+        $game.$map.currentTiles[i][j] = _nextTiles[i][j]
       }
     }
     //reset array
-    _nextTiles = [];
-    callback();
+    _nextTiles = []
+    callback()
   },
 
   //create the data for the boss map

@@ -141,8 +141,7 @@ var $npc = $game.$npc = {
       // a speech bubble and the game to provide additional actions.
       isMultiline = true
       _showMultiline(0)
-    }
-    else {
+    } else {
       // Assume that messages is a string.
       text = messages
       $el.find('.message').text(text)
@@ -184,14 +183,12 @@ var $npc = $game.$npc = {
           e.stopImmediatePropagation()
           _showMultiline(index + 1)
         }).show()
-      }
-      else {
+      } else {
         // Last message
         $el.find('.next-button').off('click').hide()
         if (hasPrompt === true) {
           _setupPrompt()
-        }
-        else {
+        } else {
           $el.find('.close-button').on('click', function (e) {
             e.stopImmediatePropagation()
             $npc.hideSpeechBubble(callback)
@@ -498,11 +495,9 @@ var _npc = {
         else {
           if ($game.$player.currentLevel === this.level) {
             dialog = this.dialog.smalltalk[1]
-          }
-          else if ($game.$player.currentLevel < this.level) {
+          } else if ($game.$player.currentLevel < this.level) {
             dialog = this.dialog.smalltalk[2]
-          }
-          else {
+          } else {
             dialog = this.dialog.smalltalk[0]
           }
         }
@@ -510,7 +505,7 @@ var _npc = {
       },
     };
 
-    return npcObject;
+    return npcObject
   },
 
   //choose prompt based on PLAYERs memory of interaction
