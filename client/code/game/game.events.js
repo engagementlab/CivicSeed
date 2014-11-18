@@ -25,7 +25,7 @@ var $events = $game.$events = module.exports = {
     //player moves
     ss.event.on('ss-playerMoved', function (data, chan) {
       if (data.id !== $game.$player.id) {
-        $game.$others.sendMoveInfo(data.moves, data.id)
+        $game.$others.sendMoveInfo(data.id, data.moves)
       }
     })
 
@@ -43,9 +43,8 @@ var $events = $game.$events = module.exports = {
       data.input = 'chat'
       if (data.id === $game.$player.id ) {
         $game.$chat.message(data)
-      }
-      else {
-        $game.$others.message(data)
+      } else {
+        $game.$others.message(data.id, data)
       }
     })
 
@@ -102,9 +101,9 @@ var $events = $game.$events = module.exports = {
     //another player has beamed
     ss.event.on('ss-beam', function (info) {
       if (info.id !== $game.$player.id) {
-        $game.$others.beam(info);
+        $game.$others.beam(info.id, info)
       }
-    });
+    })
 
     ss.event.on('ss-collaborativeChallenge', function (info) {
       for(var i = 0; i < info.players.length; i++) {
@@ -119,9 +118,9 @@ var $events = $game.$events = module.exports = {
 
     ss.event.on('ss-skinSuitChange', function (info) {
       if (info.id !== $game.$player.id) {
-        $game.$others.skinSuitChange(info);
+        $game.$others.skinSuitChange(info.id, info)
       }
-    });
+    })
   }
 
 };

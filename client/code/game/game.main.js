@@ -460,15 +460,15 @@ var $game = module.exports = {
 
   //startup boss level if player finished game and boss level is unlocked
   toBossLevel: function () {
-    $game.$audio.pauseTrack();
-    $game.$render.clearMap();
-    $game.$player.setPositionInfo();
+    $game.$audio.pauseTrack()
+    $game.$render.clearMap()
+    $game.$player.setPositionInfo()
     $game.$player.clearNpcComments()
-    $game.$botanist.disable();
-    $game.$robot.disable();
-    $game.$others.disable();
-    _game.setBoundaries();
-    _game.startGame(true);
+    $game.$botanist.disable()
+    $game.$robot.disable()
+    $game.$others.disable()
+    _game.setBoundaries()
+    _game.startGame(true)
   }
 
 }
@@ -638,9 +638,8 @@ var _game = {
           // Things to do if the player has not completed the tutorial
           if ($game.flags.check('first-time') === true) {
             $game.alert('Welcome to Civic Seed!')
-          }
-          // Things to do if this is not the player's first time here
-          else {
+          } else {
+            // Things to do if this is not the player's first time here
             $game.$player.giveMapToPlayer()
           }
 

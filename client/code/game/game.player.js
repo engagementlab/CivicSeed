@@ -9,7 +9,6 @@ var _curFrame = 0,
     _direction = 0,
     _willTravel = null,
     _idleCounter = 0,
-    _getMaster = true,
 
     _info = null,
     _renderInfo = null,
@@ -49,7 +48,7 @@ var $player = $game.$player = {
   currentLevel: null,
   botanistState: null,
   seenRobot: null,
-  seriesOfMoves: null,
+  seriesOfMoves: [],
   currentMove: 0,
   currentStep: 0,
   seedPlanting: false,
@@ -124,7 +123,6 @@ var $player = $game.$player = {
     _direction = 0;
     _willTravel = null;
     _idleCounter = 0;
-    _getMaster = true;
 
     _info = null;
     _renderInfo = null;
@@ -157,7 +155,7 @@ var $player = $game.$player = {
     $game.$player.instanceName= null;
     $game.$player.currentLevel= null;
     $game.$player.seenRobot= null;
-    $game.$player.seriesOfMoves= null;
+    $game.$player.seriesOfMoves = []
     $game.$player.currentMove= 0;
     $game.$player.currentStep= 0;
     $game.$player.seedPlanting= false;
@@ -170,18 +168,13 @@ var $player = $game.$player = {
   update: function () {
     if ($game.flags.check('is-moving') === true) {
       _move()
-      _getMaster = true
+      _updateRenderInfo()
     } else {
       if ($game.flags.check('in-transit') === true) {
-        _getMaster = true
+        _updateRenderInfo()
       } else {
         _idle()
       }
-    }
-
-    //this keeps us from doing this query every frame
-    if (_getMaster) {
-      _updateRenderInfo()
     }
   },
 
@@ -1563,33 +1556,28 @@ function _endMove() {
 
 //determine what frame to render while standing
 function _idle() {
-  _idleCounter += 1;
+  _idleCounter += 1
   if ($game.$player.seedMode) {
     if (_idleCounter % 32 < 16) {
-      _renderInfo.colorNum = 0;
-    }
-    else {
-      _renderInfo.colorNum = _playerColorNum;
+      _renderInfo.colorNum = 0
+    } else {
+      _renderInfo.colorNum = _playerColorNum
     }
   }
 
   if (_idleCounter >= 64) {
-    _idleCounter = 0;
-    _info.srcX = 0;
-    _info.srcY = 0;
-    _getMaster = true;
-    _renderInfo.squat = false;
-  }
+    _idleCounter = 0
+    _info.srcX = 0
+    _info.srcY = 0
+    _renderInfo.squat = false
 
-  else if (_idleCounter === 48) {
-    _info.srcX = 32;
-    _info.srcY = 0;
-    _getMaster = true;
-    _renderInfo.squat = true;
-  }
+    _updateRenderInfo()
+  } else if (_idleCounter === 48) {
+    _info.srcX = 32
+    _info.srcY = 0
+    _renderInfo.squat = true
 
-  else {
-    _getMaster = false;
+    _updateRenderInfo()
   }
 }
 

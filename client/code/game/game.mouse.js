@@ -76,12 +76,11 @@ $game.$mouse = (function () {
             $game.$input.inactiveHUDButton('.hud-seed')
           }
         }
-      }
-      else {
+      } else {
         // If clicking on other player, show their info
         var mX    = $game.$map.currentTiles[_curX][_curY].x,
             mY    = $game.$map.currentTiles[_curX][_curY].y,
-            user  = $game.$others.playerCard(mX, mY, true)
+            user  = $game.$others.playerCard(mX, mY)
 
         if (!user) {
           //determine if the player can go to new tile

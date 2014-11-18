@@ -18,7 +18,6 @@ $game.flags = (function () {
   // Private holder of flags
   var _FLAGS = {}
 
-  // Expose 'public' methods
   return {
 
     // Checks to see if a game state flag is set
@@ -36,7 +35,6 @@ $game.flags = (function () {
 
     // Remove one or all game state flags
     unset: function (flag) {
-      // Always returns true, even if the flag did not exist
       delete _FLAGS[flag]
     },
 

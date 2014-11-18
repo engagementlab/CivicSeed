@@ -1,6 +1,6 @@
 'use strict';
 
-var $robot = $game.$robot = (function () {
+$game.$robot = (function () {
 
   var _coords = [
         {x: 0, y: 14},
@@ -264,7 +264,7 @@ var $robot = $game.$robot = (function () {
   }
 
   // Expose 'public' methods
-  $robot = {
+  return {
     init: init,
     resetInit: resetInit,
     update: update,
@@ -273,7 +273,5 @@ var $robot = $game.$robot = (function () {
     setPosition: setPosition,
     getRenderInfo: getRenderInfo
   }
-
-  return $robot
 
 }())

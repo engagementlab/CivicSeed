@@ -1,7 +1,6 @@
 'use strict';
 
-var _nextTiles = null,
-    _nextX = 0,
+var _nextX = 0,
     _nextY = 0,
     _stepX = 0,
     _stepY = 0,
@@ -15,10 +14,6 @@ var _nextTiles = null,
 
 var $map = $game.$map = {
 
-  coloredTiles: [],
-  growingSeed: false,
-  seedsInProgress: [],
-  collectiveImage: null,
   ready: false,
   miniMap: {},
   currentTiles: null,
@@ -39,7 +34,6 @@ var $map = $game.$map = {
   },
 
   resetInit: function () {
-    _nextTiles = null;
     _nextX = 0;
     _nextY = 0;
     _stepX = 0;
@@ -52,10 +46,6 @@ var $map = $game.$map = {
     _topEdge = 0;
     _bottomEdge = 0;
 
-    $game.$map.coloredTiles = [];
-    $game.$map.growingSeed = false;
-    $game.$map.seedsInProgress = [];
-    $game.$map.collectiveImage = null;
     $game.$map.ready = false;
     $game.$map.miniMap = {};
     $game.$map.currentTiles = null;
