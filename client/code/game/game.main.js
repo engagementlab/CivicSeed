@@ -112,19 +112,18 @@ var $game = module.exports = {
     $log        = require('/game.log')
     $boss       = require('/game.boss')
 
-    // events recevied by RPC
-    $events.init();
-    $input.init();
+    // events received by RPC
+    $events.init()
+    $input.init()
 
     // TODO: there needs to be some other kind of mechanism to see if the user has retired from the game...
     $WINDOW.on('beforeunload', function () {
       if (sessionStorage.isPlaying === 'true') {
-        var x = $game.exitGame();
-        return x;
+        return $game.exitGame()
       }
-    });
+    })
 
-    $game.instantiated = true;
+    $game.instantiated = true
 
   },
 
@@ -436,25 +435,26 @@ var $game = module.exports = {
   // save and exit game
   exitGame: function (callback) {
     // Kill the audio
-    $game.$audio.stopAll();
+    $game.$audio.stopAll()
 
     // save out all current status of player to db on exit
     if (!$game.bossModeUnlocked) {
-      $game.$player.saveTimeToDB();
+      $game.$player.saveTimeToDB()
     }
-    $game.$map.removePlayer($game.$player.id);
+    $game.$map.removePlayer($game.$player.id)
     ss.rpc('game.player.exitPlayer', {
       id:   $game.$player.id,
       name: $game.$player.firstName
     }, function () {
       if (typeof callback === 'function') {
-        callback();
+        callback()
       }
-    });
+    })
 
     // Clear all state flags and things
-    sessionStorage.removeItem('isPlaying');
-    $game.running = false;
+    sessionStorage.removeItem('isPlaying')
+    $game.$botanist.unload()
+    $game.running = false
     $game.flags.unsetAll()
   },
 

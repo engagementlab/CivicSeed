@@ -289,6 +289,13 @@ var $botanist = $game.$botanist = {
 
   disable: function () {
     // Nothing
+  },
+
+  // On game exit, call this function to clean up (e.g. from $game.exitGame())
+  unload: function () {
+    // Clear nudge timers.
+    clearInterval(_botanist.nudgePlayerInterval)
+    clearTimeout(_botanist.nudgePlayerTimeout)
   }
 };
 
