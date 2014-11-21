@@ -134,13 +134,15 @@ var $input = $game.$input = module.exports = {
 
     // You vs Everyone progress map tabs
     $BODY.on('click', '.tab-you', function () {
-      $('#tab-you-pane').show()
-      $('#tab-everyone-pane').hide()
+      // '.active' class is based on Bootstrap's 'tabbable'
+      $('#tab-you-pane').addClass('active')
+      $('#tab-everyone-pane').removeClass('active')
     })
 
     $BODY.on('click', '.tab-everyone', function () {
-      $('#tab-everyone-pane').show()
-      $('#tab-you-pane').hide()
+      // '.active' class is based on Bootstrap 'tabbable'
+      $('#tab-everyone-pane').addClass('active')
+      $('#tab-you-pane').removeClass('active')
     })
 
     // View all player resource answers
