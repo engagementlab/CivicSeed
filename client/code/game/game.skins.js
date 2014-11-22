@@ -208,7 +208,7 @@ var $skins = $game.$skins = (function () {
     $game.$player.setSkinSuit(name, part)
 
     // Render
-    $game.$render.createCanvasForPlayer($game.$player.id, false)
+    $game.$render.createCanvasForPlayer($game.$player.id, $game.$player.getSkinSuit(), $game.$player.getColorIndex())
     renderSkinformation()
 
     // Immediately execute anything based on flags
