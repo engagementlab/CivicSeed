@@ -53,27 +53,7 @@ Npc.prototype.update = function () {
   if (!check) {
     this.idle()
   } else {
-    this.getRenderPosition()
-  }
-}
-
-// Determine if NPC is on screen, and if so, update its render location
-Npc.prototype.getRenderPosition = function () {
-  var local = $game.$map.masterToLocal(this.position.x, this.position.y)
-  if (local) {
-    var curX  = local.x * $game.TILE_SIZE,
-        curY  = local.y * $game.TILE_SIZE
-
-    // NPCs do not move, so there is no previous X/Y, but set it to
-    // current X/Y in case renderer chokes without it
-    this.renderInfo.prevX = curX
-    this.renderInfo.prevY = curY
-    this.renderInfo.curX = curX
-    this.renderInfo.curY = curY
-
-    this.onScreen = true
-  } else {
-    this.onScreen = false
+    this.setRenderInfo()
   }
 }
 
@@ -95,6 +75,31 @@ Npc.prototype.idle = function () {
   }
 }
 
+// Determine if NPC is on screen, and if so, update its render location
+Npc.prototype.setRenderInfo = function () {
+  var local = $game.$map.masterToLocal(this.position.x, this.position.y)
+  if (local) {
+    var curX  = local.x * $game.TILE_SIZE,
+        curY  = local.y * $game.TILE_SIZE
+
+    // NPCs do not move, so there is no previous X/Y, but set it to
+    // current X/Y in case renderer chokes without it
+    this.renderInfo.prevX = curX
+    this.renderInfo.prevY = curY
+    this.renderInfo.curX = curX
+    this.renderInfo.curY = curY
+
+    this.onScreen = true
+  } else {
+    this.onScreen = false
+  }
+}
+
+// Get the render information to draw it
+Npc.prototype.getRenderInfo = function () {
+  return (this.onScreen) ? this.renderInfo : false
+}
+
 // Clear from the screen
 Npc.prototype.clear = function () {
   $game.$render.clearCharacter(this.renderInfo)
@@ -103,11 +108,6 @@ Npc.prototype.clear = function () {
 // Returns actual numerical value of level
 Npc.prototype.getLevel = function () {
   return this.level + 1
-}
-
-// Get the render information to draw it
-Npc.prototype.getRenderInfo = function () {
-  return (this.onScreen) ? this.renderInfo : false
 }
 
 // Check if an NPC's resource is locked
@@ -477,7 +477,7 @@ var _npc = {
   add: function (npcData) {
     var npc = new Npc(npcData)
 
-    npc.getRenderPosition()
+    npc.setRenderInfo()
 
     // To switch from referring to NPCs by id instead of index
     // Just do it here
