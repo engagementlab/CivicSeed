@@ -208,6 +208,7 @@ var $game = module.exports = {
   // Starts a transition from one viewport to another
   beginTransition: function () {
     $game.flags.set('screen-transition')
+    $game.flags.unset('screen-will-transition')
 
     var doTravel = function () {
       _stepNumber = 0

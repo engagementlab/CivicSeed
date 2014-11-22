@@ -1,11 +1,6 @@
 'use strict';
 
-var _nextX = 0,
-    _nextY = 0,
-    _stepX = 0,
-    _stepY = 0,
-    _nextTiles = [],
-    _shiftArray = 0,
+var _nextTiles = [],
     _stepNumber = 0,
     _leftEdge = 0,
     _rightEdge = 0,
@@ -34,12 +29,7 @@ var $map = $game.$map = {
   },
 
   resetInit: function () {
-    _nextX = 0;
-    _nextY = 0;
-    _stepX = 0;
-    _stepY = 0;
     _nextTiles = [];
-    _shiftArray = 0;
     _stepNumber = 0;
     _leftEdge = 0;
     _rightEdge = 0;
@@ -180,60 +170,51 @@ var $map = $game.$map = {
     var getThisManyX,
         getThisManyY,
         getThisX,
-        getThisY;
+        getThisY
 
     //left
     if (x === 0) {
-      _nextX = $game.masterX - ($game.VIEWPORT_WIDTH - 2);
-      _stepX = -1;
-      _shiftArray = -1;
-      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
-      $game.$map.stepDirection = 'left';
-      getThisManyX = $game.VIEWPORT_WIDTH - 2;
-      getThisManyY = $game.VIEWPORT_HEIGHT;
-      getThisX = _nextX;
-      getThisY = $game.masterY;
+      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
+      $game.$map.stepDirection = 'left'
+      getThisManyX = $game.VIEWPORT_WIDTH - 2
+      getThisManyY = $game.VIEWPORT_HEIGHT
+      getThisX = $game.masterX - ($game.VIEWPORT_WIDTH - 2)
+      getThisY = $game.masterY
     }
     //right
     else if (x === $game.VIEWPORT_WIDTH - 1) {
-      _nextX = $game.masterX + $game.VIEWPORT_WIDTH - 2;
-      _stepX = 1;
-      _shiftArray = 1;
-      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2;
-      $game.$map.stepDirection = 'right';
-      getThisManyX = $game.VIEWPORT_WIDTH - 2;
-      getThisManyY = $game.VIEWPORT_HEIGHT;
-      getThisX = _nextX + 2;
-      getThisY = $game.masterY;
+      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
+      $game.$map.stepDirection = 'right'
+      getThisManyX = $game.VIEWPORT_WIDTH - 2
+      getThisManyY = $game.VIEWPORT_HEIGHT
+      getThisX = $game.masterX + $game.VIEWPORT_WIDTH
+      getThisY = $game.masterY
     }
     //up
     else if (y === 0) {
-      _nextY = $game.masterY - ($game.VIEWPORT_HEIGHT - 2);
-      _stepY = -1;
-      _shiftArray = -$game.totalVIEWPORT_HEIGHT;
-      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
-      $game.$map.stepDirection = 'up';
-      getThisManyX = $game.VIEWPORT_WIDTH;
-      getThisManyY = $game.VIEWPORT_HEIGHT - 2;
-      getThisX = $game.masterX;
-      getThisY = _nextY;
+      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
+      $game.$map.stepDirection = 'up'
+      getThisManyX = $game.VIEWPORT_WIDTH
+      getThisManyY = $game.VIEWPORT_HEIGHT - 2
+      getThisX = $game.masterX
+      getThisY = $game.masterY - ($game.VIEWPORT_HEIGHT - 2)
     }
     //down
     else if (y === $game.VIEWPORT_HEIGHT - 1) {
-      _nextY = $game.masterY+$game.VIEWPORT_HEIGHT - 2;
-      _stepY = 1;
-      _shiftArray = $game.totalVIEWPORT_HEIGHT;
-      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2;
-      $game.$map.stepDirection = 'down';
-      getThisManyX = $game.VIEWPORT_WIDTH;
-      getThisManyY = $game.VIEWPORT_HEIGHT - 2;
-      getThisX = $game.masterX;
-      getThisY = _nextY + 2;
+      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
+      $game.$map.stepDirection = 'down'
+      getThisManyX = $game.VIEWPORT_WIDTH
+      getThisManyY = $game.VIEWPORT_HEIGHT - 2
+      getThisX = $game.masterX
+      getThisY = $game.masterY + $game.VIEWPORT_HEIGHT
     }
 
-    _map.getTiles({x:getThisX, y: getThisY, numX: getThisManyX, numY: getThisManyY}, function () {
-      return;
-    });
+    _map.getTiles({
+      x: getThisX,
+      y: getThisY,
+      numX: getThisManyX,
+      numY: getThisManyY
+    })
   },
 
   //go thru and copy new tiles to current tiles to shift the map over
@@ -412,9 +393,10 @@ var _map = {
         }
         c++;
       }
-      $game.$map.dataLoaded = true;
-      callback();
-    });
+      $game.$map.dataLoaded = true
+
+      if (typeof callback === 'function') callback()
+    })
   },
 
   //copy over new tiles to current tiles

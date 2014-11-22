@@ -7,7 +7,6 @@ var _curFrame = 0,
     _currentStepIncX = 0,
     _currentStepIncY = 0,
     _direction = 0,
-    _willTravel = null,
     _idleCounter = 0,
 
     _info = null,
@@ -122,7 +121,6 @@ var $player = $game.$player = {
     _currentStepIncX = 0;
     _currentStepIncY = 0;
     _direction = 0;
-    _willTravel = null;
     _idleCounter = 0;
 
     _info = null;
@@ -181,7 +179,7 @@ var $player = $game.$player = {
 
   //clear the character canvas to ready for redraw
   clear: function () {
-    $game.$render.clearCharacter(_renderInfo);
+    $game.$render.clearCharacter(_renderInfo)
   },
 
   //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
@@ -215,12 +213,10 @@ var $player = $game.$player = {
       // Check if it is an edge of the world
       var isEdge = $game.$map.isMapEdge(x, y)
 
-      _willTravel = false
-
       // If a transition is necessary, load new data
       if (!isEdge) {
         if (x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
-          _willTravel = true
+          $game.flags.set('screen-will-transition')
           $game.$map.calculateNext(x, y)
         }
       } else {
@@ -1532,7 +1528,7 @@ function _endMove() {
   _info.prevOffX= 0;
   _info.prevOffY= 0;
 
-  if (_willTravel) {
+  if ($game.flags.check('screen-will-transition') === true) {
     $game.beginTransition()
   } else {
     //trigger npc to popup _info and stuff
