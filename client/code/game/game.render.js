@@ -1,11 +1,21 @@
 'use strict';
 
+// Spritesheet-related constants
+// All values are integers representing number of pixels.
+// Spritesheet dimensions are hard-coded instead of determining from image size.
+// TODO: Deprecate code that dynamatically determines this amount
+var PLAYER_SPRITE_WIDTH  = $game.TILE_SIZE,     // Width of one sprite (one animation frame)
+    PLAYER_SPRITE_HEIGHT = $game.TILE_SIZE * 2, // Height of one sprite
+    PLAYER_SPRITESHEET_WIDTH  = 128, // Width of full spritesheet for player skin
+    PLAYER_SPRITESHEET_HEIGHT = 320, // Height of full spritesheet for player skin
+    SPRITE_HEAD_HEIGHT   = 30,       // Height of sprite head part
+    SPRITE_TORSO_HEIGHT  = 15,       // Height of sprite torso part
+    SPRITE_LEGS_HEIGHT   = 19        // Height of sprite legs part
+
 var _tilesheets = {},
     _currentTilesheet = null,
     _tilesheetWidth = 0,
     _tilesheetHeight = 0,
-    _skinSuitWidth = 0,
-    _skinSuitHeight = 0,
 
     _tilesheetCanvas = [],
     _tilesheetContext = [],
@@ -108,8 +118,6 @@ var $render = $game.$render = {
     _currentTilesheet = null;
     _tilesheetWidth = 0;
     _tilesheetHeight = 0;
-    _skinSuitWidth = 0;
-    _skinSuitHeight = 0;
 
     _tilesheetCanvas = [];
     _tilesheetContext = [];
@@ -231,9 +239,8 @@ var $render = $game.$render = {
       filename = 'basic/' + (num - skinsList.length + 1)
     }
 
-    var skinSuitFile = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png'
     var skinSuitImage = new Image()
-    skinSuitImage.src = skinSuitFile
+    skinSuitImage.src = CivicSeed.CLOUD_PATH + '/img/game/skins/' + filename + '.png'
 
     skinSuitImage.onload = function () {
       _offscreenSkinSuitCanvas[filename] = document.createElement('canvas')
@@ -249,10 +256,10 @@ var $render = $game.$render = {
 
       if (next >= (skinsList.length + numberOfColors)) {
         $render.ready = true
-        _skinSuitWidth = skinSuitImage.width
-        _skinSuitHeight = skinSuitImage.height
+        PLAYER_SPRITESHEET_WIDTH = PLAYER_SPRITESHEET_WIDTH
+        PLAYER_SPRITESHEET_HEIGHT = PLAYER_SPRITESHEET_HEIGHT
         $game.$skins.renderSkinventoryUI()
-        $render.createCanvasForPlayer($game.$player.id, false)
+        $render.createCanvasForPlayer($game.$player.id, $game.$player.getSkinSuit(), $game.$player.getColorIndex())
         return
       } else {
         $render.loadSkinSuitImages(next)
@@ -483,27 +490,28 @@ var $render = $game.$render = {
 
   },
 
-  //create a canvas for each active player
+  // Create a canvas for a player sprite
+  // The id is required to identify the canvas
+  // Skinsuit (object) and player color (index) must be provided
   createCanvasForPlayer: function (id, skinSuit, playerColor) {
-    //if it exists, clear it
-    if (_offscreenPlayersContext[id]) {
-      _offscreenPlayersContext[id].clearRect(0, 0, _skinSuitWidth, _skinSuitHeight);
+    var context = _offscreenPlayersContext[id]
+
+    // If player's canvas currently exists, clear it
+    if (context) {
+      _render.clearContext(context)
     } else {
-      _offscreenPlayersCanvas[id] = document.createElement('canvas');
-      _offscreenPlayersCanvas[id].setAttribute('width', _skinSuitWidth);
-      _offscreenPlayersCanvas[id].setAttribute('height', _skinSuitHeight);
-      _offscreenPlayersContext[id] = _offscreenPlayersCanvas[id].getContext('2d');
+      // Create a canvas
+      var canvas = document.createElement('canvas')
+      canvas.setAttribute('width', PLAYER_SPRITESHEET_WIDTH)
+      canvas.setAttribute('height', PLAYER_SPRITESHEET_HEIGHT)
+      context = canvas.getContext('2d')
+
+      // Store this to module global
+      _offscreenPlayersCanvas[id] = canvas
     }
 
-    if (!skinSuit) {
-      skinSuit = $game.$player.getSkinSuit()
-    }
-
-    if (!playerColor) {
-      playerColor = $game.$player.getColorIndex() || 0
-    }
-
-    // If basic suit, set to render player color
+    // If skin part is "basic", append the player color index so that we
+    // can grab the correct basic skin color
     if (skinSuit.head === 'basic') {
       skinSuit.head = 'basic/' + playerColor
     }
@@ -514,60 +522,69 @@ var $render = $game.$render = {
       skinSuit.legs = 'basic/' + playerColor
     }
 
-    //draw the head, torso, and legs
-    var h = $game.TILE_SIZE * 2,
-        numRows = Math.floor(_skinSuitHeight / h);
+    // Create player sprite canvas from individual parts
+    var numRows = Math.floor(PLAYER_SPRITESHEET_HEIGHT / PLAYER_SPRITE_HEIGHT),
+        headSpriteSource = _offscreenSkinSuitCanvas[skinSuit.head],
+        torsoSpriteSource = _offscreenSkinSuitCanvas[skinSuit.torso],
+        legsSpriteSource = _offscreenSkinSuitCanvas[skinSuit.legs]
 
-    var r = 0;
-    //draw all the heads from this spritesheet
-    var headHeight  = 30,
-        torsoHeight = 15,
-        legsHeight  = 19
-
-    for (r = 0; r < numRows; r++) {
-      _offscreenPlayersContext[id].drawImage(
-        _offscreenSkinSuitCanvas[skinSuit.head],
+    // Optimization for wearing full suit
+    // Duplicate the full spritesheet, don't loop & redraw each part
+    if (skinSuit.head === skinSuit.torso && skinSuit.torso === skinSuit.legs) {
+      context.drawImage(
+        headSpriteSource,
         0,
-        r * h,
-        _skinSuitWidth,
-        headHeight,
         0,
-        r * h,
-        _skinSuitWidth,
-        headHeight
+        context.canvas.width,
+        context.canvas.height,
+        0,
+        0,
+        PLAYER_SPRITESHEET_WIDTH,
+        PLAYER_SPRITESHEET_HEIGHT
       )
+    } else {
+      // If parts of skin are from different suits, assemble it together
+      for (var row = 0; row < numRows; row++) {
+        // Draw all the head parts from the source spritesheet
+        context.drawImage(
+          headSpriteSource,
+          0,
+          PLAYER_SPRITE_HEIGHT * row,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_HEAD_HEIGHT,
+          0,
+          PLAYER_SPRITE_HEIGHT * row,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_HEAD_HEIGHT
+        )
+        // Draw all the torso parts from the source spritesheet
+        context.drawImage(
+          torsoSpriteSource,
+          0,
+          (PLAYER_SPRITE_HEIGHT * row) + SPRITE_HEAD_HEIGHT,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_TORSO_HEIGHT,
+          0,
+          (PLAYER_SPRITE_HEIGHT * row) + SPRITE_HEAD_HEIGHT,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_TORSO_HEIGHT
+        )
+        // Draw all the leg parts from the source spritesheet
+        context.drawImage(
+          legsSpriteSource,
+          0,
+          (PLAYER_SPRITE_HEIGHT * row) + SPRITE_HEAD_HEIGHT + SPRITE_TORSO_HEIGHT,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_LEGS_HEIGHT,
+          0,
+          (PLAYER_SPRITE_HEIGHT * row) + SPRITE_HEAD_HEIGHT + SPRITE_TORSO_HEIGHT,
+          PLAYER_SPRITESHEET_WIDTH,
+          SPRITE_LEGS_HEIGHT
+        )
+      }
     }
-    //draw all the torso from this spritesheet
-    for (r = 0; r < numRows; r++) {
-      _offscreenPlayersContext[id].drawImage(
-        _offscreenSkinSuitCanvas[skinSuit.torso],
-        0,
-        r * h + headHeight,
-        _skinSuitWidth,
-        torsoHeight,
-        0,
-        r * h + headHeight,
-        _skinSuitWidth,
-        torsoHeight
-      );
-    }
-    //draw all the legs from this spritesheet
-    for(r = 0; r < numRows; r++) {
-      _offscreenPlayersContext[id].drawImage(
-        _offscreenSkinSuitCanvas[skinSuit.legs],
-        0,
-        r * h + headHeight + torsoHeight,
-        _skinSuitWidth,
-        legsHeight,
-        0,
-        r * h + headHeight + torsoHeight,
-        _skinSuitWidth,
-        legsHeight
-      );
-    }
-
         //tinting proof
-    // var theImage = _offscreenSkinSuitContext.lion.getImageData(0, 0, _skinSuitWidth, _skinSuitHeight);
+    // var theImage = _offscreenSkinSuitContext.lion.getImageData(0, 0, PLAYER_SPRITESHEET_WIDTH, PLAYER_SPRITESHEET_HEIGHT);
   //           pix = theImage.data;
 
   //       // Every four values equals 1 pixel.
@@ -944,12 +961,11 @@ var $render = $game.$render = {
       info.curY - $game.TILE_SIZE * 4,
       $game.TILE_SIZE * 6,
       $game.TILE_SIZE * 5
-    );
+    )
   },
 
   //render the robot on the canvas
   renderRobot: function (info) {
-    // console.log(info.srcX, info.srcY);
     _charactersContext.drawImage(
       _tilesheets.robot,
       info.srcX,
@@ -960,7 +976,7 @@ var $render = $game.$render = {
       info.curY - $game.TILE_SIZE * 1,
       64,
       64
-    );
+    )
   },
 
   //display the mini map image on the canvas
