@@ -87,10 +87,11 @@ var $player = $game.$player = {
           rank: playerInfo.game.rank,
           currentLevel: playerInfo.game.currentLevel,
           position: playerInfo.game.position,
-          skinSuit: playerInfo.game.skinSuit
+          skinSuit: playerInfo.game.skinSuit,
+          playerColor: playerInfo.game.playerColor
         }
-      };
-      ss.rpc('game.player.tellOthers', subsetInfo);
+      }
+      ss.rpc('game.player.tellOthers', subsetInfo)
 
       // set the render info
       _renderInfo = {
