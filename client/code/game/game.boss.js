@@ -773,8 +773,7 @@ var _boss = {
   fail: function () {
     $game.$input.inactiveHUDButton('.hud-boss .hud-seed')
     $game.flags.unset('seed-mode')
-    $game.$player.seedMode = false;
-    $game.$player.resetRenderColor()
+    $game.$player.seedMode = false
     _boss.clock.pause()
     _boss.showOverlay(3)
   },

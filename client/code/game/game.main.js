@@ -15,6 +15,7 @@ var _stepNumber = 0,
     _displayTimeout = null,
     $flags,
     $map,
+    $minimap,
     $render,
     $npc,
     $resources,
@@ -95,6 +96,7 @@ var $game = module.exports = {
     // Instantiating code (if not already done)
     $flags      = require('/game.flags')
     $map        = require('/game.map')
+    $minimap    = require('/game.minimap')
     $render     = require('/game.render')
     $npc        = require('/game.npc')
     $resources  = require('/game.resources')
@@ -256,7 +258,7 @@ var $game = module.exports = {
     $game.$player.resetRenderValues()
     $game.$others.resetRenderValues()
     $game.$player.displayNpcComments()
-    $game.$render.minimapRadar.update()
+    $game.minimap.radar.update()
     $game.$player.saveTimeToDB()
   },
 
@@ -280,8 +282,8 @@ var $game = module.exports = {
   updateProgressOverlay: function () {
 
     //save and show player's colors
-    var myImageSrc = $game.$map.saveImage();
-    $game.$map.createCollectiveImage();
+    var myImageSrc = $game.$map.saveImage()
+    $game.$map.createCollectiveImage()
 
     //get stats
     var tilesColored = $game.$player.getTilesColored(),
@@ -448,14 +450,15 @@ var $game = module.exports = {
 
   // save and exit game
   exitGame: function (callback) {
-    // Kill the audio
+    // Kill the audio & graphics
     $game.$audio.stopAll()
+    $game.minimap.removePlayer($game.$player.id)
 
     // save out all current status of player to db on exit
     if (!$game.bossModeUnlocked) {
       $game.$player.saveTimeToDB()
     }
-    $game.$map.removePlayer($game.$player.id)
+
     ss.rpc('game.player.exitPlayer', {
       id:   $game.$player.id,
       name: $game.$player.firstName
@@ -504,8 +507,8 @@ var _game = {
     // all the init calls will trigger others, a waterfall approach to assure
     // the right data is loaded before we start
     $game.$player.init(function () {
-      _game.loadGameInfo();
-    });
+      _game.loadGameInfo()
+    })
   },
 
   loadGameInfo: function () {
@@ -522,26 +525,28 @@ var _game = {
         percent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100),
         prevPercent: Math.floor((response.seedsDropped / response.seedsDroppedGoal) * 100)
       };
-      $game.$player.setPositionInfo();
+      $game.$player.setPositionInfo()
+
+      // required for npcs to be placed
+      _game.setBoundaries()
+
       $game.$render.init(function () {
-        _game.loadMap();
-      });
-    });
+        _game.loadMinimap()
+      })
+    })
   },
 
-  loadMap: function() {
-    $game.$map.init(function () {
-      // required for npcs to be placed
-      _game.setBoundaries();
-      _game.loadOthers();
-    });
+  loadMinimap: function () {
+    $game.minimap.init(function () {
+      _game.loadOthers()
+    })
   },
 
   loadOthers: function () {
     //depends on map
     $game.$others.init(function () {
-      _game.loadNpc();
-    });
+      _game.loadNpc()
+    })
   },
 
   loadNpc: function () {
@@ -597,12 +602,12 @@ var _game = {
     }
 
     //make players color map
-    var src = $game.$player.getColorMap();
+    var src = $game.$player.getColorMap()
     if (src !== undefined) {
-      $game.$render.imageToCanvas(src);
+      $game.$render.imageToCanvas(src)
     }
     //create collective image
-    $game.$map.createCollectiveImage();
+    $game.$map.createCollectiveImage()
 
     //update text in HUD
     // var percentString = _stats.percent + '%';
@@ -622,10 +627,10 @@ var _game = {
         startX   = divX * ($game.VIEWPORT_WIDTH - 2),
         startY   = divY * ($game.VIEWPORT_HEIGHT - 2)
 
-    $game.masterX = startX;
-    $game.masterY = startY;
+    $game.masterX = startX
+    $game.masterY = startY
 
-    $game.$map.setBoundaries();
+    $game.$map.setBoundaries()
   },
 
   //start the game, decide if going to boss level or not
@@ -644,10 +649,11 @@ var _game = {
           $game.$render.renderAllTiles()
           $game.tick()
           $game.$player.displayNpcComments()
-          $game.$render.minimapRadar.update()
 
           // Turn on minimap view on gameboard
-          $game.$input.showMinimap()
+          $game.minimap.addPlayer($game.$player.id, $game.$player.getPosition(), $game.$player.getColorHex())
+          $game.minimap.radar.update()
+          $game.minimap.show()
 
           // Things to do if the player has not completed the tutorial
           if ($game.flags.check('first-time') === true) {

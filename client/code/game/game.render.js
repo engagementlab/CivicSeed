@@ -33,16 +33,85 @@ var _tilesheets = {},
     _foregroundContext    = null,
     _charactersContext    = null,
     _interfaceContext     = null,
-    _minimapPlayerContext = null,
     _minimapTileContext   = null,
-    _minimapRadarContext  = null,
 
     _prevMouseX = 0,
-    _prevMouseY = 0,
-    _hasNpc = false,
-    _wasNpc = false,
-    _playerColorNum = 0,
-    _playerLevelNum = 0;
+    _prevMouseY = 0
+
+/**
+  *
+  *  PRIVATE FUNCTIONS
+  *
+ **/
+
+var _render = {
+
+  images: [ 'tilesheet_color',
+            'tilesheet_gray',
+            'boss_items',
+            'botanist',
+            'cursors',
+            'npcs',
+            'robot'
+          ],
+  tilesheets: {},
+  tilesheet: {
+    height: null,
+    width:  null
+  },
+
+  createCanvas: function (elementId, width, height, onDom, styles) {
+    var el    = document.createElement('canvas')
+    el.id     = elementId
+    // Width and height, if not provided, is equal to gameboard dimensions.
+    el.width  = width  || $game.VIEWPORT_WIDTH  * $game.TILE_SIZE
+    el.height = height || $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
+
+    if (onDom === true) {
+      _.each(styles, function (value, key) {
+        el.style[key] = value
+      })
+      document.getElementById('gameboard').appendChild(el)
+    }
+
+    return this.initCanvas(el)
+  },
+
+  initCanvas: function (element, forcePixelRatio) {
+    var el      = (typeof element === 'object') ? element : document.getElementById(element),
+        context = el.getContext('2d'),
+        width   = el.width,
+        height  = el.height
+
+    // Scale interface display for higher-pixel-density screens
+    // forcePixelRatio can be passed as true to this function to force this
+    // canvas to use a pixel ratio of 1 and use the browser's native scaling
+    if ($game.PIXEL_RATIO > 1 && forcePixelRatio !== true) {
+        $(el).attr('width',  width  * $game.PIXEL_RATIO)
+        $(el).attr('height', height * $game.PIXEL_RATIO)
+        $(el).css('width',   width)
+        $(el).css('height',  height)
+        context.scale($game.PIXEL_RATIO, $game.PIXEL_RATIO)
+    }
+
+    return context
+  },
+
+  // Clears a canvas context
+  clearContext: function (context) {
+    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+  },
+
+  displayText: function (text, position, color) {
+    var theContext = _interfaceContext    // Use this context
+
+    theContext.strokeText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
+    theContext.fillStyle = (color) ? color: 'white'
+    theContext.fillText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
+  }
+
+}
+
 
 var $render = $game.$render = {
 
@@ -59,6 +128,14 @@ var $render = $game.$render = {
     blue:   'rgb(121,204,206)',
     yellow: 'rgb(247,215,61)',
     red:    'rgb(249,79,51)'
+  },
+
+  // Expose utility functions
+  // TODO: Public by default, perhaps as methods of a Renderer class
+  utils: {
+    clearContext: _render.clearContext,
+    createCanvas: _render.createCanvas,
+    initCanvas:   _render.initCanvas
   },
 
   // Set up all rendering contexts and load images
@@ -80,9 +157,7 @@ var $render = $game.$render = {
     _foregroundContext    = _render.initCanvas('foreground', true)
     _charactersContext    = _render.initCanvas('characters', true)
     _interfaceContext     = _render.initCanvas('interface')
-    _minimapPlayerContext = _render.initCanvas('minimap-player')
     _minimapTileContext   = _render.initCanvas('minimap-tile')
-    _minimapRadarContext  = _render.initCanvas('minimap-radar')
 
     // Interface canvas - style for player names
     _interfaceContext.lineWidth    = 6
@@ -98,8 +173,6 @@ var $render = $game.$render = {
     _foregroundContext.lineWidth = 4;
     _foregroundContext.save();
 
-    _playerColorNum = $game.$player.getColorIndex();
-    _playerLevelNum = $game.$player.currentLevel;
     $render.loadTilesheets(0);
 
     // hack to check if all stuff is loaded so we can callback
@@ -135,15 +208,9 @@ var $render = $game.$render = {
     _foregroundContext    = null
     _charactersContext    = null
     _interfaceContext     = null
-    _minimapPlayerContext = null
-    _minimapTileContext   = null
 
     _prevMouseX = 0;
     _prevMouseY = 0;
-    _hasNpc = false;
-    _wasNpc = false;
-    _playerColorNum = 0;
-    _playerLevelNum = 0;
 
     $game.$render.ready = false;
   },
@@ -611,10 +678,10 @@ var $render = $game.$render = {
       info.curY - $game.TILE_SIZE,
       $game.TILE_SIZE,
       $game.TILE_SIZE*2
-    );
+    )
 
     // Display player name
-    _render.displayText(info.firstName, info)
+    _render.displayText(info.firstName, info, info.color)
   },
 
   //clear the character canvas
@@ -770,165 +837,6 @@ var $render = $game.$render = {
       _prevMouseY = mouse.cY;
   },
 
-  // Clear the minimap
-  clearMiniMap: function () {
-    _render.clearContext(_minimapPlayerContext)
-  },
-
-  //render a player to the mini map
-  renderMiniPlayer: function (player) {
-    //_minimapPlayerContext.fillStyle = player.col;
-    _minimapPlayerContext.fillStyle = this.colors.white
-    _minimapPlayerContext.fillRect(
-      player.x,
-      player.y,
-      4,
-      4
-    );
-  },
-
-  //render the botanist and dividing lines on the mini map
-  renderMiniMapConstants: function () {
-    _minimapPlayerContext.fillStyle = this.colors.gray
-    _minimapPlayerContext.fillRect(
-      0,
-      72,
-      142,
-      1
-    );
-    _minimapPlayerContext.fillRect(
-      71,
-      0,
-      1,
-      132
-    );
-    // _minimapPlayerContext.fillStyle = 'rgb(255,255,255)';
-    // _minimapPlayerContext.fillRect(
-    //  67,
-    //  68,
-    //  8,
-    //  8
-    // );
-    _minimapPlayerContext.drawImage(
-      _tilesheets.tiny_botanist,
-      0,
-      0,
-      20,
-      16,
-      60,
-      64,
-      20,
-      16
-    );
-  },
-
-  //render a specific tile on the mini map
-  renderMiniTile: function (x, y) {
-    var rgba = 'rgb(124,202,176)';
-    _minimapTileContext.fillStyle = rgba;
-    _minimapTileContext.fillRect(
-      x,
-      y,
-      1,
-      1
-    );
-  },
-
-  // Create a ping effect on the minimap to attract the player's attention to a specific location
-  // TODO ! This was never completed.
-  pingMinimap: function (location) {
-    var context = _render.createCanvas('minimap-ping', 142, 132, true, {
-      right: '0',
-      zIndex: '6'
-    })
-    context.fillStyle = this.colors.red
-    // TODO: Incomplete
-    context.fillRect(
-      location.x,
-      location.y,
-      20,
-      20
-    );
-    $('#minimap-ping').remove()
-  },
-
-  // Show radar for NPCs still holding resources
-  minimapRadar: {
-    /*
-    // Not used.
-    // Canvas for radar is hardcoded into game template.
-    context: null,
-
-    create: function () {
-      $render.minimapRadar.context = _render.createCanvas('minimap-radar', 142, 132, true, {
-                        right: '0',
-                        zIndex: '6'
-                      })
-      var context = $render.minimapRadar.context
-
-      context.fillStyle = $render.colors.yellow
-    },
-
-    destroy: function () {
-      $('#minimap-radar').remove()
-    },
-
-    update: function () {
-    },
-    */
-
-    update: function () {
-      $render.minimapRadar.clear()
-
-      var local     = $game.flags.check('local-radar'),
-          global    = $game.flags.check('global-radar'),
-          npcs      = {},
-          resources = $game.$player.getResources()
-
-      // If player doesn't have radar on, exit
-      if (!local && !global) return false
-
-      // Depending on radar, get NPCs
-      if (global === true) {
-        npcs = $game.$npc.getNpcData()
-      } else if (local === true) {
-        var onscreen = $game.$npc.getOnScreenNpcs()
-        for (var n = 0; n < onscreen.length; n++) {
-          var npc = $game.$npc.getNpc(onscreen[n])
-          npcs[npc.index] = npc
-        }
-      }
-
-      // Render the dot for each NPC
-      $.each(npcs, function (key, npc) {
-        // Check
-        // - If NPC is holding a resource
-        // - If player does not already have that resource
-        // - If NPC level is less than or equal to Player's current level
-        var theResource = resources[npc.index]
-        if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
-          $game.$render.minimapRadar.drawDot(npc.info)
-        }
-      })
-    },
-
-    clear: function () {
-      _render.clearContext(_minimapRadarContext)
-    },
-
-    drawDot: function (location) {
-      var context = _minimapRadarContext
-      context.fillStyle = $render.colors.yellow
-      context.fillRect(
-        location.x,
-        location.y,
-        2,
-        2
-      );
-    }
-
-  },
-
   //clear the botanist from the canvas
   clearBotanist: function (info) {
     _charactersContext.clearRect(
@@ -979,14 +887,27 @@ var $render = $game.$render = {
     )
   },
 
+  //render a specific tile on the mini map
+  // NOTE: This is used for color map on progress window, not the actual in-game minimap.
+  renderMiniTile: function (x, y) {
+    var rgba = 'rgb(124,202,176)'
+    _minimapTileContext.fillStyle = rgba
+    _minimapTileContext.fillRect(
+      x,
+      y,
+      1,
+      1
+    )
+  },
+
   //display the mini map image on the canvas
   imageToCanvas: function (map) {
-    var newImg = new Image();
+    var newImg = new Image()
 
     newImg.onload = function () {
-      _minimapTileContext.drawImage(newImg,0,0);
-    };
-    newImg.src = map;
+      _minimapTileContext.drawImage(newImg, 0, 0)
+    }
+    newImg.src = map
   },
 
   renderBossTiles: function (tiles) {
@@ -1052,78 +973,4 @@ var $render = $game.$render = {
     _render.clearContext(_backgroundContext)
     _render.clearContext(_foregroundContext)
   }
-}
-
-/**
-  *
-  *  PRIVATE FUNCTIONS
-  *
- **/
-
-var _render = {
-
-  images: [ 'tilesheet_color',
-            'tilesheet_gray',
-            'boss_items',
-            'botanist',
-            'cursors',
-            'npcs',
-            'robot',
-            'tiny_botanist'
-          ],
-  tilesheets: {},
-  tilesheet: {
-    height: null,
-    width:  null
-  },
-
-  createCanvas: function (elementId, width, height, onDom, styles) {
-    var el    = document.createElement('canvas')
-    el.id     = elementId
-    // Width and height, if not provided, is equal to gameboard dimensions.
-    el.width  = width  || $game.VIEWPORT_WIDTH  * $game.TILE_SIZE
-    el.height = height || $game.VIEWPORT_HEIGHT * $game.TILE_SIZE
-
-    if (onDom === true) {
-      _.each(styles, function (value, key) {
-        el.style[key] = value
-      })
-      document.getElementById('gameboard').appendChild(el)
-    }
-
-    return this.initCanvas(el)
-  },
-
-  initCanvas: function (element, forcePixelRatio) {
-    var el      = (typeof element === 'object') ? element : document.getElementById(element),
-        context = el.getContext('2d'),
-        width   = el.width,
-        height  = el.height
-
-    // Scale interface display for higher-pixel-density screens
-    // forcePixelRatio can be passed as true to this function to force this
-    // canvas to use a pixel ratio of 1 and use the browser's native scaling
-    if ($game.PIXEL_RATIO > 1 && forcePixelRatio !== true) {
-        $(el).attr('width',  width  * $game.PIXEL_RATIO)
-        $(el).attr('height', height * $game.PIXEL_RATIO)
-        $(el).css('width',   width)
-        $(el).css('height',  height)
-        context.scale($game.PIXEL_RATIO, $game.PIXEL_RATIO)
-    }
-
-    return context
-  },
-
-  // Clears a canvas context
-  clearContext: function (context) {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height)
-  },
-
-  displayText: function (text, position) {
-    var theContext = _interfaceContext    // Use this context
-
-    theContext.strokeText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
-    theContext.fillText(text, position.curX + $game.TILE_SIZE / 2, position.curY - $game.TILE_SIZE)
-  }
-
 }

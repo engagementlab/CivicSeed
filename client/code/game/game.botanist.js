@@ -476,7 +476,7 @@ var _botanist = {
   nudgePlayer: function () {
     if ($botanist.getState() !== 2) {
       $game.alert('Talk to the botanist')
-      $game.$render.pingMinimap({x: 70, y: 71})
+      $game.minimap.ping({x: 70, y: 71})
     }
   },
 

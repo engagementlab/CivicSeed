@@ -22,9 +22,6 @@ var _curFrame = 0,
     _totalSeeds = null,
     _resources = null,
     _position = null,
-    _rgb = null,
-    _rgbString = null,
-    _playerColorNum = null,
     _inventory = null,
     _colorMap = null,
     _resume = null,
@@ -94,26 +91,27 @@ var $player = $game.$player = {
 
       // set the render info
       _renderInfo = {
-        colorNum: _playerColorNum,
+        id: $game.$player.id,
+        kind: 'player',
+        firstName: $game.$player.firstName,
+        level: $game.$player.currentLevel,
+        colorIndex: playerInfo.game.playerColor,
+        color: $player.getColorHex(),
         srcX: 0,
         srcY: 0,
         curX: _info.x * $game.TILE_SIZE,
         curY: _info.y * $game.TILE_SIZE,
         prevX: _info.x * $game.TILE_SIZE,
-        prevY: _info.y * $game.TILE_SIZE,
-        kind: 'player',
-        level: $game.$player.currentLevel,
-        firstName: $game.$player.firstName,
-        id: $game.$player.id
-      };
+        prevY: _info.y * $game.TILE_SIZE
+      }
 
-      _player.updateTotalSeeds();
-      _updateRenderInfo();
+      _player.updateTotalSeeds()
+      _updateRenderInfo()
 
       // we are ready, let everyone know dat
-      $game.$player.ready = true;
-      callback();
-    });
+      $game.$player.ready = true
+      callback()
+    })
   },
 
   resetInit: function () {
@@ -134,9 +132,6 @@ var $player = $game.$player = {
     _totalSeeds = null;
     _resources = null;
     _position = null;
-    _rgb = null;
-    _rgbString = null;
-    _playerColorNum = 0;
     _inventory = null;
     _colorMap = null;
     _resume = null;
@@ -462,7 +457,7 @@ var $player = $game.$player = {
   giveMapToPlayer: function () {
     // Turn on minimap view on gameboard
     // NOTE: Currently always on by default.
-    // $game.$input.showMinimap()
+    // $game.minimap.show()
 
     // Enable minimap view on progress window
     $('#progress-area .minimap').show()
@@ -627,11 +622,6 @@ var $player = $game.$player = {
     ss.rpc('game.player.updateGameInfo', info);
   },
 
-  //disable blinking seed planting mode
-  resetRenderColor: function () {
-    _renderInfo.colorNum = _playerColorNum;
-  },
-
   // Return the player's current position in the world
   getPosition: function () {
     return _info;
@@ -642,15 +632,25 @@ var $player = $game.$player = {
     return $game.$map.masterToLocal(_info.x, _info.y)
   },
 
-  //get the players rgb colors
-  getColor: function () {
-    return _rgb;
+  // Get the player's color index number
+  getColorIndex: function () {
+    return $game.$player.playerColor
   },
 
-  //get the players image number (corresponds to 2.png for example)
-  getColorIndex: function () {
-    //return _renderInfo.colorNum;
-    return $game.$player.playerColor
+  // Get a color at a given index or use current player color index
+  getColor: function (index) {
+    if (!index) {
+      index = $game.$player.getColorIndex()
+    }
+    // Returns an object {r, g, b}, values from 0 - 255
+    return COLORS[index]
+  },
+
+  // Get a color hex string at a given index or use current player color index
+  getColorHex: function (index) {
+    var rgb = $player.getColor(index)
+    // A quick way of converting to a hex string, e.g. #5599cc
+    return '#' + ('0'+(rgb.r.toString(16))).slice(-2) + ('0'+(rgb.g.toString(16))).slice(-2) + ('0'+(rgb.b.toString(16))).slice(-2)
   },
 
   //get all the render info to draw player
@@ -749,10 +749,6 @@ var $player = $game.$player = {
   //get the quantity of seedITs made
   getPledges: function () {
     return _pledges;
-  },
-
-  getColorString: function () {
-    return _rgbString;
   },
 
   //get the current viewport position
@@ -888,7 +884,7 @@ var $player = $game.$player = {
 
     // Display NPC bubble with number of comments & update minimap radar
     $game.$player.displayNpcComments()
-    $game.$render.minimapRadar.update()
+    $game.minimap.radar.update()
 
   },
 
@@ -1317,7 +1313,6 @@ var _player = {
   // Generic end seed mode
   endSeedMode: function() {
     $game.$player.seedMode = false;
-    _renderInfo.colorNum = _playerColorNum;
     $game.$player.seedPlanting = false;
     $game.alert('You are out of seeds!')
     $('.hud-seed').removeClass('hud-button-active');
@@ -1359,8 +1354,9 @@ var _player = {
                   y: position.y
                 }
     })
+
     // Update on minimap
-    $game.$map.updatePlayer($game.$player.id, position.x, position.y)
+    $game.minimap.updatePlayer($game.$player.id, position)
   }
 }
 
@@ -1438,8 +1434,9 @@ function _move() {
     _info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
 
     $game.$player.currentMove += 1;
+
     //render mini map every spot player moves
-    $game.$map.updatePlayer($game.$player.id, _info.x, _info.y);
+    $game.minimap.updatePlayer($game.$player.id, _info)
   }
 
   //if we done, finish
@@ -1544,13 +1541,6 @@ function _endMove() {
 //determine what frame to render while standing
 function _idle() {
   _idleCounter += 1
-  if ($game.$player.seedMode) {
-    if (_idleCounter % 32 < 16) {
-      _renderInfo.colorNum = 0
-    } else {
-      _renderInfo.colorNum = _playerColorNum
-    }
-  }
 
   if (_idleCounter >= 64) {
     _idleCounter = 0
@@ -1622,3 +1612,134 @@ function _resourceExists(npc) {
   }
   return false;
 }
+
+// Temporary global for player colors.
+// TODO: Use the backend for this?
+var COLORS = [
+  {
+    'r': 255,
+    'g': 255,
+    'b': 255
+  },
+  {
+    'r': 205,
+    'g': 95,
+    'b': 243
+  },
+  {
+    'r': 106,
+    'g': 220,
+    'b': 230
+  },
+  {
+    'r': 242,
+    'g': 202,
+    'b': 93
+  },
+  {
+    'r': 184,
+    'g': 239,
+    'b': 98
+  },
+  {
+    'r': 236,
+    'g': 109,
+    'b': 168
+  },
+  {
+    'r': 109,
+    'g': 227,
+    'b': 209
+  },
+  {
+    'r': 242,
+    'g': 243,
+    'b': 95
+  },
+  {
+    'r': 146,
+    'g': 235,
+    'b': 103
+  },
+  {
+    'r': 245,
+    'g': 97,
+    'b': 93
+  },
+  {
+    'r': 108,
+    'g': 230,
+    'b': 179
+  },
+  {
+    'r': 241,
+    'g': 166,
+    'b': 92
+  },
+  {
+    'r': 242,
+    'g': 95,
+    'b': 218
+  },
+  {
+    'r': 242,
+    'g': 223,
+    'b': 95
+  },
+  {
+    'r': 243,
+    'g': 231,
+    'b': 99
+  },
+  {
+    'r': 241,
+    'g': 93,
+    'b': 103
+  },
+  {
+    'r': 233,
+    'g': 239,
+    'b': 98
+  },
+  {
+    'r': 243,
+    'g': 101,
+    'b': 121
+  },
+  {
+    'r': 203,
+    'g': 245,
+    'b': 93
+  },
+  {
+    'r': 227,
+    'g': 93,
+    'b': 183
+  },
+  {
+    'r': 245,
+    'g': 113,
+    'b': 91
+  },
+  {
+    'r': 122,
+    'g': 235,
+    'b': 158
+  },
+  {
+    'r': 242,
+    'g': 150,
+    'b': 95
+  },
+  {
+    'r': 220,
+    'g': 245,
+    'b': 94
+  },
+  {
+    'r': 214,
+    'g': 95,
+    'b': 243
+  }
+]
+

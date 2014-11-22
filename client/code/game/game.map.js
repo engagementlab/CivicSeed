@@ -9,24 +9,10 @@ var _nextTiles = [],
 
 var $map = $game.$map = {
 
-  ready: false,
-  miniMap: {},
   currentTiles: null,
   dataLoaded: false,
   numberOfSteps: 0,
   stepDirection: null,
-
-  // Place player on map
-  init: function (callback) {
-    var id       = $game.$player.id,
-        position = $game.$player.getPosition(),
-        color    = $game.$player.getColor()
-
-    $game.$map.addPlayer(id, position.x, position.y, color)
-
-    $game.$map.ready = true
-    callback()
-  },
 
   resetInit: function () {
     _nextTiles = [];
@@ -36,8 +22,6 @@ var $map = $game.$map = {
     _topEdge = 0;
     _bottomEdge = 0;
 
-    $game.$map.ready = false;
-    $game.$map.miniMap = {};
     $game.$map.currentTiles = null;
     $game.$map.dataLoaded = false;
     $game.$map.numberOfSteps = 0;
@@ -89,41 +73,6 @@ var $map = $game.$map = {
   // Return true if player is on the edge of the world
   isMapEdge: function (x, y) {
     return $game.$map.currentTiles[x][y].isMapEdge
-  },
-
-  //add a player to the minimap
-  addPlayer: function (id, x, y, col) {
-    $game.$map.miniMap[id] = {};
-    $game.$map.miniMap[id].x = x;
-    $game.$map.miniMap[id].y = y;
-    $game.$map.miniMap[id].col = col;
-    $game.$map.render();
-  },
-
-  //update a player on the minimap
-  updatePlayer: function (id, x, y) {
-    $game.$render.clearMiniMap();
-    $game.$map.miniMap[id].x = x;
-    $game.$map.miniMap[id].y = y;
-    $game.$map.render();
-  },
-
-  //remove a player from the minimap
-  removePlayer: function (id) {
-    $game.$render.clearMiniMap();
-    delete $game.$map.miniMap[id];
-    $game.$map.render();
-  },
-
-  //render all the players on the minimap
-  render: function () {
-    $game.$render.renderMiniMapConstants();
-    $.each($game.$map.miniMap, function (key, player) {
-      $game.$render.renderMiniPlayer(player);
-    });
-
-    // Render radar
-    $game.$render.minimapRadar.update();
   },
 
   //put new color on the map

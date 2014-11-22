@@ -172,7 +172,7 @@ var $resources = $game.$resources = {
 
     // Update the npc bubbles on screen
     $game.$player.displayNpcComments()
-    $game.$render.minimapRadar.update()
+    $game.minimap.radar.update()
   },
 
   // Remove an answer (this means they made it private and it was previously public)

@@ -447,13 +447,12 @@ var $input = $game.$input = module.exports = {
     document.getElementById('chat-input').focus()
   },
 
+  // Toggle minimap
+  // Currently disabled in UI.
+  // TODO: Consider moving logic to $game.minimap module
   toggleMinimap: function () {
     if ($game.flags.check('first-time') === true) return // Disables if it's player's first time in the game.
     $('.minimap').toggle()
-  },
-
-  showMinimap: function () {
-    $('.minimap').show()
   },
 
   // Toggles Seed Mode.
@@ -506,7 +505,6 @@ var $input = $game.$input = module.exports = {
     $BODY.off('mouseup touchend', '#gameboard');
     $game.flags.unset('draw-mode')
     $game.$player.seedPlanting = false;
-    $game.$player.resetRenderColor();
     $input.inactiveHUDButton('.hud-seed')
 
     // Force update of mouse cursor

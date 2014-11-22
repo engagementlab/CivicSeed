@@ -219,7 +219,7 @@ var $skins = $game.$skins = (function () {
     // If radar, re-render NPC comments & update minimap
     if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
       $game.$player.displayNpcComments()
-      $game.$render.minimapRadar.update()
+      $game.minimap.radar.update()
     }
 
     // If speed goes up, change player speed

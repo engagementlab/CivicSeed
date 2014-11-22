@@ -154,7 +154,7 @@ var self = $game.$others = (function () {
     this.info.prevOffX = 0
     this.info.prevOffY = 0
 
-    $game.$map.updatePlayer(this.id, this.info.x, this.info.y)
+    $game.minimap.updatePlayer(this.id, this.info)
   }
 
   Player.prototype.move = function () {
@@ -166,9 +166,8 @@ var self = $game.$others = (function () {
       this.info.y = this.seriesOfMoves[this.currentMove].masterY
       this.currentMove += 1
 
-      //render mini map here *****
-      //THIS CAN BE REMOVED IF WE DON"T WANT IT TOO OFTEN
-      $game.$map.updatePlayer(this.id, this.info.x, this.info.y)
+      // Update player position on minimap
+      $game.minimap.updatePlayer(this.id, this.info)
     }
 
     //check to see if done
@@ -274,12 +273,31 @@ var self = $game.$others = (function () {
     this.info.x = position.x
     this.info.y = position.y
     this.updateRenderInfo()
-    $game.$map.updatePlayer(this.id, this.info.x, this.info.y)
+    $game.minimap.updatePlayer(this.id, this.info)
   }
 
   Player.prototype.skinSuitChange = function (info) {
     this.skinSuit = info.skinSuit
     $game.$render.createCanvasForPlayer(this.id, this.skinSuit, this.playerColor)
+  }
+
+  // Get the player's color index number
+  Player.prototype.getColorIndex = function () {
+    return this.playerColor
+  }
+
+  // Get a color at a given index or use current player color index
+  Player.prototype.getColor = function () {
+    // Returns an object {r, g, b}, values from 0 - 255
+    // TODO: something different besides aliasing to $player
+    return $game.$player.getColor(this.playerColor)
+  }
+
+  // Get a color hex string at a given index or use current player color index
+  Player.prototype.getColorHex = function () {
+    var rgb = this.getColor()
+    // A quick way of converting to a hex string, e.g. #5599cc
+    return '#' + ('0'+(rgb.r.toString(16))).slice(-2) + ('0'+(rgb.g.toString(16))).slice(-2) + ('0'+(rgb.b.toString(16))).slice(-2)
   }
 
   return {
@@ -311,7 +329,7 @@ var self = $game.$others = (function () {
         _onScreenPlayers[newbie.id] = newbie
         newbie.updateRenderInfo()
         $game.$render.createCanvasForPlayer(newbie.id, newbie.skinSuit, newbie.playerColor)
-        $game.$map.addPlayer(newbie.id, player.game.position.x, player.game.position.y, 'rgb(200,200,200)')
+        $game.minimap.addPlayer(newbie.id, player.game.position, newbie.getColorHex())
       }
     },
 
@@ -373,7 +391,7 @@ var self = $game.$others = (function () {
       var player = _onScreenPlayers[id]
       if (player) {
         player.clear()
-        $game.$map.removePlayer(id)
+        $game.minimap.removePlayer(id)
         delete _onScreenPlayers[id]
       }
     },
