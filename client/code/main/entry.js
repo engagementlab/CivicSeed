@@ -10,6 +10,12 @@ ss.server.on('ready', function () {
 })
 
 ss.server.on('disconnect', function () {
+  // Do not reset the front-end if this is the development environment
+  if (CivicSeed.ENVIRONMENT === 'development') {
+    console.log('Lost connection to server...')
+    return
+  }
+
   if (CivicSeed.CONNECTED && sessionStorage.getItem('userId')) {
     CivicSeed.CONNECTED = false
     $game.running = false
@@ -30,6 +36,12 @@ ss.server.on('disconnect', function () {
 })
 
 ss.server.on('reconnect', function () {
+  // Do not reset the front-end if this is the development environment
+  if (CivicSeed.ENVIRONMENT === 'development') {
+    console.log('Reconnected to server!')
+    return
+  }
+
   CivicSeed.CONNECTED = true
   sessionStorage.clear()
   Davis.location.assign('/')
