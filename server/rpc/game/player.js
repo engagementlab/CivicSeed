@@ -640,8 +640,8 @@ exports.actions = function (req, res, ss) {
     },
 
     changeSkinSuit: function (info) {
-      dbHelpers.saveInfo(info);
-      ss.publish.channel(req.session.game.instanceName,'ss-skinSuitChange', info);
+      dbHelpers.saveInfo(info)
+      ss.publish.channel(req.session.game.instanceName,'ss-skinSuitChange', info)
     }
-  };
-};
+  }
+}

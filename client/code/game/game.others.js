@@ -279,7 +279,7 @@ var self = $game.$others = (function () {
 
   Player.prototype.skinSuitChange = function (info) {
     this.skinSuit = info.skinSuit
-    $game.$render.createCanvasForPlayer(info.id, info.skinSuit, info.playerColor)
+    $game.$render.createCanvasForPlayer(this.id, this.skinSuit, this.playerColor)
   }
 
   return {
