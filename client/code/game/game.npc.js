@@ -8,20 +8,171 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+// NPC prototype Object
+function Npc (npc) {
+  this.name       = npc.name
+  this.id         = npc.id
+  this.index      = npc.index
+  this.sprite     = npc.sprite
+  this.level      = npc.level
+  this.dialog     = npc.dialog
+  this.dependsOn  = npc.dependsOn
+  this.isHolding  = npc.isHolding
+  this.resource   = npc.resource
+  this.skinSuit   = npc.skinSuit
+  this.onScreen   = null
+
+  this.position = {
+    x: npc.position.x,
+    y: npc.position.y
+  }
+
+  // Two concepts of render data
+  // 1. Render position (named renderInfo currently)
+  // 2. Animation frame (position on spritesheet)
+  this.renderInfo = {
+    kind:  'npc',
+    prevX: this.position.x * $game.TILE_SIZE,
+    prevY: this.position.y * $game.TILE_SIZE,
+    curX:  this.position.x * $game.TILE_SIZE,
+    curY:  this.position.x * $game.TILE_SIZE,
+    srcX:  0,
+    srcY:  this.sprite * 64
+  }
+
+  // Begin animation frame at a random counter, so that
+  // NPCs are not all weirdly synchronized
+  this.animation  = {
+    counter: Math.floor(Math.random() * 64)
+  }
+}
+
+// Update the npc's rendering
+Npc.prototype.update = function () {
+  var check = $game.flags.check('screen-transition')
+  if (!check) {
+    this.idle()
+  } else {
+    this.getRenderPosition()
+  }
+}
+
+// Determine if NPC is on screen, and if so, update its render location
+Npc.prototype.getRenderPosition = function () {
+  var local = $game.$map.masterToLocal(this.position.x, this.position.y)
+  if (local) {
+    var curX  = local.x * $game.TILE_SIZE,
+        curY  = local.y * $game.TILE_SIZE
+
+    // NPCs do not move, so there is no previous X/Y, but set it to
+    // current X/Y in case renderer chokes without it
+    this.renderInfo.prevX = curX
+    this.renderInfo.prevY = curY
+    this.renderInfo.curX = curX
+    this.renderInfo.curY = curY
+
+    this.onScreen = true
+  } else {
+    this.onScreen = false
+  }
+}
+
+// Idle for one frame of animation and set the render info to the appropriate sprite
+Npc.prototype.idle = function () {
+  var spriteWidth = $game.TILE_SIZE
+  this.animation.counter += 1
+
+  if (this.animation.counter >= 56) {
+    this.renderInfo.srcX = 0
+    // Reset counter
+    this.animation.counter = 0
+  } else if (this.animation.counter == 24) {
+    this.renderInfo.srcX = 1 * spriteWidth
+  } else if (this.animation.counter == 28) {
+    this.renderInfo.srcX = 2 * spriteWidth
+  } else if (this.animation.counter == 32) {
+    this.renderInfo.srcX = 3 * spriteWidth
+  }
+}
+
+// Clear from the screen
+Npc.prototype.clear = function () {
+  $game.$render.clearCharacter(this.renderInfo)
+}
+
+// Returns actual numerical value of level
+Npc.prototype.getLevel = function () {
+  return this.level + 1
+}
+
+// Get the render information to draw it
+Npc.prototype.getRenderInfo = function () {
+  return (this.onScreen) ? this.renderInfo : false
+}
+
+// Check if an NPC's resource is locked
+// An NPC is locked if the player must own the resource of another NPC,
+// before being able to obtain its resource
+// TODO: The concept of "locked" will change somewhat away from the
+// concept of resource ownership - it means whether a player is "done"
+// with answering a given NPC's questions.
+Npc.prototype.isLocked = function () {
+  var id = this.dependsOn
+  if (id !== null) {
+    // Check if player already has it
+    return ($game.$player.checkForResource(id)) ? false : true
+  }
+  return false
+},
+
+// Form smalltalk dialog
+Npc.prototype.getSmalltalk = function () {
+  var dialog = '',
+      place = ''
+
+  if (this.isHolding) {
+    switch ($game.$player.currentLevel) {
+      case 0:
+        place = 'northwest'
+        break
+      case 1:
+        place = 'northeast'
+        break
+      case 2:
+        place = 'southeast'
+        break
+      case 3:
+        place = 'southwest'
+        break
+    }
+    dialog = 'You should go explore ' + $game.world[place].name + ', in the ' + place + '.'
+  }
+  // If NPC has a response for past, present, future
+  else {
+    if ($game.$player.currentLevel === this.level) {
+      dialog = this.dialog.smalltalk[1]
+    } else if ($game.$player.currentLevel < this.level) {
+      dialog = this.dialog.smalltalk[2]
+    } else {
+      dialog = this.dialog.smalltalk[0]
+    }
+  }
+  return dialog
+}
+
+
 var $npc = $game.$npc = {
 
   ready:      false,
   hideTimer:  null,
-  isResource: false,
 
   //pull all npc info from the DB
   init: function (callback) {
     //load all the npc info from the DB store it in an array
     //where the index is the id of the npc / mapIndex
     ss.rpc('game.npc.getNpcs', function (response) {
-      console.log(response)
       $.each(response, function (key, npc) {
-       _npc.add(npc)
+        _npc.add(npc)
       })
       $npc.ready = true
       callback()
@@ -31,18 +182,16 @@ var $npc = $game.$npc = {
   resetInit: function () {
     $npc.ready      = false
     $npc.hideTimer  = null
-    $npc.isResource = false
   },
 
-  //update all npcs (for movement and rendering)
+  // Update all npcs (for movement and rendering)
   update: function () {
-    //if is moving, move
     $.each(_npc.data, function (key, npc) {
       npc.update()
     })
   },
 
-  //clear all npcs to draw fresh
+  // Clear all npcs to draw fresh
   clear: function () {
     $.each(_npc.data, function (key, npc) {
       npc.clear()
@@ -51,16 +200,16 @@ var $npc = $game.$npc = {
 
   //get render info for all npcs to draw them
   getRenderInfo: function () {
-    var all = [];
+    var allRenderInfo = []
     if ((!$game.bossModeUnlocked && $game.$player.currentLevel > 3) || $game.$player.currentLevel <= 3) {
       $.each(_npc.data, function (key, npc) {
-        var temp = npc.getRenderInfo();
-        if (temp) {
-          all.push(temp);
+        var info = npc.getRenderInfo()
+        if (info) {
+          allRenderInfo.push(info)
         }
-      });
+      })
     }
-    return all;
+    return allRenderInfo
   },
 
   // Determine NPC content to display when clicked
@@ -257,7 +406,7 @@ var $npc = $game.$npc = {
   // Set the current npc to specific one so we can operate on it in the near future
   selectNpc: function (index) {
     // Pass the selected NPC index to $player to trigger the selected NPC
-    $game.$player.npcOnDeck = index;
+    $game.$player.npcOnDeck = index
   },
 
   getNpc: function (index) {
@@ -294,10 +443,10 @@ var $npc = $game.$npc = {
   },
 
   getOnScreenNpcs: function () {
-    var onScreenNpcs = [];
+    var onScreenNpcs = []
     $.each(_npc.data, function (key, npc) {
       if (npc.onScreen) {
-        onScreenNpcs.push(npc.index);
+        onScreenNpcs.push(npc.index)
       }
     })
     return onScreenNpcs
@@ -325,187 +474,15 @@ var _npc = {
   data: {},
 
   // Add an npc to the data object
-  add: function (npc) {
-    var newbie = _npc.create(npc)
+  add: function (npcData) {
+    var npc = new Npc(npcData)
 
-    newbie.getMaster()
+    npc.getRenderPosition()
 
     // To switch from referring to NPCs by id instead of index
     // Just do it here
-    //_npc.data[npc.id] = newbie
-    _npc.data[npc.index] = newbie
-  },
-
-  //create an npc with all its data bound to it
-  create: function (npc) {
-
-    var npcObject = {
-
-      name: npc.name,
-      id: npc.id,
-      index: npc.index,
-
-      // TODO: temporarily calculate position from index, if position data not available;
-      // eventually we should make sure all position data is available and stored.
-      position: {
-        //x: npc.index % $game.TOTAL_WIDTH,
-        //y: Math.floor(npc.index / $game.TOTAL_WIDTH)
-        x: npc.position.x,
-        y: npc.position.y
-      },
-
-      dialog: npc.dialog,
-      dependsOn: npc.dependsOn,
-      level: npc.level,
-      isHolding: npc.isHolding,
-      resource: npc.resource,
-      onScreen: null,
-      numSteps: 64,
-      counter: Math.floor(Math.random() * 64),
-      curFrame: 0,
-      numFrames: 4,
-      skinSuit: npc.skinSuit,
-
-      info: {
-        x: npc.position.x, // npc.index % $game.TOTAL_WIDTH,
-        y: npc.position.y, // Math.floor(npc.index / $game.TOTAL_WIDTH),
-        spriteY: npc.sprite * 64
-      },
-
-      renderInfo: {
-        prevX: npc.position.x * $game.TILE_SIZE, // (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-        prevY: npc.position.y * $game.TILE_SIZE, // (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
-        curX:  npc.position.x * $game.TILE_SIZE, // (npc.index % $game.TOTAL_WIDTH) * $game.TILE_SIZE,
-        curY:  npc.position.x * $game.TILE_SIZE, // (Math.floor(npc.index / $game.TOTAL_WIDTH)) * $game.TILE_SIZE,
-        srcX: 0,
-        srcY: 0,
-        kind: 'npc'
-      },
-
-      //update the npc's rendering
-      update: function () {
-        var check = $game.flags.check('screen-transition')
-        if (!check) {
-          npcObject.idle()
-        } else {
-          npcObject.getMaster()
-        }
-      },
-
-      //figure out if it is on screen or not
-      getMaster: function () {
-        var loc = $game.$map.masterToLocal(npcObject.info.x, npcObject.info.y);
-        if (loc) {
-          var prevX = loc.x * $game.TILE_SIZE,
-              prevY = loc.y * $game.TILE_SIZE,
-              curX  = loc.x * $game.TILE_SIZE,
-              curY  = loc.y * $game.TILE_SIZE
-
-          npcObject.renderInfo.prevX = prevX
-          npcObject.renderInfo.prevY = prevY
-
-          npcObject.renderInfo.curX = curX
-          npcObject.renderInfo.curY = curY
-          npcObject.onScreen = true
-        } else {
-          npcObject.onScreen = false
-        }
-      },
-
-      //advance the idle cycle for animation
-      idle: function () {
-        npcObject.counter += 1;
-
-        if (npcObject.counter >= 56) {
-          npcObject.counter = 0;
-          npcObject.renderInfo.srcX = 0;
-          npcObject.renderInfo.srcY = npcObject.info.spriteY;
-        }
-
-        else if (npcObject.counter == 24) {
-          npcObject.renderInfo.srcX = 32;
-          npcObject.renderInfo.srcY = npcObject.info.spriteY;
-        }
-
-        else if (npcObject.counter == 28) {
-          npcObject.renderInfo.srcX = 64;
-          npcObject.renderInfo.srcY = npcObject.info.spriteY;
-        }
-
-        else if (npcObject.counter == 32) {
-          npcObject.renderInfo.srcX = 96;
-          npcObject.renderInfo.srcY = npcObject.info.spriteY;
-        }
-      },
-
-      //clear from the screen
-      clear: function () {
-        $game.$render.clearCharacter(npcObject.renderInfo);
-      },
-
-      // Returns actual numerical value of level
-      getLevel: function () {
-        return this.level + 1
-      },
-
-      //get the render information to draw it
-      getRenderInfo: function () {
-        if (npcObject.onScreen) {
-          return npcObject.renderInfo;
-        }
-        else {
-          return false;
-        }
-      },
-
-      // Check if an NPC's resource is locked
-      isLocked: function () {
-        var id = this.dependsOn
-        // An NPC is locked if obtaining its resource depends on a player owning the resource of another NPC.
-        if (id !== null) {
-          // Check if player already has it
-          return ($game.$player.checkForResource(id)) ? false : true
-        }
-        return false
-      },
-
-      // Form smalltalk dialog
-      getSmalltalk: function () {
-        var dialog = '',
-            place = ''
-
-        if (this.isHolding) {
-          switch ($game.$player.currentLevel) {
-            case 0:
-              place = 'northwest'
-              break
-            case 1:
-              place = 'northeast'
-              break
-            case 2:
-              place = 'southeast'
-              break
-            case 3:
-              place = 'southwest'
-              break
-          }
-          dialog = 'You should go explore ' + $game.world[place].name + ', in the ' + place + '.'
-        }
-        // If NPC has a response for past, present, future
-        else {
-          if ($game.$player.currentLevel === this.level) {
-            dialog = this.dialog.smalltalk[1]
-          } else if ($game.$player.currentLevel < this.level) {
-            dialog = this.dialog.smalltalk[2]
-          } else {
-            dialog = this.dialog.smalltalk[0]
-          }
-        }
-        return dialog
-      },
-    };
-
-    return npcObject
+    //_npc.data[npc.id] = npc
+    _npc.data[npc.index] = npc
   },
 
   //choose prompt based on PLAYERs memory of interaction

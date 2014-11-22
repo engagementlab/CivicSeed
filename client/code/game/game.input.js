@@ -316,9 +316,7 @@ var $input = $game.$input = module.exports = {
 
     //pause menu if we want it
     // $WINDOW.blur(function (e) {
-    //  if (!$game.$npc.isResource) {
-    //    //$game.pause();
-    //  }
+    //  $game.pause();
     // });
 
     // $('.unpause').click(function () {

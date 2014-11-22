@@ -38,19 +38,19 @@ var $botanist = $game.$botanist = {
       $botanist.ready   = true
 
       callback()
-    });
+    })
   },
 
   resetInit: function () {
-    _counter = 0;
-    _dragOffX = 0;
-    _dragOffY = 0;
+    _counter = 0
+    _dragOffX = 0
+    _dragOffY = 0
 
-    $botanist.index   = 0;
-    $botanist.dialog  = null;
-    $botanist.tangram = null;
-    $botanist.name    = null;
-    $botanist.ready   = false;
+    $botanist.index   = 0
+    $botanist.dialog  = null
+    $botanist.tangram = null
+    $botanist.name    = null
+    $botanist.ready   = false
   },
 
   // Get current render data
@@ -113,7 +113,6 @@ var $botanist = $game.$botanist = {
     var pieces    = $botanist.tangram[$game.$player.currentLevel].answer,
         inventory = $game.$player.getInventory()
 
-    console.log(inventory)
     // Look through player's inventory to see if it matches a correct piece
     for (var i = 0; i < pieces.length; i++) {
       var piece = pieces[i].id,
@@ -202,7 +201,7 @@ var $botanist = $game.$botanist = {
         break
       // 4 = Player has correctly solved the puzzle, but has not answered the portfolio question.
       case 4:
-        _botanist.showOverlay(3);
+        _botanist.showOverlay(3)
         break
     }
   },
@@ -270,15 +269,16 @@ var $botanist = $game.$botanist = {
       .off('dragover')
       .off('drop')
 
+    // TODO: What is this?
     var npcData = e.data,
-        dt = e.originalEvent.dataTransfer;
+        dt = e.originalEvent.dataTransfer
 
-    dt.setData('text/plain', npcData.npc);
+    dt.setData('text/plain', npcData.npc)
 
     //set drag over and drop to receive
     $puzzleEl
       .on('dragover', _botanist.onTangramDragOver)
-      .on('drop',     _botanist.onTangramDrop);
+      .on('drop',     _botanist.onTangramDrop)
   },
 
   // Things to do if the player has completed level 4
@@ -297,7 +297,7 @@ var $botanist = $game.$botanist = {
     clearInterval(_botanist.nudgePlayerInterval)
     clearTimeout(_botanist.nudgePlayerTimeout)
   }
-};
+}
 
 /**
   *
@@ -338,48 +338,41 @@ var _botanist = {
 
   // Determine if the Botanist is on screen
   isOnScreen: function () {
-    var loc = $game.$map.masterToLocal(_botanist.data.x, _botanist.data.y);
+    var loc = $game.$map.masterToLocal(_botanist.data.x, _botanist.data.y)
 
     if (loc) {
       var prevX = loc.x * $game.TILE_SIZE,
           prevY = loc.y * $game.TILE_SIZE,
           curX  = loc.x * $game.TILE_SIZE,
-          curY  = loc.y * $game.TILE_SIZE;
+          curY  = loc.y * $game.TILE_SIZE
 
-      _botanist.renderInfo.prevX = prevX;
-      _botanist.renderInfo.prevY = prevY;
+      _botanist.renderInfo.prevX = prevX
+      _botanist.renderInfo.prevY = prevY
 
-      _botanist.renderInfo.curX = curX;
-      _botanist.renderInfo.curY = curY;
+      _botanist.renderInfo.curX = curX
+      _botanist.renderInfo.curY = curY
 
       return true
-    }
-    else return false
+    } else return false
   },
 
   //update data for idle cycle animation
   idle: function () {
-    _counter += 1;
+    _counter += 1
 
     if (_botanist.renderInfo.srcY === 0) {
       if (_counter >= 24) {
-        _counter = 0;
-        _botanist.renderInfo.srcX = 0;
-      }
-
-      else if (_counter == 18) {
-        _botanist.renderInfo.srcX = 32 * 6;
-      }
-
-      else if (_counter == 12) {
-        _botanist.renderInfo.srcX = 32 * 12;
-      }
-
-      else if (_counter == 6) {
-        _botanist.renderInfo.srcX = 32 * 18;
+        _counter = 0
+        _botanist.renderInfo.srcX = 0
+      } else if (_counter == 18) {
+        _botanist.renderInfo.srcX = 32 * 6
+      } else if (_counter == 12) {
+        _botanist.renderInfo.srcX = 32 * 12
+      } else if (_counter == 6) {
+        _botanist.renderInfo.srcX = 32 * 18
       }
     } else {
-      _botanist.renderInfo.srcX = 0;
+      _botanist.renderInfo.srcX = 0
     }
   },
 
@@ -604,7 +597,7 @@ var _botanist = {
             _botanist.submitPortfolioResponse()
 
             // Reset - TODO: Verify this is all good
-            _paintbrushSeedFactor = 5;
+            _paintbrushSeedFactor = 5
             $game.$player.nextLevel()
             $botanist.hideOverlay(function () {
               // Begin the next level introduction from the Botanist
@@ -820,7 +813,6 @@ var _botanist = {
       left:   $el.position().left,
       right:  $el.position().left + $el.width()
     }
-    console.log(position)
 
     return position
   },
@@ -839,7 +831,7 @@ var _botanist = {
 
     // Create & format the trash can element
     trashEl.classList.add('trash')
-    trashEl.src = CivicSeed.CLOUD_PATH + '/img/game/trash.png';
+    trashEl.src = CivicSeed.CLOUD_PATH + '/img/game/trash.png'
     trashEl.title = 'Drag a piece to the trash can to put it back in your inventory.'
     trashEl.setAttribute('data-placement', 'top')
     trashEl.addEventListener('mouseover', function () {
@@ -875,22 +867,22 @@ var _botanist = {
         name = splits[1],
         selector = 'br' + name,
         x = e.originalEvent.layerX,
-        y =  e.originalEvent.layerY;
+        y = e.originalEvent.layerY
 
     var shape = $game.$resources.getShape(npc),
         path = shape.path,
-        fill = $game.$resources.fills[shape.fill];
+        fill = $game.$resources.fills[shape.fill]
 
     var drag = d3.behavior.drag()
                 .origin(Object)
                 .on('drag',      _botanist.onTangramDrag)
                 .on('dragstart', _botanist.onTangramDragStart)
-                .on('dragend',   _botanist.onTangramDragEnd);
+                .on('dragend',   _botanist.onTangramDragEnd)
 
     //console.log(npcData, selector, x);
     $('.r' + name)
       .css('opacity','.4')
-      .attr('draggable', 'false');
+      .attr('draggable', 'false')
 
     d3.select('.puzzle-svg').append('path')
       .attr('class', selector)
@@ -900,15 +892,15 @@ var _botanist = {
       .attr('stroke', 'rgb(255,255,255)')
       .attr('stroke-width', 0)
       .attr('transform', 'translate('+x+','+y+')')
-      .call(drag);
+      .call(drag)
 
     $('.botanist-puzzle')
       .unbind('dragover')
-      .unbind('drop');
+      .unbind('drop')
 
     //clear data from drag bind
-    e.originalEvent.dataTransfer.clearData();
-    return false;
+    e.originalEvent.dataTransfer.clearData()
+    return false
   },
 
   // Event handler for starting to drag a puzzle piece on the puzzle area
@@ -930,8 +922,8 @@ var _botanist = {
     // Sorts the picked up piece so that it is above the others.
     // Taken from here: http://stackoverflow.com/questions/13595175/updating-svg-element-z-index-with-d3
     d3.selectAll('.puzzle-svg path').sort(function (a, b) { // select the parent and sort the path's
-      if (a.id != d.id) return -1;                          // a is not the hovered element, send "a" to the back
-      else return 1;                                        // a is the hovered element, bring "a" to the front
+      if (a.id != d.id) return -1                           // a is not the hovered element, send "a" to the back
+      else return 1                                         // a is the hovered element, bring "a" to the front
     })
 
     // Hacky way of making it so that dragging puzzle pieces at the lower end of tangram area doesn't
@@ -1011,7 +1003,7 @@ var _botanist = {
 
     // If over trash area, return it to the inventory
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
-      $('.br' + d.id).remove();
+      $('.br' + d.id).remove()
       $('.r' + d.id)
         .css('opacity', 1)
         .attr('draggable', 'true')
@@ -1037,7 +1029,7 @@ var _botanist = {
           // This is the number of pieces
         message     = '',
         wrongOne    = false,
-        nudge       = false;
+        nudge       = false
 
     allTangrams.each(function (i, d) {
       //pull the coordinates for each tangram
@@ -1050,65 +1042,61 @@ var _botanist = {
           transY  = parseInt(transD2[1],10),
           t       = aLength,
           found   = false,
-          correctPiece = false;
+          correctPiece = false
         //go through the answer sheet to see if the current tangram is there &&
         //in the right place
 
-      while(--t > -1) {
-        var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t];
+      while (--t > -1) {
+        var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t]
         if (answer.id === tanId) {
-          found = true;
+          found = true
           //this is a hard check for snapping
           if (transX === answer.x && transY === answer.y) {
-            numRight += 1;
-            correctPiece = true;
+            numRight += 1
+            correctPiece = true
           }
           else {
-            correctPiece = false;
+            correctPiece = false
           }
         }
       }
 
       if (!found) {
-        wrongOne = true;
-        correct = false;
+        wrongOne = true
+        correct = false
         //remove it from the board
-        $('.br' + tanId).remove();
+        $('.br' + tanId).remove()
         $('.r' + tanId)
           .css('opacity', 1)
-          .attr('draggable', 'true');
-      }
-      else if (found && !correctPiece) {
-        nudge = true;
-        correct = false;
+          .attr('draggable', 'true')
+      } else if (found && !correctPiece) {
+        nudge = true
+        correct = false
         //remove it from the board
-        $('.br' + tanId).remove();
+        $('.br' + tanId).remove()
         $('.r' + tanId)
           .css('opacity', 1)
-          .attr('draggable', 'true');
+          .attr('draggable', 'true')
       }
-    });
+    })
 
     if (allTangrams.length === 0) {
       correct = false
-      _paintbrushSeedFactor -= 1;
-      message = 'At least TRY to solve it!';
-    }
-    // If there was a wrong piece
-    else if (wrongOne) {
+      _paintbrushSeedFactor -= 1
+      message = 'At least TRY to solve it!'
+    } else if (wrongOne) {
+      // If there was a wrong piece
       correct = false
-      _paintbrushSeedFactor -=1;
-      message = 'Oh! That’s not quite right. Think more about how the pieces relate to one another, and try again.';
-    }
-    else if (allTangrams.length < aLength) {
+      _paintbrushSeedFactor -= 1
+      message = 'Oh! That’s not quite right. Think more about how the pieces relate to one another, and try again.'
+    } else if (allTangrams.length < aLength) {
       correct = false
-      _paintbrushSeedFactor -=1;
-      message = 'You are missing some pieces. Be sure to read the notebook clues carefully to help pick out the right pieces.';
-    }
-    else if (nudge) {
+      _paintbrushSeedFactor -= 1
+      message = 'You are missing some pieces. Be sure to read the notebook clues carefully to help pick out the right pieces.'
+    } else if (nudge) {
       correct = false
-      _paintbrushSeedFactor -=1;
-      message = 'So close! You had the right pieces, just fix the placement.';
+      _paintbrushSeedFactor -= 1
+      message = 'So close! You had the right pieces, just fix the placement.'
     }
 
     // Display feedback, if there is one
@@ -1143,7 +1131,7 @@ var _botanist = {
     // Add number of seeds as a reward
     var numSeeds   = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
         level      = $game.$player.currentLevel + 1,
-        totalSeeds = (30 + level * 4 ) + level * 4 * numSeeds;
+        totalSeeds = (30 + level * 4 ) + level * 4 * numSeeds
     $game.$player.addSeeds('draw', totalSeeds)
 
     // Reset inventory and puzzle mode

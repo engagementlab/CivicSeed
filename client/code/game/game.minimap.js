@@ -193,7 +193,7 @@ var self = $game.minimap = (function () {
           // - If NPC level is less than or equal to Player's current level
           var theResource = resources[npc.index]
           if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
-            self.radar.drawDot(npc.info)
+            self.radar.drawDot(npc.position)
           }
         })
       },
