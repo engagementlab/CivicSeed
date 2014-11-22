@@ -24,7 +24,7 @@ The following table documents flags that are currently set in CivicSeed.
 | ------------- | ------------- |
 | `pathfinding` | Game is currently calculating a path between two points. Certain inputs should be disabled during this time. |
 | `is-moving`   | Player is currently moving from one point to another. |
-| `in-transit`  | Player is currently moving from one screen to another. Movement and input should be disabled during this time. |
+| `screen-transition` | Player is currently moving from one screen to another. Movement and input should be disabled during this time. |
 | `viewing-inventory` | Player was using the inventory, but it had been temporarily hidden for another action (e.g. reviewing the contents of a resource).|
 | `visible-inventory` | Set when the inventory overlay is currently visible on the gameboard.|
 | `visible-seedventory` | Set when the seedventory overlay is currently visible.|

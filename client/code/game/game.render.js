@@ -278,7 +278,7 @@ var $render = $game.$render = {
     $render.clearAll()
 
     // Only re-render all the tiles if the viewport is tranisitioning
-    if ($game.flags.check('in-transit')) {
+    if ($game.flags.check('screen-transition')) {
       $render.renderAllTiles()
     }
 

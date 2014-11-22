@@ -66,7 +66,7 @@ var self = $game.$others = (function () {
       this.move()
       this.updateRenderInfo()
     } else {
-      if ($game.flags.check('in-transit') === true) {
+      if ($game.flags.check('screen-transition') === true) {
         this.updateRenderInfo()
       } else {
         this.idle()

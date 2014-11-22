@@ -384,7 +384,7 @@ var _npc = {
 
       //update the npc's rendering
       update: function () {
-        var check = $game.flags.check('in-transit')
+        var check = $game.flags.check('screen-transition')
         if (!check) {
           npcObject.idle()
         } else {

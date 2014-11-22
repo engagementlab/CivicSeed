@@ -19,7 +19,7 @@ var $input = $game.$input = module.exports = {
 
     // Update cursor on mouse move
     $BODY.on('mousemove', '#gameboard', function (e) {
-      if (!$game.flags.check('in-transit') && $game.running) {
+      if (!$game.flags.check('screen-transition') && $game.running) {
         $game.$mouse.onMove({
           event: e,
           x:     e.pageX,
@@ -743,7 +743,7 @@ var _input = {
     //check all the game states (if windows are open ,in transit, etc.) to begin a new action
     return (
       $game.running &&
-      !$game.flags.check('in-transit') &&
+      !$game.flags.check('screen-transition') &&
       !$game.flags.check('is-moving') &&
       !$game.flags.check('botanist-chatting') &&
       !$game.flags.check('visible-seedventory') &&

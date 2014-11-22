@@ -151,7 +151,7 @@ var $game = module.exports = {
     _displayTimeout = null;
 
     $game.currentTiles = [];
-    $game.flags.unset('in-transit');
+    $game.flags.unset('screen-transition');
     $game.running = false;
     $game.ready = false;
     $game.resourceCount = [];
@@ -191,8 +191,8 @@ var $game = module.exports = {
 
   // pause menu on browser tab unfocus (currently disabled)
   pause: function () {
-    $('#pause-menu').fadeIn();
-    $game.running = false;
+    $('#pause-menu').fadeIn()
+    $game.running = false
     // TODO: play pause music?
     // CAN USE: $game.$audio.stopAll();
   },
@@ -200,38 +200,51 @@ var $game = module.exports = {
   // resume from the pause menu, start up game loop (currenty disabled)
   resume: function () {
     $('#pause-menu').slideUp(function () {
-      $game.running = true;
-      $game.tick();
-    });
+      $game.running = true
+      $game.tick()
+    })
   },
 
-  //starts a transition from one viewport to another
+  // Starts a transition from one viewport to another
   beginTransition: function () {
-    $game.flags.set('in-transit');
-    _stepNumber = 0;
-    $game.$chat.hideChat();
-    $game.$others.hideAllChats();
-    $game.$player.clearNpcComments()
+    $game.flags.set('screen-transition')
 
-    // Force clear all chats here (TODO: This is a hack because $others.hideAllChats() *SHOULD* BE DOING THIS!)
-    $game.$chat.clearAllChats()
-    $game.stepTransition();
+    var doTravel = function () {
+      _stepNumber = 0
+      $game.$chat.hideChat()
+      $game.$others.hideAllChats()
+      $game.$player.clearNpcComments()
+
+      // Force clear all chats here (TODO: This is a hack because $others.hideAllChats() *SHOULD* BE DOING THIS!)
+      $game.$chat.clearAllChats()
+      $game.stepTransition()
+    }
+
+    // Wait until map data of next screen is fully loaded
+    var beginTravel = function () {
+      if ($game.$map.dataLoaded) {
+        doTravel()
+      } else {
+        setTimeout(beginTravel, 50)
+      }
+    }
+
+    beginTravel()
   },
 
   //decides if we continue tweening the viewports or to end transition
   stepTransition: function () {
-    if (_stepNumber !== $game.$map.numberOfSteps) {
-      _stepNumber += 1;
-      $game.$map.transitionMap(_stepNumber);
-    }
-    else {
-      $game.endTransition();
+    if (_stepNumber < $game.$map.numberOfSteps) {
+      _stepNumber += 1
+      $game.$map.transitionMap(_stepNumber)
+    } else {
+      $game.endTransition()
     }
   },
 
   //resumes normal state of being able to walk and enables chat etc.
   endTransition: function () {
-    $game.flags.unset('in-transit')
+    $game.flags.unset('screen-transition')
     $game.flags.unset('is-moving')
 
     // Now that the transition has ended, create a new grid

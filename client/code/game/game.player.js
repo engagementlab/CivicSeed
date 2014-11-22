@@ -171,7 +171,7 @@ var $player = $game.$player = {
       _move()
       _updateRenderInfo()
     } else {
-      if ($game.flags.check('in-transit') === true) {
+      if ($game.flags.check('screen-transition') === true) {
         _updateRenderInfo()
       } else {
         _idle()
@@ -220,11 +220,10 @@ var $player = $game.$player = {
       // If a transition is necessary, load new data
       if (!isEdge) {
         if (x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
-          _willTravel = true;
-          $game.$map.calculateNext(x, y);
+          _willTravel = true
+          $game.$map.calculateNext(x, y)
         }
-      }
-      else {
+      } else {
         $game.alert('Edge of the world!')
       }
 
@@ -793,7 +792,7 @@ var $player = $game.$player = {
   // Transport player magically (or scientifically) to any location in the game world
   beam: function (location) {
     $game.flags.set('is-beaming')
-    $game.flags.set('in-transit')
+    $game.flags.set('screen-transition')
     $game.$input.resetUI()
     $game.$chat.clearAllChats()
     $('#beaming').show()
@@ -1533,19 +1532,8 @@ function _endMove() {
   _info.prevOffX= 0;
   _info.prevOffY= 0;
 
-  $game.flags.unset('is-moving')
-
   if (_willTravel) {
-    var beginTravel = function (){
-      if ($game.$map.dataLoaded){
-        $game.beginTransition();
-      }
-      else{
-        //keep tryin!
-        setTimeout(beginTravel,50);
-      }
-    };
-    beginTravel();
+    $game.beginTransition()
   } else {
     //trigger npc to popup _info and stuff
     if ($game.$player.npcOnDeck) {
@@ -1553,6 +1541,8 @@ function _endMove() {
       $game.$npc.activate(index)
     }
   }
+
+  $game.flags.unset('is-moving')
 }
 
 //determine what frame to render while standing

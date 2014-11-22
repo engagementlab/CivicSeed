@@ -135,7 +135,7 @@ var $botanist = $game.$botanist = {
     // If player is holding ALL the pieces obtainable this level, beam the player directly to the Botanist so that they don't keep wasting time.
     if (inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
       // Immediately lock player from moving
-      $game.flags.set('in-transit')
+      $game.flags.set('screen-transition')
 
       // Teleport
       $game.alert('You collected all the pieces, to the botanist!')

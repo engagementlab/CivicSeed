@@ -368,7 +368,7 @@ var _map = {
         x2 = data.x + data.numX,
         y2 = data.y + data.numY;
 
-    ss.rpc('game.map.getMapData',x1, y1, x2, y2, function (map, colors) {
+    ss.rpc('game.map.getMapData', x1, y1, x2, y2, function (map, colors) {
       //breakdown single array into 2d array
       var index = null;
 
