@@ -255,6 +255,9 @@ var $map = $game.$map = {
     _topEdge    = $game.masterY
     _bottomEdge = $game.masterY + $game.VIEWPORT_HEIGHT + 1
 
+    // Update edges on minimap, too
+    $game.minimap.render()
+
     window.requestAnimationFrame($game.stepTransition)
   },
 

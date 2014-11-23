@@ -25,16 +25,28 @@ var self = $game.minimap = (function () {
   function renderQuadrantLines () {
     _minimapPlayerContext.fillStyle = $game.$render.colors.gray
     _minimapPlayerContext.fillRect(
-      0,
-      72,
-      142,
-      1
+      0,   // x
+      72,  // y
+      142, // width
+      1    // height
     )
     _minimapPlayerContext.fillRect(
       71,
       0,
       1,
       132
+    )
+  }
+
+  // Render outlines of the current viewport so player
+  // can identify where on the map they are.
+  function renderViewportBoundaries () {
+    _minimapPlayerContext.strokeStyle = 'rgba(192,192,192,0.5)'
+    _minimapPlayerContext.strokeRect(
+      $game.masterX,
+      $game.masterY,
+      $game.VIEWPORT_WIDTH,
+      $game.VIEWPORT_HEIGHT
     )
   }
 
@@ -92,7 +104,6 @@ var self = $game.minimap = (function () {
 
     // Update a player on the minimap
     updatePlayer: function (id, position) {
-      self.clear()
       _minimap[id].x = position.x
       _minimap[id].y = position.y
       self.render()
@@ -100,15 +111,16 @@ var self = $game.minimap = (function () {
 
     // Remove a player from the minimap
     removePlayer: function (id) {
-      self.clear()
       delete _minimap[id]
       self.render()
     },
 
     // Render all the players on the minimap
     render: function () {
+      self.clear()
       renderQuadrantLines()
       renderTinyBotanist()
+      renderViewportBoundaries()
 
       $.each(_minimap, function (key, player) {
         renderPlayer(player)
