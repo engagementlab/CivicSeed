@@ -211,7 +211,7 @@ var $input = $game.$input = module.exports = {
 
     // Make your comment public
     $BODY.on('click', '.public-button button', function () {
-      $game.$player.makePublic($(this).attr('data-npc'))
+      $game.$player.makePublic($(this).attr('data-resource'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
       // This toggling does not reflect success / error conditions from server
@@ -222,7 +222,7 @@ var $input = $game.$input = module.exports = {
 
     // Make your comment private
     $BODY.on('click', '.private-button button', function () {
-      $game.$player.makePrivate($(this).attr('data-npc'))
+      $game.$player.makePrivate($(this).attr('data-resource'))
       // Toggle state of button
       // TODO: place this presentation logic elsewhere
       // This toggling does not reflect success / error conditions from server
@@ -234,9 +234,9 @@ var $input = $game.$input = module.exports = {
     // Pledge a seed to a comment
     $BODY.on('click', '.pledge-button button', function () {
       var info = {
-        id:      $(this).attr('data-player'),
-        pledger: $game.$player.firstName,
-        npc:     $(this).attr('data-npc')
+        id:         $(this).attr('data-player'),
+        pledger:    $game.$player.firstName,
+        resourceId: $(this).attr('data-resource')
       }
 
       var pledges = $game.$player.getPledges()

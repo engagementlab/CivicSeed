@@ -17,8 +17,8 @@ module.exports = {
     resourceCount: [Number],
     instanceName: String,
     resourceResponses: [{
-      npc: Number,
-      id: String,
+      resourceId: Number,
+      playerId: String,
       name: String,
       answer: String,
       madePublic: Boolean

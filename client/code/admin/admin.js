@@ -95,7 +95,7 @@ var self = module.exports = {
     })
 
     $body.on('click', '.allQuestion', function () {
-      var npc      = $(this).attr('data-npc'),
+      var npc      = $(this).attr('data-resource'),
           instance = $(this).attr('data-instance')
       self.showQuestionAnswers(npc, instance, this)
     })
@@ -277,8 +277,8 @@ var self = module.exports = {
 
     for(var q = 0; q < self.allQuestions.length; q++) {
       if (self.allQuestions[q].resource.questionType === 'open') {
-        html += '<div class="allQuestion" data-instance="' + instance + '" data-npc="' + self.allQuestions[q].index +'">'
-        html += '<p data-npc="' + self.allQuestions[q].index +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>'
+        html += '<div class="allQuestion" data-instance="' + instance + '" data-resource="' + self.allQuestions[q].index +'">'
+        html += '<p data-resource="' + self.allQuestions[q].index +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>'
       }
     }
     self.getAllAnswers(instance)

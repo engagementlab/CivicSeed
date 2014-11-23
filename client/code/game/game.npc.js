@@ -9,21 +9,21 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // NPC prototype Object
-function Npc (npc) {
-  this.name       = npc.name
-  this.id         = npc.id
-  this.sprite     = npc.sprite
-  this.level      = npc.level
-  this.dialog     = npc.dialog
-  this.dependsOn  = npc.dependsOn
-  this.isHolding  = npc.isHolding
-  this.resource   = npc.resource
-  this.skinSuit   = npc.skinSuit
+function Npc (data) {
+  this.name       = data.name
+  this.id         = data.id
+  this.sprite     = data.sprite
+  this.level      = data.level
+  this.dialog     = data.dialog
+  this.dependsOn  = data.dependsOn
+  this.isHolding  = data.isHolding
+  this.resource   = data.resource
+  this.skinSuit   = data.skinSuit
   this.onScreen   = null
 
   this.position = {
-    x: npc.position.x,
-    y: npc.position.y
+    x: data.position.x,
+    y: data.position.y
   }
 
   // Two concepts of render data
@@ -34,14 +34,14 @@ function Npc (npc) {
     prevX: this.position.x * $game.TILE_SIZE,
     prevY: this.position.y * $game.TILE_SIZE,
     curX:  this.position.x * $game.TILE_SIZE,
-    curY:  this.position.x * $game.TILE_SIZE,
+    curY:  this.position.y * $game.TILE_SIZE,
     srcX:  0,
     srcY:  this.sprite * 64
   }
 
   // Begin animation frame at a random counter, so that
   // NPCs are not all weirdly synchronized
-  this.animation  = {
+  this.animation = {
     counter: Math.floor(Math.random() * 64)
   }
 }
@@ -124,11 +124,10 @@ Npc.prototype.getLevel = function () {
 // concept of resource ownership - it means whether a player is "done"
 // with answering a given NPC's questions.
 Npc.prototype.isLocked = function () {
-  var id = this.dependsOn
-  if (id !== null) {
-    var npc = $game.$npc.get(id)
+  if (this.dependsOn) {
+    var npc = $game.$npc.get(this.dependsOn)
     // Check if player already has it
-    return ($game.$player.checkForResource(id.index)) ? false : true
+    return ($game.$player.checkForResource(npc.resource.id)) ? false : true
   }
   return false
 },
@@ -229,36 +228,24 @@ var $npc = $game.$npc = {
     // TODO: This should be deprecated eventually
     $game.$player.npcOnDeck = false
 
-    // HACK: Invisible NPCs on signs.
-    /*
-    if (npc.name === 'Sign') {
-      $npc.showSpeechBubble(npc.name, npc.getSmalltalk())
-      return
-    }
-    */
-
     // NPC interaction to display if the player has not finished speaking with Botanist
     // (1) If the player attempts to roam the world before completing the tutorial
     if ($game.flags.check('first-time') === true) {
       $npc.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
-    }
-    // (2) If the player attempts to roam the world before the Botanist is done talking
-    else if (botanistState < 2 || botanistState > 3) {
+    } else if (botanistState < 2 || botanistState > 3) {
+      // (2) If the player attempts to roam the world before the Botanist is done talking
       $npc.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
-    }
-    // If resource is available for the player
-    else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
+    } else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
+      // If resource is available for the player
       // Check if NPC's availability depends on player talking to a different NPC
       if (npc.isLocked()) {
         var dialogue = 'Before I help you out, you need to go see ' + $npc.get(npc.dependsOn).name + '. Come back when you have their resource.'
         $npc.showSpeechBubble(npc.name, dialogue)
-      }
-      else {
+      } else {
         _npc.createPrompt(npc)
       }
-    }
-    // If no resource is available for the player, make small talk instead.
-    else {
+    } else {
+      // If no resource is available for the player, make small talk instead.
       $npc.showSpeechBubble(npc.name, npc.getSmalltalk())
     }
   },

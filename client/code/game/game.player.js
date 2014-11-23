@@ -56,8 +56,7 @@ var $player = $game.$player = {
     //get the players info from the db, alerts other users of presence
     ss.rpc('game.player.init', function (playerInfo) {
       // time in seconds since 1970 or whatever
-      // console.log(playerInfo);
-      _startTime = new Date().getTime() / 1000;
+      _startTime = new Date().getTime() / 1000
 
       _info = {
         srcX: 0,
@@ -68,11 +67,11 @@ var $player = $game.$player = {
         offY: 0,
         prevOffX: 0,
         prevOffY: 0
-      };
+      }
 
       // keeping this around because we then save to it on exit
-      $game.$player.game = playerInfo.game;
-      _setPlayerInformation(playerInfo);
+      $game.$player.game = playerInfo.game
+      _setPlayerInformation(playerInfo)
 
       //tell others you have joined
       var subsetInfo = {
@@ -333,9 +332,9 @@ var $player = $game.$player = {
   },
 
   // determine which returning to npc prompt to show based on if player answered it or not
-  getPrompt: function (index) {
-    if (_resources[index]) {
-      if (_resources[index].result) {
+  getPrompt: function (id) {
+    if (_resources[id]) {
+      if (_resources[id].result) {
         return 2
       } else {
         return 1
@@ -347,29 +346,28 @@ var $player = $game.$player = {
   //saves the user's answer locally
   answerResource: function (info) {
     var newInfo = {
+      id: info.id,
       answers: [info.answer],
       attempts: 1,
       result: info.correct,
       seeded: [],
-      questionType: info.questionType,
-      index: info.index
-    };
-    var realResource = null;
+      questionType: info.questionType
+    }
+    var realResource = null
 
     //see if the resource is already in the list
-    if (_resources[info.index]) {
-      realResource = _resources[info.index];
+    if (_resources[info.id]) {
+      realResource = _resources[info.id]
     }
 
     //if not, then add it to the list
     if (!realResource) {
-      _resources[info.index] = newInfo;
-      realResource = _resources[info.index];
-    }
-    else {
-      realResource.answers.push(newInfo.answers[0]);
-      realResource.attempts += 1;
-      realResource.result = newInfo.result;
+      _resources[info.id] = newInfo
+      realResource = _resources[info.id]
+    } else {
+      realResource.answers.push(newInfo.answers[0])
+      realResource.attempts += 1
+      realResource.result = newInfo.result
     }
 
     if (info.skinSuit) {
@@ -378,11 +376,11 @@ var $player = $game.$player = {
 
     //the answer was correct, add item to inventory
     if (info.correct) {
-      _resourcesDiscovered += 1;
+      _resourcesDiscovered += 1
       var rawAttempts = 6 - realResource.attempts,
-        numToAdd = rawAttempts < 0 ? 0 : rawAttempts;
-      $game.$player.addSeeds('regular', numToAdd);
-      return numToAdd;
+          numToAdd = rawAttempts < 0 ? 0 : rawAttempts
+      $game.$player.addSeeds('regular', numToAdd)
+      return numToAdd
     }
   },
 
@@ -390,13 +388,13 @@ var $player = $game.$player = {
   saveMapImage: function (force) {
     //only do this if we have dropped 5 new seeds
     if (_seeds.dropped - _previousSeedsDropped > 4 || force) {
-      _colorMap = $game.$map.saveImage();
+      _colorMap = $game.$map.saveImage()
       var info = {
         id: $game.$player.id,
         colorMap: _colorMap
-      };
-      ss.rpc('game.player.updateGameInfo', info);
-      _previousSeedsDropped = _seeds.dropped;
+      }
+      ss.rpc('game.player.updateGameInfo', info)
+      _previousSeedsDropped = _seeds.dropped
     }
   },
 
@@ -528,29 +526,29 @@ var $player = $game.$player = {
     $game.alert(msg)
   },
 
-  //make a response public to all other users
-  makePublic: function (index) {
-    if (_resources[index]) {
-      _resources[index].madePublic = true
+  // Make a response public to all other users
+  makePublic: function (id) {
+    if (_resources[id]) {
+      _resources[id].madePublic = true
       ss.rpc('game.npc.makeResponsePublic', {
         playerId: $game.$player.id,
-        npcId: index,
+        resourceId: id,
         instanceName: $game.$player.instanceName
       })
-      // This emits an 'ss-addAnswer' event which calls $resources.addAnswer()
+      // This emits an 'ss-addAnswer' event
     }
   },
 
-  //make a previously public response private to all other users
-  makePrivate: function (index) {
-    if (_resources[index]) {
-      _resources[index].madePublic = false
+  // Make a previously public response private to all other users
+  makePrivate: function (id) {
+    if (_resources[id]) {
+      _resources[id].madePublic = false
       ss.rpc('game.npc.makeResponsePrivate', {
         playerId: $game.$player.id,
-        npcId: index,
+        resourceId: id,
         instanceName: $game.$player.instanceName
       })
-      // This emits an 'ss-removeAnswer' event which calls $resources.removeAnswer()
+      // This emits an 'ss-removeAnswer' event
     }
   },
 
@@ -561,7 +559,7 @@ var $player = $game.$player = {
     $.each(_resources, function (index, resource) {
       if (resource.questionType === 'open') {
         var answer      = resource.answers[resource.answers.length - 1],
-            question    = $game.$resources.getQuestion(index),
+            question    = $game.$resources.get(index).question,
             seededCount = resource.seeded.length
 
         html += '<p class="theQuestion"><strong>Q:</strong> ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>'
@@ -831,19 +829,17 @@ var $player = $game.$player = {
 
   //when another player pledges a seed, make the update in your local resources
   updateResource: function (data) {
-    if (_resources[data.npc]) {
-      _resources[data.npc].seeded.push(data.pledger);
+    if (_resources[data.resourceId]) {
+      _resources[data.resourceId].seeded.push(data.pledger)
     }
   },
 
   //add the tagline to the resource, then save it to db
   setTagline: function (resource, tagline) {
-
     var realResource = null,
         npc          = $game.$npc.findNpcByResourceId(resource.id),
         npcLevel     = npc.getLevel(),
-        playerLevel  = $player.getLevel(),
-        shapeName    = resource.shape
+        playerLevel  = $player.getLevel()
 
     // Find the resource and add tagline
     if (_resources[resource.id]) {
@@ -851,35 +847,32 @@ var $player = $game.$player = {
       realResource.tagline = tagline
       realResource.level = playerLevel
     }
+    _player.saveResourceToDb(realResource)
 
     // Add piece to inventory
     if (playerLevel === npcLevel) {
       if (!_resourceExists(resource.id)) {
         _player.addToInventory({
           id:       resource.id,
-          name:     shapeName,
+          name:     resource.shape,
           tagline:  tagline
         })
       }
     }
 
-    //add this to the DB of resources for all player answers
-    var newAnswer = {
-      resource:     resource.id,
-      id:           $game.$player.id,
-      name:         $game.$player.firstName,
-      answer:       realResource.answers[realResource.answers.length - 1],
-      madePublic:   false,
-      instanceName: $game.$player.instanceName,
-      questionType: realResource.questionType
-    }
-
     // Hack to not include demo users
     if ($game.$player.firstName !== 'Demo') {
-      ss.rpc('game.npc.saveResponse', newAnswer)
+      // Add this to the DB of resources for all player answers
+      var newAnswer = {
+        resourceId:   resource.id,
+        playerId:     $game.$player.id,
+        name:         $game.$player.firstName,
+        answer:       realResource.answers[realResource.answers.length - 1],
+        madePublic:   false
+      }
+      ss.rpc('game.npc.saveResponse', $game.$player.instanceName, newAnswer)
     }
 
-    _player.saveResourceToDb(realResource)
 
     // Display NPC bubble with number of comments & update minimap radar
     $game.$player.displayNpcComments()
@@ -915,16 +908,14 @@ var $player = $game.$player = {
       if (theResource && theResource.result === true) {
         // For open-ended questions
         if (theResource.questionType === 'open') {
-          contents = $game.$resources.getNumResponses(resourceId)
+          contents = $game.$resources.get(resourceId).getNumResponses()
           if (contents > 0) {
             message = 'Click to view ' + contents + ' public answers'
-          }
-          else {
+          } else {
             message = 'There are no public answers, click to make yours public'
           }
-        }
-        // For all other question types
-        else {
+        } else {
+          // For all other question types
           contents = '*'
           message  = 'You answered this question correctly'
         }
@@ -1149,9 +1140,9 @@ var _player = {
         $(this).tooltip('show')
       })
       .on('click', function () {
-        $game.$resources.examineResource(data.npc)
+        $game.$resources.examineResource(data.id)
       })
-      .on('dragstart', {npc: data.npc + ',' + data.name}, $game.$botanist.onTangramDragFromInventoryStart)
+      .on('dragstart', {id: data.id , name: data.name}, $game.$botanist.onTangramDragFromInventoryStart)
   },
 
   // Convenience funtion to load all items in player's inventory from DB
@@ -1339,8 +1330,7 @@ var _player = {
       id:                  $player.id,
       resource:            resource,
       inventory:           _inventory,
-      resourcesDiscovered: _resourcesDiscovered,
-      index:               resource.index
+      resourcesDiscovered: _resourcesDiscovered
     })
   },
 
@@ -1367,31 +1357,31 @@ function _setPlayerInformation (info) {
   $game.flags.unsetAll()
 
   // private
-  _seeds = info.game.seeds;
-  _previousSeedsDropped = _seeds.dropped;
-  _resources = _objectify(info.game.resources);
-  _position = info.game.position;
-  _inventory = info.game.inventory;
-  _colorMap = info.game.colorMap;
-  _resume = info.game.resume;
-  _playingTime = info.game.playingTime;
-  _tilesColored = info.game.tilesColored;
-  _pledges = info.game.pledges;
-  _resourcesDiscovered = info.game.resourcesDiscovered;
-  _skinSuit = info.game.skinSuit;
+  _seeds = info.game.seeds
+  _previousSeedsDropped = _seeds.dropped
+  _resources = _objectify(info.game.resources)
+  _position = info.game.position
+  _inventory = info.game.inventory
+  _colorMap = info.game.colorMap
+  _resume = info.game.resume
+  _playingTime = info.game.playingTime
+  _tilesColored = info.game.tilesColored
+  _pledges = info.game.pledges
+  _resourcesDiscovered = info.game.resourcesDiscovered
+  _skinSuit = info.game.skinSuit
 
   // hack
   // console.log(_resources);
   if (!_resources) {
-    _resources = {};
+    _resources = {}
   }
 
   // public
-  $game.$player.id = info.id;
-  $game.$player.firstName = info.firstName;
-  $game.$player.currentLevel = info.game.currentLevel;
-  $game.$player.instanceName = info.game.instanceName;
-  $game.$player.seenRobot = info.game.seenRobot;
+  $game.$player.id = info.id
+  $game.$player.firstName = info.firstName
+  $game.$player.currentLevel = info.game.currentLevel
+  $game.$player.instanceName = info.game.instanceName
+  $game.$player.seenRobot = info.game.seenRobot
   $game.$player.isMuted = info.game.isMuted
   $game.$player.playerColor = info.game.playerColor
 
@@ -1564,7 +1554,7 @@ function _gameOver() {
   //if demo mode just send to boss level
   if ($game.$player.firstName === 'Demo') {
     $game.$boss.init(function () {
-    });
+    })
   } else {
     ss.rpc('game.player.gameOver', $game.$player.id, function (res){
       if (res) {
@@ -1572,35 +1562,34 @@ function _gameOver() {
           //TODO: test this
           $game.$boss.init(function () {
 
-          });
+          })
         } else {
-          var hooray = '<div class="hooray"><h2>You beat the game, hooray!</h2><p>But the color has not yet returned to the world... If you have more seeds go and color the world. I will contact you when it has returned.</div>';
-          $('#gameboard').append(hooray);
+          var hooray = '<div class="hooray"><h2>You beat the game, hooray!</h2><p>But the color has not yet returned to the world... If you have more seeds go and color the world. I will contact you when it has returned.</div>'
+          $('#gameboard').append(hooray)
         }
       }
-    });
+    })
   }
 }
 
 //save current seed data to db
-function _saveSeedsToDB() {
+function _saveSeedsToDB () {
   var info = {
     id: $game.$player.id,
     seeds: _seeds,
     tilesColored: _tilesColored
-  };
-  ss.rpc('game.player.updateGameInfo', info);
+  }
+  ss.rpc('game.player.updateGameInfo', info)
 }
 
 //turn array into object
-function _objectify(input) {
-  var result = {};
-  for(var i = 0; i < input.length; i++) {
-    result[input[i].index] = input[i];
-    result[input[i].index].arrayLookup = i;
+function _objectify (input) {
+  var result = {}
+  for (var i = 0; i < input.length; i++) {
+    result[input[i].id] = input[i]
+    result[input[i].id].arrayLookup = i
   }
-  // console.log('resources', result);
-  return result;
+  return result
 }
 
 //return boolean if a resource is held in the player's inventory

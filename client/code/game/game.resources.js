@@ -8,41 +8,91 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var $resources = $game.$resources = {
+// TODO: Resource object.
+function Resource (data, skinSuit) {
+  // Copy contents of resource data to this object
+  for (var i in data) {
+    this[i] = data[i]
+  }
 
-  ready:     false,
+  // TODO: See where .index is used and deprecate in favor of .id
+  // For now, copy the id number to prevent scripts breaking
+  this.index         = data.id
 
-  // SVG fills for tangram pieces
-  fills: {
+  this.playerAnswers = []
+
+  // TODO: See where this is being used. Should the skinsuit
+  // be a property of the NPC, the resource, or either?
+  if (skinSuit) {
+    this.skinSuit = skinSuit
+  }
+}
+
+Resource.prototype.getNumResponses = function () {
+  return this.playerAnswers.length
+}
+
+Resource.prototype.addPlayerResponse = function (data) {
+  return this.playerAnswers.push(data)
+}
+
+// Remove a public player response from the resource's list of player responses
+Resource.prototype.removePlayerResponse = function (data) {
+  this.playerAnswers = _.reject(this.playerAnswers, function (answer) {
+    return answer.playerId === data.playerId
+  })
+}
+
+// Tangram pieces as object prototypes.
+var _tangrams = []
+
+function Tangram (data) {
+  this.id    = data.id    // Numerical unique id for each tangram piece
+  this.name  = data.name  // "correctX" or "wrongX" - not a unique identifier. Used by resource to identify which piece to use, currently.
+  this.level = data.level // Pieces are associated with a level. Each level has a group of tangrams that go into a puzzle.
+  this.path  = data.path  // SVG shape path
+  this.fill  = data.fill  // Fill color, a string. Use method .getCSSColor to get a CSS/Canvas-compatible color string.
+}
+
+Tangram.prototype.getCSSColor = function () {
+  var fills = {
     orange:      'rgb(236,113,41)',
     lightOrange: 'rgb(237,173,135)',
     blue:        'rgb(14,152,212)',
     lightBlue:   'rgb(109,195,233)',
     green:       'rgb(76,212,206)',
     lightGreen:  'rgb(164,238,235)'
-  },
+  }
+  return fills[this.fill] || 'rgb(0,0,0)' // Fallback to black
+}
+
+
+var $resources = $game.$resources = {
+
+  ready:     false,
 
   //load in all the resources and the corresponding answers
   init: function (callback) {
+    // Get all resources
     var response = $game.$npc.getNpcData()
-    //create array of ALL player responses and resource information
-    ss.rpc('game.npc.getResponses', $game.$player.instanceName, function (all) {
-      $.each(response, function (key, npc) {
-        if (npc.isHolding) {
-          var stringId = String(npc.resource.id)
-          _resources.data[stringId] = npc.resource
-          _resources.data[stringId].id = npc.resource.id
-          // TODO: See where .index is used and deprecate in favor of .id
-          _resources.data[stringId].index = npc.resource.id
-          _resources.data[stringId].playerAnswers = []
-          _resources.data[stringId].skinSuit = npc.skinSuit
-        }
-      })
-      var allRes = all[0].resourceResponses
-      $.each(allRes, function (key, answer) {
-        if (answer.madePublic) {
-          var stringId = String(answer.npc)
-          _resources.data[stringId].playerAnswers.push(answer)
+    $.each(response, function (key, npc) {
+      if (npc.isHolding) {
+        _resources.data[npc.resource.id] = new Resource(npc.resource, npc.skinSuit)
+      }
+    })
+
+    // Create all tangram pieces - construct an array of all tangram pieces as object prototypes.
+    for (var i = 0, j = TANGRAMS.length; i < j; i++) {
+      _tangrams.push(new Tangram(TANGRAMS[i]))
+    }
+
+    // Create array of ALL player responses
+    ss.rpc('game.npc.getResponses', $game.$player.instanceName, function (response) {
+      var allPlayerResponses = response[0].resourceResponses
+
+      $.each(allPlayerResponses, function (key, answer) {
+        if (answer.madePublic === true) {
+          $resources.get(answer.resourceId).addPlayerResponse(answer)
         }
       })
 
@@ -53,6 +103,10 @@ var $resources = $game.$resources = {
 
   resetInit: function () {
     $resources.ready = false
+  },
+
+  get: function (id) {
+    return _resources.data[id]
   },
 
   debug: function () { // TODO: REMOVE
@@ -153,61 +207,17 @@ var $resources = $game.$resources = {
     }
   },
 
-  //get the shape svg info for a specific resource
-  getShape: function (id) {
-    var stringId  = String(id),
-        shapeName = _resources.data[stringId].shape
-
-    return _resources.shapes[$game.$player.currentLevel][shapeName]
+  // Get the Tangram for a given resource id
+  getTangram: function (id) {
+    var resource = $resources.get(id)
+    return _.findWhere(_tangrams, { level: $game.$player.currentLevel, name: resource.shape })
   },
 
-  //get the tagline for the resource
-  getTagline: function (id) {
-    var stringId = String(id)
-    return _resources.data[stringId].tagline
-  },
-
-  // Add an answer to the player answers for the specific resource
-  addAnswer: function (data) {
-    var stringId = String(data.npc)
-    _resources.data[stringId].playerAnswers.push(data)
-
-    // Update the npc bubbles on screen
-    $game.$player.displayNpcComments()
-    $game.minimap.radar.update()
-  },
-
-  // Remove an answer (this means they made it private and it was previously public)
-  removeAnswer: function (data) {
-    var stringId = String(data.npc)
-    var found = false,
-        i     = 0
-
-    while (!found) {
-      if (_resources.data[stringId].playerAnswers[i].id === data.id) {
-        _resources.data[stringId].playerAnswers.splice(i, 1);
-        found = true
-      }
-      i++
-      if (i >= _resources.data[stringId].playerAnswers.length) {
-        found = true
-      }
-    }
-
-    $game.$player.displayNpcComments()
-  },
-
-  //get the question for a resource
-  getQuestion: function (index) {
-    var stringId = String(index);
-    return _resources.data[stringId].question;
-  },
-
-  getNumResponses: function (index) {
-    var stringId = String(index);
-    return _resources.data[stringId].playerAnswers.length;
+  getTangrams: function () {
+    return _tangrams
   }
-};
+
+}
 
 /**
   *
@@ -268,8 +278,8 @@ var _resources = {
     var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
         artboardX = artboard.offsetWidth,
         artboardY = artboard.offsetHeight,
-        shape     = $resources.getShape(resource.id),
-        fill      = $resources.fills[shape.fill]
+        shape     = $resources.getTangram(resource.id),
+        fill      = shape.getCSSColor()
 
     // Clear previous SVG if any
     artboard.innerHMTL = ''
@@ -370,22 +380,23 @@ var _resources = {
   // Load other players answers and your own
   loadResponses: function (resource) {
     var el             = document.getElementById('resource-area').querySelector('.resource-responses'),
-        playerResource = $game.$player.getAnswer(resource.index),
+        playerResource = $game.$player.getAnswer(resource.id),
         playerPublic   = false,
         playerHTML     = '',
         responsesHTML  = '',
-        npc            = $game.$npc.findNpcByResourceId(resource.index),
+        npc            = $game.$npc.findNpcByResourceId(resource.id),
         dialogue       = ''
 
     // Process public responses (we do not have access to non-public responses here)
     for (var i = 0; i < resource.playerAnswers.length; i++) {
       var thisAnswer = resource.playerAnswers[i]
-      if (thisAnswer.id === $game.$player.id) {
+
+      if (thisAnswer.playerId === $game.$player.id) {
         // If yours is public, remember this for later
         playerPublic = true
       } else {
         // Create HTML snippet of all other players' public responses
-        responsesHTML += '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledge-button"><button class="btn btn-success" data-npc="' + resource.index + '" data-player="'+ thisAnswer.id +'">Seed It!</button></div></li>';
+        responsesHTML += '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledge-button"><button class="btn btn-success" data-resource="' + resource.id + '" data-player="'+ thisAnswer.playerId +'">Seed It!</button></div></li>';
       }
     }
 
@@ -405,9 +416,9 @@ var _resources = {
     // TODO: Make a better templating system for all of this
     playerHTML += '<li class="response your-response"><p><span>' + 'You said' + ': </span>' + playerResource.answers[playerResource.answers.length - 1] + '</p>'
     if (!playerPublic) {
-      playerHTML += '<div class="public-button"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
+      playerHTML += '<div class="public-button"><button class="btn btn-info" data-resource="'+ resource.id +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
     } else {
-      playerHTML += '<div class="private-button"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
+      playerHTML += '<div class="private-button"><button class="btn btn-info" data-resource="'+ resource.id +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
     }
     playerHTML += '</li>'
 
@@ -739,7 +750,7 @@ var _resources = {
 
   // Called after submitAnswer(..., false) because the answer is wrong, and we're done
   showFeedbackWrong: function (resource) {
-    var npc     = $game.$npc.findNpcByResourceId(resource.index),
+    var npc     = $game.$npc.findNpcByResourceId(resource.id),
         message = resource.feedbackWrong
 
     $resources.hideResource(function callback() {
@@ -748,183 +759,309 @@ var _resources = {
     })
   },
 
-  // Shape paths
-  shapes: [{
-    correct1: {
-      path: 'm0,0l0,70l80,0l0,-70l-80,0z',
-      fill: 'lightGreen'
-    },
-    wrong1: {
-      path: 'm0,0l50,-50l50,50l-50,50l-50,-50z',
-      fill: 'blue'
-    },
-    wrong2: {
-      path: 'm0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z',
-      fill: 'lightBlue'
-    },
-    correct2: {
-      path: 'm0,0l-50,50l50,50l0,-100z',
-      fill: 'orange'
-    },
-    wrong3: {
-      path: 'm0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z',
-      fill: 'orange'
-    },
-    correct3: {
-      path: 'm0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z',
-      fill: 'green'
-    },
-    wrong4: {
-      path: 'm0,0l0,100l-50,-50l50,-50z',
-      fill: 'lightOrange'
-    },
-    wrong5: {
-      path: 'm0,0l0,-50l200,0l0,50l-200,0z',
-      fill: 'green'
-    },
-    wrong6: {
-      path: 'm0,0l80,0l0,90l-80,0l0,-90z',
-      fill: 'lightGreen'
-    },
-    correct4: {
-      path: 'm0,0l0,100l50,-50l-50,-50z',
-      fill: 'lightOrange'
-    }
-  },{
-    correct1: {
-      path: 'm0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z',
-      fill: 'green'
-    },
-    wrong1: {
-      path: 'm0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z',
-      fill: 'orange'
-    },
-    wrong2: {
-      path: 'm0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z',
-      fill: 'lightOrange'
-    },
-    wrong3: {
-      path: 'm0,0l100,-40l100,0l100,40l-300,0z',
-      fill: 'green'
-    },
-    wrong4: {
-      path: 'm0,0l100,0l0,-40l-50,-40l-50,40l0,40z',
-      fill: 'lightGreen'
-    },
-    wrong5: {
-      path: 'm0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z',
-      fill: 'blue'
-    },
-    wrong6: {
-      path: 'm0,0c0,0 0,110 0,110c0,0 0,10 0,10c0,0 150,0 150,0c0,0 -100,-40 -100,-40c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40z',
-      fill: 'lightBlue'
-    },
-    correct2: {
-      path: 'm0,0l300,0l-100,-40l-100,0l-100,40z',
-      fill: 'lightOrange'
-    },
-    correct3: {
-      path: 'm0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z',
-      fill: 'lightGreen'
-    },
-    wrong7: {
-      path: 'm0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z',
-      fill: 'orange'
-    },
-    correct4: {
-      path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
-      fill: 'blue'
-    },
-    wrong8: {
-      path: 'm0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z',
-      fill: 'lightOrange'
-    },
-    correct5: {
-      path: 'm0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z',
-      fill: 'orange'
-    },
-    wrong9: {
-      path: 'm0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z',
-      fill: 'blue'
-    }
-  }, {
-    correct1: {
-      path: 'm0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z',
-      fill: 'orange'
-    },
-    correct2: {
-      path: 'm0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z',
-      fill: 'lightOrange'
-    },
-    correct3: {
-      path: 'm0,0l0,-60l300,0l10,20l0,40l-310,0z',
-      fill: 'green'
-    },
-    correct4: {
-      path: 'm0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z',
-      fill: 'lightGreen'
-    },
-    correct5: {
-      path: 'm0,0l0,-70l150,0l0,70l-150,0z',
-      fill: 'lightBlue'
-    },
-    wrong1: {
-      path: 'm0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z',
-      fill: 'blue'
-    },
-    wrong2: {
-      path: 'm0,0l0,60l260,0l-20,-40l-20,-20l-220,0z',
-      fill: 'lightOrange'
-    },
-    correct6: {
-      path: 'm0,0l0,40l300,0l-10,-20l-20,-20l-270,0z',
-      fill: 'blue'
-    },
-    wrong3: {
-      path: 'm0,0l90,0l0,-60l-50,0l-20,20l-20,40z',
-      fill: 'green'
-    }
-  }, {
-    correct1: {
-      path: 'm0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z',
-      fill: 'orange'
-    },
-    wrong1: {
-      path: 'm0,0l0,-40l240,0l0,40l-240,0z',
-      fill: 'blue'
-    },
-    wrong2: {
-      path: 'm0,0l80,0l0,-90l-100,0l20,90z',
-      fill: 'lightOrange'
-    },
-    correct2: {
-      path: 'm0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z',
-      fill: 'lightGreen'
-    },
-    wrong3: {
-      path: 'm0,0l-100,0l0,90l80,0l20,-90z',
-      fill: 'green'
-    },
-    wrong4: {
-      path: 'm0,0l-20,-90l160,0l-20,90l-120,0z',
-      fill: 'lightGreen'
-    },
-    correct3: {
-      path: 'm0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z',
-      fill: 'blue'
-    },
-    correct4: {
-      path: 'm0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z',
-      fill: 'lightOrange'
-    },
-    wrong5: {
-      path: 'm0,0l120,0l0,220l-60,0l-40,-180l-20,0l0,-40z',
-      fill: 'orange'
-    },
-    correct5: {
-      path: 'm0,0l20,20l-20,50l-20,-50l20,-20z',
-      fill: 'green'
-    }
-  }]
-
 }
+
+
+var TANGRAMS = [
+  {
+    "id": 0,
+    "name": "correct1",
+    "level": 0,
+    "path": "m0,0l0,70l80,0l0,-70l-80,0z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 1,
+    "name": "wrong1",
+    "level": 0,
+    "path": "m0,0l50,-50l50,50l-50,50l-50,-50z",
+    "fill": "blue"
+  },
+  {
+    "id": 2,
+    "name": "wrong2",
+    "level": 0,
+    "path": "m0,0l0,-90l60,0l0,-50l-140,0l0,140l80,0z",
+    "fill": "lightBlue"
+  },
+  {
+    "id": 3,
+    "name": "correct2",
+    "level": 0,
+    "path": "m0,0l-50,50l50,50l0,-100z",
+    "fill": "orange"
+  },
+  {
+    "id": 4,
+    "name": "wrong3",
+    "level": 0,
+    "path": "m0,0c0,0 60,0 60,0c0,0 0,-50 0,-50c0,0 -60,0 -60,0c0,0 0,50 0,50z",
+    "fill": "orange"
+  },
+  {
+    "id": 5,
+    "name": "correct3",
+    "level": 0,
+    "path": "m0,0l-100,0l0,50l60,0l0,20l80,0l0,-20l60,0l0,-50l-100,0z",
+    "fill": "green"
+  },
+  {
+    "id": 6,
+    "name": "wrong4",
+    "level": 0,
+    "path": "m0,0l0,100l-50,-50l50,-50z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 7,
+    "name": "wrong5",
+    "level": 0,
+    "path": "m0,0l0,-50l200,0l0,50l-200,0z",
+    "fill": "green"
+  },
+  {
+    "id": 8,
+    "name": "wrong6",
+    "level": 0,
+    "path": "m0,0l80,0l0,90l-80,0l0,-90z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 9,
+    "name": "correct4",
+    "level": 0,
+    "path": "m0,0l0,100l50,-50l-50,-50z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 10,
+    "name": "correct1",
+    "level": 1,
+    "path": "m0,0l-60,0l0,120l-40,0l0,-160l140,0l0,160l-40,0l0,-120z",
+    "fill": "green"
+  },
+  {
+    "id": 11,
+    "name": "wrong1",
+    "level": 1,
+    "path": "m0,0l0,-80l-170,0l-10,0l0,200l120,0l0,-120l60,0z",
+    "fill": "orange"
+  },
+  {
+    "id": 12,
+    "name": "wrong2",
+    "level": 1,
+    "path": "m0,0c0,0 0,-200 0,-200c0,0 -120,0 -120,0c0,0 0,200 0,200c0,0 120,0 120,0z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 13,
+    "name": "wrong3",
+    "level": 1,
+    "path": "m0,0l100,-40l100,0l100,40l-300,0z",
+    "fill": "green"
+  },
+  {
+    "id": 14,
+    "name": "wrong4",
+    "level": 1,
+    "path": "m0,0l100,0l0,-40l-50,-40l-50,40l0,40z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 15,
+    "name": "wrong5",
+    "level": 1,
+    "path": "m0,0l150,0l0,-120l-50,40l0,30l0,10l-100,40z",
+    "fill": "blue"
+  },
+  {
+    "id": 16,
+    "name": "wrong6",
+    "level": 1,
+    "path": "m0,0c0,0 0,110 0,110c0,0 0,10 0,10c0,0 150,0 150,0c0,0 -100,-40 -100,-40c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40z",
+    "fill": "lightBlue"
+  },
+  {
+    "id": 17,
+    "name": "correct2",
+    "level": 1,
+    "path": "m0,0l300,0l-100,-40l-100,0l-100,40z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 18,
+    "name": "correct3",
+    "level": 1,
+    "path": "m0,0c0,0 0,-200 0,-200c0,0 150,0 150,0c0,0 0,40 0,40c0,0 -70,0 -70,0c0,0 0,160 0,160c0,0 -80,0 -80,0z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 19,
+    "name": "wrong7",
+    "level": 1,
+    "path": "m0,0l0,-200l150,0l0,40l-70,0l0,160l-80,0z",
+    "fill": "orange"
+  },
+  {
+    "id": 20,
+    "name": "correct4",
+    "level": 1,
+    "path": "m0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z",
+    "fill": "blue"
+  },
+  {
+    "id": 21,
+    "name": "wrong8",
+    "level": 1,
+    "path": "m0,0l0,-200l-150,0l0,40l70,0l0,160l80,0z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 22,
+    "name": "correct5",
+    "level": 1,
+    "path": "m0,0l100,0c0,0 0,-40 0,-40c0,0 -50,-40 -50,-40c0,0 -50,40 -50,40c0,0 0,40 0,40z",
+    "fill": "orange"
+  },
+  {
+    "id": 23,
+    "name": "wrong9",
+    "level": 1,
+    "path": "m0,0l0,-160l-140,0l0,160l40,0l0,-120l60,0l0,120l40,0z",
+    "fill": "blue"
+  },
+  {
+    "id": 24,
+    "name": "correct1",
+    "level": 2,
+    "path": "m0,0c0,0 0,-30 0,-30c0,0 70,0 70,0c0,0 0,30 0,30c0,0 -20,0 -20,0c0,0 0,-10 0,-10c0,0 -30,0 -30,0c0,0 0,10 0,10c0,0 -20,0 -20,0z",
+    "fill": "orange"
+  },
+  {
+    "id": 25,
+    "name": "correct2",
+    "level": 2,
+    "path": "m0,0l-20,20l-20,40l0,110l100,0l0,-70l-60,0l0,-100z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 26,
+    "name": "correct3",
+    "level": 2,
+    "path": "m0,0l0,-60l300,0l10,20l0,40l-310,0z",
+    "fill": "green"
+  },
+  {
+    "id": 27,
+    "name": "correct4",
+    "level": 2,
+    "path": "m0,0l0,70c0,0 100,0 100,0c0,0 0,-70 0,-70c0,0 -100,0 -100,0z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 28,
+    "name": "correct5",
+    "level": 2,
+    "path": "m0,0l0,-70l150,0l0,70l-150,0z",
+    "fill": "lightBlue"
+  },
+  {
+    "id": 29,
+    "name": "wrong1",
+    "level": 2,
+    "path": "m0,0l20,0l0,-10l30,0l0,10l20,0l0,-30l-70,0l0,30z",
+    "fill": "blue"
+  },
+  {
+    "id": 30,
+    "name": "wrong2",
+    "level": 2,
+    "path": "m0,0l0,60l260,0l-20,-40l-20,-20l-220,0z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 31,
+    "name": "correct6",
+    "level": 2,
+    "path": "m0,0l0,40l300,0l-10,-20l-20,-20l-270,0z",
+    "fill": "blue"
+  },
+  {
+    "id": 32,
+    "name": "wrong3",
+    "level": 2,
+    "path": "m0,0l90,0l0,-60l-50,0l-20,20l-20,40z",
+    "fill": "green"
+  },
+  {
+    "id": 33,
+    "name": "correct1",
+    "level": 3,
+    "path": "m0,0l-120,0l0,40l240,0c0,0 0,-40 0,-40c0,0 -120,0 -120,0z",
+    "fill": "orange"
+  },
+  {
+    "id": 34,
+    "name": "wrong1",
+    "level": 3,
+    "path": "m0,0l0,-40l240,0l0,40l-240,0z",
+    "fill": "blue"
+  },
+  {
+    "id": 35,
+    "name": "wrong2",
+    "level": 3,
+    "path": "m0,0l80,0l0,-90l-100,0l20,90z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 36,
+    "name": "correct2",
+    "level": 3,
+    "path": "m0,0l-60,0l-40,-180l100,0l-60,60l40,0l20,50l0,70z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 37,
+    "name": "wrong3",
+    "level": 3,
+    "path": "m0,0l-100,0l0,90l80,0l20,-90z",
+    "fill": "green"
+  },
+  {
+    "id": 38,
+    "name": "wrong4",
+    "level": 3,
+    "path": "m0,0l-20,-90l160,0l-20,90l-120,0z",
+    "fill": "lightGreen"
+  },
+  {
+    "id": 39,
+    "name": "correct3",
+    "level": 3,
+    "path": "m0,0l100,0l-40,180l-60,0l0,-70l20,-50l40,0l-60,-60z",
+    "fill": "blue"
+  },
+  {
+    "id": 40,
+    "name": "correct4",
+    "level": 3,
+    "path": "m0,0l60,60l-40,0l-20,-20l-20,20l-40,0l60,-60z",
+    "fill": "lightOrange"
+  },
+  {
+    "id": 41,
+    "name": "wrong5",
+    "level": 3,
+    "path": "m0,0l120,0l0,220l-60,0l-40,-180l-20,0l0,-40z",
+    "fill": "orange"
+  },
+  {
+    "id": 42,
+    "name": "correct5",
+    "level": 3,
+    "path": "m0,0l20,20l-20,50l-20,-50l20,-20z",
+    "fill": "green"
+  }
+]

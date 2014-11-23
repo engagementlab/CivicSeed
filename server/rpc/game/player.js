@@ -1,7 +1,8 @@
 'use strict';
 
-var rootDir = process.cwd(),
-    emailUtil = require(rootDir + '/server/utils/email')
+var rootDir   = process.cwd(),
+    emailUtil = require(rootDir + '/server/utils/email'),
+    winston   = require('winston')
 
 exports.actions = function (req, res, ss) {
 
@@ -17,37 +18,37 @@ exports.actions = function (req, res, ss) {
       //curIndex ALWAYS increases, but bomb only does if we found
       //the matching tile, tricky
       var bIndex = bombed.length,
-        insertTiles = [];
+          insertTiles = []
 
       //go thru each new tile (bombed)
-      while(--bIndex > -1) {
+      while (--bIndex > -1) {
         //unoptimized version:
         var oIndex = oldTiles.length,
-          found = false;
+            found = false
         //stop when we find it
-        while(--oIndex > -1) {
+        while (--oIndex > -1) {
           if (oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
-            found = true;
-            oIndex = -1;
+            found = true
+            oIndex = -1
           }
         }
         if (!found) {
-          insertTiles.push(bombed[bIndex]);
+          insertTiles.push(bombed[bIndex])
         }
       }
-      return insertTiles;
+      return insertTiles
     },
 
     saveTiles: function (tiles, callback) {
       var save = function () {
-        _colorModel.create(tiles, function (err,suc) {
-          callback();
-        });
-      };
+        _colorModel.create(tiles, function (err, suc) {
+          callback()
+        })
+      }
       if (tiles.length > 0) {
-        save();
+        save()
       } else {
-        callback();
+        callback()
       }
     },
 
@@ -57,14 +58,14 @@ exports.actions = function (req, res, ss) {
         .where('instanceName').equals(instanceName)
         .find(function (err, results) {
         if (err) {
-          console.log('error finding instance');
+          console.log('error finding instance')
         } else {
           //add tile count to our progress
           var result = results[0],
             oldCount = result.seedsDropped,
             newCount = oldCount + newInfo.numBombs,
             bossModeUnlocked = result.bossModeUnlocked,
-            seedsDroppedGoal = result.seedsDroppedGoal;
+            seedsDroppedGoal = result.seedsDroppedGoal
 
           //update leadeboard
           var oldBoard = result.leaderboard,
@@ -74,64 +75,63 @@ exports.actions = function (req, res, ss) {
             newGuy = {
               name: newInfo.name,
               count: newInfo.newCount
-            };
-
+            }
 
           //if this is the first player on the leadeboard, push em and update status
           if (ob === 0) {
-            oldBoard.push(newGuy);
-            updateBoard = true;
+            oldBoard.push(newGuy)
+            updateBoard = true
           } else {
             //if new guy exists, update him
-            while(--ob > -1) {
+            while (--ob > -1) {
               if (oldBoard[ob].name === newGuy.name) {
-                oldBoard[ob].count = newGuy.count;
-                found = true;
-                updateBoard = true;
-                continue;
+                oldBoard[ob].count = newGuy.count
+                found = true
+                updateBoard = true
+                continue
               }
             }
             //add new guy
             if (!found) {
               //onlly add him if he deserves to be on there!
               if (oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length-1]) {
-                oldBoard.push(newGuy);
-                updateBoard = true;
+                oldBoard.push(newGuy)
+                updateBoard = true
               }
             }
             //sort them
             oldBoard.sort(function (a, b) {
-              return b.count-a.count;
-            });
+              return b.count - a.count
+            })
             //get rid of the last one if too many
             if (oldBoard.length > 10) {
-              oldBoard.pop();
+              oldBoard.pop()
             }
           }
 
           //check if the world is fully colored
-          var gameisover = false;
+          var gameisover = false
           if (newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
             //change the game state
-            result.set('bossModeUnlocked', true);
-            console.log('game over!');
+            result.set('bossModeUnlocked', true)
+            console.log('game over!')
             //send out emails
-            gameisover = true;
-            colorHelpers.endGameEmails(instanceName);
+            gameisover = true
+            colorHelpers.endGameEmails(instanceName)
           }
           //save all changes
-          result.set('seedsDropped', newCount);
-          result.set('leaderboard', oldBoard);
-          result.save();
+          result.set('seedsDropped', newCount)
+          result.set('leaderboard', oldBoard)
+          result.save()
 
           var returnInfo = {
             updateBoard: updateBoard,
             board: oldBoard,
             dropped: newCount
-          };
-          callback(returnInfo, gameisover);
+          }
+          callback(returnInfo, gameisover)
         }
-      });
+      })
     },
 
     endGameEmails: function (instanceName) {
@@ -144,79 +144,77 @@ exports.actions = function (req, res, ss) {
         .select('email game.currentLevel')
         .find(function (err, users) {
           if (err) {
-            res(false);
-          }
-          else if (users) {
+            res(false)
+          } else if (users) {
             var emailListLength = users.length,
-              html = null,
-              subject = null;
+                html = null,
+                subject = null
 
-            for(emailIterator = 0; emailIterator < emailListLength; emailIterator++) {
+            for (i = 0; i < emailListLength; i++) {
               //not done
-              if (users[emailIterator].game.currentLevel < 4) {
+              if (users[i].game.currentLevel < 4) {
                 html = '<h2 style="color:green;">Hey! You need to finish!</h2>';
                 html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>';
                 subject = 'Update!';
-
               } else {
                 html = '<h2 style="color:green;">The Color has Returned!</h2>';
                 html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>';
                 subject = 'Breaking News!';
               }
               //TODO remove this check (this is to not send out test player emails?)
-              if (users[emailIterator].email.length > 6) {
-                emailUtil.sendEmail(subject, html, users[emailIterator].email);
+              if (users[i].email.length > 6) {
+                emailUtil.sendEmail(subject, html, users[i].email)
               }
             }
 
           }
-        });
+        })
     }
-  };
+  }
 
   var dbHelpers = {
     saveInfo: function (info) {
       if (info && info.id) {
         _userModel.findById(info.id, function (err, user) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else if (user) {
             for(var prop in info) {
               if (prop !== 'id') {
-                user.game[prop] = info[prop];
+                user.game[prop] = info[prop]
               }
             }
-            user.save();
+            user.save()
           }
-        });
+        })
       }
     },
 
     saveFeedback: function (info, index) {
-      _userModel.findById(info[index].id, function (err,user) {
+      _userModel.findById(info[index].id, function (err, user) {
         if (err) {
-          console.log(err);
+          console.log(err)
         } else if (user) {
-          user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index});
-          user.save(function (err,okay) {
+          user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index})
+          user.save(function (err, okay) {
             //keep savin til we aint got none
-            index++;
+            index++
             if (index < info.length) {
-              dbHelpers.saveFeedback(info,index);
+              dbHelpers.saveFeedback(info,index)
             }
-          });
+          })
         }
-      });
+      })
     },
 
     getUserGameInfo: function (id, callback) {
-      _userModel.findById(id, function (err,user) {
+      _userModel.findById(id, function (err, user) {
         if (err) {
-          callback(false);
+          callback(false)
         } else if (user) {
-          callback(user.game);
+          callback(user.game)
         }
-      });
+      })
     }
   }
 
@@ -228,18 +226,17 @@ exports.actions = function (req, res, ss) {
         id: req.session.userId,
         firstName: req.session.firstName,
         game: null
-      };
+      }
 
       dbHelpers.getUserGameInfo(req.session.userId, function (game) {
         if (game) {
-          playerInfo.game = game;
-          console.log('initializing ', playerInfo.firstName);
-          res(playerInfo);
-
+          playerInfo.game = game
+          winston.info('Initializing', playerInfo.firstName)
+          res(playerInfo)
         } else {
-          res(false);
+          res(false)
         }
-      });
+      })
     },
 
     tellOthers: function (info) {
@@ -251,38 +248,38 @@ exports.actions = function (req, res, ss) {
       if (player.id) {
         _userModel.findById(player.id, function (err, user) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else if (user) {
             if (user.activeSessionID && user.activeSessionID === req.sessionId) {
-              user.set({ activeSessionID: null });
+              user.set({ activeSessionID: null })
             }
-            ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', player);
+            ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', player)
 
             //if demo user reset all data
             if (player.name === 'Demo' && req.session.email.indexOf('demo') > -1) {
-              user.game.currentLevel = 0;
-              user.game.position.x = 64;
-              user.game.position.y = 77;
-              user.game.resources = {};
-              user.game.resourcesDiscovered = 0;
-              user.game.inventory = [];
-              user.game.seeds.regular = 0;
-              user.game.seeds.draw = 0;
-              user.game.seeds.dropped = 0;
-              user.game.botanistState = 0;
-              user.game.firstTime = true;
-              user.game.resume = [];
-              user.game.seenRobot = false;
-              user.game.playingTime = 0;
-              user.game.tilesColored = 0;
-              user.game.pledges = 5;
+              user.game.currentLevel = 0
+              user.game.position.x = 64
+              user.game.position.y = 77
+              user.game.resources = {}
+              user.game.resourcesDiscovered = 0
+              user.game.inventory = []
+              user.game.seeds.regular = 0
+              user.game.seeds.draw = 0
+              user.game.seeds.dropped = 0
+              user.game.botanistState = 0
+              user.game.firstTime = true
+              user.game.resume = []
+              user.game.seenRobot = false
+              user.game.playingTime = 0
+              user.game.tilesColored = 0
+              user.game.pledges = 5
             }
-            user.save();
-            res();
+            user.save()
+            res()
           }
-        });
+        })
       } else {
-        res();
+        res()
       }
     },
 
@@ -308,7 +305,7 @@ exports.actions = function (req, res, ss) {
         .sort('mapIndex')
         .find(function (err, allTiles) {
           if (err) {
-            res(false);
+            res(false)
           } else if (allTiles) {
             _colorModel
               .where('instanceName').equals(req.session.game.instanceName)
@@ -317,38 +314,38 @@ exports.actions = function (req, res, ss) {
               .sort('mapIndex')
               .find(function (err, colorTiles) {
                 if (err) {
-                  res(false);
+                  res(false)
                 } else if (colorTiles) {
-                  res(allTiles, colorTiles);
+                  res(allTiles, colorTiles)
                 }
-              });
+              })
           }
-        });
+        })
     },
 
     movePlayer: function (moves, id) {
       //send out the moves to everybody
-      ss.publish.channel(req.session.game.instanceName,'ss-playerMoved', {moves: moves, id: id});
-      res(true);
+      ss.publish.channel(req.session.game.instanceName,'ss-playerMoved', {moves: moves, id: id})
+      res(true)
     },
 
     savePosition: function (info) {
-      dbHelpers.saveInfo(info);
+      dbHelpers.saveInfo(info)
     },
 
     dropSeed: function (bombed, info) {
-      // console.log('info',info);
+      // console.log('info',info)
       //welcome to the color server!
       var num = bombed.length,
-        curOld = 0,
-        index = 0,
-        minX = info.x1,
-        maxX = info.x2,
-        minY = info.y1,
-        maxY = info.y2,
-        allTiles = null,
-        updateTiles = [],
-        insertTiles = [];
+          curOld = 0,
+          index = 0,
+          minX = info.x1,
+          maxX = info.x2,
+          minY = info.y1,
+          maxY = info.y2,
+          allTiles = null,
+          updateTiles = [],
+          insertTiles = []
 
       //get a chunk of the bounding tiles from the DB (instead of querying each individually)
       _colorModel
@@ -358,71 +355,71 @@ exports.actions = function (req, res, ss) {
         .sort('mapIndex')
         .find(function (err, oldTiles) {
           if (err) {
-            res(false);
+            res(false)
           } else if (oldTiles) {
-            var newTiles = null;
+            var newTiles = null
             if (oldTiles.length > 0) {
-              newTiles = colorHelpers.modifyTiles(oldTiles, bombed);
+              newTiles = colorHelpers.modifyTiles(oldTiles, bombed)
             } else {
-              newTiles = bombed;
+              newTiles = bombed
             }
             //saveEach tile
             colorHelpers.saveTiles(newTiles, function () {
               //only do updating stuff if new tiles
               if (newTiles.length > 0) {
                 //send out new bombs AND player info to update score
-                var numBombsScaled = Math.ceil(newTiles.length / 9);
-                var newTileCount = info.tilesColored + newTiles.length;
+                var numBombsScaled = Math.ceil(newTiles.length / 9)
+                var newTileCount = info.tilesColored + newTiles.length
 
                 var sendData = {
                   bombed: newTiles,
                   id: info.id,
                   tilesColored: newTileCount
-                };
+                }
                 // //we are done,send out the color information to each client to render
-                ss.publish.channel(info.instanceName,'ss-seedDropped', sendData);
+                ss.publish.channel(info.instanceName,'ss-seedDropped', sendData)
 
                 var newInfo = {
                   name: info.name,
                   newCount: newTileCount,
                   numBombs: numBombsScaled
-                };
+                }
 
                 colorHelpers.gameColorUpdate(newInfo, info.instanceName, function (updates, gameOver) {
                   if (updates.updateBoard) {
-                    ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name});
+                    ss.publish.channel(info.instanceName,'ss-leaderChange', {board: updates.board, name: newInfo.name})
                   }
-                  ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped});
+                  ss.publish.channel(info.instanceName,'ss-progressChange', {dropped: updates.dropped})
                   //FINNNALLY done updating and stuff, respond to the player
                   //telling them if it was sucesful
                   if (gameOver) {
-                    ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked');
+                    ss.publish.channel(req.session.game.instanceName, 'ss-bossModeUnlocked')
                   }
-                  res(newTiles.length);
-                });
-                dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored});
+                  res(newTiles.length)
+                })
+                dbHelpers.saveInfo({id: info.id, tilesColored: info.tilesColored})
               } else {
-                res(0);
+                res(0)
               }
-            });
+            })
           }
-        });
+        })
     },
 
     getInfo: function (id) {
       _userModel.findById(id, function (err, user) {
         if (err) {
-          res('user not found');
+          res('user not found')
         } else {
           var data = {
             tilesColored: user.game.tilesColored,
             level: user.game.currentLevel,
             rank: user.game.rank,
             name: user.name
-          };
-          res(data);
+          }
+          res(data)
         }
-      });
+      })
     },
 
     getGameInfo: function () {
@@ -430,61 +427,60 @@ exports.actions = function (req, res, ss) {
         .where('instanceName').equals(req.session.game.instanceName)
         .find(function (err, result) {
           if (err) {
-            console.log(err);
+            console.log(err)
+          } else{
+            res(result[0])
           }
-          else{
-            res(result[0]);
-          }
-      });
+      })
     },
 
     getAllImages: function (id) {
-      var maps = [];
+      var maps = []
       _userModel
         .where('role').equals('actor')
         .where('game.instanceName').equals(req.session.game.instanceName)
         .select('game.colorMap _id')
         .find(function (err, users) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else {
             for(var i = 0; i < users.length; i +=1) {
-              var map = users[i].game.colorMap;
+              var map = users[i].game.colorMap
               if (map && id != users[i]._id) {
-                maps.push(users[i].game.colorMap);
+                maps.push(users[i].game.colorMap)
               }
             }
-            res(maps);
+            res(maps)
           }
-      });
+      })
     },
 
     levelChange: function (player) {
-      ss.publish.channel(req.session.game.instanceName, 'ss-levelChange', player);
+      ss.publish.channel(req.session.game.instanceName, 'ss-levelChange', player)
     },
 
     statusUpdate: function (msg) {
-      ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg);
+      ss.publish.channel(req.session.game.instanceName,'ss-statusUpdate', msg)
     },
 
     unlockProfile: function (id) {
       _userModel.findById(id, function (err, user) {
         if (!err && user) {
-          user.profileUnlocked = true;
-          user.save(function (err,ok) {
+          user.profileUnlocked = true
+          user.save(function (err, ok) {
             if (err) {
-              console.log(err);
-              res(true);
+              console.log(err)
+              res(true)
             } else {
-              res(false);
+              res(false)
             }
-          });
+          })
         } else {
-          res(true);
+          res(true)
           // MIGHT NEED TO DO THIS HERE STILL???
           // ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
         }
-      });
+      })
     },
 
     gameOver: function (id) {
@@ -492,86 +488,80 @@ exports.actions = function (req, res, ss) {
       // req.session.game = info;
       //req.session.profileSetup = true;
       // console.log('exit: ', info);
-      req.session.save();
+      req.session.save()
       //update mongo
       _userModel.findById(id, function (err, user) {
         if (!err && user) {
-          user.game = info;
-          user.profileUnlocked = true;
+          user.game = info
+          user.profileUnlocked = true
           user.save(function (y) {
-            var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName;
-            res(url);
-          });
+            var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName
+            res(url)
+          })
         } else {
           // MIGHT NEED TO DO THIS HERE STILL???
-          // ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id);
+          // ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id)
         }
-      });
+      })
     },
 
     pledgeSeed: function (info) {
-      // console.log(info);
       _userModel.findById(info.id, function (err, user) {
         if (err) {
-          console.log(err);
+          console.log(err)
         } else if (user) {
           //find resource, update seeded number
           var found = false,
-            intNpc = parseInt(info.npc, 10);
-          for(var r = 0; r < user.game.resources.length; r++) {
-            if ((user.game.resources[r].index === intNpc) && !found) {
+              resourceId = parseInt(info.npc, 10)
+          for (var r = 0; r < user.game.resources.length; r++) {
+            if ((user.game.resources[r].id === resourceId) && !found) {
               found = true;
-              user.game.seeds.regular += 3;
-              user.game.resources[r].seeded.push(info.pledger);
-              break;
+              user.game.seeds.regular += 3
+              user.game.resources[r].seeded.push(info.pledger)
+              break
             }
           }
           if (found) {
-            user.save(function (err,suc) {
-              res(true);
-              ss.publish.channel(req.session.game.instanceName,'ss-seedPledged', info);
-
-            });
+            user.save(function (err, suc) {
+              res(true)
+              ss.publish.channel(req.session.game.instanceName, 'ss-seedPledged', info)
+            })
           } else {
-            res(false);
+            res(false)
           }
         }
-      });
+      })
     },
 
-    saveResource: function (info) {
-      // console.log(info);
+    saveResource: function (data) {
       _userModel
-        .findById(info.id, function (err, user) {
+        .findById(data.id, function (err, user) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else if (user) {
             //first we save the new resource
-            if (user.game.resources[info.index]) {
+            if (user.game.resources[data.resource.id]) {
               //TODO must use lookupIndex here
-              user.game.resources[info.index].answers = info.resource.answers;
-              user.game.resources[info.index].attempts = info.resource.attempts;
-              user.game.resources[info.index].result = info.resource.result;
+              user.game.resources[data.resource.id].answers = data.resource.answers
+              user.game.resources[data.resource.id].attempts = data.resource.attempts
+              user.game.resources[data.resource.id].result = data.resource.result
             } else {
-              user.game.resources.push(info.resource);
+              user.game.resources.push(data.resource)
             }
             //now we update the inventory and resourcesDiscovered
-            user.game.inventory = info.inventory;
-            user.game.resourcesDiscovered = info.resourcesDiscovered;
-            //console.log(user.game.resources);
-            user.save(function (err,suc) {
+            user.game.inventory = data.inventory
+            user.game.resourcesDiscovered = data.resourcesDiscovered
+            user.save(function (err, suc) {
               if (err) {
-                console.log('err');
-              } else {
-                // console.log('successs');
+                console.log('err')
               }
-            });
+            })
           }
-        });
+        })
     },
 
     updateGameInfo: function (info) {
-      dbHelpers.saveInfo(info);
+      dbHelpers.saveInfo(info)
     },
 
     getRandomResumes: function (info) {
@@ -581,19 +571,19 @@ exports.actions = function (req, res, ss) {
         .select('game.resume')
         .find(function (err,results) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else if (results) {
-            res(results);
+            res(results)
           }
-        });
+        })
     },
 
     resumeFeedback: function (info) {
-      dbHelpers.saveFeedback(info, 0);
+      dbHelpers.saveFeedback(info, 0)
     },
 
     beam: function (info) {
-      ss.publish.channel(req.session.game.instanceName,'ss-beam', info);
+      ss.publish.channel(req.session.game.instanceName,'ss-beam', info)
     },
 
     collaborativeChallenge: function () {
@@ -605,38 +595,38 @@ exports.actions = function (req, res, ss) {
         .select('game.position game.collaborativeChallenge _id game.seeds')
         .find(function (err,results) {
           if (err) {
-            console.log(err);
-            res(err);
+            console.log(err)
+            res(err)
           } else if (results) {
             //see if they are in the magic spot for this level (hard coded right now)
             var count = 0,
-              ids = [];
-            for(var i = 0; i < results.length; i++) {
-              var pos = results[i].game.position;
+                ids = []
+            for (var i = 0; i < results.length; i++) {
+              var pos = results[i].game.position
               if (pos.x > 4 && pos.x < 17 && pos.y > 8 && pos.y < 12) {
                 //add them to bonus list if in cave and not done one yet
-                count++;
+                count++
                 if (!results[i].game.collaborativeChallenge) {
-                  ids.push(i);
+                  ids.push(i)
                 }
               }
             }
             //if more than 1 person showed up, reward them
-            var playerIds = [];
+            var playerIds = []
             if (count > 1) {
-              for(var d = 0; d < ids.length; d++) {
-                playerIds.push(results[ids[d]]._id);
-                results[ids[d]].game.collaborativeChallenge = true;
-                results[ids[d]].game.seeds.draw += count * 50;
-                results[ids[d]].save();
+              for (var d = 0; d < ids.length; d++) {
+                playerIds.push(results[ids[d]]._id)
+                results[ids[d]].game.collaborativeChallenge = true
+                results[ids[d]].game.seeds.draw += count * 50
+                results[ids[d]].save()
               }
-              res();
-              ss.publish.channel(req.session.game.instanceName, 'ss-collaborativeChallenge', {players: playerIds, seeds: count * 50});
+              res()
+              ss.publish.channel(req.session.game.instanceName, 'ss-collaborativeChallenge', {players: playerIds, seeds: count * 50 })
             } else {
-              res('not enough');
+              res('not enough')
             }
           }
-        });
+        })
     },
 
     changeSkinSuit: function (info) {

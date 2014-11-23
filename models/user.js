@@ -33,14 +33,13 @@ module.exports = {
         seeded: [String],
         questionType: String,
         tagline: String,
-        index: Number
+        id: Number
       }],
       resourcesDiscovered: Number,
       inventory: [{
         name: String,
         tagline: String,
-        index: Number,
-        npc: Number
+        id: Number
       }],
       seeds: {
         regular: Number,

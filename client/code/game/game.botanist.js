@@ -269,11 +269,8 @@ var $botanist = $game.$botanist = {
       .off('dragover')
       .off('drop')
 
-    // TODO: What is this?
-    var npcData = e.data,
-        dt = e.originalEvent.dataTransfer
-
-    dt.setData('text/plain', npcData.npc)
+    // Send data about the tangram with the dragging event
+    e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(e.data))
 
     //set drag over and drop to receive
     $puzzleEl
@@ -859,19 +856,11 @@ var _botanist = {
     e.preventDefault()
     e.stopPropagation()
 
-    //set class name for new shape and fetch shape data
-    //e.originalEvent.offsetX
-    var npcData = e.originalEvent.dataTransfer.getData('text/plain'),
-        splits = npcData.split(','),
-        npc = splits[0],
-        name = splits[1],
-        selector = 'br' + name,
-        x = e.originalEvent.layerX,
-        y = e.originalEvent.layerY
-
-    var shape = $game.$resources.getShape(npc),
-        path = shape.path,
-        fill = $game.$resources.fills[shape.fill]
+    // Fetch tangram data from the data passed through the event data transfer
+    var data  = JSON.parse(e.originalEvent.dataTransfer.getData('text/plain')),
+        shape = $game.$resources.getTangram(data.id),
+        x     = e.originalEvent.layerX,
+        y     = e.originalEvent.layerY
 
     var drag = d3.behavior.drag()
                 .origin(Object)
@@ -879,16 +868,20 @@ var _botanist = {
                 .on('dragstart', _botanist.onTangramDragStart)
                 .on('dragend',   _botanist.onTangramDragEnd)
 
-    //console.log(npcData, selector, x);
-    $('.r' + name)
-      .css('opacity','.4')
+    $('.r' + shape.name)
+      .css('opacity', '.4')
       .attr('draggable', 'false')
 
     d3.select('.puzzle-svg').append('path')
-      .attr('class', selector)
-      .data([{x:x , y: y, id: name, color: fill}])
+      .attr('class', 'br' + shape.name)
+      .data([{
+        x: x,
+        y: y,
+        id: shape.name,
+        color: shape.getCSSColor()
+      }])
       .attr('d', shape.path)
-      .attr('fill', fill)
+      .attr('fill', shape.getCSSColor())
       .attr('stroke', 'rgb(255,255,255)')
       .attr('stroke-width', 0)
       .attr('transform', 'translate('+x+','+y+')')
@@ -898,7 +891,7 @@ var _botanist = {
       .unbind('dragover')
       .unbind('drop')
 
-    //clear data from drag bind
+    // Clear data from drag bind
     e.originalEvent.dataTransfer.clearData()
     return false
   },
@@ -1034,12 +1027,12 @@ var _botanist = {
     allTangrams.each(function (i, d) {
       //pull the coordinates for each tangram
       var tanIdD  = $(this).attr('class'),
-          tanId   = tanIdD.substring(2,tanIdD.length),
+          tanId   = tanIdD.substring(2, tanIdD.length),
           trans   = $(this).attr('transform'),
-          transD  = trans.substring(10,trans.length-1),
+          transD  = trans.substring(10, trans.length-1),
           transD2 = transD.split(','),
-          transX  = parseInt(transD2[0],10),
-          transY  = parseInt(transD2[1],10),
+          transX  = parseInt(transD2[0], 10),
+          transY  = parseInt(transD2[1], 10),
           t       = aLength,
           found   = false,
           correctPiece = false
@@ -1054,8 +1047,7 @@ var _botanist = {
           if (transX === answer.x && transY === answer.y) {
             numRight += 1
             correctPiece = true
-          }
-          else {
+          } else {
             correctPiece = false
           }
         }

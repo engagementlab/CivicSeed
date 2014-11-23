@@ -51,25 +51,32 @@ var $events = $game.$events = module.exports = {
     ss.event.on('ss-statusUpdate', function (data, chan) {
       // $game.temporaryStatus(data);
       // console.log('TODO lol');
-    });
+    })
 
     ss.event.on('ss-progressChange', function (data, chan) {
-      $game.updatePercent(data.dropped);
-    });
+      $game.updatePercent(data.dropped)
+    })
 
     ss.event.on('ss-leaderChange', function (data, chan) {
-      $game.updateLeaderboard(data);
-    });
+      $game.updateLeaderboard(data)
+    })
 
+    // Add an answer to the player answers for the specific resource
     ss.event.on('ss-addAnswer', function (data, chan) {
       if (data) {
-        $game.$resources.addAnswer(data)
+        $game.$resources.get(data.resourceId).addPlayerResponse(data)
+
+        // Update the npc bubbles on screen
+        $game.$player.displayNpcComments()
+        $game.minimap.radar.update()
       }
     })
 
+   // Remove an answer (this means they made it private and it was previously public)
     ss.event.on('ss-removeAnswer', function (data, chan) {
       if (data) {
-        $game.$resources.removeAnswer(data)
+        $game.$resources.get(data.resourceId).removePlayerResponse(data)
+        $game.$player.displayNpcComments()
       }
     })
 
@@ -79,14 +86,14 @@ var $events = $game.$events = module.exports = {
       $game.$others.levelChange(data.id, data.level);
     });
 
-    //some one pledged a seed to someone's answer
+    // Event fired when someone pledged a seed to another player's answer
     ss.event.on('ss-seedPledged', function (data, chan) {
       if ($game.$player.id === data.id) {
-        $game.statusUpdate({message: data.pledger  + ' liked a response of yours. Here, have some seeds.',input:'status',screen: true,log:true});
-        $game.$player.addSeeds('regular', 3);
-        $game.$player.updateResource(data);
+        $game.broadcast(data.pledger  + ' liked a response of yours. Here, have some seeds!')
+        $game.$player.addSeeds('regular', 3)
+        $game.$player.updateResource(data)
       }
-    });
+    })
 
     //the game meter has hit the end, boss mode is unlocked
     ss.event.on('ss-bossModeUnlocked', function () {
