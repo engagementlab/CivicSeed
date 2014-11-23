@@ -35,9 +35,11 @@ var self = $game.$pathfinder = (function () {
           if (bypass) {
             gridTiles[y][x] = 1
           } else {
-            var val = $game.$map.getTileState(x, y)
+            // Note that tilestates are 0 for "go" tiles
+            // but here we mean "1" for "true, go here"
+            var val = $game.$map.getTileState({ x: x, y: y })
 
-            gridTiles[y][x] = (val === -1) ? 1 : 0
+            gridTiles[y][x] = (val === 0) ? 1 : 0
           }
         }
       }

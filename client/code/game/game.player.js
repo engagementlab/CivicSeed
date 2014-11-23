@@ -336,13 +336,12 @@ var $player = $game.$player = {
   getPrompt: function (index) {
     if (_resources[index]) {
       if (_resources[index].result) {
-        return 2;
-      }
-      else {
-        return 1;
+        return 2
+      } else {
+        return 1
       }
     }
-    return 0;
+    return 0
   },
 
   //saves the user's answer locally
@@ -655,17 +654,17 @@ var $player = $game.$player = {
 
   //get all the render info to draw player
   getRenderInfo: function () {
-    return _renderInfo;
+    return _renderInfo
   },
 
   //get the current color map
   getColorMap: function () {
-    return _colorMap;
+    return _colorMap
   },
 
   //get the number of tiles colored
   getTilesColored: function () {
-    return _tilesColored;
+    return _tilesColored
   },
 
   getResources: function () {
@@ -674,7 +673,7 @@ var $player = $game.$player = {
 
   //get the number of resources collected
   getResourcesDiscovered: function () {
-    return _resourcesDiscovered;
+    return _resourcesDiscovered
   },
 
   getSkinSuit: function () {
@@ -841,24 +840,24 @@ var $player = $game.$player = {
   setTagline: function (resource, tagline) {
 
     var realResource = null,
-        npcLevel     = $game.$npc.getLevel(resource.index),
+        npc          = $game.$npc.findNpcByResourceId(resource.id),
+        npcLevel     = npc.getLevel(),
         playerLevel  = $player.getLevel(),
         shapeName    = resource.shape
 
     // Find the resource and add tagline
-    if (_resources[resource.index]) {
-      realResource = _resources[resource.index]
+    if (_resources[resource.id]) {
+      realResource = _resources[resource.id]
       realResource.tagline = tagline
       realResource.level = playerLevel
     }
 
     // Add piece to inventory
     if (playerLevel === npcLevel) {
-      if (!_resourceExists(resource.index)) {
+      if (!_resourceExists(resource.id)) {
         _player.addToInventory({
-          index:    resource.index,
+          id:       resource.id,
           name:     shapeName,
-          npc:      resource.index,
           tagline:  tagline
         })
       }
@@ -866,7 +865,7 @@ var $player = $game.$player = {
 
     //add this to the DB of resources for all player answers
     var newAnswer = {
-      npc:          resource.index,
+      resource:     resource.id,
       id:           $game.$player.id,
       name:         $game.$player.firstName,
       answer:       realResource.answers[realResource.answers.length - 1],
@@ -905,17 +904,18 @@ var $player = $game.$player = {
 
     // Go thru each on-screen NPC; figure out what to display inside the bubble and what to display when player hovers over it.
     for (var n = 0; n < npcs.length; n++) {
-      var npcIndex = npcs[n],
-          contents = null,
-          message  = null
+      var npc        = $game.$npc.get(npcs[n]),
+          resourceId = npc.resource.id,
+          contents   = null,
+          message    = null
 
-      var theResource = _resources[npcIndex]
+      var theResource = _resources[resourceId]
 
       // If player has obtained the NPC's resource
       if (theResource && theResource.result === true) {
         // For open-ended questions
         if (theResource.questionType === 'open') {
-          contents = $game.$resources.getNumResponses(npcIndex)
+          contents = $game.$resources.getNumResponses(resourceId)
           if (contents > 0) {
             message = 'Click to view ' + contents + ' public answers'
           }
@@ -928,24 +928,25 @@ var $player = $game.$player = {
           contents = '*'
           message  = 'You answered this question correctly'
         }
-        _addBubble(npcIndex, contents, message)
+        _addBubble(npc, contents, message)
       }
       // If player has a rader that can sense if NPCs have a resource to give
       else if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
         // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards from a lower-level NPC if the player skipped it earlier)
-        if ($game.$npc.getNpc(npcIndex).isHolding === true && (!theResource || theResource.result === false) && $player.getLevel() >= $game.$npc.getLevel(npcIndex)) {
+        if (npc.isHolding === true && (!theResource || theResource.result === false) && $player.getLevel() >= npc.getLevel()) {
           contents = '!'
           message  = 'This character has something for you!'
-          _addBubble(npcIndex, contents, message)
+          _addBubble(npc, contents, message)
         }
       }
     }
 
     // Create and append the bubble to the gameboard
-    function _addBubble(npcIndex, contents, hoverMessage) {
+    function _addBubble(npc, contents, hoverMessage) {
       var gameboardEl = document.getElementById('gameboard'),
-          npcPosition = $game.$npc.getNpcCoords(npcIndex),
-          theBubble   = _createBubbleElement(npcIndex, contents)
+          npcPosition = npc.getLocalPosition(),
+          resourceId  = npc.resource.id,
+          theBubble   = _createBubbleElement(npc.id, contents)
 
       // Append bubble to gameboard
       gameboardEl.appendChild(theBubble)
@@ -954,7 +955,7 @@ var $player = $game.$player = {
       $(theBubble).css({
         top:  npcPosition.y - 68,
         left: npcPosition.x
-      });
+      })
 
       // Bind mouse actions to the comment bubble
       // Show a message on hover
@@ -963,27 +964,27 @@ var $player = $game.$player = {
       })
 
       // For open ended questions, display player responses on click
-      if (_resources[npcIndex] && _resources[npcIndex].questionType === 'open') {
+      if (_resources[resourceId] && _resources[resourceId].questionType === 'open') {
         $(theBubble).on('click', function () {
-          _examineResponsesOnClick(npcIndex)
+          _examineResponsesOnClick(resourceId)
         })
       }
     }
 
-    function _createBubbleElement(npcIndex, contents) {
+    function _createBubbleElement(npcId, contents) {
       var el = document.createElement('div')
       el.classList.add('npc-bubble')
       // Hacky way to style the '!' differently
       if (contents == '!') {
         el.classList.add('npc-bubble-exclaim')
       }
-      el.id = 'npcBubble' + npcIndex
+      el.id = 'npcBubble' + npcId
       el.textContent = contents
       return el
     }
 
-    function _examineResponsesOnClick (npcIndex) {
-      $game.$resources.examineResponses(npcIndex)
+    function _examineResponsesOnClick (resourceIndex) {
+      $game.$resources.examineResponses(resourceIndex)
     }
 
     function _showMessageOnHover (message) {
@@ -1429,11 +1430,11 @@ function _move() {
   //if the steps between the tiles has finished,
   //update the master location, and reset steps to go on to next move
   if ($game.$player.currentStep >= _numSteps) {
-    $game.$player.currentStep = 0;
-    _info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX;
-    _info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY;
+    $game.$player.currentStep = 0
+    _info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX
+    _info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY
 
-    $game.$player.currentMove += 1;
+    $game.$player.currentMove += 1
 
     //render mini map every spot player moves
     $game.minimap.updatePlayer($game.$player.id, _info)
@@ -1450,9 +1451,9 @@ function _move() {
       _info.prevOffY = 0
 
       $game.flags.unset('is-moving')
-      $game.$boss.endMove(_info);
+      $game.$boss.endMove(_info)
     } else {
-      _endMove();
+      _endMove()
     }
   }
   //if we no done, then step through it yo.
@@ -1463,12 +1464,12 @@ function _move() {
     $game.$player.currentStep += 1 * currentSpeed
     //if it the first one, then figure out the direction to face
     if ($game.$player.currentStep === 1 * currentSpeed) {
-      _currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x;
-      _currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y;
+      _currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x
+      _currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y
       //set the previous offsets to 0 because the last visit
       //was the actual rounded master
-      _info.prevOffX = 0;
-      _info.prevOffY = 0;
+      _info.prevOffX = 0
+      _info.prevOffY = 0
 
       //set direction for sprite sheets
       //direction refers to the y location on the sprite sheet
@@ -1484,22 +1485,22 @@ function _move() {
         _direction = 3
       }
     } else {
-      _info.prevOffX = _info.offX;
-      _info.prevOffY = _info.offY;
+      _info.prevOffX = _info.offX
+      _info.prevOffY = _info.offY
     }
 
-    _info.offX = $game.$player.currentStep * _currentStepIncX;
-    _info.offY = $game.$player.currentStep * _currentStepIncY;
+    _info.offX = $game.$player.currentStep * _currentStepIncX
+    _info.offY = $game.$player.currentStep * _currentStepIncY
 
     //try only changing the src (frame) every X frames
     if (($game.$player.currentStep-1) % 8 === 0) {
-      _curFrame += 1;
+      _curFrame += 1
       if (_curFrame >= _numFrames) {
-        _curFrame = 0;
+        _curFrame = 0
       }
     }
-    _info.srcX = _curFrame * $game.TILE_SIZE;
-    _info.srcY = _direction * $game.TILE_SIZE*2;
+    _info.srcX = _curFrame * $game.TILE_SIZE
+    _info.srcY = _direction * $game.TILE_SIZE * 2
   }
 }
 
@@ -1530,8 +1531,8 @@ function _endMove() {
   } else {
     //trigger npc to popup _info and stuff
     if ($game.$player.npcOnDeck) {
-      var index = $game.$player.npcOnDeck
-      $game.$npc.activate(index)
+      var npcId = $game.$player.npcOnDeck
+      $game.$npc.activate(npcId)
     }
   }
 
@@ -1603,14 +1604,13 @@ function _objectify(input) {
 }
 
 //return boolean if a resource is held in the player's inventory
-function _resourceExists(npc) {
-  for(var i = 0; i < _inventory.length; i++) {
-    // console.log(_inventory[i].npc, npc);
-    if (_inventory[i].npc === npc) {
-      return true;
+function _resourceExists (id) {
+  for (var i = 0; i < _inventory.length; i++) {
+    if (_inventory[i].id === id) {
+      return true
     }
   }
-  return false;
+  return false
 }
 
 // Temporary global for player colors.

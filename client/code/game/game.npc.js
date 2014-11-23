@@ -12,7 +12,6 @@
 function Npc (npc) {
   this.name       = npc.name
   this.id         = npc.id
-  this.index      = npc.index
   this.sprite     = npc.sprite
   this.level      = npc.level
   this.dialog     = npc.dialog
@@ -100,6 +99,14 @@ Npc.prototype.getRenderInfo = function () {
   return (this.onScreen) ? this.renderInfo : false
 }
 
+// Get {x,y} coordinates for local position, a subset of renderInfo
+Npc.prototype.getLocalPosition = function () {
+  return (this.onScreen) ? {
+    x: this.renderInfo.curX,
+    y: this.renderInfo.curY
+  } : false
+}
+
 // Clear from the screen
 Npc.prototype.clear = function () {
   $game.$render.clearCharacter(this.renderInfo)
@@ -119,8 +126,9 @@ Npc.prototype.getLevel = function () {
 Npc.prototype.isLocked = function () {
   var id = this.dependsOn
   if (id !== null) {
+    var npc = $game.$npc.get(id)
     // Check if player already has it
-    return ($game.$player.checkForResource(id)) ? false : true
+    return ($game.$player.checkForResource(id.index)) ? false : true
   }
   return false
 },
@@ -213,8 +221,8 @@ var $npc = $game.$npc = {
   },
 
   // Determine NPC content to display when clicked
-  activate: function (index) {
-    var npc           = $npc.getNpc(index),
+  activate: function (npcId) {
+    var npc           = $npc.get(npcId),
         botanistState = $game.$botanist.getState()
 
     // Once activated, reset global NPC state
@@ -242,7 +250,7 @@ var $npc = $game.$npc = {
     else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
       // Check if NPC's availability depends on player talking to a different NPC
       if (npc.isLocked()) {
-        var dialogue = 'Before I help you out, you need to go see ' + $npc.getNpc(npc.dependsOn).name + '. Come back when you have their resource.'
+        var dialogue = 'Before I help you out, you need to go see ' + $npc.get(npc.dependsOn).name + '. Come back when you have their resource.'
         $npc.showSpeechBubble(npc.name, dialogue)
       }
       else {
@@ -404,32 +412,14 @@ var $npc = $game.$npc = {
   },
 
   // Set the current npc to specific one so we can operate on it in the near future
-  selectNpc: function (index) {
-    // Pass the selected NPC index to $player to trigger the selected NPC
-    $game.$player.npcOnDeck = index
+  select: function (npcId) {
+    // Pass the selected NPC id to $player to trigger the selected NPC
+    $game.$player.npcOnDeck = npcId
   },
 
-  getNpc: function (index) {
-    // Get NPC data given its index id
-    // This should act as a replacement to the use of a global _curNpc variable.
-    var npc = _npc.data[index]
-
-    // What does this do?! (selects the spot above NPC b/c of double height sprite?)
-    if (!npc) {
-      index += $game.TOTAL_WIDTH
-      npc    = _npc.data[index]
-    }
-
-    return npc
-  },
-
-  // Get NPC's level.
-  getLevel: function (index) {
-    // This differs from refering to the .level property of the NPC since this returns
-    // actual level (+1)
-    if (index) {
-      return $npc.getNpc(index).getLevel()
-    }
+  // Get an NPC by its ID
+  get: function (npcId) {
+    return _npc.data[npcId]
   },
 
   //get all npc data
@@ -437,29 +427,22 @@ var $npc = $game.$npc = {
     return _npc.data
   },
 
-  //get a specific name of npc
-  getName: function (index) {
-    return _npc.data[index].name
+  findNpcByResourceId: function (id) {
+    // Get NPC data given its resource id
+    var result = _.filter(_npc.data, function (npc) {
+      return npc.resource.id == id
+    })
+    return result[0]
   },
 
   getOnScreenNpcs: function () {
     var onScreenNpcs = []
     $.each(_npc.data, function (key, npc) {
       if (npc.onScreen) {
-        onScreenNpcs.push(npc.index)
+        onScreenNpcs.push(npc.id)
       }
     })
     return onScreenNpcs
-  },
-
-  getNpcCoords: function (index) {
-    var npc = _npc.data[index]
-    return {
-      x:    npc.renderInfo.curX,
-      y:    npc.renderInfo.curY,
-      curX: npc.renderInfo.curX,
-      curY: npc.renderInfo.curY
-    }
   }
 }
 
@@ -478,17 +461,13 @@ var _npc = {
     var npc = new Npc(npcData)
 
     npc.setRenderInfo()
-
-    // To switch from referring to NPCs by id instead of index
-    // Just do it here
-    //_npc.data[npc.id] = npc
-    _npc.data[npc.index] = npc
+    _npc.data[npc.id] = npc
   },
 
   //choose prompt based on PLAYERs memory of interaction
   //there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
   createPrompt: function (npc) {
-    var promptIndex = $game.$player.getPrompt(npc.index),
+    var promptIndex = $game.$player.getPrompt(npc.resource.id),
         dialogue    = npc.dialog.prompts[promptIndex]
 
     if (promptIndex === 2) {
@@ -496,7 +475,7 @@ var _npc = {
     }
 
     $npc.showSpeechBubble(npc.name, dialogue, function () {
-      $game.$resources.showResource(npc.index)
+      $game.$resources.showResource(npc.resource.id)
     })
   },
 

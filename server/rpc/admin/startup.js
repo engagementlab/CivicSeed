@@ -194,32 +194,26 @@ var _startup = {
       // dbActions.saveDocuments(tileModel, tileData.global);
 
       // (re)constructing tile data based on data dump from third party tool
-      for(i = 0; i < numberOfTiles; i++) {
-        mapX = i % mapTilesWidth;
-        mapY = Math.floor(i / mapTilesWidth);
+      for (i = 0; i < numberOfTiles; i++) {
+        mapX = i % mapTilesWidth
+        mapY = Math.floor(i / mapTilesWidth)
 
         //add the tile to the array
-        //tileState: -1 if nothing (go!), -2 if something (nogo!), the index if it's an NPC
+        //tileState: 0 if nothing (go!), 1 if something (nogo!), 2 if it's an NPC
         //checking values are arbitrary right now,
         //based on the image used in tiled map editor
-
+        // tileStateVal of 2 will be aded by the NPC load procedure.
         // 0: this means there was nothing place in tilestate layer, aka GO
-        if(tileStateArray[i] === 0) {
-          tileStateVal = -1;
+        if (tileStateArray[i] === 0) {
+          tileStateVal = 0
+        } else if (tileStateArray[i] === 3) {
+          //3: this is the pink? tile, it is the botanist
+          tileStateVal = 3
+        } else {
+          //X: this means there was something OTHER than the blue tile place, NOGO
+          tileStateVal = 1
         }
-        //THIS WILL NOW BE DONE AUTOMAGICALLY by the NPC load
-        // //2: this refers to the BLUE tile, means there is an NPC
-        // else if(tileStateArray[i] === 2  ) {
-        //  tileStateVal = i;
-        // }
-        //3: this is the pink? tile, it is the botanist
-        else if(tileStateArray[i] === 3) {
-          tileStateVal = 99999;
-        }
-        //3: this means there was something OTHER than the blue tile place, NOGO
-        else {
-          tileStateVal = -2;
-        }
+
         tiles.push({
           x: mapX,
           y: mapY,
@@ -230,14 +224,15 @@ var _startup = {
           background3: background3Array[i],
           foreground:  foregroundArray[i],
           foreground2: foreground2Array[i],
-          mapIndex: i
-        });
+          mapIndex: i,
+          npcId: 0
+        })
       }
 
       dbActions.saveDocuments(tileModel, tiles, numberOfTiles, function () {
-        res('Data loaded: tiles');
-      });
-    });
+        res('Data loaded: tiles')
+      })
+    })
   },
 
   loadColors: function (req, res, ss) {

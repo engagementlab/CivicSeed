@@ -157,24 +157,24 @@
       "instanceName": "test",
       "currentLevel": 0,
       "position": {
-        "x": 64,
-        "y": 77
+        "x": 38,
+        "y": 63
       },
       "resources": [],
       "resourcesDiscovered": 0,
       "inventory": [],
       "seeds": {
-        "regular": 0,
+        "regular": 5,
         "draw": 0,
-        "dropped": 0
+        "dropped": 1
       },
-      "botanistState": 0,
-      "firstTime": true,
+      "botanistState": 2,
+      "firstTime": false,
       "resume": [],
       "resumeFeedback": [],
       "seenRobot": false,
-      "playingTime": 0,
-      "tilesColored": 0,
+      "playingTime": 100,
+      "tilesColored": 9,
       "pledges": 5,
       "collaborativeChallenge": false,
       "playerColor": 3,
@@ -453,7 +453,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 8986,
+          "id": 8986,
           "tagline": "This is correct",
           "seeded": [],
           "answers": [
@@ -464,7 +464,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "multiple",
-          "index": 9536,
+          "id": 9536,
           "tagline": "Wrong square",
           "seeded": [],
           "answers": [
@@ -475,7 +475,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "yesno",
-          "index": 8542,
+          "id": 8542,
           "tagline": "This piece is wrong",
           "seeded": [],
           "answers": [
@@ -486,7 +486,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 6265,
+          "id": 6265,
           "tagline": "This is a correct piece",
           "seeded": [],
           "answers": [
@@ -497,7 +497,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 4693,
+          "id": 4693,
           "tagline": "Nope",
           "seeded": [],
           "answers": [
@@ -508,7 +508,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "multiple",
-          "index": 4284,
+          "id": 4284,
           "tagline": "Don't place this one",
           "seeded": [],
           "answers": [
@@ -519,7 +519,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 2569,
+          "id": 2569,
           "tagline": "Use this one",
           "seeded": [],
           "answers": [
@@ -530,7 +530,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 1608,
+          "id": 1608,
           "tagline": "No not this",
           "seeded": [],
           "answers": [
@@ -541,7 +541,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 2176,
+          "id": 2176,
           "tagline": "This is one of them",
           "seeded": [],
           "answers": [
@@ -552,7 +552,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 4876,
+          "id": 4876,
           "tagline": "Not a puzzle piece",
           "seeded": [],
           "answers": [
@@ -565,67 +565,57 @@
         {
           "name": "correct4",
           "tagline": "This is correct",
-          "npc": 8986,
-          "index": 8986
+          "id": 8986
         },
         {
           "name": "wrong6",
           "tagline": "Wrong square",
-          "npc": 9536,
-          "index": 9536
+          "id": 9536
         },
         {
           "name": "wrong3",
           "tagline": "This piece is wrong",
-          "npc": 8542,
-          "index": 8542
+          "id": 8542
         },
         {
           "name": "correct2",
           "tagline": "This is a correct piece",
-          "npc": 6265,
-          "index": 6265
+          "id": 6265
         },
         {
           "name": "wrong2",
           "tagline": "Nope",
-          "npc": 4693,
-          "index": 4693
+          "id": 4693
         },
         {
           "name": "wrong1",
           "tagline": "Don't place this one",
-          "npc": 4284,
-          "index": 4284
+          "id": 4284
         },
         {
           "name": "correct1",
           "tagline": "Use this one",
-          "npc": 2569,
-          "index": 2569
+          "id": 2569
         },
         {
           "name": "wrong4",
           "tagline": "No not this",
-          "npc": 1608,
-          "index": 1608
+          "id": 1608
         },
         {
           "name": "correct3",
           "tagline": "This is one of them",
-          "npc": 2176,
-          "index": 2176
+          "id": 2176
         },
         {
           "name": "wrong5",
           "tagline": "Not a puzzle piece",
-          "npc": 4876,
-          "index": 4876
+          "id": 4876
         }
       ],
       "seeds": {
-        "regular": 0,
-        "draw": 0,
+        "regular": 50,
+        "draw": 50,
         "dropped": 0
       },
       "botanistState": 3,
@@ -686,7 +676,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 8986,
+          "id": 8986,
           "tagline": "This is correct",
           "seeded": [],
           "answers": [
@@ -697,7 +687,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "multiple",
-          "index": 9536,
+          "id": 9536,
           "tagline": "Wrong square",
           "seeded": [],
           "answers": [
@@ -708,7 +698,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "yesno",
-          "index": 8542,
+          "id": 8542,
           "tagline": "This piece is wrong",
           "seeded": [],
           "answers": [
@@ -719,7 +709,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 6265,
+          "id": 6265,
           "tagline": "This is a correct piece",
           "seeded": [],
           "answers": [
@@ -730,7 +720,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 4693,
+          "id": 4693,
           "tagline": "Nope",
           "seeded": [],
           "answers": [
@@ -741,7 +731,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "multiple",
-          "index": 4284,
+          "id": 4284,
           "tagline": "Don't place this one",
           "seeded": [],
           "answers": [
@@ -752,7 +742,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 2569,
+          "id": 2569,
           "tagline": "Use this one",
           "seeded": [],
           "answers": [
@@ -763,7 +753,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 1608,
+          "id": 1608,
           "tagline": "No not this",
           "seeded": [],
           "answers": [
@@ -774,7 +764,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 2176,
+          "id": 2176,
           "tagline": "This is one of them",
           "seeded": [],
           "answers": [
@@ -785,7 +775,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "index": 4876,
+          "id": 4876,
           "tagline": "Not a puzzle piece",
           "seeded": [],
           "answers": [
@@ -798,62 +788,52 @@
         {
           "name": "correct4",
           "tagline": "This is correct",
-          "npc": 8986,
-          "index": 8986
+          "id": 8986
         },
         {
           "name": "wrong6",
           "tagline": "Wrong square",
-          "npc": 9536,
-          "index": 9536
+          "id": 9536
         },
         {
           "name": "wrong3",
           "tagline": "This piece is wrong",
-          "npc": 8542,
-          "index": 8542
+          "id": 8542
         },
         {
           "name": "correct2",
           "tagline": "This is a correct piece",
-          "npc": 6265,
-          "index": 6265
+          "id": 6265
         },
         {
           "name": "wrong2",
           "tagline": "Nope",
-          "npc": 4693,
-          "index": 4693
+          "id": 4693
         },
         {
           "name": "wrong1",
           "tagline": "Don't place this one",
-          "npc": 4284,
-          "index": 4284
+          "id": 4284
         },
         {
           "name": "correct1",
           "tagline": "Use this one",
-          "npc": 2569,
-          "index": 2569
+          "id": 2569
         },
         {
           "name": "wrong4",
           "tagline": "No not this",
-          "npc": 1608,
-          "index": 1608
+          "id": 1608
         },
         {
           "name": "correct3",
           "tagline": "This is one of them",
-          "npc": 2176,
-          "index": 2176
+          "id": 2176
         },
         {
           "name": "wrong5",
           "tagline": "Not a puzzle piece",
-          "npc": 4876,
-          "index": 4876
+          "id": 4876
         }
       ],
       "seeds": {

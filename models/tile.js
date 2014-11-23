@@ -14,7 +14,8 @@ module.exports = {
     background3: Number,
     foreground: Number,
     foreground2: Number,
-    mapIndex: Number
+    mapIndex: Number,
+    npcId: Number
   }
 
 }

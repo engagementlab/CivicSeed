@@ -116,15 +116,17 @@ module.exports = {
       var npc = npcData[index]
 
       tileModel
-        .where('mapIndex').equals(npc.index)
+        .where('x').equals(npc.position.x)
+        .where('y').equals(npc.position.y)
         .find(function (err, tiles) {
           if (err) {
             callback(err)
           }
 
           var tile = tiles[0]
-          tile.tileState = npc.index
-          tile.save(function (err, suc) {
+          tile.tileState = 2
+          tile.npcId = npc.id
+          tile.save(function (err, success) {
             index++
             if (index < npcData.length) {
               saveTile(index)

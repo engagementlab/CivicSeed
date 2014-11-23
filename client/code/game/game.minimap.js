@@ -180,8 +180,8 @@ var self = $game.minimap = (function () {
         } else if (local === true) {
           var onscreen = $game.$npc.getOnScreenNpcs()
           for (var n = 0; n < onscreen.length; n++) {
-            var npc = $game.$npc.getNpc(onscreen[n])
-            npcs[npc.index] = npc
+            var npc = $game.$npc.get(onscreen[n])
+            npcs[npc.id] = npc
           }
         }
 
@@ -191,8 +191,8 @@ var self = $game.minimap = (function () {
           // - If NPC is holding a resource
           // - If player does not already have that resource
           // - If NPC level is less than or equal to Player's current level
-          var theResource = resources[npc.index]
-          if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= $game.$npc.getLevel(npc.index)) {
+          var theResource = resources[npc.resource.id]
+          if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= npc.getLevel()) {
             self.radar.drawDot(npc.position)
           }
         })

@@ -24,33 +24,35 @@ var $resources = $game.$resources = {
 
   //load in all the resources and the corresponding answers
   init: function (callback) {
-    var response = $game.$npc.getNpcData();
+    var response = $game.$npc.getNpcData()
     //create array of ALL player responses and resource information
     ss.rpc('game.npc.getResponses', $game.$player.instanceName, function (all) {
       $.each(response, function (key, npc) {
         if (npc.isHolding) {
-          var stringId = String(npc.index);
-          _resources.data[stringId] = npc.resource;
-          _resources.data[stringId].index = npc.index;
-          _resources.data[stringId].playerAnswers = [];
-          _resources.data[stringId].skinSuit = npc.skinSuit;
+          var stringId = String(npc.resource.id)
+          _resources.data[stringId] = npc.resource
+          _resources.data[stringId].id = npc.resource.id
+          // TODO: See where .index is used and deprecate in favor of .id
+          _resources.data[stringId].index = npc.resource.id
+          _resources.data[stringId].playerAnswers = []
+          _resources.data[stringId].skinSuit = npc.skinSuit
         }
-      });
-      var allRes = all[0].resourceResponses;
+      })
+      var allRes = all[0].resourceResponses
       $.each(allRes, function (key, answer) {
         if (answer.madePublic) {
-          var stringId = String(answer.npc);
-          _resources.data[stringId].playerAnswers.push(answer);
+          var stringId = String(answer.npc)
+          _resources.data[stringId].playerAnswers.push(answer)
         }
-      });
+      })
 
-      $resources.ready = true;
-      callback();
-    });
+      $resources.ready = true
+      callback()
+    })
   },
 
   resetInit: function () {
-    $resources.ready = false;
+    $resources.ready = false
   },
 
   debug: function () { // TODO: REMOVE
@@ -152,16 +154,16 @@ var $resources = $game.$resources = {
   },
 
   //get the shape svg info for a specific resource
-  getShape: function (index) {
-    var stringId  = String(index),
+  getShape: function (id) {
+    var stringId  = String(id),
         shapeName = _resources.data[stringId].shape
 
     return _resources.shapes[$game.$player.currentLevel][shapeName]
   },
 
   //get the tagline for the resource
-  getTagline: function (index) {
-    var stringId = String(index)
+  getTagline: function (id) {
+    var stringId = String(id)
     return _resources.data[stringId].tagline
   },
 
@@ -266,7 +268,7 @@ var _resources = {
     var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
         artboardX = artboard.offsetWidth,
         artboardY = artboard.offsetHeight,
-        shape     = $resources.getShape(resource.index),
+        shape     = $resources.getShape(resource.id),
         fill      = $resources.fills[shape.fill]
 
     // Clear previous SVG if any
@@ -331,8 +333,7 @@ var _resources = {
   // Adds content for the screen if the Player answered the resource question correctly
   loadRewards: function (resource) {
     var el          = document.getElementById('resource-area').querySelector('.resource-content'),
-        npc         = $game.$npc.getNpc(resource.index),
-        npcLevel    = npc.level,
+        npc         = $game.$npc.findNpcByResourceId(resource.id),
         playerLevel = $game.$player.currentLevel,
         feedback    = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight,
         dialogue    = '',
@@ -341,7 +342,7 @@ var _resources = {
     // Legacy stuff saved here, never used.
     //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 
-    if (npcLevel < playerLevel) {
+    if (npc.level < playerLevel) {
       // This can happen because not all tangram pieces need to be obtained to
       // solve the botanist's puzzle. The player only needs the "correct" ones.
       // As a result, if a player goes back to talk to an NPC they haven't talked
@@ -349,8 +350,7 @@ var _resources = {
       // since it is no longer necessary.
       // The player will still obtain seeds and skin rewards.
       dialogue = feedback + ' Here, take ' + _resources.seedsToAdd + ' seeds!'
-    }
-    else {
+    } else {
       // Load the tangram as an SVG path
       _resources.loadTangram(resource)
 
@@ -374,7 +374,7 @@ var _resources = {
         playerPublic   = false,
         playerHTML     = '',
         responsesHTML  = '',
-        npc            = $game.$npc.getNpc(resource.index),
+        npc            = $game.$npc.findNpcByResourceId(resource.index),
         dialogue       = ''
 
     // Process public responses (we do not have access to non-public responses here)
@@ -383,8 +383,7 @@ var _resources = {
       if (thisAnswer.id === $game.$player.id) {
         // If yours is public, remember this for later
         playerPublic = true
-      }
-      else {
+      } else {
         // Create HTML snippet of all other players' public responses
         responsesHTML += '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledge-button"><button class="btn btn-success" data-npc="' + resource.index + '" data-player="'+ thisAnswer.id +'">Seed It!</button></div></li>';
       }
@@ -393,12 +392,10 @@ var _resources = {
     // Determine what NPC says for status
     if (responsesHTML !== '') {
       dialogue = 'Here are some recent answers by your peers.'
-    }
-    else {
+    } else {
       if (!playerPublic) {
         dialogue = 'There are no public answers. If you make your answer public, other players can give you more seeds!'
-      }
-      else {
+      } else {
         dialogue = 'Your answer is shown below, but other players have not made their answers public.'
       }
       responsesHTML = '<li class="response response-notice"><p>More answers from your peers will appear shortly.  Be sure to check back.</p></li>'
@@ -409,8 +406,7 @@ var _resources = {
     playerHTML += '<li class="response your-response"><p><span>' + 'You said' + ': </span>' + playerResource.answers[playerResource.answers.length - 1] + '</p>'
     if (!playerPublic) {
       playerHTML += '<div class="public-button"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
-    }
-    else {
+    } else {
       playerHTML += '<div class="private-button"><button class="btn btn-info" data-npc="'+ resource.index +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
     }
     playerHTML += '</li>'
@@ -638,8 +634,7 @@ var _resources = {
     if (tagline.length === 0) {
       $resources.showCheckMessage('You should summarize what you learned. You’ll need this later!', _focusInput)
       return false
-    }
-    else {
+    } else {
       $game.$player.setTagline(resource, tagline)
       return true
     }
@@ -655,12 +650,10 @@ var _resources = {
     if (response.length === 0) {
       $resources.showCheckMessage('Please answer the question!', _focusInput)
       return false
-    }
-    else if (resource.requiredLength && response.length < resource.requiredLength) {
+    } else if (resource.requiredLength && response.length < resource.requiredLength) {
       _resources.popupCheck(resource, _focusInput)
       return false
-    }
-    else return true
+    } else return true
   },
 
   // Trigger a popup if answer was too short
@@ -706,12 +699,12 @@ var _resources = {
 
   submitAnswer: function (resource, isCorrect) {
     var response   = this.getAnswer(resource),
-        npcLevel   = $game.$npc.getNpc(resource.index).level,
+        npc        = $game.$npc.findNpcByResourceId(resource.id),
         seedsToAdd = 0,
         data       = {
-          index:        resource.index,
+          id:           resource.id,
           answer:       response,
-          npcLevel:     npcLevel,
+          npcLevel:     npc.level,
           questionType: resource.questionType
         }
 
@@ -746,12 +739,12 @@ var _resources = {
 
   // Called after submitAnswer(..., false) because the answer is wrong, and we're done
   showFeedbackWrong: function (resource) {
-    var who     = $game.$npc.getNpc(resource.index).name,
+    var npc     = $game.$npc.findNpcByResourceId(resource.index),
         message = resource.feedbackWrong
 
     $resources.hideResource(function callback() {
       $game.$audio.playTriggerFx('resourceWrong')
-      $game.$npc.showSpeechBubble(who, message)
+      $game.$npc.showSpeechBubble(npc.name, message)
     })
   },
 

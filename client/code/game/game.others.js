@@ -49,15 +49,16 @@ var self = $game.$others = (function () {
       prevOffY: 0
     }
     this.renderInfo = {
+      kind: 'player',
+      id: player._id,
+      firstName: player.firstName,
       srcX: 0,
       srcY: 0,
       curX: player.x,
       curY: player.y,
       prevX: player.x,
       prevY: player.y,
-      kind: 'player',
-      firstName: player.firstName,
-      id: player._id
+      color: null
     }
   }
 
@@ -128,6 +129,7 @@ var self = $game.$others = (function () {
 
   Player.prototype.getRenderInfo = function () {
     if (!this.offScreen) {
+      this.renderInfo.color = this.getColorHex()
       return this.renderInfo
     } else {
       return false

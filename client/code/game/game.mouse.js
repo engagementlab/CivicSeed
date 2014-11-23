@@ -83,36 +83,62 @@ $game.$mouse = (function () {
             user  = $game.$others.playerCard(mX, mY)
 
         if (!user) {
-          //determine if the player can go to new tile
-          var state = $game.$map.getTileState(_curX, _curY)
-          //if the player isn't "searching" for a path it is a green tile, move
-          if (state === -1 && !$game.flags.check('pathfinding')) {
-            $game.$player.beginMove(_curX,_curY)
-            if ($game.flags.check('npc-chatting')) {
-              $game.$npc.hideSpeechBubble()
-            }
+          // Determine what to do with a clicked tile
+          // TODO: Move this logic outside of mouse interaction?
+
+          // TODO: Does pathfinding flag check happen here?
+          if ($game.flags.check('pathfinding')) {
+            return
           }
-          //they clicked on an NPC
-          else if (state >= 0 ) {
-            if (state !== $game.$botanist.index && !$game.flags.check('pathfinding')) {
-              if ($game.flags.check('npc-chatting')) {
-                $game.$npc.hideSpeechBubble()
+
+          // Cancel out of an existing NPC chat bubble if it exists
+          // TODO: this is here?
+          if ($game.flags.check('npc-chatting')) {
+            $game.$npc.hideSpeechBubble()
+          }
+
+          // The only reason why this happens instead of reading $map.currentTiles directly
+          // is because it's calculating if the tile space above it is the upper half of an NPC
+          var state = $game.$map.getTileState({ x: _curX, y: _curY })
+          switch (state) {
+            // Go (occupyable) tile
+            case 0:
+              $game.$player.beginMove(_curX, _curY)
+              break
+            // No-go tile, do nothing.
+            case 1:
+              break
+            // NPC
+            case 2:
+              // Get the npcId sitting at this tile - TODO
+              var npcId = $game.$map.currentTiles[_curX][_curY].npcId
+              // If npcId is zero, we might need to get the npcId from the tile below.
+              if (npcId === 0) {
+                npcId = $game.$map.currentTiles[_curX][_curY+1].npcId
               }
-              $game.$npc.selectNpc(state)
-              //move top bottom left of NPC
+
+              $game.$npc.select(npcId)
+
+              // Move player character to bottom left of NPC
+              // TODO: Better positioning logic - sometimes this space is not occupyable,
+              // and this interrupts the process.
               $game.$player.beginMove(_curX - 2, _curY + 1)
-            }
-            else {
-              //show botanist stuff cuz you clicked him!
-              $('#speech-bubble button').hide()
+              break
+            // Botanist
+            case 3:
+              $('#speech-bubble button').hide() // ?
               $game.$botanist.show()
-            }
+              break
+            // Unknown ID, do nothing; reserve other options for future use.
+            default:
+              break
           }
         }
       }
     }
 
-    debug()
+    // Debug output on each click
+    //debug()
   }
 
   // Returns local x,y grid data based on mouse location

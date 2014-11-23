@@ -6,7 +6,6 @@ module.exports = {
   collection: 'npcs',
   schema: {
     id: Number,
-    index: Number,
     position: {
       x: Number,
       y: Number
@@ -21,6 +20,7 @@ module.exports = {
     },
     dependsOn: Number,
     resource: {
+      id: Number,
       url: String,
       question: String,
       questionType: String,

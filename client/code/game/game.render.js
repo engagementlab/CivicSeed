@@ -162,7 +162,7 @@ var $render = $game.$render = {
     // Interface canvas - style for player names
     _interfaceContext.lineWidth    = 6
     _interfaceContext.lineJoin     = 'round'
-    _interfaceContext.strokeStyle  = '#777'
+    _interfaceContext.strokeStyle  = '#444'
     _interfaceContext.fillStyle    = '#fff'
     _interfaceContext.textAlign    = 'center'
     _interfaceContext.textBaseline = 'bottom'
@@ -732,7 +732,7 @@ var $render = $game.$render = {
       npcData.curY - $game.TILE_SIZE,
       $game.TILE_SIZE,
       $game.TILE_SIZE*2
-    );
+    )
   },
 
   //draw the mouse box to the canvas
@@ -740,52 +740,15 @@ var $render = $game.$render = {
 
     var mX = mouse.cX * $game.TILE_SIZE,
         mY = mouse.cY * $game.TILE_SIZE,
-        state = $game.$map.getTileState(mouse.cX, mouse.cY);
+        state = $game.$map.getTileState({ x: mouse.cX, y: mouse.cY })
         //clear previous mouse area
         _foregroundContext.clearRect(
           _prevMouseX * $game.TILE_SIZE,
           _prevMouseY * $game.TILE_SIZE,
           $game.TILE_SIZE,
           $game.TILE_SIZE
-        );
+        )
 
-/*  // TODO: Experiment on what is the best way to do this.
-    // NOTE: Using CSS won't have the same text-stroke effect as the player
-    // but has the benefit of being able to stack above the NPC comment.
-
-    // Potential solution is to generalize the position of displayText
-    // and have the NPC name displayed below.
-
-    // Display NPC name when you hover over one
-    $('.npc-name').remove()
-    if (state > 0) {
-      // _render.displayText($game.$npc.getNpc(state).name, mouse)
-      console.log('This is ' + $game.$npc.getNpc(state).name)
-
-      var nameEl
-      nameEl = document.createElement('div')
-      nameEl.classList.add('npc-name')
-      nameEl.textContent = $game.$npc.getNpc(state).name
-      document.getElementById('gameboard').appendChild(nameEl)
-
-      var size = nameEl.offsetWidth,
-          half = size / 2,
-          placeX    = null,
-          placeY    = null,
-          position  = null,
-          adjustY   = 3
-
-      position = $game.$player.getRenderPosition()
-
-      placeX = position.x - half + 16
-      placeY = position.y - ($game.TILE_SIZE * 2 + adjustY)
-
-      $(nameEl).css({
-        'top':  placeY,
-        'left': placeX
-      })
-    }
-*/
     //redraw that area
     var tile = $game.$map.currentTiles[_prevMouseX][_prevMouseY];
     var foreIndex = tile.foreground - 1,
@@ -797,28 +760,26 @@ var $render = $game.$render = {
           destX: _prevMouseX,
           destY: _prevMouseY,
           colored: colored
-        };
+        }
 
-      $render.drawForegroundTile(foreData);
-      var srcX;
+      $render.drawForegroundTile(foreData)
+      var srcX = 0
       if ($game.$player.seedMode) {
-        srcX  = $game.TILE_SIZE * 3;
-      }
-      else {
-        // var user = $game.$others.playerCard(tile.x, tile.y);
-        // console.log(tile.x, user);
-        // if (user) {
-        //  srcX = $game.TILE_SIZE * 2;
-        // } else if (state === -1) {
-        if (state === -1) {
-          //go
-          srcX = 0;
-        } else if (state === -2) {
-          //nogo
-          srcX  = $game.TILE_SIZE;
-        } else {
-          //npc
-          srcX  = $game.TILE_SIZE * 2;
+        srcX = $game.TILE_SIZE * 3
+      } else {
+        switch (state) {
+          // 1 = nogo
+          case 1:
+            srcX = $game.TILE_SIZE
+            break
+          // 2/3 = npc/botanist
+          case 2:
+          case 3:
+            srcX = $game.TILE_SIZE * 2
+            break
+          // default: assume srcX = 0, I guess
+          default:
+            break
         }
       }
       _foregroundContext.drawImage(
@@ -831,10 +792,10 @@ var $render = $game.$render = {
         mY,
         $game.TILE_SIZE,
         $game.TILE_SIZE
-      );
+      )
 
-      _prevMouseX = mouse.cX;
-      _prevMouseY = mouse.cY;
+      _prevMouseX = mouse.cX
+      _prevMouseY = mouse.cY
   },
 
   //clear the botanist from the canvas

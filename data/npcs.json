@@ -2,13 +2,13 @@
   {
     "dependsOn": null,
     "id": 0,
-    "index": 2569,
     "isHolding": true,
     "level": 0,
     "name": "W.P. Bear",
     "skinSuit": "lion",
     "sprite": 0,
     "resource": {
+      "id": 2569,
       "answer": "",
       "feedbackRight": "That will give me a lot to think about.",
       "feedbackWrong": "",
@@ -35,13 +35,13 @@
   {
     "dependsOn": null,
     "id": 1,
-    "index": 4284,
     "isHolding": true,
     "level": 0,
     "name": "Hoots",
     "sprite": 1,
     "skinSuit": null,
     "resource": {
+      "id": 4284,
       "answer": "B) downstream-oriented service",
       "feedbackRight": "Exactly! Maybe you could also think about which approach appeals to you the most.",
       "feedbackWrong": "Hoo...boy. That’s not right.",
@@ -70,15 +70,15 @@
     }
   },
   {
-    "dependsOn": 4284,
+    "dependsOn": 1,
     "id": 2,
-    "index": 4693,
     "isHolding": true,
     "level": 0,
     "name": "Squirls",
     "skinSuit": "octopus",
     "sprite": 2,
     "resource": {
+      "id": 4693,
       "answer": "",
       "feedbackRight": "Very interesting!",
       "feedbackWrong": "You might want to think about that a little more and try again.",
@@ -105,13 +105,13 @@
   {
     "dependsOn": null,
     "id": 5,
-    "index": 8956,
     "isHolding": false,
     "level": 0,
     "name": "Turp",
     "skinSuit": null,
     "sprite": 5,
     "resource": {
+      "id": 8956,
       "possibleAnswers": []
     },
     "dialog": {
@@ -130,13 +130,13 @@
   {
     "dependsOn": null,
     "id": 4,
-    "index": 8542,
     "isHolding": true,
     "level": 0,
     "name": "Foxy",
     "sprite": 4,
     "skinSuit": null,
     "resource": {
+      "id": 8542,
       "answer": "yes",
       "feedbackRight": "You are SO right.",
       "feedbackWrong": "Are you sure about that? Maybe take another look.",
@@ -162,13 +162,13 @@
   {
     "dependsOn": null,
     "id": 3,
-    "index": 6265,
     "isHolding": true,
     "level": 0,
     "name": "Rabby",
     "skinSuit": "astronaut",
     "sprite": 3,
     "resource": {
+      "id": 6265,
       "answer": "",
       "feedbackRight": "That will give me a lot to think about.",
       "feedbackWrong": "",
@@ -195,13 +195,13 @@
   {
     "dependsOn": null,
     "id": 50,
-    "index": 15668,
     "isHolding": false,
     "level": 3,
     "name": "Mageline",
     "sprite": 41,
     "skinSuit": null,
     "resource": {
+      "id": 15668,
       "possibleAnswers": []
     },
     "dialog": {
@@ -220,13 +220,13 @@
   {
     "dependsOn": null,
     "id": 6,
-    "index": 2176,
     "isHolding": true,
     "level": 0,
     "name": "RoggaBogga",
     "skinSuit": "dinosaur",
     "sprite": 6,
     "resource": {
+      "id": 2176,
       "answer": "",
       "feedbackRight": "That will give me a lot to think about.",
       "feedbackWrong": "",
@@ -253,13 +253,13 @@
   {
     "dependsOn": null,
     "id": 7,
-    "index": 1608,
     "isHolding": true,
     "level": 0,
     "name": "Goku",
     "skinSuit": "penguin",
     "sprite": 7,
     "resource": {
+      "id": 1608,
       "answer": "",
       "feedbackRight": "Thanks for sharing that.",
       "feedbackWrong": "",
@@ -284,15 +284,15 @@
     }
   },
   {
-    "dependsOn": 6265,
+    "dependsOn": 3,
     "id": 8,
-    "index": 4876,
     "isHolding": true,
     "level": 0,
     "name": "Quix",
     "skinSuit": "cactus",
     "sprite": 8,
     "resource": {
+      "id": 4876,
       "answer": "",
       "feedbackRight": "I can think of 42 reasons why that’s a great answer.",
       "feedbackWrong": "",
@@ -319,13 +319,13 @@
   {
     "dependsOn": null,
     "id": 10,
-    "index": 9536,
     "isHolding": true,
     "level": 0,
     "name": "Malo",
     "sprite": 10,
     "skinSuit": null,
     "resource": {
+      "id": 9536,
       "answer": "D) Brown hair, bilingual, New Yorker",
       "feedbackRight": "Nailed it! We should totally hang out after this.",
       "feedbackWrong": "Hmm... never heard that one before. Maybe you should check out the resource one more time and give it another shot.",
@@ -356,13 +356,13 @@
   {
     "dependsOn": null,
     "id": 12,
-    "index": 8427,
     "isHolding": false,
     "level": 0,
     "name": "Fork",
     "sprite": 12,
     "skinSuit": null,
     "resource": {
+      "id": 8427,
       "possibleAnswers": []
     },
     "dialog": {
@@ -381,13 +381,13 @@
   {
     "dependsOn": null,
     "id": 13,
-    "index": 1549,
     "isHolding": false,
     "level": 1,
     "name": "Awaa",
     "sprite": 13,
     "skinSuit": null,
     "resource": {
+      "id": 1549,
       "possibleAnswers": []
     },
     "dialog": {
@@ -406,13 +406,13 @@
   {
     "dependsOn": null,
     "id": 14,
-    "index": 1517,
     "isHolding": true,
     "level": 1,
     "name": "Hampton",
     "sprite": 14,
     "skinSuit": null,
     "resource": {
+      "id": 1517,
       "answer": "",
       "feedbackRight": "Interesting. Very interesting!",
       "feedbackWrong": "",
@@ -439,13 +439,13 @@
   {
     "dependsOn": null,
     "id": 15,
-    "index": 359,
     "isHolding": true,
     "level": 1,
     "name": "Frampton",
     "sprite": 15,
     "skinSuit": null,
     "resource": {
+      "id": 359,
       "answer": "",
       "feedbackRight": "That’s great! Thanks for sharing!",
       "feedbackWrong": "",
@@ -472,13 +472,13 @@
   {
     "dependsOn": null,
     "id": 16,
-    "index": 3338,
     "isHolding": true,
     "level": 1,
     "name": "Nosezo",
     "sprite": 16,
     "skinSuit": null,
     "resource": {
+      "id": 3338,
       "answer": "true",
       "feedbackRight": "Great work!",
       "feedbackWrong": "Maybe you should review the resource and try again...",
@@ -504,13 +504,13 @@
   {
     "dependsOn": null,
     "id": 17,
-    "index": 4338,
     "isHolding": false,
     "level": 1,
     "name": "Siri",
     "sprite": 17,
     "skinSuit": null,
     "resource": {
+      "id": 4338,
       "possibleAnswers": []
     },
     "dialog": {
@@ -529,13 +529,13 @@
   {
     "dependsOn": null,
     "id": 18,
-    "index": 6177,
     "isHolding": true,
     "level": 1,
     "name": "Chiklet",
     "sprite": 18,
     "skinSuit": null,
     "resource": {
+      "id": 6177,
       "answer": "false",
       "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
       "feedbackWrong": "Maybe you should review the resource and try again...",
@@ -561,13 +561,13 @@
   {
     "dependsOn": null,
     "id": 20,
-    "index": 7052,
     "isHolding": true,
     "level": 1,
     "name": "Dewdrop",
     "sprite": 20,
     "skinSuit": null,
     "resource": {
+      "id": 7052,
       "answer": "true",
       "feedbackRight": "Exactly right!",
       "feedbackWrong": "Oh, I don’t think so. Maybe you should take another look?",
@@ -593,13 +593,13 @@
   {
     "dependsOn": null,
     "id": 19,
-    "index": 7082,
     "isHolding": false,
     "level": 1,
     "name": "Hummer",
     "sprite": 19,
     "skinSuit": null,
     "resource": {
+      "id": 7082,
       "possibleAnswers": []
     },
     "dialog": {
@@ -618,13 +618,13 @@
   {
     "dependsOn": null,
     "id": 22,
-    "index": 6773,
     "isHolding": true,
     "level": 1,
     "name": "BeepBoop",
     "skinSuit": "cone",
     "sprite": 22,
     "resource": {
+      "id": 6773,
       "answer": "true",
       "feedbackRight": "Bingo! Now that’s what I’m talkin’ about!",
       "feedbackWrong": "That’s not right! Check the resource and give it another shot.",
@@ -650,13 +650,13 @@
   {
     "dependsOn": null,
     "id": 24,
-    "index": 9170,
     "isHolding": true,
     "level": 1,
     "name": "Blooper",
     "skinSuit": null,
     "sprite": 24,
     "resource": {
+      "id": 9170,
       "shape": "correct2",
       "url": "9170",
       "feedbackRight": "Yes. Our philosophical approach for civic engagement work with community partners is from the asset-based model. This explains why all community-based projects and opportunities should be based on community-identified needs. This does not mean that you cannot be creative and have ideas for addressing challenging issues, but unless the idea is based on a community-identified need and agreed upon with a community partner, there is little chance of success.",
@@ -687,13 +687,13 @@
   {
     "dependsOn": null,
     "id": 25,
-    "index": 2649,
     "isHolding": true,
     "level": 1,
     "name": "Dex",
     "skinSuit": null,
     "sprite": 13,
     "resource": {
+      "id": 2649,
       "answer": "",
       "feedbackRight": "Insightful response, thanks!",
       "feedbackWrong": "",
@@ -720,13 +720,13 @@
   {
     "dependsOn": null,
     "id": 26,
-    "index": 3075,
     "isHolding": false,
     "level": 1,
     "name": "Isosceles",
     "sprite": 25,
     "skinSuit": null,
     "resource": {
+      "id": 3075,
       "answer": "",
       "feedbackRight": "Neat!",
       "feedbackWrong": "",
@@ -757,13 +757,13 @@
   {
     "dependsOn": null,
     "id": 27,
-    "index": 5063,
     "isHolding": false,
     "level": 1,
     "name": "Zork",
     "skinSuit": "ninja",
     "sprite": 25,
     "resource": {
+      "id": 5063,
       "possibleAnswers": []
     },
     "dialog": {
@@ -782,13 +782,13 @@
   {
     "dependsOn": null,
     "id": 28,
-    "index": 2803,
     "isHolding": true,
     "level": 1,
     "name": "Bluesy",
     "skinSuit": null,
     "sprite": 42,
     "resource": {
+      "id": 2803,
       "answer": "A) Somerville, Chinatown, and Medford",
       "feedbackRight": "Yup, that’s right!",
       "feedbackWrong": "Confused? Check out the resource one more time and try again.",
@@ -819,13 +819,13 @@
   {
     "dependsOn": null,
     "id": 29,
-    "index": 3229,
     "isHolding": true,
     "level": 1,
     "name": "Goose",
     "skinSuit": null,
     "sprite": 10,
     "resource": {
+      "id": 3229,
       "answer": "",
       "feedbackRight": "That’s an idea!",
       "feedbackWrong": "",
@@ -852,13 +852,13 @@
   {
     "dependsOn": null,
     "id": 30,
-    "index": 3373,
     "isHolding": false,
     "level": 1,
     "name": "Starby",
     "sprite": 34,
     "skinSuit": null,
     "resource": {
+      "id": 3373,
       "possibleAnswers": []
     },
     "dialog": {
@@ -877,13 +877,13 @@
   {
     "dependsOn": null,
     "id": 31,
-    "index": 4655,
     "isHolding": false,
     "level": 1,
     "name": "Apollo",
     "sprite": 4,
     "skinSuit": null,
     "resource": {
+      "id": 4655,
       "possibleAnswers": []
     },
     "dialog": {
@@ -902,13 +902,13 @@
   {
     "dependsOn": null,
     "id": 23,
-    "index": 8898,
     "isHolding": false,
     "level": 1,
     "name": "Beholder",
     "sprite": 23,
     "skinSuit": null,
     "resource": {
+      "id": 8898,
       "possibleAnswers": []
     },
     "dialog": {
@@ -927,13 +927,13 @@
   {
     "dependsOn": null,
     "id": 34,
-    "index": 17599,
     "isHolding": true,
     "level": 2,
     "name": "Forky",
     "sprite": 25,
     "skinSuit": null,
     "resource": {
+      "id": 17599,
       "answer": "",
       "feedbackRight": "You got your helping hat on. I dig it.",
       "feedbackWrong": "",
@@ -960,13 +960,13 @@
   {
     "dependsOn": null,
     "id": 46,
-    "index": 17959,
     "isHolding": false,
     "level": 3,
     "name": "Quinto",
     "skinSuit": null,
     "sprite": 37,
     "resource": {
+      "id": 17959,
       "possibleAnswers": []
     },
     "dialog": {
@@ -985,13 +985,13 @@
   {
     "dependsOn": null,
     "id": 33,
-    "index": 5206,
     "isHolding": false,
     "level": 1,
     "name": "Blobby",
     "sprite": 46,
     "skinSuit": null,
     "resource": {
+      "id": 5206,
       "answer": "",
       "feedbackRight": "Thanks for sharing that!",
       "feedbackWrong": "",
@@ -1022,13 +1022,13 @@
   {
     "dependsOn": null,
     "id": 36,
-    "index": 18552,
     "isHolding": false,
     "level": 2,
     "name": "Scallop",
     "skinSuit": null,
     "sprite": 27,
     "resource": {
+      "id": 18552,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1047,13 +1047,13 @@
   {
     "dependsOn": null,
     "id": 37,
-    "index": 14588,
     "isHolding": true,
     "level": 2,
     "name": "PenPen",
     "sprite": 28,
     "skinSuit": null,
     "resource": {
+      "id": 14588,
       "shape": "correct3",
       "url": "14588",
       "feedbackRight": "By George, I think you’ve got it!",
@@ -1086,13 +1086,13 @@
   {
     "dependsOn": null,
     "id": 38,
-    "index": 14464,
     "isHolding": true,
     "level": 2,
     "name": "Combover",
     "sprite": 29,
     "skinSuit": null,
     "resource": {
+      "id": 14464,
       "answer": "",
       "feedbackRight": "Thanks for that! Keep fighting the good fight.",
       "feedbackWrong": "",
@@ -1119,13 +1119,13 @@
   {
     "dependsOn": null,
     "id": 39,
-    "index": 15326,
     "isHolding": false,
     "level": 2,
     "name": "Funguy",
     "sprite": 30,
     "skinSuit": null,
     "resource": {
+      "id": 15326,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1144,13 +1144,13 @@
   {
     "dependsOn": null,
     "id": 40,
-    "index": 12760,
     "isHolding": true,
     "level": 2,
     "name": "Rapscallion",
     "skinSuit": null,
     "sprite": 31,
     "resource": {
+      "id": 12760,
       "answer": "",
       "feedbackRight": "That sounds like a great start. Now keep your commitment to us and bring back all the color!",
       "feedbackWrong": "",
@@ -1177,13 +1177,13 @@
   {
     "dependsOn": null,
     "id": 41,
-    "index": 11752,
     "isHolding": true,
     "level": 2,
     "name": "Oriole",
     "sprite": 32,
     "skinSuit": null,
     "resource": {
+      "id": 11752,
       "shape": "wrong1",
       "url": "11752",
       "feedbackRight": "Glad to hear it!",
@@ -1209,13 +1209,13 @@
   {
     "dependsOn": null,
     "id": 42,
-    "index": 14706,
     "isHolding": true,
     "level": 2,
     "name": "Toad",
     "skinSuit": null,
     "sprite": 33,
     "resource": {
+      "id": 14706,
       "answer": "true",
       "feedbackRight": "That’s true. The poverty threshold for a single individual under the age of 65 is $11,334. Seems low, huh?",
       "feedbackWrong": "Nope! Try again, please.",
@@ -1241,13 +1241,13 @@
   {
     "dependsOn": null,
     "id": 43,
-    "index": 16547,
     "isHolding": true,
     "level": 2,
     "name": "Threepee",
     "sprite": 34,
     "skinSuit": null,
     "resource": {
+      "id": 16547,
       "answer": "",
       "feedbackRight": "Thanks for your answer!",
       "feedbackWrong": "",
@@ -1274,13 +1274,13 @@
   {
     "dependsOn": null,
     "id": 44,
-    "index": 10891,
     "isHolding": false,
     "level": 2,
     "name": "Beanie",
     "sprite": 35,
     "skinSuit": null,
     "resource": {
+      "id": 10891,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1299,13 +1299,13 @@
   {
     "dependsOn": null,
     "id": 45,
-    "index": 10774,
     "isHolding": true,
     "level": 2,
     "name": "Vogon",
     "skinSuit": null,
     "sprite": 36,
     "resource": {
+      "id": 10774,
       "answer": "",
       "feedbackRight": "Way to take action!",
       "feedbackWrong": "",
@@ -1332,13 +1332,13 @@
   {
     "dependsOn": null,
     "id": 47,
-    "index": 17525,
     "isHolding": true,
     "level": 3,
     "name": "Archibald",
     "skinSuit": null,
     "sprite": 38,
     "resource": {
+      "id": 17525,
       "answer": "D) Before you even begin",
       "feedbackRight": "Right on!",
       "feedbackWrong": "Not quite. Remember, “an ounce of prevention” and all that.",
@@ -1369,13 +1369,13 @@
   {
     "dependsOn": null,
     "id": 48,
-    "index": 12708,
     "isHolding": false,
     "level": 3,
     "name": "Esther",
     "sprite": 39,
     "skinSuit": null,
     "resource": {
+      "id": 12708,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1394,13 +1394,13 @@
   {
     "dependsOn": null,
     "id": 49,
-    "index": 13696,
     "isHolding": true,
     "level": 3,
     "name": "Brumble",
     "sprite": 40,
     "skinSuit": null,
     "resource": {
+      "id": 13696,
       "answer": "",
       "feedbackRight": "Great! Now go find my friend Goober to talk more about how you’ll reflect on things.",
       "feedbackWrong": "",
@@ -1427,13 +1427,13 @@
   {
     "dependsOn": null,
     "id": 51,
-    "index": 12352,
     "isHolding": true,
     "level": 2,
     "name": "Banksi",
     "sprite": 42,
     "skinSuit": null,
     "resource": {
+      "id": 12352,
       "answer": "",
       "feedbackRight": "That’s important to think about.",
       "feedbackWrong": "",
@@ -1460,13 +1460,13 @@
   {
     "dependsOn": null,
     "id": 52,
-    "index": 13246,
     "isHolding": true,
     "level": 3,
     "name": "Grebulon",
     "sprite": 43,
     "skinSuit": null,
     "resource": {
+      "id": 13246,
       "answer": "",
       "feedbackRight": "That’s something I can get behind.",
       "feedbackWrong": "",
@@ -1493,13 +1493,13 @@
   {
     "dependsOn": null,
     "id": 53,
-    "index": 14380,
     "isHolding": true,
     "level": 3,
     "name": "Prefect",
     "sprite": 44,
     "skinSuit": null,
     "resource": {
+      "id": 14380,
       "answer": "",
       "feedbackRight": "Awesome! I want to take a class on towels, and their relevance to galactic travel.",
       "feedbackWrong": "",
@@ -1526,13 +1526,13 @@
   {
     "dependsOn": null,
     "id": 54,
-    "index": 15656,
     "isHolding": false,
     "level": 3,
     "name": "Ford",
     "skinSuit": null,
     "sprite": 45,
     "resource": {
+      "id": 15656,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1551,13 +1551,13 @@
   {
     "dependsOn": null,
     "id": 55,
-    "index": 16929,
     "isHolding": false,
     "level": 3,
     "name": "Tali",
     "sprite": 46,
     "skinSuit": null,
     "resource": {
+      "id": 16929,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1576,13 +1576,13 @@
   {
     "dependsOn": null,
     "id": 56,
-    "index": 16920,
     "isHolding": true,
     "level": 3,
     "name": "Boomer",
     "sprite": 47,
     "skinSuit": null,
     "resource": {
+      "id": 16920,
       "answer": "",
       "feedbackRight": "That sounds great. I know you can do it!",
       "feedbackWrong": "",
@@ -1607,15 +1607,15 @@
     }
   },
   {
-    "dependsOn": 13696,
+    "dependsOn": 49,
     "id": 57,
-    "index": 15638,
     "isHolding": true,
     "level": 3,
     "name": "Goober",
     "sprite": 48,
     "skinSuit": null,
     "resource": {
+      "id": 15638,
       "answer": "",
       "feedbackRight": "That’s really great. Thank you!",
       "feedbackWrong": "",
@@ -1642,13 +1642,13 @@
   {
     "dependsOn": null,
     "id": 58,
-    "index": 16912,
     "isHolding": true,
     "level": 3,
     "name": "Crumb",
     "sprite": 49,
     "skinSuit": null,
     "resource": {
+      "id": 16912,
       "answer": "",
       "feedbackRight": "I like it!",
       "feedbackWrong": "",
@@ -1675,13 +1675,13 @@
   {
     "dependsOn": null,
     "id": 59,
-    "index": 15626,
     "isHolding": true,
     "level": 3,
     "name": "Derp",
     "sprite": 50,
     "skinSuit": null,
     "resource": {
+      "id": 15626,
       "answer": "true",
       "feedbackRight": "Yup! Amazing, huh?",
       "feedbackWrong": "Did we read the same resource? Try again.",
@@ -1707,13 +1707,13 @@
   {
     "dependsOn": null,
     "id": 60,
-    "index": 13360,
     "isHolding": true,
     "level": 3,
     "name": "Overcoat",
     "skinSuit": null,
     "sprite": 51,
     "resource": {
+      "id": 13360,
       "answer": "D) All of these",
       "feedbackRight": "Perfect!",
       "feedbackWrong": "Close, but think bigger!",
@@ -1745,13 +1745,13 @@
   {
     "dependsOn": null,
     "id": 61,
-    "index": 10800,
     "isHolding": false,
     "level": 3,
     "name": "Smalls",
     "sprite": 52,
     "skinSuit": null,
     "resource": {
+      "id": 10800,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1770,13 +1770,13 @@
   {
     "dependsOn": null,
     "id": 63,
-    "index": 9556,
     "isHolding": false,
     "level": 0,
     "name": "Wiggin",
     "skinSuit": null,
     "sprite": 53,
     "resource": {
+      "id": 9556,
       "url": "test",
       "shape": null,
       "questionType": "open",
@@ -1806,13 +1806,13 @@
   {
     "dependsOn": null,
     "id": 9,
-    "index": 6707,
     "isHolding": false,
     "level": 0,
     "name": "Bunzo",
     "sprite": 9,
     "skinSuit": null,
     "resource": {
+      "id": 6707,
       "possibleAnswers": []
     },
     "dialog": {
@@ -1831,13 +1831,13 @@
   {
     "dependsOn": null,
     "id": 11,
-    "index": 8986,
     "isHolding": true,
     "level": 0,
     "name": "Jawa",
     "sprite": 11,
     "skinSuit": null,
     "resource": {
+      "id": 8986,
       "answer": "",
       "feedbackRight": "Very revealing, but of course there’s more to you than that.",
       "feedbackWrong": "Are you sure you understood the question? Try again!",
@@ -1864,13 +1864,13 @@
   {
     "dependsOn": null,
     "id": 62,
-    "index": 9847,
     "isHolding": false,
     "level": 0,
     "name": "Ender",
     "sprite": 52,
     "skinSuit": null,
     "resource": {
+      "id": 9847,
       "url": "test",
       "shape": null,
       "questionType": "open",
@@ -1900,13 +1900,13 @@
   {
     "dependsOn": null,
     "id": 21,
-    "index": 9069,
     "isHolding": true,
     "level": 1,
     "name": "Zeebo",
     "sprite": 21,
     "skinSuit": null,
     "resource": {
+      "id": 9069,
       "answer": "",
       "feedbackRight": "I think that’s probably true.",
       "feedbackWrong": "",
@@ -1933,13 +1933,13 @@
   {
     "dependsOn": null,
     "id": 32,
-    "index": 5219,
     "isHolding": true,
     "level": 1,
     "name": "Toaster",
     "sprite": 10,
     "skinSuit": null,
     "resource": {
+      "id": 5219,
       "answer": "",
       "feedbackRight": "Hm, interesting. Thanks for sharing!",
       "feedbackWrong": "",
@@ -1966,13 +1966,13 @@
   {
     "dependsOn": null,
     "id": 35,
-    "index": 16297,
     "isHolding": true,
     "level": 2,
     "name": "ChickenBob",
     "skinSuit": null,
     "sprite": 26,
     "resource": {
+      "id": 16297,
       "answer": "",
       "feedbackRight": "I believe I can fly. I believe if you try you can fill the sky with color.",
       "feedbackWrong": "",
