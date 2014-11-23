@@ -863,8 +863,7 @@ var _input = {
 
   cheatLog: function (message) {
     this.log('yellow', 'Cheat code activated', message)
-  },
-
+  }
 
 }
 

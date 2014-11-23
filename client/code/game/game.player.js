@@ -231,7 +231,7 @@ var $player = $game.$player = {
 
         })
       } else {
-        $game.$player.npcOnDeck = false
+        _endMove()
       }
 
     }
@@ -1520,9 +1520,9 @@ function _endMove() {
     $game.beginTransition()
   } else {
     //trigger npc to popup _info and stuff
-    if ($game.$player.npcOnDeck) {
-      var npcId = $game.$player.npcOnDeck
-      $game.$npc.activate(npcId)
+    // npcOnDeck can equal zero so be sure to check against boolean, rather than falsy
+    if ($game.$player.npcOnDeck !== false) {
+      $game.$npc.activate($game.$player.npcOnDeck)
     }
   }
 

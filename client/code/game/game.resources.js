@@ -15,10 +15,6 @@ function Resource (data, skinSuit) {
     this[i] = data[i]
   }
 
-  // TODO: See where .index is used and deprecate in favor of .id
-  // For now, copy the id number to prevent scripts breaking
-  this.index         = data.id
-
   this.playerAnswers = []
 
   // TODO: See where this is being used. Should the skinsuit
@@ -113,10 +109,10 @@ var $resources = $game.$resources = {
     console.log(_resources.data)
   },
 
-  //decide how to display resource on screen depending on state of player
-  showResource: function (index) {
+  // Decide how to display resource on screen depending on state of player
+  showResource: function (id) {
     var el       = document.getElementById('resource-area'),
-        resource = _resources.data[index]
+        resource = _resources.data[id]
 
     // Load resource content, then display.
     $game.flags.set('visible-resource-overlay')
@@ -124,18 +120,18 @@ var $resources = $game.$resources = {
       $game.$audio.playTriggerFx('windowShow')
       $game.$audio.fadeLow()
 
-      _resources.addContent(index, 1)
+      _resources.addContent(id, 1)
       $(el).fadeIn(300)
     })
   },
 
   // Called when player views a resource from inventory
-  examineResource: function (index) {
+  examineResource: function (id) {
     // HIDES (not closes) the inventory, then show resource
     // Set a flag that remembers we were in the inventory
     $game.flags.set('viewing-inventory')
     $game.$input.hideInventory(function () {
-      $resources.showResource(index)
+      $resources.showResource(id)
     })
   },
 
@@ -165,12 +161,12 @@ var $resources = $game.$resources = {
   },
 
   // Activated when clicking on something that is specific to viewing answers
-  examineResponses: function (index) {
+  examineResponses: function (id) {
     var overlay  = document.getElementById('resource-area'),
         el       = overlay.querySelector('.resource-responses'),
-        resource = _resources.data[index]
+        resource = _resources.data[id]
 
-    _resources.addContent(index, 4)
+    _resources.addContent(id, 4)
 
     // Display rules
     el.style.display = 'block'
@@ -429,13 +425,13 @@ var _resources = {
   },
 
   // Clear the display and decide what to show on screen
-  addContent: function (index, section, slide) {
+  addContent: function (resourceId, section, slide) {
     var overlay      = document.getElementById('resource-area'),
         playerLevel  = $game.$player.getLevel(),
-        answer       = $game.$player.getAnswer(index),
+        answer       = $game.$player.getAnswer(resourceId),
         isAnswered   = (answer && answer.result) ? true : false,
         isRevisit    = $game.flags.check('viewing-inventory'),
-        resource     = _resources.data[index]
+        resource     = _resources.data[resourceId]
 
     var $article     = $('#resource-stage .pages > section'),
         slides       = $article.length
@@ -537,7 +533,7 @@ var _resources = {
       default:
         $resources.hideResource(function callback () {
           $game.debug('Error Code 4992 dump!')
-          console.log(index, resource, section, slide)
+          console.log(resourceId, resource, section, slide)
           $game.$npc.showSpeechBubble('Error Code 4992', ['The game failed to provide a slide to display, or tried to display a slide that doesn’t exist. See console for log details.'])
         })
         break
@@ -563,14 +559,14 @@ var _resources = {
           next.style.display = 'inline-block'
           next.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resources.addContent(index, section, slide)
+            _resources.addContent(resourceId, section, slide)
           })
           break
         case 'back':
           back.style.display = 'inline-block'
           back.addEventListener('click', function () {
             if (typeof callback === 'function') callback()
-            _resources.addContent(index, section, slide)
+            _resources.addContent(resourceId, section, slide)
           })
           break
         case 'answer':
@@ -592,7 +588,7 @@ var _resources = {
             if (_resources.checkAnswer(resource) === true) {
               _resources.submitAnswer(resource, true)
               // Go to reward screen.
-              _resources.addContent(index, 3)
+              _resources.addContent(resourceId, 3)
             }
             else {
               _resources.submitAnswer(resource, false)
@@ -605,7 +601,7 @@ var _resources = {
           save.style.display = 'inline-block'
           save.addEventListener('click', function _saveButton () {
             if (_resources.validateTagline(resource) !== true) return
-            if (section) _resources.addContent(index, section)
+            if (section) _resources.addContent(resourceId, section)
             else $resources.hideResource(callback)
 
             // Remove tagline check event
@@ -680,7 +676,7 @@ var _resources = {
       _resources.submitAnswer(resource, true)
 
       var slides = $('#resource-stage .pages > section').length
-      _resources.addContent(resource.index, 3)
+      _resources.addContent(resource.id, 3)
     }).show()
     // [2] Else, close and retry
     $el.find('.retry-button').on('click', function () {
