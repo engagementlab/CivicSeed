@@ -30,21 +30,6 @@ var self = module.exports = {
       })
     })
 
-    app.get('/resume/:playerId', function (req) {
-      ss.rpc('shared.profiles.getProfileInformation', req.params['playerId'], function (info) {
-        if (!info) {
-          console.log('error!')
-        } else {
-          if (!info.profileSetup && sessionStorage.userEmail === info.email) {
-            //reroute to change info
-            Davis.location.assign('change-info')
-          } else {
-            $CONTAINER.append(JT['profiles-resume'](info))
-          }
-        }
-      })
-    })
-
   }
 
 }

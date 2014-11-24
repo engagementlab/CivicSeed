@@ -26,11 +26,51 @@
                   strong Please complete the post-game survey!
                 a.btn.btn-primary.survey(href='#{postgameSurveyLink}', target='_blank') Click here to open the survey
           .row.no-print
-            .col-sm-12
-              a.btn.btn-info.btn-lg(href='/resume/' + sessionStorage.profileLink) See your Civic Resume
-          .row.no-print
             .col-sm-12.instructions
               p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
+
+
+        .resume-content
+          .row
+            .col-xs-12.col-sm-3.resume-headings
+              h3 vision
+            .col-xs-12.col-sm-8.resume-text
+              p Cupcake ipsum dolor sit amet chocolate halvah oat cake. Soufflé biscuit lemon drops biscuit liquorice donut icing. Toffee pastry brownie dessert chocolate dragée toffee. Cake jelly marzipan sweet jelly brownie candy canes applicake powder.
+
+          .row
+            .col-xs-12.col-sm-3.resume-headings
+              h3 education
+            .col-xs-12.col-sm-8.resume-text
+              ul
+                li Boston College, MA 2011
+                li Miami University, BA 2007
+                li Marblehead High School, 2003
+
+          .row
+            .col-xs-12.col-sm-3.resume-headings
+              h3 background
+            .col-xs-12.col-sm-8.resume-text
+              p Macaroon cookie gingerbread. Donut chupa chups bear claw icing marshmallow cotton candy. Candy fruitcake dessert pudding cotton candy topping pie. Gummi bears apple pie marzipan gingerbread sesame snaps jelly. Bonbon candy halvah. Chocolate liquorice wafer pastry jelly lollipop chocolate cake. Danish wafer caramels chupa chups chocolate bar toffee. Sweet roll jelly-o cake sweet jelly-o. Brownie liquorice marzipan dragée candy canes.
+
+          .row
+            .col-xs-12.col-sm-3.resume-headings
+              h3 experience
+            .col-xs-12.col-sm-8.resume-text
+              ul
+                li Something
+                li Another thing
+                li And another thing
+
+          .row
+            .col-xs-12.col-sm-3.resume-headings
+              h3 skills
+            .col-xs-12.col-sm-8.resume-text
+              ul
+                li Punkin’ chunkin’
+                li Mythbusting
+                li Wheel spinning
+                li Math
+
         if resume[0]
           .row
             .col-sm-12.motivations
@@ -68,7 +108,12 @@
         if thisBelongsToCurrentUser
           .row.no-print
             .col-sm-12
-              button.btn.save-profile-button Save Changes
+              button.btn.save-profile-button Save changes
+
+        .row.footer
+          .col-sm-12
+            img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=200, height=150)
+
       else
         .row.profile-divider
           .col-sm-8
@@ -78,8 +123,8 @@
               else
                 h3 The game is currently inactive.
             else
-              h3 This profile has not yet been completed.
+              h3 This civic resume has not yet been completed.
         if thisBelongsToCurrentUser && active
           .row
             .col-sm-8
-              a.btn.btn-info.btn-lg.play-game(href='/game') Resume Game
+              a.btn.btn-info.btn-lg.play-game(href='/game') Enter the game

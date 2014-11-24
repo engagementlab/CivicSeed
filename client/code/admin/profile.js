@@ -9,8 +9,9 @@ module.exports = {
     $body = $(document.body)
 
     $body.on('click', '.save-profile-button', function () {
-      var updates = []
-      var info = $('.resume-text-editable')
+      var updates = [],
+          info = $('.resume-text-editable')
+
       $.each(info, function (i, text) {
         var val = $(text).text()
         updates.push(val)
@@ -27,7 +28,8 @@ module.exports = {
     })
 
     $body.on('click', '.profile-toggle', function () {
-      var profilePublic = $(this).attr('data-public'),
+      var $el = $(this),
+          profilePublic = $(this).attr('data-public'),
           changeTo,
           newText,
           newClass
@@ -43,22 +45,27 @@ module.exports = {
         newText = 'your profile is private'
         newClass = 'fa fa-lock fa-4x'
       }
-      //save the change to the user info
 
-      //update dom
-      $(this).attr('data-public', profilePublic)
-      var p = $(this).find('.profile-toggle-text')
-      $(p).text(newText)
-
-      var i = $(this).find('i')
-      $(i).removeClass().addClass(newClass)
-
+      // Save the change to user info
       var updateInfo = {
         id: sessionStorage.getItem('userId'),
         changeTo: changeTo
       }
       ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
-        //nothing to see here...
+
+        if (!res) {
+          apprise('Error')
+        }
+
+        // Update dom
+        $el.attr('data-public', profilePublic)
+        $el.find('.profile-toggle-text').text(newText)
+        $el.find('i').removeClass().addClass(newClass)
+
+        if (changeTo) {
+          apprise('You have made your civic resume public! Share your page with your friends, colleagues and employers!')
+        }
+
       })
     })
 
