@@ -204,23 +204,21 @@ var $player = $game.$player = {
         _sendMoveInfo(path)
       }
     } else {
-      // Check if it is an edge of the world
-      var isEdge = $game.$map.isMapEdge(x, y)
+      // Find path
+      path = $game.$pathfinder.findPath(loc, master)
 
-      // If a transition is necessary, load new data
-      if (!isEdge) {
-        if (x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
+      if (path.length > 0) {
+        // Check if it is an edge of the world
+        var isEdge = $game.$map.isMapEdge(x, y)
+
+        if (isEdge) {
+          $game.alert('Edge of the world!')
+        } else if (x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
+          // If a transition is necessary, load new data
           $game.flags.set('screen-will-transition')
           $game.$map.calculateNext(x, y)
         }
-      } else {
-        $game.alert('Edge of the world!')
-      }
 
-      path = $game.$pathfinder.findPath(loc, master)
-
-      $game.flags.unset('pathfinding')
-      if (path.length > 0) {
         _sendMoveInfo(path)
 
         ss.rpc('game.player.movePlayer', path, $game.$player.id, function () {
@@ -228,12 +226,12 @@ var $player = $game.$player = {
               masterEndY = $game.$map.currentTiles[master.x][master.y].y
 
           $game.$audio.update(masterEndX, masterEndY)
-
         })
       } else {
         _endMove()
       }
 
+      $game.flags.unset('pathfinding')
     }
   },
 
