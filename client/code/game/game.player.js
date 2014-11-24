@@ -2,7 +2,6 @@
 
 //private vars for player
 var _curFrame = 0,
-    _numFrames = 4,
     _numSteps = 8,
     _currentStepIncX = 0,
     _currentStepIncY = 0,
@@ -725,11 +724,11 @@ var $player = $game.$player = {
 
   //get the number of seeds dropped
   getSeedsDropped: function () {
-    return _seeds.dropped;
+    return _seeds.dropped
   },
 
   getMoveSpeed: function () {
-    return _player.moveSpeed;
+    return _player.moveSpeed
   },
 
   // Gets a specific item at index or all items in inventory
@@ -743,12 +742,12 @@ var $player = $game.$player = {
 
   //get the quantity of seedITs made
   getPledges: function () {
-    return _pledges;
+    return _pledges
   },
 
   //get the current viewport position
   getRenderPosition: function () {
-    return {x: _renderInfo.curX, y: _renderInfo.curY};
+    return {x: _renderInfo.curX, y: _renderInfo.curY}
   },
 
   // Get region of the world that player is in
@@ -1480,10 +1479,13 @@ function _move() {
     _info.offX = $game.$player.currentStep * _currentStepIncX
     _info.offY = $game.$player.currentStep * _currentStepIncY
 
-    //try only changing the src (frame) every X frames
-    if (($game.$player.currentStep-1) % 8 === 0) {
+    // Change the source frame every X frames
+    // We need to get a number between 0 and whatever that is guanteed to be modulo'able by 8
+    // and hit zero, so that the frame can increment
+    if ((Math.floor($game.$player.currentStep / currentSpeed) - 1) % 8 === 0) {
       _curFrame += 1
-      if (_curFrame >= _numFrames) {
+      // Reset when we have hit the number of frames
+      if (_curFrame >= 4) {
         _curFrame = 0
       }
     }
