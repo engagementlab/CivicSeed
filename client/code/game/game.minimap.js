@@ -41,10 +41,11 @@ var self = $game.minimap = (function () {
   // Render outlines of the current viewport so player
   // can identify where on the map they are.
   function renderViewportBoundaries () {
-    _minimapPlayerContext.strokeStyle = 'rgba(192,192,192,0.5)'
+    _minimapPlayerContext.lineWidth = 1
+    _minimapPlayerContext.strokeStyle = 'rgba(192,192,192,0.35)'
     _minimapPlayerContext.strokeRect(
-      $game.masterX,
-      $game.masterY,
+      $game.masterX + 1, // Offset for stroke
+      $game.masterY + 1,
       $game.VIEWPORT_WIDTH,
       $game.VIEWPORT_HEIGHT
     )
@@ -66,14 +67,24 @@ var self = $game.minimap = (function () {
   }
 
   // Render a player to the minimap
-  function renderPlayer (player) {
-    _minimapPlayerContext.fillStyle = player.color || this.colors.white
+  function renderPlayer (id, player) {
+    _minimapPlayerContext.fillStyle = player.color || 'white'
     _minimapPlayerContext.fillRect(
       player.x,
       player.y,
       4,
       4
     )
+    if (id === $game.$player.id) {
+      _minimapPlayerContext.strokeStyle = 'white'
+      _minimapPlayerContext.lineWidth = 1
+      _minimapPlayerContext.strokeRect(
+        player.x,
+        player.y,
+        4,
+        4
+      )
+    }
   }
 
   return {
@@ -123,7 +134,7 @@ var self = $game.minimap = (function () {
       renderViewportBoundaries()
 
       $.each(_minimap, function (key, player) {
-        renderPlayer(player)
+        renderPlayer(key, player)
       })
 
       // Render radar

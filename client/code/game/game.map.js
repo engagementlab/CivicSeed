@@ -79,19 +79,19 @@ var $map = $game.$map = {
 
   //put new color on the map
   newBomb: function (bombed, id) {
-    for(var b = 0; b < bombed.length; b += 1) {
+    for (var b = 0; b < bombed.length; b += 1) {
       //only add it to render list if it is on current screen
       var loc = $game.$map.masterToLocal(bombed[b].x, bombed[b].y),
-        curTile = null;
+          curTile = null
       if (loc) {
         //if there IS a color
-        curTile = $game.$map.currentTiles[loc.x][loc.y];
-        curTile.colored = true;
-        $game.$render.clearMapTile(loc);
-        $game.$render.renderTile(loc.x,loc.y);
+        curTile = $game.$map.currentTiles[loc.x][loc.y]
+        curTile.colored = true
+        $game.$render.clearMapTile(loc)
+        $game.$render.renderTile(loc.x,loc.y)
 
         if (id === $game.$player.id) {
-          $game.$render.renderMiniTile(bombed[b].x, bombed[b].y);
+          $game.$render.renderMiniTile(bombed[b].x, bombed[b].y)
         }
       }
     }
@@ -104,16 +104,16 @@ var $map = $game.$map = {
 
   //get all the images from all players and make composite
   createCollectiveImage: function () {
-    $('.color-map-everyone .color-map-image').remove();
+    $('.color-map-everyone .color-map-image').remove()
     ss.rpc('game.player.getAllImages', $game.$player.id, function (data) {
-      var myImage = $game.$map.saveImage();
-      var index = data.length;
+      var myImage = $game.$map.saveImage()
+      var index = data.length
       //go thru each image create a new image using canvas?
-      while(--index > -1) {
-        $('.color-map-everyone').append('<img src="'+ data[index] + '" class="color-map-image">');
+      while (--index > -1) {
+        $('.color-map-everyone').append('<img src="'+ data[index] + '" class="color-map-image">')
       }
-      $('.color-map-everyone').append('<img src="'+ myImage + '" class="color-map-image">');
-    });
+      $('.color-map-everyone').append('<img src="'+ myImage + '" class="color-map-image">')
+    })
   },
 
   //figure out how to shift the viewport during a transition
@@ -177,18 +177,18 @@ var $map = $game.$map = {
       //shift all except last column
       for (var i = 0; i < $game.VIEWPORT_WIDTH - 1; i++) {
         for (var j = 0; j  < $game.VIEWPORT_HEIGHT; j++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i + 1 ][j];
+          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i + 1 ][j]
         }
       }
 
       //shift a new column from the next array to the last spot
-      var j = $game.VIEWPORT_HEIGHT;
-      while(--j >= 0) {
-        $game.$map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j];
+      var j = $game.VIEWPORT_HEIGHT
+      while (--j >= 0) {
+        $game.$map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j]
       }
-      $game.masterX += 1;
-      $game.$player.slide(1,0);
-      $game.$others.slide(1,0);
+      $game.masterX += 1
+      $game.$player.slide(1, 0)
+      $game.$others.slide(1, 0)
     }
     //--------LEFT------------
     //go thru current array and shift everthing
@@ -196,19 +196,19 @@ var $map = $game.$map = {
       //shift all except last column
       for (var i = $game.VIEWPORT_WIDTH - 1; i > 0; i--) {
         for (var j = 0; j < $game.VIEWPORT_HEIGHT; j++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i - 1 ][j];
+          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i - 1 ][j]
         }
       }
 
       //shift a new column from the next array to the last spot
-      var j = $game.VIEWPORT_HEIGHT;
+      var j = $game.VIEWPORT_HEIGHT
       while(--j >= 0) {
-        $game.$map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j];
+        $game.$map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j]
       }
 
-      $game.masterX -= 1;
-      $game.$player.slide(-1,0);
-      $game.$others.slide(-1,0);
+      $game.masterX -= 1
+      $game.$player.slide(-1, 0)
+      $game.$others.slide(-1, 0)
     }
     //--------UP------------
     //go thru current array and shift everthing
@@ -216,18 +216,18 @@ var $map = $game.$map = {
       //shift all except last column
       for (var j = $game.VIEWPORT_HEIGHT - 1; j > 0; j--) {
         for (var i = 0; i < $game.VIEWPORT_WIDTH; i++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j - 1];
+          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j - 1]
         }
       }
 
       //shift a new column from the next array to the last spot
-      var i = $game.VIEWPORT_WIDTH;
-      while(--i >= 0) {
-        $game.$map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber];
+      var i = $game.VIEWPORT_WIDTH
+      while (--i >= 0) {
+        $game.$map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber]
       }
-      $game.masterY -= 1;
-      $game.$player.slide(0,-1);
-      $game.$others.slide(0,-1);
+      $game.masterY -= 1
+      $game.$player.slide(0, -1)
+      $game.$others.slide(0, -1)
     }
     //--------DOWN------------
     //go thru current array and shift everthing
@@ -236,18 +236,18 @@ var $map = $game.$map = {
       //shift all except last column
       for (var j = 0; j < $game.VIEWPORT_HEIGHT - 1; j++) {
         for (var i = 0; i < $game.VIEWPORT_WIDTH; i++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j + 1];
+          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j + 1]
         }
       }
 
       //shift a new column from the next array to the last spot
-      var k = $game.VIEWPORT_WIDTH;
-      while(--k >= 0) {
-        $game.$map.currentTiles[k][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[k][stepNumber - 1];
+      var k = $game.VIEWPORT_WIDTH
+      while (--k >= 0) {
+        $game.$map.currentTiles[k][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[k][stepNumber - 1]
       }
-      $game.masterY += 1;
-      $game.$player.slide(0,1);
-      $game.$others.slide(0,1);
+      $game.masterY += 1
+      $game.$player.slide(0,1)
+      $game.$others.slide(0,1)
     }
     //update the edges since we shift em son
     _leftEdge   = $game.masterX
@@ -297,55 +297,56 @@ var _map = {
 
   //get new tiles from DB for new viewport
   getTiles: function (data, callback) {
-    $game.$map.dataLoaded = false;
+    $game.$map.dataLoaded = false
     var x1 = data.x,
         y1 = data.y,
         x2 = data.x + data.numX,
-        y2 = data.y + data.numY;
+        y2 = data.y + data.numY
 
     ss.rpc('game.map.getMapData', x1, y1, x2, y2, function (map, colors) {
       //breakdown single array into 2d array
-      var index = null;
+      var index = null
 
-      _nextTiles = new Array(data.numX);
-      var i = data.numX;
+      _nextTiles = new Array(data.numX)
+      var i = data.numX
 
-      while(--i >= 0) {
-        _nextTiles[i] = new Array(data.numY);
-        var j = data.numY;
+      while (--i >= 0) {
+        _nextTiles[i] = new Array(data.numY)
+        var j = data.numY
 
-        while(--j >= 0) {
-          index = j * data.numX + (i % data.numX);
-          _nextTiles[i][j] = map[index];
+        while (--j >= 0) {
+          index = j * data.numX + (i % data.numX)
+          _nextTiles[i][j] = map[index]
         }
       }
+
       //now go thru colors and attach to proper tile
       //should be going left to right, top to bottom
       var cLength = colors.length,
-        a = 0,
-        b = 0,
-        c = 0,
-        aMax = _nextTiles.length,
-        bMax = _nextTiles[0].length;
+          a = 0,
+          b = 0,
+          c = 0,
+          aMax = _nextTiles.length,
+          bMax = _nextTiles[0].length
 
-      while(c < cLength) {
-        var found = false;
-        while(!found) {
+      while (c < cLength) {
+        var found = false
+        while (!found) {
           if (_nextTiles[a][b].mapIndex === colors[c].mapIndex) {
-            _nextTiles[a][b].colored = true;
-            found = true;
+            _nextTiles[a][b].colored = true
+            found = true
           }
-          a++;
+          a++
           if (a >= aMax) {
-            a = 0;
-            b++;
+            a = 0
+            b++
             if (b >= bMax) {
-              console.log('errrr');
-              found = true;
+              console.log('errrr')
+              found = true
             }
           }
         }
-        c++;
+        c++
       }
       $game.$map.dataLoaded = true
 
@@ -372,11 +373,11 @@ var _map = {
 
   //create the data for the boss map
   setupBossMap: function () {
-    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH];
-    var i = $game.VIEWPORT_WIDTH;
+    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH]
+    var i = $game.VIEWPORT_WIDTH
     while (--i >= 0) {
-      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT];
-      var j = $game.VIEWPORT_HEIGHT;
+      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
+      var j = $game.VIEWPORT_HEIGHT
       while (--j >= 0) {
         $game.$map.currentTiles[i][j] = {
           x: i,
