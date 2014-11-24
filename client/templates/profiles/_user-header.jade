@@ -1,0 +1,34 @@
+.row.user-header
+  .col-sm-8.col-sm-offset-2.profile-box.text-center
+    h1.name #{firstName} #{lastName}
+    h4.tagline This is a tagline
+
+    if thisBelongsToCurrentUser
+      .profile-image.editable(style='background-image:url(#{CivicSeed.CLOUD_PATH}/img/profile/placeholder.png);', title='profile image')
+        .uploader.no-print
+          i.upload-icon.fa.fa-camera
+          p change image
+          input(type='file', name='pic', accept='image/*')
+    else
+      .profile-image(style='background-image:url(#{CivicSeed.CLOUD_PATH}/img/profile/placeholder.png);', title='profile image')
+
+    .profile-address
+        p.address-line-1 35 Pearl St, #1
+        p.city-state-zip Cambridge, MA
+        p.phone (415) 555-9000
+        p.email jenhunter@email.com
+
+  if thisBelongsToCurrentUser
+    .col-xs-12.col-sm-2.profile-toggle.no-print(data-public=profilePublic)
+      .public-lock
+        if profilePublic
+          .profile-toggle-icon
+            i.fa.fa-unlock-alt.fa.fa-4x(title='make profile public', data-placement='top')
+          .profile-toggle-text
+            | your profile is public
+        else
+          .profile-toggle-icon
+            i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
+          .profile-toggle-text
+            | your profile is private
+

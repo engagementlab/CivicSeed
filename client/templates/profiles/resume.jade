@@ -7,33 +7,18 @@
       if (sessionStorage.userEmail !== email)
         h1 This is not your resume. You cannot view it.
       else
-        .row
-          .col-sm-12.text-center
-            h1.name #{firstName} #{lastName}
-            h4.school #{school}
 
-            .profile-image(style='background-image:url(#{CivicSeed.CLOUD_PATH}/img/profile/placeholder.png);', title='profile image')
-              .uploader.no-print
-                i.upload-icon.fa.fa-camera
-                p change image
-                input(type='file', name='pic', accept='image/*')
-
-        .row.resume-address
-          .col-sm-12.text-center
-            p.address-line-1 35 Pearl St, #1
-            p.city-state-zip Cambridge, MA
-            p.phone (415) 555-9000
-            p.email jenhunter@email.com
+        include _user-header
 
         .resume-content
           .row
-            .col-xs-12.col-sm-3.resume-headers
+            .col-xs-12.col-sm-3.resume-headings
               h3 vision
             .col-xs-12.col-sm-8.resume-text
               p Cupcake ipsum dolor sit amet chocolate halvah oat cake. Soufflé biscuit lemon drops biscuit liquorice donut icing. Toffee pastry brownie dessert chocolate dragée toffee. Cake jelly marzipan sweet jelly brownie candy canes applicake powder.
 
           .row
-            .col-xs-12.col-sm-3.resume-headers
+            .col-xs-12.col-sm-3.resume-headings
               h3 education
             .col-xs-12.col-sm-8.resume-text
               ul
@@ -42,13 +27,13 @@
                 li Marblehead High School, 2003
 
           .row
-            .col-xs-12.col-sm-3.resume-headers
+            .col-xs-12.col-sm-3.resume-headings
               h3 background
             .col-xs-12.col-sm-8.resume-text
               p Macaroon cookie gingerbread. Donut chupa chups bear claw icing marshmallow cotton candy. Candy fruitcake dessert pudding cotton candy topping pie. Gummi bears apple pie marzipan gingerbread sesame snaps jelly. Bonbon candy halvah. Chocolate liquorice wafer pastry jelly lollipop chocolate cake. Danish wafer caramels chupa chups chocolate bar toffee. Sweet roll jelly-o cake sweet jelly-o. Brownie liquorice marzipan dragée candy canes.
 
           .row
-            .col-xs-12.col-sm-3.resume-headers
+            .col-xs-12.col-sm-3.resume-headings
               h3 experience
             .col-xs-12.col-sm-8.resume-text
               ul
@@ -57,7 +42,7 @@
                 li And another thing
 
           .row
-            .col-xs-12.col-sm-3.resume-headers
+            .col-xs-12.col-sm-3.resume-headings
               h3 skills
             .col-xs-12.col-sm-8.resume-text
               ul

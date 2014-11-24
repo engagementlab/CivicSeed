@@ -1,67 +1,70 @@
-var $body;
+'use strict';
 
-var self = module.exports = {
+var $body
 
-	init: function() {
+module.exports = {
 
-		$body = $(document.body);
+  init: function () {
 
-		$body.on('click', '.save-profile-button', function() {
-			var updates = [];
-			var info = $('.resumeText');
-			$.each(info, function(i, text) {
-				var val = $(text).text();
-				updates.push(val);
-			});
-			var updateInfo = {
-				id: sessionStorage.getItem('userId'),
-				resume: updates
-			};
-			ss.rpc('shared.profiles.updateResume', updateInfo, function(res) {
-				if (res) {
-					apprise('Changes saved.');
-				}
-			});
-		});
+    $body = $(document.body)
 
-		$body.on('click', '.profileToggle', function() {
-			var profilePublic = $(this).attr('data-public'),
-				changeTo,
-				newText,
-				newClass;
-			if (profilePublic === 'false' || !profilePublic) {
-				profilePublic = 'true';
-				changeTo = true;
-				newText = 'your profile is public';
-				newClass = 'fa fa-unlock-alt fa-4x';
-			} else {
-				profilePublic = 'false';
-				changeTo = false;
-				newText = 'your profile is private';
-				newClass = 'fa fa-lock fa-4x';
-			}
-			//save the change to the user info
+    $body.on('click', '.save-profile-button', function () {
+      var updates = []
+      var info = $('.resume-text-editable')
+      $.each(info, function (i, text) {
+        var val = $(text).text()
+        updates.push(val)
+      })
+      var updateInfo = {
+        id: sessionStorage.getItem('userId'),
+        resume: updates
+      }
+      ss.rpc('shared.profiles.updateResume', updateInfo, function (res) {
+        if (res) {
+          apprise('Changes saved.')
+        }
+      })
+    })
 
-			//update dom
-			$(this).attr('data-public',profilePublic);
-			var p = $(this).find('p');
-			$(p).text(newText);
+    $body.on('click', '.profile-toggle', function () {
+      var profilePublic = $(this).attr('data-public'),
+          changeTo,
+          newText,
+          newClass
 
-			var i = $(this).find('i');
-			$(i).removeClass().addClass(newClass);
+      if (profilePublic === 'false' || !profilePublic) {
+        profilePublic = 'true'
+        changeTo = true
+        newText = 'your profile is public'
+        newClass = 'fa fa-unlock-alt fa-4x'
+      } else {
+        profilePublic = 'false'
+        changeTo = false
+        newText = 'your profile is private'
+        newClass = 'fa fa-lock fa-4x'
+      }
+      //save the change to the user info
 
-			var updateInfo = {
-				id: sessionStorage.getItem('userId'),
-				changeTo: changeTo
-			};
-			ss.rpc('shared.profiles.setPublic', updateInfo, function(res) {
-				//nothing to see here...
-			});
-		});
+      //update dom
+      $(this).attr('data-public', profilePublic)
+      var p = $(this).find('.profile-toggle-text')
+      $(p).text(newText)
 
-		$body.on('click', '.feedback button', function() {
-			var row = $(this).parent().find('.row');
-			$(row).toggle();
-		});
-	}
-};
+      var i = $(this).find('i')
+      $(i).removeClass().addClass(newClass)
+
+      var updateInfo = {
+        id: sessionStorage.getItem('userId'),
+        changeTo: changeTo
+      }
+      ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
+        //nothing to see here...
+      })
+    })
+
+    $body.on('click', '.feedback button', function () {
+      var row = $(this).parent().find('.row')
+      $(row).toggle()
+    })
+  }
+}

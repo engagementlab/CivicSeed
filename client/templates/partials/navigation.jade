@@ -24,6 +24,8 @@ nav.navbar.navbar-default.navbar-fixed-top.no-print
               span.username #{sessionStorage.userFirstName}
               span.caret
             ul.dropdown-menu
+              li: a(href='/game/') Resume game
+              li.divider
               li: a(href='/profiles/' + sessionStorage.profileLink) My profile
               li: a(href='/resume/' + sessionStorage.profileLink) My civic resume
               li.divider
