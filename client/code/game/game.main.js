@@ -651,7 +651,7 @@ var _game = {
           $game.$player.displayNpcComments()
 
           // Turn on minimap view on gameboard
-          $game.minimap.addPlayer($game.$player.id, $game.$player.getPosition(), $game.$player.getColorHex())
+          $game.minimap.addPlayer($game.$player.id, $game.$player.getPosition(), $game.$player.getCSSColor())
           $game.minimap.radar.update()
           $game.minimap.show()
 

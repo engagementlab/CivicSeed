@@ -921,8 +921,8 @@ canvas
   width 100%
   height 200px
   background #333
-  // background rgba(50,50,50,0.9)
   margin-bottom 80px
+  border 1em solid #333
 
 #game-log-overlay
   display none
@@ -931,6 +931,7 @@ canvas
   bottom 20px
   width 500px
   height 120px
+  padding 0.9em
   background rgba(50,50,50,0.3)
   text-shadow 1px 1px 0 $csBlack
 
@@ -938,23 +939,22 @@ canvas
   z-index 900
   overflow-y auto
   overflow-x hidden
-  padding 10px
-  p
+  .log-entry
     padding 0
-    margin 2px
+    margin 0.1em
     font-family $buttonFont
+    &.chat
+      color #fff
+    &.status
+      color $csLightOrange
     .date
       color $csLightBlue
       font-family $mono
       font-size .8em
-      margin-right 8px
-    .playerName
+      margin-right 0.8em
+    .player-name
       color $csLightGreen
-      margin-right 4px
-  p.globalChat
-    color #fff
-  p.status
-    color $csLightOrange
+      margin-right 0.25em
 
 #status-update
   display none

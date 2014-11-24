@@ -116,6 +116,7 @@ var self = $game.$chat = (function () {
             name:         $game.$player.firstName,
             id:           $game.$player.id,
             log:          message,
+            color:        $game.$player.getCSSColor(),
             instanceName: $game.$player.instanceName
           }
       ss.rpc('game.chat.sendMessage', data)
@@ -171,9 +172,6 @@ var self = $game.$chat = (function () {
 
       // Place the chat bubble
       place(data)
-
-      // Add the message to the log
-      $game.$log.addMessage(data)
 
       // Return the length of time for this message to display; used by $others.message timer
       return displayTime

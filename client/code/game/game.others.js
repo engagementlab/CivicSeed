@@ -129,7 +129,7 @@ var self = $game.$others = (function () {
 
   Player.prototype.getRenderInfo = function () {
     if (!this.offScreen) {
-      this.renderInfo.color = this.getColorHex()
+      this.renderInfo.color = this.getCSSColor()
       return this.renderInfo
     } else {
       return false
@@ -229,23 +229,20 @@ var self = $game.$others = (function () {
   Player.prototype.message = function (data) {
     // Display over other player's head if onscreen
     if (!this.offScreen) {
-      var position = {
-        x: this.renderInfo.curX,
-        y: this.renderInfo.curY
-      }
       data.isChatting = this.isChatting
       data.chatId = this.chatId
       data.chatIdSelector = this.chatIdSelector
-      data.position = position
+      data.playerCSSColor = this.getCSSColor()
+      data.position = {
+        x: this.renderInfo.curX,
+        y: this.renderInfo.curY
+      }
 
       clearTimeout(this.hideTimer)
       this.isChatting = true
       var fadeTime = $game.$chat.message(data)
       this.hideTimer = setTimeout(this.hideChat, fadeTime)
     }
-
-    // Display message in game log regardless (removed because it dupes functionality with $chat.message())
-    // $game.$log.addMessage(data)
   }
 
   Player.prototype.hideChat = function () {
@@ -296,7 +293,7 @@ var self = $game.$others = (function () {
   }
 
   // Get a color hex string at a given index or use current player color index
-  Player.prototype.getColorHex = function () {
+  Player.prototype.getCSSColor = function () {
     var rgb = this.getColor()
     // A quick way of converting to a hex string, e.g. #5599cc
     return '#' + ('0'+(rgb.r.toString(16))).slice(-2) + ('0'+(rgb.g.toString(16))).slice(-2) + ('0'+(rgb.b.toString(16))).slice(-2)
@@ -331,7 +328,7 @@ var self = $game.$others = (function () {
         _onScreenPlayers[newbie.id] = newbie
         newbie.updateRenderInfo()
         $game.$render.createCanvasForPlayer(newbie.id, newbie.skinSuit, newbie.playerColor)
-        $game.minimap.addPlayer(newbie.id, player.game.position, newbie.getColorHex())
+        $game.minimap.addPlayer(newbie.id, player.game.position, newbie.getCSSColor())
       }
     },
 

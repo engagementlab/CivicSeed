@@ -37,15 +37,20 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-    //new message from chat
+    // New message from chat
     ss.event.on('ss-newMessage', function (data, chan) {
-      //put in log for everyone
       data.input = 'chat'
-      if (data.id === $game.$player.id ) {
+
+      // Route to $chat or $others to figure out how to
+      // render chat bubble
+      if (data.id === $game.$player.id) {
         $game.$chat.message(data)
       } else {
         $game.$others.message(data.id, data)
       }
+
+      // Add the message to the log for everyone
+      $game.$log.addMessage(data)
     })
 
     ss.event.on('ss-statusUpdate', function (data, chan) {

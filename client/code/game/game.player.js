@@ -94,7 +94,7 @@ var $player = $game.$player = {
         firstName: $game.$player.firstName,
         level: $game.$player.currentLevel,
         colorIndex: playerInfo.game.playerColor,
-        color: $player.getColorHex(),
+        color: $player.getCSSColor(),
         srcX: 0,
         srcY: 0,
         curX: _info.x * $game.TILE_SIZE,
@@ -641,7 +641,7 @@ var $player = $game.$player = {
   },
 
   // Get a color hex string at a given index or use current player color index
-  getColorHex: function (index) {
+  getCSSColor: function (index) {
     var rgb = $player.getColor(index)
     // A quick way of converting to a hex string, e.g. #5599cc
     return '#' + ('0'+(rgb.r.toString(16))).slice(-2) + ('0'+(rgb.g.toString(16))).slice(-2) + ('0'+(rgb.b.toString(16))).slice(-2)

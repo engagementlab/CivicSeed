@@ -14,6 +14,7 @@ exports.actions = function (req, res, ss) {
 
     sendMessage: function (data) {
       if (data.msg && data.msg.length > 0) {  // Check for blank messages
+
         var logChat = {
           who:  data.name,
           id:   data.id,
@@ -31,8 +32,10 @@ exports.actions = function (req, res, ss) {
             ss.publish.channel(req.session.game.instanceName, 'ss-newMessage', {
               message: data.msg,
               id:      data.id,
-              name:    data.name
+              name:    data.name,
+              color:   data.color
             })
+
             // Confirm it was sent to the originating client
             return res(true)
           }
