@@ -994,8 +994,22 @@
       },
       "botanistState": 3,
       "firstTime": false,
-      "resume": [],
-      "resumeFeedback": [],
+      "resume": [
+        "I'd like to think that I haven't changed those things, sir. Wait a minute - you've been declared dead. You can't give orders around here. Sure. You'd be surprised how far a hug goes with Geordi, or Worf. They were just sucked into space. My oath is between Captain Kargan and myself. Your only concern is with how you obey my orders.",
+        "Tonight's planned topics of conversation include Pierre Omidyar, Matt Taibbi and First Look; the latest twist in the Gawker unpaid intern suit, Virgin America, Taylor Swift and whatever else you want to weigh in on.",
+        "What do these organizations seek to measure? It turns out that they assess different things: Acumen measures immediate outputs, such as mosquito nets made and distributed, Robin Hood focuses on long-term outcomes in the lives of individuals such as gains in future income, and MCC aims for both individual outcomes and broader impacts on society such as reduction in poverty rates.",
+        "Alternatively, the individual(s) sharing the pattern may not have the time or interest of going through the 'pattern'-ity process and might release a short description of their proto-pattern instead. Brief descriptions or snippets of this type of pattern are known as patlets."
+      ],
+      "resumeFeedback": [
+        {
+          "resumeIndex": 0,
+          "comment": "this is a feedback response."
+        },
+        {
+          "resumeIndex": 0,
+          "comment": "roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green"
+        }
+      ],
       "seenRobot": false,
       "playingTime": 0,
       "isMuted": true,

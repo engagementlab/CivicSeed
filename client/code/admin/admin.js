@@ -27,16 +27,22 @@ var self = module.exports = {
         return
       }
 
-      button.removeClass('btn-success').prop('disabled', true)
+      button.removeClass('btn-success')
       button.find('.spinner').show()
+
+      // Disable all buttons while one is processing
+      $('#admin-startup button').prop('disabled', true)
+
       ss.rpc('admin.startup.loadData', dataType, function (res) {
         if (res) {
-          button.addClass('btn-success').prop('disabled', false)
+          button.addClass('btn-success')
         } else {
           // Is this adequate for error, or should rpc return an error message?
-          button.addClass('btn-error').prop('disabled', false)
+          button.addClass('btn-error')
         }
-        button.find('.spinner').fadeOut()
+        button.find('.spinner').fadeOut(function () {
+          $('#admin-startup button').prop('disabled', false)
+        })
       })
     })
   },

@@ -73,12 +73,12 @@
               img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=60, height=45)
               | Civic Seed seal of approval
 
-
         if resume[0]
-          .row
-            .col-sm-12.motivations
+          .row.profile-divider.resume-content-two
+          .row.resume-row-two
+            .col-sm-10.col-sm-offset-1.motivations
               h2 Motivations
-              p.resume-text(data-email=email) <span class='resume-text-editable'> #{resume[0]} </span>
+              p(data-email=email) #{resume[0]}
               if (resumeFeedback.length > 0)
                 .feedback.no-print
                   button.btn-info.btn-lg Peer Feedback
@@ -90,29 +90,30 @@
                             h4 A peer said:
                             p #{comment.comment}
         if resume[1]
-          .row
-            .col-sm-12.background
+          .row.resume-row-two
+            .col-sm-10.col-sm-offset-1.background
               h2 Background & Skills
-              p.resume-text(data-email=email) <span class='resume-text-editable'> #{resume[1]} </span>
+              p(data-email=email) #{resume[1]}
         if resume[2]
-          .row
-            .col-sm-12.goals
+          .row.resume-row-two
+            .col-sm-10.col-sm-offset-1.goals
               h2 Personal Goals
-              p.resume-text(data-email=email) <span class='resume-text-editable'> #{resume[2]} </span>
+              p(data-email=email) #{resume[2]}
         if resume[3]
-          .row
-            .col-sm-12.objectives
+          .row.resume-row-two
+            .col-sm-10.col-sm-offset-1.objectives
               h2 Civic Objectives
-              p.resume-text(data-email=email) <span class='resume-text-editable'> #{resume[3]} </span>
+              p(data-email=email) #{resume[3]}
         if colorMap
-          .row
-            .col-sm-12.color-map
+          .row.resume-row-two
+            .col-sm-10.col-sm-offset-1.color-map
               img(src='#{colorMap}')
 
-        if thisBelongsToCurrentUser
-          .row.no-print
-            .col-sm-12
-              button.btn.save-profile-button Save changes
+        //- Disable profile saving on this page for now - TODO: put it on another page to keep code separate
+        //-if thisBelongsToCurrentUser
+        //-  .row.no-print
+        //-    .col-sm-10.col-sm-offset-1
+        //-      button.btn.save-profile-button Save changes
 
         .row.footer
           .col-sm-12
@@ -121,7 +122,7 @@
 
       else
         .row.profile-divider
-          .col-sm-8
+          .col-sm-12
             if thisBelongsToCurrentUser
               if active
                 h3 Your civic resume is not ready yet. Play the game to complete it!
@@ -131,5 +132,5 @@
               h3 This civic resume has not yet been completed.
         if thisBelongsToCurrentUser && active
           .row
-            .col-sm-8
+            .col-sm-12
               a.btn.btn-info.btn-lg.play-game(href='/game') Enter the game
