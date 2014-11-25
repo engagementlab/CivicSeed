@@ -18,7 +18,6 @@ var self = module.exports = {
         environment: CivicSeed.ENVIRONMENT,
         message: 'User admin panel.'
       }))
-      $CONTAINER.addClass('admin-container')
       $('title').text('{ ::: Civic Seed - Admin Panel ::: }')
     })
 
@@ -28,7 +27,6 @@ var self = module.exports = {
         environment: CivicSeed.ENVIRONMENT,
         message: 'Startup admin panel.'
       }))
-      $CONTAINER.addClass('admin-container')
       $('title').text('{ ::: Civic Seed - Admin Panel - Startup ::: }')
     })
 
@@ -42,7 +40,6 @@ var self = module.exports = {
             environment: CivicSeed.ENVIRONMENT,
             instances: info
           }))
-          $CONTAINER.addClass('admin-container')
           $('title').text('{ ::: Civic Seed - Admin Panel - Monitor ::: }')
         }
       })
@@ -81,7 +78,6 @@ var self = module.exports = {
             environment: CivicSeed.ENVIRONMENT,
             npcs: result
           }))
-          $CONTAINER.addClass('admin-container')
 
           $('title').text('{ ::: Civic Seed - Admin Panel - NPCs ::: }')
 
@@ -98,7 +94,6 @@ var self = module.exports = {
         environment: CivicSeed.ENVIRONMENT,
         message: 'Export database information.'
       }))
-      $CONTAINER.addClass('admin-container')
       $('title').text('{ ::: Civic Seed - Admin Panel - Export ::: }')
     })
 
@@ -121,7 +116,6 @@ var self = module.exports = {
         environment: CivicSeed.ENVIRONMENT,
         message: 'Send invite codes.'
       }))
-      $CONTAINER.addClass('admin-container')
       $('title').text('{ ::: Civic Seed - Admin Panel - Invite Codes ::: }')
     })
 

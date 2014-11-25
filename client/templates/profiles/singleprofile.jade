@@ -29,47 +29,46 @@
             .col-sm-12.instructions
               p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 
-
         .resume-content
           .row
             .col-xs-12.col-sm-3.resume-headings
               h3 vision
             .col-xs-12.col-sm-8.resume-text
-              p Cupcake ipsum dolor sit amet chocolate halvah oat cake. Soufflé biscuit lemon drops biscuit liquorice donut icing. Toffee pastry brownie dessert chocolate dragée toffee. Cake jelly marzipan sweet jelly brownie candy canes applicake powder.
-
+              p= profile.vision
           .row
             .col-xs-12.col-sm-3.resume-headings
               h3 education
             .col-xs-12.col-sm-8.resume-text
               ul
-                li Boston College, MA 2011
-                li Miami University, BA 2007
-                li Marblehead High School, 2003
+                each entry in profile.education
+                  li
+                    | #{entry.school}
+                    if entry.degree
+                      | , #{entry.degree}
+                    if entry.year
+                      | , #{entry.year}
 
           .row
             .col-xs-12.col-sm-3.resume-headings
               h3 background
             .col-xs-12.col-sm-8.resume-text
-              p Macaroon cookie gingerbread. Donut chupa chups bear claw icing marshmallow cotton candy. Candy fruitcake dessert pudding cotton candy topping pie. Gummi bears apple pie marzipan gingerbread sesame snaps jelly. Bonbon candy halvah. Chocolate liquorice wafer pastry jelly lollipop chocolate cake. Danish wafer caramels chupa chups chocolate bar toffee. Sweet roll jelly-o cake sweet jelly-o. Brownie liquorice marzipan dragée candy canes.
+              p= profile.background
 
           .row
             .col-xs-12.col-sm-3.resume-headings
               h3 experience
             .col-xs-12.col-sm-8.resume-text
               ul
-                li Something
-                li Another thing
-                li And another thing
+                each item in profile.experience
+                  li= item
 
           .row
             .col-xs-12.col-sm-3.resume-headings
               h3 skills
             .col-xs-12.col-sm-8.resume-text
               ul
-                li Punkin’ chunkin’
-                li Mythbusting
-                li Wheel spinning
-                li Math
+                each skill in profile.skills
+                  li= skill
 
         if resume[0]
           .row

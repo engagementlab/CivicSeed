@@ -1,22 +1,33 @@
 .row.user-header
   .col-sm-8.col-sm-offset-2.profile-box.text-center
-    h1.name #{firstName} #{lastName}
-    h4.tagline This is a tagline
+    h1.name= firstName + ' ' + lastName
+    h4.tagline= profile.tagline
 
+    //- Profile image logic
     if thisBelongsToCurrentUser
-      .profile-image.editable(style='background-image:url(#{CivicSeed.CLOUD_PATH}/img/profile/placeholder.png);', title='profile image')
+      - var editable = 'editable'
+    if profile.mugshotURL
+      - var mugshotURL = profile.mugshotURL
+    else
+      - var mugshotURL = CivicSeed.CLOUD_PATH + '/img/profile/placeholder.png'
+
+    .profile-image(class=editable, style='background-image:url(#{mugshotURL});', title='profile image')
+      if thisBelongsToCurrentUser
         .uploader.no-print
           i.upload-icon.fa.fa-camera
           p change image
           input(type='file', name='pic', accept='image/*')
-    else
-      .profile-image(style='background-image:url(#{CivicSeed.CLOUD_PATH}/img/profile/placeholder.png);', title='profile image')
 
     .profile-address
-        p.address-line-1 35 Pearl St, #1
-        p.city-state-zip Cambridge, MA
-        p.phone (415) 555-9000
-        p.email jenhunter@email.com
+      p.address-line-1= profile.address1
+      p.address-line-2= profile.address2
+      p.city-state-zip
+        | #{profile.city}
+        if profile.state
+          | , #{profile.state}
+        | #{profile.zip}
+      p.phone= profile.phone
+      p.email= profile.email
 
   if thisBelongsToCurrentUser
     .col-xs-12.col-sm-2.profile-toggle.no-print(data-public=profilePublic)
@@ -31,4 +42,3 @@
             i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
           .profile-toggle-text
             | your profile is private
-

@@ -27,7 +27,8 @@ exports.actions = function (req, res, ss) {
             profileUnlocked: user.profileUnlocked,
             profileSetup: user.profileSetup,
             colorMap: user.game.colorMap,
-            email: user.email
+            email: user.email,
+            profile: user.profile
           }
 
           if (!profileInfo.colorMap) {

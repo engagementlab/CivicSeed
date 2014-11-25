@@ -1,54 +1,55 @@
-include _header
+.admin-container
+  include _header
 
-.row
-  .col-md-10.col-md-offset-1
-    #admin-startup.console
+  .row
+    .col-md-10.col-md-offset-1
+      #admin-startup.console
 
-      .console-content
+        .console-content
 
-        h2 Database Initialization
+          h2 Database Initialization
 
-        p <strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order from top to bottom. The button will turn green after the loading is complete. Wait until it turns green before clicking the next one!
+          p <strong class='color-darkblue'>Instructions.</strong> Click on a button below to reset each of the following categories to the default data. If this is your first time initializing Civic Seed, click on each button in order from top to bottom. The button will turn green after the loading is complete. Wait until it turns green before clicking the next one!
 
-        .row
-          .col-sm-3
-            button.btn(data-type='users') Users
-              .spinner
-          .admin-instructions.col-sm-9
-            p Clears current users; sets up test and demo users.
-        .row
-          .col-sm-3
-            button.btn(data-type='game') Game
-              .spinner
-          .admin-instructions.col-sm-9
-            p Clears current game sessions; sets up test and demo games.
-        .row
-          .col-sm-3
-            button.btn(data-type='colors') Colors
-              .spinner
-          .admin-instructions.col-sm-9
-            p Loads game colors.
-        .row
-          .col-sm-3
-            button.btn(data-type='chat') Chat
-              .spinner
-          .admin-instructions.col-sm-9
-            p Clears all chat logs.
-        .row
-          .col-sm-3
-            button.btn(data-type='tiles') Tiles
-              .spinner
-          .admin-instructions.col-sm-9
-            p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations. <strong>This may take a while.</strong>
-        .row
-          .col-sm-3
-            button.btn(data-type='botanist') Botanist
-              .spinner
-          .admin-instructions.col-sm-9
-            p Loads default Botanist conversations.
-        .row
-          .col-sm-3
-            button.btn(data-type='npcs') NPC
-              .spinner
-          .admin-instructions.col-sm-9
-            p Loads default NPC data. <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.
+          .row
+            .col-sm-3
+              button.btn(data-type='users') Users
+                .spinner
+            .admin-instructions.col-sm-9
+              p Clears current users; sets up test and demo users.
+          .row
+            .col-sm-3
+              button.btn(data-type='game') Game
+                .spinner
+            .admin-instructions.col-sm-9
+              p Clears current game sessions; sets up test and demo games.
+          .row
+            .col-sm-3
+              button.btn(data-type='colors') Colors
+                .spinner
+            .admin-instructions.col-sm-9
+              p Loads game colors.
+          .row
+            .col-sm-3
+              button.btn(data-type='chat') Chat
+                .spinner
+            .admin-instructions.col-sm-9
+              p Clears all chat logs.
+          .row
+            .col-sm-3
+              button.btn(data-type='tiles') Tiles
+                .spinner
+            .admin-instructions.col-sm-9
+              p Loads tileset for game world. Always update NPCs next so that tile states can be updated with NPC locations. <strong>This may take a while.</strong>
+          .row
+            .col-sm-3
+              button.btn(data-type='botanist') Botanist
+                .spinner
+            .admin-instructions.col-sm-9
+              p Loads default Botanist conversations.
+          .row
+            .col-sm-3
+              button.btn(data-type='npcs') NPC
+                .spinner
+            .admin-instructions.col-sm-9
+              p Loads default NPC data. <strong class='color-red'>Super Caution!!</strong> This will overwrite all modifications! Be sure to export the current data to a backup first.

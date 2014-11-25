@@ -69,6 +69,22 @@
         }
       }
     },
+    "profile": {
+      "tagline": "The administrator",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
+    },
     "admin": {
       "instances": [
         "test",
@@ -137,6 +153,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -194,6 +226,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -251,6 +299,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -262,7 +326,7 @@
     "email": "p",
     "role": "actor",
     "gameStarted": true,
-    "profilePublic": false,
+    "profilePublic": true,
     "profileLink": "7o89d51qd8rjatt9",
     "profileSetup": true,
     "profileUnlocked": false,
@@ -308,6 +372,45 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "systems analyst, problem solver",
+      "mugshotURL": "http://engagementgamelab.org/img/people/bio/aidan.jpg",
+      "address1": "35 Pearl St, #1",
+      "address2": "",
+      "city": "Cambridge",
+      "state": "MA",
+      "zip": "",
+      "phone": "(415) 555-9000",
+      "email": "jenhunter@email.com",
+      "vision": "Cupcake ipsum dolor sit amet chocolate halvah oat cake. Soufflé biscuit lemon drops biscuit liquorice donut icing. Toffee pastry brownie dessert chocolate dragée toffee. Cake jelly marzipan sweet jelly brownie candy canes applicake powder.",
+      "background": "Macaroon cookie gingerbread. Donut chupa chups bear claw icing marshmallow cotton candy. Candy fruitcake dessert pudding cotton candy topping pie. Gummi bears apple pie marzipan gingerbread sesame snaps jelly. Bonbon candy halvah. Chocolate liquorice wafer pastry jelly lollipop chocolate cake. Danish wafer caramels chupa chups chocolate bar toffee. Sweet roll jelly-o cake sweet jelly-o. Brownie liquorice marzipan dragée candy canes.",
+      "education": [
+        {
+          "school": "Boston College",
+          "major": "MA",
+          "year": "2011"
+        },
+        {
+          "school": "Miami University",
+          "major": "BA",
+          "year": "2011"
+        },
+        {
+          "school": "Marblehead High School",
+          "major": "",
+          "year": "2003"
+        }
+      ],
+      "experience": [
+        "",
+        ""
+      ],
+      "skills": [
+        "Piloting helicopters",
+        "Hairstyling",
+        "Sleeping in"
+      ]
     }
   },
   {
@@ -365,6 +468,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "Biggest tool in the shed",
+      "mugshotURL": "http://engagementgamelab.org/img/people/bio/stephen.jpg",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -425,6 +544,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "Where the wild things are",
+      "mugshotURL": "http://engagementgamelab.org/img/people/bio/sam.jpg",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -648,6 +783,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "Over one million sold",
+      "mugshotURL": "http://engagementgamelab.org/img/people/bio/eric.jpg",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   },
   {
@@ -659,10 +810,10 @@
     "email": "q",
     "role": "actor",
     "gameStarted": true,
-    "profilePublic": false,
+    "profilePublic": true,
     "profileLink": "83e38ubo04bwqaor",
     "profileSetup": true,
-    "profileUnlocked": false,
+    "profileUnlocked": true,
     "avatar": "",
     "game": {
       "instanceName": "test",
@@ -868,6 +1019,34 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "Civic tech mercenary",
+      "mugshotURL": "https://s3.amazonaws.com/civicseeders/mugshots/louhuang.jpg",
+      "address1": "221B Baker Street",
+      "address2": "",
+      "city": "London",
+      "state": "UK",
+      "zip": "",
+      "phone": "(212) 555-1234",
+      "email": "lou@louhuang.com",
+      "vision": "String",
+      "background": "String",
+      "education": [{
+        "school": "University of Pennsylvania",
+        "major": "Master of City Planning",
+        "year": "2010"
+      }],
+      "experience": [
+        "Game developer, Engagement Game Lab",
+        "Fellow, Code for America"
+      ],
+      "skills": [
+        "Punkin’ chunkin’",
+        "Mythbusting",
+        "Wheel spinning",
+        "Math"
+      ]
     }
   },
   {
@@ -940,6 +1119,22 @@
         }
       }
     },
+    "profile": {
+      "tagline": "",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
+    },
     "admin": {
       "instances": []
     }
@@ -1004,6 +1199,22 @@
           ]
         }
       }
+    },
+    "profile": {
+      "tagline": "",
+      "mugshotURL": "",
+      "address1": "",
+      "address2": "",
+      "city": "",
+      "state": "",
+      "zip": "",
+      "phone": "",
+      "email": "",
+      "vision": "",
+      "background": "",
+      "education": [],
+      "experience": [],
+      "skills": []
     }
   }
 ]

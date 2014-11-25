@@ -1,20 +1,21 @@
-include _header
+.admin-container
+  include _header
 
-#admin-monitor
-  .row
-    .col-md-10.col-md-offset-1
-      each instance, i in instances
-        .console-buttons
-            h3 Game: <span class='color-darkblue'>#{instance}</span>
-            button.monitor-button.btn#players(data-instance='#{instance}') Players
-            button.monitor-button.btn#chat(data-instance='#{instance}') Chat Logs
-            button.monitor-button.btn#questions(data-instance='#{instance}') Questions
-            button.monitor-button.btn#addPlayer(data-instance='#{instance}') Add Player
-            button.monitor-button.btn#startStop(data-instance='#{instance}') Start / Stop
+  #admin-monitor
+    .row
+      .col-md-10.col-md-offset-1
+        each instance, i in instances
+          .console-buttons
+              h3 Game: <span class='color-darkblue'>#{instance}</span>
+              button.monitor-button.btn#players(data-instance='#{instance}') Players
+              button.monitor-button.btn#chat(data-instance='#{instance}') Chat Logs
+              button.monitor-button.btn#questions(data-instance='#{instance}') Questions
+              button.monitor-button.btn#addPlayer(data-instance='#{instance}') Add Player
+              button.monitor-button.btn#startStop(data-instance='#{instance}') Start / Stop
 
-  .row
-    .col-md-10.col-md-offset-1
-      .console
-        .console-content
-          .output
-            p Click a button above to monitor an aspect of a game session.
+    .row
+      .col-md-10.col-md-offset-1
+        .console
+          .console-content
+            .output
+              p Click a button above to monitor an aspect of a game session.

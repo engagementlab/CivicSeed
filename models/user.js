@@ -72,6 +72,26 @@ module.exports = {
         }
       }
     },
+    profile: {
+      tagline: String,
+      mugshotURL: String,
+      address1: String,
+      address2: String,
+      city: String,
+      state: String,
+      zip: String,
+      phone: String,
+      email: String,
+      vision: String,
+      background: String,
+      education: [{
+        school: String,
+        major: String,
+        year: String
+      }],
+      experience: [String],
+      skills: [String]
+    },
     admin: {
       instances: [String]
     }
