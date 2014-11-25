@@ -25,8 +25,8 @@
                 input.number(id='npcLevel_' + npc.id, type='text', data-area='level', value='#{npc.level + 1}', placeholder='lvl')
 
                 label(for='npcCoordsX_' + npc.id) location:
-                input.number(id='npcCoordsX_' + npc.id, type='text', data-area='x', value='#{npc.x}', placeholder='x')
-                input.number(id='npcCoordsY_' + npc.id, type='text', data-area='y', value='#{npc.y}', placeholder='y')
+                input.number(id='npcCoordsX_' + npc.id, type='text', data-area='position.x', value='#{npc.position.x}', placeholder='x')
+                input.number(id='npcCoordsY_' + npc.id, type='text', data-area='position.y', value='#{npc.position.y}', placeholder='y')
 
                 - var npcIsHolding = (npc.isHolding) ? true : false
                 label(for='npcIsHolding_' + npc.id) holding:
