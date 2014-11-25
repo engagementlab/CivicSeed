@@ -20,55 +20,59 @@
       if profileUnlocked
         if thisBelongsToCurrentUser
           if postgameSurveyLink
-            .row.no-print
-              .col-sm-12
+            .row.profile-divider.no-print.text-center
+              .col-sm-12.postgame-survey
                 p
                   strong Please complete the post-game survey!
                 a.btn.btn-primary.survey(href='#{postgameSurveyLink}', target='_blank') Click here to open the survey
-          .row.no-print
-            .col-sm-12.instructions
-              p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
+          //- .row.no-print
+          //-   .col-sm-12.instructions
+          //-     p To edit your profile, click on the text. When you are done, make sure to hit the "Save" button.
 
-        .resume-content
-          .row
-            .col-xs-12.col-sm-3.resume-headings
-              h3 vision
-            .col-xs-12.col-sm-8.resume-text
-              p= profile.vision
-          .row
-            .col-xs-12.col-sm-3.resume-headings
-              h3 education
-            .col-xs-12.col-sm-8.resume-text
-              ul
-                each entry in profile.education
-                  li
-                    | #{entry.school}
-                    if entry.degree
-                      | , #{entry.degree}
-                    if entry.year
-                      | , #{entry.year}
+        .row.profile-divider.resume-content
+        .row
+          .col-xs-12.col-sm-3.resume-headings
+            h3 vision
+          .col-xs-12.col-sm-8.resume-text
+            p= profile.vision
+        .row
+          .col-xs-12.col-sm-3.resume-headings
+            h3 education
+          .col-xs-12.col-sm-8.resume-text
+            ul
+              each entry in profile.education
+                li
+                  | #{entry.school}
+                  if entry.degree
+                    | , #{entry.degree}
+                  if entry.year
+                    | , #{entry.year}
 
-          .row
-            .col-xs-12.col-sm-3.resume-headings
-              h3 background
-            .col-xs-12.col-sm-8.resume-text
-              p= profile.background
+        .row
+          .col-xs-12.col-sm-3.resume-headings
+            h3 background
+          .col-xs-12.col-sm-8.resume-text
+            p= profile.background
 
-          .row
-            .col-xs-12.col-sm-3.resume-headings
-              h3 experience
-            .col-xs-12.col-sm-8.resume-text
-              ul
-                each item in profile.experience
-                  li= item
+        .row
+          .col-xs-12.col-sm-3.resume-headings
+            h3 experience
+          .col-xs-12.col-sm-8.resume-text
+            ul
+              each item in profile.experience
+                li= item
 
-          .row
-            .col-xs-12.col-sm-3.resume-headings
-              h3 skills
-            .col-xs-12.col-sm-8.resume-text
-              ul
-                each skill in profile.skills
-                  li= skill
+        .row
+          .col-xs-12.col-sm-3.resume-headings
+            h3 skills
+          .col-xs-12.col-sm-8.resume-text
+            ul
+              each skill in profile.skills
+                li= skill
+            p
+              img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=60, height=45)
+              | Civic Seed seal of approval
+
 
         if resume[0]
           .row
@@ -104,6 +108,7 @@
           .row
             .col-sm-12.color-map
               img(src='#{colorMap}')
+
         if thisBelongsToCurrentUser
           .row.no-print
             .col-sm-12
@@ -111,7 +116,8 @@
 
         .row.footer
           .col-sm-12
-            img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=200, height=150)
+            img(src='#{CivicSeed.CLOUD_PATH}/img/profile/tufts-logo.png', width=320, height=60)
+            //-img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=200, height=150)
 
       else
         .row.profile-divider

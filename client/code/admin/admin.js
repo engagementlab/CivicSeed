@@ -23,11 +23,19 @@ var self = module.exports = {
       var button   = $(this),
           dataType = button.data().type
 
-      button.removeClass('btn-success')
+      if (button.prop('disabled')) {
+        return
+      }
+
+      button.removeClass('btn-success').prop('disabled', true)
       button.find('.spinner').show()
       ss.rpc('admin.startup.loadData', dataType, function (res) {
-        console.log(res)
-        button.addClass('btn-success')
+        if (res) {
+          button.addClass('btn-success').prop('disabled', false)
+        } else {
+          // Is this adequate for error, or should rpc return an error message?
+          button.addClass('btn-error').prop('disabled', false)
+        }
         button.find('.spinner').fadeOut()
       })
     })
@@ -194,7 +202,7 @@ var self = module.exports = {
   },
 
   getQuestions: function () {
-    ss.rpc('admin.monitor.init', function (err,res) {
+    ss.rpc('admin.monitor.init', function (err, res) {
       if (res) {
         self.allQuestions = res.sort(self.sortByLevel)
       }
