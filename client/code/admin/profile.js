@@ -73,5 +73,18 @@ module.exports = {
       var row = $(this).parent().find('.row')
       $(row).toggle()
     })
+
+    $body.on('change', '#mugshot-uploader', function () {
+      var file = this.files[0]
+      var fileContents = ''
+      ss.rpc('shared.profiles.signS3Request', sessionStorage.getItem('userId'), file, function (res) {
+        apprise(res)
+      })
+    })
+
+    $(document).ready(function() {
+      
+    })
+
   }
 }

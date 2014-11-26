@@ -23,6 +23,7 @@
     "node": "0.10.x"
   },
   "dependencies": {
+    "aws-sdk": "^2.0.29",
     "bcrypt": "~0.8.0",
     "colors": "~1.0.3",
     "express": "^3.17.8",

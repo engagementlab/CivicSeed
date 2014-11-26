@@ -3,5 +3,6 @@
   "PORT": 8000,
   "USE_REDIS": true,
   "EMAIL_SERVICE": "Mailgun",
-  "CLOUD_PATH": ""
+  "CLOUD_PATH": "",
+  "MUGSHOTS_S3_BUCKET": "civicseeders",
 }

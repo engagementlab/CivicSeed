@@ -19,6 +19,7 @@ var self = module.exports = {
         'libs/d3.min.js',
         'libs/apprise.js',
         'libs/howler.min.js',
+        'libs/s3upload.js',
         'routes',
         'admin',
         'shared',

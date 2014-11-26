@@ -25,7 +25,9 @@ These are the [general instructions for launching an Amazon EC2 instance](http:/
 
 ### Creating a S3 bucket
 
-Setting up an S3 bucket is fairly easy. Civic Seed expects the bucket to be named `civicseed`. Buckets use a shared namespace across all of Amazon AWS, so deployments that want their own S3 bucket will need to create a new one and modify the code as needed.
+Setting up an S3 bucket is fairly easy. Civic Seed expects the bucket to be named `civicseed`. You can change this in the `CLOUD_PATH` configuration variable. Buckets use a shared namespace across all of Amazon AWS, so deployments that want their own S3 bucket will need to create a new one and modify the code as needed.
+
+There is a second S3 bucket used for user profile mugshot uploads, called `civicseeders`. You can change this in the `MUGSHOTS_S3_BUCKET` configuration variable. This is a separate bucket because we want to keep the uploader's destination bucket physically (or metaphorically) separate from the static assets, to prevent actions or scripts from accidentally interfering with either bucket.
 
 Make sure to [double check CORS permissions](https://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html#how-do-i-enable-cors) so that Civic Seed can access assets.
 

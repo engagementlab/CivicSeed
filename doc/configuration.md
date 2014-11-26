@@ -28,6 +28,8 @@ Authentication credentials should not be stored in the configuration files becau
 * `EMAIL_USER` - User account name for the mailing service used by Nodemailer.
 * `EMAIL_PW` - Account password for the mailing service used by Nodemailer.
 * `EMAIL_TO` - E-mail address that feedback from within Civic Seed should be sent to.
+* `AWS_ACCESS_KEY_ID` - AWS access key ID for the bucket to upload user profile mugshots to.
+* `AWS_SECRET_ACCESS_KEY` - AWS secret access key for the bucket to upload user profile mugshots to.
 
 #### Other
 

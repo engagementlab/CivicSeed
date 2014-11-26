@@ -126,6 +126,27 @@
     ul
       list-style-type none
       padding-left 0
+  .share-box
+    margin 1em auto
+    text-align center
+    border 1px solid lightgray
+    border-radius 10px
+    background-color whitesmoke
+    padding 1em
+    h2
+      color $csDarkGray
+    p
+      font-family $buttonFont
+    input,
+    .input-group
+      font-family $buttonFont
+    .change-profile-link
+      cursor pointer
+      user-select none
+      &:hover
+        background-color $csDarkBlue
+        color white
+        border 1px solid darken($csDarkBlue, 10%)
   .footer
     margin-top 1em
     margin-bottom -3em // Override margin on body
@@ -134,6 +155,8 @@
     background-color #dbff85
     @media screen and (min-width $screen-sm-min)
       padding 3em
+      border-top-left-radius 10px
+      border-top-right-radius 10px
     img
       max-width 100%
       height auto
