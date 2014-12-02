@@ -1,8 +1,7 @@
 'use strict';
 
-var rootDir = process.cwd() || '.',
-    config  = require(rootDir + '/app/config'),
-    aws     = require('aws-sdk')
+var rootDir   = process.cwd() || '.',
+    config    = require(rootDir + '/app/config')
 
 exports.actions = function (req, res, ss) {
 
@@ -116,46 +115,26 @@ exports.actions = function (req, res, ss) {
       })
     },
 
-    signS3Request: function (playerId, file) {
-      console.log(file)
-
-      var NODE_ENV     = config.get('NODE_ENV'),
-          S3_BUCKET    = config.get('MUGSHOTS_S3_BUCKET'),
-          S3_PATH_NAME = '/mugshots/'
-
-      if (config.get('NODE_ENV') !== 'production') {
-        S3_PATH_NAME += NODE_ENV + '/'
-      }
-
-      aws.config.update({
-        accessKeyId:     config.get('AWS_ACCESS_KEY_ID'),
-        secretAccessKey: config.get('AWS_SECRET_ACCESS_KEY')
-      })
-
-      var s3 = new aws.S3()
-      var s3_params = {
-        Bucket:      S3_BUCKET,
-        Key:         req.query.s3_object_name,
-        Expires:     60,
-        ContentType: req.query.s3_object_type,
-        ACL:         'public-read'
-      }
-
-      s3.getSignedUrl('putObject', s3_params, function (err, data) {
-        if (err){
+    // Find the user and update their mugshot URL
+    // Called after a successful upload to S3, with the new path to the file
+    // TODO: This is very similar to other functions; make a generic update function
+    updateProfileMugshotURL: function (playerId, data) {
+      UserModel.findById(playerId, function (err, user) {
+        if (err) {
           console.log(err)
-        } else{
-          var return_data = {
-            signed_request: data,
-            url: 'https://.s3.amazonaws.com/' + S3_BUCKET + S3_PATH_NAME + req.query.s3_object_name
-          }
-          res.write(JSON.stringify(return_data))
-          res.end()
+          res(false)
+        } else if (user) {
+          user.game.profile.mugshotURL = data.mugshotURL
+          user.save(function (err, okay) {
+            if (err) {
+              console.log('error saving')
+              res(false)
+            } else {
+              res(true)
+            }
+          })
         }
       })
-
-      // If !production env, append env- to beginning of file (facilitates cleaning)
-      res(return_data.url)
     }
 
   }
