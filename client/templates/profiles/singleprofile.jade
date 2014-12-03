@@ -118,31 +118,7 @@
         if thisBelongsToCurrentUser
           .row.share.no-print
             .col-sm-10.col-sm-offset-1
-              .share-box
-                h2 Share your civic resume!
-
-                .profile-toggle(data-public=profilePublic)
-                  .public-lock
-                    if profilePublic
-                      .profile-toggle-icon
-                        i.fa.fa-unlock-alt.fa.fa-4x(title='make profile public', data-placement='top')
-                      .profile-toggle-text
-                        | your profile is public
-                    else
-                      .profile-toggle-icon
-                        i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
-                      .profile-toggle-text
-                        | your profile is private
-
-                p Use the link below to share your Civic Seed profile with your friends, colleagues and potential employers.
-                .input-group
-                  span.input-group-addon http://
-                  input.share-link.form-control(type='text')
-                  span.input-group-addon.change-profile-link Customize
-
-                h4 Here is your Civic Seed seal of approval badge.
-                img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=200, height=150)
-                button#copy-embed-code.btn Copy embed code
+              include _share
 
         .row.footer
           .col-sm-12

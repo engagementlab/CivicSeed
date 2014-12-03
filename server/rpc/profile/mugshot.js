@@ -28,7 +28,7 @@ exports.actions = function (req, res, ss) {
 
       var NODE_ENV     = config.get('NODE_ENV'),
           S3_BUCKET    = config.get('MUGSHOTS_S3_BUCKET'),
-          S3_PATH_NAME = '/mugshots/'
+          S3_PATH_NAME = 'mugshots/'
 
       // If !production env, append the env name as a path (facilitates cleaning)
       if (config.get('NODE_ENV') !== 'production') {
@@ -40,10 +40,12 @@ exports.actions = function (req, res, ss) {
         secretAccessKey: config.get('AWS_SECRET_KEY')
       })
 
+      var FILE_PATH = S3_PATH_NAME + playerId + '.' + miscUtils.getFilenameExtension(file.name)
+
       var s3 = new aws.S3()
       var s3_params = {
         Bucket:      S3_BUCKET,
-        Key:         playerId + '.' + miscUtils.getFilenameExtension(file.name),
+        Key:         FILE_PATH,
         ContentType: file.type,
         Expires:     60,
         ACL:         'public-read'
@@ -55,7 +57,7 @@ exports.actions = function (req, res, ss) {
         } else{
           var response = {
             signedRequest: data,
-            url: 'https://s3.amazonaws.com/' + S3_BUCKET + S3_PATH_NAME + playerId
+            url: 'https://s3.amazonaws.com/' + S3_BUCKET + '/' + FILE_PATH
           }
           res(response)
         }

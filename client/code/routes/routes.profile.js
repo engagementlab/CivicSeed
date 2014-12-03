@@ -4,7 +4,6 @@ var self = module.exports = {
 
   loadRoutes: function (app) {
     var profile = require('/profile')
-    profile.init()
 
     app.get('/profiles', function (req) {
       ss.rpc('shared.profiles.getAllProfiles', function (users) {
@@ -25,6 +24,7 @@ var self = module.exports = {
           } else {
             info.postgameSurveyLink = CivicSeed.SURVEY_POSTGAME_LINK
             $CONTAINER.append(JT['profiles-singleprofile'](info))
+            profile.init()
           }
         }
       })

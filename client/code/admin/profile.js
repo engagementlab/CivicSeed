@@ -5,6 +5,7 @@
     admin.profile
 
     - UI / controller for user-facing CMS for editing their own profile page.
+    - TODO: Separate this out into a /code/profile collection of files.
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -30,7 +31,7 @@ S3Uploader.prototype.onError = function (status) {
   return console.log('S3Uploader.onError()', status)
 }
 
-S3Uploader.prototype.createCORSRequest = function(method, url) {
+S3Uploader.prototype.createCORSRequest = function (method, url) {
   var xhr
   xhr = new XMLHttpRequest()
   if (xhr.withCredentials != null) {
@@ -56,6 +57,7 @@ S3Uploader.prototype.uploadToS3 = function (file, url, public_url) {
         this_s3upload.onProgress(100, 'Upload completed.')
         return this_s3upload.onFinishS3Put(public_url)
       } else {
+        console.log(xhr)
         return this_s3upload.onError('Upload error: ' + xhr.status)
       }
     }
@@ -73,6 +75,42 @@ S3Uploader.prototype.uploadToS3 = function (file, url, public_url) {
   xhr.setRequestHeader('Content-Type', file.type)
   xhr.setRequestHeader('x-amz-acl', 'public-read')
   return xhr.send(file)
+}
+
+function showCurrentURIWithoutPrefix () {
+  $('#copy-share-link-input').val(window.location.href.split('//')[1])
+}
+
+// Share link box
+function saveCustomProfileURL () {
+
+  var desiredURL = $('#customize-share-link-input').val()
+
+  // 1. RPC call to backend with data
+  // 2. Backend will attempt to make sure that the desiredURL is free
+  // 3. If so, get the current player and update
+  // 4. On error, apprise
+  // 5. On success, return state of form with a "Success!" message.
+
+  ss.rpc('profile.link.save', sessionStorage.getItem('userId'), desiredURL, function (res) {
+    if (!res) {
+      apprise('Error saving custom profile link.')
+    } else {
+      // Update location
+      //Davis.history.assign(desiredURL)
+
+      // Toggle visibility state of form
+      $('#copy-share-link-group').show()
+      $('#customize-share-link-group').hide()
+
+      // Update the blanks
+      showCurrentURIWithoutPrefix()
+
+      // Success message
+      $('#share-link-message').text('Your profile link has been chagned successfully!').addClass('color-darkgreen').show()
+    }
+  })
+
 }
 
 
@@ -106,7 +144,10 @@ module.exports = (function () {
 
   return {
     init: function () {
+      // Display share link
+      showCurrentURIWithoutPrefix()
 
+      // Set up all event listeners
       $body = $(document.body)
 
       $body.on('click', '.save-profile-button', function () {
@@ -129,28 +170,18 @@ module.exports = (function () {
       })
 
       $body.on('click', '.profile-toggle', function () {
-        var $el = $(this),
-            profilePublic = $(this).attr('data-public'),
-            changeTo,
-            newText,
-            newClass
+        var profilePublic = $(this).attr('data-public')
 
         if (profilePublic === 'false' || !profilePublic) {
-          profilePublic = 'true'
-          changeTo = true
-          newText = 'your profile is public'
-          newClass = 'fa fa-unlock-alt fa-4x'
+          profilePublic = true
         } else {
-          profilePublic = 'false'
-          changeTo = false
-          newText = 'your profile is private'
-          newClass = 'fa fa-lock fa-4x'
+          profilePublic = false
         }
 
         // Save the change to user info
         var updateInfo = {
           id: sessionStorage.getItem('userId'),
-          changeTo: changeTo
+          changeTo: profilePublic
         }
         ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
 
@@ -158,13 +189,20 @@ module.exports = (function () {
             apprise('Error')
           }
 
-          // Update dom
-          $el.attr('data-public', profilePublic)
-          $el.find('.profile-toggle-text').text(newText)
-          $el.find('i').removeClass().addClass(newClass)
+          // Update DOM
+          // Catch all instances where the .profile-toggle element exists
+          var $els = $('.profile-toggle')
+          $els.attr('data-public', profilePublic)
 
-          if (changeTo) {
-            apprise('You have made your civic resume public! Share your page with your friends, colleagues and employers!')
+          if (profilePublic) {
+            $els.find('.profile-public').show()
+            $els.find('.profile-private').hide()
+            // Is this a good UX?
+            //apprise('You have made your civic resume public! Share your page with your friends, colleagues and employers!')
+          } else {
+            $els.find('.profile-private').show()
+            $els.find('.profile-public').hide()
+            //apprise('You have made your civic resume private! Your share link will no longer be accessible to anyone else.')
           }
 
         })
@@ -187,8 +225,30 @@ module.exports = (function () {
         })
       })
 
-      $(document).ready(function() {
-        
+      $body.on('click', '#copy-share-link-input', function () {
+        $(this).select()
+      })
+
+      $body.on('click', '#customize-share-link-button', function () {
+        var $el = $(this)
+
+        // Toggle visibility state of form
+        $('#copy-share-link-group').hide()
+        $('#customize-share-link-group').css('display', 'table') // Restore display type to .input-group default
+
+        // Fill in the blanks
+        $('#share-link-prefix').text(window.location.href.split('profiles/')[0] + 'profiles/')
+        $('#customize-share-link-input').val(window.location.href.split('profiles/')[1]).select()
+
+      })
+
+      $body.on('submit', '#share-link-form', function (e) {
+        e.preventDefault()
+        saveCustomProfileURL()
+      })
+
+      $body.on('click', '#save-share-link-button', function () {
+        saveCustomProfileURL()
       })
 
     }

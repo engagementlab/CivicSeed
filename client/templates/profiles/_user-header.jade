@@ -32,12 +32,12 @@
   if thisBelongsToCurrentUser
     .col-xs-12.col-sm-2.profile-toggle.no-print(data-public=profilePublic)
       .public-lock
-        if profilePublic
+        .profile-public(style=profilePublic ? 'display: block;' : 'display: none;')
           .profile-toggle-icon
             i.fa.fa-unlock-alt.fa.fa-4x(title='make profile public', data-placement='top')
           .profile-toggle-text
             | your profile is public
-        else
+        .profile-private(style=!profilePublic ? 'display: block;' : 'display: none;')
           .profile-toggle-icon
             i.fa.fa-lock.fa.fa-4x(title='make profile private', data-placement='top')
           .profile-toggle-text
