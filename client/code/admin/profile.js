@@ -9,12 +9,11 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var $body
-
-// S3Upload is a heavily modified version from this repository:  https://github.com/flyingsparx/s3upload-coffee-javascript
-// This is because we need to use SocketStream to manage the communication with the back-end
-// server rather than using a normal GET request, and the script is further simplified to assume
-// only one file is getting uploaded at a time.
+// S3Upload is a heavily modified version from this repository:
+// https://github.com/flyingsparx/s3upload-coffee-javascript
+// This is because we need to use SocketStream to manage the communication with
+// the back-end server rather than using a normal GET request, and the script is
+// further simplified to assume only one file is getting uploaded at a time.
 // More info:  https://devcenter.heroku.com/articles/s3-upload-node
 var S3Uploader = function () {
 }
@@ -174,7 +173,7 @@ module.exports = (function () {
       showCurrentURIWithoutPrefix()
 
       // Set up all event listeners
-      $body = $(document.body)
+      var $body = $(document.body)
 
       $body.on('click', '.save-profile-button', function () {
         var updates = [],

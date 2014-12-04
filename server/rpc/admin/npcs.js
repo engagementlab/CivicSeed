@@ -123,6 +123,7 @@ exports.actions = function (req, res, ss) {
             res('error:' + err)
           } else if (result) {
             var npc = result[0]
+
             //update the tiles for the npc
             npcHelpers.updateTiles(npc.position, info.position, function (error) {
               if (error) {
@@ -139,7 +140,7 @@ exports.actions = function (req, res, ss) {
 
                 //resource
                 if (info.isHolding) {
-                  npc.resource.id = info.index // TODO: Change
+                  npc.resource.id = parseInt(info.resource.url, 10) // TODO: Change
                   npc.resource.url = info.resource.url
                   npc.resource.questionType = info.resource.questionType
                   npc.resource.question = info.resource.question

@@ -1,18 +1,17 @@
 'use strict';
 
-var $body,
-    $util = require('/util')
+var $util = require('/util')
 
 var self = module.exports = {
 
   newId: -1,
 
   init: function () {
-    $body = $(document.body)
     self.setup()
   },
 
   setup: function () {
+    var $body = $(document.body)
 
     // Intercept default browser button actions
     $('button').on('click', function (e) {
@@ -20,17 +19,17 @@ var self = module.exports = {
       return false
     })
 
-    $body.on('click', '.levelFilter div', function() {
-      var level = parseInt($(this).text(),10);
-      $(this).toggleClass('current');
+    $body.on('click', '.levelFilter div', function () {
+      var level = parseInt($(this).text(), 10)
+      $(this).toggleClass('current')
       var show = $(this).hasClass('current'),
-        npcSel = '.level' + (level - 1);
+        npcSel = '.level' + (level - 1)
       if (show) {
-        $(npcSel).show();
+        $(npcSel).show()
       } else {
-        $(npcSel).hide();
+        $(npcSel).hide()
       }
-    });
+    })
 
     // Save changes to an NPC
     $body.on('click', '.npc-save-button', function () {
@@ -118,7 +117,7 @@ var self = module.exports = {
           $self.removeClass('btn-error')
         }, 1000)
       }
-    });
+    })
 
     // When button is clicked, add a new NPC
     $body.on('click', '.npc-add-button', function() {
@@ -156,7 +155,7 @@ var self = module.exports = {
       var questionType = $(this).val(),
           $npc         = $(this).parents('.npc')
 
-      $npc.find('.questionOptions').hide();
+      $npc.find('.questionOptions').hide()
 
       // Display response fields depending on question type
       switch (questionType) {
@@ -226,14 +225,13 @@ var self = module.exports = {
           },
           level: null,
           sprite: sprite,
-          index: null,
           position: {
             x: null,
             y: null
           },
           name: null,
           skinSuit: null
-        };
+        }
 
     //update information
     var x, y
@@ -249,16 +247,15 @@ var self = module.exports = {
         case 'level':
           updates.level = parseInt(val, 10) - 1
           break
-        case 'x':
+        case 'position.x':
           x = parseInt(val, 10)
           break
-        case 'y':
+        case 'position.y':
           y = parseInt(val, 10)
           break
       }
     })
 
-    updates.index = (y * 142) + x // TODO: Deprecate reliance on the index. This hard codes the GAME_WIDTH constant as well; bad!
     updates.position.x = x
     updates.position.y = y
 
@@ -267,48 +264,48 @@ var self = module.exports = {
           val  =  $util.prettyString(this.value)
 
       if (area === 'url') {
-        updates.resource.url = val;
+        updates.resource.url = val
       } else if (area === 'shape') {
-        updates.resource.shape = val;
+        updates.resource.shape = val
       } else if (area === 'question') {
-        updates.resource.question = val;
+        updates.resource.question = val
       } else if (area === 'possibleAnswers') {
-        updates.resource.possibleAnswers.push(val);
+        updates.resource.possibleAnswers.push(val)
       } else if (area === 'answer') {
-        updates.resource.answer = val;
+        updates.resource.answer = val
       } else if (area === 'requiredLength') {
-        updates.resource.requiredlength = parseInt(val, 10);
+        updates.resource.requiredlength = parseInt(val, 10)
       } else if (area === 'dependsOn') {
-        updates.dependsOn = parseInt(val,10);
+        updates.dependsOn = parseInt(val, 10) || null
       } else if (area === 'feedbackRight') {
-        updates.resource.feedbackRight = val;
+        updates.resource.feedbackRight = val
       } else if (area === 'feedbackWrong') {
-        updates.resource.feedbackWrong = val;
+        updates.resource.feedbackWrong = val
       }
-    });
+    })
 
     promptAreas.each(function (i) {
       var area = $(this).attr('data-area'),
           val  = $util.prettyString(this.value)
 
       if (area === 'prompt') {
-        updates.dialog.prompts.push(val);
+        updates.dialog.prompts.push(val)
       }
-    });
+    })
 
     smalltalkAreas.each(function (i) {
       var area = $(this).attr('data-area'),
           val  = $util.prettyString(this.value)
 
       if (area === 'smalltalk') {
-        updates.dialog.smalltalk.push(val);
+        updates.dialog.smalltalk.push(val)
       }
-    });
+    })
 
-    var skinVal = skinSuitArea.val();
-    // console.log(skinVal);
+    var skinVal = skinSuitArea.val()
+
     if (skinVal && skinVal.length > 0) {
-      updates.skinSuit = skinVal;
+      updates.skinSuit = skinVal
     }
 
     console.log(updates)
@@ -316,31 +313,35 @@ var self = module.exports = {
     //this means it is a new one, do not save, but add new in db
     if (id < 0) {
       //figure out id
-      var max = 0;
-      $('.npc-save-button').each(function(i){
-        var id = parseInt($(this).data('id'),10);
+      var max = 0
+      $('.npc-save-button').each(function (i) {
+        var id = parseInt($(this).data('id'), 10)
         if (id > max) {
-          max = id;
+          max = id
         }
-      });
-      max++;
-      updates.id = max;
+      })
+      max++
+      updates.id = max
+
       //TODO: update information on client
       //.npc: level, npc
       var levelClass = 'level' + updates.level,
-          npcClass = 'npc' + updates.id;
-      npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
+          npcClass = 'npc' + updates.id
+
+      npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
+
       //options buttons
       var $saveButton = npc.find('.npc-create-button'),
-          $deleteButton = npc.find('.npc-cancel-button');
-      $saveButton.attr('data-id', updates.id);
-      $deleteButton.attr('data-id', updates.id);
+          $deleteButton = npc.find('.npc-cancel-button')
+
+      $saveButton.attr('data-id', updates.id)
+      $deleteButton.attr('data-id', updates.id)
 
       ss.rpc('admin.npcs.addNpc', updates, function (err) {
         if (err) {
-          apprise(err);
+          apprise(err)
         } else {
-          var $saveButton = npc.find('.npc-create-button');
+          var $saveButton = npc.find('.npc-create-button')
 
           $saveButton.addClass('btn-success').addClass('npc-save-button').removeClass('npc-create-button').text('npc created!')
           $deleteButton.addClass('npc-delete-button').removeClass('npc-cancel-button').text('delete')
@@ -348,19 +349,20 @@ var self = module.exports = {
             $saveButton.removeClass('btn-success').text('save')
           }, 2000)
         }
-      });
+      })
     } else {
-      ss.rpc('admin.npcs.updateInformation', updates, function(err) {
+      ss.rpc('admin.npcs.updateInformation', updates, function (err) {
         if (err) {
-          apprise(err);
+          apprise(err)
         } else {
-          var $saveButton = npc.find('.npc-save-button');
-          var levelClass = 'level' + updates.level,
-              npcClass = 'npc' + updates.id;
-          npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass);
-          $saveButton.addClass('btn-success');
+          var $saveButton = npc.find('.npc-save-button'),
+              levelClass = 'level' + updates.level,
+              npcClass = 'npc' + updates.id
+
+          npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
+          $saveButton.addClass('btn-success')
         }
-      });
+      })
     }
   },
 
@@ -373,9 +375,9 @@ var self = module.exports = {
   },
 
   deleteNpc: function (id) {
-    var confirm = prompt('Please type "delete" to permanently remove this NPC.');
+    var confirm = prompt('Please type "delete" to permanently remove this NPC.')
     if (confirm === 'delete') {
-      var npc = $('.npc' + id);
+      var npc = $('.npc' + id)
 
       //this means it has never been saved, delete it from client
       if (id < 0) {
@@ -383,24 +385,24 @@ var self = module.exports = {
       } else {
         ss.rpc('admin.npcs.deleteNpc', id, function (err,res) {
           if (err) {
-            console.log(err);
+            console.log(err)
           } else {
             npc.slideUp(function() {
-              this.remove();
-            });
+              this.remove()
+            })
           }
-        });
+        })
       }
     }
   },
 
   // Cancel creation of a new NPC
   cancelNpc: function (id) {
-    var npc = $('.npc' + id);
+    var npc = $('.npc' + id)
 
     npc.slideUp(function() {
-      this.remove();
-    });
+      this.remove()
+    })
   },
 
   addNpc: function () {

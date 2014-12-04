@@ -433,8 +433,8 @@ var $player = $game.$player = {
 
   // Empty everything from inventory
   emptyInventory: function () {
-    _inventory = [];
-    $('.inventory-item').remove();
+    _inventory = []
+    $('.inventory-item').remove()
     $game.setBadgeCount('.hud-inventory', 0)
 
     // Including the puzzle
@@ -459,11 +459,11 @@ var $player = $game.$player = {
 
   //reset items and prepare other entities for fresh level
   nextLevel: function () {
-    $game.$player.currentLevel += 1;
-    $game.$player.seenRobot = false;
-    $game.$botanist.setState(0);
+    $game.$player.currentLevel += 1
+    $game.$player.seenRobot = false
+    $game.$botanist.setState(0)
     $game.flags.unset('botanist-teleported')
-    _pledges = 5;
+    _pledges = 5
     // $game.$render.loadTilesheet($game.$player.currentLevel, true);
 
     //save new information to DB
@@ -478,21 +478,20 @@ var $player = $game.$player = {
     $game.log('Congrats! You have completed level ' + $game.$player.currentLevel + '!')
 
     if ($game.$player.currentLevel < 4) {
-      $game.$robot.setPosition();
-      _renderInfo.level = $game.$player.currentLevel;
+      $game.$robot.setPosition()
+      _renderInfo.level = $game.$player.currentLevel
 
       _player.createInventoryBoxes()
       //send status to message board
-      var newLevelMsg = $game.$player.currentLevel + 1;
-      // var stat = $game.$player.firstName + 'is on level' + newLevelMsg + '!';
+      var newLevelMsg = $game.$player.currentLevel + 1
+
       ss.rpc('game.player.levelChange', {
         id:    $game.$player.id,
         level: $game.$player.currentLevel,
         name:  $game.$player.firstName
       })
-    }
-    else if ($game.bossModeUnlocked) {
-      $game.toBossLevel();
+    } else if ($game.bossModeUnlocked) {
+      $game.toBossLevel()
     }
   },
 

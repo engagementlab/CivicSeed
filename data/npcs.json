@@ -459,7 +459,7 @@
     "dialog": {
       "prompts": [
         "YO! Framp is stoked you came to visit! You meet my bro Hamp yet? He is a little intense, but he just wants to make sure we are partners working together to strengthen our community.",
-        "2",
+        "",
         "See? I told you Hamp is OK! He just loves his town and wants to be a part of helping restore the color. We all want to help make our home a better place."
       ],
       "smalltalk": []
@@ -1414,7 +1414,7 @@
     "dialog": {
       "prompts": [
         "I love the water! When you bring all the color back, my water view will be incredible! I want to help. Here’s a question.",
-        "2",
+        "",
         "Water... pools... reflection pools... reflection... it all makes sense now!"
       ],
       "smalltalk": []
@@ -1440,14 +1440,14 @@
       "question": "Which one of these tips do you think most applies to you?",
       "questionType": "open",
       "requiredLength": 30,
-      "shape": "wrong2",
+      "shape": "wrong4",
       "url": "12249",
       "possibleAnswers": []
     },
     "dialog": {
       "prompts": [
         "What was that? Speak up! If I hear a right answer from you, I’ll give you something that will help!",
-        "2",
+        "",
         "I hear you’ve been reflecting on things. That’s awesome!"
       ],
       "smalltalk": []
@@ -1513,7 +1513,7 @@
     "dialog": {
       "prompts": [
         "Hm. You’re the one who’s bringing back all the color? I thought it might be you.. I can help you.",
-        "2",
+        "",
         "I’ll give you the same advice I give everyone: Get educated, and watch out for robots!"
       ],
       "smalltalk": []
@@ -1596,7 +1596,7 @@
     "dialog": {
       "prompts": [
         "Have you ever thought about where the future might take you? Wherever you go, this resource might help!",
-        "2",
+        "",
         "You’re like some color prodigy! I feel smarter and more artistic just by knowing you."
       ],
       "smalltalk": []
@@ -1629,7 +1629,7 @@
     "dialog": {
       "prompts": [
         "I thought these things were raisins, but they’re really seeds! Want some? Then answer my question.",
-        "2",
+        "",
         "It’s peanut butter and jelly time!"
       ],
       "smalltalk": []
@@ -1662,7 +1662,7 @@
     "dialog": {
       "prompts": [
         "I may be little, but I’m packing some mighty big thoughts. Let’s see if we’re on the same wavelength. If we are, I’ll give you something that just might help you out!",
-        "2",
+        "",
         "Remember, size matters not! Only knowledge. Reflect on that."
       ],
       "smalltalk": []
