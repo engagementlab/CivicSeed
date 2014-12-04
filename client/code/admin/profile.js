@@ -81,10 +81,36 @@ function showCurrentURIWithoutPrefix () {
   $('#copy-share-link-input').val(window.location.href.split('//')[1])
 }
 
+// TODO: Back end should reject invalid values too
+function checkDesiredCustomProfileURL (input) {
+  var check = input.toString().trim()
+
+  // Check to make sure characters are legal
+  var illegalChar = check.match(/[^A-Za-z0-9_-]+/)
+  if (illegalChar && illegalChar.length > 0) {
+    return 'Please only use letters, numbers, hyphens, and underscores.'
+  }
+  // Check string length is OK
+  if (check.length < 4) {
+    return 'Please enter more than four characters.'
+  } else if (check.length > 32) {
+    return 'Please enter no more than 32 characters.'
+  }
+
+  return true
+}
+
 // Share link box
 function saveCustomProfileURL () {
 
   var desiredURL = $('#customize-share-link-input').val()
+
+  var check = checkDesiredCustomProfileURL(desiredURL)
+  // Check must explicitly equal true to continue, or it is an error message
+  if (check !== true) {
+    $('#share-link-message').text(check).addClass('color-red').show()
+    return false
+  }
 
   // 1. RPC call to backend with data
   // 2. Backend will attempt to make sure that the desiredURL is free
@@ -107,7 +133,7 @@ function saveCustomProfileURL () {
       showCurrentURIWithoutPrefix()
 
       // Success message
-      $('#share-link-message').text('Your profile link has been chagned successfully!').addClass('color-darkgreen').show()
+      $('#share-link-message').text('Your profile link has been changed successfully!').addClass('color-darkgreen').show()
     }
   })
 
@@ -249,6 +275,11 @@ module.exports = (function () {
 
       $body.on('click', '#save-share-link-button', function () {
         saveCustomProfileURL()
+      })
+
+      $body.on('keyup', '#customize-share-link-input', function () {
+        // Reset
+        $('#share-link-message').text('').removeClass('color-darkgreen color-red').hide()
       })
 
     }
