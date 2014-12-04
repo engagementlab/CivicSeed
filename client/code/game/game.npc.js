@@ -8,7 +8,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// NPC prototype Object
+// NPC class
 function Npc (data) {
   this.name       = data.name
   this.id         = data.id
@@ -155,13 +155,22 @@ Npc.prototype.getSmalltalk = function () {
     dialog = 'You should go explore ' + $game.world[place].name + ', in the ' + place + '.'
   }
   // If NPC has a response for past, present, future
+  // Past (smalltalk index 0) = Player has surpassed NPC's level
+  // Present (smalltalk index 1) = Player matches NPC's level
+  // Future (smalltalk index 2) = Player has not reached NPC's level
   else {
     if ($game.$player.currentLevel === this.level) {
       dialog = this.dialog.smalltalk[1]
     } else if ($game.$player.currentLevel < this.level) {
       dialog = this.dialog.smalltalk[2]
     } else {
-      dialog = this.dialog.smalltalk[0]
+      // Not all NPCs have "past" text content.
+      // Check to make sure "past" has content; if not, default to "present" index
+      if (this.dialog.smalltalk[0].length > 1) {
+        dialog = this.dialog.smalltalk[0]
+      } else {
+        dialog = this.dialog.smalltalk[1]
+      }
     }
   }
   return dialog

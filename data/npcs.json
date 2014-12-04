@@ -207,7 +207,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "I wonder who could have built that robot? You know, the Botanist builds things sometimes. He made those special seeds!",
         "I wonder who could have built that robot?"
       ]
@@ -972,7 +972,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "I see you’ve come! The time is here to reflect on what you’ve done.",
         "You still have a long way to go. Come back later and I will teach the ways of social SCIENCE!"
       ]
@@ -1381,7 +1381,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "Everyone always asks why I wear my coat in warm weather. I have to tell them it’s my fur and I can’t take it off! No one understands me...",
         "You can view the puzzle you’re trying to solve at any time by clicking the toolbox to launch your inventory... but you knew that."
       ]
@@ -1538,7 +1538,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "I saw the robot a little while ago. It had this funny look... like it’s planning something BIG.",
         "Do you make your answers public? You know you can get way more seeds that way!"
       ]
@@ -1563,7 +1563,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "The Botanist is great and everything, but he’s been acting kind of nervous ever since that robot showed up!",
         "You’re new here! We’ll help you out later, but first you need to solve more of the enigma!"
       ]
@@ -1757,7 +1757,7 @@
     "dialog": {
       "prompts": [],
       "smalltalk": [
-        "1",
+        "",
         "I’ve been thinking a lot about the future lately. What will happen if the color just goes away again? What will we do then?",
         "Thanks for bringing the color back, but I worry about the future."
       ]
