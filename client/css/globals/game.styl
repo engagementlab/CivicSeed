@@ -324,8 +324,9 @@ canvas
     img
       // Force images to fit content area
       max-width 100%
-    .resource-video
-      text-align center
+    iframe // formerly .resource-video. Verify this is working okay
+      display block
+      margin 0 auto
       background $cloudUrl('img/bg/loading.png') no-repeat center center
       margin-top 18px     // Ideally, vertically centered. Fake it till you make it
     .resource-external

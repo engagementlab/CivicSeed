@@ -86,22 +86,21 @@ var _startup = {
       } else {
         dbActions.resetDefaultData(userModel, function (err) {
           if (err) {
-            apprise(err);
-          }
-          else {
+            apprise(err)
+          } else {
             dbActions.saveDocuments(userModel, userDataCopy, function () {
-              hashDemoData(0);
-            });
+              hashDemoData(0)
+            })
           }
-        });
+        })
       }
-    };
+    }
 
     function hashDemoData (i) {
       if (i < numDemoUsers) {
         accountHelpers.hashPassword('demo', function (hashedPassword) {
           //create demo users
-          var newColor = colorData[i-1];
+          var newColor = colorData[i - 1]
           var d = {
             activeSessionID: null,
             firstName: 'Demo',
@@ -133,7 +132,6 @@ var _startup = {
               },
               botanistState: 0,
               firstTime: true,
-              // resume: ['My mother is an emergency room doctor in Worcester, MA. When I was younger, I sometimes spent a day with her at work when I was home sick from school, or on half days when her schedule didn\'t allow her to watch me at home. I saw people from all different walks of life. They had immediate problems (why else would they be in the ER?) but I also saw many who did not have insurance because they could not afford it. In comparison, I have been very fortunate, and I want to give something back to the community.','I\'ve done work at the Jewish Community Center, putting together care packages and delivering them, but I haven\'t had much "field experience" yet. That\'s something that I\'d like to improve on.','My main interest is in health and wellness, so I\'d like to work with people in that capacity. Signing up for insurance and learning about health care is difficult and time consuming, especially when communication barriers and education are a factor. I think I would be a great asset to under-served communities with poor access to health services.','I have been thinking about a career in medicine. I think engaging with people one-on-one will help give me important skills that I\'ll use later on.'],
               resume: [],
               seenRobot: false,
               playingTime: 0,
@@ -152,16 +150,16 @@ var _startup = {
                 }
               }
             }
-          };
-          demoUsers.push(d);
-          hashDemoData(++i);
-        });
+          }
+          demoUsers.push(d)
+          hashDemoData(++i)
+        })
       } else {
-        dbActions.saveDocuments(userModel, demoUsers, function() {
-          res('Data loaded: users');
-        });
+        dbActions.saveDocuments(userModel, demoUsers, function () {
+          res('Data loaded: users')
+        })
       }
-    };
+    }
   },
 
   loadTiles: function (req, res, ss) {
@@ -189,7 +187,7 @@ var _startup = {
           mapX,
           mapY,
           tileStateVal,
-          tiles = [];
+          tiles = []
 
       // dbActions.saveDocuments(tileModel, tileData.global);
 
@@ -246,17 +244,17 @@ var _startup = {
       x: 0,
       y: 0,
       mapIndex: 0
-    }];
+    }]
 
     dbActions.resetDefaultData(colorModel, function (err) {
-      if(err) {
-        apprise(err);
+      if (err) {
+        apprise(err)
       } else {
-        dbActions.saveDocuments(colorModel, colors, function() {
-          res('Data loaded: colors');
-        });
+        dbActions.saveDocuments(colorModel, colors, function () {
+          res('Data loaded: colors')
+        })
       }
-    });
+    })
   },
 
   loadBotanist: function (req, res, ss) {
@@ -306,16 +304,19 @@ var _startup = {
   },
 
   loadResources: function (req, res, ss) {
-  // Note: this function was deprecated / removed / or never implemented?  --LH
-  /*
-    var resourceData = require(rootDir + '/data/resources')
+    // Re-implemented. TODO: Find out where this should be called from
+    var resourceData = require(rootDir + '/data/resources.json')
 
-    dbActions.dropCollection('resources', function() {
-      dbActions.saveDocuments(resourceModel, resourceData.global, function() {
-        res('Data loaded: resources');
-      });
-    });
-  */
+    dbActions.dropCollection('resources', function () {
+      dbActions.saveDocuments(resourceModel, resourceData, function () {
+        if (err) {
+          winston.error('Error saving resources data.')
+          res(err)
+        } else {
+          res('Data loaded: resources')
+        }
+      })
+    })
   },
 
   loadChat: function (req, res, ss) {

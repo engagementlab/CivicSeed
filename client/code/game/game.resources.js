@@ -257,8 +257,10 @@ var _resources = {
 
   // Preloads the resource article into the staging area
   loadArticle: function (resource, callback) {
-    var url = CivicSeed.CLOUD_PATH + '/articles/' + resource.url + '.html'
-    $('#resource-stage').empty().load(url, callback)
+    ss.rpc('game.resource.get', resource.id, function (html) {
+      $('#resource-stage').empty().html(html)
+      callback()
+    })
   },
 
   // Clears staging area
@@ -433,7 +435,7 @@ var _resources = {
         isRevisit    = $game.flags.check('viewing-inventory'),
         resource     = _resources.data[resourceId]
 
-    var $article     = $('#resource-stage .pages > section'),
+    var $article     = $('#resource-stage > section'),
         slides       = $article.length
 
     // Reset all resource slides and buttons to a hidden & clean state.
@@ -675,7 +677,7 @@ var _resources = {
       $resources.hideCheckMessage()
       _resources.submitAnswer(resource, true)
 
-      var slides = $('#resource-stage .pages > section').length
+      var slides = $('#resource-stage > section').length
       _resources.addContent(resource.id, 3)
     }).show()
     // [2] Else, close and retry
