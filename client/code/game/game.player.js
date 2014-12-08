@@ -1126,7 +1126,7 @@ var _player = {
         levelFolder = 'level' + ($game.$player.currentLevel + 1),
         imgPath     = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  data.name +'.png'
 
-    $('#inventory > .inventory-items').prepend('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
+    $('#inventory > .inventory-items').append('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
 
     $game.addBadgeCount('.hud-inventory', 1)
 

@@ -1060,13 +1060,13 @@
       "feedbackWrong": "Perhaps you should re-read the resource and try again!",
       "question": "Which of the following are important aspects of making sure your efforts benefit both yourself and the community?",
       "questionType": "multiple",
-      "answer": "E) All of These",
+      "answer": "E) All of these",
       "possibleAnswers": [
         "A) Maintaining a balance between your own learning and the service that you’re providing",
         "B) Respecting community members as co-educators and partners",
         "C) Learning about the community’s assets as well as its needs",
         "D) Truly addressing a need that the community itself identifies",
-        "E) All of These",
+        "E) All of these",
         "F) A and B"
       ]
     },
@@ -1305,7 +1305,7 @@
     "skinSuit": null,
     "sprite": 36,
     "resource": {
-      "id": 10774,
+      "id": 10780,
       "answer": "",
       "feedbackRight": "Way to take action!",
       "feedbackWrong": "",
@@ -1433,7 +1433,7 @@
     "sprite": 42,
     "skinSuit": null,
     "resource": {
-      "id": 12352,
+      "id": 12249,
       "answer": "",
       "feedbackRight": "That’s important to think about.",
       "feedbackWrong": "",

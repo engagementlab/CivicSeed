@@ -502,22 +502,187 @@
     "avatar": "",
     "game": {
       "instanceName": "test",
-      "currentLevel": 0,
+      "currentLevel": 2,
       "position": {
-        "x": 67,
-        "y": 77
+        "x": 70,
+        "y": 74
       },
-      "resources": [],
-      "resourcesDiscovered": 0,
-      "inventory": [],
+      "resources": [
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 17599,
+          "tagline": "Acting civically: race matters in civic engagement",
+          "seeded": [],
+          "answers": [
+            "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 16297,
+          "tagline": "Working across differences",
+          "seeded": [],
+          "answers": [
+            "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "multiple",
+          "id": 14588,
+          "tagline": "Combine shared goals",
+          "seeded": [],
+          "answers": [
+            "E) All of These"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 14464,
+          "tagline": "Shared goals and objective",
+          "seeded": [],
+          "answers": [
+            "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 12760,
+          "tagline": "Commitment!",
+          "seeded": [],
+          "answers": [
+            "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 16547,
+          "tagline": "Professional behavior",
+          "seeded": [],
+          "answers": [
+            "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "yesno",
+          "id": 11752,
+          "tagline": "Safety at Tufts",
+          "seeded": [],
+          "answers": [
+            "yes"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "truefalse",
+          "id": 14706,
+          "tagline": "Poverty line",
+          "seeded": [],
+          "answers": [
+            "true"
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 10780,
+          "tagline": "Classism",
+          "seeded": [],
+          "answers": [
+            "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
+          ]
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 12249,
+          "tagline": "Tips for working in the community",
+          "seeded": [],
+          "answers": [
+            "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
+          ]
+        }
+      ],
+      "resourcesDiscovered": 34,
+      "inventory": [
+        {
+          "name": "correct1",
+          "tagline": "Acting civically: race matters in civic engagement",
+          "id": 17599
+        },
+        {
+          "name": "correct2",
+          "tagline": "Working across differences",
+          "id": 16297
+        },
+        {
+          "name": "correct3",
+          "tagline": "Combine shared goals",
+          "id": 14588
+        },
+        {
+          "name": "correct4",
+          "tagline": "Shared goals and objective",
+          "id": 14464
+        },
+        {
+          "name": "correct5",
+          "tagline": "Commitment!",
+          "id": 12760
+        },
+        {
+          "name": "correct6",
+          "tagline": "Professional behavior",
+          "id": 16547
+        },
+        {
+          "name": "wrong1",
+          "tagline": "Safety at Tufts",
+          "id": 11752
+        },
+        {
+          "name": "wrong2",
+          "tagline": "Poverty line",
+          "id": 14706
+        },
+        {
+          "name": "wrong3",
+          "tagline": "Classism",
+          "id": 10780
+        },
+        {
+          "name": "wrong4",
+          "tagline": "Tips for working in the community",
+          "id": 12249
+        }
+      ],
       "seeds": {
-        "regular": 0,
-        "draw": 0,
+        "regular": 10,
+        "draw": 20,
         "dropped": 0
       },
-      "botanistState": 2,
+      "botanistState": 3,
       "firstTime": false,
-      "resume": [],
+      "resume": [
+        "Veggies sunt bona vobis, proinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green bean caulie tatsoi celery komatsuna pea seakale.",
+        "Cucumber catsear bush tomato cabbage gumbo dulse eggplant potato. Shallot horseradish cabbage wakame cress quandong fava bean. Dandelion scallion lotus root rock melon water spinach black-eyed pea water chestnut kale salad spinach broccoli rabe kohlrabi daikon groundnut cress komatsuna."
+      ],
       "resumeFeedback": [],
       "seenRobot": false,
       "playingTime": 0,
