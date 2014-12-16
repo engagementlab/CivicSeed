@@ -109,7 +109,7 @@ var self = module.exports = {
       if (resourceId) {
         ss.rpc('game.resource.get', resourceId, function (html) {
           $viewport.find('#article-insert').empty().html(html)
-          $viewport.find('#article-source-link').attr('href', 'https://github.com/engagementgamelab/CivicSeed/blob/master/data/articles/' + resourceId +'.md')
+          $viewport.find('#article-source-link').attr('href', 'https://github.com/engagementgamelab/CivicSeed/edit/master/data/articles/' + resourceId +'.md')
           $viewport.show()
           $('.resource-overlay').show()
           // Disable body scroll
