@@ -266,30 +266,68 @@ p.level3
   .npc-template
     display none
 
-.article
+.resource-viewport-container
   display none
-  top 20%
-  margin 0 auto
-  width 780px
-  height 360px
+  position fixed
+  top 50%
+  left 50%
+  margin-left -400px
+  margin-top -200px
+  width 800px
+  height 400px
   overflow auto
   background $cloudUrl('img/bg/grey.png')
-  position fixed
   border-radius 5px
-  padding 20px
-  cursor pointer
+  z-index 60
+  .resource-viewport
+    padding 2em
+    margin-top 40px
+    overflow-x auto
+    position absolute
+    top 0
+    left 0
+    bottom 0
+    right 0
+  .resource-control-panel
+    position absolute
+    top 0
+    left 0
+    right 0
+    padding 1em
+    border-bottom 2px solid $csGray
+    background $csLightGray
+    z-index 20
+  iframe
+    margin 0 auto
+  section
+    padding-top 1em
+    padding-bottom 1em
+  section:not(:first-of-type)
+    position relative
+    border-top 3px solid $csLightGray
+    padding-top 2em
+    &::before
+      content '(page break)'
+      position absolute
+      top 0.25em
+      width 100%
+      text-align center
+      font-family $buttonFont
+      font-size 0.9em
+      color $csGray
 
-.buffer
+.resource-overlay
   position fixed
   display none
   top 0
   left 0
-  background #222
-  background rgba(0,0,0,.7)
-  width 100%
-  height 100%
+  right 0
+  bottom 0
+  background rgba(0,0,0,0.7)
+  z-index 50
+  cursor pointer
 
-.levelFilter
+.npc-admin-level-filter
   position fixed
   top 176px
   left 0px

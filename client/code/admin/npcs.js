@@ -19,7 +19,8 @@ var self = module.exports = {
       return false
     })
 
-    $body.on('click', '.levelFilter div', function () {
+    // Level filter
+    $body.on('click', '.npc-admin-level-filter div', function () {
       var level = parseInt($(this).text(), 10)
       $(this).toggleClass('current')
       var show = $(this).hasClass('current'),
@@ -99,16 +100,20 @@ var self = module.exports = {
     $body.on('click', '.view-resource-button', function () {
       //get the text from the url textarea
       var $self      = $(this),
+          $viewport  = $('.resource-viewport-container'),
           parent     = $self.parentsUntil('.npc'),
           resourceId = parent.find('.url').val()
 
       // Only display a resource if the user has entered its file name
       // Note: this does not check if the file is actually present
       if (resourceId) {
-        var url = '/articles/' + resourceId + '.html'
-        $('.article').empty().load(url, function () {
-          $('.buffer').show()
-          $(this).show()
+        ss.rpc('game.resource.get', resourceId, function (html) {
+          $viewport.find('#article-insert').empty().html(html)
+          $viewport.find('#article-source-link').attr('href', 'https://github.com/engagementgamelab/CivicSeed/blob/master/data/articles/' + resourceId +'.md')
+          $viewport.show()
+          $('.resource-overlay').show()
+          // Disable body scroll
+          $('body').css('overflow', 'hidden')
         })
       } else {
         // If there is nothing entered, flash red on the button
@@ -130,8 +135,11 @@ var self = module.exports = {
     })
 
     // Hide resource view on mouse click
-    $body.on('click', '.article, .buffer', function() {
-      $('.article, .buffer').hide()
+    $body.on('click', '.resource-overlay', function() {
+      $('.resource-viewport-container').hide()
+      $('.resource-overlay').hide()
+      // Re-enable body scroll
+      $('body').css('overflow', 'auto')
     })
 
     // Toggle display of input boxes depending on whether NPC is holding a resource

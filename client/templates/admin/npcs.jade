@@ -128,10 +128,14 @@
                 button.npc-save-button.btn(type='button', data-id='#{npc.id}') save
                 button.npc-delete-button.btn(type='button', data-id='#{npc.id}') delete
 
-      .buffer
-      .article
+      .resource-overlay
+      .resource-viewport-container
+        .resource-control-panel.text-center
+          a.btn#article-source-link(href='', target='_blank') View / edit source of article on GitHub
+        .resource-viewport.scrollable
+          #article-insert
 
-  .levelFilter
+  .npc-admin-level-filter
     .current 1
     .current 2
     .current 3
