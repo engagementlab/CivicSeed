@@ -246,7 +246,7 @@ var _boss = {
       case 0:
         el = overlay.querySelector('.boss-introduction')
         el.style.display = 'block'
-        el.innerHTML = '<iframe src="//player.vimeo.com/video/74144898" width="600" height="337" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+        el.innerHTML = '<iframe src="//player.vimeo.com/video/74144898" width="600" height="337" allowfullscreen></iframe>'
         overlay.querySelector('.dialog').style.display = 'none'
 
         _boss.setButton(1)
@@ -312,7 +312,7 @@ var _boss = {
 
             el = overlay.querySelector('.boss-win')
             el.style.display = 'block'
-            el.innerHTML = '<iframe src="//player.vimeo.com/video/74131828" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>'
+            el.innerHTML = '<iframe src="//player.vimeo.com/video/74131828" width="500" height="281" allowfullscreen></iframe>'
             _boss.setButton(5, 'Unlock profile', function () {
               window.location.assign('/profiles/' + sessionStorage.profileLink + '')
             })
