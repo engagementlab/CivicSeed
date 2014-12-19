@@ -136,8 +136,14 @@ var self = module.exports = {
 
     // Hide resource view on mouse click
     $body.on('click', '.resource-overlay', function() {
-      $('.resource-viewport-container').hide()
+      var $viewport = $('.resource-viewport-container')
+
+      // Clear inserted HTML contents (stops any playing videos)
+      $viewport.find('#article-insert').empty()
+
+      $viewport.hide()
       $('.resource-overlay').hide()
+
       // Re-enable body scroll
       $('body').css('overflow', 'auto')
     })
