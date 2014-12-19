@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('underscore')
+
 //private vars for player
 var _curFrame = 0,
     _numSteps = 8,

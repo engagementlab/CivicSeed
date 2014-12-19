@@ -13,8 +13,6 @@ var self = module.exports = {
         'system',
         'libs/jquery.min.js',
         'libs/davis.min.js',
-        'libs/underscore-min.js',
-        'libs/backbone-min.js',
         'libs/bootstrap.min.js',
         'libs/d3.min.js',
         'libs/apprise.js',

@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('underscore')
+
 // Spritesheet-related constants
 // All values are integers representing number of pixels.
 // Spritesheet dimensions are hard-coded instead of determining from image size.

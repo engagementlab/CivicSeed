@@ -8,6 +8,8 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var _ = require('underscore')
+
 var $boss = $game.$boss = {
 
   // Initialize boss mode

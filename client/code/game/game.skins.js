@@ -11,6 +11,8 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var _ = require('underscore')
+
 var $skins = $game.$skins = (function () {
 
   // Returns an array of skin names (sets, not special outfits, not basic colors)
@@ -244,19 +246,19 @@ var $skins = $game.$skins = (function () {
     // Effects are stored as game flags.
     // Get all flags from skins data.
     var outfits     = data.outfits,
-        outfitFlags = _.pluck(outfits, 'flag'),   // Outfit flags
+        outfitFlags = _.pluck(outfits, 'flag'), // Outfit flags
         partFlags   = _.chain(outfits)
-                      .map(function (value, key, list) {
-                        if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
-                      })
-                      .flatten()
-                      .compact()
-                      .value(),
+                        .map(function (value, key, list) {
+                          if (list[key].head) return [list[key].head.flag, list[key].torso.flag, list[key].legs.flag]
+                        })
+                        .flatten()
+                        .compact()
+                        .value(),
         // Assemble a list from outfit and part-related flags
         flags       = _.compact(_.union(outfitFlags, partFlags))
 
     // Clear all flags
-    _.each(flags, $game.flags.unset)
+    _.each(flags, $game.flags.unset, $game.flags)
   }
 
   // If parts are part of an outfit, returns an object containing outfit data.

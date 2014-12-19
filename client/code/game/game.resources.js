@@ -8,6 +8,8 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var _ = require('underscore')
+
 // TODO: Resource object.
 function Resource (data, skinSuit) {
   // Copy contents of resource data to this object

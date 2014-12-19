@@ -8,6 +8,8 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var _ = require('underscore')
+
 // NPC class
 function Npc (data) {
   this.name       = data.name

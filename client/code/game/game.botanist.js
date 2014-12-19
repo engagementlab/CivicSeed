@@ -13,6 +13,8 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+var _ = require('underscore')
+
 //private botanist vars
 var _counter = 0,
     _dragOffX = 0,
