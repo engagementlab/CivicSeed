@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('underscore')
+
 var self = module.exports = {
 
   loadRoutes: function (app) {
@@ -98,7 +100,8 @@ var self = module.exports = {
           // TODO: This is hacky.
           // It should actually send a document of MIME type application/json
           // instead of just overwriting the HTML page.
-          document.write(JSON.stringify(res))
+          // Sort response by 'id' if that property is present
+          document.write(JSON.stringify(_.sortBy(res,'id')))
         } else {
           document.write('Error exporting data.')
         }
