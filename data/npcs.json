@@ -42,19 +42,14 @@
     "skinSuit": null,
     "resource": {
       "id": 4284,
-      "answer": "B) downstream-oriented service",
+      "answer": "education",
       "feedbackRight": "Exactly! Maybe you could also think about which approach appeals to you the most.",
-      "feedbackWrong": "Hoo...boy. That’s not right.",
-      "question": "Imagine that you’ve volunteered to help out at a local soup kitchen by getting donations of canned goods and then preparing food for people in need.",
-      "questionType": "multiple",
+      "feedbackWrong": "",
+      "question": "What is your field of study at college?",
+      "questionType": "resume",
       "shape": "wrong1",
-      "url": "4284",
-      "possibleAnswers": [
-        "A) upstream-oriented service",
-        "B) downstream-oriented service",
-        "C) noble futility test",
-        "D) none of these"
-      ]
+      "url": "",
+      "possibleAnswers": []
     },
     "dialog": {
       "prompts": [
@@ -145,13 +140,13 @@
     "skinSuit": null,
     "resource": {
       "id": 8542,
-      "answer": "yes",
+      "answer": "experience",
       "feedbackRight": "You are SO right.",
-      "feedbackWrong": "Are you sure about that? Maybe take another look.",
-      "question": "Based on the quote, do you think Dr. Nieto would agree with the following statement? “People who help others out of a sense of charity are not approaching service from a productive angle.”",
-      "questionType": "yesno",
+      "feedbackWrong": "",
+      "question": "What is your previous experience with civic engagement? List each organization you've worked with in the past, and (briefly) what you did there.",
+      "questionType": "resume",
       "shape": "wrong3",
-      "url": "8542",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -193,7 +188,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 1,
     "id": 6,
     "isHolding": true,
     "level": 0,
@@ -354,7 +349,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 4,
     "id": 11,
     "isHolding": true,
     "level": 0,
@@ -437,7 +432,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 64,
     "id": 14,
     "isHolding": true,
     "level": 1,
@@ -446,13 +441,12 @@
     "skinSuit": null,
     "resource": {
       "id": 1517,
-      "answer": "",
-      "feedbackRight": "Interesting. Very interesting!",
-      "feedbackWrong": "",
-      "question": "Think about your preconceptions of Chinatown as a neighborhood. How do they differ from what you saw in the resource videos?",
-      "questionType": "open",
-      "requiredLength": 100,
-      "shape": "wrong1",
+      "answer": "true",
+      "feedbackRight": "Bingo! Now that’s what I’m talkin’ about!",
+      "feedbackWrong": "That’s not right! Check the resource and give it another shot.",
+      "question": "True or False: There is a significant difference between the numbers of Chinatown youth and elders that are English speaking.",
+      "questionType": "truefalse",
+      "shape": "wrong3",
       "url": "1517",
       "possibleAnswers": []
     },
@@ -465,8 +459,8 @@
       "smalltalk": []
     },
     "position": {
-      "x": 97,
-      "y": 10
+      "x": 93,
+      "y": 20
     }
   },
   {
@@ -479,14 +473,13 @@
     "skinSuit": null,
     "resource": {
       "id": 359,
-      "answer": "",
+      "answer": "purpose",
       "feedbackRight": "That’s great! Thanks for sharing!",
       "feedbackWrong": "",
-      "question": "What did you learn from the video you selected?",
-      "questionType": "open",
-      "requiredLength": 50,
+      "question": "What is your passion, and how do you want to work toward it?",
+      "questionType": "resume",
       "shape": "wrong2",
-      "url": "352",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -511,14 +504,15 @@
     "sprite": 16,
     "skinSuit": null,
     "resource": {
-      "id": 3338,
-      "answer": "true",
-      "feedbackRight": "Great work!",
-      "feedbackWrong": "Maybe you should review the resource and try again...",
-      "question": "True or False: Somerville is the most densely populated municipality in New England.",
-      "questionType": "truefalse",
-      "shape": "wrong3",
-      "url": "3335",
+      "id": 3335,
+      "answer": "",
+      "feedbackRight": "I think that’s probably true.",
+      "feedbackWrong": "",
+      "question": "Based on what students, faculty, and community members in Somerville said in the videos, name one asset of the city and one challenge.",
+      "questionType": "open",
+      "requiredLength": 100,
+      "shape": "wrong5",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -569,13 +563,14 @@
     "skinSuit": null,
     "resource": {
       "id": 6177,
-      "answer": "false",
-      "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
-      "feedbackWrong": "Maybe you should review the resource and try again...",
-      "question": "True or False: The West Medford neighborhood just recently became home to a community of African American residents.",
-      "questionType": "truefalse",
-      "shape": "wrong4",
-      "url": "6177",
+      "answer": "",
+      "feedbackRight": "That’s an idea!",
+      "feedbackWrong": "",
+      "question": "Tell us about either a challenge or an asset of Medford that you learned from someone in the video.",
+      "questionType": "open",
+      "requiredLength": 100,
+      "shape": "wrong8",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -649,7 +644,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 64,
     "id": 21,
     "isHolding": true,
     "level": 1,
@@ -658,13 +653,12 @@
     "skinSuit": null,
     "resource": {
       "id": 9069,
-      "answer": "",
-      "feedbackRight": "I think that’s probably true.",
-      "feedbackWrong": "",
-      "question": "Based on what students, faculty, and community members in Somerville said in the videos, name one asset of the city and one challenge.",
-      "questionType": "open",
-      "requiredLength": 100,
-      "shape": "wrong5",
+      "answer": "true",
+      "feedbackRight": "Great work!",
+      "feedbackWrong": "Maybe you should review the resource and try again...",
+      "question": "True or False: Somerville is the most densely populated municipality in New England.",
+      "questionType": "truefalse",
+      "shape": "wrong3",
       "url": "9069",
       "possibleAnswers": []
     },
@@ -677,8 +671,8 @@
       "smalltalk": []
     },
     "position": {
-      "x": 123,
-      "y": 63
+      "x": 101,
+      "y": 20
     }
   },
   {
@@ -691,13 +685,14 @@
     "sprite": 22,
     "resource": {
       "id": 6773,
-      "answer": "true",
-      "feedbackRight": "Bingo! Now that’s what I’m talkin’ about!",
-      "feedbackWrong": "That’s not right! Check the resource and give it another shot.",
-      "question": "True or False: There is a significant difference between the numbers of Chinatown youth and elders that are English speaking.",
-      "questionType": "truefalse",
-      "shape": "wrong6",
-      "url": "6773",
+      "answer": "",
+      "feedbackRight": "Interesting. Very interesting!",
+      "feedbackWrong": "",
+      "question": "Think about your preconceptions of Chinatown as a neighborhood. How do they differ from what you saw in the resource videos?",
+      "questionType": "open",
+      "requiredLength": 100,
+      "shape": "wrong1",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -739,7 +734,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 15,
     "id": 24,
     "isHolding": true,
     "level": 1,
@@ -804,8 +799,8 @@
       "smalltalk": []
     },
     "position": {
-      "x": 93,
-      "y": 18
+      "x": 123,
+      "y": 63
     }
   },
   {
@@ -841,8 +836,8 @@
       ]
     },
     "position": {
-      "x": 93,
-      "y": 21
+      "x": 97,
+      "y": 10
     }
   },
   {
@@ -903,12 +898,12 @@
       "smalltalk": []
     },
     "position": {
-      "x": 105,
-      "y": 19
+      "x": 126,
+      "y": 20
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 64,
     "id": 29,
     "isHolding": true,
     "level": 1,
@@ -917,13 +912,12 @@
     "sprite": 10,
     "resource": {
       "id": 3229,
-      "answer": "",
-      "feedbackRight": "That’s an idea!",
-      "feedbackWrong": "",
-      "question": "Tell us about either a challenge or an asset of Medford that you learned from someone in the video.",
-      "questionType": "open",
-      "requiredLength": 100,
-      "shape": "wrong8",
+      "answer": "false",
+      "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
+      "feedbackWrong": "Maybe you should review the resource and try again...",
+      "question": "True or False: The West Medford neighborhood just recently became home to a community of African American residents.",
+      "questionType": "truefalse",
+      "shape": "wrong3",
       "url": "3229",
       "possibleAnswers": []
     },
@@ -936,8 +930,8 @@
       "smalltalk": []
     },
     "position": {
-      "x": 105,
-      "y": 22
+      "x": 97,
+      "y": 20
     }
   },
   {
@@ -1000,14 +994,13 @@
     "skinSuit": null,
     "resource": {
       "id": 5219,
-      "answer": "",
+      "answer": "skills",
       "feedbackRight": "Hm, interesting. Thanks for sharing!",
       "feedbackWrong": "",
-      "question": "What do you think was gained by the youths that made this video? Do you think it was successful?",
-      "questionType": "open",
-      "requiredLength": 50,
-      "shape": "correct5",
-      "url": "5219",
+      "question": "What skills would you bring to a civic engagement opportunity? Check all that apply!",
+      "questionType": "resume",
+      "shape": "wrong4",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -1076,7 +1069,7 @@
       "question": "Is there a comment from a student’s journal that you relate to or that you disagree with? Explain.",
       "questionType": "open",
       "requiredLength": 100,
-      "shape": "correct1",
+      "shape": "wrong3",
       "url": "17599",
       "possibleAnswers": []
     },
@@ -1258,14 +1251,14 @@
     "sprite": 31,
     "resource": {
       "id": 12760,
-      "answer": "",
+      "answer": "tagline",
       "feedbackRight": "That sounds like a great start. Now keep your commitment to us and bring back all the color!",
       "feedbackWrong": "",
-      "question": "Name something you will do that will help ensure you meet your commitments to the community.",
-      "questionType": "open",
-      "requiredLength": 40,
-      "shape": "correct5",
-      "url": "12760",
+      "question": "In just a few words, describe yourself (in a civic engagement context). Example: “Skilled artist, big heart”.",
+      "questionType": "resume",
+      "requiredLength": 1,
+      "shape": "wrong2",
+      "url": "",
       "possibleAnswers": []
     },
     "dialog": {
@@ -1328,7 +1321,7 @@
       "feedbackWrong": "Nope! Try again, please.",
       "question": "True or False: A single individual earning $15,000 per year is not officially counted living below the poverty line.",
       "questionType": "truefalse",
-      "shape": "wrong2",
+      "shape": "correct5",
       "url": "14706",
       "possibleAnswers": []
     },
@@ -1404,7 +1397,7 @@
     }
   },
   {
-    "dependsOn": null,
+    "dependsOn": 40,
     "id": 45,
     "isHolding": true,
     "level": 2,
@@ -1419,7 +1412,7 @@
       "question": "Which of the bulleted recommendations, if any, will you commit to?",
       "questionType": "open",
       "requiredLength": 50,
-      "shape": "wrong3",
+      "shape": "correct1",
       "url": "10780",
       "possibleAnswers": []
     },
@@ -1934,7 +1927,7 @@
     "skinSuit": null,
     "resource": {
       "id": 9847,
-      "url": "test",
+      "url": "",
       "shape": null,
       "questionType": "open",
       "answer": "",
@@ -1970,7 +1963,7 @@
     "sprite": 53,
     "resource": {
       "id": 9556,
-      "url": "test",
+      "url": "",
       "shape": null,
       "questionType": "open",
       "answer": "",
@@ -1994,6 +1987,42 @@
     "position": {
       "x": 42,
       "y": 67
+    }
+  },
+  {
+    "dependsOn": null,
+    "id": 64,
+    "isHolding": true,
+    "level": 1,
+    "name": "MASTER NPC",
+    "skinSuit": null,
+    "sprite": 52,
+    "resource": {
+      "id": 9556,
+      "url": "",
+      "shape": "correct5",
+      "questionType": "open",
+      "answer": "",
+      "question": "What is the answer?",
+      "feedbackRight": "Nice job.",
+      "feedbackWrong": "Not quite.",
+      "possibleAnswers": []
+    },
+    "dialog": {
+      "prompts": [
+        "Answer my question?",
+        "Try again.",
+        "Welcome back."
+      ],
+      "smalltalk": [
+        "What up? I work for the Botanist. Big B. doesn’t know it, but I’m gunning for the Head Botanist job. Anyway, once you think you have the right pieces, go back to the garden in the center of the world. That’s the Botanist’s ugly mug at the center of the mini map. The little colored dot is you. You’re in the Forest right now, in the northwest section of the world.",
+        "What up? I work for the Botanist. Big B. doesn’t know it, but I’m gunning for the Head Botanist job. Anyway, once you think you have the right pieces, go back to the garden in the center of the world. That’s the Botanist’s ugly mug at the center of the mini map. The little colored dot is you. You’re in the Forest right now, in the northwest section of the world.",
+        ""
+      ]
+    },
+    "position": {
+      "x": 97,
+      "y": 25
     }
   }
 ]

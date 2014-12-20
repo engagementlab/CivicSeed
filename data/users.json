@@ -333,10 +333,10 @@
     "avatar": "",
     "game": {
       "instanceName": "test",
-      "currentLevel": 0,
+      "currentLevel": 2,
       "position": {
-        "x": 66,
-        "y": 77
+        "x": 20,
+        "y": 31
       },
       "resources": [],
       "resourcesDiscovered": 0,
@@ -347,7 +347,7 @@
         "dropped": 0
       },
       "botanistState": 0,
-      "firstTime": true,
+      "firstTime": false,
       "resume": [],
       "resumeFeedback": [],
       "seenRobot": false,
@@ -429,21 +429,21 @@
     "avatar": "",
     "game": {
       "instanceName": "test",
-      "currentLevel": 0,
+      "currentLevel": 1,
       "position": {
-        "x": 67,
-        "y": 77
+        "x": 90,
+        "y": 23
       },
       "resources": [],
-      "resourcesDiscovered": 0,
+      "resourcesDiscovered": 10,
       "inventory": [],
       "seeds": {
-        "regular": 0,
-        "draw": 0,
+        "regular": 20,
+        "draw": 10,
         "dropped": 0
       },
-      "botanistState": 0,
-      "firstTime": true,
+      "botanistState": 2,
+      "firstTime": false,
       "resume": [],
       "resumeFeedback": [],
       "seenRobot": false,
@@ -453,18 +453,21 @@
       "collaborativeChallenge": false,
       "playerColor": 6,
       "skinSuit": {
-        "head": "basic",
+        "head": "astronaut",
         "torso": "basic",
         "legs": "basic",
         "unlocked": {
           "head": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "torso": [
-            "basic"
+            "basic",
+            "astronaut"
           ],
           "legs": [
-            "basic"
+            "basic",
+            "astronaut"
           ]
         }
       }

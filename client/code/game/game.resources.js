@@ -319,19 +319,22 @@ var _resources = {
     switch (resource.questionType) {
       case 'multiple':
         for (var i =0; i < resource.possibleAnswers.length; i++) {
-          formHTML += '<input name="resourceMultipleChoice" type ="radio" id="answer_' + i + '" value="' + resource.possibleAnswers[i] + '"><label for="answer_'+ i +'">' + resource.possibleAnswers[i] + '</label><br>';
+          formHTML += '<input name="resourceMultipleChoice" type ="radio" id="answer_' + i + '" value="' + resource.possibleAnswers[i] + '"><label for="answer_'+ i +'">' + resource.possibleAnswers[i] + '</label><br>'
         }
         break
       case 'open':
-        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." maxlength="5000" autofocus>' + _resources.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>';
+        formHTML = '<textarea class="open-response" placeholder="Type your answer here..." maxlength="5000" autofocus>' + _resources.temporaryAnswer + '</textarea></form><p class="privacy-message">Your answer will be private by default. You can later choose to make it public to earn special seeds.</p>'
         break
       case 'truefalse':
         formHTML = '<input name="resourceMultipleChoice" type="radio" id="true" value="true"><label for="true">true</label>' +
-                   '<br><input name="resourceMultipleChoice" type="radio" id="false" value="false"><label for="false">false</label>';
+                   '<br><input name="resourceMultipleChoice" type="radio" id="false" value="false"><label for="false">false</label>'
         break
       case 'yesno':
         formHTML = '<input name="resourceMultipleChoice" type="radio" id="yes" value="yes"><label for="yes">yes</label>' +
-                   '<br><input name="resourceMultipleChoice" type="radio" id="no" value="no"><label for="no">no</label>';
+                   '<br><input name="resourceMultipleChoice" type="radio" id="no" value="no"><label for="no">no</label>'
+        break
+      case 'resume':
+        formHTML = 'Placeholder for resume question type here'
         break
       default:
         formHTML = 'Whoops! The game tried to set up a type of question that doesn’t exist!'
@@ -443,6 +446,13 @@ var _resources = {
     // Reset all resource slides and buttons to a hidden & clean state.
     _resources.resetSlides()
 
+    // Skip section 1 if the NPC's resource does not have URL field
+    // It means there is no article content to display, so go straight to question
+    // Resume question types are like this, so are some open-ended questions.
+    if (section === 1 && resource.url === '') {
+      section = 2
+    }
+
     // Determine what content to add.
     switch (section) {
       // [SECTION 01] ARTICLE.
@@ -483,12 +493,16 @@ var _resources = {
 
         // Add buttons
         _addButton('answer')
-        _addButton('back', 1, slides - 1, function () {
-          // If they were answering an open question, store their answer if the player goes back
-          if (resource.questionType === 'open') {
-            _resources.temporaryAnswer = overlay.querySelector('.open-response').value
-          }
-        })
+
+        // No back button for resume type questions
+        if (resource.questionType !== 'resume') {
+          _addButton('back', 1, slides - 1, function () {
+            // If they were answering an open question, store their answer if the player goes back
+            if (resource.questionType === 'open') {
+              _resources.temporaryAnswer = overlay.querySelector('.open-response').value
+            }
+          })
+        }
         // After submitting an answer, if incorrect, the player is kicked back out to the game.
         // If correct, the player goes to section [3].
         // If answered, the player skips to section [4].
@@ -620,7 +634,7 @@ var _resources = {
           break
         default:
           // Nothing.
-          $game.debug('Warning: the game attempted to add a button a resource that does not exist.')
+          $game.debug('Warning: the game attempted to add a button that does not exist.')
           break
       }
       return true
@@ -664,7 +678,9 @@ var _resources = {
     } else if (resource.requiredLength && response.length < resource.requiredLength) {
       _resources.popupCheck(resource, _focusInput)
       return false
-    } else return true
+    } else {
+      return true
+    }
   },
 
   // Trigger a popup if answer was too short
@@ -694,16 +710,20 @@ var _resources = {
   checkAnswer: function (resource) {
     var response = this.getAnswer(resource)
 
-    if (resource.questionType === 'open') return true // Open ended questions are never false
-    else return (response === resource.answer) ? true : false
+    if (resource.questionType === 'open' || resource.questionType === 'resume') {
+      // Open-ended and resume questions are never false
+      return true
+    } else {
+      // Compare given answer with the resource's correct answer
+      return (response === resource.answer) ? true : false
+    }
   },
 
   // Retrieve Player's answers from the question form
   getAnswer: function (resource) {
     if (resource.questionType === 'open') {
       return document.getElementById('resource-area').querySelector('.open-response').value.trim()
-    }
-    else {
+    } else {
       return $('input[name=resourceMultipleChoice]:checked').val()
     }
   },
@@ -733,14 +753,12 @@ var _resources = {
       }
 
       $game.$player.saveAnswer(resource, data)
-    }
-    else if (isCorrect === false) {
+    } else if (isCorrect === false) {
       data.correct  = false
 
       seedsToAdd = $game.$player.answerResource(data)
       $game.$player.saveAnswer(resource, data)
-    }
-    else {
+    } else {
       $game.debug('Warning: an answer was submitted via _resources.data.submitAnswer() without indicating whether it is correct or incorrect.')
     }
 
