@@ -282,6 +282,13 @@ var self = $game.$npc = (function () {
         // Check if NPC's availability depends on player talking to a different NPC
         if (npc.isLocked()) {
           var dialogue = 'Before I help you out, you need to go see ' + self.get(npc.dependsOn).name + '. Come back when you have their resource.'
+
+          // TODO HACK
+          // Different dialogue for the community NPCs and Master NPC
+          if (npc.dependsOn === 64) {
+            dialogue = 'PLACEHOLDER MESSAGE: Talk to MASTER NPC FIRST'
+          }
+
           self.showSpeechBubble(npc.name, dialogue)
         } else {
           _npc.createPrompt(npc)
