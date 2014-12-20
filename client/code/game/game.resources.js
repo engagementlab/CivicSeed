@@ -259,7 +259,14 @@ var _resources = {
 
   // Preloads the resource article into the staging area
   loadArticle: function (resource, callback) {
-    ss.rpc('game.resource.get', resource.id, function (html) {
+    // Continue if there is no resource article.
+    if (!resource.url) {
+      callback()
+      return
+    }
+
+    // Otherwise, go get that resource article and pre-load it!
+    ss.rpc('game.resource.get', resource.url, function (html) {
       $('#resource-stage').empty().html(html)
       callback()
     })
