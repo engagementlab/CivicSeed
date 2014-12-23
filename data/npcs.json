@@ -70,7 +70,7 @@
     "isHolding": true,
     "level": 0,
     "name": "Squirls",
-    "skinSuit": "octopus",
+    "skinSuit": null,
     "sprite": 2,
     "resource": {
       "id": 4693,
@@ -193,7 +193,7 @@
     "isHolding": true,
     "level": 0,
     "name": "RoggaBogga",
-    "skinSuit": "dinosaur",
+    "skinSuit": null,
     "sprite": 6,
     "resource": {
       "id": 2176,
@@ -259,7 +259,7 @@
     "isHolding": true,
     "level": 0,
     "name": "Quix",
-    "skinSuit": "cactus",
+    "skinSuit": null,
     "sprite": 8,
     "resource": {
       "id": 4876,
@@ -649,8 +649,8 @@
     "isHolding": true,
     "level": 1,
     "name": "Zeebo",
+    "skinSuit": "cactus",
     "sprite": 21,
-    "skinSuit": null,
     "resource": {
       "id": 9069,
       "answer": "true",
@@ -1059,8 +1059,8 @@
     "isHolding": true,
     "level": 2,
     "name": "Forky",
-    "sprite": 25,
     "skinSuit": null,
+    "sprite": 25,
     "resource": {
       "id": 17599,
       "answer": "",
@@ -1280,8 +1280,8 @@
     "isHolding": true,
     "level": 2,
     "name": "Oriole",
+    "skinSuit": "dinosaur",
     "sprite": 32,
-    "skinSuit": null,
     "resource": {
       "id": 11752,
       "shape": "wrong1",
@@ -1522,8 +1522,8 @@
     "isHolding": true,
     "level": 3,
     "name": "Brumble",
+    "skinSuit": "octopus",
     "sprite": 40,
-    "skinSuit": null,
     "resource": {
       "id": 13696,
       "answer": "",
