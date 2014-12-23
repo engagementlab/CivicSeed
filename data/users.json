@@ -520,7 +520,9 @@
           "seeded": [],
           "answers": [
             "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -531,7 +533,9 @@
           "seeded": [],
           "answers": [
             "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -542,7 +546,9 @@
           "seeded": [],
           "answers": [
             "E) All of These"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -553,7 +559,9 @@
           "seeded": [],
           "answers": [
             "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -564,7 +572,9 @@
           "seeded": [],
           "answers": [
             "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -575,7 +585,9 @@
           "seeded": [],
           "answers": [
             "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -586,7 +598,9 @@
           "seeded": [],
           "answers": [
             "yes"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -597,7 +611,9 @@
           "seeded": [],
           "answers": [
             "true"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -608,7 +624,9 @@
           "seeded": [],
           "answers": [
             "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -619,7 +637,9 @@
           "seeded": [],
           "answers": [
             "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         }
       ],
       "resourcesDiscovered": 34,
@@ -761,7 +781,9 @@
           "seeded": [],
           "answers": [
             "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -772,7 +794,9 @@
           "seeded": [],
           "answers": [
             "D) A daughter of immigrants, bilingual upbringing, latina female"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -783,7 +807,9 @@
           "seeded": [],
           "answers": [
             "yes"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -794,7 +820,9 @@
           "seeded": [],
           "answers": [
             "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -805,7 +833,9 @@
           "seeded": [],
           "answers": [
             "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -816,7 +846,9 @@
           "seeded": [],
           "answers": [
             "B) downstream-oriented service"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -827,7 +859,9 @@
           "seeded": [],
           "answers": [
             "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -838,7 +872,9 @@
           "seeded": [],
           "answers": [
             "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -849,7 +885,9 @@
           "seeded": [],
           "answers": [
             "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -860,7 +898,9 @@
           "seeded": [],
           "answers": [
             "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         }
       ],
       "resourcesDiscovered": 10,
@@ -1000,7 +1040,9 @@
           "seeded": [],
           "answers": [
             "The City of Philadelphia, in particular, is engaged in some progressive efforts to use the government procurement process as a means to develop an ecosystem of smaller companies that offer innovative new ideas to longstanding city problems. If the goal of using the procurement process to stimulate (or at least not hinder) innovation inside government is to be realized, reformers in Philadelphia and elsewhere will need to face some hard truths about procurement reform."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1011,7 +1053,9 @@
           "seeded": [],
           "answers": [
             "D) A daughter of immigrants, bilingual upbringing, latina female"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1022,7 +1066,9 @@
           "seeded": [],
           "answers": [
             "yes"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1033,7 +1079,9 @@
           "seeded": [],
           "answers": [
             "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1044,7 +1092,9 @@
           "seeded": [],
           "answers": [
             "Personally, I have a hard time tearing myself away from such maps, particularly those showing the Bay Area, where I live. The simplified designs recalling Harry Beck’s 1933 London Underground map are, in my opinion, beautiful. And ever since I sold my car last year, I’ve been reliant on walking, biking, and public transit, so a fantasy transit map gets my head spinning with ideas. I could go directly from my house in Oakland to Golden Gate Park in San Francisco on a sunny day. Or maybe I’d go on a wine tour in Napa and drunkenly ride BART back. In this gallery, I’ve collected a few transit map examples that might inspire your own fantasies."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1055,7 +1105,9 @@
           "seeded": [],
           "answers": [
             "B) downstream-oriented service"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1066,7 +1118,9 @@
           "seeded": [],
           "answers": [
             "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1077,7 +1131,9 @@
           "seeded": [],
           "answers": [
             "Other neighbors heard something as well, but it wasn’t always clear what. Some looked out the window to see Moseley scurrying away, or Genovese, having stood up, now walking slowly down the block, leaning against a building. From their vantage point, it wasn’t obvious that she was wounded. Others who looked didn’t see her at all, as Genovese walked around a corner, trying to make her way home at 82-70 Austin St."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1088,7 +1144,9 @@
           "seeded": [],
           "answers": [
             "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         },
         {
           "attempts": 1,
@@ -1099,7 +1157,9 @@
           "seeded": [],
           "answers": [
             "What is your 1-sentence elevator pitch? What is your mission? What is motivating you to build this company? How does your company make society more informed, connected, and/or empowered? Why does your company matter?"
-          ]
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         }
       ],
       "resourcesDiscovered": 10,

@@ -34,7 +34,8 @@ module.exports = {
         result: Boolean,
         tagline: String,
         seeded: [String],
-        seedsRewarded: Number
+        seedsRewarded: Number,
+        rewarded: Boolean
       }],
       resourcesDiscovered: Number,
       inventory: [{

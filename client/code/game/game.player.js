@@ -364,7 +364,8 @@ var $player = $game.$player = {
         attempts:      1,
         result:        data.correct,
         seeded:        [],
-        skinSuit:      data.skinSuit
+        skinSuit:      data.skinSuit,
+        rewarded:      false
       }
 
       // Determine seeds to reward
@@ -883,8 +884,8 @@ var $player = $game.$player = {
     }
 
     // Things to unlock / add if this is a correct answer
-    // May not need this check?
-    if (playerResource.result === true) {
+    // And also make sure it has not been awarded already
+    if (playerResource.result === true && playerResource.rewarded === false) {
       // Add item to inventory count
       _resourcesDiscovered += 1
 
@@ -895,6 +896,9 @@ var $player = $game.$player = {
       if (playerResource.skinSuit) {
         $game.$skins.unlockSkin(playerResource.skinSuit)
       }
+
+      // Flip to true once rewarded
+      playerResource.rewarded = true
     }
 
     // Save resource to DB

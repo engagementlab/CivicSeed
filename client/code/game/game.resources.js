@@ -745,20 +745,20 @@ var _resources = {
         case 'save':
           save.style.display = 'inline-block'
           save.addEventListener('click', function _saveButton () {
-            var input   = _resources.readTaglineInput(),
-                tagline = _resources.sanitizeTagline(input)
 
-            // Do the following things when someone clicks Save
-            if (_resources.validateTagline(tagline) !== true) {
+            // For all question types except resume,
+            // check the tagline
+            if (resource.questionType !== 'resume') {
+              var input   = _resources.readTaglineInput(),
+                  tagline = _resources.sanitizeTagline(input)
+
               // If the tagline is not validated, exit
-              return false
-            } else {
-              // Else, set tagline and save the resource
-              $game.$player.setTagline(resource, tagline)
-
-              // If correct, then unlock suit, add seeds, add
-              // tangram to inventory, and save answer to DB
-              $game.$player.saveResource(resource)
+              if (_resources.validateTagline(tagline) !== true) {
+                return false
+              } else {
+                // Else, set tagline and save the resource
+                $game.$player.setTagline(resource, tagline)
+              }
             }
 
             // Proceed to next screen or close resource window
@@ -776,6 +776,13 @@ var _resources = {
         case 'close':
           close.style.display = 'inline-block'
           close.addEventListener('click', function _closeButton () {
+
+            // If correct, then unlock suit, add seeds, add
+            // tangram to inventory, and save answer to DB
+            if (!isRevisit) {
+              $game.$player.saveResource(resource)
+            }
+
             $resources.hideResource(callback)
           })
           break
