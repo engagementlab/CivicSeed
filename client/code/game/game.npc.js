@@ -194,19 +194,33 @@ var self = $game.$npc = (function () {
       _npc.data[npc.id] = npc
     },
 
-    //choose prompt based on PLAYERs memory of interaction
-    //there are 3 prompts (0: fresh visit, 1: visited, wrong answer, 2: already answered
+    // Choose prompt based on PLAYER's memory of interaction
+    // There are 3 prompts:
+    //  0: fresh visit
+    //  1: player has previously visited, but provided a wrong answer
+    //  2: player has correctly answered and collected this resource
     createPrompt: function (npc) {
       var promptIndex = $game.$player.getPrompt(npc.resource.id),
           dialogue    = npc.dialog.prompts[promptIndex]
 
-      if (promptIndex === 2) {
+      // If the NPC is holding a resource and the resource is not
+      // a resume question type, then ask the player if they want
+      // to review the resource article content
+      if (promptIndex === 2 && npc.resource.questionType !== 'resume') {
         dialogue += ' Want to view again?'
       }
 
-      self.showSpeechBubble(npc.name, dialogue, function () {
-        $game.$resources.showResource(npc.resource.id)
-      })
+      // If the NPC is holding a resource and the resource IS a
+      // resume question type, then do not allow any resource to display
+      if (promptIndex === 2 && npc.resource.questionType === 'resume') {
+        self.showSpeechBubble(npc.name, dialogue)
+      } else {
+        // Show the prompt smalltalk and then follow up by showing
+        // the resource article / question window
+        self.showSpeechBubble(npc.name, dialogue, function () {
+          $game.$resources.showResource(npc.resource.id)
+        })
+      }
     }
 
   }

@@ -8,9 +8,9 @@
     "bossModeUnlocked": false,
     "leaderboard": [],
     "resourceCount": [
+      8,
       10,
-      12,
-      9,
+      8,
       10
     ],
     "instanceName": "test",
@@ -25,9 +25,9 @@
     "bossModeUnlocked": false,
     "leaderboard": [],
     "resourceCount": [
+      8,
       10,
-      12,
-      9,
+      8,
       10
     ],
     "instanceName": "demo",
@@ -42,9 +42,9 @@
     "bossModeUnlocked": true,
     "leaderboard": [],
     "resourceCount": [
+      8,
       10,
-      12,
-      9,
+      8,
       10
     ],
     "instanceName": "boss",

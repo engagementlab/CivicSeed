@@ -47,7 +47,7 @@
       "feedbackWrong": "",
       "question": "What is your field of study at college?",
       "questionType": "resume",
-      "shape": "wrong1",
+      "shape": "",
       "url": "",
       "possibleAnswers": []
     },
@@ -145,7 +145,7 @@
       "feedbackWrong": "",
       "question": "What is your previous experience with civic engagement? List each organization you've worked with in the past, and (briefly) what you did there.",
       "questionType": "resume",
-      "shape": "wrong3",
+      "shape": "",
       "url": "",
       "possibleAnswers": []
     },
@@ -478,7 +478,7 @@
       "feedbackWrong": "",
       "question": "What is your passion, and how do you want to work toward it?",
       "questionType": "resume",
-      "shape": "wrong2",
+      "shape": "",
       "url": "",
       "possibleAnswers": []
     },
@@ -999,7 +999,7 @@
       "feedbackWrong": "",
       "question": "What skills would you bring to a civic engagement opportunity? Check all that apply!",
       "questionType": "resume",
-      "shape": "wrong4",
+      "shape": "",
       "url": "",
       "possibleAnswers": []
     },
@@ -1257,7 +1257,7 @@
       "question": "In just a few words, describe yourself (in a civic engagement context). Example: “Skilled artist, big heart”.",
       "questionType": "resume",
       "requiredLength": 1,
-      "shape": "wrong2",
+      "shape": "",
       "url": "",
       "possibleAnswers": []
     },
