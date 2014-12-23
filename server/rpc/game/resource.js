@@ -5,6 +5,7 @@
     rpc.game.resource
 
     - Parses article Markdown and returns it to client as HTML.
+    - Handle player's interaction with resource (saving, retrieving etc)
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -59,6 +60,10 @@ exports.actions = function (req, res, ss) {
       } else {
         res(errorMsg)
       }
+    },
+
+    setPlayerTagline: function (data) {
+
     }
 
   }

@@ -342,45 +342,55 @@ var $player = $game.$player = {
     return 0
   },
 
-  //saves the user's answer locally
-  answerResource: function (info) {
-    var newInfo = {
-      id: info.id,
-      answers: [info.answer],
-      attempts: 1,
-      result: info.correct,
-      seeded: [],
-      questionType: info.questionType
-    }
-    var realResource = null
+  // Saves the user's answer locally
+  saveResourceLocally: function (data) {
+    var playerResource = _resources[data.id]
 
-    //see if the resource is already in the list
-    if (_resources[info.id]) {
-      realResource = _resources[info.id]
-    }
-
-    //if not, then add it to the list
-    if (!realResource) {
-      _resources[info.id] = newInfo
-      realResource = _resources[info.id]
+    // See if the resource is already in the player's game data
+    // If so, retrieve it and update it
+    // If not, set up a new object
+    if (playerResource) {
+      playerResource.answers.push(data.answers[0])
+      playerResource.attempts += 1
+      playerResource.result = data.correct
+      playerResource.seedsRewarded = this.determineNumberOfSeedsToReward(playerResource)
     } else {
-      realResource.answers.push(newInfo.answers[0])
-      realResource.attempts += 1
-      realResource.result = newInfo.result
+      // Create resource game data to save
+      // This will be updated on the server later
+      playerResource = {
+        id:            data.id,
+        questionType:  data.questionType,
+        answers:       [data.answer],
+        attempts:      1,
+        result:        data.correct,
+        seeded:        [],
+        skinSuit:      data.skinSuit
+      }
+
+      // Determine seeds to reward
+      playerResource.seedsRewarded = this.determineNumberOfSeedsToReward(playerResource)
+
+      // Add it to game data
+      _resources[data.id] = playerResource
     }
 
-    if (info.skinSuit) {
-      $game.$skins.unlockSkin(info.skinSuit)
+    // Return it so other things in the game know it exists
+    return playerResource
+  },
+
+  // Determine how many seeds a player gets, based on their attempts
+  determineNumberOfSeedsToReward: function (playerResource) {
+    var rawAttempts = 6 - playerResource.attempts,
+        seedsToAdd = (rawAttempts < 0) ? 0 : rawAttempts
+
+    // If they took more than 1 try to get a binary, drop down more
+    if (playerResource.questionType === 'truefalse' || playerResource.questionType === 'yesno') {
+      if (seedsToAdd < 5 && seedsToAdd > 2) {
+        seedsToAdd = 2
+      }
     }
 
-    //the answer was correct, add item to inventory
-    if (info.correct) {
-      _resourcesDiscovered += 1
-      var rawAttempts = 6 - realResource.attempts,
-          numToAdd = rawAttempts < 0 ? 0 : rawAttempts
-      $game.$player.addSeeds('regular', numToAdd)
-      return numToAdd
-    }
+    return seedsToAdd
   },
 
   //checks if we should save out a new image of player's color map
@@ -663,11 +673,20 @@ var $player = $game.$player = {
     return _tilesColored
   },
 
+  // Get an object containing references to all collected resources
+  // Plus information pertaining to the player's copy of the resource
+  // e.g. answers, number of attempts, etc.
   getResources: function () {
     return _resources
   },
 
-  //get the number of resources collected
+  // Get a particular resource that is in the player's collection
+  // Note: this is not the original resource object
+  getResource: function (id) {
+    return _resources[id]
+  },
+
+  // Get the number of resources collected
   getResourcesDiscovered: function () {
     return _resourcesDiscovered
   },
@@ -825,38 +844,61 @@ var $player = $game.$player = {
     })
   },
 
-  //when another player pledges a seed, make the update in your local resources
+  // When another player pledges a seed, make the update in your local resources
   updateResource: function (data) {
     if (_resources[data.resourceId]) {
       _resources[data.resourceId].seeded.push(data.pledger)
     }
   },
 
-  //add the tagline to the resource, then save it to db
+  // Add the tagline to the resource locally, then update the tagline on the server
   setTagline: function (resource, tagline) {
-    var realResource = null,
-        npc          = $game.$npc.findNpcByResourceId(resource.id),
-        npcLevel     = npc.getLevel(),
-        playerLevel  = $player.getLevel()
-
-    // Find the resource and add tagline
     if (_resources[resource.id]) {
-      realResource = _resources[resource.id]
-      realResource.tagline = tagline
-      realResource.level = playerLevel
+      _resources[resource.id].tagline = tagline
     }
-    _player.saveResourceToDb(realResource)
+  },
+
+  // Save player's resource status to the database (whether completed, answered, etc)
+  saveResource: function (resource) {
+    // NOTES
+    // `resource` is the object that contains the data for the entire resource
+    // `_resources` is what the player is holding, made of realResources
+    // `realResource` is a faux resource object that is created here
+
+    var playerResource  =  _resources[resource.id],
+        npc             = $game.$npc.findNpcByResourceId(resource.id),
+        npcLevel        = npc.getLevel(),
+        playerLevel     = $player.getLevel()
 
     // Add piece to inventory
-    if (playerLevel === npcLevel) {
+    // Do not add if this is a resume type question
+    if (playerLevel === npcLevel && resource.questionType !== 'resume') {
       if (!_resourceExists(resource.id)) {
         _player.addToInventory({
           id:       resource.id,
           name:     resource.shape,
-          tagline:  tagline
+          tagline:  playerResource.tagline
         })
       }
     }
+
+    // Things to unlock / add if this is a correct answer
+    // May not need this check?
+    if (playerResource.result === true) {
+      // Add item to inventory count
+      _resourcesDiscovered += 1
+
+      // Add seeds
+      $game.$player.addSeeds('regular', playerResource.seedsRewarded)
+
+      // Unlock skinsuit
+      if (playerResource.skinSuit) {
+        $game.$skins.unlockSkin(playerResource.skinSuit)
+      }
+    }
+
+    // Save resource to DB
+    _player.saveResourceToDb(playerResource)
 
     // Hack to not include demo users
     if ($game.$player.firstName !== 'Demo') {
@@ -865,24 +907,15 @@ var $player = $game.$player = {
         resourceId:   resource.id,
         playerId:     $game.$player.id,
         name:         $game.$player.firstName,
-        answer:       realResource.answers[realResource.answers.length - 1],
+        answer:       playerResource.answers[playerResource.answers.length - 1],
         madePublic:   false
       }
       ss.rpc('game.npc.saveResponse', $game.$player.instanceName, newAnswer)
     }
 
-
     // Display NPC bubble with number of comments & update minimap radar
     $game.$player.displayNpcComments()
     $game.minimap.radar.update()
-
-  },
-
-  // Replacement function for saving to DB
-  saveAnswer: function (resource, data) {
-
-    // Doesn't do anything right now. Saving occurs with setTagline().
-
   },
 
   //show a bubble over visited npcs of how many comments there are

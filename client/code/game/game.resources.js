@@ -228,7 +228,6 @@ var _resources = {
   data: [],
 
   temporaryAnswer: '',
-  seedsToAdd:      0,
 
   resetSlides: function () {
     var overlay = document.getElementById('resource-area'),
@@ -279,6 +278,13 @@ var _resources = {
     while (el.firstChild) el.removeChild(el.firstChild)
   },
 
+  unloadTangram: function () {
+    var artboard  = document.getElementById('resource-area').querySelector('.tangram')
+
+    artboard.innerHMTL = ''
+    d3.select('#resource-area .tangram svg').remove()
+  },
+
   // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
     // Loads the SVG version of the tangram.
@@ -289,8 +295,7 @@ var _resources = {
         fill      = shape.getCSSColor()
 
     // Clear previous SVG if any
-    artboard.innerHMTL = ''
-    d3.select('svg').remove()
+    this.unloadTangram()
 
     var svg  = d3.select('#resource-area .tangram').append('svg').attr('class','tangram-svg'),
         path = svg.append('path')
@@ -341,40 +346,168 @@ var _resources = {
                    '<br><input name="resourceMultipleChoice" type="radio" id="no" value="no"><label for="no">no</label>'
         break
       case 'resume':
-        formHTML = 'Placeholder for resume question type here'
+        formHTML = this.makeResumeFormHTML(resource)
         break
       default:
         formHTML = 'Whoops! The game tried to set up a type of question that doesn’t exist!'
         break
     }
     form.innerHTML = formHTML
+
+    // Autofocus on input box, if any
+    if (resource.questionType === 'resume') {
+      // Add scrollable to form
+      form.classList.add('scrollable', 'resume-form')
+
+      // Wait for DOM render before finding focus
+      setTimeout(function () {
+        $('.resume-text-input').filter(':first').focus()
+      }, 0)
+    }
+  },
+
+  makeResumeFormHTML: function (resource) {
+    var html = ''
+
+    // Notes on questions and desired functionality from Sam's Google Doc
+    switch (resource.answer) {
+      // Purpose
+      // "What is your passion, and how do you want to work toward it?"
+      case 'purpose':
+        // One short text box
+        html = '<input class="resume-text-input" name="resume-purpose" type="text" value="" placeholder="" maxlength=255>'
+        break
+      // Education
+      // What is your field of study at college?
+      case 'education':
+        // One short text box
+        html = '<input class="resume-text-input" name="resume-education" type="text" value="" placeholder="" maxlength=140>'
+        break
+      // Experience
+      // What is your previous experience with civic engagement?
+      // List each organization you've worked with in the past, and
+      // (briefly) what you did there.
+      case 'experience':
+        // Three text boxes (potentially with the ability to add another?)
+        html = '<input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
+                <textarea class="resume-textarea" name="resume-experience-content"></textarea>\
+                <input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
+                <textarea class="resume-textarea" name="resume-experience-content"></textarea>\
+                <input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
+                <textarea class="resume-textarea" name="resume-experience-content"></textarea>'
+        break
+      // Skills
+      // What skills would you bring to a civic engagement opportunity? Check all that apply!
+      case 'skills':
+        // Checkboxes
+        // Hard code all of this for now...
+        var skills = [
+          'Social Media Content Development',
+          'Social Media Back-end Management',
+          'Salesforce / Raiser’s Edge / Constant Contact / CRM',
+          'SPSS / STATA',
+          'Microsoft Office Suite',
+          'Access / Database Development and Reporting',
+          'Data Cleaning  / Data Management',
+          'Graphic Design -  Marketing / Promotion',
+          'Graphic Design – Infographics / Data Visualization',
+          'Multimedia Production',
+          'Quantitative Modelling / Statistical Analysis / Excel',
+          'Administration and Organizational',
+          'Project Design',
+          'Group Facilitation',
+          'Manage Teams',
+          'Working across Difference',
+          'Child Development',
+          'Early Literacy',
+          'Languages (specify _______________)',
+          'ESL Instruction',
+          'Nutrition / Food Preparation / Food Security Support',
+          'Qualitative Data Collection – Interview / Focus Groups',
+          'Qualitative Analysis – Coding / NVivo',
+          'Event Planning / Logistics / Event Support',
+          'Public Speaking',
+          'Writing – Marketing / Promotion',
+          'Writing – Reports / Expository',
+          'Copyediting / Proofreading',
+          'Fundraising',
+          'Environmental Stewardship / Environmental Program Operations',
+          'Recycling Program Operations',
+          'Public Health',
+          'Performing Arts',
+          'Community Outreach / Recruitment',
+          'Working with Underserved Populations',
+          'Client Support (specify ______________)',
+          'CPR',
+          'Human Subjects / CITI',
+          'Familiar with Public Transport',
+          'Other Skill (specify __________________)'
+        ]
+
+        for (var i = 0, j = skills.length; i < j; i++) {
+          html += '<br><input name="resume-skills" type="checkbox" value="' + skills[i] + '"><label for="' + skills[i] + '">' + skills[i] + '</label>'
+        }
+
+        break
+      // Tagline
+      // In just a few words, describe yourself (in a civic engagement context). Example: "Skilled artist, big heart"
+      case 'tagline':
+        // One short text box with a tight character limit
+        html = '<input class="resume-text-input" name="resume-tagline" type="text" value="" placeholder="" maxlength=50>'
+        break
+      // Catch all for typos etc
+      default:
+        html = '<strong class="color-red">Error:</strong> The game attempted to ask a resume question type that does not exist. Resume type provided: ' + resource.answer
+        break
+    }
+    return html
   },
 
   // Adds content for the screen if the Player answered the resource question correctly
   loadRewards: function (resource) {
-    var el          = document.getElementById('resource-area').querySelector('.resource-content'),
-        npc         = $game.$npc.findNpcByResourceId(resource.id),
-        playerLevel = $game.$player.currentLevel,
-        feedback    = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight,
-        dialogue    = '',
-        skin        = $game.$skins.getSkin(resource.skinSuit)
+    var el            = document.getElementById('resource-area').querySelector('.resource-content'),
+        input         = el.querySelector('.tagline-input input'),
+        npc           = $game.$npc.findNpcByResourceId(resource.id),
+        playerLevel   = $game.$player.currentLevel,
+        feedback      = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight,
+        dialogue      = '',
+        skin          = $game.$skins.getSkin(resource.skinSuit),
+        seedsRewarded = $game.$player.getResource(resource.id).seedsRewarded
 
     // Legacy stuff saved here, never used.
     //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 
-    if (npc.level < playerLevel) {
+    if (npc.level < playerLevel || resource.questionType === 'resume') {
       // This can happen because not all tangram pieces need to be obtained to
       // solve the botanist's puzzle. The player only needs the "correct" ones.
       // As a result, if a player goes back to talk to an NPC they haven't talked
       // to, they can still complete it, but will no longer obtain the tangram piece
       // since it is no longer necessary.
+      // ALSO: No tangram piece is obtained if player is answering a resume question.
       // The player will still obtain seeds and skin rewards.
-      dialogue = feedback + ' Here, take ' + _resources.seedsToAdd + ' seeds!'
+      dialogue = feedback + ' Here, take ' + seedsRewarded + ' seeds!'
+
+      // Hide all the tangram related stuff
+      _resources.unloadTangram()
+      el.querySelector('.tagline-input').style.display = 'none'
     } else {
       // Load the tangram as an SVG path
       _resources.loadTangram(resource)
 
-      dialogue = feedback + ' Here, take this puzzle piece, and ' + _resources.seedsToAdd + ' seeds!'
+      // Reset and focus tagline input
+      el.querySelector('.tagline-input').style.display = 'block'
+      input.value = ''
+      input.focus()
+
+      // Bind a check event listener to the standard close button on the upper right
+      $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
+        e.stopImmediatePropagation()
+        e.preventDefault()
+        // Basically, do the same thing as the save button in this case.
+        $('#resource-area .save-button').trigger('click')
+      })
+
+      dialogue = feedback + ' Here, take this puzzle piece, and ' + seedsRewarded + ' seeds!'
     }
 
     //give them the skinsuit regardless if in prev level or not
@@ -481,7 +614,7 @@ var _resources = {
             // If open-ended question, go to responses next
             if (resource.questionType === 'open') _addButton('next', 4)
             // If question was answered correctly for any other question type, close resource window
-            else _addButton ('close', null, null, _checkBotanistCallback)
+            else _addButton('close', null, null, _checkBotanistCallback)
           }
           // If question was not answered correctly, go to next slide (question screen)
           else _addButton('next', 2)
@@ -517,29 +650,17 @@ var _resources = {
       // [SECTION 03] REWARD.
       // Only shown immediately after section [2] if it is answered correctly.
       case 3:
-        var input = overlay.querySelector('.tagline-input input')
         overlay.querySelector('.resource-content').style.display = 'block'
 
         // Load resource details and draw tangram - note that this needs to happen after
         // the visibility is set to 'block' because we calculate div width/height in this function.
         _resources.loadRewards(resource)
 
-        // Reset and focus input
-        input.value = ''
-        input.focus()
-
-        // Bind a check event listener to the standard close button on the upper right
-        $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
-          e.stopImmediatePropagation()
-          e.preventDefault()
-          // Basically, do the same thing as the save button in this case.
-          $('#resource-area .save-button').trigger('click')
-        })
-
         if (resource.questionType === 'open') {
           _addButton('save', 4)
-        }
-        else {
+        } else if (resource.questionType === 'resume') {
+          _addButton('close')
+        } else {
           _addButton('save', null, null, _checkBotanistCallback)
         }
         break
@@ -614,8 +735,7 @@ var _resources = {
               _resources.submitAnswer(resource, true)
               // Go to reward screen.
               _resources.addContent(resourceId, 3)
-            }
-            else {
+            } else {
               _resources.submitAnswer(resource, false)
               // Quit
               _resources.showFeedbackWrong(resource)
@@ -625,11 +745,31 @@ var _resources = {
         case 'save':
           save.style.display = 'inline-block'
           save.addEventListener('click', function _saveButton () {
-            if (_resources.validateTagline(resource) !== true) return
-            if (section) _resources.addContent(resourceId, section)
-            else $resources.hideResource(callback)
+            var input   = _resources.readTaglineInput(),
+                tagline = _resources.sanitizeTagline(input)
 
-            // Remove tagline check event
+            // Do the following things when someone clicks Save
+            if (_resources.validateTagline(tagline) !== true) {
+              // If the tagline is not validated, exit
+              return false
+            } else {
+              // Else, set tagline and save the resource
+              $game.$player.setTagline(resource, tagline)
+
+              // If correct, then unlock suit, add seeds, add
+              // tangram to inventory, and save answer to DB
+              $game.$player.saveResource(resource)
+            }
+
+            // Proceed to next screen or close resource window
+            // depending on the situation
+            if (section) {
+              _resources.addContent(resourceId, section)
+            } else {
+              $resources.hideResource(callback)
+            }
+
+            // Cleanup: remove tagline check event
             $('#resource-area .close-overlay').off('click.onCloseCheck')
           })
           break
@@ -655,19 +795,24 @@ var _resources = {
     }
   },
 
-  validateTagline: function (resource) {
-    var input       = document.getElementById('resource-area').querySelector('.tagline-input input'),
-        tagline     = input.value.trim(),
-        // This is a callback function to focus on the input box after closing the message
-        _focusInput = function () {
-          input.focus()
-        }
+  readTaglineInput: function () {
+    return document.getElementById('resource-area').querySelector('.tagline-input input').value
+  },
+
+  sanitizeTagline: function (tagline) {
+    return tagline.trim()
+  },
+
+  validateTagline: function (tagline) {
+    // This is a callback function to focus on the input box after closing the message
+    var _focusInput = function () {
+      document.getElementById('resource-area').querySelector('.tagline-input input').focus()
+    }
 
     if (tagline.length === 0) {
       $resources.showCheckMessage('You should summarize what you learned. You’ll need this later!', _focusInput)
       return false
     } else {
-      $game.$player.setTagline(resource, tagline)
       return true
     }
   },
@@ -738,39 +883,16 @@ var _resources = {
   submitAnswer: function (resource, isCorrect) {
     var response   = this.getAnswer(resource),
         npc        = $game.$npc.findNpcByResourceId(resource.id),
-        seedsToAdd = 0,
         data       = {
           id:           resource.id,
           answer:       response,
           npcLevel:     npc.level,
-          questionType: resource.questionType
+          questionType: resource.questionType,
+          skinSuit:     resource.skinSuit,
+          correct:      (isCorrect === true) ? true : false
         }
 
-    // If correct, determine number of seeds to add, and push answer to DB
-    if (isCorrect === true) {
-      data.correct  = true
-      data.skinSuit = resource.skinSuit
-
-      seedsToAdd = $game.$player.answerResource(data)
-      // If they took more than 1 try to get a binary, drop down more
-      if (resource.questionType === 'truefalse' || resource.questionType === 'yesno') {
-        if (seedsToAdd < 5 && seedsToAdd > 2) {
-          seedsToAdd = 2
-        }
-      }
-
-      $game.$player.saveAnswer(resource, data)
-    } else if (isCorrect === false) {
-      data.correct  = false
-
-      seedsToAdd = $game.$player.answerResource(data)
-      $game.$player.saveAnswer(resource, data)
-    } else {
-      $game.debug('Warning: an answer was submitted via _resources.data.submitAnswer() without indicating whether it is correct or incorrect.')
-    }
-
-    // Store seedsToAdd on this object. Not ideal? but it works for now
-    _resources.seedsToAdd = seedsToAdd
+    $game.$player.saveResourceLocally(data)
   },
 
   // Called after submitAnswer(..., false) because the answer is wrong, and we're done
@@ -782,7 +904,7 @@ var _resources = {
       $game.$audio.playTriggerFx('resourceWrong')
       $game.$npc.showSpeechBubble(npc.name, message)
     })
-  },
+  }
 
 }
 

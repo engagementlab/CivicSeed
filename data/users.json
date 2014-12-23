@@ -333,7 +333,7 @@
     "avatar": "",
     "game": {
       "instanceName": "test",
-      "currentLevel": 2,
+      "currentLevel": 0,
       "position": {
         "x": 20,
         "y": 31
@@ -346,7 +346,7 @@
         "draw": 0,
         "dropped": 0
       },
-      "botanistState": 0,
+      "botanistState": 2,
       "firstTime": false,
       "resume": [],
       "resumeFeedback": [],

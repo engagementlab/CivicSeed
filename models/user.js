@@ -27,13 +27,14 @@ module.exports = {
         y: Number
       },
       resources: [{
-        answers: [String],
-        attempts: Number,
-        result: Boolean,
-        seeded: [String],
+        id: Number,
         questionType: String,
+        attempts: Number,
+        answers: [String],
+        result: Boolean,
         tagline: String,
-        id: Number
+        seeded: [String],
+        seedsRewarded: Number
       }],
       resourcesDiscovered: Number,
       inventory: [{

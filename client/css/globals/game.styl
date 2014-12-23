@@ -85,6 +85,7 @@ canvas
   background #efefef
   background-image $cloudUrl('img/bg/grey.png')
   box-shadow $csUIDropShadow
+  overflow hidden
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
     background-image $cloudUrl('img/bg/grey@2x.png')
     background-size 397px
@@ -173,7 +174,8 @@ canvas
   cursor text
 
 .scrollable
-  overflow auto
+  overflow-y auto
+  overflow-x hidden
 
 #loading
   margin 150px 0 0 0
@@ -342,10 +344,13 @@ canvas
     display none
     form
       margin 20px 0 0
+      height 300px
+      overflow-y auto
     textarea
       width 100%
       height 200px
       padding 10px
+      resize none
     input[type='radio']
       // Somewhere the alignment is actually incorrect
       margin 0 10px 0 20px
@@ -353,6 +358,11 @@ canvas
     label
       // Overrides display: block elsewhere (bootstrap?)
       display inline-block
+    // Resource question with resume form hacks
+    .resume-text-input
+      min-width 500px
+    .resume-textarea
+      height 100px
 
 #resource-stage
   display none
