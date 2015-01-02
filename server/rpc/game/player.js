@@ -483,28 +483,6 @@ exports.actions = function (req, res, ss) {
       })
     },
 
-    gameOver: function (id) {
-      //update redis
-      // req.session.game = info;
-      //req.session.profileSetup = true;
-      // console.log('exit: ', info);
-      req.session.save()
-      //update mongo
-      _userModel.findById(id, function (err, user) {
-        if (!err && user) {
-          user.game = info
-          user.profileUnlocked = true
-          user.save(function (y) {
-            var url = '/profiles/' + req.session.firstName + '.' + req.session.lastName
-            res(url)
-          })
-        } else {
-          // MIGHT NEED TO DO THIS HERE STILL???
-          // ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', numActivePlayers, id)
-        }
-      })
-    },
-
     pledgeSeed: function (info) {
       _userModel.findById(info.id, function (err, user) {
         if (err) {

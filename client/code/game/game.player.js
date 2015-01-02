@@ -1447,7 +1447,7 @@ function _updateRenderInfo() {
 }
 
 //figure out how much to move the player during a walk and wait frame to show
-function _move() {
+function _move () {
   /** IMPORTANT note: x and y are really flipped!!! **/
   //update the step
   $game.flags.set('is-moving')
@@ -1533,7 +1533,7 @@ function _move() {
 }
 
 //once the move is sent out to all players, update the players next moves
-function _sendMoveInfo(moves) {
+function _sendMoveInfo (moves) {
   $game.$player.seriesOfMoves = moves
   $game.$player.currentMove = 0
   $game.$player.currentStep = 0
@@ -1542,22 +1542,22 @@ function _sendMoveInfo(moves) {
 }
 
 //when a move is done, decide waht to do next (if it is a transition) and save position to DB
-function _endMove() {
+function _endMove () {
 
   _player.savePosition({x: _info.x, y: _info.y})
 
   //put the character back to normal position
-  _info.offX = 0;
-  _info.offY = 0;
-  _info.srcX = 0;
-  _info.srcY =  0;
-  _info.prevOffX= 0;
-  _info.prevOffY= 0;
+  _info.offX = 0
+  _info.offY = 0
+  _info.srcX = 0
+  _info.srcY = 0
+  _info.prevOffX = 0
+  _info.prevOffY = 0
 
   if ($game.flags.check('screen-will-transition') === true) {
     $game.beginTransition()
   } else {
-    //trigger npc to popup _info and stuff
+    // Activate NPC
     // npcOnDeck can equal zero so be sure to check against boolean, rather than falsy
     if ($game.$player.npcOnDeck !== false) {
       $game.$npc.activate($game.$player.npcOnDeck)
@@ -1568,7 +1568,7 @@ function _endMove() {
 }
 
 //determine what frame to render while standing
-function _idle() {
+function _idle () {
   _idleCounter += 1
 
   if (_idleCounter >= 64) {
@@ -1584,29 +1584,6 @@ function _idle() {
     _renderInfo.squat = true
 
     _updateRenderInfo()
-  }
-}
-
-//game over (deprecated)
-function _gameOver() {
-  //if demo mode just send to boss level
-  if ($game.$player.firstName === 'Demo') {
-    $game.$boss.init(function () {
-    })
-  } else {
-    ss.rpc('game.player.gameOver', $game.$player.id, function (res){
-      if (res) {
-        if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-          //TODO: test this
-          $game.$boss.init(function () {
-
-          })
-        } else {
-          var hooray = '<div class="hooray"><h2>You beat the game, hooray!</h2><p>But the color has not yet returned to the world... If you have more seeds go and color the world. I will contact you when it has returned.</div>'
-          $('#gameboard').append(hooray)
-        }
-      }
-    })
   }
 }
 

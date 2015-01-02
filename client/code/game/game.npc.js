@@ -277,6 +277,7 @@ var self = $game.$npc = (function () {
 
     // Determine NPC content to display when clicked
     activate: function (npcId) {
+      var MASTER_NPC_ID = 64
       var npc           = self.get(npcId),
           botanistState = $game.$botanist.getState()
 
@@ -298,12 +299,17 @@ var self = $game.$npc = (function () {
           var dialogue = 'Before I help you out, you need to go see ' + self.get(npc.dependsOn).name + '. Come back when you have their resource.'
 
           // TODO HACK
-          // Different dialogue for the community NPCs and Master NPC
-          if (npc.dependsOn === 64) {
+          // Different dialogue for the community NPCs
+          if (npc.dependsOn === MASTER_NPC_ID) {
             dialogue = 'PLACEHOLDER MESSAGE: Talk to MASTER NPC FIRST'
           }
 
           self.showSpeechBubble(npc.name, dialogue)
+        } else if (npc.id === MASTER_NPC_ID) {
+          console.log(npc)
+          // TODO HACK
+          // Shoe horn in different behavior for the Master NPC
+          self.showSpeechBubble(npc.name, ['PLACEHOLDER MESSAGE: Talk to Hampton, Goose or Zeebo! They are the three stooges standing right behind me. Each of them are a representative of a different community. Choose one to talk to and learn about their community and then come back to me.'])
         } else {
           _npc.createPrompt(npc)
         }
