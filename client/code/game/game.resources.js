@@ -584,6 +584,14 @@ var _resources = {
     el.querySelector('.content-box ul').innerHTML = playerHTML + responsesHTML
     el.querySelector('.speaker').textContent = npc.name
     el.querySelector('.message').textContent = dialogue
+
+    // Bind a check event listener to the standard close button on the upper right
+    $('#resource-area .close-overlay').on('click.onCloseResource', function (e) {
+      e.stopImmediatePropagation()
+      e.preventDefault()
+      // Basically, do the same thing as the close button in this case.
+      $('#resource-area .close-button').trigger('click')
+    })
   },
 
   // Clear the display and decide what to show on screen
@@ -798,6 +806,9 @@ var _resources = {
               $game.$player.saveResource(resource)
             }
 
+            // Cleanup: remove close button event listener
+            $('#resource-area .close-overlay').off('click.onCloseResource')
+
             $resources.hideResource(callback)
           })
           break
@@ -903,9 +914,9 @@ var _resources = {
   },
 
   submitAnswer: function (resource, isCorrect) {
-    var response   = this.getAnswer(resource),
-        npc        = $game.$npc.findNpcByResourceId(resource.id),
-        data       = {
+    var response = this.getAnswer(resource),
+        npc      = $game.$npc.findNpcByResourceId(resource.id),
+        data     = {
           id:           resource.id,
           answer:       response,
           npcLevel:     npc.level,

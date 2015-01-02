@@ -350,7 +350,7 @@ var $player = $game.$player = {
     // If so, retrieve it and update it
     // If not, set up a new object
     if (playerResource) {
-      playerResource.answers.push(data.answers[0])
+      playerResource.answers.push(data.answer)
       playerResource.attempts += 1
       playerResource.result = data.correct
       playerResource.seedsRewarded = this.determineNumberOfSeedsToReward(playerResource)
