@@ -359,9 +359,18 @@ var _resources = {
       // Add scrollable to form
       form.classList.add('scrollable', 'resume-form')
 
-      // Wait for DOM render before finding focus
+      // Wait for DOM render
       setTimeout(function () {
+        // Find focus
         $('.resume-text-input').filter(':first').focus()
+
+        // Bind event to form submit action
+        $('.resume-form').submit(function (e) {
+          // Prevent actual submittal
+          e.preventDefault()
+          // Find the answer button and trigger click action on it
+          $('#resource-area .buttons .answer-button').click()
+        })
       }, 0)
     }
   },
@@ -498,6 +507,12 @@ var _resources = {
       el.querySelector('.tagline-input').style.display = 'block'
       input.value = ''
       input.focus()
+
+      // Bind an event to the submit action of the tagline input form
+      $('.tagline-input').submit(function (e) {
+        e.preventDefault()
+        $('#resource-area .save-button').trigger('click')
+      })
 
       // Bind a check event listener to the standard close button on the upper right
       $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
