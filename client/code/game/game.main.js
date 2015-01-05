@@ -500,9 +500,7 @@ var _game = {
 
   // At start of the game, append DOM elements
   kickOffGame: function () {
-    $CONTAINER.append(JT['game-gameboard']())
-    $CONTAINER.append(JT['game-resourcestage']())
-    $CONTAINER.append(JT['game-hud']())
+    $CONTAINER.append(JT['game-index']())
 
     // all the init calls will trigger others, a waterfall approach to assure
     // the right data is loaded before we start

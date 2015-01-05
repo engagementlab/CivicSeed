@@ -306,10 +306,9 @@ var self = $game.$npc = (function () {
 
           self.showSpeechBubble(npc.name, dialogue)
         } else if (npc.id === MASTER_NPC_ID) {
-          console.log(npc)
           // TODO HACK
           // Shoe horn in different behavior for the Master NPC
-          self.showSpeechBubble(npc.name, ['PLACEHOLDER MESSAGE: Talk to Hampton, Goose or Zeebo! They are the three stooges standing right behind me. Each of them are a representative of a different community. Choose one to talk to and learn about their community and then come back to me.'])
+          $game.$resources.showResource(4000)
         } else {
           _npc.createPrompt(npc)
         }

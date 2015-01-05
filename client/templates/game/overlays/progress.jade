@@ -1,0 +1,41 @@
+//- Gameboard progress overlay
+
+#progress-area.gameboard-overlay
+  h2 Progress
+  .personal-info
+    .level-images
+      img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/0.png').current-level-image
+      img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/1.png')
+      img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/2.png')
+      img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
+    .current-level-name Novice gardener
+    .resources-collected-heading Resources collected:
+    .resources-collected 0
+    button.btn.collected-button.btn-success(type='button') View Answers
+  .color-map.tabbable
+    .tabs
+      .tab-you you
+      .tab-everyone everyone
+    .tab-content
+      #tab-you-pane.tab-pane.active
+        .color-map-you
+          img.color-map-image(src='')
+          img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+        .time-played
+          i.fa.fa-clock-o.fa-lg
+          span.time-played-text
+        .time-played-label time played
+      #tab-everyone-pane.tab-pane
+        .color-map-everyone
+          img.color-map-image(src='')
+          img.minimap(src='#{CivicSeed.CLOUD_PATH}/img/game/minimap.png')
+        .percent-complete
+          .progress
+            .bar
+        .percent-label world color meter
+  .top-seeders
+    .top-seeders-heading Top seeders
+    .your-seeds
+    ol.top-seeders-ranking
+  a.close-overlay(href='')
+    i.fa.fa-times-circle.fa-lg

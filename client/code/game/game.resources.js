@@ -171,10 +171,8 @@ var $resources = $game.$resources = {
     _resources.addContent(id, 4)
 
     // Display rules
+    _resources.hideContent()
     el.style.display = 'block'
-    _.each(overlay.querySelectorAll('.resource-content, .resource-article, .resource-question'), function (el) {
-      el.style.display = 'none'
-    })
     if ($(overlay).is(':hidden')) {
       $game.flags.set('visible-resource-overlay')
       $(overlay).fadeIn(300)
@@ -232,10 +230,8 @@ var _resources = {
   resetSlides: function () {
     var overlay = document.getElementById('resource-area'),
         article = overlay.querySelector('.resource-article')
-    // Note: this appears to perform faster than equivalent jQuery in tests: http://jsperf.com/jquery-vs-queryselectorall/40
-    _.each(overlay.querySelectorAll('.resource-content, .resource-article, .resource-question, .resource-responses'), function (el) {
-      el.style.display = 'none'
-    })
+
+    this.hideContent()
 
     // Clear article content to prevent it from affecting the rest of the game, e.g. stopping videos that are still playing
     // This is equivalent to, but faster than & less prone to memory leaks than innerHTML = ''
@@ -243,6 +239,23 @@ var _resources = {
 
     // When slides are reset, always reset all buttons
     this.resetButtons()
+  },
+
+  hideContent: function () {
+    var overlay = document.getElementById('resource-area'),
+        listOfContentElementSelectors = [
+          '.resource-content',
+          '.resource-article',
+          '.resource-question',
+          '.resource-responses',
+          '.resource-custom-content'
+        ]
+
+    for (var i in listOfContentElementSelectors) {
+      var el = overlay.querySelector(listOfContentElementSelectors[i])
+      el.style.display = 'none'
+    }
+
   },
 
   resetButtons: function () {
@@ -535,6 +548,24 @@ var _resources = {
     el.querySelector('.message').textContent = dialogue
   },
 
+  // A variation on loadRewards() to display 'Master NPC' content
+  loadMasterNPCContent: function (resource) {
+    var el            = document.getElementById('resource-area').querySelector('.resource-custom-content'),
+        npc           = $game.$npc.findNpcByResourceId(resource.id)
+
+    _resources.hideContent()
+    el.style.display = 'block'
+
+    // Bind a check event listener to the standard close button on the upper right
+    $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
+      e.stopImmediatePropagation()
+      e.preventDefault()
+      $('#resource-area .close-button').trigger('click')
+    })
+
+    el.querySelector('.speaker').textContent = npc.name
+  },
+
   // Load other players answers and your own
   loadResponses: function (resource) {
     var el             = document.getElementById('resource-area').querySelector('.resource-responses'),
@@ -614,6 +645,12 @@ var _resources = {
     // Resume question types are like this, so are some open-ended questions.
     if (section === 1 && resource.url === '') {
       section = 2
+    }
+
+    // HACK FOR SECTION 4000 (Master NPC resource)
+    // TODO: Need logic to handle state
+    if (resource.id === 4000) {
+      section = 4000
     }
 
     // Determine what content to add.
@@ -697,6 +734,30 @@ var _resources = {
         _addButton('close', null, null, _checkBotanistCallback)
         // If an article was preloaded onto the stage, display the 'back' button.
         if (document.getElementById('resource-stage').innerHTML !== '') _addButton('back', 1, slides - 1)
+        break
+      // [4000] MASTER NPC.
+      // Kind of a hack, but this is a screen to show for the Master NPC's
+      // introductory thing. It is only activated through activating Master NPC
+      // for the first time, and will display until a player receives one of the
+      // community NPCs' resources.
+      // Behind the scenes, upon reading this message, the player obtains a
+      // placeholder resource from the Master NPC that "unlocks" the community NPCs.
+      // It will be refreshed later with the Q&A content.
+      case 4000:
+        _resources.loadMasterNPCContent(resource)
+        _addButton('close')
+
+        // Momentarily save dummy data for viewing this thing
+        var data = {
+              id:           resource.id,
+              answer:       '',
+              npcLevel:     null,
+              questionType: null,
+              skinSuit:     null,
+              correct:      false,
+              tagline:      ''
+            }
+        $game.$player.saveResourceLocally(data)
         break
       // Generic error for debugging.
       default:

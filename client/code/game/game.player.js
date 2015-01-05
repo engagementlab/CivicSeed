@@ -861,31 +861,26 @@ var $player = $game.$player = {
 
   // Save player's resource status to the database (whether completed, answered, etc)
   saveResource: function (resource) {
-    // NOTES
-    // `resource` is the object that contains the data for the entire resource
-    // `_resources` is what the player is holding, made of realResources
-    // `realResource` is a faux resource object that is created here
-
     var playerResource  =  _resources[resource.id],
         npc             = $game.$npc.findNpcByResourceId(resource.id),
         npcLevel        = npc.getLevel(),
         playerLevel     = $player.getLevel()
 
-    // Add piece to inventory
-    // Do not add if this is a resume type question
-    if (playerLevel === npcLevel && resource.questionType !== 'resume') {
-      if (!_resourceExists(resource.id)) {
-        _player.addToInventory({
-          id:       resource.id,
-          name:     resource.shape,
-          tagline:  playerResource.tagline
-        })
-      }
-    }
-
     // Things to unlock / add if this is a correct answer
     // And also make sure it has not been awarded already
     if (playerResource.result === true && playerResource.rewarded === false) {
+      // Add piece to inventory
+      // Do not add if this is a resume type question
+      if (playerLevel === npcLevel && resource.questionType !== 'resume') {
+        if (!_resourceExists(resource.id)) {
+          _player.addToInventory({
+            id:       resource.id,
+            name:     resource.shape,
+            tagline:  playerResource.tagline
+          })
+        }
+      }
+
       // Add item to inventory count
       _resourcesDiscovered += 1
 

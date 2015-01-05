@@ -1,0 +1,51 @@
+//- Gameboard resource area
+
+#resource-area.gameboard-overlay
+  .resource-article.scrollable
+
+  .resource-question
+    .dialog.question
+    form
+
+  .resource-content
+    .dialog
+      span.speaker
+      span.message
+    .tangram
+    form.tagline-input
+      input(name='tagline', type='text', value='', placeholder='Summarize what you just learned.', maxLength='60', autofocus)
+      .privacy-message You’ll need it later!
+
+  .resource-responses
+    .dialog
+      span.speaker
+      span.message
+    .responses.content-box.scrollable
+      p.question
+      ul.responses
+
+  .resource-custom-content
+    include ../content/master-npc-instructions
+
+  .buttons
+    .left
+      button.back-button.btn.btn-info(type='button') Back
+    .right
+      button.next-button.btn.btn-success(type='button') Next
+      button.answer-button.btn.btn-success(type='button') Answer
+      button.save-button.btn.btn-success(type='button') Save
+      button.close-button.btn.btn-primary(type='button') Close
+
+  .check
+    .check-dialog.confirm-skimpy
+      p Are you sure? That seems a bit skimpy...
+      .buttons
+        button.sure-button.right.btn.btn-success(type='button') I'm Sure
+        button.retry-button.left.btn.btn-primary(type='button') I'll Add More
+    .check-dialog.message-feedback
+      .feedback
+      .buttons
+        button.btn.btn-primary(type='button') Okay
+
+  a.close-overlay(href='')
+    i.fa.fa-times-circle.fa-lg
