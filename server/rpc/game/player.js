@@ -526,6 +526,7 @@ exports.actions = function (req, res, ss) {
             } else {
               user.game.resources.push(data.resource)
             }
+
             //now we update the inventory and resourcesDiscovered
             user.game.inventory = data.inventory
             user.game.resourcesDiscovered = data.resourcesDiscovered

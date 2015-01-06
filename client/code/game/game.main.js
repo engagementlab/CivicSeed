@@ -19,6 +19,7 @@ var _stepNumber = 0,
     $render,
     $npc,
     $resources,
+    $inventory,
     $skins,
     $player,
     $others,
@@ -100,6 +101,7 @@ var $game = module.exports = {
     $render     = require('/game.render')
     $npc        = require('/game.npc')
     $resources  = require('/game.resources')
+    $inventory  = require('/game.inventory')
     $skins      = require('/game.skins')
     $player     = require('/game.player')
     $others     = require('/game.others')
@@ -592,11 +594,11 @@ var _game = {
     });
   },
 
-  //this is all the other stuff that needs to happen once everything is loaded
+  // This is all the other stuff that needs to happen once everything is loaded
   loadExtra: function () {
-    //fill player inventory and creat outlines
+    // Fill player's inventory and create outlines
     if ($game.$player.currentLevel < 4) {
-      $game.$player.setupInventory()
+      $game.inventory.init()
     }
 
     //make players color map

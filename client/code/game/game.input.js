@@ -54,7 +54,7 @@ var $input = $game.$input = module.exports = {
 
     // Toggle display of Inventory
     $BODY.on('click', '.hud-inventory, #inventory button', function () {
-      $input.toggleInventory()
+      $game.inventory.toggle()
     })
 
     // Toggle display of Changing Room (skinventory)
@@ -385,7 +385,7 @@ var $input = $game.$input = module.exports = {
         // **** DISPLAY HUD OVERLAYS & WINDOWS ****
         case 73:  // 'i'
           // Display inventory overlay.
-          $input.toggleInventory()
+          $game.inventory.toggle()
           break
         case 69:  // 'e'
           // Seedventory
@@ -527,54 +527,6 @@ var $input = $game.$input = module.exports = {
     })
   },
 
-  // Shows the inventory overlay only.
-  // Used to restore inventory overlay after reviewing an inventory item / resource.
-  showInventory: function (callback) {
-    $game.flags.set('visible-inventory')
-    $('#inventory').slideDown(300, function () {
-      if (typeof callback === 'function') callback()
-    })
-  },
-
-  // Only visually hides the inventory window.
-  // Used to temporarily hide the inventory with the intention of re-opening it.
-  hideInventory: function (callback) {
-    $('#inventory').slideUp(300, function () {
-      $game.flags.unset('visible-inventory')
-      if (typeof callback === 'function') callback()
-    })
-  },
-
-  toggleInventory: function () {
-    if ($('#inventory').is(':visible')) {
-      $input.closeInventory()
-    }
-    else {
-      $input.openInventory()
-    }
-  },
-
-  // The following extends showInventory() and hideInventory() respectively for actual inventory interaction.
-  openInventory: function (callback) {
-    $input.resetUI()
-    $input.activeHUDButton('.hud-inventory')
-
-    this.showInventory(function () {
-      if ($game.$player.getInventory().length > 0) {
-        $game.alert('Click on a piece to review again')
-      }
-      if (typeof callback === 'function') callback()
-    })
-  },
-
-  closeInventory: function (callback) {
-    this.hideInventory(function () {
-      $input.inactiveHUDButton('.hud-inventory')
-      $game.flags.unset('viewing-inventory')
-      if (typeof callback === 'function') callback()
-    })
-  },
-
   toggleSkinventory: function () {
     return ($game.flags.check('visible-skinventory') === true) ? $input.closeSkinventory() : $input.openSkinventory()
   },
@@ -705,7 +657,7 @@ var $input = $game.$input = module.exports = {
   // Clears UI and sets everything into the most defaultest mode we can
   resetUI: function () {
     // Close any overlays
-    $input.closeInventory()
+    $game.inventory.close()
     $input.closeSkinventory()
     $input.closeProgress()
     $input.closeHelp()
@@ -826,7 +778,6 @@ var _input = {
         break
       case 'ding me':
         _input.cheatLog('Leveling up!')
-        $game.$player.emptyInventory()
         $game.$player.nextLevel()
         break
       case 'suit alors':

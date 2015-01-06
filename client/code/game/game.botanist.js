@@ -113,7 +113,7 @@ var $botanist = $game.$botanist = {
     // and an object containing all the resources player has obtained this
     // level (inventory)
     var pieces    = $botanist.tangram[$game.$player.currentLevel].answer,
-        inventory = $game.$player.getInventory()
+        inventory = $game.inventory.get()
 
     // Look through player's inventory to see if it matches a correct piece
     for (var i = 0; i < pieces.length; i++) {
@@ -194,7 +194,7 @@ var $botanist = $game.$botanist = {
         break
       // 2 = Player has obtained tangram puzzle and is currently collecting resources.
       case 2:
-        var hintIndex = ($game.$player.getInventory().length > 0) ? 1 : 0
+        var hintIndex = ($game.inventory.get().length > 0) ? 1 : 0
         _botanist.chat($botanist.dialog[level].hint[hintIndex])
         break
       // 3 = Player has all the correct resources, ready to solve.
@@ -216,11 +216,37 @@ var $botanist = $game.$botanist = {
     _botanist.nudgePlayerInterval = setInterval(_botanist.nudgePlayer, 16000)
   },
 
+  // Put the Botanist's tangram puzzle in the inventory
+  putPuzzlePageInInventory: function () {
+    var el        = document.querySelector('#inventory .inventory-tangram'),
+        className = 'puzzle' + $game.$player.currentLevel,
+        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png',
+        imgEl     = document.createElement('img')
+
+    // Format the puzzle item
+    imgEl.src = imgPath
+    imgEl.classList.add('inventory-item')
+    imgEl.classList.add(className)
+    imgEl.setAttribute('draggable', 'false')
+    imgEl.setAttribute('data-placement', 'top')
+    imgEl.setAttribute('data-title', 'Click to review the botanist’s puzzle')
+
+    // Clear any previous puzzles, then add the new one to DOM
+    while (el.firstChild) el.removeChild(el.firstChild)
+    el.appendChild(imgEl)
+
+    // Bind actions
+    $('.' + className).on('click', $botanist.showPuzzlePageFromInventory)
+    $('.' + className).on('mouseenter', function () {
+      $(this).tooltip('show')
+    })
+  },
+
   // Shows the botanist's riddle when clicked on from the player's inventory
   showPuzzlePageFromInventory: function () {
     // Set a flag that remembers we were in the inventory
     $game.flags.set('viewing-inventory')
-    $game.$input.hideInventory(function () {
+    $game.inventory.hide(function () {
       _botanist.showOverlay(0)
     })
   },
@@ -520,12 +546,12 @@ var _botanist = {
           // If the player does not yet have this puzzle piece, the game adds it to the
           // player's inventory after this window is closed.
           if ($botanist.getState() < 2) {
-            $game.$player.putTangramPuzzleInInventory()
+            $botanist.putPuzzlePageInInventory()
             $botanist.setState(2)
           }
 
           // If inventory was showing previously, re-open the inventory
-          if ($game.flags.check('viewing-inventory') === true) $game.$input.showInventory()
+          if ($game.flags.check('viewing-inventory') === true) $game.inventory.show()
         })
         break
       // [SECTION 01] SOLVING THE BOTANISTS'S PUZZLE.
@@ -547,7 +573,7 @@ var _botanist = {
         document.querySelector('#inventory .help').style.display = 'block'
 
         // Show the inventory screen
-        $game.$input.showInventory(function () {
+        $game.inventory.show(function () {
           // Set the inventory items to draggable in case they were off
           $('.inventory-item').attr('draggable', 'true')
         })
@@ -616,7 +642,7 @@ var _botanist = {
 
         _addButton('close', null, function () {
           // Add this tangram outline to the inventory
-          $game.$player.putTangramPuzzleInInventory()
+          $botanist.putPuzzlePageInInventory()
           $botanist.setState(2)
 
           // Give the player the map.
@@ -1120,7 +1146,8 @@ var _botanist = {
   // If puzzle answer is correct, give player rewards
   submitPuzzleAnswer: function () {
     // Remove pieces from player's inventory
-    $game.$player.emptyInventory()
+    // TODO: Should it happen here or in $player.nextLevel()?
+    //$game.inventory.empty()
 
     // Add number of seeds as a reward
     var numSeeds   = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
@@ -1170,7 +1197,7 @@ var _botanist = {
   // Hide and reset inventory view to non-puzzle state
   resetInventoryInterface: function () {
     $game.flags.unset('viewing-inventory')
-    $game.$input.closeInventory(function () {
+    $game.inventory.close(function () {
       document.querySelector('#inventory .inventory-tangram').style.display = 'block'
       document.querySelector('#inventory .close-button').style.display = 'block'
       document.querySelector('#inventory .help').style.display = 'none'

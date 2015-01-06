@@ -23,7 +23,6 @@ var _curFrame = 0,
     _totalSeeds = null,
     _resources = null,
     _position = null,
-    _inventory = null,
     _colorMap = null,
     _resume = null,
     _playingTime = null,
@@ -132,7 +131,6 @@ var $player = $game.$player = {
     _totalSeeds = null;
     _resources = null;
     _position = null;
-    _inventory = null;
     _colorMap = null;
     _resume = null;
     _playingTime = null;
@@ -181,7 +179,7 @@ var $player = $game.$player = {
   beginMove: function (x, y) {
     // Clear HUD
     if ($game.flags.check('visible-inventory')) {
-      $game.$input.closeInventory()
+      $game.inventory.close()
     }
 
     var loc    = $player.getLocalPosition(),
@@ -351,7 +349,7 @@ var $player = $game.$player = {
     // If not, set up a new object
     if (playerResource) {
       playerResource.answers.push(data.answer)
-      if (data.attempts) {
+      if (Number.isInteger(data.attempts)) {
         playerResource.attempts = data.attempts
       } else {
         playerResource.attempts += 1
@@ -365,7 +363,7 @@ var $player = $game.$player = {
         id:            data.id,
         questionType:  data.questionType,
         answers:       [data.answer],
-        attempts:      data.attempts || 1,
+        attempts:      Number.isInteger(data.attempts) ? data.attempts : 1,
         result:        data.correct,
         seeded:        [],
         skinSuit:      data.skinSuit,
@@ -417,53 +415,6 @@ var $player = $game.$player = {
     return _resources[id]
   },
 
-  setupInventory: function () {
-    _player.createInventoryBoxes()
-    _player.fillInventoryHUD()
-  },
-
-  // Put the Botanist's tangram puzzle in the inventory
-  putTangramPuzzleInInventory: function () {
-    var el        = document.querySelector('#inventory .inventory-tangram'),
-        className = 'puzzle' + $player.currentLevel,
-        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png',
-        imgEl     = document.createElement('img')
-
-    // Format the puzzle item
-    imgEl.src = imgPath
-    imgEl.classList.add('inventory-item')
-    imgEl.classList.add(className)
-    imgEl.setAttribute('draggable', 'false')
-    imgEl.setAttribute('data-placement', 'top')
-    imgEl.setAttribute('data-title', 'Click to review the botanist’s puzzle')
-
-    // Clear any previous puzzles, then add the new one to DOM
-    while (el.firstChild) el.removeChild(el.firstChild)
-    el.appendChild(imgEl)
-
-    // Bind actions
-    $('.' + className).on('click', $game.$botanist.showPuzzlePageFromInventory)
-    $('.' + className).on('mouseenter', function () {
-      $(this).tooltip('show')
-    })
-  },
-
-  // Empty everything from inventory
-  emptyInventory: function () {
-    _inventory = []
-    $('.inventory-item').remove()
-    $game.setBadgeCount('.hud-inventory', 0)
-
-    // Including the puzzle
-    document.querySelector('#inventory .inventory-tangram').innerHTML = ''
-
-    // Save to server
-    ss.rpc('game.player.updateGameInfo', {
-      id:        $game.$player.id,
-      inventory: []
-    })
-  },
-
   // Simulates giving a map to the player
   giveMapToPlayer: function () {
     // Turn on minimap view on gameboard
@@ -498,7 +449,10 @@ var $player = $game.$player = {
       $game.$robot.setPosition()
       _renderInfo.level = $game.$player.currentLevel
 
-      _player.createInventoryBoxes()
+      // Clear inventory and redraw for next level
+      $game.inventory.empty()
+      $game.inventory.init()
+
       //send status to message board
       var newLevelMsg = $game.$player.currentLevel + 1
 
@@ -756,11 +710,6 @@ var $player = $game.$player = {
     return _player.moveSpeed
   },
 
-  // Gets a specific item at index or all items in inventory
-  getInventory: function (index) {
-    return (index !== undefined) ? _inventory[index] : _inventory
-  },
-
   getLevel: function () {
     return $player.currentLevel + 1
   },
@@ -876,13 +825,11 @@ var $player = $game.$player = {
       // Add piece to inventory
       // Do not add if this is a resume type question
       if (playerLevel === npcLevel && resource.questionType !== 'resume') {
-        if (!_resourceExists(resource.id)) {
-          _player.addToInventory({
-            id:       resource.id,
-            name:     resource.shape,
-            tagline:  playerResource.tagline
-          })
-        }
+        $game.inventory.add({
+          id:       resource.id,
+          name:     resource.shape,
+          tagline:  playerResource.tagline
+        })
       }
 
       // Add item to inventory count
@@ -1139,61 +1086,6 @@ var _player = {
 
   moveSpeed: 1,
 
-  // * * * * * * *   INVENTORY   * * * * * * *
-
-  // Make the bounding box for each possible resource in inventory
-  createInventoryBoxes: function () {
-    var el = document.getElementById('inventory').querySelector('.inventory-boxes')
-    while (el.firstChild) el.removeChild(el.firstChild)
-    for (var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i++) {
-      el.innerHTML += '<div class="inventory-box"></div>'
-    }
-  },
-
-  // Add an item to the inventory
-  addToInventory: function (data) {
-    // Store in internal data
-    _inventory.push(data)
-    _player.addToInventoryHUD(data)
-  },
-
-  // Add an item to inventory HUD and bind actions to it
-  addToInventoryHUD: function (data) {
-    // Add resource image to inventory HUD
-    var className   = 'r' + data.name,
-        levelFolder = 'level' + ($game.$player.currentLevel + 1),
-        imgPath     = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  data.name +'.png'
-
-    $('#inventory > .inventory-items').append('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
-
-    $game.addBadgeCount('.hud-inventory', 1)
-
-    // Bind actions
-    $('img.inventory-item.' + className)
-      .on('mouseenter', function () {
-        $(this).tooltip('show')
-      })
-      .on('click', function () {
-        $game.$resources.examineResource(data.id)
-      })
-      .on('dragstart', {id: data.id , name: data.name}, $game.$botanist.onTangramDragFromInventoryStart)
-  },
-
-  // Convenience funtion to load all items in player's inventory from DB
-  // into the player's inventory HUD - this is called on game load
-  fillInventoryHUD: function () {
-    var inventory = $player.getInventory()
-
-    for (var i = 0; i < inventory.length; i++) {
-      _player.addToInventoryHUD(inventory[i])
-    }
-
-    // If the player has gotten the riddle, put the tangram in the inventory + bind actions
-    if ($game.$botanist.getState() > 1) {
-      $player.putTangramPuzzleInInventory();
-    }
-  },
-
   // * * * * * * *   SEEDING   * * * * * * *
 
   // Fgure out which tiles to color when a seed is dropped
@@ -1363,7 +1255,7 @@ var _player = {
     ss.rpc('game.player.saveResource', {
       id:                  $player.id,
       resource:            resource,
-      inventory:           _inventory,
+      inventory:           $game.inventory.get(),
       resourcesDiscovered: _resourcesDiscovered
     })
   },
@@ -1395,7 +1287,7 @@ function _setPlayerInformation (info) {
   _previousSeedsDropped = _seeds.dropped
   _resources = _objectify(info.game.resources)
   _position = info.game.position
-  _inventory = info.game.inventory
+  $game.inventory.set(info.game.inventory)
   _colorMap = info.game.colorMap
   _resume = info.game.resume
   _playingTime = info.game.playingTime
@@ -1604,16 +1496,6 @@ function _objectify (input) {
     result[input[i].id].arrayLookup = i
   }
   return result
-}
-
-//return boolean if a resource is held in the player's inventory
-function _resourceExists (id) {
-  for (var i = 0; i < _inventory.length; i++) {
-    if (_inventory[i].id === id) {
-      return true
-    }
-  }
-  return false
 }
 
 // Temporary global for player colors.

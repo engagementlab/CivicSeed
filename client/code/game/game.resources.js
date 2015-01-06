@@ -132,7 +132,7 @@ var $resources = $game.$resources = {
     // HIDES (not closes) the inventory, then show resource
     // Set a flag that remembers we were in the inventory
     $game.flags.set('viewing-inventory')
-    $game.$input.hideInventory(function () {
+    $game.inventory.hide(function () {
       $resources.showResource(id)
     })
   },
@@ -156,7 +156,7 @@ var $resources = $game.$resources = {
       $game.$audio.fadeHi()
 
       // If inventory was showing previously, re-open the inventory
-      if ($game.flags.check('viewing-inventory') === true) $game.$input.showInventory()
+      if ($game.flags.check('viewing-inventory') === true) $game.inventory.show()
 
       if (typeof callback === 'function') callback()
     })
