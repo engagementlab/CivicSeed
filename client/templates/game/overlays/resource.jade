@@ -12,7 +12,10 @@
       span.speaker
       span.message
     .tangram
-    form.tagline-input
+
+    form.tagline-input(method='POST')
+      //- Note: While this form will be handled by jQuery,
+      //- the method of 'POST' prevents data from being appended to the URL.
       input(name='tagline', type='text', value='', placeholder='Summarize what you just learned.', maxLength='60', autofocus)
       .privacy-message You’ll need it later!
 

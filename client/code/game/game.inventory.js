@@ -30,7 +30,9 @@ var self = $game.inventory = (function () {
     var el = document.getElementById('inventory').querySelector('.inventory-boxes')
     while (el.firstChild) el.removeChild(el.firstChild)
     for (var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i++) {
-      el.innerHTML += '<div class="inventory-box"></div>'
+      var boxEl = document.createElement('div')
+      boxEl.classList.add('inventory-box')
+      el.appendChild(boxEl)
     }
   }
 
@@ -133,7 +135,9 @@ var self = $game.inventory = (function () {
       return (index !== undefined) ? _inventory[index] : _inventory
     },
 
+    // Sets inventory data on game initiation.
     // Called only on _setPlayerInformation from player.js
+    // Do not use this to set inventory information through gameplay!
     set: function (data) {
       _inventory = data
     },
@@ -155,6 +159,7 @@ var self = $game.inventory = (function () {
       })
     },
 
+    // Add an item to the inventory when a player obtains something through gameplay
     add: function (item) {
       // Skip if already present
       if (isInInventory(item.id) === true) return false
@@ -162,8 +167,7 @@ var self = $game.inventory = (function () {
       // Add inventory item to internal
       _inventory.push(item)
       addToInventoryHUD(item)
-    },
-
+    }
 
   }
 
