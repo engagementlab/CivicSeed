@@ -440,7 +440,7 @@
     "sprite": 14,
     "skinSuit": null,
     "resource": {
-      "id": 1517,
+      "id": 4001,
       "answer": "true",
       "feedbackRight": "Bingo! Now that’s what I’m talkin’ about!",
       "feedbackWrong": "That’s not right! Check the resource and give it another shot.",
@@ -652,7 +652,7 @@
     "skinSuit": "cactus",
     "sprite": 21,
     "resource": {
-      "id": 9069,
+      "id": 4001,
       "answer": "true",
       "feedbackRight": "Great work!",
       "feedbackWrong": "Maybe you should review the resource and try again...",
@@ -911,7 +911,7 @@
     "skinSuit": null,
     "sprite": 10,
     "resource": {
-      "id": 3229,
+      "id": 4001,
       "answer": "false",
       "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
       "feedbackWrong": "Maybe you should review the resource and try again...",
@@ -1590,7 +1590,7 @@
       "question": "Which one of these tips do you think most applies to you?",
       "questionType": "open",
       "requiredLength": 30,
-      "shape": "wrong4",
+      "shape": "wrong2",
       "url": "12249",
       "possibleAnswers": []
     },

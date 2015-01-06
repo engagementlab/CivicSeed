@@ -646,8 +646,8 @@
       "inventory": [
         {
           "name": "correct1",
-          "tagline": "Acting civically: race matters in civic engagement",
-          "id": 17599
+          "tagline": "Classism",
+          "id": 10780
         },
         {
           "name": "correct2",
@@ -666,8 +666,8 @@
         },
         {
           "name": "correct5",
-          "tagline": "Commitment!",
-          "id": 12760
+          "tagline": "Poverty line",
+          "id": 14706
         },
         {
           "name": "correct6",
@@ -681,18 +681,13 @@
         },
         {
           "name": "wrong2",
-          "tagline": "Poverty line",
-          "id": 14706
+          "tagline": "Tips for working in the community",
+          "id": 12249
         },
         {
           "name": "wrong3",
-          "tagline": "Classism",
-          "id": 10780
-        },
-        {
-          "name": "wrong4",
-          "tagline": "Tips for working in the community",
-          "id": 12249
+          "tagline": "Acting civically: race matters in civic engagement",
+          "id": 17599
         }
       ],
       "seeds": {
