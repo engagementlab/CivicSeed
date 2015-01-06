@@ -351,7 +351,11 @@ var $player = $game.$player = {
     // If not, set up a new object
     if (playerResource) {
       playerResource.answers.push(data.answer)
-      playerResource.attempts += 1
+      if (data.attempts) {
+        playerResource.attempts = data.attempts
+      } else {
+        playerResource.attempts += 1
+      }
       playerResource.result = data.correct
       playerResource.seedsRewarded = this.determineNumberOfSeedsToReward(playerResource)
     } else {
@@ -361,7 +365,7 @@ var $player = $game.$player = {
         id:            data.id,
         questionType:  data.questionType,
         answers:       [data.answer],
-        attempts:      1,
+        attempts:      data.attempts || 1,
         result:        data.correct,
         seeded:        [],
         skinSuit:      data.skinSuit,

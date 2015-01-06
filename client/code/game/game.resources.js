@@ -751,6 +751,7 @@ var _resources = {
         var data = {
               id:           resource.id,
               answer:       '',
+              attempts:     0,
               npcLevel:     null,
               questionType: null,
               skinSuit:     null,
