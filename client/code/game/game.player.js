@@ -186,14 +186,9 @@ var $player = $game.$player = {
         master = {x: x, y: y},
         path
 
-    /*  Removing this prevents function from exiting if player stays in the same spot, which helps for reactivating NPCs.
-    if (loc.x === x && loc.y === y) {
-      return;
-    }*/
-
     $game.flags.set('pathfinding')
-    _info.offX = 0;
-    _info.offY = 0;
+    _info.offX = 0
+    _info.offY = 0
 
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
       path = $game.$pathfinder.findPath({x: _info.x, y: _info.y}, master)
@@ -209,6 +204,9 @@ var $player = $game.$player = {
       if (path.length > 0) {
         // Check if it is an edge of the world
         var isEdge = $game.$map.isMapEdge(x, y)
+
+        // Reset transition flag
+        $game.flags.unset('screen-will-transition')
 
         if (isEdge) {
           $game.alert('Edge of the world!')

@@ -692,7 +692,6 @@ var _input = {
     return (
       $game.running &&
       !$game.flags.check('screen-transition') &&
-      !$game.flags.check('is-moving') &&
       !$game.flags.check('botanist-chatting') &&
       !$game.flags.check('visible-seedventory') &&
       !$game.flags.check('visible-skinventory') &&

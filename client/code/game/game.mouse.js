@@ -90,15 +90,20 @@ $game.$mouse = (function () {
         // TODO: Move this logic outside of mouse interaction?
 
         // TODO: Does pathfinding flag check happen here?
+        /*
         if ($game.flags.check('pathfinding')) {
           return
         }
+        */
 
         // Cancel out of an existing NPC chat bubble if it exists
         // TODO: this is here?
         if ($game.flags.check('npc-chatting')) {
           $game.$npc.hideSpeechBubble()
         }
+
+        // Reset queued NPCs
+        $game.$player.npcOnDeck = false
 
         // The only reason why this happens instead of reading $map.currentTiles directly
         // is because it's calculating if the tile space above it is the upper half of an NPC
