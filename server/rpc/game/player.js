@@ -532,7 +532,41 @@ exports.actions = function (req, res, ss) {
             user.game.resourcesDiscovered = data.resourcesDiscovered
             user.save(function (err, suc) {
               if (err) {
-                console.log('[rpc.player.saveResource] ' + err.name + ': ' + err.message + ' Were you trying to save a bunch of things too quickly?')
+                console.log('[rpc.player.saveResource] ' + err.name + ': ' + err.message)
+              }
+            })
+          }
+        })
+    },
+
+    // A HACKY HACKY way of doing multiple resource saves at once
+    // Calling a bunch of saveResource()s concurrently would cause
+    // Mongoose to choke on versioning. We would need a way to
+    // queue the requests, making sure one is complete before saving
+    // the next. The technical implementation of this is tougher than
+    // I want to deal with right now, hence this one, which just
+    // assumes multiple resources are sent in a single payload.
+    saveMoreThanOneResource: function (data) {
+      _userModel
+        .findById(data.id, function (err, user) {
+          if (err) {
+            console.log(err)
+          } else if (user) {
+            for (var i = 0; i < data.resources.length; i++) {
+              var resource = data.resources[i]
+
+              if (user.game.resources[resource.id]) {
+                user.game.resources[resource.id].answers = resource.answers
+                user.game.resources[resource.id].attempts = resource.attempts
+                user.game.resources[resource.id].result = resource.result
+              } else {
+                user.game.resources.push(resource)
+              }
+            }
+
+            user.save(function (err, suc) {
+              if (err) {
+                console.log('[rpc.player.saveMoreThanOneResource] ' + err.name + ': ' + err.message)
               }
             })
           }

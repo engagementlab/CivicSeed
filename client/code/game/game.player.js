@@ -885,7 +885,8 @@ var $player = $game.$player = {
   saveOtherCommunityResources: function (answeredResourceId) {
     // Hack for community inventory items
     // Dummy data for other resources
-    var ids = [4001, 4002, 4003]
+    var ids = [4001, 4002, 4003],
+        bunchOfResources = []
 
     for (var i = 0; i < ids.length; i++) {
       if (ids[i] === answeredResourceId) continue
@@ -903,8 +904,14 @@ var $player = $game.$player = {
           }
 
       var dummyResource = $player.saveResourceLocally(dummyData)
-      _player.saveResourceToDb(dummyResource)
+      bunchOfResources.push(dummyResource)
     }
+
+    ss.rpc('game.player.saveMoreThanOneResource', {
+      id:        $player.id,
+      resources: bunchOfResources
+    })
+
   },
 
   //show a bubble over visited npcs of how many comments there are
