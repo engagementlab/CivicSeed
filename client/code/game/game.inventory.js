@@ -16,9 +16,9 @@ var self = $game.inventory = (function () {
   var _inventory = {} // Holds each item in inventory.
 
   // Returns true if a resource is held in the player's inventory
-  function isInInventory (id) {
+  function isInInventory (item) {
     for (var i = 0, j = _inventory.length; i < j; i++) {
-      if (_inventory[i].id === id) {
+      if (_inventory[i].name === item.name) {
         return true
       }
     }
@@ -162,7 +162,7 @@ var self = $game.inventory = (function () {
     // Add an item to the inventory when a player obtains something through gameplay
     add: function (item) {
       // Skip if already present
-      if (isInInventory(item.id) === true) return false
+      if (isInInventory(item) === true) return false
 
       // Add inventory item to internal
       _inventory.push(item)

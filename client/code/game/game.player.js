@@ -356,6 +356,9 @@ var $player = $game.$player = {
       }
       playerResource.result = data.correct
       playerResource.seedsRewarded = this.determineNumberOfSeedsToReward(playerResource)
+      if (data.tagline) {
+        playerResource.tagline = data.tagline
+      }
     } else {
       // Create resource game data to save
       // This will be updated on the server later
@@ -367,7 +370,8 @@ var $player = $game.$player = {
         result:        data.correct,
         seeded:        [],
         skinSuit:      data.skinSuit,
-        rewarded:      false
+        rewarded:      data.rewarded || false,
+        tagline:       null
       }
 
       // Determine seeds to reward
@@ -568,27 +572,27 @@ var $player = $game.$player = {
 
   //put new answer into the resume
   resumeAnswer: function (answer) {
-    _resume.push(answer);
+    _resume.push(answer)
     var info = {
       id: $game.$player.id,
       resume: _resume
-    };
-    ss.rpc('game.player.updateGameInfo', info);
+    }
+    ss.rpc('game.player.updateGameInfo', info)
   },
 
   //keep track of how many seedITs the player has done
   updatePledges: function (quantity) {
-    _pledges += quantity;
+    _pledges += quantity
     var info = {
       id: $game.$player.id,
       pledges: _pledges
-    };
-    ss.rpc('game.player.updateGameInfo', info);
+    }
+    ss.rpc('game.player.updateGameInfo', info)
   },
 
   // Return the player's current position in the world
   getPosition: function () {
-    return _info;
+    return _info
   },
 
   // Return the player's current position on the screen
@@ -805,7 +809,7 @@ var $player = $game.$player = {
     }
   },
 
-  // Add the tagline to the resource locally, then update the tagline on the server
+  // Set the tagline to the resource locally
   setTagline: function (resource, tagline) {
     if (_resources[resource.id]) {
       _resources[resource.id].tagline = tagline
@@ -845,6 +849,12 @@ var $player = $game.$player = {
 
       // Flip to true once rewarded
       playerResource.rewarded = true
+
+      // If the resource saved is a community NPC resource, immediately
+      // save all of the others! These ids are 4001, 4002 and 4003
+      if (resource.id > 4000 && resource.id < 4004) {
+        $player.saveOtherCommunityResources(resource.id)
+      }
     }
 
     // Save resource to DB
@@ -866,6 +876,35 @@ var $player = $game.$player = {
     // Display NPC bubble with number of comments & update minimap radar
     $game.$player.displayNpcComments()
     $game.minimap.radar.update()
+  },
+
+  // If one of the community resources is obtained, call this function to save
+  // all of the other ones so that the NPCs who hold them are unlocked
+  // answeredResourceId will be the one that is answered, either 4001, 4002 or 4003
+  // TODO: This is hacky, is there a better way of doing this?
+  saveOtherCommunityResources: function (answeredResourceId) {
+    // Hack for community inventory items
+    // Dummy data for other resources
+    var ids = [4001, 4002, 4003]
+
+    for (var i = 0; i < ids.length; i++) {
+      if (ids[i] === answeredResourceId) continue
+
+      var dummyData = {
+            id:           ids[i],
+            answer:       '',
+            attempts:     0,
+            npcLevel:     null,
+            questionType: null,
+            skinSuit:     null,
+            correct:      true,
+            rewarded:     true,
+            tagline:      null
+          }
+
+      var dummyResource = $player.saveResourceLocally(dummyData)
+      _player.saveResourceToDb(dummyResource)
+    }
   },
 
   //show a bubble over visited npcs of how many comments there are

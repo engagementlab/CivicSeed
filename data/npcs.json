@@ -652,7 +652,7 @@
     "skinSuit": "cactus",
     "sprite": 21,
     "resource": {
-      "id": 4001,
+      "id": 4003,
       "answer": "true",
       "feedbackRight": "Great work!",
       "feedbackWrong": "Maybe you should review the resource and try again...",
@@ -911,7 +911,7 @@
     "skinSuit": null,
     "sprite": 10,
     "resource": {
-      "id": 4001,
+      "id": 4002,
       "answer": "false",
       "feedbackRight": "That’s right! Mayor Michael McGlynn has overseen the rebuilding of every Medford elementary and middle school since he became the Mayor in 1988.",
       "feedbackWrong": "Maybe you should review the resource and try again...",

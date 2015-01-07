@@ -555,14 +555,6 @@ var _resources = {
 
     _resources.hideContent()
     el.style.display = 'block'
-
-    // Bind a check event listener to the standard close button on the upper right
-    $('#resource-area .close-overlay').on('click.onCloseCheck', function (e) {
-      e.stopImmediatePropagation()
-      e.preventDefault()
-      $('#resource-area .close-button').trigger('click')
-    })
-
     el.querySelector('.speaker').textContent = npc.name
   },
 
@@ -756,7 +748,7 @@ var _resources = {
               questionType: null,
               skinSuit:     null,
               correct:      false,
-              tagline:      ''
+              tagline:      null
             }
         $game.$player.saveResourceLocally(data)
         break
@@ -851,6 +843,11 @@ var _resources = {
             if (section) {
               _resources.addContent(resourceId, section)
             } else {
+              // If correct, then unlock suit, add seeds, add
+              // tangram to inventory, and save answer to DB
+              if (!isRevisit) {
+                $game.$player.saveResource(resource)
+              }
               $resources.hideResource(callback)
             }
 

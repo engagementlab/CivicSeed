@@ -532,7 +532,7 @@ exports.actions = function (req, res, ss) {
             user.game.resourcesDiscovered = data.resourcesDiscovered
             user.save(function (err, suc) {
               if (err) {
-                console.log('err')
+                console.log('[rpc.player.saveResource] ' + err.name + ': ' + err.message + ' Were you trying to save a bunch of things too quickly?')
               }
             })
           }
