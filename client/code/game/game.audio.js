@@ -48,7 +48,7 @@ var $audio = $game.$audio = {
 
   init: function (callback) {
     if (CivicSeed.ENVIRONMENT !== 'development') {
-      _extension = CivicSeed.version;
+      _extension = CivicSeed.version
     }
 
     $audio.isMute = $game.$player.isMuted
@@ -63,29 +63,29 @@ var $audio = $game.$audio = {
     //hack to check if all stuff is loaded so we can callback
     var checkDone = function () {
       if ($audio.ready) {
-        callback();
+        callback()
       } else {
-        setTimeout(checkDone, 30);
+        setTimeout(checkDone, 30)
       }
-    };
-    checkDone();
+    }
+    checkDone()
   },
 
   resetInit: function () {
-    _soundtracks = [];
-    _triggerFx = null;
-    _environmentLoopFx = null;
-    _environmentOnceFx = null;
-    _currentTrack = -1;
-    _prevTrack = -1;
-    _tweenTimeout = null;
-    _targetV = 0;
-    _midTransition = false;
-    _extension = null;
-    _currentLoop = null;
-    _currentPos = null;
+    _soundtracks = []
+    _triggerFx = null
+    _environmentLoopFx = null
+    _environmentOnceFx = null
+    _currentTrack = -1
+    _prevTrack = -1
+    _tweenTimeout = null
+    _targetV = 0
+    _midTransition = false
+    _extension = null
+    _currentLoop = null
+    _currentPos = null
 
-    $game.$audio.ready= false;
+    $game.$audio.ready= false
     $game.$audio.isMute = $game.$player.isMuted
   },
 
@@ -112,11 +112,11 @@ var $audio = $game.$audio = {
       loop: true,
       volume: _audio.config.soundtrackVolume,
       buffer: true
-    });
+    })
     //this goes thru all the tracks, and skips num since its preloaded
-    $audio.loadOtherTrack(0, num);
-    $audio.loadTriggerFx();
-    _currentTrack = num;
+    $audio.loadOtherTrack(0, num)
+    $audio.loadTriggerFx()
+    _currentTrack = num
   },
 
   loadOtherTrack: function (track, num) {
@@ -125,8 +125,8 @@ var $audio = $game.$audio = {
           ogg = _musicPath + track + '.ogg?VERSION='
 
       if (_extension) {
-        mp3 += _extension;
-        ogg += _extension;
+        mp3 += _extension
+        ogg += _extension
       } else {
         mp3 += Math.round(Math.random(1) * 1000000000)
         ogg += Math.round(Math.random(1) * 1000000000)
@@ -137,25 +137,25 @@ var $audio = $game.$audio = {
         loop: true,
         volume: 0.0,
         buffer: true
-      });
-      track++;
+      })
+      track++
       if (track !== _numTracks) {
-        $audio.loadOtherTrack(track, num);
+        $audio.loadOtherTrack(track, num)
       }
     } else {
-      track++;
+      track++
       if (track !== _numTracks) {
-        $audio.loadOtherTrack(track, num);
+        $audio.loadOtherTrack(track, num)
       }
     }
   },
 
   loadTriggerFx: function () {
     var mp3 = _musicPath + 'triggers.mp3?VERSION=',
-      ogg = _musicPath +'triggers.ogg?VERSION=';
+        ogg = _musicPath + 'triggers.ogg?VERSION='
     if (_extension) {
-      mp3 += _extension;
-      ogg += _extension;
+      mp3 += _extension
+      ogg += _extension
     } else {
       mp3 += Math.round(Math.random(1) * 1000000000)
       ogg += Math.round(Math.random(1) * 1000000000)
@@ -182,18 +182,18 @@ var $audio = $game.$audio = {
       },
       volume: _audio.config.triggerFxVolume,
       onload: function () {
-        $audio.loadEnvironmentLoopFx();
+        $audio.loadEnvironmentLoopFx()
       }
-    });
+    })
   },
 
   loadEnvironmentLoopFx: function () {
     var mp3 = _musicPath + 'environmentloop.mp3?VERSION=',
-        ogg = _musicPath + 'environmentloop.ogg?VERSION=';
+        ogg = _musicPath + 'environmentloop.ogg?VERSION='
 
     if (_extension) {
-      mp3 += _extension;
-      ogg += _extension;
+      mp3 += _extension
+      ogg += _extension
     } else {
       mp3 += Math.round(Math.random(1) * 1000000000)
       ogg += Math.round(Math.random(1) * 1000000000)
@@ -201,29 +201,29 @@ var $audio = $game.$audio = {
     _environmentLoopFx = new Howl({
       urls: [mp3, ogg],
       sprite: {
-        stream: [0, 5010],
-        chatter: [6000, 12025],
-        wave: [19000, 16500],
-        wind: [36000, 14350]
+        stream:   [0, 5010],
+        chatter:  [6000, 12025],
+        wave:     [19000, 16500],
+        wind:     [36000, 14350]
       },
       loop: true,
       onend: function () {
-        $audio.checkLoopExit();
+        $audio.checkLoopExit()
       },
       volume: _audio.config.environmentLoopFxVolume,
       onload: function () {
-        $audio.loadEnvironmentOnceFx();
+        $audio.loadEnvironmentOnceFx()
       }
-    });
+    })
   },
 
   loadEnvironmentOnceFx: function () {
     var mp3 = _musicPath + 'environmentonce.mp3?VERSION=',
-        ogg = _musicPath +'environmentonce.ogg?VERSION=';
+        ogg = _musicPath + 'environmentonce.ogg?VERSION='
 
     if (_extension) {
-      mp3 += _extension;
-      ogg += _extension;
+      mp3 += _extension
+      ogg += _extension
     } else {
       mp3 += Math.round(Math.random(1) * 1000000000)
       ogg += Math.round(Math.random(1) * 1000000000)
@@ -253,28 +253,28 @@ var $audio = $game.$audio = {
       onend: function () {
       },
       onload: function () {
-        $audio.ready = true;
+        $audio.ready = true
       }
-    });
+    })
   },
 
   playTriggerFx: function (fx) {
-    _triggerFx.play(fx);
+    _triggerFx.play(fx)
   },
 
   playEnvironmentLoopFx: function (fx) {
-    _environmentLoopFx.play(fx);
+    _environmentLoopFx.play(fx)
   },
 
   playEnvironmentOnceFx: function (fx) {
-    var ranDelay = Math.random() * 2000;
+    var ranDelay = Math.random() * 2000
     setTimeout(function () {
-      _environmentOnceFx.play(fx);
-    }, ranDelay);
+      _environmentOnceFx.play(fx)
+    }, ranDelay)
   },
 
-  update: function (posX, posY) {
-    _currentPos = {x: posX, y: posY};
+  update: function (position) {
+    _currentPos = position  // {x, y} value
     var trackNum = _audio.whichTrack(),
         message  = 'Entering '
 

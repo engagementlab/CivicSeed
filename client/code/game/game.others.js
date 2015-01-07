@@ -20,7 +20,6 @@ var self = $game.$others = (function () {
     this.id               = player._id
     this.isMoving         = false
     this.currentStep      = 0
-    this.currentMove      = 0
     this.currentStepIncX  = 0
     this.currentStepIncY  = 0
     this.curFrame         = 0
@@ -139,11 +138,9 @@ var self = $game.$others = (function () {
   Player.prototype.beginMove = function (moves) {
     this.seriesOfMoves = new Array(moves.length)
     this.seriesOfMoves = moves
-    this.currentMove = 1
     this.currentStep = 0
     this.isMoving = true
     this.hideChat()
-    //console.log(this.seriesOfMoves);
   }
 
   Player.prototype.endMove = function () {
@@ -164,16 +161,17 @@ var self = $game.$others = (function () {
     //update the master location, and reset steps to go on to next move
     if (this.currentStep >= this.numSteps) {
       this.currentStep = 0
-      this.info.x = this.seriesOfMoves[this.currentMove].masterX
-      this.info.y = this.seriesOfMoves[this.currentMove].masterY
-      this.currentMove += 1
+      this.info.x = this.seriesOfMoves[0].masterX
+      this.info.y = this.seriesOfMoves[0].masterY
+
+      this.seriesOfMoves.shift()
 
       // Update player position on minimap
       $game.minimap.updatePlayer(this.id, this.info)
     }
 
-    //check to see if done
-    if (this.currentMove >= this.seriesOfMoves.length) {
+    // Check to see if done
+    if (this.seriesOfMoves.length <= 0) {
       this.endMove()
     }
 
@@ -184,8 +182,8 @@ var self = $game.$others = (function () {
 
       //if it the first one, then figure out the direction to face
       if (this.currentStep === 1) {
-        this.currentStepIncX = this.seriesOfMoves[this.currentMove].masterX - this.info.x
-        this.currentStepIncY = this.seriesOfMoves[this.currentMove].masterY - this.info.y
+        this.currentStepIncX = this.seriesOfMoves[0].masterX - this.info.x
+        this.currentStepIncY = this.seriesOfMoves[0].masterY - this.info.y
 
         //set the previous offsets to 0 because the last visit
         //was the actual rounded master

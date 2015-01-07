@@ -276,8 +276,8 @@ var $game = module.exports = {
       }
       $game.$player.update()
       $game.$render.renderFrame()
-      window.requestAnimationFrame($game.tick)
     }
+    window.requestAnimationFrame($game.tick)
   },
 
   // Updates the progress area section, pulling the latest pertinent data

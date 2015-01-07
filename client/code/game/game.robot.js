@@ -38,7 +38,7 @@ $game.$robot = (function () {
       _info = {
         x: 0,
         y: 0
-      };
+      }
       _renderInfo = {
         kind: 'robot',
         prevX: 0,
@@ -47,9 +47,9 @@ $game.$robot = (function () {
         curY: 0,
         srcX: 0,
         srcY: 0
-      };
+      }
       if (!$game.$player.seenRobot) {
-        setPosition();
+        setPosition()
       }
     }
 
@@ -190,61 +190,58 @@ $game.$robot = (function () {
       //if the steps between the tiles has finished,
       //update the master location, and reset steps to go on to next move
       if (currentStep >= numSteps) {
-        currentStep = 0;
-        //info.x = seriesOfMoves[currentMove].masterX;
-        //info.y = seriesOfMoves[currentMove].masterY;
-        _info.x += _info.d;
+        currentStep = 0
+        _info.x += _info.d
       }
 
       //check to see if done
       if (_info.x === _info.target) {
-        _onScreen = false;
-        active = false;
+        _onScreen = false
+        active = false
       }
 
       //if not, step through it
       else {
         //increment the current step
-        currentStep += 1;
+        currentStep += 1
 
         //if it the first one, then figure out the direction to face
         if (currentStep === 1) {
           //set the previous offsets to 0 because the last visit
           //was the actual rounded master
-          _info.prevOffX = 0;
-          _info.prevOffY = 0;
+          _info.prevOffX = 0
+          _info.prevOffY = 0
 
         }
 
         //if it is not the first step:
         else {
-          _info.prevOffX = _info.offX;
-          _info.prevOffY = _info.offY;
+          _info.prevOffX = _info.offX
+          _info.prevOffY = _info.offY
           //set direction for sprite sheets
           if (currentStep % 4 === 0) {
-            // console.log('currentStep', currentStep);
-            _renderInfo.srcX = $game.TILE_SIZE * (currentStep / 4) * 2 - 64;
+            _renderInfo.srcX = $game.TILE_SIZE * (currentStep / 4) * 2 - 64
           }
         }
 
-        _info.offX = currentStep * currentStepIncX;
-        _info.offY = currentStep * currentStepIncY;
+        _info.offX = currentStep * currentStepIncX
+        _info.offY = currentStep * currentStepIncY
 
         //try only changing the src (frame) every X frames
         // if ((currentStep - 1) % 8 === 0) {
-        //  curFrame += 1;
+        //  curFrame += 1
         //  if (curFrame >= numFrames) {
         //    curFrame = 0;
         //  }
         // }
       // info.srcX = curFrame * $game.TILE_SIZE,
-        updateRenderInfo();
+        updateRenderInfo()
       }
     }
   }
 
   function clear () {
-    $game.$render.clearRobot(_renderInfo);
+    $game.$render.clearRobot(_renderInfo)
   }
 
   function getRenderInfo () {

@@ -58,9 +58,9 @@ var self = $game.$pathfinder = (function () {
     },
 
     // Calculate a path using pathfinding
-    findPath: function (local, master) {
-      var start = _graph.grid[local.y][local.x],
-          end   = _graph.grid[master.y][master.x]
+    findPath: function (currentPosition, targetPosition) {
+      var start = _graph.grid[currentPosition.y][currentPosition.x],
+          end   = _graph.grid[targetPosition.y][targetPosition.x]
 
       // Returns an array of tiles for character to move on
       return astar.astar.search(_graph, start, end)

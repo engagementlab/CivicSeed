@@ -2,9 +2,10 @@
 
 var _ = require('underscore')
 
+var STEPS_PER_MOVE = 8 // Frames per move between tiles
+
 //private vars for player
 var _curFrame = 0,
-    _numSteps = 8,
     _currentStepIncX = 0,
     _currentStepIncY = 0,
     _direction = 0,
@@ -45,7 +46,6 @@ var $player = $game.$player = {
   botanistState: null,
   seenRobot: null,
   seriesOfMoves: [],
-  currentMove: 0,
   currentStep: 0,
   seedPlanting: false,
   npcOnDeck: false,
@@ -114,46 +114,45 @@ var $player = $game.$player = {
   },
 
   resetInit: function () {
-    _curFrame = 0;
-    _currentStepIncX = 0;
-    _currentStepIncY = 0;
-    _direction = 0;
-    _idleCounter = 0;
+    _curFrame = 0
+    _currentStepIncX = 0
+    _currentStepIncY = 0
+    _direction = 0
+    _idleCounter = 0
 
-    _info = null;
-    _renderInfo = null;
+    _info = null
+    _renderInfo = null
 
-    _previousSeedsDropped = null;
+    _previousSeedsDropped = null
 
-    _startTime = null;
+    _startTime = null
 
-    _seeds = null;
-    _totalSeeds = null;
-    _resources = null;
-    _position = null;
-    _colorMap = null;
-    _resume = null;
-    _playingTime = null;
-    _tilesColored = null;
-    _pledges = null;
-    _resourcesDiscovered = null;
-    _skinSuit = null;
+    _seeds = null
+    _totalSeeds = null
+    _resources = null
+    _position = null
+    _colorMap = null
+    _resume = null
+    _playingTime = null
+    _tilesColored = null
+    _pledges = null
+    _resourcesDiscovered = null
+    _skinSuit = null
 
-    _drawSeeds = null;
+    _drawSeeds = null
 
-    $game.$player.firsName = null;
-    $game.$player.id= null;
-    $game.$player.game= null;
-    $game.$player.instanceName= null;
-    $game.$player.currentLevel= null;
-    $game.$player.seenRobot= null;
+    $game.$player.firstName = null
+    $game.$player.id = null
+    $game.$player.game = null
+    $game.$player.instanceName = null
+    $game.$player.currentLevel = null
+    $game.$player.seenRobot = null
     $game.$player.seriesOfMoves = []
-    $game.$player.currentMove= 0;
-    $game.$player.currentStep= 0;
-    $game.$player.seedPlanting= false;
-    $game.$player.npcOnDeck= false;
-    $game.$player.ready= false;
-    $game.$player.seedMode= false;
+    $game.$player.currentStep = 0
+    $game.$player.seedPlanting = false
+    $game.$player.npcOnDeck = false
+    $game.$player.ready = false
+    $game.$player.seedMode = false
   },
 
   //calculate movements and what to render for every game tick
@@ -175,23 +174,25 @@ var $player = $game.$player = {
     $game.$render.clearCharacter(_renderInfo)
   },
 
-  //start a movement -> pathfind, decide if we need to load new viewport, if we are going to visit an NPC
+  // Start a movement -> pathfind
+  // Decide if we need to load new viewport, or if we are going to visit an NPC
   beginMove: function (x, y) {
+    var localPosition  = $player.getLocalPosition(),
+        targetPosition = {x: x, y: y},
+        path
+
     // Clear HUD
+    $game.$chat.hideChat()
     if ($game.flags.check('visible-inventory')) {
       $game.inventory.close()
     }
-
-    var loc    = $player.getLocalPosition(),
-        master = {x: x, y: y},
-        path
 
     $game.flags.set('pathfinding')
     _info.offX = 0
     _info.offY = 0
 
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-      path = $game.$pathfinder.findPath({x: _info.x, y: _info.y}, master)
+      path = $game.$pathfinder.findPath({x: _info.x, y: _info.y}, targetPosition)
 
       $game.flags.unset('pathfinding')
       if (path.length > 0) {
@@ -199,7 +200,13 @@ var $player = $game.$player = {
       }
     } else {
       // Find path
-      path = $game.$pathfinder.findPath(loc, master)
+      // If player is already moving, the start point of the path is the point of next move in the series
+      // Otherwise, use the player's current local position
+      if ($game.flags.check('is-moving')) {
+        path = $game.$pathfinder.findPath($game.$map.masterToLocal($player.seriesOfMoves[0].masterX, $player.seriesOfMoves[0].masterY), targetPosition)
+      } else {
+        path = $game.$pathfinder.findPath(localPosition, targetPosition)
+      }
 
       if (path.length > 0) {
         // Check if it is an edge of the world
@@ -219,10 +226,12 @@ var $player = $game.$player = {
         _sendMoveInfo(path)
 
         ss.rpc('game.player.movePlayer', path, $game.$player.id, function () {
-          var masterEndX = $game.$map.currentTiles[master.x][master.y].x,
-              masterEndY = $game.$map.currentTiles[master.x][master.y].y
+          var targetTile = {
+                x: $game.$map.currentTiles[targetPosition.x][targetPosition.y].x,
+                y: $game.$map.currentTiles[targetPosition.x][targetPosition.y].y
+              }
 
-          $game.$audio.update(masterEndX, masterEndY)
+          $game.$audio.update(targetTile)
         })
       } else {
         _endMove()
@@ -252,23 +261,23 @@ var $player = $game.$player = {
     $game.$player.beginMove(location.x + 1, location.y)
   },
 
-  //moves the player as the viewport transitions
+  // Moves the player as the viewport transitions
   slide: function (slideX, slideY) {
-    _info.prevOffX = slideX * _numSteps;
-    _info.prevOffY = slideY * _numSteps;
+    _info.prevOffX = slideX * STEPS_PER_MOVE
+    _info.prevOffY = slideY * STEPS_PER_MOVE
   },
 
-  //when the player finishes moving or we just need a hard reset for rendering
+  // When the player finishes moving or we just need a hard reset for rendering
   resetRenderValues: function () {
-    _info.prevOffX = 0;
-    _info.prevOffY = 0;
+    _info.prevOffX = 0
+    _info.prevOffY = 0
   },
 
   //decide what type of seed drop mechanic to do and check if they have seeds
   dropSeed: function (options) {
     if (options.x !== undefined && options.x >= 0) {
-      options.mX = $game.$map.currentTiles[options.x][options.y].x;
-      options.mY = $game.$map.currentTiles[options.x][options.y].y;
+      options.mX = $game.$map.currentTiles[options.x][options.y].x
+      options.mY = $game.$map.currentTiles[options.x][options.y].y
     }
     var mode = options.mode;
 
@@ -1365,7 +1374,7 @@ function _setPlayerInformation (info) {
 // calculate new render information based on the player's position
 function _updateRenderInfo() {
   // get local render information. update if appropriate.
-  var loc = $game.$map.masterToLocal(_info.x, _info.y);
+  var loc = $game.$map.masterToLocal(_info.x, _info.y)
   if (loc) {
     var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS,
         prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS,
@@ -1383,25 +1392,26 @@ function _updateRenderInfo() {
 
 //figure out how much to move the player during a walk and wait frame to show
 function _move () {
-  /** IMPORTANT note: x and y are really flipped!!! **/
-  //update the step
-  $game.flags.set('is-moving')
+  /** IMPORTANT note: x and y are really flipped!!! **/ // is this true?
 
-  //if the steps between the tiles has finished,
-  //update the master location, and reset steps to go on to next move
-  if ($game.$player.currentStep >= _numSteps) {
+  // First, check what step of animation we are on.
+  // After one animation cycle, reset steps and moves
+  if ($game.$player.currentStep >= STEPS_PER_MOVE) {
     $game.$player.currentStep = 0
-    _info.x = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX
-    _info.y = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY
 
-    $game.$player.currentMove += 1
+    // The next move becomes the current player's current position
+    _info.x = $game.$player.seriesOfMoves[0].masterX
+    _info.y = $game.$player.seriesOfMoves[0].masterY
 
-    //render mini map every spot player moves
+    // Once set, remove the move from queue immediately
+    $game.$player.seriesOfMoves.shift()
+
+    // Update player's location on the minimap
     $game.minimap.updatePlayer($game.$player.id, _info)
   }
 
-  //if we done, finish
-  if ($game.$player.currentMove >= $game.$player.seriesOfMoves.length) {
+  // If there are no more moves, finish
+  if ($game.$player.seriesOfMoves.length <= 0) {
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
       _info.offX = 0
       _info.offY = 0
@@ -1410,22 +1420,19 @@ function _move () {
       _info.prevOffX = 0
       _info.prevOffY = 0
 
-      $game.flags.unset('is-moving')
       $game.$boss.endMove(_info)
     } else {
       _endMove()
     }
-  }
-  //if we no done, then step through it yo.
-  else {
+  } else {
+    // There are more moves, keep setting each frame of animation
     var currentSpeed = $player.getMoveSpeed()
 
-    //increment the current step
-    $game.$player.currentStep += 1 * currentSpeed
-    //if it the first one, then figure out the direction to face
-    if ($game.$player.currentStep === 1 * currentSpeed) {
-      _currentStepIncX = $game.$player.seriesOfMoves[$game.$player.currentMove].masterX - _info.x
-      _currentStepIncY = $game.$player.seriesOfMoves[$game.$player.currentMove].masterY - _info.y
+    // If it is the first step, then figure out which direction to face
+    if ($game.$player.currentStep === 0) {
+      _currentStepIncX = $game.$player.seriesOfMoves[0].masterX - _info.x
+      _currentStepIncY = $game.$player.seriesOfMoves[0].masterY - _info.y
+
       //set the previous offsets to 0 because the last visit
       //was the actual rounded master
       _info.prevOffX = 0
@@ -1462,23 +1469,30 @@ function _move () {
         _curFrame = 0
       }
     }
-    _info.srcX = _curFrame * $game.TILE_SIZE
+    _info.srcX = _curFrame  * $game.TILE_SIZE
     _info.srcY = _direction * $game.TILE_SIZE * 2
+
+    // Increment the current step
+    $game.$player.currentStep += 1 * currentSpeed
   }
 }
 
 //once the move is sent out to all players, update the players next moves
 function _sendMoveInfo (moves) {
-  $game.$player.seriesOfMoves = moves
-  $game.$player.currentMove = 0
-  $game.$player.currentStep = 0
   $game.flags.set('is-moving')
-  $game.$chat.hideChat()
+
+  // If there is already a move queue, let the current one finish and\
+  // then replace the rest with the new moves.
+  if ($player.seriesOfMoves.length > 0) {
+    $player.seriesOfMoves.splice(1, Number.MAX_VALUE)
+    $player.seriesOfMoves = $player.seriesOfMoves.concat(moves)
+  } else {
+    $player.seriesOfMoves = moves
+  }
 }
 
 //when a move is done, decide waht to do next (if it is a transition) and save position to DB
 function _endMove () {
-
   _player.savePosition({x: _info.x, y: _info.y})
 
   //put the character back to normal position
