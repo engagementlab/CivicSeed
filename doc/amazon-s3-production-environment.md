@@ -30,10 +30,12 @@ These instructions assume that the production server environment is already up a
 1. Push new assets to GitHub.
 
    ```
+   git add --all
+   git commit -m 'Update static assets for production server'
    git push origin master
    ```
 
-2. **(optional)** If you have new static assets, push them to S3. Static assets include images, vendor stylesheets, and anything else in the `static/` directory.
+2. If you have new static assets, push them to S3. Static assets include images, vendor stylesheets, and anything else in the `static/` directory.
 
    ```
    s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2015 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
@@ -63,9 +65,11 @@ These instructions assume that the production server environment is already up a
    forever -o out.log -e err.log restart bin/server.js
    ```
 
-   Note that for some server-side changes you may need to completely stop the application and then start it again from scratch.
+   Note that for some server-side changes you may need to completely stop the application and then start it again from scratch. For instance, to update node modules or run Civic Seed's bootstrap process.
 
    ```
    forever stopall
+   npm update
+   node bin/boot
    forever -o out.log -e err.log start bin/server.js
    ```
