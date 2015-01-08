@@ -129,7 +129,7 @@ Npc.prototype.isLocked = function () {
   if (this.dependsOn) {
     var npc = $game.$npc.get(this.dependsOn)
     // Check if player already has it
-    return ($game.$player.checkForResource(npc.resource.id)) ? false : true
+    return ($game.$player.checkForCompletedResource(npc.resource.id)) ? false : true
   }
   return false
 },
@@ -302,14 +302,29 @@ var self = $game.$npc = (function () {
           // Different dialogue for the community NPCs
           if (npc.dependsOn === MASTER_NPC_ID) {
             dialogue = 'PLACEHOLDER MESSAGE: Talk to MASTER NPC FIRST'
+            // Player obtains Master NPC's placeholder resource
+            // after speaking to him the first time.
+            if ($game.$player.checkForResource(4000) === true) {
+              _npc.createPrompt(npc)
+              return
+            }
           }
 
           self.showSpeechBubble(npc.name, dialogue)
         } else if (npc.id === MASTER_NPC_ID) {
           // TODO HACK
           // Shoe horn in different behavior for the Master NPC
-          $game.$resources.showResource(4000)
+          // If player has not completed community NPCs:
+          if ($game.$player.checkForCompletedResource(4001) === true ||
+              $game.$player.checkForCompletedResource(4002) === true ||
+              $game.$player.checkForCompletedResource(4003) === true) {
+            _npc.createPrompt(npc)
+          } else {
+            // If not, show special master NPC screen
+            $game.$resources.showResource(4000)
+          }
         } else {
+          // NPC's resource dialog and prompt
           _npc.createPrompt(npc)
         }
       } else {

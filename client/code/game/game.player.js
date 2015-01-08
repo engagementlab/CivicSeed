@@ -552,6 +552,16 @@ var $player = $game.$player = {
   },
 
   // See if the player has the specific resource already
+  // Note that it must be correct and rewarded to count.
+  checkForCompletedResource: function (id) {
+    var resource = _resources[id]
+    if (!resource) return false
+    if (resource.result !== true) return false
+    if (resource.rewarded !== true) return false
+    return true
+  },
+
+  // See if the player has resource, complete or not
   checkForResource: function (id) {
     return (_resources[id]) ? true : false
   },

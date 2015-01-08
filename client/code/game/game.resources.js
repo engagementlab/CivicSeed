@@ -639,10 +639,16 @@ var _resources = {
       section = 2
     }
 
-    // HACK FOR SECTION 4000 (Master NPC resource)
+    // HACK - LOGIC ROUTING FOR MASTER NPC
     // TODO: Need logic to handle state
     if (resource.id === 4000) {
-      section = 4000
+      // If the player has not received correct resources for any of the
+      // community NPCs, go to the special Master NPC screen
+      if (!($game.$player.checkForCompletedResource(4001) === true ||
+          $game.$player.checkForCompletedResource(4002) === true ||
+          $game.$player.checkForCompletedResource(4003) === true)) {
+        section = 4000
+      }
     }
 
     // Determine what content to add.
