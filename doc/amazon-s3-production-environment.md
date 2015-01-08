@@ -27,7 +27,7 @@ These instructions assume that the production server environment is already up a
 
 #### Push assets to remotes.
 
-1. Push new assets to GitHub.
+1. Push code to GitHub.
 
    ```
    git add --all
@@ -35,7 +35,7 @@ These instructions assume that the production server environment is already up a
    git push origin master
    ```
 
-2. If you have new static assets, push them to S3. Static assets include images, vendor stylesheets, and anything else in the `static/` directory.
+2. Push static assets to S3. Static assets are anything in the `static/` directory, which also includes the packed assets done in the previous section. The production server will be loading client-side code and stylesheets from S3.
 
    ```
    s3cmd sync --acl-public --delete-removed --add-header 'Expires: Fri, 30 May 2015 00:00:00 GMT' --add-header='Cache-Control:no-transform,public,max-age=31536000,s-maxage=31536000' --rexclude "$(<client/static/.s3ignore)" client/static/ s3://civicseed/
@@ -43,10 +43,14 @@ These instructions assume that the production server environment is already up a
 
 #### Login to the S3 instance.
 
-1. SSH into the S3 instance. (Assuming your `.pem` key is already in your keychain, otherwise use `-i path/to/key.pem`)
+1. SSH into the S3 instance. If your `.pem` key is already in your keychain:
 
    ```
    ssh ec2-user@54.88.15.173
+   ```
+   otherwise, use the `-i` option to specify your key location.
+   ```
+   ssh ec2-user@54.88.15.173 -i ./path/to/civicseed-prod.pem
    ```
 
    You are now in the S3 terminal.
@@ -65,7 +69,7 @@ These instructions assume that the production server environment is already up a
    forever -o out.log -e err.log restart bin/server.js
    ```
 
-   Note that for some server-side changes you may need to completely stop the application and then start it again from scratch. For instance, to update node modules or run Civic Seed's bootstrap process.
+   For some server-side changes, you may need to completely stop the application and then start it again from scratch. For instance, to update node modules or run Civic Seed's bootstrap process.
 
    ```
    forever stopall
