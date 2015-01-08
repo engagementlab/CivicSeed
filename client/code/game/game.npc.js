@@ -301,7 +301,7 @@ var self = $game.$npc = (function () {
           // TODO HACK
           // Different dialogue for the community NPCs
           if (npc.dependsOn === MASTER_NPC_ID) {
-            dialogue = 'PLACEHOLDER MESSAGE: Talk to MASTER NPC FIRST'
+            dialogue = 'We’re here to talk about your host communities! Talk to <strong class="color-blue">Katamari</strong> to hear what you need to do. That’s the little green toad standing there in the lab coat, if you didn’t know. Come back soon!'
             // Player obtains Master NPC's placeholder resource
             // after speaking to him the first time.
             if ($game.$player.checkForResource(4000) === true) {
@@ -371,7 +371,7 @@ var self = $game.$npc = (function () {
       } else {
         // Assume that messages is a string.
         text = messages
-        $el.find('.message').text(text)
+        $el.find('.message').html(text) // Allow HTML tags inline
       }
 
       // If it has a prompt, set up prompt.
@@ -402,7 +402,7 @@ var self = $game.$npc = (function () {
         $el.find('.dialog').addClass('fit')
 
         text = messages[index]
-        $el.find('.message').text(text)
+        $el.find('.message').html(text) // Allow HTML tags inline
 
         if (index < messages.length - 1) {
           // Intermediary messages
