@@ -325,6 +325,11 @@ var $input = $game.$input = module.exports = {
 
     /* * * * * * * *                KEYBINDINGS                * * * * * * * */
 
+    // Clear key from being held, if it is
+    $BODY.keyup(function (e) {
+      _input.deleteHeldKey(e.which)
+    })
+
     $BODY.keydown(function (e) {
       // If escape is pressed, cancels any current action and returns to default gameboard view
       if (e.which === 27) {
@@ -349,7 +354,11 @@ var $input = $game.$input = module.exports = {
         case 56:  // 'numpad 2' (numlock off/opera)
           // Move player character up.
           e.preventDefault()
-          $input.moveUp()
+          // Disallow event from firing repeatedly on hold
+          if (!_input.isKeyHeldDown(e.which)) {
+            $input.moveUp()
+            _input.recordHeldKey(e.which)
+          }
           break
         case 65:  // 'a'
         case 37:  // 'left arrow', 'numpad 4'
@@ -357,7 +366,11 @@ var $input = $game.$input = module.exports = {
         case 52:  // 'numpad 4' (numlock off/opera)
           // Move player character to the left.
           e.preventDefault()
-          $input.moveLeft()
+          // Disallow event from firing repeatedly on hold
+          if (!_input.isKeyHeldDown(e.which)) {
+            $input.moveLeft()
+            _input.recordHeldKey(e.which)
+          }
           break
         case 83:  // 'a'
         case 40:  // 'down arrow', 'numpad 8'
@@ -365,7 +378,11 @@ var $input = $game.$input = module.exports = {
         case 50:  // 'numpad 8' (numlock off/opera)
           // Move player character down.
           e.preventDefault()
-          $input.moveDown()
+          // Disallow event from firing repeatedly on hold
+          if (!_input.isKeyHeldDown(e.which)) {
+            $input.moveDown()
+            _input.recordHeldKey(e.which)
+          }
           break
         case 68:  // 'd'
         case 39:  // 'right arrow', 'numpad 6'
@@ -373,7 +390,11 @@ var $input = $game.$input = module.exports = {
         case 54:  // 'numpad 6' (numlock off/opera)
           // Move player character to the right.
           e.preventDefault()
-          $input.moveRight()
+          // Disallow event from firing repeatedly on hold
+          if (!_input.isKeyHeldDown(e.which)) {
+            $input.moveRight()
+            _input.recordHeldKey(e.which)
+          }
           break
         // **** CHAT ****
         case 84:  // 't'
@@ -426,19 +447,19 @@ var $input = $game.$input = module.exports = {
 
   // Wrapper functions for inputs and interactions
   moveUp: function () {
-    $game.$player.moveUp()
+    $game.$player.moveStraight('up')
   },
 
   moveDown: function () {
-    $game.$player.moveDown()
+    $game.$player.moveStraight('down')
   },
 
   moveLeft: function () {
-    $game.$player.moveLeft()
+    $game.$player.moveStraight('left')
   },
 
   moveRight: function () {
-    $game.$player.moveRight()
+    $game.$player.moveStraight('right')
   },
 
   focusChatInput: function () {
@@ -707,6 +728,24 @@ var _input = {
   isKeyInputAccepted: function () {
     // TODO: There may be other conditions to test whether keypad input should be accepted.
     return (!$('input, textarea').is(':focus')) ? true : false
+  },
+
+  // Remember if any keys are held down, to prevent
+  // repeated firings of certain keys
+  keysHeld: {},
+
+  isKeyHeldDown: function (keycode) {
+    return (keycode in this.keysHeld)
+  },
+
+  recordHeldKey: function (keycode) {
+    if (keycode) {
+      this.keysHeld[keycode] = true
+    }
+  },
+
+  deleteHeldKey: function (keycode) {
+    delete this.keysHeld[keycode]
   },
 
   // Inputs for game activities

@@ -160,7 +160,7 @@ var $botanist = $game.$botanist = {
     // Potential fix is to build in callback functions to beginMove to allow a queue of actions to be
     // performed when a character has finished moving.
     var location = $game.$map.masterToLocal(71, 74)   // An arbitrary location by the Botanist
-    $game.$player.beginMove(location.x, location.y)
+    $game.$player.beginMove(location)
 
     // Behavior for if player has completed level 4
     if (level === 4) {

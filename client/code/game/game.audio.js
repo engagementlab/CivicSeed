@@ -38,8 +38,7 @@ var _soundtracks = [],
       {location: {x: 35, y: 90}, sounds: ['portBells', 'foghorn', 'bird2'], prox: {x:25, y:20}, chance: 0.1}
 
     ],
-    _currentLoop = null,
-    _currentPos = null
+    _currentLoop = null
 
 var $audio = $game.$audio = {
 
@@ -83,7 +82,6 @@ var $audio = $game.$audio = {
     _midTransition = false
     _extension = null
     _currentLoop = null
-    _currentPos = null
 
     $game.$audio.ready= false
     $game.$audio.isMute = $game.$player.isMuted
@@ -273,8 +271,7 @@ var $audio = $game.$audio = {
     }, ranDelay)
   },
 
-  update: function (position) {
-    _currentPos = position  // {x, y} value
+  update: function () {
     var trackNum = _audio.whichTrack(),
         message  = 'Entering '
 
@@ -472,8 +469,9 @@ var _audio = {
   },
 
   getProximity: function (location, prox) {
-    var distX = Math.abs(_currentPos.x - location.x),
-        distY = Math.abs(_currentPos.y - location.y)
+    var currentPosition = $game.$player.getPosition()
+    var distX = Math.abs(currentPosition.x - location.x),
+        distY = Math.abs(currentPosition.y - location.y)
 
     return (distX < prox.x && distY < prox.y) ? true : false
   },

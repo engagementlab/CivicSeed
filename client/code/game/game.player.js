@@ -155,7 +155,7 @@ var $player = $game.$player = {
     $game.$player.seedMode = false
   },
 
-  //calculate movements and what to render for every game tick
+  // Calculate movements and what to render for every game tick
   update: function () {
     if ($game.flags.check('is-moving') === true) {
       _move()
@@ -169,16 +169,16 @@ var $player = $game.$player = {
     }
   },
 
-  //clear the character canvas to ready for redraw
+  // Clear the character canvas to ready for redraw
   clear: function () {
     $game.$render.clearCharacter(_renderInfo)
   },
 
   // Start a movement -> pathfind
   // Decide if we need to load new viewport, or if we are going to visit an NPC
-  beginMove: function (x, y) {
+  // targetPosition is an object containing {x: xLocalPosition, y: yLocalPosition }
+  beginMove: function (targetPosition) {
     var localPosition  = $player.getLocalPosition(),
-        targetPosition = {x: x, y: y},
         path
 
     // Clear HUD
@@ -209,30 +209,26 @@ var $player = $game.$player = {
       }
 
       if (path.length > 0) {
-        // Check if it is an edge of the world
-        var isEdge = $game.$map.isMapEdge(x, y)
-
-        // Reset transition flag
+        // Reset flags, in case they were set by a previous move
+        // and now needs to be cancelled.
         $game.flags.unset('screen-will-transition')
 
-        if (isEdge) {
-          $game.alert('Edge of the world!')
-        } else if (x === 0 || x === $game.VIEWPORT_WIDTH - 1 || y === 0 || y === $game.VIEWPORT_HEIGHT - 1) {
-          // If a transition is necessary, load new data
+        // If a transition is necessary, preload data for loading next screen
+        // No transition occurs if this is the edge of the game map
+        // We do this here instead of at _endMove() to cut down on load time
+        if ((targetPosition.x === 0 ||
+            targetPosition.x === $game.VIEWPORT_WIDTH - 1 ||
+            targetPosition.y === 0 ||
+            targetPosition.y === $game.VIEWPORT_HEIGHT - 1) &&
+            $game.$map.isMapEdge(targetPosition) === false) {
           $game.flags.set('screen-will-transition')
-          $game.$map.calculateNext(x, y)
+          $game.$map.calculateNext(targetPosition.x, targetPosition.y)
         }
 
         _sendMoveInfo(path)
 
-        ss.rpc('game.player.movePlayer', path, $game.$player.id, function () {
-          var targetTile = {
-                x: $game.$map.currentTiles[targetPosition.x][targetPosition.y].x,
-                y: $game.$map.currentTiles[targetPosition.x][targetPosition.y].y
-              }
-
-          $game.$audio.update(targetTile)
-        })
+        // Send update to server so everyone else gets your path
+        ss.rpc('game.player.movePlayer', path, $game.$player.id)
       } else {
         _endMove()
       }
@@ -241,24 +237,56 @@ var $player = $game.$player = {
     }
   },
 
-  moveUp: function () {
-    var location = $player.getLocalPosition()
-    $game.$player.beginMove(location.x, location.y - 1)
-  },
+  moveStraight: function (direction) {
+    // Get current local position
+    // If player is moving, start calculation from next move in series
+    // Else, use current position
+    if ($player.seriesOfMoves.length > 0) {
+      var location = $game.$map.masterToLocal($player.seriesOfMoves[0].masterX, $player.seriesOfMoves[0].masterY)
+    } else {
+      var location = $player.getLocalPosition()
+    }
 
-  moveDown: function () {
-    var location = $player.getLocalPosition()
-    $game.$player.beginMove(location.x, location.y + 1)
-  },
+    var targetPosition
 
-  moveLeft: function () {
-    var location = $player.getLocalPosition()
-    $game.$player.beginMove(location.x - 1, location.y)
-  },
+    // Using target direction,
+    // analyze grid until we hit any tile with state above 0 (Go)
+    // and that becomes our new target position
+    switch (direction) {
+      case 'up':
+        var y = location.y
+        while (y >= 0 && $game.$map.currentTiles[location.x][y].tileState === 0) {
+          targetPosition = { x: location.x, y: y }
+          y--
+        }
+        break
+      case 'down':
+        var y = location.y
+        while (y <= $game.VIEWPORT_HEIGHT - 1 && $game.$map.currentTiles[location.x][y].tileState === 0) {
+          targetPosition = { x: location.x, y: y }
+          y++
+        }
+        break
+      case 'left':
+        var x = location.x
+        while (x >= 0 && $game.$map.currentTiles[x][location.y].tileState === 0) {
+          targetPosition = { x: x, y: location.y }
+          x--
+        }
+        break
+      case 'right':
+        var x = location.x
+        while (x <= $game.VIEWPORT_WIDTH - 1 && $game.$map.currentTiles[x][location.y].tileState === 0) {
+          targetPosition = { x: x, y: location.y }
+          x++
+        }
+        break
+    }
 
-  moveRight: function () {
-    var location = $player.getLocalPosition()
-    $game.$player.beginMove(location.x + 1, location.y)
+    // Send move target position through beginMove()
+    // beginMove() handles logic on what to do once the player
+    // reaches that destination
+    $game.$player.beginMove(targetPosition)
   },
 
   // Moves the player as the viewport transitions
@@ -1501,11 +1529,15 @@ function _sendMoveInfo (moves) {
   }
 }
 
-//when a move is done, decide waht to do next (if it is a transition) and save position to DB
+// When a move is done, decide what to do next (if it is a transition)
 function _endMove () {
-  _player.savePosition({x: _info.x, y: _info.y})
+  // Save position to database
+  _player.savePosition({
+    x: _info.x,
+    y: _info.y
+  })
 
-  //put the character back to normal position
+  // Put the character back to normal position
   _info.offX = 0
   _info.offY = 0
   _info.srcX = 0
@@ -1513,14 +1545,23 @@ function _endMove () {
   _info.prevOffX = 0
   _info.prevOffY = 0
 
+  // Are we at the edge of the world?
+  if ($game.$map.isMapEdge($player.getLocalPosition()) === true) {
+    $game.alert('Edge of the world!')
+  }
+
+  // Transition screen if the player can move to the next screen
   if ($game.flags.check('screen-will-transition') === true) {
     $game.beginTransition()
-  } else {
-    // Activate NPC
-    // npcOnDeck can equal zero so be sure to check against boolean, rather than falsy
-    if ($game.$player.npcOnDeck !== false) {
-      $game.$npc.activate($game.$player.npcOnDeck)
-    }
+  }
+
+  // Update music
+  $game.$audio.update()
+
+  // Activate NPC
+  // npcOnDeck can equal zero so be sure to check against boolean, rather than falsy
+  if ($game.$player.npcOnDeck !== false) {
+    $game.$npc.activate($game.$player.npcOnDeck)
   }
 
   $game.flags.unset('is-moving')

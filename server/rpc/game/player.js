@@ -324,7 +324,7 @@ exports.actions = function (req, res, ss) {
     },
 
     movePlayer: function (moves, id) {
-      //send out the moves to everybody
+      // Send out the moves to everybody
       ss.publish.channel(req.session.game.instanceName,'ss-playerMoved', {moves: moves, id: id})
       res(true)
     },

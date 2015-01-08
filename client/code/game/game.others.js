@@ -23,8 +23,8 @@ var self = $game.$others = (function () {
     this.currentStepIncX  = 0
     this.currentStepIncY  = 0
     this.curFrame         = 0
-    this.numFrames        = 4
-    this.numSteps         = 8
+    this.numFrames        = 4 // TODO: Should be a constant
+    this.numSteps         = 8 // TODO: Should be a constant
     this.direction        = 0
     this.idleCounter      = 0
     this.chatId           = 'player' + player._id
@@ -212,15 +212,15 @@ var self = $game.$others = (function () {
       this.info.offY = this.currentStep * this.currentStepIncY
 
       //try only changing the src (frame) every X frames
-      if ((this.currentStep-1)%8 === 0) {
+      if ((this.currentStep -1) % 8 === 0) {
         this.curFrame += 1
         if (this.curFrame >= this.numFrames) {
           this.curFrame = 0
         }
       }
 
-      this.info.srcX = this.curFrame * $game.TILE_SIZE
-      this.info.srcY =  this.direction * $game.TILE_SIZE*2
+      this.info.srcX = this.curFrame  * $game.TILE_SIZE
+      this.info.srcY = this.direction * $game.TILE_SIZE * 2
     }
   }
 

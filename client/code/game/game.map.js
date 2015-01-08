@@ -73,8 +73,8 @@ var $map = $game.$map = {
   },
 
   // Return true if player is on the edge of the world
-  isMapEdge: function (x, y) {
-    return $game.$map.currentTiles[x][y].isMapEdge
+  isMapEdge: function (localPosition) {
+    return $game.$map.currentTiles[localPosition.x][localPosition.y].isMapEdge
   },
 
   //put new color on the map
@@ -275,6 +275,14 @@ var $map = $game.$map = {
       return local
     } else {
       return false
+    }
+  },
+
+  // Convert local position in {x, y} coordinates to master map coordinates
+  localToMaster: function (localPosition) {
+    return {
+      x: $map.currentTiles[localPosition.x][localPosition.y].x,
+      y: $map.currentTiles[localPosition.x][localPosition.y].y
     }
   },
 

@@ -58,7 +58,7 @@ $game.$mouse = (function () {
       if ($game.$player.seedMode) {
         $game.$boss.dropSeed({ x: _curX, y: _curY })
       } else {
-        $game.$player.beginMove(_curX, _curY)
+        $game.$player.beginMove({ x: _curX, y: _curY })
       }
     } else {
 
@@ -111,7 +111,7 @@ $game.$mouse = (function () {
         switch (state) {
           // Go (occupyable) tile
           case 0:
-            $game.$player.beginMove(_curX, _curY)
+            $game.$player.beginMove({ x: _curX, y: _curY })
             break
           // No-go tile, do nothing.
           case 1:
@@ -130,7 +130,7 @@ $game.$mouse = (function () {
             // Move player character to bottom left of NPC
             // TODO: Better positioning logic - sometimes this space is not occupyable,
             // and this interrupts the process.
-            $game.$player.beginMove(_curX - 2, _curY + 1)
+            $game.$player.beginMove({ x: _curX - 2, y: _curY + 1 })
             break
           // Botanist
           case 3:
