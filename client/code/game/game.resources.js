@@ -695,8 +695,8 @@ var _resources = {
         // Add buttons
         _addButton('answer')
 
-        // No back button for resume type questions
-        if (resource.questionType !== 'resume') {
+        // No back button for questions without articles to view
+        if (resource.url !== '') {
           _addButton('back', 1, slides - 1, function () {
             // If they were answering an open question, store their answer if the player goes back
             if (resource.questionType === 'open') {
