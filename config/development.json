@@ -8,6 +8,6 @@
   "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "",
   "MUGSHOTS_S3_BUCKET": "civicseeders",
-  "SURVEY_PREGAME_LINK": "http://bit.ly/CivicSeed",
-  "SURVEY_POSTGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_5b4GhL39bB7T8nb"
+  "SURVEY_PREGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j",
+  "SURVEY_POSTGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l"
 }
