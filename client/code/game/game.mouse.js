@@ -89,13 +89,6 @@ $game.$mouse = (function () {
         // Determine what to do with a clicked tile
         // TODO: Move this logic outside of mouse interaction?
 
-        // TODO: Does pathfinding flag check happen here?
-        /*
-        if ($game.flags.check('pathfinding')) {
-          return
-        }
-        */
-
         // Cancel out of an existing NPC chat bubble if it exists
         // TODO: this is here?
         if ($game.flags.check('npc-chatting')) {
@@ -118,13 +111,8 @@ $game.$mouse = (function () {
             break
           // NPC
           case 2:
-            // Get the npcId sitting at this tile - TODO
+            // Get the npcId sitting at this tile
             var npcId = $game.$map.currentTiles[_curX][_curY].npcId
-            // If npcId is zero, we might need to get the npcId from the tile below.
-            if (npcId === 0) {
-              npcId = $game.$map.currentTiles[_curX][_curY+1].npcId
-            }
-
             $game.$npc.select(npcId)
 
             // Move player character to bottom left of NPC

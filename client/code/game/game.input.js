@@ -328,6 +328,33 @@ var $input = $game.$input = module.exports = {
     // Clear key from being held, if it is
     $BODY.keyup(function (e) {
       _input.deleteHeldKey(e.which)
+
+      switch(e.which) {
+        case 87:  // 'w'
+        case 38:  // 'up arrow', 'numpad 2' (numlock on)
+        case 104: // 'numpad 2' (numlock off)
+        case 56:  // 'numpad 2' (numlock off/opera)
+        case 65:  // 'a'
+        case 37:  // 'left arrow', 'numpad 4'
+        case 100: // 'numpad 4' (numlock off)
+        case 52:  // 'numpad 4' (numlock off/opera)
+        case 83:  // 's'
+        case 40:  // 'down arrow', 'numpad 8'
+        case 98:  // 'numpad 8' (numlock off)
+        case 50:  // 'numpad 8' (numlock off/opera)
+        case 68:  // 'd'
+        case 39:  // 'right arrow', 'numpad 6'
+        case 102: // 'numpad 6' (numlock off)
+        case 54:  // 'numpad 6' (numlock off/opera)
+          e.preventDefault()
+          // Any of these, if unheld, immediately stops movement
+          $game.$player.moveStop()
+          // And then remove scroll prevention
+          $('body').css('overflow', 'auto')
+        default:
+          // Nothing
+          break
+      }
     })
 
     $BODY.keydown(function (e) {
@@ -356,8 +383,10 @@ var $input = $game.$input = module.exports = {
           e.preventDefault()
           // Disallow event from firing repeatedly on hold
           if (!_input.isKeyHeldDown(e.which)) {
-            $input.moveUp()
+            $game.$player.moveStraight('up')
             _input.recordHeldKey(e.which)
+            // Prevent window scroll
+            $('body').css('overflow', 'hidden')
           }
           break
         case 65:  // 'a'
@@ -368,11 +397,13 @@ var $input = $game.$input = module.exports = {
           e.preventDefault()
           // Disallow event from firing repeatedly on hold
           if (!_input.isKeyHeldDown(e.which)) {
-            $input.moveLeft()
+            $game.$player.moveStraight('left')
             _input.recordHeldKey(e.which)
+            // Prevent window scroll
+            $('body').css('overflow', 'hidden')
           }
           break
-        case 83:  // 'a'
+        case 83:  // 's'
         case 40:  // 'down arrow', 'numpad 8'
         case 98:  // 'numpad 8' (numlock off)
         case 50:  // 'numpad 8' (numlock off/opera)
@@ -380,8 +411,10 @@ var $input = $game.$input = module.exports = {
           e.preventDefault()
           // Disallow event from firing repeatedly on hold
           if (!_input.isKeyHeldDown(e.which)) {
-            $input.moveDown()
+            $game.$player.moveStraight('down')
             _input.recordHeldKey(e.which)
+            // Prevent window scroll
+            $('body').css('overflow', 'hidden')
           }
           break
         case 68:  // 'd'
@@ -392,8 +425,10 @@ var $input = $game.$input = module.exports = {
           e.preventDefault()
           // Disallow event from firing repeatedly on hold
           if (!_input.isKeyHeldDown(e.which)) {
-            $input.moveRight()
+            $game.$player.moveStraight('right')
             _input.recordHeldKey(e.which)
+            // Prevent window scroll
+            $('body').css('overflow', 'hidden')
           }
           break
         // **** CHAT ****
@@ -443,23 +478,6 @@ var $input = $game.$input = module.exports = {
           break
       }
     })
-  },
-
-  // Wrapper functions for inputs and interactions
-  moveUp: function () {
-    $game.$player.moveStraight('up')
-  },
-
-  moveDown: function () {
-    $game.$player.moveStraight('down')
-  },
-
-  moveLeft: function () {
-    $game.$player.moveStraight('left')
-  },
-
-  moveRight: function () {
-    $game.$player.moveStraight('right')
   },
 
   focusChatInput: function () {

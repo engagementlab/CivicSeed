@@ -108,36 +108,29 @@ module.exports = {
     }
   },
 
-  saveNpcTilestate: function (model, npcData, callback) {
-    var tileModel = model,
-        i = 0
+  saveNpcTilestate: function (tileModel, npcData, callback) {
+    var tilesToSave = []
 
-    function saveTile (index) {
-      var npc = npcData[index]
+    for (var i = 0; i < npcData.length; i++) {
+      var npc = npcData[i]
 
       tileModel
         .where('x').equals(npc.position.x)
-        .where('y').equals(npc.position.y)
+        .where('y').in([npc.position.y, npc.position.y - 1])
         .find(function (err, tiles) {
           if (err) {
             callback(err)
           }
 
-          var tile = tiles[0]
-          tile.tileState = 2
-          tile.npcId = npc.id
-          tile.save(function (err, success) {
-            index++
-            if (index < npcData.length) {
-              saveTile(index)
-            } else {
-              callback()
-            }
-          })
-        })
+          for (var j = 0; j < tiles.length; j++) {
+            tiles[j].tileState = 2
+            tiles[j].npcId = this.npc.id
+            tiles[j].save(function (err, success) {
+            })
+          }
+        }.bind({npc: npc}))
     }
-
-    saveTile(i)
+    callback()
   }
 
 }

@@ -8,6 +8,10 @@ exports.actions = function (req, res, ss) {
   var npcModel  = ss.service.db.model('Npc'),
       tileModel = ss.service.db.model('Tile')
 
+  // TODO BUG
+  // This does not properly save the y-1 tile with the correct NPC state and ID
+  // Most of this should be refactored anyway because this is callback hell
+
   var npcHelpers = {
     addNpcTile: function (position, callback) {
       tileModel

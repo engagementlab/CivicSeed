@@ -211,6 +211,19 @@ var $game = module.exports = {
 
   // Starts a transition from one viewport to another
   beginTransition: function () {
+    // Verify that the player is at the edge of a screen
+    // Refuse transition if player is not at a transitional edge
+    // This catches bugs
+    var position = $game.$player.getLocalPosition()
+    if (!(position.x === 0 ||
+        position.x === $game.VIEWPORT_WIDTH - 1 ||
+        position.y === 0 ||
+        position.y === $game.VIEWPORT_HEIGHT - 1) &&
+        $game.$map.isMapEdge(position) === false) {
+      $game.flags.unset('screen-will-transition')
+      return false
+    }
+
     $game.flags.set('screen-transition')
     $game.flags.unset('screen-will-transition')
 

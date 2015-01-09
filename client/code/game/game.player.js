@@ -262,9 +262,10 @@ var $player = $game.$player = {
         break
       case 'down':
         var y = location.y
-        while (y <= $game.VIEWPORT_HEIGHT - 1 && $game.$map.currentTiles[location.x][y].tileState === 0) {
+        while ((y <= $game.VIEWPORT_HEIGHT - 1) && $game.$map.currentTiles[location.x][y].tileState === 0) {
           targetPosition = { x: location.x, y: y }
           y++
+          console.log(targetPosition)
         }
         break
       case 'left':
@@ -276,7 +277,7 @@ var $player = $game.$player = {
         break
       case 'right':
         var x = location.x
-        while (x <= $game.VIEWPORT_WIDTH - 1 && $game.$map.currentTiles[x][location.y].tileState === 0) {
+        while ((x <= $game.VIEWPORT_WIDTH - 1) && $game.$map.currentTiles[x][location.y].tileState === 0) {
           targetPosition = { x: x, y: location.y }
           x++
         }
@@ -287,6 +288,10 @@ var $player = $game.$player = {
     // beginMove() handles logic on what to do once the player
     // reaches that destination
     $game.$player.beginMove(targetPosition)
+  },
+
+  moveStop: function () {
+    $player.seriesOfMoves.splice(1, Number.MAX_VALUE)
   },
 
   // Moves the player as the viewport transitions

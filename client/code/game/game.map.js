@@ -55,21 +55,12 @@ var $map = $game.$map = {
     }
   },
 
-  //return if a tile is go or nogo (with special exception for NPCs)
+  // Returns tilestate
   getTileState: function (localPosition) {
     var x = localPosition.x,
         y = localPosition.y
 
-    var tileStateVal = $game.$map.currentTiles[x][y].tileState
-    //must first do a check to see if the tile BOTTOM is the npc
-    //if so, then return npc val (THIS IS A HACK SORT OF)
-    if ( y < $game.VIEWPORT_HEIGHT - 1) {
-      var belowState = $game.$map.currentTiles[x][y+1].tileState
-      if (belowState === 2) {
-        tileStateVal = belowState
-      }
-    }
-    return tileStateVal
+    return $game.$map.currentTiles[x][y].tileState
   },
 
   // Return true if player is on the edge of the world
