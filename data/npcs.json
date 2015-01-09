@@ -452,7 +452,7 @@
     },
     "dialog": {
       "prompts": [
-        "You seen my bro, Framp? Hamp loves Framp. If you are gonna help our community you gotta let us help too! Let me share some knowledge with you.",
+        "Did you know Chinatown is the most densely populated neighborhood of Boston? It’s history is pretty amazing. Let me share some knowledge with you.",
         "Yo you gotta get this right before I can help you.",
         "My bro Framp said you were alright. I’m glad we got someone who wants to work with us."
       ],
@@ -664,8 +664,8 @@
     },
     "dialog": {
       "prompts": [
-        "Hello there! Have you ever thought about how the alphabet would sound if it was one big word? Something like “ab-keddef-gajihkel-monop-quristuv-wixyz.” My head hurts just saying that! Anyway, I found this unusual looking thing. I will give it to you, but first I have make sure you will use it properly.",
-        "You’re silly. Maybe you should say that alphabet-word out loud. Or at least answer that question for me.",
+        "Somerville may be famous for its hipsters and farm-to-table restaurants these days, but there’s a lot more to it than that. Let’s talk about the real Somerville.",
+        "Yeah, that was a lot of information. Why don’t you take another look?",
         "You are the best! Make good use of that shape."
       ],
       "smalltalk": []
@@ -761,7 +761,7 @@
       "prompts": [
         "Bloop dee doop bloop! Beep boop? Oh. Sorry. You don’t speak bloopian. What I said was: Are you here to help us? If so, I think we can help you help us!",
         "This bloopin’ thing won’t answer itself!",
-        "If you haven’t already talked to Zeebo, I bet he has some junk you could use to fix this mess!"
+        "If you haven’t already talked to Katamari, I bet he has some junk you could use to fix this mess!"
       ],
       "smalltalk": []
     },
@@ -2003,22 +2003,19 @@
       "shape": "correct5",
       "questionType": "open",
       "answer": "",
-      "question": "What is the answer?",
-      "feedbackRight": "Nice job.",
-      "feedbackWrong": "Not quite.",
+      "question": "You’ve learned a lot about the host community you chose. Now it’s time to think about all the assets, challenges, and tips the stakeholders discussed. Select one of them that stuck with you and share it here, along with why you think it is important. If necessary, you can go back and review the resource.",
+      "requiredLength": 150,
+      "feedbackRight": "Excellent. Here's the piece you were looking for. Remember: it only for good.",
+      "feedbackWrong": "",
       "possibleAnswers": []
     },
     "dialog": {
       "prompts": [
-        "Answer my question?",
-        "OH GOOD YOU GOTS THE COMMUNTIY NPC THING",
-        "Welcome back."
+        "[First time message is hijacked by custom code. Do not edit.]",
+        "Ah, welcome back. I see you’ve got the knowledge needed to answer my question. Are you ready?",
+        "Always nice to see a familiar face! Hope you found that piece useful. Take care, and watch out for robots."
       ],
-      "smalltalk": [
-        "What up? I work for the Botanist. Big B. doesn’t know it, but I’m gunning for the Head Botanist job. Anyway, once you think you have the right pieces, go back to the garden in the center of the world. That’s the Botanist’s ugly mug at the center of the mini map. The little colored dot is you. You’re in the Forest right now, in the northwest section of the world.",
-        "What up? I work for the Botanist. Big B. doesn’t know it, but I’m gunning for the Head Botanist job. Anyway, once you think you have the right pieces, go back to the garden in the center of the world. That’s the Botanist’s ugly mug at the center of the mini map. The little colored dot is you. You’re in the Forest right now, in the northwest section of the world.",
-        ""
-      ]
+      "smalltalk": []
     },
     "position": {
       "x": 97,

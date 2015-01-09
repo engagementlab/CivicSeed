@@ -203,16 +203,15 @@ var self = $game.$npc = (function () {
       var promptIndex = $game.$player.getPrompt(npc.resource.id),
           dialogue    = npc.dialog.prompts[promptIndex]
 
-      // If the NPC is holding a resource and the resource is not
-      // a resume question type, then ask the player if they want
-      // to review the resource article content
-      if (promptIndex === 2 && npc.resource.questionType !== 'resume') {
+      // If the NPC is holding a resource with content, then ask the
+      // player if they want to review the resource article content
+      if (promptIndex === 2 && npc.resource.url !== '') {
         dialogue += ' Want to view again?'
       }
 
-      // If the NPC is holding a resource and the resource IS a
-      // resume question type, then do not allow any resource to display
-      if (promptIndex === 2 && npc.resource.questionType === 'resume') {
+      // If the NPC is holding a resource and the resource has no
+      // content URL, then do not allow any resource to display
+      if (promptIndex === 2 && npc.resource.url === '') {
         self.showSpeechBubble(npc.name, dialogue)
       } else {
         // Show the prompt smalltalk and then follow up by showing

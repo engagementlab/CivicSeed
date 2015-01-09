@@ -129,6 +129,9 @@ var $resources = $game.$resources = {
 
   // Called when player views a resource from inventory
   examineResource: function (id) {
+    // If an id is called without a resource.url, then bail
+    if (_resources.data[id].url === '') return
+
     // HIDES (not closes) the inventory, then show resource
     // Set a flag that remembers we were in the inventory
     $game.flags.set('viewing-inventory')
