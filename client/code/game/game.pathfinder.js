@@ -59,6 +59,13 @@ var self = $game.$pathfinder = (function () {
 
     // Calculate a path using pathfinding
     findPath: function (currentPosition, targetPosition) {
+      // Catch errors where currentPosition or targetPosition are bad
+      if (!currentPosition || !targetPosition) {
+        console.error('Bad data passed to pathfinder module.', 'currentPosition: ', currentPosition, '; targetPosition: ', targetPosition)
+        apprise('Something went wrong. Please refresh your browser window.')
+        return
+      }
+
       var start = _graph.grid[currentPosition.y][currentPosition.x],
           end   = _graph.grid[targetPosition.y][targetPosition.x]
 

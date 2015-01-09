@@ -202,7 +202,7 @@ var $player = $game.$player = {
       // Find path
       // If player is already moving, the start point of the path is the point of next move in the series
       // Otherwise, use the player's current local position
-      if ($game.flags.check('is-moving')) {
+      if ($player.seriesOfMoves[0]) {
         path = $game.$pathfinder.findPath($game.$map.masterToLocal($player.seriesOfMoves[0].masterX, $player.seriesOfMoves[0].masterY), targetPosition)
       } else {
         path = $game.$pathfinder.findPath(localPosition, targetPosition)
@@ -265,7 +265,6 @@ var $player = $game.$player = {
         while ((y <= $game.VIEWPORT_HEIGHT - 1) && $game.$map.currentTiles[location.x][y].tileState === 0) {
           targetPosition = { x: location.x, y: y }
           y++
-          console.log(targetPosition)
         }
         break
       case 'left':
