@@ -384,6 +384,19 @@ var _resources = {
         $('.resume-form').submit(function (e) {
           // Prevent actual submittal
           e.preventDefault()
+
+          // Submit form contents as a string to rpc
+
+          // Why does this happen twice?
+          // TODO: fix this
+          // Temporarily (?) hijacked by getAnswer() to save to answer field 
+          var formContents = $(this).serialize()
+          console.log(formContents)
+          ss.rpc('game.player.saveResumeAnswer', {
+            id: $game.$player.id,
+            form: formContents
+          })
+
           // Find the answer button and trigger click action on it
           $('#resource-area .buttons .answer-button').click()
         })
@@ -976,6 +989,8 @@ var _resources = {
   getAnswer: function (resource) {
     if (resource.questionType === 'open') {
       return document.getElementById('resource-area').querySelector('.open-response').value.trim()
+    } else if (resource.questionType === 'resume') {
+      return $('.resume-form').serialize()
     } else {
       return $('input[name=resourceMultipleChoice]:checked').val()
     }

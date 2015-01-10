@@ -645,6 +645,10 @@ exports.actions = function (req, res, ss) {
     changeSkinSuit: function (info) {
       dbHelpers.saveInfo(info)
       ss.publish.channel(req.session.game.instanceName,'ss-skinSuitChange', info)
+    },
+
+    saveResumeAnswer: function (info) {
+      console.log(info.form)
     }
   }
 }
