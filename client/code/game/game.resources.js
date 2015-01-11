@@ -283,6 +283,10 @@ var _resources = {
     // Otherwise, go get that resource article and pre-load it!
     ss.rpc('game.resource.get', resource.url, function (html) {
       $('#resource-stage').empty().html(html)
+
+      // Look for links and attach _blank target
+      $('#resource-stage').find('a').attr('target', '_blank')
+
       callback()
     })
   },
@@ -458,7 +462,7 @@ var _resources = {
           'Working across Difference',
           'Child Development',
           'Early Literacy',
-          'Languages (specify _______________)',
+          'Languages (you can add specifics later)',
           'ESL Instruction',
           'Nutrition / Food Preparation / Food Security Support',
           'Qualitative Data Collection – Interview / Focus Groups',
@@ -475,11 +479,11 @@ var _resources = {
           'Performing Arts',
           'Community Outreach / Recruitment',
           'Working with Underserved Populations',
-          'Client Support (specify ______________)',
+          'Client Support (you can add specifics later)',
           'CPR',
           'Human Subjects / CITI',
           'Familiar with Public Transport',
-          'Other Skill (specify __________________)'
+          'Other Skill (you can add specifics later)'
         ]
 
         for (var i = 0, j = skills.length; i < j; i++) {
