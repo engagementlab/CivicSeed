@@ -642,7 +642,7 @@
           "rewarded": true
         }
       ],
-      "resourcesDiscovered": 34,
+      "resourcesDiscovered": 30,
       "inventory": [
         {
           "name": "correct1",
@@ -1029,6 +1029,45 @@
         {
           "attempts": 1,
           "result": true,
+          "questionType": "multiple",
+          "id": 17525,
+          "tagline": "Use this one",
+          "seeded": [],
+          "answers": [
+            "D) Before you even begin"
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 13246,
+          "tagline": "This is a correct piece",
+          "seeded": [],
+          "answers": [
+            "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "open",
+          "id": 15638,
+          "tagline": "This is one of them",
+          "seeded": [],
+          "answers": [
+            "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
+        },
+        {
+          "attempts": 1,
+          "result": true,
           "questionType": "open",
           "id": 8986,
           "tagline": "This is correct",
@@ -1043,24 +1082,11 @@
           "attempts": 1,
           "result": true,
           "questionType": "multiple",
-          "id": 9536,
-          "tagline": "Wrong square",
+          "id": 13360,
+          "tagline": "Right one",
           "seeded": [],
           "answers": [
-            "D) A daughter of immigrants, bilingual upbringing, latina female"
-          ],
-          "seedsRewarded": 5,
-          "rewarded": true
-        },
-        {
-          "attempts": 1,
-          "result": true,
-          "questionType": "yesno",
-          "id": 8542,
-          "tagline": "This piece is wrong",
-          "seeded": [],
-          "answers": [
-            "yes"
+            "D) All of these"
           ],
           "seedsRewarded": 5,
           "rewarded": true
@@ -1069,20 +1095,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "id": 6265,
-          "tagline": "This is a correct piece",
-          "seeded": [],
-          "answers": [
-            "As the name suggests, object-oriented programming is related to objects. So far, we have used objects as loose aggregations of values, adding and altering their properties whenever we saw fit. In an object-oriented approach, objects are viewed as little worlds of their own, and the outside world may touch them only through a limited and well-defined interface, a number of specific methods and properties. The 'reached list' we used at the end of chapter 7 is an example of this: We used only three functions, makeReachedList, storeReached, and findReached to interact with it. These three functions form an interface for such objects."
-          ],
-          "seedsRewarded": 5,
-          "rewarded": true
-        },
-        {
-          "attempts": 1,
-          "result": true,
-          "questionType": "open",
-          "id": 4693,
+          "id": 13696,
           "tagline": "Nope",
           "seeded": [],
           "answers": [
@@ -1094,34 +1107,8 @@
         {
           "attempts": 1,
           "result": true,
-          "questionType": "multiple",
-          "id": 4284,
-          "tagline": "Don't place this one",
-          "seeded": [],
-          "answers": [
-            "B) downstream-oriented service"
-          ],
-          "seedsRewarded": 5,
-          "rewarded": true
-        },
-        {
-          "attempts": 1,
-          "result": true,
           "questionType": "open",
-          "id": 2569,
-          "tagline": "Use this one",
-          "seeded": [],
-          "answers": [
-            "New Orleans spent decades paving over swampland to bring its people into the 20th century. But as the fallout from Hurricane Katrina made clear, the very infrastructure that modernized the city works against it when disaster strikes. That’s why local architects and advocates have put forth the Greater New Orleans Urban Water Plan, a $6.2 billion effort to give city a 21st-century water management strategy that borrows from, for instance, the Dutch. Reporter Sarah Goodyear asks whether rain gardens, detention ponds, bioswales, porous pavement and the like represent the way forward for a perennially cash-strapped and tradition-bound New Orleans."
-          ],
-          "seedsRewarded": 5,
-          "rewarded": true
-        },
-        {
-          "attempts": 1,
-          "result": true,
-          "questionType": "open",
-          "id": 1608,
+          "id": 14380,
           "tagline": "No not this",
           "seeded": [],
           "answers": [
@@ -1134,20 +1121,7 @@
           "attempts": 1,
           "result": true,
           "questionType": "open",
-          "id": 2176,
-          "tagline": "This is one of them",
-          "seeded": [],
-          "answers": [
-            "Innovators have tried to solve the waiting problem (or the waiting perception problem) in many contexts. This is why dentists deploy fish tanks, and why elevators have mirrors (we like to preen), and why the hostess at many restaurants will intentionally overestimate your wait (you're delighted when it turns out to be shorter). But the stakes are particularly high with transit, because the alternative – taking the car – requires no wait at all."
-          ],
-          "seedsRewarded": 5,
-          "rewarded": true
-        },
-        {
-          "attempts": 1,
-          "result": true,
-          "questionType": "open",
-          "id": 4876,
+          "id": 16920,
           "tagline": "Not a puzzle piece",
           "seeded": [],
           "answers": [
@@ -1155,59 +1129,67 @@
           ],
           "seedsRewarded": 5,
           "rewarded": true
+        },
+        {
+          "attempts": 1,
+          "result": true,
+          "questionType": "truefalse",
+          "id": 15626,
+          "tagline": "Wrong square",
+          "seeded": [],
+          "answers": [
+            "true"
+          ],
+          "seedsRewarded": 5,
+          "rewarded": true
         }
       ],
-      "resourcesDiscovered": 10,
+      "resourcesDiscovered": 39,
       "inventory": [
         {
-          "name": "correct4",
-          "tagline": "This is correct",
-          "id": 8986
-        },
-        {
-          "name": "wrong6",
-          "tagline": "Wrong square",
-          "id": 9536
-        },
-        {
-          "name": "wrong3",
-          "tagline": "This piece is wrong",
-          "id": 8542
+          "name": "correct1",
+          "tagline": "Use this one",
+          "id": 17525
         },
         {
           "name": "correct2",
           "tagline": "This is a correct piece",
-          "id": 6265
-        },
-        {
-          "name": "wrong2",
-          "tagline": "Nope",
-          "id": 4693
-        },
-        {
-          "name": "wrong1",
-          "tagline": "Don't place this one",
-          "id": 4284
-        },
-        {
-          "name": "correct1",
-          "tagline": "Use this one",
-          "id": 2569
-        },
-        {
-          "name": "wrong4",
-          "tagline": "No not this",
-          "id": 1608
+          "id": 13246
         },
         {
           "name": "correct3",
           "tagline": "This is one of them",
-          "id": 2176
+          "id": 15638
+        },
+        {
+          "name": "correct4",
+          "tagline": "This is correct",
+          "id": 16912
+        },
+        {
+          "name": "correct5",
+          "tagline": "Right one",
+          "id": 13360
+        },
+        {
+          "name": "wrong1",
+          "tagline": "Nope",
+          "id": 13696
+        },
+        {
+          "name": "wrong3",
+          "tagline": "No not this",
+          "id": 14380
+        },
+        {
+          "name": "wrong4",
+          "tagline": "Not a puzzle piece",
+          "id": 16920
         },
         {
           "name": "wrong5",
-          "tagline": "Not a puzzle piece",
-          "id": 4876
+          "tagline": "Wrong square",
+          "id": 15626
         }
       ],
       "seeds": {

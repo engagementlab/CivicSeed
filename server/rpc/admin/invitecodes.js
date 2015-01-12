@@ -187,7 +187,6 @@ exports.actions = function (req, res, ss) {
           newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?']
           newGame.leaderboard = []
           newGame.levelNames= ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked']
-          newGame.resourceCount = [8, 8, 9, 9]
           newGame.instanceName = info.instanceName
           newGame.resourceResponses = {}
 

@@ -67,17 +67,33 @@ Tangram.prototype.getCSSColor = function () {
 
 var $resources = $game.$resources = {
 
-  ready:     false,
+  ready: false,
+
+  inventorySlotsPerLevel: {},
 
   //load in all the resources and the corresponding answers
   init: function (callback) {
     // Get all resources
     var response = $game.$npc.getNpcData()
+    var resourceCount = {}
+
     $.each(response, function (key, npc) {
       if (npc.isHolding) {
         _resources.data[npc.resource.id] = new Resource(npc.resource, npc.skinSuit)
+
+        // Set up resource counts per level - used for inventory counts
+        // This only counts resources held by NPCs that will be issued as
+        // inventory pieces (as in, there is a shape)
+        // It does not count resources that do not have shapes (like those that are
+        // attached to a resume question)
+        var resource = _resources.data[npc.resource.id]
+        if (resource.shape !== '') {
+          resourceCount[npc.level] = resourceCount[npc.level] + 1 || 1
+        }
       }
     })
+
+    this.inventorySlotsPerLevel = resourceCount
 
     // Create all tangram pieces - construct an array of all tangram pieces as object prototypes.
     for (var i = 0, j = TANGRAMS.length; i < j; i++) {

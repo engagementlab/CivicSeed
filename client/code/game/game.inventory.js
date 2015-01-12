@@ -29,7 +29,7 @@ var self = $game.inventory = (function () {
   function createInventoryHUDBoxes () {
     var el = document.getElementById('inventory').querySelector('.inventory-boxes')
     while (el.firstChild) el.removeChild(el.firstChild)
-    for (var i = 0; i < $game.resourceCount[$game.$player.currentLevel]; i++) {
+    for (var i = 0; i < $game.$resources.inventorySlotsPerLevel[$game.$player.currentLevel]; i++) {
       var boxEl = document.createElement('div')
       boxEl.classList.add('inventory-box')
       el.appendChild(boxEl)

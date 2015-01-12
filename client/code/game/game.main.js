@@ -50,7 +50,6 @@ var $game = module.exports = {
   currentTiles: [],
   running: false,
   ready: false,
-  resourceCount: [],
   graph: null,
   masterX: null,
   masterY: null,
@@ -158,7 +157,6 @@ var $game = module.exports = {
     $game.flags.unset('screen-transition');
     $game.running = false;
     $game.ready = false;
-    $game.resourceCount = [];
     $game.graph = null;
     $game.masterX = null;
     $game.masterY = null;
@@ -530,7 +528,6 @@ var _game = {
       // regular game mode
       $game.bossModeUnlocked = response.bossModeUnlocked;
 
-      $game.resourceCount = response.resourceCount;
       _stats = {
         seedsDropped: response.seedsDropped,
         seedsDroppedGoal: response.seedsDroppedGoal,

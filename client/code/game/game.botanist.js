@@ -134,7 +134,7 @@ var $botanist = $game.$botanist = {
     $botanist.setState(3)
 
     // If player is holding ALL the pieces obtainable this level, beam the player directly to the Botanist so that they don't keep wasting time.
-    if (inventory.length === $game.resourceCount[$game.$player.currentLevel]) {
+    if (inventory.length === $game.$resources.inventorySlotsPerLevel[$game.$player.currentLevel]) {
       // Immediately lock player from moving
       $game.flags.set('screen-transition')
 

@@ -14,7 +14,6 @@ module.exports = {
       name: String,
       count: Number
     }],
-    resourceCount: [Number],
     instanceName: String,
     resourceResponses: [{
       resourceId: Number,

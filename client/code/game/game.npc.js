@@ -491,7 +491,7 @@ var self = $game.$npc = (function () {
       return _npc.data[npcId]
     },
 
-    //get all npc data
+    // Get all npc data
     getNpcData: function () {
       return _npc.data
     },
