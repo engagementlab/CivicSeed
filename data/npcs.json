@@ -498,7 +498,7 @@
   {
     "dependsOn": null,
     "id": 16,
-    "isHolding": true,
+    "isHolding": false,
     "level": 1,
     "name": "Nosezo",
     "sprite": 16,
@@ -521,7 +521,11 @@
         "Ah. I think you need to try again.",
         "Am I a bird with no wings or a creature with a large nose? What do you think?"
       ],
-      "smalltalk": []
+      "smalltalk": [
+        "Oh my, my — you are very skilled and talented — but you know what? I think you will find those out in the community are too. Look — I can balance a teacup on my head.",
+        "Oh my, my — you are very skilled and talented — but you know what? I think you will find those out in the community are too. Look — I can balance a teacup on my head.",
+        "Oh my, my — you are very skilled and talented — but you know what? I think you will find those out in the community are too. Look — I can balance a teacup on my head."
+      ]
     },
     "position": {
       "x": 72,
@@ -556,7 +560,7 @@
   {
     "dependsOn": null,
     "id": 18,
-    "isHolding": true,
+    "isHolding": false,
     "level": 1,
     "name": "Chiklet",
     "sprite": 18,
@@ -579,7 +583,11 @@
         "We need this relationship to be mutually beneficial!",
         "Thanks for the help. I feel optimistic about the future!"
       ],
-      "smalltalk": []
+      "smalltalk": [
+        "One step, two step, three step — hit the streets and see where your feet lead you. That is what my mama always said to me when going to a new place. Walk on.",
+        "One step, two step, three step — hit the streets and see where your feet lead you. That is what my mama always said to me when going to a new place. Walk on.",
+        "One step, two step, three step — hit the streets and see where your feet lead you. That is what my mama always said to me when going to a new place. Walk on."
+      ]
     },
     "position": {
       "x": 71,
@@ -678,7 +686,7 @@
   {
     "dependsOn": null,
     "id": 22,
-    "isHolding": true,
+    "isHolding": false,
     "level": 1,
     "name": "BeepBoop",
     "skinSuit": "cone",
@@ -701,7 +709,11 @@
         "Still waiting for that answer bub!",
         "I’m glad you are taking the time to learn about our world! By working with us and learning about our history, your help will be so much more appreciated!"
       ],
-      "smalltalk": []
+      "smalltalk": [
+        "Hey you know what this fortune cookie says?  Seek and you shall find.  I think eating some food and talking to some folks wouldn't hurt either.",
+        "Hey you know what this fortune cookie says?  Seek and you shall find.  I think eating some food and talking to some folks wouldn't hurt either.",
+        "Hey you know what this fortune cookie says?  Seek and you shall find.  I think eating some food and talking to some folks wouldn't hurt either."
+      ]
     },
     "position": {
       "x": 99,
@@ -1079,7 +1091,11 @@
         "Get your head out of the dirt and get on this!",
         "Glad I could help. Make sure you talk to everyone else around the ranch. If you find a snack, hit me up."
       ],
-      "smalltalk": []
+      "smalltalk": [
+        "Reflect, reflect, reflect — that’s my mantra. Try it out some time. It is very enlightening. Ohm...",
+        "Reflect, reflect, reflect — that’s my mantra. Try it out some time. It is very enlightening. Ohm...",
+        "Reflect, reflect, reflect — that’s my mantra. Try it out some time. It is very enlightening. Ohm..."
+      ]
     },
     "position": {
       "x": 133,
