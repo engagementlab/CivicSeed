@@ -95,6 +95,20 @@ var $resources = $game.$resources = {
 
     this.inventorySlotsPerLevel = resourceCount
 
+    // HACK
+    // Update the URL of the Master NPC resource, if
+    // the player has obtained one of the community resources
+    if ($game.$player.getResource(4000)) {
+      var communityIDs = [4001, 4002, 4003]
+      for (var i = 0; i < communityIDs.length; i++) {
+        var checkResource = $game.$player.getResource(communityIDs[i])
+        if (checkResource && checkResource.rewarded === true && checkResource.attempts > 0) {
+          $game.$resources.get(4000).url = communityIDs[i].toString()
+          break
+        }
+      }
+    }
+
     // Create all tangram pieces - construct an array of all tangram pieces as object prototypes.
     for (var i = 0, j = TANGRAMS.length; i < j; i++) {
       _tangrams.push(new Tangram(TANGRAMS[i]))

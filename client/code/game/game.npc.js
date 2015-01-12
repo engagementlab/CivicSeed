@@ -200,24 +200,25 @@ var self = $game.$npc = (function () {
     //  1: player has previously visited, but provided a wrong answer
     //  2: player has correctly answered and collected this resource
     createPrompt: function (npc) {
-      var promptIndex = $game.$player.getPrompt(npc.resource.id),
-          dialogue    = npc.dialog.prompts[promptIndex]
+      var promptIndex = $game.$player.getPrompt(npc.resource.id)
+      var dialogue    = npc.dialog.prompts[promptIndex]
+      var resource    = $game.$resources.get(npc.resource.id)
 
       // If the NPC is holding a resource with content, then ask the
       // player if they want to review the resource article content
-      if (promptIndex === 2 && npc.resource.url !== '') {
+      if (promptIndex === 2 && resource.url !== '') {
         dialogue += ' Want to view again?'
       }
 
       // If the NPC is holding a resource and the resource has no
       // content URL, then do not allow any resource to display
-      if (promptIndex === 2 && npc.resource.url === '') {
+      if (promptIndex === 2 && resource.url === '') {
         self.showSpeechBubble(npc.name, dialogue)
       } else {
         // Show the prompt smalltalk and then follow up by showing
         // the resource article / question window
         self.showSpeechBubble(npc.name, dialogue, function () {
-          $game.$resources.showResource(npc.resource.id)
+          $game.$resources.showResource(resource.id)
         })
       }
     }
