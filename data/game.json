@@ -9,9 +9,9 @@
     "leaderboard": [],
     "resourceCount": [
       8,
-      10,
       8,
-      10
+      9,
+      9
     ],
     "instanceName": "test",
     "resourceResponses": []
@@ -26,9 +26,9 @@
     "leaderboard": [],
     "resourceCount": [
       8,
-      10,
       8,
-      10
+      9,
+      9
     ],
     "instanceName": "demo",
     "resourceResponses": []
@@ -43,9 +43,9 @@
     "leaderboard": [],
     "resourceCount": [
       8,
-      10,
       8,
-      10
+      9,
+      9
     ],
     "instanceName": "boss",
     "resourceResponses": []
