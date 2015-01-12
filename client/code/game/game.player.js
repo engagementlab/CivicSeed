@@ -935,7 +935,8 @@ var $player = $game.$player = {
     // Hack for community inventory items
     // Dummy data for other resources
     var ids = [4001, 4002, 4003],
-        bunchOfResources = []
+        bunchOfResources = [],
+        masterNpcResource = _resources[4000]
 
     for (var i = 0; i < ids.length; i++) {
       if (ids[i] === answeredResourceId) continue
@@ -948,13 +949,22 @@ var $player = $game.$player = {
             questionType: null,
             skinSuit:     null,
             correct:      true,
-            rewarded:     true,
+            rewarded:     false,
             tagline:      null
           }
 
       var dummyResource = $player.saveResourceLocally(dummyData)
       bunchOfResources.push(dummyResource)
     }
+
+    // Also: the Master NPC resource article will be directed
+    // to a resource equal to the 400x range, which are the
+    // videos about that community.
+    masterNpcResource.url = answeredResourceId.toString()
+    bunchOfResources.push(dummyResource)
+
+    // Also update on resources
+    $game.$resources.get(4000).url = answeredResourceId.toString()
 
     ss.rpc('game.player.saveMoreThanOneResource', {
       id:        $player.id,

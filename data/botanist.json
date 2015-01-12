@@ -86,8 +86,8 @@
     },
     {
       "instructions": [
-        "Ah, the color has not yet been restored to the world. You can use your remaining seeds to help it out.",
-        "I will contact you when the color has returned to the world."
+        "Ah, the color has not yet been restored to the world. If you have any seeds left, you can use them to help out. If you’ve used all of your seeds, you can urge others to use theirs.",
+        "I will contact you via email when the color has returned to the world.  You can then return and receive your reward."
       ],
       "riddle": {
         "prompts": [
