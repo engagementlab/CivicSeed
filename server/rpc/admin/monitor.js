@@ -5,44 +5,45 @@ exports.actions = function (req, res, ss) {
 
   req.use('session')
 
-  var gameModel = ss.service.db.model('Game'),
-      npcModel  = ss.service.db.model('Npc'),
-      chatModel = ss.service.db.model('Chat'),
-      userModel = ss.service.db.model('User')
+  var gameModel = ss.service.db.model('Game')
+  var npcModel  = ss.service.db.model('Npc')
+  var chatModel = ss.service.db.model('Chat')
+  var userModel = ss.service.db.model('User')
 
   var monitorHelpers = {
 
-    getInstances: function(instances, callback) {
+    getInstances: function (instances, callback) {
       //console.log(instances);
-      var numInstances = instances.length,
-        cur = 0,
-        allInstances = [];
+      var numInstances = instances.length
+      var cur = 0
+      var allInstances = []
       var getNext = function() {
-        monitorHelpers.getInstanceData(instances[cur], function(result) {
-          allInstances.push(result);
-          cur++;
-          if(cur < numInstances) {
-            getNext();
+        monitorHelpers.getInstanceData(instances[cur], function (result) {
+          allInstances.push(result)
+          cur++
+          if (cur < numInstances) {
+            getNext()
+          } else {
+            callback(allInstances)
           }
-          else {
-            callback(allInstances);
-          }
-        });
-      };
-      getNext();
+        })
+      }
+
+      getNext()
     },
-    getInstanceData: function(instance) {
+
+    getInstanceData: function (instance) {
       gameModel
         .where('instanceName').equals(instance)
-        .find(function(err,result) {
-          if(err) {
+        .find(function (err, result) {
+          if (err) {
 
           } else {
-            return result[0];
+            return result[0]
           }
-        });
+        })
     }
-  };
+  }
 
   return {
 
@@ -51,87 +52,87 @@ exports.actions = function (req, res, ss) {
         .where('isHolding').equals(true)
         .select('index resource.question level resource.questionType')
         .find(function (err, npcs) {
-          res(err,npcs)
+          res(err, npcs)
       })
     },
 
     getInstanceNames: function (id) {
       userModel
-        .findById(id, function(err,data) {
-          if(err) {
-            res('error with db search', false);
-          } else if(data) {
-            res(false, data.admin.instances);
+        .findById(id, function (err, data) {
+          if (err) {
+            res('error with db search', false)
+          } else if (data) {
+            res(false, data.admin.instances)
           } else {
-            res('you must logout / login to do more admin stuff');
+            res('you must logout / login to do more admin stuff')
           }
-        });
+        })
     },
 
-    getPlayers: function(instance) {
+    getPlayers: function (instance) {
       userModel
         .where('game.instanceName').equals(instance)
         .where('role').equals('actor')
         .select('firstName lastName id profileUnlocked game.resourcesDiscovered game.resources game.playingTime activeSessionID')
-        .find(function(err,data) {
-          //console.log(err,data);
-          if(err) {
-            res(err, false);
+        .find(function (err, data) {
+          //console.log(err,data)
+          if (err) {
+            res(err, false)
           } else {
-            res(false, data);
+            res(false, data)
           }
-        });
+        })
     },
 
-    getRecentChat: function(instance) {
+    getRecentChat: function (instance) {
       chatModel
         .where('instanceName').equals(instance)
         .limit(100)
         .sort('-when')
-        .find(function(err,chat) {
-          res(err,chat);
-        });
+        .find(function (err, chat) {
+          res(err, chat)
+        })
     },
 
-    getInstanceAnswers: function(instance) {
+    getInstanceAnswers: function (instance) {
       gameModel
         .where('instanceName').equals(instance)
         .select('resourceResponses')
-        .find(function(err,answers){
-          res(err,answers[0]);
-        });
+        .find(function (err, answers){
+          res(err, answers[0])
+        })
     },
 
-    deletePlayer: function(id) {
+    deletePlayer: function (id) {
       userModel
-        .findById(id, function(err,user) {
-          if(err) {
-            res(true);
-          } else if(user) {
-            user.remove();
-            res(false);
+        .findById(id, function (err, user) {
+          if (err) {
+            res(true)
+          } else if (user) {
+            user.remove()
+            res(false)
           }
-        });
+        })
     },
 
-    toggleGame: function(instance, bool) {
+    toggleGame: function (instance, bool) {
       gameModel
         .where('instanceName').equals(instance)
-        .findOne(function(err,game) {
-          if(err) {
-            res(err);
-          } else if(game) {
-            game.active = bool;
-            game.save(function(err,ok) {
-              if(err) {
-                res(err);
+        .findOne(function (err, game) {
+          if (err) {
+            res(err)
+          } else if (game) {
+            game.active = bool
+            game.save(function (err, ok) {
+              if (err) {
+                res(err)
               } else {
-                res();
+                res()
               }
-            });
+            })
           }
-        });
+        })
     }
-  };
+  }
 
 }
