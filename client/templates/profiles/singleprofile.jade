@@ -136,5 +136,10 @@
               h3 This civic resume has not yet been completed.
         if thisBelongsToCurrentUser && active
           .row
-            .col-sm-12
+            .col-sm-12.text-center
               a.btn.btn-info.btn-lg.play-game(href='/game') Enter the game
+          .row
+            .col-sm-12.text-center
+              .resume-sample
+                h4.color-darkorange Sample civic resume:
+                img(src='#{CivicSeed.CLOUD_PATH}/img/profile/resume-sample.png', width=340, height=880)
