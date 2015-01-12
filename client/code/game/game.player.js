@@ -949,7 +949,7 @@ var $player = $game.$player = {
             questionType: null,
             skinSuit:     null,
             correct:      true,
-            rewarded:     false,
+            rewarded:     true,
             tagline:      null
           }
 
