@@ -657,7 +657,7 @@
     "isHolding": true,
     "level": 1,
     "name": "Zeebo",
-    "skinSuit": "cactus",
+    "skinSuit": null,
     "sprite": 21,
     "resource": {
       "id": 4003,
@@ -2011,7 +2011,7 @@
     "isHolding": true,
     "level": 1,
     "name": "Katamari",
-    "skinSuit": null,
+    "skinSuit": "cactus",
     "sprite": 52,
     "resource": {
       "id": 4000,
