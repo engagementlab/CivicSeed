@@ -438,6 +438,7 @@ var _resources = {
     }
   },
 
+  // TODO: put resume HTML templates elsewhere
   makeResumeFormHTML: function (resource) {
     var html = ''
 
@@ -461,12 +462,55 @@ var _resources = {
       // (briefly) what you did there.
       case 'experience':
         // Three text boxes (potentially with the ability to add another?)
-        html = '<input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
-                <textarea class="resume-textarea" name="resume-experience-content"></textarea>\
-                <input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
-                <textarea class="resume-textarea" name="resume-experience-content"></textarea>\
-                <input class="resume-text-input" name="resume-experience" type="text" value="" placeholder="" maxlength=50>\
-                <textarea class="resume-textarea" name="resume-experience-content"></textarea>'
+        html = '<div class="resume-experience-section">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-organization-01">Organization #1</label>\
+                    </div><div class="col-sm-10">\
+                      <input id="resume-experience-organization-01" class="resume-text-input" name="resume-experience-organization-01" type="text" value="" placeholder="" maxlength=50>\
+                    </div>\
+                  </div class="row">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-summary-01">Summary</label>\
+                    </div><div class="col-sm-10">\
+                      <textarea id="resume-experience-summary-01" class="resume-textarea" name="resume-experience-summary-01"></textarea>\
+                    </div>\
+                  </div class="row">\
+                </div>\
+                <div class="resume-experience-section">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-organization-02">Organization #2</label>\
+                    </div><div class="col-sm-10">\
+                      <input id="resume-experience-organization-02" class="resume-text-input" name="resume-experience-organization-02" type="text" value="" placeholder="" maxlength=50>\
+                    </div>\
+                  </div class="row">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-summary-02">Summary</label>\
+                    </div><div class="col-sm-10">\
+                      <textarea id="resume-experience-summary-02" class="resume-textarea" name="resume-experience-summary-02"></textarea>\
+                    </div>\
+                  </div class="row">\
+                </div>\
+                <div class="resume-experience-section">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-organization-03">Organization #3</label>\
+                    </div><div class="col-sm-10">\
+                      <input id="resume-experience-organization-03" class="resume-text-input" name="resume-experience-03" type="text" value="" placeholder="" maxlength=50>\
+                    </div>\
+                  </div class="row">\
+                  <div class="row">\
+                    <div class="col-sm-2">\
+                      <label class="resume-label" for="resume-experience-summary-03">Summary</label>\
+                    </div><div class="col-sm-10">\
+                      <textarea id="resume-experience-summary-03" class="resume-textarea" name="resume-experience-summary-03"></textarea>\
+                    </div>\
+                  </div>\
+                </div>\
+                <p><strong>If you need more than three, you can add more later!</p>'
         break
       // Skills
       // What skills would you bring to a civic engagement opportunity? Check all that apply!
@@ -517,7 +561,7 @@ var _resources = {
         ]
 
         for (var i = 0, j = skills.length; i < j; i++) {
-          html += '<br><input name="resume-skills" type="checkbox" value="' + skills[i] + '"><label for="' + skills[i] + '">' + skills[i] + '</label>'
+          html += '<input name="resume-skills" type="checkbox" id="resume-skills-' + i + '" value="' + skills[i] + '"> <label for="resume-skills-' + i + '">' + skills[i] + '</label> <br>'
         }
 
         break
