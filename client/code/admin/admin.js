@@ -109,20 +109,21 @@ var self = module.exports = {
     })
 
     $body.on('click', '.allQuestion', function () {
-      var npc      = $(this).attr('data-resource'),
-          instance = $(this).attr('data-instance')
+      var npc      = $(this).attr('data-resource')
+      var instance = $(this).attr('data-instance')
+
       self.showQuestionAnswers(npc, instance, this)
     })
 
-    $body.on('click', '.add-player-button', function (e) {
-      e.preventDefault()
+    $body.on('click', '.add-player-button', function (event) {
+      event.preventDefault()
 
-      var email        = $('#add-player-email').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi),
-          instanceName = $(this).attr('data-instance')
+      var email = $('#add-player-email').val().match(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/gi)
+      var instanceName = $(this).attr('data-instance')
 
       if (email) {
-        ss.rpc('admin.invitecodes.getCount', instanceName, function (space) {
-          if (space) {
+        ss.rpc('admin.invitecodes.checkPlayerCount', instanceName, function (space) {
+          if (space === true) {
             ss.rpc('admin.invitecodes.sendInvites', email, instanceName, space, function (okay) {
               if (okay) {
                 apprise('New player(s) added successfully.')

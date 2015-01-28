@@ -8,6 +8,8 @@ var accountHelpers = require(rootDir + '/server/utils/account-helpers')
 var winston        = require('winston')
 var xkcd           = require('xkcd-pwgen')
 
+var MAX_PLAYERS    = 20
+
 exports.actions = function (req, res, ss) {
 
   req.use('session')
@@ -257,17 +259,20 @@ exports.actions = function (req, res, ss) {
       })
     },
 
-    getCount: function (instanceName) {
-      //get count of players in current instance, if < 20 add new one
+    // Counts the number of players in a given game instance
+    checkPlayerCount: function (instanceName) {
+      // Returns false if game is full or there is an error...
+      // Returns true if game still has room
       userModel.count({'game.instanceName': instanceName}, function (err, count) {
         if (err) {
           res(false)
+          return
+        }
+
+        if (count >= MAX_PLAYERS) {
+          res(false)
         } else {
-          if (count >= 20) {
-            res(false)
-          } else {
-            res(count)
-          }
+          res(true)
         }
       })
     }
