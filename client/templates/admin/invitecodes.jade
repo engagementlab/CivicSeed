@@ -16,28 +16,31 @@
           form
             .row
               .col-sm-3
-                label.control-label(for='invite-email-list') Email Addresses:
+                label.control-label(for='invite-email-list') Email addresses:
               .col-sm-9.controls
                 textarea#invite-email-list(rows='4', placeholder='Enter a list of comma-separated email addresses. Note: more than twenty e-mail addresses will be ignored!')
             .row.control-group
               .col-sm-3
-                label.control-label(for='invite-game-name') Game Name:
+                label.control-label(for='invite-game-name') Game name:
               .col-sm-9.controls
                 input#invite-game-name(placeholder='ex. Tufts Round 1')
             .row.control-group
               .col-sm-9.col-sm-offset-3.controls
-                //- .btn-success
-                button#invite-button.btn(type='button') Create and Send Invites
+                button#invite-button.btn(type='button') Create and send invites
+                  .spinner
+            .row
+              .col-sm-9.col-sm-offset-3
+                .server-response
 
             //- p Select an existing session to apply an action:
 
             //- div.control-group
-            //-   label.control-label(for='sessionSelect') Existing Session:
+            //-   label.control-label(for='sessionSelect') Existing session:
             //-   div.controls
             //-     //- textarea#emailList(rows='6', class='span4', placeholder='Enter a list of email addresses...')
             //-     select#sessionSelect.col-md-4
             //-       //- {{#each invitees}}
             //-       //-   option value='{{this}}'>{{this}}
             //-       //- {{/each}}
-            //-     button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete Session
-            //-     button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend Invite Emails
+            //-     button#deleteCodesBtn.btn.btn-mini.btn-danger(type='button') Delete session
+            //-     button#resendCodesBtn.btn.btn-mini.btn-info(type='button') Resend invite emails

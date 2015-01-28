@@ -27,7 +27,7 @@ var self = module.exports = {
         return
       }
 
-      button.removeClass('btn-success')
+      button.removeClass('btn-success btn-error')
       button.find('.spinner').show()
 
       // Disable all buttons while one is processing

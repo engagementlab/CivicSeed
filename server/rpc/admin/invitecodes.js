@@ -1,21 +1,21 @@
 'use strict';
 
-var rootDir        = process.cwd(),
-    config         = require(rootDir + '/app/config'),
-    nodeEnv        = config.get('ENVIRONMENT'),
-    emailUtil      = require(rootDir + '/server/utils/email'),
-    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-    winston        = require('winston'),
-    xkcd           = require('xkcd-pwgen')
+var rootDir        = process.cwd()
+var config         = require(rootDir + '/app/config')
+var NODE_ENV       = config.get('NODE_ENV')
+var emailUtil      = require(rootDir + '/server/utils/email')
+var accountHelpers = require(rootDir + '/server/utils/account-helpers')
+var winston        = require('winston')
+var xkcd           = require('xkcd-pwgen')
 
 exports.actions = function (req, res, ss) {
 
   req.use('session')
   req.use('account.authenticated')
 
-  var userModel  = ss.service.db.model('User'),
-      gameModel  = ss.service.db.model('Game'),
-      colorModel = ss.service.db.model('Color')
+  var userModel  = ss.service.db.model('User')
+  var gameModel  = ss.service.db.model('Game')
+  var colorModel = ss.service.db.model('Color')
 
   var colorData = require(rootDir + '/data/colors.json')
 
@@ -112,14 +112,15 @@ exports.actions = function (req, res, ss) {
   }
 
   var sendInviteEmail = function (firstName, password, email) {
-    var content = '',
-        pregameSurveyLink = config.get('SURVEY_PREGAME_LINK')
+    var content = ''
+    var pregameSurveyLink = config.get('SURVEY_PREGAME_LINK')
 
     // Set up email template
-    if (nodeEnv !== 'production') {
+    if (NODE_ENV !== 'production') {
       // Add a message to indicate a test invite (NOT from production server)
-      content += '<p><strong style="color:red;">This is a test invite from the Civic Seed Development server. Do not attempt to sign up for the game through this e-mail.</strong></p>'
+      content += '<p><strong style="color:red;">This is a test invite from the Civic Seed ' + NODE_ENV + ' server. Do not attempt to sign up for the game through this e-mail.</strong></p>'
     }
+
     content += '<h2>Why hello there, #{firstName}!</h2>'
     content += '<p style="color:green">WELCOME TO CIVIC SEED!</p>'
     if (pregameSurveyLink) {
@@ -156,11 +157,14 @@ exports.actions = function (req, res, ss) {
             // Not entirely sure what the difference is between i and iterator (j), but the #add-player-button from the Admin panel (see ./client/code/admin/admin.js) provides a digit for i.
             // It needs to return "true" for the admin panel to report an OK message on apprise.
             createUserAndSendInvite(email, instanceName, i)
-            res(true)
+            //res(true)
           } else {
             createUserAndSendInvite(email, instanceName, j)
           }
         }
+
+        // Better to put this here?
+        res(true)
       } else {
         res(false)
       }
