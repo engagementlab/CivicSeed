@@ -50,10 +50,10 @@ exports.actions = function (req, res, ss) {
     init: function (id) {
       npcModel
         .where('isHolding').equals(true)
-        .select('index resource.question level resource.questionType')
+        .select('level resource')
         .find(function (err, npcs) {
           res(err, npcs)
-      })
+        })
     },
 
     getInstanceNames: function (id) {

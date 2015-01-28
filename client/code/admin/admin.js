@@ -108,7 +108,7 @@ var self = module.exports = {
       }
     })
 
-    $body.on('click', '.allQuestion', function () {
+    $body.on('click', '.question.answer-toggle', function () {
       var npc      = $(this).attr('data-resource')
       var instance = $(this).attr('data-instance')
 
@@ -217,24 +217,24 @@ var self = module.exports = {
   },
 
   showPlayerAnswers: function (index) {
-    var resources = self.players[index].game.resources,
-        numNPC    = self.allQuestions.length,
-        html      = '<h2>' + self.players[index].firstName + ' ' + self.players[index].lastName + '</h2>'
+    var resources = self.players[index].game.resources
+    var numNPC = self.allQuestions.length
+    var html = '<h2>' + self.players[index].firstName + ' ' + self.players[index].lastName + '</h2>'
 
     for (var i = 0; i < resources.length; i++) {
-      var npc    = resources[i],
-          npcInt = npc.resource.id
-
-      var n     = 0,
-          found = false,
-          open  = false
+      var resource = resources[i]
+      var n = 0
+      var found = false
+      var open = false
 
       while (!found) {
-        if (self.allQuestions[n].index === npcInt) {
+        var question = self.allQuestions[n]
+        if (question.resource.id === resource.id) {
           found = true
-          if (self.allQuestions[n].resource.questionType === 'open') {
+          console.log(question)
+          if (question.resource.questionType === 'open') {
             open = true
-            html += '<p class="question level' + self.allQuestions[n].level + '">Q: ' + self.allQuestions[n].resource.question + '</p>'
+            html += '<div class="question"><p class="level' + question.level + '">Q: ' + question.resource.question + '</p></div>'
           }
         }
         n++
@@ -245,14 +245,14 @@ var self = module.exports = {
 
       //answer only if open ended
       if (open) {
-        html += '<div class="answer"><p>A: ' + npc.answers[0] + '</p><div class="extras">'
-        if (npc.madePublic) {
+        html += '<div class="answer"><p>A: ' + resource.answers[0] + '</p><div class="extras">'
+        if (resource.madePublic) {
           //put unlocked icon
           html += '<i class="fa fa-unlock-alt fa-lg"></i>'
         }
-        if (npc.seeded) {
+        if (resource.seeded) {
           //thumbs up icon with number
-          html += '<i class="fa fa-thumbs-up fa-lg"></i> ' + npc.seeded.length
+          html += '<i class="fa fa-thumbs-up fa-lg"></i> ' + resource.seeded.length
         }
         html += '</div></div>'
       }
@@ -290,12 +290,15 @@ var self = module.exports = {
     var html = '<h2>Open-ended questions</h2>' +
                '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>'
 
-    for(var q = 0; q < self.allQuestions.length; q++) {
-      if (self.allQuestions[q].resource.questionType === 'open') {
-        html += '<div class="allQuestion" data-instance="' + instance + '" data-resource="' + self.allQuestions[q].index +'">'
-        html += '<p data-resource="' + self.allQuestions[q].index +'" class="mainQ level' + self.allQuestions[q].level + '">' + self.allQuestions[q].resource.question + '</p></div>'
+    for (var q = 0; q < self.allQuestions.length; q++) {
+      var question = self.allQuestions[q]
+
+      if (question.resource.questionType === 'open') {
+        html += '<div class="question answer-toggle" data-instance="' + instance + '" data-resource="' + question.resource.id +'">'
+        html += '<p data-resource="' + question.resource.id +'" class="mainQ level' + question.level + '">' + question.resource.question + '</p></div>'
       }
     }
+
     self.getAllAnswers(instance)
     $('.output').empty().append(html)
   },
@@ -311,20 +314,21 @@ var self = module.exports = {
   },
 
   showQuestionAnswers: function (npc, instance, selector) {
-    $('.allQuestion .allPlayerAnswers').remove()
-    var html   = '',
-        found  = false,
-        npcInt = parseInt(npc, 10)
+    var html = ''
+    var found = false
+    var npcInt = parseInt(npc, 10)
+
+    $('.question .answers').remove()
 
     for (var i = 0; i < self.allAnswers.length; i++) {
-      if (self.allAnswers[i].npc === npcInt) {
+      if (self.allAnswers[i].resourceId === npcInt) {
         found = true
-        html += '<p class="allPlayerAnswers"><span class="subWho">' + self.allAnswers[i].name + ': </span>'
-        html += '<span class="subAnswer">' + self.allAnswers[i].answer + '</span></p>'
+        html += '<p class="answers"><span class="player-name">' + self.allAnswers[i].name + ': </span>'
+        html += '<span class="player-answer">' + self.allAnswers[i].answer + '</span></p>'
       }
     }
     if (!found) {
-      html += '<p class="allPlayerAnswers">There are no answers for this question yet.</p>'
+      html += '<p class="answers">There are no answers for this question yet.</p>'
     }
 
     $(selector).append(html)

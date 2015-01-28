@@ -108,47 +108,41 @@
           color white
           font-size 1.2em
           background $csGreen
+
     .question
-      font-family $bodyFont
-      cursor pointer
       margin 0
       margin-top 20px
       color white
-      padding 10px
-      font-size 1.2em
+      font-family $buttonFont
+      &.answer-toggle
+        cursor pointer
+      p
+        color white
+        padding 10px
+        margin 0
+      .answers
+        background $csLightGray
+        color black
+      .player-name
+        font-weight bold
 
     .answer
-      background $csGray
-      color white
-      padding 10px
-      margin 0
       position relative
+      margin 0
+      background $csLightGray
+      font-family $buttonFont
+      color black
       p
-        width 90%
-        font-size 1.2em
-        font-family $buttonFont
+        padding 10px
+        margin-right 60px
       .extras
         position absolute
         right 10px
         top 10px
         i
-          color #eee
+          color $csGray
           margin 5px
 
-    .allQuestion
-      margin-bottom 30px
-      p
-        color white
-        padding 10px
-        margin 0
-        font-size 1.2em
-        font-family $buttonFont
-      p.allPlayerAnswers
-        background $csGray
-      p.mainQ
-        font-family $bodyFont
-        cursor pointer
-        margin-top 20px
   .deletePlayer
     margin-top -10px
     margin-left 10px
