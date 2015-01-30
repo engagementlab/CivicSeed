@@ -264,7 +264,6 @@ module.exports = (function () {
         // Fill in the blanks
         $('#share-link-prefix').text(window.location.href.split('profiles/')[0] + 'profiles/')
         $('#customize-share-link-input').val(window.location.href.split('profiles/')[1]).select()
-
       })
 
       $body.on('submit', '#share-link-form', function (e) {

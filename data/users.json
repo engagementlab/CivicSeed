@@ -1435,5 +1435,730 @@
       "experience": [],
       "skills": []
     }
+  },
+  {
+    "gameStarted": true,
+    "profileUnlocked": true,
+    "profileSetup": true,
+    "profileLink": "z15jg7ptmwh4cxr",
+    "profilePublic": false,
+    "role": "actor",
+    "email": "o",
+    "password": "",
+    "school": "Tufts University",
+    "lastName": "Barkley",
+    "firstName": "Charles",
+    "admin": {
+      "instances": []
+    },
+    "profile": {
+      "skills": [],
+      "experience": [],
+      "education": []
+    },
+    "game": {
+      "instanceName": "test",
+      "currentLevel": 4,
+      "position": {
+        "x": 71,
+        "y": 74
+      },
+      "resources": [
+        {
+          "id": 8542,
+          "questionType": "resume",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "resume-experience=Ceramic+League+of+Miami&resume-experience-content=Taught+in+summer+camp%2C+working+with+kids+aged+6-14+on+how+to+make+ceramic+pieces.+Also+organized+their+volunteer+service.&resume-experience=Fairchild+Tropical+Botanical+Garden&resume-experience-content=Educated+people+on+use+and+growth+of+culinary+herbs%2C+instructed+kids+aged+4-10+on+air+plants+and+other+floridian+flora.&resume-experience=&resume-experience-content="
+          ]
+        },
+        {
+          "id": 6265,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "goals and objectives",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "goal: be as active as I can be in helping spread art education and opprotunities in schools and community programs\nObjective: volunteer in said programs at least three times a month"
+          ]
+        },
+        {
+          "id": 4284,
+          "questionType": "resume",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "resume-education=environmental+engineering"
+          ]
+        },
+        {
+          "id": 4693,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "stuff",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "i dont really want it to..."
+          ]
+        },
+        {
+          "id": 2569,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "Empathy is special",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Empathy, because it helps you understand other's viewpoints and why they do what they do"
+          ]
+        },
+        {
+          "id": 4876,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "art",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Are you hoping to find your passion? affects my goals because I really want to teach art to people, because art is one of my major nonacademic passions"
+          ]
+        },
+        {
+          "id": 8986,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "stuff",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "athleticism\ncreativity\nenthusiasm"
+          ]
+        },
+        {
+          "id": 2176,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "kids",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Teaching with kids resonated, because that is the same as me"
+          ]
+        },
+        {
+          "id": 1608,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "stuff",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "I grew up in a school that was majorly african american, and I had issues collaborating with others because they expected me to be prejudicial because that was their most common experience"
+          ]
+        },
+        {
+          "id": 9536,
+          "questionType": "multiple",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "stuff",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "D) Brown hair, bilingual, New Yorker"
+          ]
+        },
+        {
+          "id": 7052,
+          "questionType": "truefalse",
+          "attempts": 2,
+          "result": true,
+          "rewarded": true,
+          "tagline": "tufts municipal",
+          "seedsRewarded": 2,
+          "seeded": [],
+          "answers": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "id": 5219,
+          "questionType": "resume",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "resume-skills=Microsoft+Office+Suite&resume-skills=Graphic+Design+-++Marketing+%2F+Promotion&resume-skills=Graphic+Design+%E2%80%93+Infographics+%2F+Data+Visualization&resume-skills=Multimedia+Production&resume-skills=Quantitative+Modelling+%2F+Statistical+Analysis+%2F+Excel&resume-skills=Administration+and+Organizational&resume-skills=Project+Design&resume-skills=Group+Facilitation&resume-skills=Working+across+Difference&resume-skills=Child+Development&resume-skills=Nutrition+%2F+Food+Preparation+%2F+Food+Security+Support&resume-skills=Event+Planning+%2F+Logistics+%2F+Event+Support&resume-skills=Public+Speaking&resume-skills=Copyediting+%2F+Proofreading&resume-skills=Fundraising&resume-skills=Environmental+Stewardship+%2F+Environmental+Program+Operations&resume-skills=Recycling+Program+Operations"
+          ]
+        },
+        {
+          "id": 4000,
+          "questionType": null,
+          "attempts": 0,
+          "result": false,
+          "rewarded": false,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            ""
+          ]
+        },
+        {
+          "id": 4001,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            ""
+          ]
+        },
+        {
+          "id": 4003,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            ""
+          ]
+        },
+        {
+          "id": 4003,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            ""
+          ]
+        },
+        {
+          "id": 4000,
+          "questionType": null,
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "medford challenges",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "",
+            "YAAY"
+          ]
+        },
+        {
+          "id": 359,
+          "questionType": "resume",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "resume-purpose=Swimming%2C+training"
+          ]
+        },
+        {
+          "id": 2803,
+          "questionType": "multiple",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "towns host",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "A) Somerville, Chinatown, and Medford"
+          ]
+        },
+        {
+          "id": 2649,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "learn while work",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "I learned the BEST ice cream store in miami!"
+          ]
+        },
+        {
+          "id": 9170,
+          "questionType": "multiple",
+          "attempts": 2,
+          "result": true,
+          "rewarded": true,
+          "tagline": "needs of community",
+          "seedsRewarded": 4,
+          "seeded": [],
+          "answers": [
+            "C) Everyone should assess needs and act upon them without deliberation",
+            "B) Needs should be identified by assets within the community"
+          ]
+        },
+        {
+          "id": 11752,
+          "questionType": "yesno",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "kid procedures",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "yes"
+          ]
+        },
+        {
+          "id": 12760,
+          "questionType": "resume",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "resume-tagline=Skilled+artist%2C+talented+athlete"
+          ]
+        },
+        {
+          "id": 10780,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "classicm",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Examine their feelings about money in terms savings, earning, and credit."
+          ]
+        },
+        {
+          "id": 12249,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "community",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Coming from a standpoint of understanding community issues"
+          ]
+        },
+        {
+          "id": 14464,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "goals share",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Spread knowledge of the arts"
+          ]
+        },
+        {
+          "id": 17599,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "acting civically",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "When the asian american syudent talks about the lady wanting him to just do her taxes, I understnd both sides of the situation."
+          ]
+        },
+        {
+          "id": 16297,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "working across differences",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Being color blind, because it makes the most sense"
+          ]
+        },
+        {
+          "id": 14588,
+          "questionType": "multiple",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "stuff",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "E) All of these"
+          ]
+        },
+        {
+          "id": 14706,
+          "questionType": "truefalse",
+          "attempts": 2,
+          "result": true,
+          "rewarded": true,
+          "tagline": "poverty",
+          "seedsRewarded": 2,
+          "seeded": [],
+          "answers": [
+            "false",
+            "true"
+          ]
+        },
+        {
+          "id": 16547,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "professional",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Dress for success, be responsible"
+          ]
+        },
+        {
+          "id": 4001,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            "",
+            ""
+          ]
+        },
+        {
+          "id": 4003,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            "",
+            ""
+          ]
+        },
+        {
+          "id": 4003,
+          "questionType": null,
+          "attempts": 0,
+          "result": true,
+          "rewarded": true,
+          "tagline": null,
+          "seedsRewarded": 6,
+          "seeded": [],
+          "answers": [
+            "",
+            ""
+          ]
+        },
+        {
+          "id": 4002,
+          "questionType": "truefalse",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "professional",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "false"
+          ]
+        },
+        {
+          "id": 13696,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "reflection",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "looking at your actions and attitudes"
+          ]
+        },
+        {
+          "id": 17525,
+          "questionType": "multiple",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "sustainability",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "D) Before you even begin"
+          ]
+        },
+        {
+          "id": 15638,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "jrnl",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "keep reflection journal"
+          ]
+        },
+        {
+          "id": 15626,
+          "questionType": "truefalse",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "svc",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "true"
+          ]
+        },
+        {
+          "id": 15638,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "jrnl",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "keep reflection journal"
+          ]
+        },
+        {
+          "id": 14380,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "class",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Environmental Economics"
+          ]
+        },
+        {
+          "id": 13246,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "leadership cpcity",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "Take risks"
+          ]
+        },
+        {
+          "id": 13360,
+          "questionType": "multiple",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "benefit",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "D) All of these"
+          ]
+        },
+        {
+          "id": 16920,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "work",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "ability to work with others"
+          ]
+        },
+        {
+          "id": 16912,
+          "questionType": "open",
+          "attempts": 1,
+          "result": true,
+          "rewarded": true,
+          "tagline": "YAY",
+          "seedsRewarded": 5,
+          "seeded": [],
+          "answers": [
+            "no-- commserv=art,career- environmental protection"
+          ]
+        }
+      ],
+      "resourcesDiscovered": 38,
+      "inventory": [
+        {
+          "id": 13696,
+          "name": "wrong1",
+          "tagline": "reflection"
+        },
+        {
+          "id": 17525,
+          "name": "correct1",
+          "tagline": "sustainability"
+        },
+        {
+          "id": 15638,
+          "name": "correct3",
+          "tagline": "jrnl"
+        },
+        {
+          "id": 15626,
+          "name": "wrong5",
+          "tagline": "svc"
+        },
+        {
+          "id": 14380,
+          "name": "wrong3",
+          "tagline": "class"
+        },
+        {
+          "id": 13246,
+          "name": "correct2",
+          "tagline": "leadership cpcity"
+        },
+        {
+          "id": 13360,
+          "name": "correct5",
+          "tagline": "benefit"
+        },
+        {
+          "id": 16920,
+          "name": "wrong4",
+          "tagline": "work"
+        },
+        {
+          "id": 16912,
+          "name": "correct4",
+          "tagline": "YAY"
+        }
+      ],
+      "seeds": {
+        "regular": 0,
+        "draw": 0,
+        "dropped": 238
+      },
+      "botanistState": 2,
+      "firstTime": false,
+      "resume": [
+        "The ability to have an impact on others.",
+        "Work with kids in art education",
+        "Spending time with others.",
+        "become better person"
+      ],
+      "resumeFeedback": [],
+      "seenRobot": false,
+      "playingTime": 4767,
+      "tilesColored": 1858,
+      "pledges": 5,
+      "collaborativeChallenge": false,
+      "playerColor": 4,
+      "skinSuit": {
+        "unlocked": {
+          "head": [
+            "basic",
+            "astronaut",
+            "lion",
+            "penguin",
+            "dinosaur",
+            "octopus"
+          ],
+          "torso": [
+            "basic",
+            "astronaut",
+            "lion",
+            "penguin",
+            "dinosaur",
+            "octopus"
+          ],
+          "legs": [
+            "basic",
+            "astronaut",
+            "lion",
+            "penguin",
+            "dinosaur",
+            "octopus"
+          ]
+        },
+        "legs": "astronaut",
+        "torso": "astronaut",
+        "head": "astronaut"
+      },
+      "colorMap": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAI4AAACECAYAAABGZhNuAAAED0lEQVR4Xu3c3XHbMBREYbup1JGC8piCUkeaSsb5mZFliwKWuBApfHmMsVfCweGS1nj0+uIfAgGB1yAjgsALcUgQESBOhE2IOByICBAnwiZEHA5EBIgTYRMiDgciAsSJsAkRhwMRAeJE2ISIw4GIAHEibELE4UBEgDgRNiHicCAiQJwImxBxOBARIE6ETYg4HIgIECfCJkQcDkQEiBNhEyIOByICxImwCRGHAxEB4kTYhIjDgYgAcSJsQsThQESAOBE2IeJwICJAnAibEHE4EBEgToRNiDgciAgQJ8ImRBwORASIE2ETIg4HIgLEibAJEYcDEQHiRNiEiMOBiABxImxCxOFARIA4ETYh4nAgIkCcCJsQcTgQESBOhE2IOByICBAnwiZEHA5EBIgTYRMiDgciAsSJsAkRhwMRAeJE2ISIw4GIAHEibELE4UBEgDgRNqGnF+fbzx+/bh3z9y9fn37/VYo/Pbgtcaqgzpj7aOmJM+OUC16DOAVQL0e23qrO1kzEKRZnS6JL+MTpO4inv1URp0+I1tXE+UdK47Qq83fd04tzNiFaj88zTiupcN0ocd4OatSscCvvYsQZQXFjxqjD7hWnd30vBuL0EutcP0qcz15267cy4nQe1NGWE6fmRDwc7+D6yM+B3Kp2HFxLtLJxWl6/ag1xqsie9POZHhyPlMetquekDraWOIUHMvNWteeZJ80+Sh6NUyTtow60aDsfxhKniDRxisDOGjvzVnW5J+LMOuGi1yFODVi3qhquLxqnCOyssRqnhrTGqeGqcYq4ThurcWpQa5warhqniOu0sRqnBrXGqeGqcYq4ThurcWpQa5warhqniOu0sRqnBrXGqeGqcYq4ThurcWpQa5warhqniOu0sRqnBrXGqeGqcYq4ThurcWpQa5warhqniOu0sRqnBrXGqeG6duNcXq1n/VNIjVNzZWw2zj1x7v285i33TSVOH6/W1cRpJbWx7qxtvGfrd59xtlrlGRunR4L/++/J7DmsI2V3iXOkjdx6L723ql4J3ub3Zs7A7d57/FScW7BbAB25hVokatnjJdRVW+eDOFtwW6CeRZyWvWxdddec9s67d4Uf7ed/xGm5Et/W3foqjpb/P8LGR0pNnA1xrr858yyCtDzv7G0I4lyJcw301lU68uqd1UatzZq8n70iJq/5yMy7bwv/bPNnFKSlcfZCX02Ua14fxPnsqnwWSKvfXvZeLJf5KeIcpbWIM06dpl/H9zbOUcQZh82ku58cj0BEnBEUjzVjijjH2rJ3M4IAcUZQXHAGcRY89BFbJs4IigvOIM6Chz5iy8QZQXHBGcRZ8NBHbJk4IyguOIM4Cx76iC0TZwTFBWcQZ8FDH7Fl4oyguOAM4ix46CO2/BttQKCU+DQSrAAAAABJRU5ErkJggg=="
+    },
+    "activeSessionID": null
   }
+
 ]

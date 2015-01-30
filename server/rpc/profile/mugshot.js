@@ -8,11 +8,11 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir   = process.cwd() || '.',
-    config    = require(rootDir + '/app/config'),
-    miscUtils = require(rootDir + '/server/utils/misc'),
-    aws       = require('aws-sdk'),
-    winston   = require('winston')
+var rootDir = process.cwd() || '.'
+var config = require(rootDir + '/app/config')
+var miscUtils = require(rootDir + '/server/utils/misc')
+var aws = require('aws-sdk')
+var winston = require('winston')
 
 exports.actions = function (req, res, ss) {
 

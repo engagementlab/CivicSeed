@@ -8,9 +8,9 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir   = process.cwd() || '.',
-    config    = require(rootDir + '/app/config'),
-    winston   = require('winston')
+var rootDir = process.cwd() || '.'
+var config = require(rootDir + '/app/config')
+var winston = require('winston')
 
 exports.actions = function (req, res, ss) {
 

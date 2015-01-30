@@ -1,14 +1,14 @@
 'use strict';
 
-var rootDir   = process.cwd() || '.',
-    config    = require(rootDir + '/app/config')
+var rootDir = process.cwd() || '.'
+var config = require(rootDir + '/app/config')
 
 exports.actions = function (req, res, ss) {
 
   req.use('session')
 
-  var UserModel = ss.service.db.model('User'),
-      GameModel = ss.service.db.model('Game')
+  var UserModel = ss.service.db.model('User')
+  var GameModel = ss.service.db.model('Game')
 
   return {
 
@@ -32,13 +32,12 @@ exports.actions = function (req, res, ss) {
             profilePublic: user.profilePublic,
             profileUnlocked: user.profileUnlocked,
             profileSetup: user.profileSetup,
-            colorMap: user.game.colorMap,
+            colorMap: user.game.colorMap || false,
             email: user.email,
-            profile: user.profile
-          }
 
-          if (!profileInfo.colorMap) {
-            profileInfo.colorMap = false
+            // TEMP: Get resume question answers stored in resources
+            resources: user.game.resources,
+            profile: user.profile
           }
 
           GameModel

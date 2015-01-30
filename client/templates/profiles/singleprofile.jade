@@ -43,8 +43,8 @@
               each entry in profile.education
                 li
                   | #{entry.school}
-                  if entry.degree
-                    | , #{entry.degree}
+                  if entry.major
+                    | , #{entry.major}
                   if entry.year
                     | , #{entry.year}
 
@@ -59,8 +59,14 @@
             h3 experience
           .col-xs-12.col-sm-8.resume-text
             ul
-              each item in profile.experience
-                li= item
+              each entry in profile.experience
+                if entry.organization
+                  li
+                    strong
+                      | #{entry.organization}
+                    if entry.summary
+                      | &nbsp;&mdash;
+                      | #{entry.summary}
 
         .row
           .col-xs-12.col-sm-3.resume-headings
