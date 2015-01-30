@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/normalize.css">
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/main.css">
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/font-awesome.min.css">
-    <script>window.CivicSeed = {"VERSION":"0.2.0","CACHE":"0.2.0","ENVIRONMENT":"production","CLOUD_PATH":"http://s3.amazonaws.com/civicseed","CONNECTED":true,"SURVEY_POSTGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l","SURVEY_PREGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j"};</script><link href="/assets/main/1422478183072.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1422478183072.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+    <script>window.CivicSeed = {"VERSION":"0.2.0","CACHE":"0.2.0","ENVIRONMENT":"production","CLOUD_PATH":"http://s3.amazonaws.com/civicseed","CONNECTED":true,"SURVEY_POSTGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l","SURVEY_PREGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j"};</script><link href="/assets/main/1422581087023.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1422581087023.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
 window.JT['admin-export'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
@@ -599,9 +599,9 @@ buf.push("<div class=\"row profile-divider resume-content\"></div><div class=\"r
       var entry = $$obj[$index];
 
 buf.push("<li>" + (jade.escape((jade.interp = entry.school) == null ? '' : jade.interp)) + "");
-if ( entry.degree)
+if ( entry.major)
 {
-buf.push(", " + (jade.escape((jade.interp = entry.degree) == null ? '' : jade.interp)) + "");
+buf.push(", " + (jade.escape((jade.interp = entry.major) == null ? '' : jade.interp)) + "");
 }
 if ( entry.year)
 {
@@ -616,9 +616,9 @@ buf.push("</li>");
       $$l++;      var entry = $$obj[$index];
 
 buf.push("<li>" + (jade.escape((jade.interp = entry.school) == null ? '' : jade.interp)) + "");
-if ( entry.degree)
+if ( entry.major)
 {
-buf.push(", " + (jade.escape((jade.interp = entry.degree) == null ? '' : jade.interp)) + "");
+buf.push(", " + (jade.escape((jade.interp = entry.major) == null ? '' : jade.interp)) + "");
 }
 if ( entry.year)
 {
@@ -637,17 +637,33 @@ buf.push("</ul></div></div><div class=\"row\"><div class=\"col-xs-12 col-sm-3 re
   if ('number' == typeof $$obj.length) {
 
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-      var item = $$obj[$index];
+      var entry = $$obj[$index];
 
-buf.push("<li>" + (jade.escape(null == (jade.interp = item) ? "" : jade.interp)) + "</li>");
+if ( entry.organization)
+{
+buf.push("<li><strong>" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
+if ( entry.summary)
+{
+buf.push("&nbsp;&mdash;\n" + (jade.escape((jade.interp = entry.summary) == null ? '' : jade.interp)) + "");
+}
+buf.push("</li>");
+}
     }
 
   } else {
     var $$l = 0;
     for (var $index in $$obj) {
-      $$l++;      var item = $$obj[$index];
+      $$l++;      var entry = $$obj[$index];
 
-buf.push("<li>" + (jade.escape(null == (jade.interp = item) ? "" : jade.interp)) + "</li>");
+if ( entry.organization)
+{
+buf.push("<li><strong>" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
+if ( entry.summary)
+{
+buf.push("&nbsp;&mdash;\n" + (jade.escape((jade.interp = entry.summary) == null ? '' : jade.interp)) + "");
+}
+buf.push("</li>");
+}
     }
 
   }
