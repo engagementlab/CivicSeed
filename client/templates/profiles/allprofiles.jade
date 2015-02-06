@@ -1,7 +1,35 @@
+- var userIsAdmin = (sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin') ? true : false
+
 .row.all-profiles
   .col-md-10.col-md-offset-1
     h2 Public Profiles
-    p Below is a list of all users who have chosen to make their profile publicly available.
+
+    //- Intro text depending on whether user is an admin or not
+    if userIsAdmin == true
+      p.
+        Below is a list of all users who have started playing the game.
+        This is an <strong>administrator</strong> view. Profiles that are not made
+        public by the player themselves will show a lock symbol by their name.
+    else
+      p.
+        Below is a list of all users who have chosen to make their profile publicly available.
+
+    //- Display each
     each user in users
-      p
-        a(href='profiles/' + user.profileLink)= user.firstName + ' ' + user.lastName
+      //- Only display users that are public
+      if user.profilePublic || (userIsAdmin && user.gameStarted)
+        if user.profile.mugshotURL
+          - var mugshotURL = user.profile.mugshotURL
+        else
+          - var mugshotURL = CivicSeed.CLOUD_PATH + '/img/profile/placeholder.png'
+
+        .profile-grid-box
+          .profile-image(style='background-image:url(#{mugshotURL});', title='profile image')
+            a(class='profile-link', href='profiles/' + user.profileLink)
+          h3.name
+            a(href='profiles/' + user.profileLink)= user.firstName + ' ' + user.lastName
+            unless user.profilePublic
+              i.fa.fa-lock(title='this profile is not public', data-placement='top')
+          h4.tagline= user.profile.tagline
+
+

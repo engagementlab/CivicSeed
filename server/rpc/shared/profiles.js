@@ -57,21 +57,28 @@ exports.actions = function (req, res, ss) {
     },
 
     getAllProfiles: function () {
-      UserModel.find({ role: 'actor', profilePublic: true }, function (err, users) {
+      // Get all profiles from players who have started the game
+      // In the all-profiles page, we will only display profiles
+      // that are public, but we retrieve the others so that admin
+      // can view non-public profiles in progress.
+
+      // Also, reject profiles from the 'test' games of Demo and Boss
+      UserModel.find({
+        role: 'actor',
+        gameStarted: true,
+        'game.instanceName': {
+          '$not': /(demo|boss)/
+        }
+      }).sort({
+        firstName: 1,
+        lastName: 1
+      }).exec(function (err, users) {
         if (err) {
           console.log(err)
           res(false)
-        } else if (users) {
-          var all = []
-          users.forEach(function (u, i) {
-            var profile = {
-              firstName: u.firstName,
-              lastName: u.lastName,
-              profileLink: u.profileLink
-            }
-            all.push(profile)
-          })
-          res(all)
+        } else {
+          // For flexibility, return all user data
+          res(users)
         }
       })
     },
