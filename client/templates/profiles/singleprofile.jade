@@ -20,6 +20,7 @@ mixin filteredPeerFeedback(resumeIndex, resumeFeedback)
 //- End mixin declaration
 
 //- BEGIN PROFILE TEMPLATE
+- var userIsAdmin = (sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin') ? true : false
 
 .row.user-profile
   .col-md-10.col-md-offset-1
@@ -33,14 +34,35 @@ mixin filteredPeerFeedback(resumeIndex, resumeFeedback)
     else if (firstName === 'Demo')
       include _demo
 
-    else if !thisBelongsToCurrentUser && !profilePublic
+    //- Refuse to display if profile is not public,
+    //- and does not belong to the current user or
+    //- current user is not an administrator
+    else if !profilePublic && !thisBelongsToCurrentUser && !userIsAdmin
       h1 This profile is not public.
 
     else
 
+      //- Administrator headers
+      if userIsAdmin && !thisBelongsToCurrentUser
+        .row.text-center
+          .col-sm-8.col-sm-offset-2
+            p
+              if !profileUnlocked
+                strong.
+                  This player has not finished the game, so the profile will only be
+                  partially complete.
+                  But you get to view it because you are an administrator!
+              else if !profilePublic
+                strong.
+                  This player has not made his or her profile public.
+                  But you get to view it because you are an administrator!
+
       include _user-header
 
-      if profileUnlocked
+      //- Show only if:
+      //- Current player has "unlocked" the resume
+      //- Or user is an administrator
+      if profileUnlocked || userIsAdmin
         if thisBelongsToCurrentUser
           if postgameSurveyLink
             .row.profile-divider.no-print.text-center
