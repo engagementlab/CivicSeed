@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/normalize.css">
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/main.css">
     <link rel="stylesheet" type="text/css" href="http://s3.amazonaws.com/civicseed/css/font-awesome.min.css">
-    <script>window.CivicSeed = {"VERSION":"0.2.0","CACHE":"0.2.0","ENVIRONMENT":"production","CLOUD_PATH":"http://s3.amazonaws.com/civicseed","CONNECTED":true,"SURVEY_POSTGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l","SURVEY_PREGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j"};</script><link href="/assets/main/1422581087023.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1422581087023.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
+    <script>window.CivicSeed = {"VERSION":"0.2.0","CACHE":"0.2.0","ENVIRONMENT":"production","CLOUD_PATH":"http://s3.amazonaws.com/civicseed","CONNECTED":true,"SURVEY_POSTGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l","SURVEY_PREGAME_LINK":"https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j"};</script><link href="/assets/main/1423259573587.css" media="screen" rel="stylesheet" type="text/css"><script src="/assets/main/1423259573587.js" type="text/javascript"></script><script type="text/javascript">if(!window.JT){window.JT = {};}
 window.JT['admin-export'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
@@ -487,11 +487,11 @@ var buf = [];
 var jade_mixins = {};
 
 buf.push("<nav class=\"navbar navbar-default navbar-fixed-top no-print\"><div class=\"container-fluid\"><div class=\"navbar-header\"><button type=\"button\" data-toggle=\"collapse\" data-target=\".navbar-collapse\" class=\"navbar-toggle\"><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span><span class=\"icon-bar\"></span></button><a href=\"/\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/logo.png', true, false)) + " class=\"logo\"/></a></div><div class=\"navbar-collapse collapse navbar-right\"><ul class=\"nav navbar-nav\"><li><a href=\"/\">Home</a></li><li><a href=\"/about\">About</a></li><li><a href=\"/profiles\">Profiles</a></li><li><a href=\"/contact\">Contact us</a></li>");
-if(sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
+if (sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin')
 {
 buf.push("<li><a href=\"/admin\">Admin console</a></li>");
 }
-if(sessionStorage.userFirstName)
+if (sessionStorage.userFirstName)
 {
 buf.push("<li class=\"dropdown\"><button data-toggle=\"dropdown\" class=\"dropdown-toggle\"><i class=\"fa fa-user\"></i><span class=\"username\">" + (jade.escape((jade.interp = sessionStorage.userFirstName) == null ? '' : jade.interp)) + "</span><span class=\"caret\"></span></button><ul class=\"dropdown-menu\"><li><a href=\"/game\">Enter game</a></li><li><a" + (jade.attr("href", '/profiles/' + sessionStorage.profileLink, true, false)) + ">My civic resume</a></li><li class=\"divider\"></li><li><a href=\"/signout\" class=\"dropdown-sign-out\">Sign out</a></li></ul></li>");
 }
@@ -502,7 +502,16 @@ window.JT['profiles-allprofiles'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
 var locals_ = (locals || {}),users = locals_.users;
-buf.push("<div class=\"row all-profiles\"><div class=\"col-md-10 col-md-offset-1\"><h2>Public Profiles</h2><p>Below is a list of all users who have chosen to make their profile publicly available.</p>");
+var userIsAdmin = (sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin') ? true : false
+buf.push("<div class=\"row all-profiles\"><div class=\"col-md-10 col-md-offset-1\"><h2>Public Profiles</h2>");
+if ( userIsAdmin == true)
+{
+buf.push("<p>Below is a list of all users who have started playing the game.\nThis is an <strong>administrator</strong> view. Profiles that are not made\npublic by the player themselves will show a lock symbol by their name.</p>");
+}
+else
+{
+buf.push("<p>Below is a list of all users who have chosen to make their profile publicly available.\n</p>");
+}
 // iterate users
 ;(function(){
   var $$obj = users;
@@ -511,7 +520,23 @@ buf.push("<div class=\"row all-profiles\"><div class=\"col-md-10 col-md-offset-1
     for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
       var user = $$obj[$index];
 
-buf.push("<p><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a></p>");
+if ( user.profilePublic || (userIsAdmin && user.gameStarted))
+{
+if ( user.profile.mugshotURL)
+{
+var mugshotURL = user.profile.mugshotURL
+}
+else
+{
+var mugshotURL = CivicSeed.CLOUD_PATH + '/img/profile/placeholder.png'
+}
+buf.push("<div class=\"profile-grid-box\"><div" + (jade.attr("style", 'background-image:url(' + (mugshotURL) + ');', true, false)) + " title=\"profile image\" class=\"profile-image\"><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + " class=\"profile-link\"></a></div><h3 class=\"name\"><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a>");
+if (!( user.profilePublic))
+{
+buf.push("<i title=\"this profile is not public\" data-placement=\"top\" class=\"fa fa-lock\"></i>");
+}
+buf.push("</h3><h4 class=\"tagline\">" + (jade.escape(null == (jade.interp = user.profile.tagline) ? "" : jade.interp)) + "</h4></div>");
+}
     }
 
   } else {
@@ -519,7 +544,23 @@ buf.push("<p><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, fals
     for (var $index in $$obj) {
       $$l++;      var user = $$obj[$index];
 
-buf.push("<p><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a></p>");
+if ( user.profilePublic || (userIsAdmin && user.gameStarted))
+{
+if ( user.profile.mugshotURL)
+{
+var mugshotURL = user.profile.mugshotURL
+}
+else
+{
+var mugshotURL = CivicSeed.CLOUD_PATH + '/img/profile/placeholder.png'
+}
+buf.push("<div class=\"profile-grid-box\"><div" + (jade.attr("style", 'background-image:url(' + (mugshotURL) + ');', true, false)) + " title=\"profile image\" class=\"profile-image\"><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + " class=\"profile-link\"></a></div><h3 class=\"name\"><a" + (jade.attr("href", 'profiles/' + user.profileLink, true, false)) + ">" + (jade.escape(null == (jade.interp = user.firstName + ' ' + user.lastName) ? "" : jade.interp)) + "</a>");
+if (!( user.profilePublic))
+{
+buf.push("<i title=\"this profile is not public\" data-placement=\"top\" class=\"fa fa-lock\"></i>");
+}
+buf.push("</h3><h4 class=\"tagline\">" + (jade.escape(null == (jade.interp = user.profile.tagline) ? "" : jade.interp)) + "</h4></div>");
+}
     }
 
   }
@@ -531,7 +572,67 @@ buf.push("</div></div>");;return buf.join("");
 window.JT['profiles-singleprofile'] = (function template(locals) {
 var buf = [];
 var jade_mixins = {};
-var locals_ = (locals || {}),email = locals_.email,firstName = locals_.firstName,profilePublic = locals_.profilePublic,lastName = locals_.lastName,profile = locals_.profile,profileUnlocked = locals_.profileUnlocked,postgameSurveyLink = locals_.postgameSurveyLink,resume = locals_.resume,resumeFeedback = locals_.resumeFeedback,colorMap = locals_.colorMap,active = locals_.active;
+var locals_ = (locals || {}),email = locals_.email,firstName = locals_.firstName,profilePublic = locals_.profilePublic,profileUnlocked = locals_.profileUnlocked,lastName = locals_.lastName,profile = locals_.profile,postgameSurveyLink = locals_.postgameSurveyLink,resume = locals_.resume,resumeFeedback = locals_.resumeFeedback,colorMap = locals_.colorMap,active = locals_.active;
+jade_mixins["filteredPeerFeedback"] = function(resumeIndex, resumeFeedback){
+var block = (this && this.block), attributes = (this && this.attributes) || {};
+var filtered = []
+// iterate resumeFeedback
+;(function(){
+  var $$obj = resumeFeedback;
+  if ('number' == typeof $$obj.length) {
+
+    for (var index = 0, $$l = $$obj.length; index < $$l; index++) {
+      var comment = $$obj[index];
+
+if ( (comment.resumeIndex === resumeIndex))
+{
+filtered.push(comment)
+}
+    }
+
+  } else {
+    var $$l = 0;
+    for (var index in $$obj) {
+      $$l++;      var comment = $$obj[index];
+
+if ( (comment.resumeIndex === resumeIndex))
+{
+filtered.push(comment)
+}
+    }
+
+  }
+}).call(this);
+
+if ( (filtered.length > 0))
+{
+buf.push("<div class=\"feedback no-print\"><button class=\"btn-info btn-lg\">Peer feedback</button>");
+// iterate filtered
+;(function(){
+  var $$obj = filtered;
+  if ('number' == typeof $$obj.length) {
+
+    for (var index = 0, $$l = $$obj.length; index < $$l; index++) {
+      var comment = $$obj[index];
+
+buf.push("<div class=\"row\"><div class=\"col-sm-12\"><div class=\"comment\"><h4>A peer said:</h4><p>" + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div></div></div>");
+    }
+
+  } else {
+    var $$l = 0;
+    for (var index in $$obj) {
+      $$l++;      var comment = $$obj[index];
+
+buf.push("<div class=\"row\"><div class=\"col-sm-12\"><div class=\"comment\"><h4>A peer said:</h4><p>" + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div></div></div>");
+    }
+
+  }
+}).call(this);
+
+buf.push("</div>");
+}
+};
+var userIsAdmin = (sessionStorage.userRole === 'superadmin' || sessionStorage.userRole === 'admin') ? true : false
 buf.push("<div class=\"row user-profile\"><div class=\"col-md-10 col-md-offset-1\">");
 if ( (sessionStorage.userEmail === email))
 {
@@ -545,12 +646,25 @@ else if ( (firstName === 'Demo'))
 {
 buf.push("<div class=\"row demo-profile\"><div class=\"col-sm-12\"><h1>The story of Civic Seed</h1><h3>Call to action</h3><p>At the start of the game, the players are told that the color has vanished from the world, and that they have been tasked to help restore it. The Botanist (our game guide) has developed special color seeds to this effect. If the players want to bring the color back, they must plant these seeds all over the world.</p><p>Knowledge is the fertilizer that gives the seeds their power, so the players must answer questions to earn and plant the seeds, up to and including the Enigma Civica, a great riddle that the players must solve to progress through each level.</p><h3>Exploring the mystery</h3><p>As the players explore the world, talk to NPCs, and earn and plant seeds, more of the backstory comes to light. Through aspects of the NPC’s dialogue and rare sightings of a mysterious robot on the outskirts of the map, they learn that an Autonomous Harvesting Robot T-Class (AHR-T) is the source of the color crisis. Furthermore, it becomes apparent that AHR-T has stolen all the color multiple times&mdash;and that each time this happens, the people replant the color seeds.</p><h3>The big reveal</h3><p>After completing level 4, AHR-T sucks up all the seeds, rendering the world gray once again. Finally, the players learn the truth: it turns out, the robot was an invention of the Botanist, designed to fertilize and harvest more colorful crops, but instead, it went haywire and sucked up all the color.</p><p>The Botanist is at his wit’s end, believing that no matter what he does, the cycle will only continue.</p><h3>Boss battle and final sequence</h3><p>Now, the players must use the skills and knowledge mastered in the game to defeat the robot once and for all. The seeds, which they used to color the world, take on an extra effect: they illuminate hidden objects under the ground. To defeat AHR-T, they must race against time to uncover the four hidden control ports, and test their understanding of the content one last time at each.</p><p>This overwhelms the seeds in AHR-T’s collection bag, which rapidly expands and explodes like a giant bag of microwave popcorn. The seeds fly everywhere, floating on the breeze and bringing color back to the world where they land.</p><h3>Features of the full version of Civic Seed</h3><ul><li>Music and sound effects</li><li>Animated intro and finale sequences</li><li>Timed boss level</li><li>Hidden “Easter Egg” seeds</li><li>Heads-up knowledge contests between players</li><li>Sharable Community Service Resumes</li></ul><iframe src=\"http://player.vimeo.com/video/64315985\" width=\"640\" height=\"360\" allowfullscreen></iframe></div></div><div class=\"row\"><div class=\"col-sm-12\"><a href=\"/game\" class=\"btn btn-info btn-lg play-game\">Play the game</a></div></div>");
 }
-else if ( !thisBelongsToCurrentUser && !profilePublic)
+else if ( !profilePublic && !thisBelongsToCurrentUser && !userIsAdmin)
 {
 buf.push("<h1>This profile is not public.</h1>");
 }
 else
 {
+if ( userIsAdmin && !thisBelongsToCurrentUser)
+{
+buf.push("<div class=\"row text-center\"><div class=\"col-sm-8 col-sm-offset-2\"><p>");
+if ( !profileUnlocked)
+{
+buf.push("<strong>This player has not finished the game, so the profile will only be\npartially complete.\nBut you get to view it because you are an administrator!</strong>");
+}
+else if ( !profilePublic)
+{
+buf.push("<strong>This player has not made his or her profile public.\nBut you get to view it because you are an administrator!\n</strong>");
+}
+buf.push("</p></div></div>");
+}
 buf.push("<div class=\"row user-header\"><div class=\"col-sm-8 col-sm-offset-2 profile-box text-center\"><h1 class=\"name\">" + (jade.escape(null == (jade.interp = firstName + ' ' + lastName) ? "" : jade.interp)) + "</h1><h4 class=\"tagline\">" + (jade.escape(null == (jade.interp = profile.tagline) ? "" : jade.interp)) + "</h4>");
 if ( thisBelongsToCurrentUser)
 {
@@ -580,7 +694,7 @@ if ( thisBelongsToCurrentUser)
 buf.push("<div" + (jade.attr("data-public", profilePublic, true, false)) + " class=\"col-xs-12 col-sm-2 profile-toggle no-print\"><div class=\"public-lock\"><div" + (jade.attr("style", profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-public\"><div class=\"profile-toggle-icon\"><i title=\"make profile public\" data-placement=\"top\" class=\"fa fa-unlock-alt fa fa-4x\"></i></div><div class=\"profile-toggle-text\">your profile is public</div></div><div" + (jade.attr("style", !profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-private\"><div class=\"profile-toggle-icon\"><i title=\"make profile private\" data-placement=\"top\" class=\"fa fa-lock fa fa-4x\"></i></div><div class=\"profile-toggle-text\">your profile is private</div></div></div></div>");
 }
 buf.push("</div>");
-if ( profileUnlocked)
+if ( profileUnlocked || userIsAdmin)
 {
 if ( thisBelongsToCurrentUser)
 {
@@ -641,7 +755,12 @@ buf.push("</ul></div></div><div class=\"row\"><div class=\"col-xs-12 col-sm-3 re
 
 if ( entry.organization)
 {
-buf.push("<li><strong>" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
+buf.push("<li><strong>");
+if ( entry.role)
+{
+buf.push("" + (jade.escape((jade.interp = entry.role) == null ? '' : jade.interp)) + ",&nbsp;");
+}
+buf.push("" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
 if ( entry.summary)
 {
 buf.push("&nbsp;&mdash;\n" + (jade.escape((jade.interp = entry.summary) == null ? '' : jade.interp)) + "");
@@ -657,7 +776,12 @@ buf.push("</li>");
 
 if ( entry.organization)
 {
-buf.push("<li><strong>" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
+buf.push("<li><strong>");
+if ( entry.role)
+{
+buf.push("" + (jade.escape((jade.interp = entry.role) == null ? '' : jade.interp)) + ",&nbsp;");
+}
+buf.push("" + (jade.escape((jade.interp = entry.organization) == null ? '' : jade.interp)) + "</strong>");
 if ( entry.summary)
 {
 buf.push("&nbsp;&mdash;\n" + (jade.escape((jade.interp = entry.summary) == null ? '' : jade.interp)) + "");
@@ -693,55 +817,30 @@ buf.push("<li>" + (jade.escape(null == (jade.interp = skill) ? "" : jade.interp)
 }).call(this);
 
 buf.push("</ul><p><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/profile/seal.png', true, false)) + " width=\"60\" height=\"45\"/>Civic Seed seal of approval</p></div></div>");
+var resumeFeedbackFiltered = []
 if ( resume[0])
 {
 buf.push("<div class=\"row profile-divider resume-content-two\"></div><div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 motivations\"><h2>Motivations</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[0]) == null ? '' : jade.interp)) + "</p>");
-if ( (resumeFeedback.length > 0))
-{
-buf.push("<div class=\"feedback no-print\"><button class=\"btn-info btn-lg\">Peer Feedback</button>");
-// iterate resumeFeedback
-;(function(){
-  var $$obj = resumeFeedback;
-  if ('number' == typeof $$obj.length) {
-
-    for (var c = 0, $$l = $$obj.length; c < $$l; c++) {
-      var comment = $$obj[c];
-
-if ( (comment.resumeIndex === 0))
-{
-buf.push("<div class=\"row\"><div class=\"col-sm-12\"><div class=\"comment\"><h4>A peer said:</h4><p>" + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div></div></div>");
-}
-    }
-
-  } else {
-    var $$l = 0;
-    for (var c in $$obj) {
-      $$l++;      var comment = $$obj[c];
-
-if ( (comment.resumeIndex === 0))
-{
-buf.push("<div class=\"row\"><div class=\"col-sm-12\"><div class=\"comment\"><h4>A peer said:</h4><p>" + (jade.escape((jade.interp = comment.comment) == null ? '' : jade.interp)) + "</p></div></div></div>");
-}
-    }
-
-  }
-}).call(this);
-
-buf.push("</div>");
-}
+jade_mixins["filteredPeerFeedback"](0, resumeFeedback);
 buf.push("</div></div>");
 }
 if ( resume[1])
 {
-buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 background\"><h2>Background & Skills</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[1]) == null ? '' : jade.interp)) + "</p></div></div>");
+buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 background\"><h2>Background and skills</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[1]) == null ? '' : jade.interp)) + "</p>");
+jade_mixins["filteredPeerFeedback"](1, resumeFeedback);
+buf.push("</div></div>");
 }
 if ( resume[2])
 {
-buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 goals\"><h2>Personal Goals</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[2]) == null ? '' : jade.interp)) + "</p></div></div>");
+buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 goals\"><h2>Personal goals</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[2]) == null ? '' : jade.interp)) + "</p>");
+jade_mixins["filteredPeerFeedback"](2, resumeFeedback);
+buf.push("</div></div>");
 }
 if ( resume[3])
 {
-buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 objectives\"><h2>Civic Objectives</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[3]) == null ? '' : jade.interp)) + "</p></div></div>");
+buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset-1 objectives\"><h2>Civic objectives</h2><p" + (jade.attr("data-email", email, true, false)) + ">" + (jade.escape((jade.interp = resume[3]) == null ? '' : jade.interp)) + "</p>");
+jade_mixins["filteredPeerFeedback"](3, resumeFeedback);
+buf.push("</div></div>");
 }
 if ( colorMap)
 {
@@ -749,7 +848,7 @@ buf.push("<div class=\"row resume-row-two\"><div class=\"col-sm-10 col-sm-offset
 }
 if ( thisBelongsToCurrentUser)
 {
-buf.push("<div class=\"row share no-print\"><div class=\"col-sm-10 col-sm-offset-1\"><div class=\"share-box\"><h2>Share your civic resume!</h2><div" + (jade.attr("data-public", profilePublic, true, false)) + " class=\"profile-toggle\"><div class=\"public-lock\"><div" + (jade.attr("style", profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-public\"><div class=\"profile-toggle-icon\"><i title=\"make profile public\" data-placement=\"top\" class=\"fa fa-unlock-alt fa\"></i></div><div class=\"profile-toggle-text\">Congratulations, your profile is public!</div></div><div" + (jade.attr("style", !profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-private\"><div class=\"profile-toggle-icon\"><i title=\"make profile private\" data-placement=\"top\" class=\"fa fa-lock fa\"></i></div><div class=\"profile-toggle-text\">Your profile is private. Click here to make it public.</div></div></div></div><p>Use the link below to share your Civic Seed profile with your friends,\ncolleagues and potential employers.\n</p><form id=\"share-link-form\"><div id=\"copy-share-link-group\" class=\"input-group\"><span class=\"input-group-addon\">http://</span><input id=\"copy-share-link-input\" type=\"text\" readonly=\"readonly\" class=\"share-link form-control\"/><span id=\"customize-share-link-button\" class=\"input-group-addon share-link-button change-share-link-button\">Customize</span></div><div id=\"customize-share-link-group\" class=\"input-group\"><span id=\"share-link-prefix\" class=\"input-group-addon\">http://</span><input id=\"customize-share-link-input\" type=\"text\" maxlength=\"32\" class=\"share-link form-control\"/><span id=\"save-share-link-button\" class=\"input-group-addon share-link-button save-share-link-button\">Save</span></div><div id=\"share-link-message\" class=\"share-link-message\"></div></form><h4>Here is your Civic Seed seal of approval badge.</h4><div class=\"seal-container\"><div class=\"seal-image\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/profile/seal.png', true, false)) + " width=\"180\" height=\"135\" alt=\"Civic Seed Seal of Approval\"/></div><div class=\"seal-code\"><h5>Embed this on your website!</h5><textarea><a href=\"http://civicseed.org/profiles/" + (jade.escape((jade.interp = sessionStorage.profileLink) == null ? '' : jade.interp)) + "\" title=\"" + (jade.escape((jade.interp = firstName) == null ? '' : jade.interp)) + " has earned the Civic Seed Seal of Approval!\"><img src=\"" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/profile/seal.png\" width=\"200\" height=\"150\" alt=\"Civic Seed Seal of Approval\"></a></textarea></div></div></div></div></div>");
+buf.push("<div class=\"row share no-print\"><div class=\"col-sm-10 col-sm-offset-1\"><div class=\"share-box\"><h2>Share your civic resume!</h2><div" + (jade.attr("data-public", profilePublic, true, false)) + " class=\"profile-toggle\"><div class=\"public-lock\"><div" + (jade.attr("style", profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-public\"><div class=\"profile-toggle-icon\"><i title=\"make profile public\" data-placement=\"top\" class=\"fa fa-unlock-alt\"></i></div><div class=\"profile-toggle-text\">Congratulations, your profile is public!</div></div><div" + (jade.attr("style", !profilePublic ? 'display: block;' : 'display: none;', true, false)) + " class=\"profile-private\"><div class=\"profile-toggle-icon\"><i title=\"make profile private\" data-placement=\"top\" class=\"fa fa-lock\"></i></div><div class=\"profile-toggle-text\">Your profile is private. Click here to make it public.</div></div></div></div><p>Use the link below to share your Civic Seed profile with your friends,\ncolleagues and potential employers.\n</p><form id=\"share-link-form\"><div id=\"copy-share-link-group\" class=\"input-group\"><span class=\"input-group-addon\">http://</span><input id=\"copy-share-link-input\" type=\"text\" readonly=\"readonly\" class=\"share-link form-control\"/><span id=\"customize-share-link-button\" class=\"input-group-addon share-link-button change-share-link-button\">Customize</span></div><div id=\"customize-share-link-group\" class=\"input-group\"><span id=\"share-link-prefix\" class=\"input-group-addon\">http://</span><input id=\"customize-share-link-input\" type=\"text\" maxlength=\"32\" class=\"share-link form-control\"/><span id=\"save-share-link-button\" class=\"input-group-addon share-link-button save-share-link-button\">Save</span></div><div id=\"share-link-message\" class=\"share-link-message\"></div></form><h4>Here is your Civic Seed seal of approval badge.</h4><div class=\"seal-container\"><div class=\"seal-image\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/profile/seal.png', true, false)) + " width=\"180\" height=\"135\" alt=\"Civic Seed Seal of Approval\"/></div><div class=\"seal-code\"><h5>Embed this on your website!</h5><textarea><a href=\"http://civicseed.org/profiles/" + (jade.escape((jade.interp = sessionStorage.profileLink) == null ? '' : jade.interp)) + "\" title=\"" + (jade.escape((jade.interp = firstName) == null ? '' : jade.interp)) + " has earned the Civic Seed Seal of Approval!\"><img src=\"" + (jade.escape((jade.interp = CivicSeed.CLOUD_PATH) == null ? '' : jade.interp)) + "/img/profile/seal.png\" width=\"200\" height=\"150\" alt=\"Civic Seed Seal of Approval\"></a></textarea></div></div></div></div></div>");
 }
 buf.push("<div class=\"row footer\"><div class=\"col-sm-12\"><img" + (jade.attr("src", '' + (CivicSeed.CLOUD_PATH) + '/img/profile/tufts-logo.png', true, false)) + " width=\"320\" height=\"60\"/></div></div>");
 }
