@@ -1,3 +1,26 @@
+mixin filteredPeerFeedback(resumeIndex, resumeFeedback)
+  - var filtered = []
+
+  //- Filter out feedback that does not fit
+  each comment, index in resumeFeedback
+    if (comment.resumeIndex === resumeIndex)
+      - filtered.push(comment)
+
+  //- Output everything
+  if (filtered.length > 0)
+    .feedback.no-print
+      button.btn-info.btn-lg Peer feedback
+      each comment, index in filtered
+        .row
+          .col-sm-12
+            .comment
+              h4 A peer said:
+              p #{comment.comment}
+
+//- End mixin declaration
+
+//- BEGIN PROFILE TEMPLATE
+
 .row.user-profile
   .col-md-10.col-md-offset-1
 
@@ -63,6 +86,8 @@
                 if entry.organization
                   li
                     strong
+                      if entry.role
+                        | #{entry.role},&nbsp;
                       | #{entry.organization}
                     if entry.summary
                       | &nbsp;&mdash;
@@ -79,37 +104,41 @@
               img(src='#{CivicSeed.CLOUD_PATH}/img/profile/seal.png', width=60, height=45)
               | Civic Seed seal of approval
 
+        - var resumeFeedbackFiltered = []
+
         if resume[0]
           .row.profile-divider.resume-content-two
           .row.resume-row-two
             .col-sm-10.col-sm-offset-1.motivations
               h2 Motivations
-              p(data-email=email) #{resume[0]}
-              if (resumeFeedback.length > 0)
-                .feedback.no-print
-                  button.btn-info.btn-lg Peer Feedback
-                  each comment, c in resumeFeedback
-                    if (comment.resumeIndex === 0)
-                      .row
-                        .col-sm-12
-                          .comment
-                            h4 A peer said:
-                            p #{comment.comment}
+              p(data-email=email)
+                | #{resume[0]}
+              +filteredPeerFeedback(0, resumeFeedback)
+
         if resume[1]
           .row.resume-row-two
             .col-sm-10.col-sm-offset-1.background
-              h2 Background & Skills
-              p(data-email=email) #{resume[1]}
+              h2 Background and skills
+              p(data-email=email)
+                | #{resume[1]}
+              +filteredPeerFeedback(1, resumeFeedback)
+
         if resume[2]
           .row.resume-row-two
             .col-sm-10.col-sm-offset-1.goals
-              h2 Personal Goals
-              p(data-email=email) #{resume[2]}
+              h2 Personal goals
+              p(data-email=email)
+                | #{resume[2]}
+              +filteredPeerFeedback(2, resumeFeedback)
+
         if resume[3]
           .row.resume-row-two
             .col-sm-10.col-sm-offset-1.objectives
-              h2 Civic Objectives
-              p(data-email=email) #{resume[3]}
+              h2 Civic objectives
+              p(data-email=email)
+                | #{resume[3]}
+              +filteredPeerFeedback(3, resumeFeedback)
+
         if colorMap
           .row.resume-row-two
             .col-sm-10.col-sm-offset-1.color-map

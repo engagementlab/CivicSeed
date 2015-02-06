@@ -91,7 +91,11 @@ module.exports = {
         major: String,
         year: String
       }],
-      experience: [String],
+      experience: [{
+        role: String,
+        organization: String,
+        summary: String
+      }],
       skills: [String]
     },
     admin: {

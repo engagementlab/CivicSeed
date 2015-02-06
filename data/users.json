@@ -1200,19 +1200,35 @@
       "botanistState": 3,
       "firstTime": false,
       "resume": [
-        "I'd like to think that I haven't changed those things, sir. Wait a minute - you've been declared dead. You can't give orders around here. Sure. You'd be surprised how far a hug goes with Geordi, or Worf. They were just sucked into space. My oath is between Captain Kargan and myself. Your only concern is with how you obey my orders.",
-        "Tonight's planned topics of conversation include Pierre Omidyar, Matt Taibbi and First Look; the latest twist in the Gawker unpaid intern suit, Virgin America, Taylor Swift and whatever else you want to weigh in on.",
-        "What do these organizations seek to measure? It turns out that they assess different things: Acumen measures immediate outputs, such as mosquito nets made and distributed, Robin Hood focuses on long-term outcomes in the lives of individuals such as gains in future income, and MCC aims for both individual outcomes and broader impacts on society such as reduction in poverty rates.",
-        "Alternatively, the individual(s) sharing the pattern may not have the time or interest of going through the 'pattern'-ity process and might release a short description of their proto-pattern instead. Brief descriptions or snippets of this type of pattern are known as patlets."
+        "I believe in truth, justice, and that the American way can be more than just the short-term pursuit of increasing profits. I believe our pursuit of happiness should be investment in ourselves and in our understanding of each other and the world around us.",
+        "I am classically trained in architecture and city planning but became a self-taught web developer because of supportive parents, peers, and the employers who took a chance on a person who wanted more out of life than a day job. As a result, I tend to work in small teams and wear a lot of hats. I look good in hats.",
+        "I strive to make the world a better place, and if it helps you understand why, it's because I selfishly want to live in a better world. The problem is that the real estate market on worlds is pretty constrained right now so it's important to try and make decisions that are supportive of all seven billion of your roommates.",
+        "“Think globally, act locally” might be pretty overused but I think it's best to concentrate on the smaller community you're a part of and make an impact there. That way you don't spread yourself too thin with all of the things you can't possibly get to, but concentrate on what and who you know."
       ],
       "resumeFeedback": [
         {
           "resumeIndex": 0,
-          "comment": "this is a feedback response."
+          "comment": "This is great!"
         },
         {
           "resumeIndex": 0,
-          "comment": "roinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce greenroinde vos postulo esse magis radicchio coriander pea sprouts burdock celtuce green"
+          "comment": "I approve!"
+        },
+        {
+          "resumeIndex": 1,
+          "comment": "I think this is true for me too."
+        },
+        {
+          "resumeIndex": 1,
+          "comment": "You go gurl"
+        },
+        {
+          "resumeIndex": 1,
+          "comment": "Love it"
+        },
+        {
+          "resumeIndex": 3,
+          "comment": "What's your favorite color?"
         }
       ],
       "seenRobot": false,
@@ -1240,31 +1256,48 @@
       }
     },
     "profile": {
-      "tagline": "Civic tech mercenary",
+      "tagline": "Civic technology for the people",
       "mugshotURL": "https://s3.amazonaws.com/civicseeders/mugshots/louhuang.jpg",
-      "address1": "221B Baker Street",
+      "address1": "1400 Irving St NW",
       "address2": "",
-      "city": "London",
-      "state": "UK",
-      "zip": "",
-      "phone": "(212) 555-1234",
+      "city": "Washington",
+      "state": "DC",
+      "zip": "20010",
+      "phone": "(347) 443-9568",
       "email": "lou@louhuang.com",
-      "vision": "The immediate need for the City to implement policies and programs that enable us to reach our Housing Element Objectives and Policies is clearly reflected in both local and national conversations about the current housing market and growing affordable housing crisis. San Francisco’s existing Housing Element provides a solid structure for recently completed and ongoing housing policy.",
-      "background": " Tomorrow’s Uber is targeting a stratospheric billion valuation Uber appears to have an army of supporters, and has achieved staggering levels of publicity for a company of its current size, even by dot-com era standards. It is not intuitive as to how $18 billion or $30 billion of economic value could be realized out of the traditionally cutthroat/low-margin urban car service business, and none of the pro-Uber publicity I’ve seen provides any financial/business explanation of how this megagrowth might be achieved.",
+      "vision": "I am an urban designer and front-end web developer based in Washington, D.C. by way of San Francisco. I use technology to improve cities and build better communities. ",
+      "background": "Recovering architect, 2013 fellow at Code for America, and LEED-ND accredited. I design for exceptional user experience, work with maps and open data, write about iterative placemaking, and speak about civic engagement in a digital world.",
       "education": [{
         "school": "University of Pennsylvania",
         "major": "Master of City Planning",
         "year": "2010"
+      },
+      {
+        "school": "University of California",
+        "major": "Bachelor of Arts in Architecture",
+        "year": "2004"
       }],
-      "experience": [
-        "Game developer, Engagement Game Lab",
-        "Fellow, Code for America"
-      ],
+      "experience": [{
+        "organization": "Mapzen",
+        "role": "UI engineer",
+        "summary": "Building interfaces for open-source map tools."
+      },
+      {
+        "organization": "Engagement Game Lab",
+        "role": "Game developer",
+        "summary": "Engaging communities through games."
+      },
+      {
+        "organization": "Code for America",
+        "role": "Fellow",
+        "summary": "Shaping government for the people through technology."
+      }],
       "skills": [
-        "Punkin’ chunkin’",
-        "Mythbusting",
-        "Wheel spinning",
-        "Math"
+        "Graphic Design – Infographics / Data Visualization",
+        "Project Design",
+        "Public Speaking",
+        "Copyediting / Proofreading",
+        "Familiar with Public Transport"
       ]
     }
   },
