@@ -25,7 +25,8 @@
         | #{profile.city}
         if profile.state
           | , #{profile.state}
-        | #{profile.zip}
+        if profile.zip
+          | &nbsp;#{profile.zip}
       p.phone= profile.phone
       p.email= profile.email
 
