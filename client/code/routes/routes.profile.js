@@ -1,11 +1,10 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, $CONTAINER, JT, Davis */
 
 // TEMP
 // Process resume answers and inject them into the
 // profile data object as if it were already there.
 function _processResumeAnswers (data) {
-  var resumeAnswers = []
-
   for (var i = 0; i < data.resources.length; i++) {
     var resource = data.resources[i]
     if (resource.questionType === 'resume') {
@@ -41,7 +40,7 @@ function _processResumeAnswers (data) {
         var education = {
           school: data.school,
           major: major,
-          year: 2105 // Temp
+          year: null // Temp
         }
 
         if (!data.profile.education[0]) {
@@ -96,14 +95,13 @@ function _processResumeAnswers (data) {
           data.profile.experience = processed
         }
       }
-
     }
   }
 
   return data
 }
 
-var self = module.exports = {
+module.exports = {
 
   loadRoutes: function (app) {
     var profile = require('/profile')
@@ -122,7 +120,7 @@ var self = module.exports = {
           console.log('error!')
         } else {
           if (!info.profileSetup && sessionStorage.userEmail === info.email) {
-            //reroute to change info
+            // reroute to change info
             Davis.location.assign('change-info')
           } else {
             info.postgameSurveyLink = CivicSeed.SURVEY_POSTGAME_LINK
@@ -135,7 +133,6 @@ var self = module.exports = {
         }
       })
     })
-
   }
 
 }

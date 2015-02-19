@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
+/* global CivicSeed, $, ss, $CONTAINER, JT, apprise */
 
 var _ = require('underscore')
 
-var self = module.exports = {
+module.exports = {
 
   loadRoutes: function (app) {
-
     require('/admin').init()
     require('/export').init()
     require('/invitecodes').init()
@@ -50,21 +50,20 @@ var self = module.exports = {
     app.get('/admin/npcs', function (req) {
       ss.rpc('admin.npcs.init', sessionStorage.userId, function (result) {
         if (result) {
-
           // Add a dummy template entry for new NPCs
           result.push({
-            id:     '-template',
+            id: '-template',
             newNpc: true,
-            level:  0,
+            level: 0,
             position: {
-              x:    '',
-              y:    ''
+              x: '',
+              y: ''
             },
-            name:   '',
+            name: '',
             sprite: 0,
-            index:  0,
+            index: 0,
             resource: {},
-            dialog:  {
+            dialog: {
               prompts: [],
               smalltalk: []
             }
@@ -101,7 +100,7 @@ var self = module.exports = {
           // It should actually send a document of MIME type application/json
           // instead of just overwriting the HTML page.
           // Sort response by 'id' if that property is present
-          document.write(JSON.stringify(_.sortBy(res,'id')))
+          document.write(JSON.stringify(_.sortBy(res, 'id')))
         } else {
           document.write('Error exporting data.')
         }
@@ -116,7 +115,6 @@ var self = module.exports = {
       }))
       $('title').text('{ ::: Civic Seed - Admin Panel - Invite Codes ::: }')
     })
-
   }
 
 }

@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global $CONTAINER, $game, JT, Davis */
 
 var actorRoutes = [
   '/game'
@@ -14,19 +15,16 @@ var superadminRoutes = [
   '/admin/npcs'
 ]
 
-var self = module.exports = {
+module.exports = {
 
   loadMiddleware: function (app) {
-
     // check if user experiences/authentic
     app.before(function (req) {
-
       var fullPath = req.fullPath
       var userRole = sessionStorage.getItem('userRole')
 
       if (Davis.previousPath && Davis.previousPath === '/game') {
         // do something special here
-        // console.log('exit the game!');
         if (sessionStorage.getItem('isPlaying')) {
           $game.exitGame()
         }
@@ -57,9 +55,7 @@ var self = module.exports = {
           return false
         }
       }
-
     })
-
   }
 
 }

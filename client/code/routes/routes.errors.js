@@ -1,13 +1,12 @@
-'use strict';
+'use strict'
+/* global $CONTAINER, JT */
 
-var self = module.exports = {
+module.exports = {
 
   loadRoutes: function (app) {
-
     app.bind('routeNotFound', function (req) {
       $CONTAINER.append(JT['pages-404']())
     })
-
   }
 
 }

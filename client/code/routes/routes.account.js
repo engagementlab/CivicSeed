@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
+/* global CivicSeed, $CONTAINER, JT */
 
-var self = module.exports = {
+module.exports = {
 
   loadRoutes: function (app) {
-
     app.get('/remind-me', function (req) {
       $CONTAINER.append(JT['pages-remindme']())
     })
@@ -13,7 +13,6 @@ var self = module.exports = {
         pregameSurveyLink: CivicSeed.SURVEY_PREGAME_LINK
       }))
     })
-
   }
 
 }

@@ -1,9 +1,9 @@
-'use strict';
+'use strict'
+/* global $CONTAINER, $game, JT */
 
-var self = module.exports = {
+module.exports = {
 
   loadRoutes: function (app) {
-
     app.get('/', function (req) {
       $CONTAINER.append(JT['pages-home']())
     })
@@ -24,7 +24,6 @@ var self = module.exports = {
     app.get('/introduction', function (req) {
       $CONTAINER.append(JT['pages-introduction']())
     })
-
   }
 
 }
