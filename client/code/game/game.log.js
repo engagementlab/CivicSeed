@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -24,15 +25,14 @@ Counter.prototype.isFull = function () {
   return this.numItems > this.maxItems
 }
 
-var self = $game.$log = (function () {
-
+$game.$log = module.exports = (function () {
   var logCounter = new Counter()
 
   return {
 
     init: function (callback) {
       $game.log('Welcome to Civic Seed')
-      self.clearUnread()
+      this.clearUnread()
       callback()
     },
 
@@ -43,6 +43,9 @@ var self = $game.$log = (function () {
     // Add message to game log
     addMessage: function (data) {
       var el = document.getElementById('game-log')
+      var date = Date()
+      var displayDate = date.substring(0, 10) + date.substring(15, 24)
+      var html
 
       // Update unread messages icon number
       if ($(el).is(':visible')) {
@@ -56,10 +59,6 @@ var self = $game.$log = (function () {
 
         $game.setBadgeCount('.hud-log', hudText)
       }
-
-      var date = Date(),
-          displayDate = date.substring(0, 10) + date.substring(15, 24),
-          html
 
       // Create HTML snippets
       if (data.input === 'chat') {
@@ -90,5 +89,4 @@ var self = $game.$log = (function () {
       $game.setBadgeCount('.hud-log', 0)
     }
   }
-
 }())

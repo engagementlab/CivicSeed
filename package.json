@@ -50,5 +50,14 @@
   "subdomain": "civicseed-testing",
   "scripts": {
     "start": "node ./bin/server"
+  },
+  "standard": {
+    "ignore": [
+      "**/bower_components/**",
+      "**/client/code/libs/**",
+      "**/client/code/system/**",
+      "**/client/static/**",
+      "**/server/utils/date-format.js"
+    ]
   }
 }

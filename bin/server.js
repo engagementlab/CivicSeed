@@ -1,28 +1,28 @@
 #!/usr/bin/env node
 
-var rootDir     = process.cwd() || '.'
+var rootDir = process.cwd() || '.'
 
-var express     = require('express'),
-    ss          = require('socketstream'),
-    ssJade      = require('ss-jade'),
-    ssStylus    = require('ss-stylus'),
-    winston     = require('winston')
+var express = require('express')
+var ss = require('socketstream')
+var ssJade = require('ss-jade')
+var ssStylus = require('ss-stylus')
+var winston = require('winston')
 
-var app         = exports.app = express()
+var app = exports.app = express()
 
-var config      = require(rootDir + '/app/config')
+var config = require(rootDir + '/app/config')
 
-var PORT        = config.get('PORT'),
-    NODE_ENV    = config.get('NODE_ENV'),
-    CLOUD_PATH  = config.get('CLOUD_PATH'),
-    USE_REDIS   = config.get('USE_REDIS')
+var PORT = config.get('PORT')
+var NODE_ENV = config.get('NODE_ENV')
+var CLOUD_PATH = config.get('CLOUD_PATH')
+var USE_REDIS = config.get('USE_REDIS')
 
-var service     = require(rootDir + '/app/service'),
-    controllers = require(rootDir + '/app/controllers'),
-    CivicSeed   = require(rootDir + '/app/CivicSeed')
+var service = require(rootDir + '/app/service')
+var controllers = require(rootDir + '/app/controllers')
+var CivicSeed = require(rootDir + '/app/CivicSeed')
 
-var server,
-    redisConfig
+var server
+var redisConfig
 
 console.log('\n\n     ___      _               _                       ___                       _   '.red)
 console.log('    / __|    (_)    __ __    (_)     __       '.red + 'o O O'.white + '  / __|    ___     ___    __| |  '.red)
@@ -34,7 +34,6 @@ console.log('\n\n')
 
 // Setup database services, based on the config
 service.connectMongoose(app, function (databases) {
-
   // ~ - ~ - ~ --- >>>
   // ~ - ~ - ~ --- >>> EXPRESS
   // ~ - ~ - ~ --- >>>
@@ -63,10 +62,10 @@ service.connectMongoose(app, function (databases) {
   winston.info('Configuring SocketStream ... '.yellow)
 
   // Attach Winston logger to SS logger
-  ss.api.log.info   = winston.info
-  ss.api.log.debug  = winston.debug
-  ss.api.log.error  = winston.error
-  ss.api.log.warn   = winston.warn
+  ss.api.log.info = winston.info
+  ss.api.log.debug = winston.debug
+  ss.api.log.error = winston.error
+  ss.api.log.warn = winston.warn
 
   // Code formatters
   ss.client.formatters.add(ssJade, {
@@ -112,7 +111,6 @@ service.connectMongoose(app, function (databases) {
   ss.api.add('db', databases.mongooseDb)
 
   controllers.loadAll(app, service, function () {
-
     if (NODE_ENV === 'development') {
       app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 
@@ -136,7 +134,6 @@ service.connectMongoose(app, function (databases) {
     // ~ - ~ - ~ --- >>>
 
     server = app.listen(PORT, function () {
-
       var local = server.address()
       winston.info('Express server listening @ http://%s:%d/ in '.magenta + '%s'.yellow.inverse + ' mode'.magenta, local.address, local.port, app.settings.env)
 
@@ -145,9 +142,6 @@ service.connectMongoose(app, function (databases) {
 
       // Append SocketStream middleware to the stack
       app.stack = ss.http.middleware.stack.concat(app.stack)
-
     })
-
   })
-
 })

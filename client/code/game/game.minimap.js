@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global CivicSeed, $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -12,14 +13,12 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var self = $game.minimap = (function () {
-
-  // Private
-  var _minimap = {},
-      _minimapPlayerContext = null,
-      _minimapRadarContext  = null,
-      _utils,
-      _images = {}
+$game.minimap = module.exports = (function () {
+  var _minimap = {}
+  var _minimapPlayerContext = null
+  var _minimapRadarContext = null
+  var _utils
+  var _images = {}
 
   // Render quadrant lines on the minimap
   function renderQuadrantLines () {
@@ -92,7 +91,7 @@ var self = $game.minimap = (function () {
     init: function (callback) {
       _utils = $game.$render.utils
       _minimapPlayerContext = _utils.initCanvas('minimap-player')
-      _minimapRadarContext  = _utils.initCanvas('minimap-radar')
+      _minimapRadarContext = _utils.initCanvas('minimap-radar')
       _images['tiny_botanist'] = new Image()
       _images['tiny_botanist'].src = CivicSeed.CLOUD_PATH + '/img/game/tiny_botanist.png'
       _images['tiny_botanist'].onload = function () {
@@ -110,25 +109,25 @@ var self = $game.minimap = (function () {
       _minimap[id].x = position.x
       _minimap[id].y = position.y
       _minimap[id].color = color
-      self.render()
+      this.render()
     },
 
     // Update a player on the minimap
     updatePlayer: function (id, position) {
       _minimap[id].x = position.x
       _minimap[id].y = position.y
-      self.render()
+      this.render()
     },
 
     // Remove a player from the minimap
     removePlayer: function (id) {
       delete _minimap[id]
-      self.render()
+      this.render()
     },
 
     // Render all the players on the minimap
     render: function () {
-      self.clear()
+      this.clear()
       renderQuadrantLines()
       renderTinyBotanist()
       renderViewportBoundaries()
@@ -138,7 +137,7 @@ var self = $game.minimap = (function () {
       })
 
       // Render radar
-      self.radar.update()
+      this.radar.update()
     },
 
     // Clear the minimap
@@ -153,7 +152,7 @@ var self = $game.minimap = (function () {
         right: '0',
         zIndex: '6'
       })
-      context.fillStyle = 'red' //this.colors.red
+      context.fillStyle = 'red'
       // TODO: Incomplete
       context.fillRect(
         location.x,
@@ -189,10 +188,10 @@ var self = $game.minimap = (function () {
       update: function () {
         this.clear()
 
-        var local     = $game.flags.check('local-radar'),
-            global    = $game.flags.check('global-radar'),
-            npcs      = {},
-            resources = $game.$player.getResources()
+        var local = $game.flags.check('local-radar')
+        var global = $game.flags.check('global-radar')
+        var npcs = {}
+        var resources = $game.$player.getResources()
 
         // If player doesn't have radar on, exit
         if (!local && !global) return false
@@ -216,9 +215,9 @@ var self = $game.minimap = (function () {
           // - If NPC level is less than or equal to Player's current level
           var theResource = resources[npc.resource.id]
           if (npc.isHolding === true && (!theResource || theResource.result === false) && $game.$player.getLevel() >= npc.getLevel()) {
-            self.radar.drawDot(npc.position)
+            this.drawDot(npc.position)
           }
-        })
+        }.bind(this)) // this = radar
       },
 
       clear: function () {
@@ -238,5 +237,4 @@ var self = $game.minimap = (function () {
     }
 
   }
-
 }())

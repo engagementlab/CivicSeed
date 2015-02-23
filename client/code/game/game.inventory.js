@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -10,9 +11,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var self = $game.inventory = (function () {
-
-  // Private
+$game.inventory = module.exports = (function () {
   var _inventory = {} // Holds each item in inventory.
 
   // Returns true if a resource is held in the player's inventory
@@ -39,12 +38,12 @@ var self = $game.inventory = (function () {
   // Add an item to inventory HUD and bind actions to it
   function addToInventoryHUD (data) {
     // Add resource image to inventory HUD
-    var className   = 'r' + data.name,
-        playerLevel = $game.$player.getLevel(),
-        levelFolder = 'level' + playerLevel.toString(),
-        imgPath     = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' +  data.name +'.png'
+    var className = 'r' + data.name
+    var playerLevel = $game.$player.getLevel()
+    var levelFolder = 'level' + playerLevel.toString()
+    var imgPath = CivicSeed.CLOUD_PATH + '/img/game/resources/' + levelFolder + '/small/' + data.name + '.png'
 
-    $('#inventory > .inventory-items').append('<img class="inventory-item '+ className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
+    $('#inventory > .inventory-items').append('<img class="inventory-item ' + className + '"src="' + imgPath + '" data-placement="top" data-original-title="' + data.tagline + '">')
 
     $game.addBadgeCount('.hud-inventory', 1)
 
@@ -56,7 +55,7 @@ var self = $game.inventory = (function () {
       .on('click', function () {
         $game.$resources.examineResource(data.id)
       })
-      .on('dragstart', {id: data.id , name: data.name}, $game.$botanist.onTangramDragFromInventoryStart)
+      .on('dragstart', {id: data.id, name: data.name}, $game.$botanist.onTangramDragFromInventoryStart)
   }
 
   // Convenience funtion to load all items in player's inventory from DB
@@ -97,11 +96,11 @@ var self = $game.inventory = (function () {
       $game.$input.activeHUDButton('.hud-inventory')
 
       this.show(function () {
-        if (self.get().length > 0) {
+        if (this.get().length > 0) {
           $game.alert('Click on a piece to review again')
         }
         if (typeof callback === 'function') callback()
-      })
+      }.bind(this))
     },
 
     // Only visually hides the inventory window.
@@ -154,7 +153,7 @@ var self = $game.inventory = (function () {
 
       // Save to server
       ss.rpc('game.player.updateGameInfo', {
-        id:        $game.$player.id,
+        id: $game.$player.id,
         inventory: []
       })
     },
@@ -170,5 +169,4 @@ var self = $game.inventory = (function () {
     }
 
   }
-
 }())

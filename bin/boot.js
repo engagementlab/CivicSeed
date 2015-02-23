@@ -1,12 +1,12 @@
-var rootDir     = process.cwd()
+var rootDir = process.cwd()
 
-var fs          = require('fs'),
-    nconf       = require('nconf'),
-    env         = require('node-env-file'),
-    colors      = require('colors'),
-    bcrypt      = require('bcrypt'),
-    mongoose    = require('mongoose'),
-    winston     = require('winston')
+var fs = require('fs')
+var nconf = require('nconf')
+var env = require('node-env-file')
+var colors = require('colors')
+var bcrypt = require('bcrypt')
+var mongoose = require('mongoose')
+var winston = require('winston')
 
 winston.info('Bootstrapping MongoDB for Civic Seed first-run ...'.red)
 
@@ -14,11 +14,14 @@ winston.info('Bootstrapping MongoDB for Civic Seed first-run ...'.red)
 var envFile = rootDir + '/.env'
 if (fs.existsSync(envFile)) {
   winston.info('.env found. Loading ...'.red)
-  env(envFile, {verbose: false, overwrite: true})
+  env(envFile, {
+    verbose: false,
+    overwrite: true
+  })
 }
 
-var NODE_ENV    = process.env.NODE_ENV || 'development',
-    CONFIG_FILE = rootDir + '/config/' + NODE_ENV + '.json'
+var NODE_ENV = process.env.NODE_ENV || 'development'
+var CONFIG_FILE = rootDir + '/config/' + NODE_ENV + '.json'
 
 nconf.argv().env().file({
   file: CONFIG_FILE
@@ -29,11 +32,9 @@ if (NODE_ENV === 'heroku') {
   nconf.set('MONGO_URL', process.env.MONGOHQ_URL)
 }
 
-var accountHelpers = require(rootDir + '/server/utils/account-helpers')
-
-var _db,
-    _userModel,
-    _superAdminUser
+var _db
+var _userModel
+var _superAdminUser
 
 _db = mongoose.createConnection(nconf.get('MONGO_URL'))
 _db.on('error', function (err) {

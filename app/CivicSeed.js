@@ -1,11 +1,13 @@
-'use strict';
+'use strict'
 
-var rootDir  = process.cwd(),
-    fs       = require('fs'),
-    config   = require(rootDir + '/app/config'),
-    VERSION  = config.get('VERSION'),
-    NODE_ENV = config.get('NODE_ENV'),
-    now      = new Date()
+var rootDir = process.cwd()
+var fs = require('fs')
+
+var config = require(rootDir + '/app/config')
+var VERSION = config.get('VERSION')
+var NODE_ENV = config.get('NODE_ENV')
+
+var now = new Date()
 
 var _CivicSeed = {
   VERSION: VERSION,
@@ -25,7 +27,7 @@ var _CivicSeed = {
 // If the SS_PACK env directive is detected, override current config
 // with info from a production configuration file so that the correct variables are pre-packed
 // See issue #145. https://github.com/engagementgamelab/CivicSeed/issues/145
-if (parseInt(process.env.SS_PACK) === 1) {
+if (parseInt(process.env.SS_PACK, 10) === 1) {
   fs.readFile(rootDir + '/config/production.json', function (err, data) {
     if (err) {
       console.log(err)
@@ -42,7 +44,7 @@ if (parseInt(process.env.SS_PACK) === 1) {
   })
 }
 
-var self = module.exports = {
+module.exports = {
 
   getGlobals: function () {
     return _CivicSeed

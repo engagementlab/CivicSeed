@@ -1,30 +1,26 @@
-'use strict';
+'use strict'
+/* global $ */
 
-var self = module.exports = (function () {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-  var $body
+    admin.export
 
-  return {
+    - Setup export menu
 
-    init: function () {
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-      $body = $(document.body)
-
-      self.setupExportButtons()
-
-    },
-
-    // Create event listeners to export data
-    setupExportButtons: function () {
-
-      $body.on('click', '#admin-export button', function () {
-        var dataType = $(this).data().type
-
-        window.location = '/admin/export/' + dataType
-      })
-
-    }
-
+module.exports = (function () {
+  // Create event listeners to export data
+  function setupExportButtons () {
+    $(document.body).on('click', '#admin-export button', function () {
+      var dataType = $(this).data().type
+      window.location = '/admin/export/' + dataType
+    })
   }
 
+  return {
+    init: function () {
+      setupExportButtons()
+    }
+  }
 }())

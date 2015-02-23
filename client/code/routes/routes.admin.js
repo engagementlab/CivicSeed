@@ -1,5 +1,5 @@
 'use strict'
-/* global CivicSeed, $, ss, $CONTAINER, JT, apprise */
+/* global CivicSeed, ss, JT, $, $CONTAINER, apprise */
 
 var _ = require('underscore')
 

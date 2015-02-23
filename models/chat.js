@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Chat',
   collection: 'chat',
   schema: {
@@ -11,5 +10,4 @@ module.exports = {
     when: Date,
     instanceName: String
   }
-
 }

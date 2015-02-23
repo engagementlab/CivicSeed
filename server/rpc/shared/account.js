@@ -1,28 +1,29 @@
-'use strict';
+'use strict'
 
-var rootDir        = process.cwd(),
-    bcrypt         = require('bcrypt'),
-    xkcd           = require('xkcd-pwgen'),
-    winston        = require('winston'),
-    config         = require(rootDir + '/app/config'),
-    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-    emailUtil      = require(rootDir + '/server/utils/email'),
-    EMAIL_TO       = config.get('EMAIL_TO'),
-    _countdown     = 10,
-    singleHtml
+var rootDir = process.cwd()
+var bcrypt = require('bcrypt')
+var xkcd = require('xkcd-pwgen')
+var winston = require('winston')
+var config = require(rootDir + '/app/config')
+var accountHelpers = require(rootDir + '/server/utils/account-helpers')
+var emailUtil = require(rootDir + '/server/utils/email')
+var EMAIL_TO = config.get('EMAIL_TO')
+var _countdown = 10
+var singleHtml
 
-var html = '<h2>Password reminder for #{firstName}</h2>\
-            <p style="color:red;">Someone is requesting access to your account. \
-            If you did not request this information, you can ignore and delete this email.</p>\
-            <p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>\
-            <p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>'
+var html = ''
+
+html += '<h2>Password reminder for #{firstName}</h2>'
+html += '<p style="color:red;">Someone is requesting access to your account.'
+html += 'If you did not request this information, you can ignore and delete this email.</p>'
+html += '<p>Your username is: &ldquo;<strong>#{email}</strong>&rdquo; ✔</p>'
+html += '<p>Your password is: &ldquo;<strong>#{password}</strong>&rdquo; ✔</p>'
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
-  var UserModel = ss.service.db.model('User'),
-      GameModel = ss.service.db.model('Game')
+  var UserModel = ss.service.db.model('User')
+  var GameModel = ss.service.db.model('Game')
 
   var _setUserSession = function (user) {
     req.session.setUserId(user.id)
@@ -67,7 +68,7 @@ exports.actions = function (req, res, ss) {
 
     authenticate: function (email, password) {
       winston.info('Checking authentication for ', email)
-      UserModel.findOne({ email: email } , function (err, user) {
+      UserModel.findOne({ email: email }, function (err, user) {
         if (user) {
           bcrypt.compare(password, user.password, function (err, authenticated) {
             if (authenticated) {
@@ -90,7 +91,7 @@ exports.actions = function (req, res, ss) {
       var sessionEmail = req.session.email
 
       // MONGO
-      UserModel.findOne({ email: sessionEmail } , function (err, user) {
+      UserModel.findOne({ email: sessionEmail }, function (err, user) {
         if (user && user.activeSessionID && user.activeSessionID === sessionId) {
           // req.session.activeSessionID = null;
           // req.session.save();
@@ -119,11 +120,9 @@ exports.actions = function (req, res, ss) {
           res({ status: true, reason: 'Session destroyed.' })
         }
       })
-
     },
 
     getUserSession: function () {
-      //console.log('**** getUserSession ******');
       if (req.session.userId) {
         res({
           id: req.session.userId,
@@ -137,7 +136,6 @@ exports.actions = function (req, res, ss) {
           profileLink: req.session.profileLink
         })
       } else {
-        //console.log('Not authenticated . . . rerouting . . . '.yellow.inverse);
         res('NOT_AUTHENTICATED')
       }
     },
@@ -229,10 +227,9 @@ exports.actions = function (req, res, ss) {
     },
 
     remindMeMyPassword: function (email) {
-      UserModel.findOne({ email: email } , function (err, user) {
+      UserModel.findOne({ email: email }, function (err, user) {
         if (!err && user) {
-
-          //TODO THIS AUTO RESETS without creds!!
+          // TODO THIS AUTO RESETS without creds!!
           var password = xkcd.generatePassword()
           accountHelpers.hashPassword(password, function (hashedPassword) {
             user.password = hashedPassword.hash
@@ -258,7 +255,7 @@ exports.actions = function (req, res, ss) {
     },
 
     sendMessage: function (email, message) {
-      var messageHTML  = '<h2>Civic Seed contact form submission</h2>\
+      var messageHTML = '<h2>Civic Seed contact form submission</h2>\
                           <p><strong>E-mail:</strong> ' + email + '</p>\
                           <p><strong>Message:</strong> ' + message + '</p>'
 
@@ -272,7 +269,7 @@ exports.actions = function (req, res, ss) {
     },
 
     changeInfo: function (info) {
-      UserModel.findOne({ email: req.session.email } , function (err, user) {
+      UserModel.findOne({ email: req.session.email }, function (err, user) {
         if (!err && user) {
           user.set({
             firstName: info.first,
@@ -286,8 +283,7 @@ exports.actions = function (req, res, ss) {
               req.session.lastName = info.last
               req.session.save()
               res({firstName: info.first, lastName: info.last})
-            }
-            else {
+            } else {
               res(false)
             }
           })
@@ -298,9 +294,9 @@ exports.actions = function (req, res, ss) {
     },
 
     startGame: function () {
-      UserModel.findOne({ email: req.session.email } , function (err, user) {
+      UserModel.findOne({ email: req.session.email }, function (err, user) {
         if (err) {
-
+          // Placeholder for error handling
         } else if (user) {
           user.set({
             gameStarted: true
@@ -313,5 +309,4 @@ exports.actions = function (req, res, ss) {
     }
 
   }
-
 }

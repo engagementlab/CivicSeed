@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Color',
   collection: 'colors',
   schema: {
@@ -10,5 +9,4 @@ module.exports = {
     y: Number,
     mapIndex: Number
   }
-
 }

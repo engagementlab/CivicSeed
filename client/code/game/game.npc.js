@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global ss, $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -11,6 +12,8 @@
 var _ = require('underscore')
 
 // NPC class
+// Currently not a standalone thing because to many internal
+// functions are depending on other bits of game
 function Npc (data) {
   this.name       = data.name
   this.id         = data.id
@@ -32,13 +35,13 @@ function Npc (data) {
   // 1. Render position (named renderInfo currently)
   // 2. Animation frame (position on spritesheet)
   this.renderInfo = {
-    kind:  'npc',
+    kind: 'npc',
     prevX: this.position.x * $game.TILE_SIZE,
     prevY: this.position.y * $game.TILE_SIZE,
-    curX:  this.position.x * $game.TILE_SIZE,
-    curY:  this.position.y * $game.TILE_SIZE,
-    srcX:  0,
-    srcY:  this.sprite * 64
+    curX: this.position.x * $game.TILE_SIZE,
+    curY: this.position.y * $game.TILE_SIZE,
+    srcX: 0,
+    srcY: this.sprite * 64
   }
 
   // Begin animation frame at a random counter, so that
@@ -67,11 +70,11 @@ Npc.prototype.idle = function () {
     this.renderInfo.srcX = 0
     // Reset counter
     this.animation.counter = 0
-  } else if (this.animation.counter == 24) {
+  } else if (this.animation.counter === 24) {
     this.renderInfo.srcX = 1 * spriteWidth
-  } else if (this.animation.counter == 28) {
+  } else if (this.animation.counter === 28) {
     this.renderInfo.srcX = 2 * spriteWidth
-  } else if (this.animation.counter == 32) {
+  } else if (this.animation.counter === 32) {
     this.renderInfo.srcX = 3 * spriteWidth
   }
 }
@@ -80,8 +83,8 @@ Npc.prototype.idle = function () {
 Npc.prototype.setRenderInfo = function () {
   var local = $game.$map.masterToLocal(this.position.x, this.position.y)
   if (local) {
-    var curX  = local.x * $game.TILE_SIZE,
-        curY  = local.y * $game.TILE_SIZE
+    var curX = local.x * $game.TILE_SIZE
+    var curY = local.y * $game.TILE_SIZE
 
     // NPCs do not move, so there is no previous X/Y, but set it to
     // current X/Y in case renderer chokes without it
@@ -132,12 +135,12 @@ Npc.prototype.isLocked = function () {
     return ($game.$player.checkForCompletedResource(npc.resource.id)) ? false : true
   }
   return false
-},
+}
 
 // Form smalltalk dialog
 Npc.prototype.getSmalltalk = function () {
-  var dialog = '',
-      place = ''
+  var dialog = ''
+  var place = ''
 
   if (this.isHolding) {
     switch ($game.$player.currentLevel) {
@@ -153,14 +156,17 @@ Npc.prototype.getSmalltalk = function () {
       case 3:
         place = 'southwest'
         break
+      default:
+        // No default
+        break
     }
     dialog = 'You should go explore ' + $game.world[place].name + ', in the ' + place + '.'
-  }
-  // If NPC has a response for past, present, future
-  // Past (smalltalk index 0) = Player has surpassed NPC's level
-  // Present (smalltalk index 1) = Player matches NPC's level
-  // Future (smalltalk index 2) = Player has not reached NPC's level
-  else {
+  } else {
+    // If NPC has a response for past, present, future
+    // Past (smalltalk index 0) = Player has surpassed NPC's level
+    // Present (smalltalk index 1) = Player matches NPC's level
+    // Future (smalltalk index 2) = Player has not reached NPC's level
+
     if ($game.$player.currentLevel === this.level) {
       dialog = this.dialog.smalltalk[1]
     } else if ($game.$player.currentLevel < this.level) {
@@ -178,12 +184,8 @@ Npc.prototype.getSmalltalk = function () {
   return dialog
 }
 
-
-var self = $game.$npc = (function () {
-
-  // PRIVATE
+$game.$npc = module.exports = (function () {
   var _npc = {
-
     data: {},
 
     // Add an npc to the data object
@@ -201,8 +203,8 @@ var self = $game.$npc = (function () {
     //  2: player has correctly answered and collected this resource
     createPrompt: function (npc) {
       var promptIndex = $game.$player.getPrompt(npc.resource.id)
-      var dialogue    = npc.dialog.prompts[promptIndex]
-      var resource    = $game.$resources.get(npc.resource.id)
+      var dialogue = npc.dialog.prompts[promptIndex]
+      var resource = $game.$resources.get(npc.resource.id)
 
       // If the NPC is holding a resource with content, then ask the
       // player if they want to review the resource article content
@@ -213,38 +215,36 @@ var self = $game.$npc = (function () {
       // If the NPC is holding a resource and the resource has no
       // content URL, then do not allow any resource to display
       if (promptIndex === 2 && resource.url === '') {
-        self.showSpeechBubble(npc.name, dialogue)
+        $game.$npc.showSpeechBubble(npc.name, dialogue)
       } else {
         // Show the prompt smalltalk and then follow up by showing
         // the resource article / question window
-        self.showSpeechBubble(npc.name, dialogue, function () {
+        $game.$npc.showSpeechBubble(npc.name, dialogue, function () {
           $game.$resources.showResource(resource.id)
         })
       }
     }
-
   }
 
   return {
-    ready:      false,
-    hideTimer:  null,
+    ready: false,
+    hideTimer: null,
 
-    //pull all npc info from the DB
+    // Pull all npc info from the DB
     init: function (callback) {
-      //load all the npc info from the DB store it in an array
-      //where the index is the id of the npc / mapIndex
+      // Load all the npc info from the DB store it in an array
       ss.rpc('game.npc.getNpcs', function (response) {
         $.each(response, function (key, npc) {
           _npc.add(npc)
         })
-        self.ready = true
+        this.ready = true
         callback()
-      })
+      }.bind(this))
     },
 
     resetInit: function () {
-      self.ready      = false
-      self.hideTimer  = null
+      this.ready = false
+      this.hideTimer = null
     },
 
     // Update all npcs (for movement and rendering)
@@ -261,7 +261,7 @@ var self = $game.$npc = (function () {
       })
     },
 
-    //get render info for all npcs to draw them
+    // Get render info for all npcs to draw them
     getRenderInfo: function () {
       var allRenderInfo = []
       if ((!$game.bossModeUnlocked && $game.$player.currentLevel > 3) || $game.$player.currentLevel <= 3) {
@@ -278,8 +278,8 @@ var self = $game.$npc = (function () {
     // Determine NPC content to display when clicked
     activate: function (npcId) {
       var MASTER_NPC_ID = 64
-      var npc           = self.get(npcId),
-          botanistState = $game.$botanist.getState()
+      var npc = this.get(npcId)
+      var botanistState = $game.$botanist.getState()
 
       // Once activated, reset global NPC state
       // TODO: This should be deprecated eventually
@@ -288,15 +288,15 @@ var self = $game.$npc = (function () {
       // NPC interaction to display if the player has not finished speaking with Botanist
       // (1) If the player attempts to roam the world before completing the tutorial
       if ($game.flags.check('first-time') === true) {
-        self.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
+        this.showSpeechBubble(npc.name, 'You should really see the Botanist before exploring the world.')
       } else if (botanistState < 2 || botanistState > 3) {
         // (2) If the player attempts to roam the world before the Botanist is done talking
-        self.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
+        this.showSpeechBubble(npc.name, 'The Botanist still has more to tell you! Head back to The Botanist’s Garden to hear the rest.')
       } else if (npc.isHolding && $game.$player.getLevel() >= npc.getLevel()) {
         // If resource is available for the player
         // Check if NPC's availability depends on player talking to a different NPC
         if (npc.isLocked()) {
-          var dialogue = 'Before I help you out, you need to go see ' + self.get(npc.dependsOn).name + '. Come back when you have their resource.'
+          var dialogue = 'Before I help you out, you need to go see ' + this.get(npc.dependsOn).name + '. Come back when you have their resource.'
 
           // TODO HACK
           // Different dialogue for the community NPCs
@@ -310,7 +310,7 @@ var self = $game.$npc = (function () {
             }
           }
 
-          self.showSpeechBubble(npc.name, dialogue)
+          this.showSpeechBubble(npc.name, dialogue)
         } else if (npc.id === MASTER_NPC_ID) {
           // TODO HACK
           // Shoe horn in different behavior for the Master NPC
@@ -329,17 +329,18 @@ var self = $game.$npc = (function () {
         }
       } else {
         // If no resource is available for the player, make small talk instead.
-        self.showSpeechBubble(npc.name, npc.getSmalltalk())
+        this.showSpeechBubble(npc.name, npc.getSmalltalk())
       }
     },
 
     // Show an NPC's speech bubble
     showSpeechBubble: function (speaker, messages, prompt, callback) {
-      var el            = document.getElementById('speech-bubble'),
-          $el           = $(el),
-          hasPrompt     = false,
-          isMultiline   = false,
-          text          = null
+      var el = document.getElementById('speech-bubble')
+      var $el = $(el) // Cache jQuery reference
+      var hasPrompt = false
+      var isMultiline = false
+      var text = null
+      var self = this
 
       // If a speech bubble is currently open, just hide it quickly so that text change can happen
       if ($el.is(':visible')) {
@@ -393,9 +394,9 @@ var self = $game.$npc = (function () {
         if (!isMultiline && !hasPrompt) {
           var hideTimer = text.length * 50
           if (hideTimer < 4000) hideTimer = 4000
-          self.hideTimer = setTimeout(self.hideSpeechBubble, hideTimer)
+          this.hideTimer = setTimeout(this.hideSpeechBubble, hideTimer)
         }
-      })
+      }.bind(this))
 
       // Utility functions for showSpeechBubble()
       function _showMultiline (index) {
@@ -454,12 +455,11 @@ var self = $game.$npc = (function () {
 
         el.querySelector('.buttons').appendChild(button)
       }
-
     },
 
     // Hide an NPC's chat bubble
     hideSpeechBubble: function (callback) {
-      clearTimeout(self.hideTimer)
+      clearTimeout(this.hideTimer)
       var $el = $('#speech-bubble')
 
       $game.flags.unset('npc-chatting')
@@ -500,7 +500,7 @@ var self = $game.$npc = (function () {
     findNpcByResourceId: function (id) {
       // Get NPC data given its resource id
       var result = _.filter(_npc.data, function (npc) {
-        return npc.resource.id == id
+        return npc.resource.id === id
       })
       return result[0]
     },
@@ -515,5 +515,4 @@ var self = $game.$npc = (function () {
       return onScreenNpcs
     }
   }
-
 })()

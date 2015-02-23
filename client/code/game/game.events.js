@@ -1,12 +1,18 @@
-'use strict';
+'use strict'
+/* global ss, $game */
 
-var $events = $game.$events = module.exports = {
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    events.js
+
+    - Handles events from SocketStream RPC
+
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+$game.$events = module.exports = {
 
   init: function () {
-
-    /******* RPC EVENTS *********/
-
-    // new player joining to keep track of
+    // When a new player has joined
     ss.event.on('ss-addPlayer', function (data, chan) {
       $game.$others.add(data.info)
       if (data.info._id !== $game.$player.id) {
@@ -14,7 +20,7 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-    //player removing
+    // When a player has left the game
     ss.event.on('ss-removePlayer', function (data, chan) {
       if (data.id !== $game.$player.id) {
         $game.log(data.name + ' has left the game.')
@@ -22,14 +28,14 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-    //player moves
+    // When a player oves
     ss.event.on('ss-playerMoved', function (data, chan) {
       if (data.id !== $game.$player.id) {
         $game.$others.sendMoveInfo(data.id, data.moves)
       }
     })
 
-    //new tile color bomb
+    // When a seed "bomb" is dropped
     ss.event.on('ss-seedDropped', function (data, chan) {
       $game.$map.newBomb(data.bombed, data.id)
       if (data.id !== $game.$player.id) {
@@ -37,7 +43,7 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-    // New message from chat
+    // When a new chat message is received
     ss.event.on('ss-newMessage', function (data, chan) {
       data.input = 'chat'
 
@@ -77,7 +83,7 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-   // Remove an answer (this means they made it private and it was previously public)
+    // When a player has turned a public answer into a private one
     ss.event.on('ss-removeAnswer', function (data, chan) {
       if (data) {
         $game.$resources.get(data.resourceId).removePlayerResponse(data)
@@ -85,49 +91,52 @@ var $events = $game.$events = module.exports = {
       }
     })
 
-    //level change for a player
+    // When a player has leveled up
     ss.event.on('ss-levelChange', function (data, chan) {
-      $game.broadcast(data.name + ' has reached level ' + (data.level + 1) +'!')
-      $game.$others.levelChange(data.id, data.level);
-    });
+      $game.broadcast(data.name + ' has reached level ' + (data.level + 1) + '!')
+      $game.$others.levelChange(data.id, data.level)
+    })
 
     // Event fired when someone pledged a seed to another player's answer
     ss.event.on('ss-seedPledged', function (data, chan) {
       if ($game.$player.id === data.id) {
-        $game.broadcast(data.pledger  + ' liked a response of yours. Here, have some seeds!')
+        $game.broadcast(data.pledger + ' liked a response of yours. Here, have some seeds!')
         $game.$player.addSeeds('regular', 3)
         $game.$player.updateResource(data)
       }
     })
 
-    //the game meter has hit the end, boss mode is unlocked
+    // When the game meter has hit the end, and boss mode is unlocked
     ss.event.on('ss-bossModeUnlocked', function () {
       $game.flags.set('boss-mode-unlocked')
-      $game.bossModeUnlocked = true;
+      $game.bossModeUnlocked = true
       if ($game.$player.currentLevel > 3) {
         $game.flags.set('boss-mode-ready')
-        $game.toBossLevel();
+        $game.toBossLevel()
       }
-    });
+    })
 
-    //another player has beamed
+    // When another player has beamed to another location
     ss.event.on('ss-beam', function (info) {
       if (info.id !== $game.$player.id) {
         $game.$others.beam(info.id, info)
       }
     })
 
+    // When a collaborative challenge has initiated
+    // TODO: Not implemented.
     ss.event.on('ss-collaborativeChallenge', function (info) {
-      for(var i = 0; i < info.players.length; i++) {
+      for (var i = 0; i < info.players.length; i++) {
         if (info.players[i] === $game.$player.id) {
-          //TODO add seeds
-          $game.statusUpdate({message: 'Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.',input:'status', screen:true, log:true});
-          $game.$player.addSeeds('draw', info.seeds);
-          break;
+          // TODO add seeds
+          $game.broadcast('Nice work you did a collaborative challenge! Have ' + info.seeds + ' paintbrush seeds.')
+          $game.$player.addSeeds('draw', info.seeds)
+          break
         }
       }
-    });
+    })
 
+    // When a player has changed his or her skinsuit
     ss.event.on('ss-skinSuitChange', function (info) {
       if (info.id !== $game.$player.id) {
         $game.$others.skinSuitChange(info.id, info)
@@ -135,4 +144,4 @@ var $events = $game.$events = module.exports = {
     })
   }
 
-};
+}

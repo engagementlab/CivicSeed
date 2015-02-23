@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Npc',
   collection: 'npcs',
   schema: {
@@ -33,5 +32,4 @@ module.exports = {
     },
     skinSuit: String
   }
-
 }

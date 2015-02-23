@@ -1,42 +1,39 @@
-'use strict';
+'use strict'
+/* global ss, $, $game */
+
+// TODO: Refactor
 
 var _ = require('underscore')
 
 var STEPS_PER_MOVE = 8 // Frames per move between tiles
 
-//private vars for player
-var _curFrame = 0,
-    _currentStepIncX = 0,
-    _currentStepIncY = 0,
-    _direction = 0,
-    _idleCounter = 0,
+// Private vars for player
+// TODO: Find where these variables are used and place them
+// so that variables are confined to smaller scopes or attached
+// to objects that can organize them.
+var _curFrame = 0
+var _currentStepIncX = 0
+var _currentStepIncY = 0
+var _direction = 0
+var _idleCounter = 0
+var _info = null
+var _renderInfo = null
+var _previousSeedsDropped = null
+var _startTime = null
+var _seeds = null
+var _totalSeeds = null
+var _resources = null
+var _colorMap = null
+var _resume = null
+var _playingTime = null
+var _tilesColored = null
+var _pledges = null
+var _resourcesDiscovered = null
+var _skinSuit = null
+var _drawSeeds = null
+var _drawSeedArea = {}
 
-    _info = null,
-    _renderInfo = null,
-
-    _numRequired = [4,5,6,5],
-
-    _previousSeedsDropped = null,
-
-    _startTime = null,
-
-    _seeds = null,
-    _totalSeeds = null,
-    _resources = null,
-    _position = null,
-    _colorMap = null,
-    _resume = null,
-    _playingTime = null,
-    _tilesColored = null,
-    _pledges = null,
-    _resourcesDiscovered = null,
-    _skinSuit = null,
-
-    _drawSeeds = null,
-    _drawSeedArea = {};
-
-//export player functions
-var $player = $game.$player = {
+var $player = $game.$player = module.exports = {
 
   firstName: null,
   id: null,
@@ -53,7 +50,7 @@ var $player = $game.$player = {
   seedMode: false,
 
   init: function (callback) {
-    //get the players info from the db, alerts other users of presence
+    // get the players info from the db, alerts other users of presence
     ss.rpc('game.player.init', function (playerInfo) {
       // time in seconds since 1970 or whatever
       _startTime = new Date().getTime() / 1000
@@ -73,7 +70,7 @@ var $player = $game.$player = {
       $game.$player.game = playerInfo.game
       _setPlayerInformation(playerInfo)
 
-      //tell others you have joined
+      // tell others you have joined
       var subsetInfo = {
         _id: playerInfo.id,
         firstName: playerInfo.firstName,
@@ -130,7 +127,6 @@ var $player = $game.$player = {
     _seeds = null
     _totalSeeds = null
     _resources = null
-    _position = null
     _colorMap = null
     _resume = null
     _playingTime = null
@@ -178,8 +174,8 @@ var $player = $game.$player = {
   // Decide if we need to load new viewport, or if we are going to visit an NPC
   // targetPosition is an object containing {x: xLocalPosition, y: yLocalPosition }
   beginMove: function (targetPosition) {
-    var localPosition  = $player.getLocalPosition(),
-        path
+    var localPosition = $player.getLocalPosition()
+    var path
 
     // Clear HUD
     $game.$chat.hideChat()
@@ -238,48 +234,56 @@ var $player = $game.$player = {
   },
 
   moveStraight: function (direction) {
+    var location
+    var targetPosition
+    var x, y
+
     // Get current local position
     // If player is moving, start calculation from next move in series
     // Else, use current position
     if ($player.seriesOfMoves.length > 0) {
-      var location = $game.$map.masterToLocal($player.seriesOfMoves[0].masterX, $player.seriesOfMoves[0].masterY)
+      location = $game.$map.masterToLocal($player.seriesOfMoves[0].masterX, $player.seriesOfMoves[0].masterY)
     } else {
-      var location = $player.getLocalPosition()
+      location = $player.getLocalPosition()
     }
 
-    var targetPosition
+    // Initialize x, y position
+    x = location.x
+    y = location.y
 
     // Using target direction,
     // analyze grid until we hit any tile with state above 0 (Go)
     // and that becomes our new target position
     switch (direction) {
       case 'up':
-        var y = location.y
-        while (y >= 0 && $game.$map.currentTiles[location.x][y].tileState === 0) {
-          targetPosition = { x: location.x, y: y }
+        while (y >= 0 && $game.$map.currentTiles[x][y].tileState === 0) {
+          targetPosition = { x: x, y: y }
           y--
         }
         break
       case 'down':
-        var y = location.y
-        while ((y <= $game.VIEWPORT_HEIGHT - 1) && $game.$map.currentTiles[location.x][y].tileState === 0) {
-          targetPosition = { x: location.x, y: y }
+        y = location.y
+        while ((y <= $game.VIEWPORT_HEIGHT - 1) && $game.$map.currentTiles[x][y].tileState === 0) {
+          targetPosition = { x: x, y: y }
           y++
         }
         break
       case 'left':
-        var x = location.x
-        while (x >= 0 && $game.$map.currentTiles[x][location.y].tileState === 0) {
-          targetPosition = { x: x, y: location.y }
+        x = location.x
+        while (x >= 0 && $game.$map.currentTiles[x][y].tileState === 0) {
+          targetPosition = { x: x, y: y }
           x--
         }
         break
       case 'right':
-        var x = location.x
-        while ((x <= $game.VIEWPORT_WIDTH - 1) && $game.$map.currentTiles[x][location.y].tileState === 0) {
-          targetPosition = { x: x, y: location.y }
+        x = location.x
+        while ((x <= $game.VIEWPORT_WIDTH - 1) && $game.$map.currentTiles[x][y].tileState === 0) {
+          targetPosition = { x: x, y: y }
           x++
         }
+        break
+      default:
+        // No default case
         break
     }
 
@@ -305,20 +309,19 @@ var $player = $game.$player = {
     _info.prevOffY = 0
   },
 
-  //decide what type of seed drop mechanic to do and check if they have seeds
+  // decide what type of seed drop mechanic to do and check if they have seeds
   dropSeed: function (options) {
     if (options.x !== undefined && options.x >= 0) {
       options.mX = $game.$map.currentTiles[options.x][options.y].x
       options.mY = $game.$map.currentTiles[options.x][options.y].y
     }
-    var mode = options.mode;
+    var mode = options.mode
 
-    //regular seed mode
+    // regular seed mode
     if (mode === 'regular') {
       if (_seeds.regular < 1) {
-        return false;
-      }
-      else {
+        return false
+      } else {
         // Default paint radius
         options.sz = 3
         options.radius = 1
@@ -329,25 +332,21 @@ var $player = $game.$player = {
         if ($game.flags.check('paint-up-3')) options.radius++
         if ($game.flags.check('paint-max')) options.radius = 4
 
-        _player.calculateSeeds(options);
-        return true;
+        _player.calculateSeeds(options)
+        return true
       }
-    }
-    //draw seed mode
-    else {
+    } else {
+      // draw seed mode
       var seedArray = $.map(_drawSeeds, function (k, v) {
-        return [k];
-      });
+        return [k]
+      })
 
       if (seedArray.length > 0) {
-        //figure out the size covered
-        var xSize = _drawSeedArea.maxX - _drawSeedArea.minX,
-          ySize = _drawSeedArea.maxY - _drawSeedArea.minY,
-          sz = xSize > ySize ? xSize : ySize,
-          topLeftTile = $game.$map.currentTiles[_drawSeedArea.minX][_drawSeedArea.minY],
-          bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY],
-          centerTileX = $game.$map.currentTiles[15][7].x,
-          centerTileY = $game.$map.currentTiles[15][7].y;
+        // figure out the size covered
+        var topLeftTile = $game.$map.currentTiles[_drawSeedArea.minX][_drawSeedArea.minY]
+        var bottomRightTile = $game.$map.currentTiles[_drawSeedArea.maxX][_drawSeedArea.maxY]
+        var centerTileX = $game.$map.currentTiles[15][7].x
+        var centerTileY = $game.$map.currentTiles[15][7].y
 
         var data = {
           bombed: seedArray,
@@ -360,9 +359,9 @@ var $player = $game.$player = {
           x2: bottomRightTile.x,
           y2: bottomRightTile.y,
           kind: 'draw'
-        };
-        _player.sendSeedBomb(data);
-        return true;
+        }
+        _player.sendSeedBomb(data)
+        return true
       }
     }
   },
@@ -402,15 +401,15 @@ var $player = $game.$player = {
       // Create resource game data to save
       // This will be updated on the server later
       playerResource = {
-        id:            data.id,
-        questionType:  data.questionType,
-        answers:       [data.answer],
-        attempts:      Number.isInteger(data.attempts) ? data.attempts : 1,
-        result:        data.correct,
-        seeded:        [],
-        skinSuit:      data.skinSuit,
-        rewarded:      data.rewarded || false,
-        tagline:       null
+        id: data.id,
+        questionType: data.questionType,
+        answers: [data.answer],
+        attempts: Number.isInteger(data.attempts) ? data.attempts : 1,
+        result: data.correct,
+        seeded: [],
+        skinSuit: data.skinSuit,
+        rewarded: data.rewarded || false,
+        tagline: null
       }
 
       // Determine seeds to reward
@@ -426,8 +425,8 @@ var $player = $game.$player = {
 
   // Determine how many seeds a player gets, based on their attempts
   determineNumberOfSeedsToReward: function (playerResource) {
-    var rawAttempts = 6 - playerResource.attempts,
-        seedsToAdd = (rawAttempts < 0) ? 0 : rawAttempts
+    var rawAttempts = 6 - playerResource.attempts
+    var seedsToAdd = (rawAttempts < 0) ? 0 : rawAttempts
 
     // If they took more than 1 try to get a binary, drop down more
     if (playerResource.questionType === 'truefalse' || playerResource.questionType === 'yesno') {
@@ -439,9 +438,9 @@ var $player = $game.$player = {
     return seedsToAdd
   },
 
-  //checks if we should save out a new image of player's color map
+  // checks if we should save out a new image of player's color map
   saveMapImage: function (force) {
-    //only do this if we have dropped 5 new seeds
+    // only do this if we have dropped 5 new seeds
     if (_seeds.dropped - _previousSeedsDropped > 4 || force) {
       _colorMap = $game.$map.saveImage()
       var info = {
@@ -468,22 +467,22 @@ var $player = $game.$player = {
     $('#progress-area .minimap').show()
   },
 
-  //reset items and prepare other entities for fresh level
+  // reset items and prepare other entities for fresh level
   nextLevel: function () {
     $game.$player.currentLevel += 1
     $game.$player.seenRobot = false
     $game.$botanist.setState(0)
     $game.flags.unset('botanist-teleported')
     _pledges = 5
-    // $game.$render.loadTilesheet($game.$player.currentLevel, true);
+    // $game.$render.loadTilesheet($game.$player.currentLevel, true)
 
-    //save new information to DB
+    // save new information to DB
     ss.rpc('game.player.updateGameInfo', {
-      id:            $game.$player.id,
+      id: $game.$player.id,
       botanistState: $game.$botanist.getState(),
-      seenRobot:     $game.$player.seenRobot,
-      pledges:       _pledges,
-      currentLevel:  $game.$player.currentLevel
+      seenRobot: $game.$player.seenRobot,
+      pledges: _pledges,
+      currentLevel: $game.$player.currentLevel
     })
 
     $game.log('Congrats! You have completed level ' + $game.$player.currentLevel + '!')
@@ -496,34 +495,31 @@ var $player = $game.$player = {
       $game.inventory.empty()
       $game.inventory.init()
 
-      //send status to message board
-      var newLevelMsg = $game.$player.currentLevel + 1
-
       ss.rpc('game.player.levelChange', {
-        id:    $game.$player.id,
+        id: $game.$player.id,
         level: $game.$player.currentLevel,
-        name:  $game.$player.firstName
+        name: $game.$player.firstName
       })
     } else if ($game.bossModeUnlocked) {
       $game.toBossLevel()
     }
   },
 
-  //return the calculation of how long they have been playing for (total)
+  // return the calculation of how long they have been playing for (total)
   getPlayingTime: function () {
-    var currentTime = new Date().getTime() / 1000,
-        totalTime   = Math.round((currentTime - _startTime) + _playingTime)
+    var currentTime = new Date().getTime() / 1000
+    var totalTime = Math.round((currentTime - _startTime) + _playingTime)
     return totalTime
   },
 
-  //remove the menu once they have selected a seed flash player and disable other actions
+  // remove the menu once they have selected a seed flash player and disable other actions
   startSeeding: function (choice) {
-    $game.$player.seedMode = choice;
+    $game.$player.seedMode = choice
     $('#seedventory').slideUp(function () {
       $game.flags.unset('visible-seedventory')
-      $game.$player.seedPlanting = true;
-    });
-    var msg;
+      $game.$player.seedPlanting = true
+    })
+    var msg
     if (choice === 'regular') {
       msg = 'Click anywhere to plant a seed and watch color bloom there'
     } else {
@@ -568,9 +564,9 @@ var $player = $game.$player = {
 
     $.each(_resources, function (index, resource) {
       if (resource.questionType === 'open') {
-        var answer      = resource.answers[resource.answers.length - 1],
-            question    = $game.$resources.get(index).question,
-            seededCount = resource.seeded.length
+        var answer = resource.answers[resource.answers.length - 1]
+        var question = $game.$resources.get(index).question
+        var seededCount = resource.seeded.length
 
         html += '<p class="theQuestion"><strong>Q:</strong> ' + question + '</p><div class="theAnswer"><p class="answerText">' + answer + '</p>'
         if (seededCount > 0) {
@@ -600,7 +596,7 @@ var $player = $game.$player = {
 
   // Set seeds to a specific amount
   setSeeds: function (kind, quantity) {
-    _seeds[kind] = quantity;
+    _seeds[kind] = quantity
 
     // Save to DB
     ss.rpc('game.player.updateGameInfo', {
@@ -609,7 +605,7 @@ var $player = $game.$player = {
     })
 
     // Update HUD
-    _player.updateTotalSeeds();
+    _player.updateTotalSeeds()
   },
 
   // Add seeds to a specific type of seed
@@ -619,7 +615,7 @@ var $player = $game.$player = {
     $player.setSeeds(kind, total)
   },
 
-  //put new answer into the resume
+  // put new answer into the resume
   resumeAnswer: function (answer) {
     _resume.push(answer)
     var info = {
@@ -629,7 +625,7 @@ var $player = $game.$player = {
     ss.rpc('game.player.updateGameInfo', info)
   },
 
-  //keep track of how many seedITs the player has done
+  // keep track of how many seedITs the player has done
   updatePledges: function (quantity) {
     _pledges += quantity
     var info = {
@@ -667,20 +663,20 @@ var $player = $game.$player = {
   getCSSColor: function (index) {
     var rgb = $player.getColor(index)
     // A quick way of converting to a hex string, e.g. #5599cc
-    return '#' + ('0'+(rgb.r.toString(16))).slice(-2) + ('0'+(rgb.g.toString(16))).slice(-2) + ('0'+(rgb.b.toString(16))).slice(-2)
+    return '#' + ('0' + (rgb.r.toString(16))).slice(-2) + ('0' + (rgb.g.toString(16))).slice(-2) + ('0' + (rgb.b.toString(16))).slice(-2)
   },
 
-  //get all the render info to draw player
+  // get all the render info to draw player
   getRenderInfo: function () {
     return _renderInfo
   },
 
-  //get the current color map
+  // get the current color map
   getColorMap: function () {
     return _colorMap
   },
 
-  //get the number of tiles colored
+  // get the number of tiles colored
   getTilesColored: function () {
     return _tilesColored
   },
@@ -709,9 +705,9 @@ var $player = $game.$player = {
     // separate object to prevent other
     // scripts from writing directly to it
     return {
-      head:   data.head,
-      torso:  data.torso,
-      legs:   data.legs
+      head: data.head,
+      torso: data.torso,
+      legs: data.legs
     }
   },
 
@@ -722,14 +718,14 @@ var $player = $game.$player = {
       _skinSuit[part] = name
     } else {
       // Assume entire suit
-      _skinSuit.head  = name
+      _skinSuit.head = name
       _skinSuit.torso = name
-      _skinSuit.legs  = name
+      _skinSuit.legs = name
     }
 
     // Change skin on database
     ss.rpc('game.player.changeSkinSuit', {
-      id:       $game.$player.id,
+      id: $game.$player.id,
       skinSuit: _skinSuit
     })
   },
@@ -744,7 +740,7 @@ var $player = $game.$player = {
   setSkinventory: function (skinventory) {
     _skinSuit.unlocked = skinventory
     ss.rpc('game.player.updateGameInfo', {
-      id:       $game.$player.id,
+      id: $game.$player.id,
       skinSuit: _skinSuit
     })
   },
@@ -754,7 +750,7 @@ var $player = $game.$player = {
     return _seeds
   },
 
-  //get the number of seeds dropped
+  // get the number of seeds dropped
   getSeedsDropped: function () {
     return _seeds.dropped
   },
@@ -767,12 +763,12 @@ var $player = $game.$player = {
     return $player.currentLevel + 1
   },
 
-  //get the quantity of seedITs made
+  // get the quantity of seedITs made
   getPledges: function () {
     return _pledges
   },
 
-  //get the current viewport position
+  // get the current viewport position
   getRenderPosition: function () {
     return {x: _renderInfo.curX, y: _renderInfo.curY}
   },
@@ -780,11 +776,11 @@ var $player = $game.$player = {
   // Get region of the world that player is in
   getGameRegion: function () {
     // Compare player position to centers of the world
-    var position = this.getPosition(),
-        posX     = position.x,
-        posY     = position.y,
-        diffX    = posX - ($game.TOTAL_WIDTH  - 4) / 2,
-        diffY    = posY - ($game.TOTAL_HEIGHT + 8) / 2
+    var position = this.getPosition()
+    var posX = position.x
+    var posY = position.y
+    var diffX = posX - ($game.TOTAL_WIDTH - 4) / 2
+    var diffY = posY - ($game.TOTAL_HEIGHT + 8) / 2
 
     // Check for botanist's place first
     if (posX >= 57 && posX <= 84 && posY >= 66 && posY <= 78) {
@@ -812,23 +808,22 @@ var $player = $game.$player = {
 
     _info.x = location.x
     _info.y = location.y
-    _renderInfo.curX  = location.x * $game.TILE_SIZE
-    _renderInfo.curY  = location.y * $game.TILE_SIZE
+    _renderInfo.curX = location.x * $game.TILE_SIZE
+    _renderInfo.curY = location.y * $game.TILE_SIZE
     _renderInfo.prevX = location.x * $game.TILE_SIZE
     _renderInfo.prevY = location.y * $game.TILE_SIZE
-    //$game.running = false;
 
-    var tx     = (location.x === 0) ? 0 : location.x - 1,
-        ty     = (location.y === 0) ? 0 : location.y - 1,
-        divX   = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2 )),
-        divY   = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2 )),
-        startX = divX * ($game.VIEWPORT_WIDTH - 2),
-        startY = divY * ($game.VIEWPORT_HEIGHT - 2);
+    var tx = (location.x === 0) ? 0 : location.x - 1
+    var ty = (location.y === 0) ? 0 : location.y - 1
+    var divX = Math.floor(tx / ($game.VIEWPORT_WIDTH - 2))
+    var divY = Math.floor(ty / ($game.VIEWPORT_HEIGHT - 2))
+    var startX = divX * ($game.VIEWPORT_WIDTH - 2)
+    var startY = divY * ($game.VIEWPORT_HEIGHT - 2)
 
     $game.masterX = startX
     $game.masterY = startY
 
-    //update npcs, other players?
+    // update npcs, other players?
     $game.$map.setBoundaries()
     $game.$map.firstStart(function () {
       $game.$render.renderAllTiles()
@@ -867,10 +862,10 @@ var $player = $game.$player = {
 
   // Save player's resource status to the database (whether completed, answered, etc)
   saveResource: function (resource) {
-    var playerResource  =  _resources[resource.id],
-        npc             = $game.$npc.findNpcByResourceId(resource.id),
-        npcLevel        = npc.getLevel(),
-        playerLevel     = $player.getLevel()
+    var playerResource = _resources[resource.id]
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
+    var npcLevel = npc.getLevel()
+    var playerLevel = $player.getLevel()
 
     // Things to unlock / add if this is a correct answer
     // And also make sure it has not been awarded already
@@ -879,9 +874,9 @@ var $player = $game.$player = {
       // Do not add if this is a resume type question
       if (playerLevel === npcLevel && resource.questionType !== 'resume') {
         $game.inventory.add({
-          id:       resource.id,
-          name:     resource.shape,
-          tagline:  playerResource.tagline
+          id: resource.id,
+          name: resource.shape,
+          tagline: playerResource.tagline
         })
       }
 
@@ -913,11 +908,11 @@ var $player = $game.$player = {
     if ($game.$player.firstName !== 'Demo') {
       // Add this to the DB of resources for all player answers
       var newAnswer = {
-        resourceId:   resource.id,
-        playerId:     $game.$player.id,
-        name:         $game.$player.firstName,
-        answer:       playerResource.answers[playerResource.answers.length - 1],
-        madePublic:   false
+        resourceId: resource.id,
+        playerId: $game.$player.id,
+        name: $game.$player.firstName,
+        answer: playerResource.answers[playerResource.answers.length - 1],
+        madePublic: false
       }
       ss.rpc('game.npc.saveResponse', $game.$player.instanceName, newAnswer)
     }
@@ -934,24 +929,24 @@ var $player = $game.$player = {
   saveOtherCommunityResources: function (answeredResourceId) {
     // Hack for community inventory items
     // Dummy data for other resources
-    var ids = [4001, 4002, 4003],
-        bunchOfResources = [],
-        masterNpcResource = _resources[4000]
+    var ids = [4001, 4002, 4003]
+    var bunchOfResources = []
+    var masterNpcResource = _resources[4000]
 
     for (var i = 0; i < ids.length; i++) {
       if (ids[i] === answeredResourceId) continue
 
       var dummyData = {
-            id:           ids[i],
-            answer:       '',
-            attempts:     0,
-            npcLevel:     null,
-            questionType: null,
-            skinSuit:     null,
-            correct:      true,
-            rewarded:     true,
-            tagline:      null
-          }
+        id: ids[i],
+        answer: '',
+        attempts: 0,
+        npcLevel: null,
+        questionType: null,
+        skinSuit: null,
+        correct: true,
+        rewarded: true,
+        tagline: null
+      }
 
       var dummyResource = $player.saveResourceLocally(dummyData)
       bunchOfResources.push(dummyResource)
@@ -967,13 +962,12 @@ var $player = $game.$player = {
     $game.$resources.get(4000).url = answeredResourceId.toString()
 
     ss.rpc('game.player.saveMoreThanOneResource', {
-      id:        $player.id,
+      id: $player.id,
       resources: bunchOfResources
     })
-
   },
 
-  //show a bubble over visited npcs of how many comments there are
+  // show a bubble over visited npcs of how many comments there are
   displayNpcComments: function () {
     // Clear any previous comment bubbles
     $player.clearNpcComments()
@@ -983,12 +977,11 @@ var $player = $game.$player = {
 
     // Go thru each on-screen NPC; figure out what to display inside the bubble and what to display when player hovers over it.
     for (var n = 0; n < npcs.length; n++) {
-      var npc        = $game.$npc.get(npcs[n]),
-          resourceId = npc.resource.id,
-          contents   = null,
-          message    = null
-
+      var npc = $game.$npc.get(npcs[n])
+      var resourceId = npc.resource.id
       var theResource = _resources[resourceId]
+      var contents = null
+      var message = null
 
       // If player has obtained the NPC's resource
       if (theResource && theResource.result === true) {
@@ -1003,34 +996,38 @@ var $player = $game.$player = {
         } else {
           // For all other question types
           contents = '*'
-          message  = 'You answered this question correctly'
+          message = 'You answered this question correctly'
         }
         _addBubble(npc, contents, message)
-      }
-      // If player has a rader that can sense if NPCs have a resource to give
-      else if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
-        // Only display if the NPC is holding a resource, player doesn't have it yet, and the player is at least the NPC's level (since it is possible to obtain NPC rewards from a lower-level NPC if the player skipped it earlier)
+      } else if (($game.flags.check('local-radar') || $game.flags.check('global-radar'))) {
+        // If player is wearing a rader that can sense if NPCs have a resource to give
+        // Display indicator if:
+        // - NPC is holding a resource
+        // - player doesn't have it yet
+        // - and the player is at least the NPC's level
+        // (since it is possible to obtain NPC rewards from a
+        // lower-level NPC if the player skipped it earlier)
         if (npc.isHolding === true && (!theResource || theResource.result === false) && $player.getLevel() >= npc.getLevel()) {
           contents = '!'
-          message  = 'This character has something for you!'
+          message = 'This character has something for you!'
           _addBubble(npc, contents, message)
         }
       }
     }
 
     // Create and append the bubble to the gameboard
-    function _addBubble(npc, contents, hoverMessage) {
-      var gameboardEl = document.getElementById('gameboard'),
-          npcPosition = npc.getLocalPosition(),
-          resourceId  = npc.resource.id,
-          theBubble   = _createBubbleElement(npc.id, contents)
+    function _addBubble (npc, contents, hoverMessage) {
+      var gameboardEl = document.getElementById('gameboard')
+      var npcPosition = npc.getLocalPosition()
+      var resourceId = npc.resource.id
+      var theBubble = _createBubbleElement(npc.id, contents)
 
       // Append bubble to gameboard
       gameboardEl.appendChild(theBubble)
 
       // Positioning
       $(theBubble).css({
-        top:  npcPosition.y - 68,
+        top: npcPosition.y - 68,
         left: npcPosition.x
       })
 
@@ -1048,11 +1045,11 @@ var $player = $game.$player = {
       }
     }
 
-    function _createBubbleElement(npcId, contents) {
+    function _createBubbleElement (npcId, contents) {
       var el = document.createElement('div')
       el.classList.add('npc-bubble')
       // Hacky way to style the '!' differently
-      if (contents == '!') {
+      if (contents === '!') {
         el.classList.add('npc-bubble-exclaim')
       }
       el.id = 'npcBubble' + npcId
@@ -1067,108 +1064,107 @@ var $player = $game.$player = {
     function _showMessageOnHover (message) {
       if (_.isString(message)) $game.alert(message)
     }
-
   },
 
   clearNpcComments: function () {
     $('.npc-bubble').remove()
   },
 
-  //save the player's current position to the DB
+  // save the player's current position to the DB
   saveTimeToDB: function () {
-    var endTime = new Date().getTime() / 1000,
-      totalTime = parseInt(endTime - _startTime, 10);
-    _playingTime += totalTime;
+    var endTime = new Date().getTime() / 1000
+    var totalTime = parseInt(endTime - _startTime, 10)
+    _playingTime += totalTime
     var info = {
       id: $game.$player.id,
       playingTime: _playingTime
-    };
-    _startTime = endTime;
-    ss.rpc('game.player.updateGameInfo', info);
+    }
+    _startTime = endTime
+    ss.rpc('game.player.updateGameInfo', info)
   },
 
-  //call the save seed function from outside player
+  // call the save seed function from outside player
   saveSeeds: function () {
-    _saveSeedsToDB();
+    _saveSeedsToDB()
   },
 
-  //update the running array for current tiles colored to push to DB on end of drawing
+  // update the running array for current tiles colored to push to DB on end of drawing
   drawSeed: function (pos) {
     if (_seeds.draw > 0) {
-      var drawLocal = false;
+      var drawLocal = false
       if ($game.$player.seedMode === 'draw') {
-        var currentTile = $game.$map.currentTiles[pos.x][pos.y],
-          index = currentTile.mapIndex,
-          stringIndex = String(index);
-        //add to array and color if we haven't done it
+        var currentTile = $game.$map.currentTiles[pos.x][pos.y]
+        var index = currentTile.mapIndex
+
+        // add to array and color if we haven't done it
         if (!_drawSeeds[index]) {
-          $game.$player.addSeeds('draw', -1);
+          $game.$player.addSeeds('draw', -1)
           document.getElementById('graffiti').querySelector('.remaining').textContent = _seeds.draw
-          drawLocal = true;
+          drawLocal = true
           _drawSeeds[index] = {
             x: currentTile.x,
             y: currentTile.y,
             mapIndex: index,
             instanceName: $game.$player.instanceName
-          };
-          //keep track area positions
+          }
+          // keep track area positions
           if (pos.x < _drawSeedArea.minX) {
-            _drawSeedArea.minX = pos.x;
+            _drawSeedArea.minX = pos.x
           }
           if (pos.y < _drawSeedArea.minY) {
-            _drawSeedArea.minY = pos.y;
+            _drawSeedArea.minY = pos.y
           }
           if (pos.x > _drawSeedArea.maxX) {
-            _drawSeedArea.maxX = pos.x;
+            _drawSeedArea.maxX = pos.x
           }
           if (pos.y > _drawSeedArea.maxY) {
-            _drawSeedArea.maxY = pos.y;
+            _drawSeedArea.maxY = pos.y
           }
         }
-        //empty so add it
+        // empty so add it
         if (drawLocal) {
-          //blend the prev. color with new color
-          //show auto
-          $game.$map.currentTiles[pos.x][pos.y].colored = true;
+          // blend the prev. color with new color
+          // show auto
+          $game.$map.currentTiles[pos.x][pos.y].colored = true
 
-          //draw over the current tiles to show player they are drawing
-          $game.$render.clearMapTile(pos);
-          $game.$render.renderTile(pos.x,pos.y);
+          // draw over the current tiles to show player they are drawing
+          $game.$render.clearMapTile(pos)
+          $game.$render.renderTile(pos.x, pos.y)
         }
       }
     } else {
-      $game.$player.dropSeed({mode: 'draw'});
+      $game.$player.dropSeed({mode: 'draw'})
       $game.flags.unset('draw-mode')
-      $game.$player.seedMode = false;
-      $BODY.off('mousedown touchstart', '#gameboard');
-      $game.$player.seedPlanting = false;
+      $game.$player.seedMode = false
+      $BODY.off('mousedown touchstart', '#gameboard')
+      $game.$player.seedPlanting = false
       $game.alert('You are out of seeds!')
-      _saveSeedsToDB();
+      _saveSeedsToDB()
     }
   },
 
-  //put initial seed drawn in running array
+  // put initial seed drawn in running array
   drawFirstSeed: function () {
-    var pos = $game.$mouse.getCurrentPosition();
-    _drawSeeds = {};
+    var pos = $game.$mouse.getCurrentPosition()
+    _drawSeeds = {}
     _drawSeedArea = {
       minX: 29,
       maxX: 0,
       minY: 14,
       maxY: 0
-    };
-    $game.$player.drawSeed(pos);
+    }
+    $game.$player.drawSeed(pos)
   },
 
-  //if boss mode then must change up pos info
+  // if boss mode then must change up pos info
   setPositionInfo: function () {
     if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
-      _info.x = 15;
-      _info.y = 8;
+      _info.x = 15
+      _info.y = 8
     }
   },
 
-  //turns off draw mode if no seeds left
+  // turns off draw mode if no seeds left
   checkSeedLevel: function () {
     if (_seeds.draw <= 0) {
       $game.flags.unset('draw-mode')
@@ -1195,8 +1191,7 @@ var _player = {
 
   // Fgure out which tiles to color when a seed is dropped
   calculateSeeds: function (options) {
-    var mode  = options.mode,
-        tiles = []
+    var tiles = []
 
     // Get the tiles that need to be bombed
     if (options.radius > 1) {
@@ -1210,28 +1205,28 @@ var _player = {
 
     // Add additional info
     for (var i in tiles) {
-      tiles[i].mapIndex     = tiles[i].y * $game.TOTAL_WIDTH + tiles[i].x
+      tiles[i].mapIndex = tiles[i].y * $game.TOTAL_WIDTH + tiles[i].x
       tiles[i].instanceName = $game.$player.instanceName
     }
 
     // Utility function for getting an array of all points a radius from a particular X,Y
     function _getTilesInCircle (x, y, r) {
-      var tiles = [];
+      var tiles = []
 
       for (var j = x - r; j <= x + r; j++)
         for (var k = y - r; k <= y + r; k++)
           if ((_distance({ x: j, y: k }, { x: x, y: y }) <= r) &&
-              (_isInMap(j, k))) tiles.push({ x: j, y: k });
+              (_isInMap(j, k))) tiles.push({ x: j, y: k })
 
-      return tiles;
+      return tiles
     }
 
     // Utility function for getting an array of all points in a square around X,Y
     function _getTilesInSquare (x, y, sz) {
-      var tiles  = [],
-          mid     = Math.floor(sz / 2),
-          cornerX = x - mid,
-          cornerY = y - mid
+      var tiles = []
+      var mid = Math.floor(sz / 2)
+      var cornerX = x - mid
+      var cornerY = y - mid
 
       for (var j = cornerX; j < cornerX + sz; j++)
         for (var k = cornerY; k < cornerY + sz; k++)
@@ -1242,9 +1237,11 @@ var _player = {
 
     // Utility function for finding the distance from a point
     function _distance (p1, p2) {
-      var dx = p2.x - p1.x; dx *= dx;
-      var dy = p2.y - p1.y; dy *= dy;
-      return Math.sqrt( dx + dy );
+      var dx = p2.x - p1.x
+      var dy = p2.y - p1.y
+      dx *= dx
+      dy *= dy
+      return Math.sqrt(dx + dy)
     }
 
     // Utility function for verifying if a point is on the map
@@ -1256,8 +1253,8 @@ var _player = {
       // Set a correct size for the bounding box if radius mode
       if (options.radius > 1) options.sz = (options.radius - 1) * 2 + 3
 
-      var origX = options.mX - Math.floor(options.sz / 2),
-          origY = options.mY - Math.floor(options.sz / 2)
+      var origX = options.mX - Math.floor(options.sz / 2)
+      var origY = options.mY - Math.floor(options.sz / 2)
 
       _player.sendSeedBomb({
         bombed: tiles,
@@ -1267,18 +1264,18 @@ var _player = {
         x2: origX + options.sz,
         y2: origY + options.sz,
         kind: 'regular'
-      });
+      })
     }
   },
 
-  //plant the seed on the server and wait for response and update hud and map
+  // plant the seed on the server and wait for response and update hud and map
   sendSeedBomb: function (data) {
     var waitingEl = document.getElementById('waiting-for-seed')
 
-    //set a waiting boolean so we don't plant more until receive data back from rpc
+    // set a waiting boolean so we don't plant more until receive data back from rpc
     $game.flags.set('awaiting-seed')
 
-    //send the data to the rpc
+    // send the data to the rpc
     var info = {
       id: $game.$player.id,
       name: $game.$player.firstName,
@@ -1289,35 +1286,34 @@ var _player = {
       tilesColored: _tilesColored,
       instanceName: $game.$player.instanceName,
       kind: data.kind
-    };
+    }
 
-    var loc = $game.$map.masterToLocal(data.options.mX,data.options.mY);
+    var loc = $game.$map.masterToLocal(data.options.mX, data.options.mY)
 
     $(waitingEl)
       .css({
         top: loc.y * 32,
         left: loc.x * 32
       })
-      .show();
+      .show()
 
     ss.rpc('game.player.dropSeed', data.bombed, info, function (result) {
       $game.flags.unset('awaiting-seed')
 
-      $(waitingEl).fadeOut();
+      $(waitingEl).fadeOut()
       if (result > 0) {
-        _seeds.dropped += 1;   //increase the drop count for the player
-        $game.$audio.playTriggerFx('seedDrop');  //play sound clip
-        _tilesColored += result;
+        _seeds.dropped += 1   // increase the drop count for the player
+        $game.$audio.playTriggerFx('seedDrop')  // play sound clip
+        _tilesColored += result
 
         if (data.kind === 'regular') {
-          $game.$player.addSeeds('regular', -1);
+          $game.$player.addSeeds('regular', -1)
 
           // If player is out of seeds, end it
           if (_seeds.regular === 0) {
             _player.endSeedMode()
           }
-        }
-        else {
+        } else {
           $game.$player.addSeeds('draw', 0)
 
           if (_seeds.draw === 0) {
@@ -1335,18 +1331,18 @@ var _player = {
 
   // Generic end seed mode
   endSeedMode: function() {
-    $game.$player.seedMode = false;
-    $game.$player.seedPlanting = false;
+    $game.$player.seedMode = false
+    $game.$player.seedPlanting = false
     $game.alert('You are out of seeds!')
-    $('.hud-seed').removeClass('hud-button-active');
-    $game.$player.saveMapImage(true);
-    //TODO: save seed values to DB
-    _saveSeedsToDB();
+    $('.hud-seed').removeClass('hud-button-active')
+    $game.$player.saveMapImage(true)
+    // TODO: save seed values to DB
+    _saveSeedsToDB()
   },
 
   // Update seed counts
   updateTotalSeeds: function () {
-    _totalSeeds = _seeds.regular + _seeds.draw;
+    _totalSeeds = _seeds.regular + _seeds.draw
 
     $game.setBadgeCount('.hud-seed', _totalSeeds)
     $game.setBadgeCount('.regular-button', _seeds.regular)
@@ -1358,9 +1354,9 @@ var _player = {
   // Save a new resource to the database
   saveResourceToDb: function (resource) {
     ss.rpc('game.player.saveResource', {
-      id:                  $player.id,
-      resource:            resource,
-      inventory:           $game.inventory.get(),
+      id: $player.id,
+      resource: resource,
+      inventory: $game.inventory.get(),
       resourcesDiscovered: _resourcesDiscovered
     })
   },
@@ -1370,11 +1366,11 @@ var _player = {
     // Location is an object with x and y properties
     // Update on server
     ss.rpc('game.player.savePosition', {
-      id:       $game.$player.id,
+      id: $game.$player.id,
       position: {
-                  x: position.x,
-                  y: position.y
-                }
+        x: position.x,
+        y: position.y
+      }
     })
 
     // Update on minimap
@@ -1391,7 +1387,6 @@ function _setPlayerInformation (info) {
   _seeds = info.game.seeds
   _previousSeedsDropped = _seeds.dropped
   _resources = _objectify(info.game.resources)
-  _position = info.game.position
   $game.inventory.set(info.game.inventory)
   _colorMap = info.game.colorMap
   _resume = info.game.resume
@@ -1424,25 +1419,25 @@ function _setPlayerInformation (info) {
 }
 
 // calculate new render information based on the player's position
-function _updateRenderInfo() {
+function _updateRenderInfo () {
   // get local render information. update if appropriate.
   var loc = $game.$map.masterToLocal(_info.x, _info.y)
   if (loc) {
-    var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS,
-        prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS,
-        curX  = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS,
-        curY  = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS
+    var prevX = loc.x * $game.TILE_SIZE + _info.prevOffX * $game.STEP_PIXELS
+    var prevY = loc.y * $game.TILE_SIZE + _info.prevOffY * $game.STEP_PIXELS
+    var curX = loc.x * $game.TILE_SIZE + _info.offX * $game.STEP_PIXELS
+    var curY = loc.y * $game.TILE_SIZE + _info.offY * $game.STEP_PIXELS
 
     _renderInfo.prevX = prevX
     _renderInfo.prevY = prevY
-    _renderInfo.srcX  = _info.srcX
-    _renderInfo.srcY  = _info.srcY
-    _renderInfo.curX  = curX
-    _renderInfo.curY  = curY
+    _renderInfo.srcX = _info.srcX
+    _renderInfo.srcY = _info.srcY
+    _renderInfo.curX = curX
+    _renderInfo.curY = curY
   }
 }
 
-//figure out how much to move the player during a walk and wait frame to show
+// figure out how much to move the player during a walk and wait frame to show
 function _move () {
   /** IMPORTANT note: x and y are really flipped!!! **/ // is this true?
 
@@ -1468,7 +1463,7 @@ function _move () {
       _info.offX = 0
       _info.offY = 0
       _info.srcX = 0
-      _info.srcY =  0
+      _info.srcY = 0
       _info.prevOffX = 0
       _info.prevOffY = 0
 
@@ -1485,15 +1480,15 @@ function _move () {
       _currentStepIncX = $game.$player.seriesOfMoves[0].masterX - _info.x
       _currentStepIncY = $game.$player.seriesOfMoves[0].masterY - _info.y
 
-      //set the previous offsets to 0 because the last visit
-      //was the actual rounded master
+      // set the previous offsets to 0 because the last visit
+      // was the actual rounded master
       _info.prevOffX = 0
       _info.prevOffY = 0
 
-      //set direction for sprite sheets
-      //direction refers to the y location on the sprite sheet
-      //since the character will be in different rows
-      //will be 0,1,2,3
+      // set direction for sprite sheets
+      // direction refers to the y location on the sprite sheet
+      // since the character will be in different rows
+      // will be 0,1,2,3
       if (_currentStepIncX === 1) {
         _direction = 2
       } else if (_currentStepIncX === -1) {
@@ -1521,7 +1516,7 @@ function _move () {
         _curFrame = 0
       }
     }
-    _info.srcX = _curFrame  * $game.TILE_SIZE
+    _info.srcX = _curFrame * $game.TILE_SIZE
     _info.srcY = _direction * $game.TILE_SIZE * 2
 
     // Increment the current step
@@ -1529,7 +1524,7 @@ function _move () {
   }
 }
 
-//once the move is sent out to all players, update the players next moves
+// once the move is sent out to all players, update the players next moves
 function _sendMoveInfo (moves) {
   $game.flags.set('is-moving')
 
@@ -1581,7 +1576,7 @@ function _endMove () {
   $game.flags.unset('is-moving')
 }
 
-//determine what frame to render while standing
+// determine what frame to render while standing
 function _idle () {
   _idleCounter += 1
 
@@ -1601,7 +1596,7 @@ function _idle () {
   }
 }
 
-//save current seed data to db
+// save current seed data to db
 function _saveSeedsToDB () {
   var info = {
     id: $game.$player.id,
@@ -1611,7 +1606,7 @@ function _saveSeedsToDB () {
   ss.rpc('game.player.updateGameInfo', info)
 }
 
-//turn array into object
+// turn array into object
 function _objectify (input) {
   var result = {}
   for (var i = 0; i < input.length; i++) {
@@ -1750,4 +1745,3 @@ var COLORS = [
     'b': 243
   }
 ]
-

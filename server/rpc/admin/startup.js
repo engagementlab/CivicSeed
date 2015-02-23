@@ -1,29 +1,27 @@
-'use strict';
+'use strict'
 
-var rootDir = process.cwd(),
-    fs      = require('fs'),
-    winston = require('winston')
+var rootDir = process.cwd()
+var winston = require('winston')
 
-var config         = require(rootDir + '/app/config'),
-    service        = require(rootDir + '/app/service'),
-    dbActions      = require(rootDir + '/server/utils/database-actions'),
-    accountHelpers = require(rootDir + '/server/utils/account-helpers'),
-    filename       = 'rpc.admin.startup'
+var service = require(rootDir + '/app/service')
+var dbActions = require(rootDir + '/server/utils/database-actions')
+var accountHelpers = require(rootDir + '/server/utils/account-helpers')
+var filename = 'rpc.admin.startup'
 
-var userModel      = service.useModel('user'),
-    tileModel      = service.useModel('tile'),
-    colorModel     = service.useModel('color'),
-    npcModel       = service.useModel('npc'),
-    botanistModel  = service.useModel('botanist'),
-    gameModel      = service.useModel('game'),
-    chatModel      = service.useModel('chat')
+var userModel = service.useModel('user')
+var tileModel = service.useModel('tile')
+var colorModel = service.useModel('color')
+var npcModel = service.useModel('npc')
+var botanistModel = service.useModel('botanist')
+var gameModel = service.useModel('game')
+var chatModel = service.useModel('chat')
+var resourceModel = service.useModel('resource')
 
 var _JSONClone = function (json) {
   return JSON.parse(JSON.stringify(json))
 }
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
   req.use('account.authenticated')
 
@@ -68,11 +66,11 @@ exports.actions = function (req, res, ss) {
 var _startup = {
 
   loadUsers: function (req, res, ss) {
-    var userData     = require(rootDir + '/data/users.json'),
-        colorData    = require(rootDir + '/data/colors.json'),
-        userDataCopy = _JSONClone(userData),
-        numDemoUsers = 16,
-        demoUsers    = []
+    var userData = require(rootDir + '/data/users.json')
+    var colorData = require(rootDir + '/data/colors.json')
+    var userDataCopy = _JSONClone(userData)
+    var numDemoUsers = 16
+    var demoUsers = []
 
     hashUserData(0)
 
@@ -86,7 +84,8 @@ var _startup = {
       } else {
         dbActions.resetDefaultData(userModel, function (err) {
           if (err) {
-            apprise(err)
+            // TODO: Better error handling
+            winston.error(err)
           } else {
             dbActions.saveDocuments(userModel, userDataCopy, function () {
               hashDemoData(0)
@@ -99,8 +98,7 @@ var _startup = {
     function hashDemoData (i) {
       if (i < numDemoUsers) {
         accountHelpers.hashPassword('demo', function (hashedPassword) {
-          //create demo users
-          var newColor = colorData[i - 1]
+          // create demo users
           var d = {
             activeSessionID: null,
             firstName: 'Demo',
@@ -168,26 +166,26 @@ var _startup = {
     // Set up tile data object
     var data = tileData.layers // This is an array of unnamed objects, we want to name them
     var tileObject = {}
-    for (var i = 0; i < tileData.layers.length; i ++) {
-      tileObject[tileData.layers[i].name] = tileData.layers[i]
+    for (var i = 0; i < data.length; i++) {
+      tileObject[data[i].name] = data[i]
     }
 
     // Construct database
     dbActions.dropCollection('tiles', function () {
-      var i,
-          backgroundArray  = tileObject.texture.data,       // layer name 'texture'
-          background2Array = tileObject.background1.data,   // layer name 'background1'
-          background3Array = tileObject.background2.data,   // layer name 'background2'
-          foregroundArray  = tileObject.foreground1.data,   // layer name 'foreground1'
-          foreground2Array = tileObject.foreground2.data,   // layer name 'foreground2'
-          tileStateArray   = tileObject.tilestate.data,     // layer name 'tilestate'
-          numberOfTiles    = backgroundArray.length,
-          mapTilesWidth    = 142,
-          mapTilesHeight   = 132,
-          mapX,
-          mapY,
-          tileStateVal,
-          tiles = []
+      var i
+      var backgroundArray = tileObject.texture.data       // layer name 'texture'
+      var background2Array = tileObject.background1.data  // layer name 'background1'
+      var background3Array = tileObject.background2.data  // layer name 'background2'
+      var foregroundArray = tileObject.foreground1.data   // layer name 'foreground1'
+      var foreground2Array = tileObject.foreground2.data  // layer name 'foreground2'
+      var tileStateArray = tileObject.tilestate.data      // layer name 'tilestate'
+      var numberOfTiles = backgroundArray.length
+      var mapTilesWidth = 142
+      var mapTilesHeight = 132
+      var mapX
+      var mapY
+      var tileStateVal
+      var tiles = []
 
       // dbActions.saveDocuments(tileModel, tileData.global);
 
@@ -196,19 +194,19 @@ var _startup = {
         mapX = i % mapTilesWidth
         mapY = Math.floor(i / mapTilesWidth)
 
-        //add the tile to the array
-        //tileState: 0 if nothing (go!), 1 if something (nogo!), 2 if it's an NPC
-        //checking values are arbitrary right now,
-        //based on the image used in tiled map editor
+        // add the tile to the array
+        // tileState: 0 if nothing (go!), 1 if something (nogo!), 2 if it's an NPC
+        // checking values are arbitrary right now,
+        // based on the image used in tiled map editor
         // tileStateVal of 2 will be aded by the NPC load procedure.
         // 0: this means there was nothing place in tilestate layer, aka GO
         if (tileStateArray[i] === 0) {
           tileStateVal = 0
         } else if (tileStateArray[i] === 3) {
-          //3: this is the pink? tile, it is the botanist
+          // 3: this is the pink? tile, it is the botanist
           tileStateVal = 3
         } else {
-          //X: this means there was something OTHER than the blue tile place, NOGO
+          // X: this means there was something OTHER than the blue tile place, NOGO
           tileStateVal = 1
         }
 
@@ -217,10 +215,10 @@ var _startup = {
           y: mapY,
           tileState: tileStateVal,
           isMapEdge: (mapX === 0 || mapY === 0 || mapX === mapTilesWidth - 1 || mapY === mapTilesHeight - 1) ? true : false,
-          background:  backgroundArray[i],
+          background: backgroundArray[i],
           background2: background2Array[i],
           background3: background3Array[i],
-          foreground:  foregroundArray[i],
+          foreground: foregroundArray[i],
           foreground2: foreground2Array[i],
           mapIndex: i,
           npcId: 0
@@ -248,7 +246,7 @@ var _startup = {
 
     dbActions.resetDefaultData(colorModel, function (err) {
       if (err) {
-        apprise(err)
+        // Placeholder for error handling
       } else {
         dbActions.saveDocuments(colorModel, colors, function () {
           res('Data loaded: colors')
@@ -277,7 +275,7 @@ var _startup = {
 
     dbActions.dropCollection('npcs', function () {
       dbActions.saveDocuments(npcModel, npcData, function () {
-        //go thru npc data, save tilestate at that tile
+        // go thru npc data, save tilestate at that tile
         dbActions.saveNpcTilestate(tileModel, npcData, function (err) {
           if (err) {
             console.log('error saving tilestate')
@@ -294,7 +292,7 @@ var _startup = {
 
     dbActions.resetDefaultData(gameModel, function (err) {
       if (err) {
-        apprise(err)
+        // Placeholder for error handling
       } else {
         dbActions.saveDocuments(gameModel, gameData, function () {
           res('Data loaded: game')
@@ -308,7 +306,7 @@ var _startup = {
     var resourceData = require(rootDir + '/data/resources.json')
 
     dbActions.dropCollection('resources', function () {
-      dbActions.saveDocuments(resourceModel, resourceData, function () {
+      dbActions.saveDocuments(resourceModel, resourceData, function (err) {
         if (err) {
           winston.error('Error saving resources data.')
           res(err)
@@ -322,11 +320,10 @@ var _startup = {
   loadChat: function (req, res, ss) {
     dbActions.resetDefaultData(chatModel, function (err) {
       if (err) {
-        apprise(err)
+        // Placeholder for error handling
       } else {
         res('Chat logs deleted')
       }
     })
   }
 }
-

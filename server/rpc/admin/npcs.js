@@ -1,12 +1,11 @@
-'use strict';
+'use strict'
 
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
-  var npcModel  = ss.service.db.model('Npc'),
-      tileModel = ss.service.db.model('Tile')
+  var npcModel = ss.service.db.model('Npc')
+  var tileModel = ss.service.db.model('Tile')
 
   // TODO BUG
   // This does not properly save the y-1 tile with the correct NPC state and ID
@@ -58,7 +57,7 @@ exports.actions = function (req, res, ss) {
     },
 
     updateTiles: function (oldPosition, newPosition, callback) {
-      //update new tile, make sure we can change it
+      // update new tile, make sure we can change it
       if ((oldPosition.x === newPosition.x) && (oldPosition.y === newPosition.y)) {
         callback()
       } else {
@@ -75,7 +74,7 @@ exports.actions = function (req, res, ss) {
                   if (err) {
                     callback('could not save new tiles')
                   } else if (saved) {
-                    //update the old tile so it doesnt have an npc
+                    // update the old tile so it doesnt have an npc
                     tileModel
                       .where('x').equals(oldPosition.x)
                       .where('y').equals(oldPosition.y)
@@ -83,7 +82,7 @@ exports.actions = function (req, res, ss) {
                         if (err) {
                           callback('could not find old tile')
                         } else if (oldTiles) {
-                          oldTiles[0].tileState = 0;
+                          oldTiles[0].tileState = 0
                           oldTiles[0].save(function (err, saved) {
                             if (err) {
                               callback('could not save old tiles')
@@ -92,16 +91,15 @@ exports.actions = function (req, res, ss) {
                             }
                           })
                         }
-                    })
+                      })
                   }
                 })
               } else {
                 callback('cant place npc there')
               }
             }
-        })
+          })
       }
-
     }
   }
 
@@ -128,12 +126,12 @@ exports.actions = function (req, res, ss) {
           } else if (result) {
             var npc = result[0]
 
-            //update the tiles for the npc
+            // update the tiles for the npc
             npcHelpers.updateTiles(npc.position, info.position, function (error) {
               if (error) {
                 res(error)
               } else {
-                //general
+                // general
                 npc.name = info.name
                 npc.sprite = info.sprite
                 npc.isHolding = info.isHolding
@@ -142,7 +140,7 @@ exports.actions = function (req, res, ss) {
 
                 npc.position = info.position
 
-                //resource
+                // resource
                 if (info.isHolding) {
                   npc.resource.id = parseInt(info.resource.url, 10) // TODO: Change
                   npc.resource.url = info.resource.url
@@ -154,7 +152,7 @@ exports.actions = function (req, res, ss) {
                   npc.dialog.prompts = info.dialog.prompts
                   npc.dependsOn = info.dependsOn
 
-                  //not open
+                  // not open
                   if (info.questionType === 'open') {
                     npc.resource.requiredLength = info.resource.requiredLength
                   } else {
@@ -164,7 +162,7 @@ exports.actions = function (req, res, ss) {
                     }
                   }
                 } else {
-                  //smalltalk
+                  // smalltalk
                   npc.dialog.smalltalk = info.dialog.smalltalk
                 }
 
@@ -178,12 +176,12 @@ exports.actions = function (req, res, ss) {
               }
             })
           }
-      })
+        })
     },
 
     addNpc: function (info) {
       npcModel
-        .create(info, function (err,result) {
+        .create(info, function (err, result) {
           if (err) {
             res(err)
           } else if (result) {

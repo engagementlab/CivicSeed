@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, Davis, $, $game, apprise */
 
 window.ss = require('socketstream')
 
@@ -16,6 +17,8 @@ ss.server.on('disconnect', function () {
     return
   }
 
+  var disconnectMessage = 'The server is experiencing connection problems, which means this session needs to be restarted. We are very sorry for the inconvenience. Please try reauthenticating the game in a few minutes. If you continue to experience problems, please contact the site administrator and report the problem.'
+
   if (CivicSeed.CONNECTED && sessionStorage.getItem('userId')) {
     CivicSeed.CONNECTED = false
     $game.running = false
@@ -26,12 +29,7 @@ ss.server.on('disconnect', function () {
     Davis.location.assign('/')
     $('.appriseOverlay').remove()
     $('.appriseOuter').remove()
-    apprise('The server is experiencing connection problems, \
-      which means this session needs to be restarted. \
-      We are very sorry for the inconvenience. \
-      Please try reauthenticating the game in a few minutes. \
-      If you continue to experience problems, \
-      please contact the site administrator and report the problem.')
+    apprise(disconnectMessage)
   }
 })
 
@@ -42,14 +40,12 @@ ss.server.on('reconnect', function () {
     return
   }
 
+  var reconnectMessage = 'The server has been restarted. We are very sorry for the inconvenience. Please try reauthenticating. If you continue to experience problems, please contact the site administrator and report the problem.'
+
   CivicSeed.CONNECTED = true
   sessionStorage.clear()
   Davis.location.assign('/')
   $('.appriseOverlay').remove()
   $('.appriseOuter').remove()
-  apprise('The server has been restarted. \
-    We are very sorry for the inconvenience. \
-    Please try reauthenticating. \
-    If you continue to experience problems, \
-    please contact the site administrator and report the problem.')
+  apprise(reconnectMessage)
 })

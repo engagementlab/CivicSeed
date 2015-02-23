@@ -1,13 +1,11 @@
-'use strict';
+'use strict'
 
-var rootDir   = process.cwd(),
-    fs        = require('fs'),
-    winston   = require('winston')
+var rootDir = process.cwd()
+var winston = require('winston')
 
 var dbActions = require(rootDir + '/server/utils/database-actions')
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
   req.use('account.authenticated')
 
@@ -47,5 +45,4 @@ exports.actions = function (req, res, ss) {
     }
 
   }
-
 }

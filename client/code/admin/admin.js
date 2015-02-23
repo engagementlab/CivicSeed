@@ -1,118 +1,124 @@
-'use strict';
+'use strict'
+/* global ss, $, apprise */
 
-var $body
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-var self = module.exports = {
+    admin.admin
 
-  gameInstances: null,
-  allQuestions: null,
-  allAnswers: null,
-  players: null,
+    - Main code for admin and monitor page
 
-  init: function () {
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-    $body = $(document.body)
+module.exports = (function () {
+  var allQuestions = null
+  var allAnswers = null
+  var players = null
+  var $body
 
-    // NEED TO DO SOME SORT OF RPC CALL HERE TO MAKE SURE THIS NEVER CAN JUST HAPPEN UNLESS YOU HAVE THE RIGHT ROLE
-    self.setupLoaders()
-    self.setupMonitor()
-  },
-
-  setupLoaders: function () {
+  function setupLoaders () {
     $body.on('click', '#admin-startup button', function (event) {
-      var button   = $(this),
-          dataType = button.data().type
+      var $button = $(this)
+      var dataType = $button.data().type
 
-      if (button.prop('disabled')) {
+      if ($button.prop('disabled')) {
         return
       }
 
-      button.removeClass('btn-success btn-error')
-      button.find('.spinner').show()
+      $button.removeClass('btn-success btn-error')
+      $button.find('.spinner').show()
 
       // Disable all buttons while one is processing
       $('#admin-startup button').prop('disabled', true)
 
       ss.rpc('admin.startup.loadData', dataType, function (res) {
         if (res) {
-          button.addClass('btn-success')
+          $button.addClass('btn-success')
         } else {
           // Is this adequate for error, or should rpc return an error message?
-          button.addClass('btn-error')
+          $button.addClass('btn-error')
         }
-        button.find('.spinner').fadeOut(function () {
+        $button.find('.spinner').fadeOut(function () {
           $('#admin-startup button').prop('disabled', false)
         })
       })
     })
-  },
+  }
 
-  setupMonitor: function () {
-    self.getQuestions()
+  function setupMonitor () {
+    getQuestions()
+
     $body.on('click', '#players', function () {
       var instance = $(this).attr('data-instance')
       ss.rpc('admin.monitor.getPlayers', instance, function (err, res) {
-        if (res) {
-          self.players = res
-          self.showPlayersInfo(instance)
+        if (err) {
+          var errorMessage = 'Error getting players: ' + err
+          console.log(errorMessage)
+          apprise(errorMessage)
+        } else {
+          players = res
+          showPlayersInfo(instance)
         }
       })
     })
 
     $body.on('click', '#questions', function () {
       var instance = $(this).attr('data-instance')
-      self.showQuestions(instance)
+      showQuestions(instance)
     })
 
     $body.on('click', '#chat', function () {
       var instance = $(this).attr('data-instance')
       ss.rpc('admin.monitor.getRecentChat', instance, function (err, res) {
-        if (res) {
-          self.showChat(instance, res)
+        if (err) {
+          var errorMessage = 'Error getting recent chat: ' + err
+          console.log(errorMessage)
+          apprise(errorMessage)
+        } else {
+          showChat(instance, res)
         }
       })
     })
 
     $body.on('click', '#addPlayer', function () {
       var instance = $(this).attr('data-instance')
-      self.showAddPlayerForm(instance)
+      showAddPlayerForm(instance)
     })
 
     $body.on('click', '#startStop', function () {
       var instance = $(this).attr('data-instance')
-      self.addStartStopButton(instance)
+      addStartStopButton(instance)
     })
 
     $body.on('click', '.viewAnswers', function () {
       var index = $(this).attr('data-index')
-      self.showPlayerAnswers(index)
+      showPlayerAnswers(index)
     })
 
     $body.on('click', '.stopGameButton', function () {
       var instance = $(this).attr('data-instance')
-      self.toggleGame(instance, false)
+      toggleGame(instance, false)
     })
 
     $body.on('click', '.startGameButton', function () {
       var instance = $(this).attr('data-instance')
-      self.toggleGame(instance, true)
+      toggleGame(instance, true)
     })
 
     $body.on('click', '.deletePlayer', function () {
-      var id   = $(this).attr('data-id'),
-          word = $('.input' + id).val()
+      var id = $(this).attr('data-id')
+      var word = $('.input' + id).val()
       if (word.indexOf('delete') > -1) {
-        self.deletePlayer(id, this)
+        deletePlayer(id, this)
       } else {
         apprise('You must type “delete” to delete this user!')
       }
     })
 
     $body.on('click', '.question.answer-toggle', function () {
-      var npc      = $(this).attr('data-resource')
+      var npc = $(this).attr('data-resource')
       var instance = $(this).attr('data-instance')
 
-      self.showQuestionAnswers(npc, instance, this)
+      showQuestionAnswers(npc, instance, this)
     })
 
     $body.on('click', '.add-player-button', function (event) {
@@ -141,32 +147,33 @@ var self = module.exports = {
       }
       return false
     })
-  },
+  }
 
-  showPlayersInfo: function (instance) {
-    var html  = '<h2>All players</h2>' +
-                '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>'
+  function showPlayersInfo (instance) {
+    var html = '<h2>All players</h2>' +
+               '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>'
 
-    for (var i = 0; i < self.players.length; i++) {
-      var playingTime = self.players[i].game.playingTime,
-          hours = Math.floor(playingTime / 3600),
-          hoursRemainder = playingTime % 3600,
-          minutes = Math.floor(hoursRemainder / 60),
-          seconds = playingTime % 60,
-          time = hours + 'h ' + minutes + 'm ' + seconds + 's',
-          isPlaying = self.players[i].activeSessionID ? true : false
+    for (var i = 0; i < players.length; i++) {
+      var playingTime = players[i].game.playingTime
+      var hours = Math.floor(playingTime / 3600)
+      var hoursRemainder = playingTime % 3600
+      var minutes = Math.floor(hoursRemainder / 60)
+      var seconds = playingTime % 60
+      var time = hours + 'h ' + minutes + 'm ' + seconds + 's'
+      var isPlaying = players[i].activeSessionID ? true : false
 
-      html += '<div class="player' + self.players[i]._id + '"><h3>' + self.players[i].firstName + ' ' + self.players[i].lastName + '</h3>'
-      html += '<p>Profile unlocked: ' + self.players[i].profileUnlocked + '</p>'
+      html += '<div class="player' + players[i]._id + '"><h3>' + players[i].firstName + ' ' + players[i].lastName + '</h3>'
+      html += '<p>Profile unlocked: ' + players[i].profileUnlocked + '</p>'
       html += '<p>Logged in: ' + isPlaying + '</p>'
       html += '<p>Time played: ' + time + '</p>'
-      html += '<p>Resources collected: ' + self.players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>'
-      html += '<p>Enter "delete" to remove user permanently: <input class="input' + self.players[i]._id + '"></input><button data-id=' + self.players[i]._id + ' class="btn btn-danger deletePlayer" type="button">Delete User</button></p></div>'
+      html += '<p>Resources collected: ' + players[i].game.resourcesDiscovered + ' / 42  <button data-index=' + i + ' class="viewAnswers btn btn-success" type="button">View Answers</button></p>'
+      html += '<p>Enter "delete" to remove user permanently: <input class="input' + players[i]._id + '"></input><button data-id=' + players[i]._id + ' class="btn btn-danger deletePlayer" type="button">Delete User</button></p></div>'
     }
-    $('.output').empty().append(html)
-  },
 
-  showChat: function (instance, chat) {
+    $('.output').empty().append(html)
+  }
+
+  function showChat (instance, chat) {
     var html = '<h2>Recent Chat History</h2>' +
                '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>' +
                '<div class="allChat">'
@@ -175,18 +182,18 @@ var self = module.exports = {
       html += '<p>No one has spoken yet.</p>'
     } else {
       for (var i = 0; i < chat.length; i++) {
-        var date = chat[i].when.substring(0, 10),
-            time = chat[i].when.substring(11, 20)
+        var date = chat[i].when.substring(0, 10)
+        var time = chat[i].when.substring(11, 20)
         html += '<p><span class="time">[' + date + ' || ' + time + ']</span><span class="who"> ' + chat[i].who + ' </span><span class="what">' + chat[i].what + '</span></p>'
       }
     }
 
     html += '</div>'
     $('.output').empty().append(html)
-  },
+  }
 
-  showAddPlayerForm: function (instance) {
-    var html  = '<div class="row"><div class="col-sm-12">' +
+  function showAddPlayerForm (instance) {
+    var html = '<div class="row"><div class="col-sm-12">' +
                 '<h2>Add Player</h2>' +
                 '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>' +
                 '<p>You can add multiple new players providing a comma-separated list of e-mail addresses. Note that you cannot add more players than allowed inside each game session.</p>' +
@@ -199,27 +206,31 @@ var self = module.exports = {
                 '</div></div>' +
                 '</form>'
     $('.output').empty().append(html)
-  },
+  }
 
-  addStartStopButton: function (instance) {
-    var html  = '<h2>Make the game active or inactive</h2>' +
+  function addStartStopButton (instance) {
+    var html = '<h2>Make the game active or inactive</h2>' +
                 '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>' +
                 '<p><button data-instance="' + instance + '"class="btn btn-success startGameButton" type="button">Start Game</button></p><p><button data-instance="' + instance + '"class="btn btn-warning stopGameButton" type="button">Stop Game</button></p>'
     $('.output').empty().append(html)
-  },
+  }
 
-  getQuestions: function () {
+  function getQuestions () {
     ss.rpc('admin.monitor.init', function (err, res) {
-      if (res) {
-        self.allQuestions = res.sort(self.sortByLevel)
+      if (err) {
+        var errorMessage = 'Error getting questions: ' + err
+        console.log(errorMessage)
+        apprise(errorMessage)
+      } else {
+        allQuestions = res.sort(sortByLevel)
       }
     })
-  },
+  }
 
-  showPlayerAnswers: function (index) {
-    var resources = self.players[index].game.resources
-    var numNPC = self.allQuestions.length
-    var html = '<h2>' + self.players[index].firstName + ' ' + self.players[index].lastName + '</h2>'
+  function showPlayerAnswers (index) {
+    var resources = players[index].game.resources
+    var numNPC = allQuestions.length
+    var html = '<h2>' + players[index].firstName + ' ' + players[index].lastName + '</h2>'
 
     for (var i = 0; i < resources.length; i++) {
       var resource = resources[i]
@@ -228,7 +239,7 @@ var self = module.exports = {
       var open = false
 
       while (!found) {
-        var question = self.allQuestions[n]
+        var question = allQuestions[n]
         if (question.resource.id === resource.id) {
           found = true
           console.log(question)
@@ -243,39 +254,42 @@ var self = module.exports = {
         }
       }
 
-      //answer only if open ended
+      // Answer only if open ended
       if (open) {
         html += '<div class="answer"><p>A: ' + resource.answers[0] + '</p><div class="extras">'
         if (resource.madePublic) {
-          //put unlocked icon
+          // Put unlocked icon
           html += '<i class="fa fa-unlock-alt fa-lg"></i>'
         }
         if (resource.seeded) {
-          //thumbs up icon with number
+          // Thumbs up icon with number
           html += '<i class="fa fa-thumbs-up fa-lg"></i> ' + resource.seeded.length
         }
         html += '</div></div>'
       }
     }
     $('.output').empty().append(html)
-  },
+  }
 
-  deletePlayer: function (id) {
+  function deletePlayer (id) {
     ss.rpc('admin.monitor.deletePlayer', id, function (err) {
       if (err) {
-        console.log(err)
+        var errorMessage = 'Error deleting player: ' + err
+        console.log(errorMessage)
+        apprise(errorMessage)
       } else {
-        var sel = '.player' + id
-        $(sel).remove()
+        $('.player' + id).remove()
         apprise('Player deleted.')
       }
     })
-  },
+  }
 
-  toggleGame: function (instance, bool) {
+  function toggleGame (instance, bool) {
     ss.rpc('admin.monitor.toggleGame', instance, bool, function (err) {
       if (err) {
-        apprise('error switching game')
+        var errorMessage = 'Error switching game: ' + err
+        console.log(errorMessage)
+        apprise(errorMessage)
       } else {
         if (bool) {
           apprise('The game is now active.')
@@ -284,47 +298,47 @@ var self = module.exports = {
         }
       }
     })
-  },
+  }
 
-  showQuestions: function (instance) {
+  function showQuestions (instance) {
     var html = '<h2>Open-ended questions</h2>' +
                '<p><strong>Game name: <span class="color-darkblue">' + instance + '</span></strong></p>'
 
-    for (var q = 0; q < self.allQuestions.length; q++) {
-      var question = self.allQuestions[q]
+    for (var q = 0; q < allQuestions.length; q++) {
+      var question = allQuestions[q]
 
       if (question.resource.questionType === 'open') {
-        html += '<div class="question answer-toggle" data-instance="' + instance + '" data-resource="' + question.resource.id +'">'
-        html += '<p data-resource="' + question.resource.id +'" class="mainQ level' + question.level + '">' + question.resource.question + '</p></div>'
+        html += '<div class="question answer-toggle" data-instance="' + instance + '" data-resource="' + question.resource.id + '">'
+        html += '<p data-resource="' + question.resource.id + '" class="mainQ level' + question.level + '">' + question.resource.question + '</p></div>'
       }
     }
 
-    self.getAllAnswers(instance)
+    getAllAnswers(instance)
     $('.output').empty().append(html)
-  },
+  }
 
-  getAllAnswers: function (instance) {
+  function getAllAnswers (instance) {
     ss.rpc('admin.monitor.getInstanceAnswers', instance, function (err, res) {
       if (err) {
-        self.allAnswers = []
+        allAnswers = []
       } else if (res) {
-        self.allAnswers = res.resourceResponses
+        allAnswers = res.resourceResponses
       }
     })
-  },
+  }
 
-  showQuestionAnswers: function (npc, instance, selector) {
+  function showQuestionAnswers (npc, instance, selector) {
     var html = ''
     var found = false
     var npcInt = parseInt(npc, 10)
 
     $('.question .answers').remove()
 
-    for (var i = 0; i < self.allAnswers.length; i++) {
-      if (self.allAnswers[i].resourceId === npcInt) {
+    for (var i = 0; i < allAnswers.length; i++) {
+      if (allAnswers[i].resourceId === npcInt) {
         found = true
-        html += '<p class="answers"><span class="player-name">' + self.allAnswers[i].name + ': </span>'
-        html += '<span class="player-answer">' + self.allAnswers[i].answer + '</span></p>'
+        html += '<p class="answers"><span class="player-name">' + allAnswers[i].name + ': </span>'
+        html += '<span class="player-answer">' + allAnswers[i].answer + '</span></p>'
       }
     }
     if (!found) {
@@ -332,9 +346,9 @@ var self = module.exports = {
     }
 
     $(selector).append(html)
-  },
+  }
 
-  sortByLevel: function (a, b) {
+  function sortByLevel (a, b) {
     if (a.level < b.level) {
       return -1
     } else if (a.level > b.level) {
@@ -343,4 +357,14 @@ var self = module.exports = {
       return 0
     }
   }
-}
+
+  return {
+    init: function () {
+      $body = $(document.body)
+
+      // NEED TO DO SOME SORT OF RPC CALL HERE TO MAKE SURE THIS NEVER CAN JUST HAPPEN UNLESS YOU HAVE THE RIGHT ROLE
+      setupLoaders()
+      setupMonitor()
+    }
+  }
+}())

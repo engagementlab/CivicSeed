@@ -1,19 +1,17 @@
-'use strict';
+'use strict'
 
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
   var gameModel = ss.service.db.model('Game')
-  var npcModel  = ss.service.db.model('Npc')
+  var npcModel = ss.service.db.model('Npc')
   var chatModel = ss.service.db.model('Chat')
   var userModel = ss.service.db.model('User')
 
   var monitorHelpers = {
 
     getInstances: function (instances, callback) {
-      //console.log(instances);
       var numInstances = instances.length
       var cur = 0
       var allInstances = []
@@ -37,7 +35,7 @@ exports.actions = function (req, res, ss) {
         .where('instanceName').equals(instance)
         .find(function (err, result) {
           if (err) {
-
+            // Placeholder for error handling
           } else {
             return result[0]
           }
@@ -75,7 +73,6 @@ exports.actions = function (req, res, ss) {
         .where('role').equals('actor')
         .select('firstName lastName id profileUnlocked game.resourcesDiscovered game.resources game.playingTime activeSessionID')
         .find(function (err, data) {
-          //console.log(err,data)
           if (err) {
             res(err, false)
           } else {
@@ -98,7 +95,7 @@ exports.actions = function (req, res, ss) {
       gameModel
         .where('instanceName').equals(instance)
         .select('resourceResponses')
-        .find(function (err, answers){
+        .find(function (err, answers) {
           res(err, answers[0])
         })
     },
@@ -134,5 +131,4 @@ exports.actions = function (req, res, ss) {
         })
     }
   }
-
 }

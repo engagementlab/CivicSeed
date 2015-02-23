@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global ss, $, $game, d3 */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -45,25 +46,24 @@ Resource.prototype.removePlayerResponse = function (data) {
 var _tangrams = []
 
 function Tangram (data) {
-  this.id    = data.id    // Numerical unique id for each tangram piece
-  this.name  = data.name  // "correctX" or "wrongX" - not a unique identifier. Used by resource to identify which piece to use, currently.
+  this.id = data.id       // Numerical unique id for each tangram piece
+  this.name = data.name   // "correctX" or "wrongX" - not a unique identifier. Used by resource to identify which piece to use, currently.
   this.level = data.level // Pieces are associated with a level. Each level has a group of tangrams that go into a puzzle.
-  this.path  = data.path  // SVG shape path
-  this.fill  = data.fill  // Fill color, a string. Use method .getCSSColor to get a CSS/Canvas-compatible color string.
+  this.path = data.path   // SVG shape path
+  this.fill = data.fill   // Fill color, a string. Use method .getCSSColor to get a CSS/Canvas-compatible color string.
 }
 
 Tangram.prototype.getCSSColor = function () {
   var fills = {
-    orange:      'rgb(236,113,41)',
+    orange: 'rgb(236,113,41)',
     lightOrange: 'rgb(237,173,135)',
-    blue:        'rgb(14,152,212)',
-    lightBlue:   'rgb(109,195,233)',
-    green:       'rgb(76,212,206)',
-    lightGreen:  'rgb(164,238,235)'
+    blue: 'rgb(14,152,212)',
+    lightBlue: 'rgb(109,195,233)',
+    green: 'rgb(76,212,206)',
+    lightGreen: 'rgb(164,238,235)'
   }
   return fills[this.fill] || 'rgb(0,0,0)' // Fallback to black
 }
-
 
 var $resources = $game.$resources = {
 
@@ -71,7 +71,7 @@ var $resources = $game.$resources = {
 
   inventorySlotsPerLevel: {},
 
-  //load in all the resources and the corresponding answers
+  // load in all the resources and the corresponding answers
   init: function (callback) {
     // Get all resources
     var response = $game.$npc.getNpcData()
@@ -110,9 +110,9 @@ var $resources = $game.$resources = {
     }
 
     // Create all tangram pieces - construct an array of all tangram pieces as object prototypes.
-    for (var i = 0, j = TANGRAMS.length; i < j; i++) {
-      _tangrams.push(new Tangram(TANGRAMS[i]))
-    }
+    _tangrams = TANGRAMS.map(function (tangram) {
+      return new Tangram(tangram)
+    })
 
     // Create array of ALL player responses
     ss.rpc('game.npc.getResponses', $game.$player.instanceName, function (response) {
@@ -143,8 +143,8 @@ var $resources = $game.$resources = {
 
   // Decide how to display resource on screen depending on state of player
   showResource: function (id) {
-    var el       = document.getElementById('resource-area'),
-        resource = _resources.data[id]
+    var el = document.getElementById('resource-area')
+    var resource = _resources.data[id]
 
     // Load resource content, then display.
     $game.flags.set('visible-resource-overlay')
@@ -197,9 +197,8 @@ var $resources = $game.$resources = {
 
   // Activated when clicking on something that is specific to viewing answers
   examineResponses: function (id) {
-    var overlay  = document.getElementById('resource-area'),
-        el       = overlay.querySelector('.resource-responses'),
-        resource = _resources.data[id]
+    var overlay = document.getElementById('resource-area')
+    var el = overlay.querySelector('.resource-responses')
 
     _resources.addContent(id, 4)
 
@@ -214,9 +213,9 @@ var $resources = $game.$resources = {
 
   // Display messages on checking user input
   showCheckMessage: function (message, callback) {
-    var $check      = $('#resource-area .check'),
-        $el         = $check.find('.message-feedback'),
-        $confirmBtn = $el.find('.btn-primary')
+    var $check = $('#resource-area .check')
+    var $el = $check.find('.message-feedback')
+    var $confirmBtn = $el.find('.btn-primary')
 
     $check.find('.check-dialog').hide()
     $check.show()
@@ -257,12 +256,11 @@ var $resources = $game.$resources = {
 var _resources = {
 
   data: [],
-
   temporaryAnswer: '',
 
   resetSlides: function () {
-    var overlay = document.getElementById('resource-area'),
-        article = overlay.querySelector('.resource-article')
+    var overlay = document.getElementById('resource-area')
+    var article = overlay.querySelector('.resource-article')
 
     this.hideContent()
 
@@ -275,20 +273,19 @@ var _resources = {
   },
 
   hideContent: function () {
-    var overlay = document.getElementById('resource-area'),
-        listOfContentElementSelectors = [
-          '.resource-content',
-          '.resource-article',
-          '.resource-question',
-          '.resource-responses',
-          '.resource-custom-content'
-        ]
+    var overlay = document.getElementById('resource-area')
+    var listOfContentElementSelectors = [
+      '.resource-content',
+      '.resource-article',
+      '.resource-question',
+      '.resource-responses',
+      '.resource-custom-content'
+    ]
 
     for (var i in listOfContentElementSelectors) {
       var el = overlay.querySelector(listOfContentElementSelectors[i])
       el.style.display = 'none'
     }
-
   },
 
   resetButtons: function () {
@@ -329,7 +326,7 @@ var _resources = {
   },
 
   unloadTangram: function () {
-    var artboard  = document.getElementById('resource-area').querySelector('.tangram')
+    var artboard = document.getElementById('resource-area').querySelector('.tangram')
 
     artboard.innerHMTL = ''
     d3.select('#resource-area .tangram svg').remove()
@@ -338,41 +335,40 @@ var _resources = {
   // Loads the tangram piece and adds it into DOM
   loadTangram: function (resource) {
     // Loads the SVG version of the tangram.
-    var artboard  = document.getElementById('resource-area').querySelector('.tangram'),
-        artboardX = artboard.offsetWidth,
-        artboardY = artboard.offsetHeight,
-        shape     = $resources.getTangram(resource.id),
-        fill      = shape.getCSSColor()
+    var artboard = document.getElementById('resource-area').querySelector('.tangram')
+    var artboardX = artboard.offsetWidth
+    var artboardY = artboard.offsetHeight
+    var shape = $resources.getTangram(resource.id)
+    var fill = shape.getCSSColor()
 
     // Clear previous SVG if any
     this.unloadTangram()
 
-    var svg  = d3.select('#resource-area .tangram').append('svg').attr('class','tangram-svg'),
-        path = svg.append('path')
-                .attr('d', shape.path)
-                .attr('fill', fill)
-                .attr('stroke', 'rgb(255,255,255)')
-                .attr('stroke-width', 0),
-        pathCentroid = _getCentroid(path),
-        displayX = (artboardX / 2) - pathCentroid[0],
-        displayY = (artboardY / 2) - pathCentroid[1]
+    var svg = d3.select('#resource-area .tangram').append('svg').attr('class', 'tangram-svg')
+    var path = svg.append('path')
+                  .attr('d', shape.path)
+                  .attr('fill', fill)
+                  .attr('stroke', 'rgb(255,255,255)')
+                  .attr('stroke-width', 0)
+    var pathCentroid = _getCentroid(path)
+    var displayX = (artboardX / 2) - pathCentroid[0]
+    var displayY = (artboardY / 2) - pathCentroid[1]
 
     // Set the tangram to display in the middle of the area
-    path.attr('transform', 'translate(' + displayX + ',' + displayY +')')
+    path.attr('transform', 'translate(' + displayX + ',' + displayY + ')')
 
     function _getCentroid (selection) {
       var bbox = selection.node().getBBox()
-      return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
+      return [bbox.x + bbox.width / 2, bbox.y + bbox.height / 2]
     }
   },
 
   // Preloads question information into the DOM
   loadQuestion: function (resource) {
-    var overlay   = document.getElementById('resource-area'),
-        el        = overlay.querySelector('.resource-question'),
-        form      = el.querySelector('form'),
-        type      = resource.questionType,
-        formHTML  = ''
+    var overlay = document.getElementById('resource-area')
+    var el = overlay.querySelector('.resource-question')
+    var form = el.querySelector('form')
+    var formHTML = ''
 
     // Fill in the question
     el.querySelector('.question').textContent = resource.question
@@ -380,8 +376,8 @@ var _resources = {
     // Create the answer form
     switch (resource.questionType) {
       case 'multiple':
-        for (var i =0; i < resource.possibleAnswers.length; i++) {
-          formHTML += '<input name="resourceMultipleChoice" type ="radio" id="answer_' + i + '" value="' + resource.possibleAnswers[i] + '"><label for="answer_'+ i +'">' + resource.possibleAnswers[i] + '</label><br>'
+        for (var i = 0; i < resource.possibleAnswers.length; i++) {
+          formHTML += '<input name="resourceMultipleChoice" type ="radio" id="answer_' + i + '" value="' + resource.possibleAnswers[i] + '"><label for="answer_' + i + '">' + resource.possibleAnswers[i] + '</label><br>'
         }
         break
       case 'open':
@@ -423,7 +419,7 @@ var _resources = {
 
           // Why does this happen twice?
           // TODO: fix this
-          // Temporarily (?) hijacked by getAnswer() to save to answer field 
+          // Temporarily (?) hijacked by getAnswer() to save to answer field
           var formContents = $(this).serialize()
           console.log(formContents)
           ss.rpc('game.player.saveResumeAnswer', {
@@ -581,14 +577,14 @@ var _resources = {
 
   // Adds content for the screen if the Player answered the resource question correctly
   loadRewards: function (resource) {
-    var el            = document.getElementById('resource-area').querySelector('.resource-content'),
-        input         = el.querySelector('.tagline-input input'),
-        npc           = $game.$npc.findNpcByResourceId(resource.id),
-        playerLevel   = $game.$player.currentLevel,
-        feedback      = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight,
-        dialogue      = '',
-        skin          = $game.$skins.getSkin(resource.skinSuit),
-        seedsRewarded = $game.$player.getResource(resource.id).seedsRewarded
+    var el = document.getElementById('resource-area').querySelector('.resource-content')
+    var input = el.querySelector('.tagline-input input')
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
+    var playerLevel = $game.$player.currentLevel
+    var feedback = (resource.feedbackRight.length < 1) ? 'Thanks for sharing.' : resource.feedbackRight
+    var dialogue = ''
+    var skin = $game.$skins.getSkin(resource.skinSuit)
+    var seedsRewarded = $game.$player.getResource(resource.id).seedsRewarded
 
     // Legacy stuff saved here, never used.
     //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
@@ -632,7 +628,7 @@ var _resources = {
       dialogue = feedback + ' Here, take this puzzle piece, and ' + seedsRewarded + ' seeds!'
     }
 
-    //give them the skinsuit regardless if in prev level or not
+    // give them the skinsuit regardless if in prev level or not
     if (skin) {
       dialogue += ' You unlocked the ' + skin.name + ' suit! Try it on or browse your other suits by clicking the changing room button below.'
     }
@@ -644,8 +640,8 @@ var _resources = {
 
   // A variation on loadRewards() to display 'Master NPC' content
   loadMasterNPCContent: function (resource) {
-    var el            = document.getElementById('resource-area').querySelector('.resource-custom-content'),
-        npc           = $game.$npc.findNpcByResourceId(resource.id)
+    var el = document.getElementById('resource-area').querySelector('.resource-custom-content')
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
 
     _resources.hideContent()
     el.style.display = 'block'
@@ -654,13 +650,13 @@ var _resources = {
 
   // Load other players answers and your own
   loadResponses: function (resource) {
-    var el             = document.getElementById('resource-area').querySelector('.resource-responses'),
-        playerResource = $game.$player.getAnswer(resource.id),
-        playerPublic   = false,
-        playerHTML     = '',
-        responsesHTML  = '',
-        npc            = $game.$npc.findNpcByResourceId(resource.id),
-        dialogue       = ''
+    var el = document.getElementById('resource-area').querySelector('.resource-responses')
+    var playerResource = $game.$player.getAnswer(resource.id)
+    var playerPublic = false
+    var playerHTML = ''
+    var responsesHTML = ''
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
+    var dialogue = ''
 
     // Process public responses (we do not have access to non-public responses here)
     for (var i = 0; i < resource.playerAnswers.length; i++) {
@@ -671,7 +667,7 @@ var _resources = {
         playerPublic = true
       } else {
         // Create HTML snippet of all other players' public responses
-        responsesHTML += '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledge-button"><button class="btn btn-success" data-resource="' + resource.id + '" data-player="'+ thisAnswer.playerId +'">Seed It!</button></div></li>';
+        responsesHTML += '<li class="response"><p><span>' + thisAnswer.name + ': </span>' + thisAnswer.answer + '</p><div class="pledge-button"><button class="btn btn-success" data-resource="' + resource.id + '" data-player="' + thisAnswer.playerId + '">Seed It!</button></div></li>'
       }
     }
 
@@ -687,13 +683,13 @@ var _resources = {
       responsesHTML = '<li class="response response-notice"><p>More answers from your peers will appear shortly.  Be sure to check back.</p></li>'
     }
 
-    //add in the player's answer with the appropriate button
+    // add in the player's answer with the appropriate button
     // TODO: Make a better templating system for all of this
     playerHTML += '<li class="response your-response"><p><span>' + 'You said' + ': </span>' + playerResource.answers[playerResource.answers.length - 1] + '</p>'
     if (!playerPublic) {
-      playerHTML += '<div class="public-button"><button class="btn btn-info" data-resource="'+ resource.id +'">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
+      playerHTML += '<div class="public-button"><button class="btn btn-info" data-resource="' + resource.id + '">Make Public</button> <i class="fa fa-lock fa-lg"></i></div>'
     } else {
-      playerHTML += '<div class="private-button"><button class="btn btn-info" data-resource="'+ resource.id +'">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
+      playerHTML += '<div class="private-button"><button class="btn btn-info" data-resource="' + resource.id + '">Make Private</button> <i class="fa fa-unlock-alt fa-lg"></i></div>'
     }
     playerHTML += '</li>'
 
@@ -713,15 +709,14 @@ var _resources = {
 
   // Clear the display and decide what to show on screen
   addContent: function (resourceId, section, slide) {
-    var overlay      = document.getElementById('resource-area'),
-        playerLevel  = $game.$player.getLevel(),
-        answer       = $game.$player.getAnswer(resourceId),
-        isAnswered   = (answer && answer.result) ? true : false,
-        isRevisit    = $game.flags.check('viewing-inventory'),
-        resource     = _resources.data[resourceId]
+    var overlay = document.getElementById('resource-area')
+    var answer = $game.$player.getAnswer(resourceId)
+    var isAnswered = (answer && answer.result) ? true : false
+    var isRevisit = $game.flags.check('viewing-inventory')
+    var resource = _resources.data[resourceId]
 
-    var $article     = $('#resource-stage > section'),
-        slides       = $article.length
+    var $article = $('#resource-stage > section')
+    var slides = $article.length
 
     // Reset all resource slides and buttons to a hidden & clean state.
     _resources.resetSlides()
@@ -767,9 +762,10 @@ var _resources = {
             if (resource.questionType === 'open') _addButton('next', 4)
             // If question was answered correctly for any other question type, close resource window
             else _addButton('close', null, null, _checkBotanistCallback)
+          } else {
+            // If question was not answered correctly, go to next slide (question screen)
+            _addButton('next', 2)
           }
-          // If question was not answered correctly, go to next slide (question screen)
-          else _addButton('next', 2)
         }
         // Add a back button if it's not the first slide.
         if (slide > 0) _addButton('back', 1, slide - 1)
@@ -841,15 +837,15 @@ var _resources = {
 
         // Momentarily save dummy data for viewing this thing
         var data = {
-              id:           resource.id,
-              answer:       '',
-              attempts:     0,
-              npcLevel:     null,
-              questionType: null,
-              skinSuit:     null,
-              correct:      false,
-              tagline:      null
-            }
+          id: resource.id,
+          answer: '',
+          attempts: 0,
+          npcLevel: null,
+          questionType: null,
+          skinSuit: null,
+          correct: false,
+          tagline: null
+        }
         $game.$player.saveResourceLocally(data)
         break
       // Generic error for debugging.
@@ -864,12 +860,12 @@ var _resources = {
 
     // Private add button function. Displays the button each slide asks for and binds actions to them.
     function _addButton (button, section, slide, callback) {
-      var buttons = overlay.querySelector('.buttons'),
-          back    = buttons.querySelector('.back-button'),
-          next    = buttons.querySelector('.next-button'),
-          answer  = buttons.querySelector('.answer-button'),
-          save    = buttons.querySelector('.save-button'),
-          close   = buttons.querySelector('.close-button')
+      var buttons = overlay.querySelector('.buttons')
+      var back = buttons.querySelector('.back-button')
+      var next = buttons.querySelector('.next-button')
+      var answer = buttons.querySelector('.answer-button')
+      var save = buttons.querySelector('.save-button')
+      var close = buttons.querySelector('.close-button')
 
       // Note on EventListeners. Removal is possible within the function itself (the easiest
       // way is to name the function so you can remove it) but there is no good way to remove
@@ -922,12 +918,11 @@ var _resources = {
         case 'save':
           save.style.display = 'inline-block'
           save.addEventListener('click', function _saveButton () {
-
             // For all question types except resume,
             // check the tagline
             if (resource.questionType !== 'resume') {
-              var input   = _resources.readTaglineInput(),
-                  tagline = _resources.sanitizeTagline(input)
+              var input = _resources.readTaglineInput()
+              var tagline = _resources.sanitizeTagline(input)
 
               // If the tagline is not validated, exit
               if (_resources.validateTagline(tagline) !== true) {
@@ -958,7 +953,6 @@ var _resources = {
         case 'close':
           close.style.display = 'inline-block'
           close.addEventListener('click', function _closeButton () {
-
             // If correct, then unlock suit, add seeds, add
             // tangram to inventory, and save answer to DB
             if (!isRevisit) {
@@ -1011,10 +1005,11 @@ var _resources = {
 
   // Called by check answer to validate whether an open-ended response is sufficient
   validateOpenResponse: function (resource) {
-    var response    = this.getAnswer(resource),
-        _focusInput = function () {
-          document.querySelector('.open-response').focus()
-        }
+    var response = this.getAnswer(resource)
+
+    function _focusInput () {
+      document.querySelector('.open-response').focus()
+    }
 
     if (response.length === 0) {
       $resources.showCheckMessage('Please answer the question!', _focusInput)
@@ -1038,8 +1033,6 @@ var _resources = {
     $el.find('.sure-button').on('click', function () {
       $resources.hideCheckMessage()
       _resources.submitAnswer(resource, true)
-
-      var slides = $('#resource-stage > section').length
       _resources.addContent(resource.id, 3)
     }).show()
     // [2] Else, close and retry
@@ -1075,24 +1068,24 @@ var _resources = {
   },
 
   submitAnswer: function (resource, isCorrect) {
-    var response = this.getAnswer(resource),
-        npc      = $game.$npc.findNpcByResourceId(resource.id),
-        data     = {
-          id:           resource.id,
-          answer:       response,
-          npcLevel:     npc.level,
-          questionType: resource.questionType,
-          skinSuit:     resource.skinSuit,
-          correct:      (isCorrect === true) ? true : false
-        }
+    var response = this.getAnswer(resource)
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
+    var data = {
+      id: resource.id,
+      answer: response,
+      npcLevel: npc.level,
+      questionType: resource.questionType,
+      skinSuit: resource.skinSuit,
+      correct: (isCorrect === true) ? true : false
+    }
 
     $game.$player.saveResourceLocally(data)
   },
 
   // Called after submitAnswer(..., false) because the answer is wrong, and we're done
   showFeedbackWrong: function (resource) {
-    var npc     = $game.$npc.findNpcByResourceId(resource.id),
-        message = resource.feedbackWrong
+    var npc = $game.$npc.findNpcByResourceId(resource.id)
+    var message = resource.feedbackWrong
 
     $resources.hideResource(function callback() {
       $game.$audio.playTriggerFx('resourceWrong')
@@ -1101,7 +1094,6 @@ var _resources = {
   }
 
 }
-
 
 var TANGRAMS = [
   {

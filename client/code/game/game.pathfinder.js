@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global $game, apprise */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -11,13 +12,11 @@
 
 var astar = require('astar')
 
-var self = $game.$pathfinder = (function () {
-
+$game.$pathfinder = module.exports = (function () {
   // Private - holder of graph tiles for current screen
   var _graph
 
   return {
-
     // Create the grid, and set walkable or no-go state for each tile.
     // If bypass === true, all tiles are walkable
     // 1 = Walkable tile
@@ -27,8 +26,8 @@ var self = $game.$pathfinder = (function () {
       var gridTiles = new Array(y)
 
       while (--y >= 0) {
+        // Reset x
         var x = $game.VIEWPORT_WIDTH
-
         gridTiles[y] = new Array(x)
 
         while (--x >= 0) {
@@ -48,12 +47,12 @@ var self = $game.$pathfinder = (function () {
 
       // Assign master grid coordinates to local grid
       for (var i = 0, nodeLength = _graph.nodes.length; i < nodeLength; i++) {
-        var x = _graph.nodes[i].x,
-            y = _graph.nodes[i].y
+        var localX = _graph.nodes[i].x
+        var localY = _graph.nodes[i].y
 
         // Get masterX and masterY and put them inside node
-        _graph.nodes[i].masterX = $game.$map.currentTiles[y][x].x
-        _graph.nodes[i].masterY = $game.$map.currentTiles[y][x].y
+        _graph.nodes[i].masterX = $game.$map.currentTiles[localY][localX].x
+        _graph.nodes[i].masterY = $game.$map.currentTiles[localY][localX].y
       }
     },
 
@@ -66,13 +65,12 @@ var self = $game.$pathfinder = (function () {
         return
       }
 
-      var start = _graph.grid[currentPosition.y][currentPosition.x],
-          end   = _graph.grid[targetPosition.y][targetPosition.x]
+      var start = _graph.grid[currentPosition.y][currentPosition.x]
+      var end = _graph.grid[targetPosition.y][targetPosition.x]
 
       // Returns an array of tiles for character to move on
       return astar.astar.search(_graph, start, end)
     }
 
   }
-
 }())

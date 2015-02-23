@@ -1,10 +1,6 @@
-'use strict';
-
-var rootDir = process.cwd() || '.'
-var config = require(rootDir + '/app/config')
+'use strict'
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
   var UserModel = ss.service.db.model('User')
@@ -21,7 +17,6 @@ exports.actions = function (req, res, ss) {
           console.log(err)
           res({ firstName: false })
         } else if (user) {
-
           var profileInfo = {
             firstName: user.firstName,
             lastName: user.lastName,
@@ -144,5 +139,4 @@ exports.actions = function (req, res, ss) {
     }
 
   }
-
 }

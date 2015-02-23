@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Game',
   collection: 'game',
   schema: {
@@ -23,5 +22,4 @@ module.exports = {
       madePublic: Boolean
     }]
   }
-
 }

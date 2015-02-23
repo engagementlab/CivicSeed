@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Botanist',
   collection: 'botanist',
   schema: {
@@ -36,5 +35,4 @@ module.exports = {
       }
     ]
   }
-
 }

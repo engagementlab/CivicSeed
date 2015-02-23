@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'User',
   collection: 'users',
   schema: {
@@ -102,5 +101,4 @@ module.exports = {
       instances: [String]
     }
   }
-
 }

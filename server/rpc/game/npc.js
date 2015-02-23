@@ -1,13 +1,12 @@
-'use strict';
+'use strict'
 
 var winston = require('winston')
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
-  var Npc  = ss.service.db.model('Npc'),
-      Game = ss.service.db.model('Game')
+  var Npc = ss.service.db.model('Npc')
+  var Game = ss.service.db.model('Game')
 
   return {
 
@@ -65,11 +64,11 @@ exports.actions = function (req, res, ss) {
           if (err) {
             winston.error('Could not find game', err)
           } else if (game) {
-            var responses = game[0].resourceResponses,
-                addThis   = null
+            var responses = game[0].resourceResponses
+            var addThis = null
 
             for (var i = 0; i < responses.length; i++) {
-              if (responses[i].resourceId == data.resourceId && responses[i].playerId == data.playerId) {
+              if (responses[i].resourceId === data.resourceId && responses[i].playerId === data.playerId) {
                 responses[i].madePublic = true
                 addThis = responses[i]
                 break
@@ -91,7 +90,7 @@ exports.actions = function (req, res, ss) {
               }
             })
           }
-      })
+        })
     },
 
     makeResponsePrivate: function (data) {
@@ -100,11 +99,11 @@ exports.actions = function (req, res, ss) {
           if (err) {
             winston.error('Could not find game', err)
           } else if (game) {
-            var responses  = game[0].resourceResponses,
-                removeThis = null
+            var responses = game[0].resourceResponses
+            var removeThis = null
 
             for (var i = 0; i < responses.length; i++) {
-              if (responses[i].resourceId == data.resourceId && responses[i].playerId == data.playerId) {
+              if (responses[i].resourceId === data.resourceId && responses[i].playerId === data.playerId) {
                 responses[i].madePublic = false
                 removeThis = responses[i]
                 break
@@ -126,7 +125,7 @@ exports.actions = function (req, res, ss) {
               }
             })
           }
-      })
+        })
     }
 
   }

@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -6,20 +7,19 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.$mouse = (function () {
-
-  var _prevX = 0,
-      _prevY = 0,
-      _curX  = 0,
-      _curY  = 0
+$game.$mouse = module.exports = (function () {
+  var _prevX = 0
+  var _prevY = 0
+  var _curX = 0
+  var _curY = 0
 
   function onMove (mouseInfo) {
     // Where is the mouse pointing at right now?
-    var x = mouseInfo.x - mouseInfo.offX,
-        y = mouseInfo.y - mouseInfo.offY,
-        TILE_SIZE = $game.TILE_SIZE,
-        tempX     = Math.floor(x / TILE_SIZE),
-        tempY     = Math.floor(y / TILE_SIZE)
+    var TILE_SIZE = $game.TILE_SIZE
+    var x = mouseInfo.x - mouseInfo.offX
+    var y = mouseInfo.y - mouseInfo.offY
+    var tempX = Math.floor(x / TILE_SIZE)
+    var tempY = Math.floor(y / TILE_SIZE)
 
     // Set where the mouse was at previously
     _prevX = _curX
@@ -27,7 +27,7 @@ $game.$mouse = (function () {
 
     // Limit extreme values to gameboard width and height
     // Verified speed checking: http://jsperf.com/constraining
-    _curX = Math.max(Math.min($game.VIEWPORT_WIDTH  - 1, tempX), 0)
+    _curX = Math.max(Math.min($game.VIEWPORT_WIDTH - 1, tempX), 0)
     _curY = Math.max(Math.min($game.VIEWPORT_HEIGHT - 1, tempY), 0)
 
     // If the mouse cursor is pointing on a different tile,
@@ -43,7 +43,6 @@ $game.$mouse = (function () {
           y: _curY
         })
       }
-
     }
   }
 
@@ -61,15 +60,14 @@ $game.$mouse = (function () {
         $game.$player.beginMove({ x: _curX, y: _curY })
       }
     } else {
-
       // If the player is in seed mode, determine if drop seed or exit seed mode
       if ($game.$player.seedMode) {
         if ($game.flags.check('awaiting-seed') === false) {
           var m = {
-            mouse:  true,
-            x:      _curX,
-            y:      _curY,
-            mode:   $game.$player.seedMode
+            mouse: true,
+            x: _curX,
+            y: _curY,
+            mode: $game.$player.seedMode
           }
           var r = $game.$player.dropSeed(m)
           if (!r) {
@@ -78,8 +76,8 @@ $game.$mouse = (function () {
         }
       } else {
         // Determine what to do
-        var mX = $game.$map.currentTiles[_curX][_curY].x,
-            mY = $game.$map.currentTiles[_curX][_curY].y
+        var mX = $game.$map.currentTiles[_curX][_curY].x
+        var mY = $game.$map.currentTiles[_curX][_curY].y
 
         // If clicking on other player, show their info, then exit
         if ($game.$others.playerCard(mX, mY)) {
@@ -167,5 +165,4 @@ $game.$mouse = (function () {
     updateCursor: updateCursor,
     getCurrentPosition: getCurrentPosition
   }
-
 }())

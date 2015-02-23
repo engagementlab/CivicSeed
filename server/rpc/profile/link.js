@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -8,12 +8,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir = process.cwd() || '.'
-var config = require(rootDir + '/app/config')
-var winston = require('winston')
-
 exports.actions = function (req, res, ss) {
-
   req.use('session')
   req.use('account.authenticated')
 
@@ -45,5 +40,4 @@ exports.actions = function (req, res, ss) {
     }
 
   }
-
 }

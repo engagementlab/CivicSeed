@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Content',
   collection: 'content',
   schema: {
@@ -10,5 +9,4 @@ module.exports = {
     email: String,
     type: String
   }
-
 }

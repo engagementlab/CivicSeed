@@ -1,11 +1,10 @@
-'use strict';
+'use strict'
 
 var ss = require('socketstream')
 
-var self = module.exports = {
+module.exports = {
 
   init: function (app) {
-
     ss.client.define('main', {
       view: 'main.jade',
       css: ['styles.styl'],
@@ -29,7 +28,6 @@ var self = module.exports = {
     ss.http.route('/', function (req, res) {
       res.serveClient('main')
     })
-
   }
 
 }

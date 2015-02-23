@@ -1,28 +1,28 @@
-'use strict';
+'use strict'
 
-var rootDir        = process.cwd()
-var config         = require(rootDir + '/app/config')
-var NODE_ENV       = config.get('NODE_ENV')
-var emailUtil      = require(rootDir + '/server/utils/email')
+var rootDir = process.cwd()
+var winston = require('winston')
+var xkcd = require('xkcd-pwgen')
+
+var config = require(rootDir + '/app/config')
+var NODE_ENV = config.get('NODE_ENV')
+
+var emailUtil = require(rootDir + '/server/utils/email')
 var accountHelpers = require(rootDir + '/server/utils/account-helpers')
-var winston        = require('winston')
-var xkcd           = require('xkcd-pwgen')
 
-var MAX_PLAYERS    = 20
+var MAX_PLAYERS = 20
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
   req.use('account.authenticated')
 
-  var userModel  = ss.service.db.model('User')
-  var gameModel  = ss.service.db.model('Game')
+  var userModel = ss.service.db.model('User')
+  var gameModel = ss.service.db.model('Game')
   var colorModel = ss.service.db.model('Color')
 
   var colorData = require(rootDir + '/data/colors.json')
 
   var createUserAndSendInvite = function (email, instanceName, i) {
-
     // Note: All invites assume a NEW USER. This means if the user is
     // already in the system, this OVERWRITES their account.
 
@@ -34,8 +34,8 @@ exports.actions = function (req, res, ss) {
         console.error('  Could not find \'actor\' user: %s'.red.inverse, err)
       } else {
 //        if (!user) {
-          var newColor = colorData[i],
-              tilesheetNum = i + 1
+          var newColor = colorData[i]
+          var tilesheetNum = i + 1
 
           var password = xkcd.generatePassword()
           accountHelpers.hashPassword(password, function (hashedPassword) {
@@ -145,9 +145,7 @@ exports.actions = function (req, res, ss) {
   return {
 
     sendInvites: function (emailList, instanceName, i) {
-
       if (req.session.role && (req.session.role === 'superadmin' || req.session.role === 'admin')) {
-
         winston.info('\n\n   * * * * * * * * * * * *   Sending User Invites via Email   * * * * * * * * * * * *   \n\n'.yellow)
         winston.info(emailList.join(', ') + '\n\n')
 
@@ -159,13 +157,11 @@ exports.actions = function (req, res, ss) {
             // Not entirely sure what the difference is between i and iterator (j), but the #add-player-button from the Admin panel (see ./client/code/admin/admin.js) provides a digit for i.
             // It needs to return "true" for the admin panel to report an OK message on apprise.
             createUserAndSendInvite(email, instanceName, i)
-            //res(true)
           } else {
             createUserAndSendInvite(email, instanceName, j)
           }
         }
 
-        // Better to put this here?
         res(true)
       } else {
         res(false)
@@ -177,7 +173,7 @@ exports.actions = function (req, res, ss) {
       .where('instanceName').equals(info.instanceName)
       .select('instanceName')
       .find(function (err, results) {
-        //if it doesn't exist, create new game instance
+        // if it doesn't exist, create new game instance
         if (err) {
           res(true, false)
         } else if (results.length > 0) {

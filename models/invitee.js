@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 module.exports = {
-
   name: 'Invitee',
   collection: 'invitees',
   schema: {
@@ -10,5 +9,4 @@ module.exports = {
     accepted: Boolean,
     code: String
   }
-
 }

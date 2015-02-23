@@ -1,16 +1,20 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, $, apprise */
 
-var $util = require('/util')
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-var self = module.exports = {
+    admin.npcs
 
-  newId: -1,
+    - NPC administration
 
-  init: function () {
-    self.setup()
-  },
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-  setup: function () {
+var util = require('/util')
+
+module.exports = (function () {
+  var newId = -1
+
+  function setup () {
     var $body = $(document.body)
 
     // Intercept default browser button actions
@@ -21,51 +25,53 @@ var self = module.exports = {
 
     // Level filter
     $body.on('click', '.npc-admin-level-filter div', function () {
+      var $el = $(this)
       var level = parseInt($(this).text(), 10)
-      $(this).toggleClass('current')
-      var show = $(this).hasClass('current'),
-        npcSel = '.level' + (level - 1)
-      if (show) {
-        $(npcSel).show()
+      var npcs = '.level' + (level - 1)
+
+      $el.toggleClass('current')
+
+      if ($el.hasClass('current')) {
+        $(npcs).show()
       } else {
-        $(npcSel).hide()
+        $(npcs).hide()
       }
     })
 
     // Save changes to an NPC
     $body.on('click', '.npc-save-button', function () {
       var id = parseInt($(this).attr('data-id'), 10)
-      self.saveChanges(id)
+      saveChanges(id)
     })
 
     // Delete an NPC
     $body.on('click', '.npc-delete-button', function () {
       var id = parseInt($(this).attr('data-id'), 10)
-      self.deleteNpc(id)
+      deleteNpc(id)
     })
 
     // Create an NPC
     $body.on('click', '.npc-create-button', function () {
       var id = $(this).attr('data-id')
-      self.createNpc(id)
+      createNpc(id)
     })
 
     // Cancel addition of a new NPC
     $body.on('click', '.npc-cancel-button', function () {
       var id = $(this).attr('data-id')
-      self.cancelNpc(id)
+      cancelNpc(id)
     })
 
     // Previous NPC sprite
     $body.on('click', '.sprite-up', function () {
-      var $npc        = $(this).parents('.npc'),
-          spriteId    = $npc.attr('data-sprite'),
-          spriteImage = $npc.find('.sprite')
+      var $npc = $(this).parents('.npc')
+      var spriteId = $npc.attr('data-sprite')
+      var spriteImage = $npc.find('.sprite')
 
       if (spriteId > 0) {
         spriteId--
-        var locY = spriteId * -64,
-            pos  = '0 ' + locY + 'px'
+        var locY = spriteId * -64
+        var pos = '0 ' + locY + 'px'
 
         spriteImage.css({
           'background-position': pos
@@ -78,15 +84,15 @@ var self = module.exports = {
 
     // Next NPC sprite
     $body.on('click', '.sprite-down', function () {
-      var $npc        = $(this).parents('.npc'),
-          spriteId    = $npc.attr('data-sprite'),
-          spriteImage = $npc.find('.sprite')
+      var $npc = $(this).parents('.npc')
+      var spriteId = $npc.attr('data-sprite')
+      var spriteImage = $npc.find('.sprite')
 
       // TODO: Don't hardcode the maximum number of sprites!
       if (spriteId < 53) {
         spriteId++
-        var locY = spriteId * -64,
-            pos  = '0 ' + locY + 'px'
+        var locY = spriteId * -64
+        var pos = '0 ' + locY + 'px'
 
         spriteImage.css({
           'background-position': pos
@@ -98,18 +104,18 @@ var self = module.exports = {
 
     // View the resource that NPC is holding
     $body.on('click', '.view-resource-button', function () {
-      //get the text from the url textarea
-      var $self      = $(this),
-          $viewport  = $('.resource-viewport-container'),
-          parent     = $self.parentsUntil('.npc'),
-          resourceId = parent.find('.url').val()
+      // Get the text from the url textarea
+      var $self = $(this)
+      var $viewport = $('.resource-viewport-container')
+      var parent = $self.parentsUntil('.npc')
+      var resourceId = parent.find('.url').val()
 
       // Only display a resource if the user has entered its file name
       // Note: this does not check if the file is actually present
       if (resourceId) {
         ss.rpc('game.resource.get', resourceId, function (html) {
           $viewport.find('#article-insert').empty().html(html)
-          $viewport.find('#article-source-link').attr('href', 'https://github.com/engagementgamelab/CivicSeed/edit/master/data/articles/' + resourceId +'.md')
+          $viewport.find('#article-source-link').attr('href', 'https://github.com/engagementgamelab/CivicSeed/edit/master/data/articles/' + resourceId + '.md')
           $viewport.show()
           $('.resource-overlay').show()
           // Disable body scroll
@@ -126,7 +132,7 @@ var self = module.exports = {
 
     // When button is clicked, add a new NPC
     $body.on('click', '.npc-add-button', function() {
-      self.addNpc()
+      addNpc()
     })
 
     // Loads a JSON view of all NPC data.
@@ -150,8 +156,8 @@ var self = module.exports = {
 
     // Toggle display of input boxes depending on whether NPC is holding a resource
     $body.on('change', 'input[type="checkbox"]', function () {
-      var holding = this.checked ? true : false,
-          $npc    = $(this).parents('.npc')
+      var holding = this.checked ? true : false
+      var $npc = $(this).parents('.npc')
 
       if (holding) {
         $npc.find('.resource').show()
@@ -166,8 +172,8 @@ var self = module.exports = {
 
     // Toggle display of answer inputs depending on the type of question NPC is asking
     $body.on('change', '.questionType input[type="radio"]', function () {
-      var questionType = $(this).val(),
-          $npc         = $(this).parents('.npc')
+      var questionType = $(this).val()
+      var $npc = $(this).parents('.npc')
 
       $npc.find('.questionOptions').hide()
 
@@ -190,69 +196,51 @@ var self = module.exports = {
           break
       }
     })
-  },
+  }
 
-  addSprites: function () {
-    var npc = $('.npc'),
-        url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')'
-
-    npc.each(function (i) {
-      var sprite = $(this).data('sprite'),
-          locY   = sprite * -64,
-          pos    = '0 ' + locY + 'px',
-          info   = $(this).find('.sprite')
-
-        info.css({
-        'background-image':    url,
-        'background-position': pos
-      })
-    })
-  },
-
-  saveChanges: function (id) {
-    var npc = $('#admin-npcs').find('.npc' + id),
-        informationAreas = npc.find('.information textarea, .information input'),
-        resourceAreas    = npc.find('.resource textarea, .resource input'),
-        promptAreas      = npc.find('.prompts textarea'),
-        smalltalkAreas   = npc.find('.smalltalk textarea'),
-        skinSuitArea     = npc.find('.skinSuit input'),
-        holding          = npc.find('.information .holding')[0].checked,
-        questionType     = npc.find('.resource input:checked').val(),
-        sprite           = parseInt(npc.attr('data-sprite'), 10),
-        updates = {
-          id: id,
-          isHolding: holding,
-          resource: {
-            url: null,
-            shape: null,
-            questionType: questionType,
-            answer: null,
-            question: null,
-            possibleAnswers: [],
-            feedbackRight: null,
-            feedbackWrong: null
-          },
-          dependsOn: null,
-          dialog: {
-            prompts: [],
-            smalltalk: []
-          },
-          level: null,
-          sprite: sprite,
-          position: {
-            x: null,
-            y: null
-          },
-          name: null,
-          skinSuit: null
-        }
-
-    //update information
+  function saveChanges (id) {
+    var $npc = $('#admin-npcs').find('.npc' + id)
+    var informationAreas = $npc.find('.information textarea, .information input')
+    var resourceAreas = $npc.find('.resource textarea, .resource input')
+    var promptAreas = $npc.find('.prompts textarea')
+    var smalltalkAreas = $npc.find('.smalltalk textarea')
+    var skinSuitArea = $npc.find('.skinSuit input')
+    var holding = $npc.find('.information .holding')[0].checked
+    var questionType = $npc.find('.resource input:checked').val()
+    var sprite = parseInt($npc.attr('data-sprite'), 10)
     var x, y
 
+    var updates = {
+      id: id,
+      isHolding: holding,
+      resource: {
+        url: null,
+        shape: null,
+        questionType: questionType,
+        answer: null,
+        question: null,
+        possibleAnswers: [],
+        feedbackRight: null,
+        feedbackWrong: null
+      },
+      dependsOn: null,
+      dialog: {
+        prompts: [],
+        smalltalk: []
+      },
+      level: null,
+      sprite: sprite,
+      position: {
+        x: null,
+        y: null
+      },
+      name: null,
+      skinSuit: null
+    }
+
     informationAreas.each(function (i) {
-      var area = $(this).attr('data-area'),
-          val  = $util.prettyString(this.value)
+      var area = $(this).attr('data-area')
+      var val = util.prettyString(this.value)
 
       switch (area) {
         case 'name':
@@ -267,6 +255,9 @@ var self = module.exports = {
         case 'position.y':
           y = parseInt(val, 10)
           break
+        default:
+          // No default case
+          break
       }
     })
 
@@ -274,8 +265,8 @@ var self = module.exports = {
     updates.position.y = y
 
     resourceAreas.each(function (i) {
-      var area = $(this).attr('data-area'),
-          val  =  $util.prettyString(this.value)
+      var area = $(this).attr('data-area')
+      var val = util.prettyString(this.value)
 
       if (area === 'url') {
         updates.resource.url = val
@@ -299,8 +290,8 @@ var self = module.exports = {
     })
 
     promptAreas.each(function (i) {
-      var area = $(this).attr('data-area'),
-          val  = $util.prettyString(this.value)
+      var area = $(this).attr('data-area')
+      var val = util.prettyString(this.value)
 
       if (area === 'prompt') {
         updates.dialog.prompts.push(val)
@@ -308,8 +299,8 @@ var self = module.exports = {
     })
 
     smalltalkAreas.each(function (i) {
-      var area = $(this).attr('data-area'),
-          val  = $util.prettyString(this.value)
+      var area = $(this).attr('data-area')
+      var val = util.prettyString(this.value)
 
       if (area === 'smalltalk') {
         updates.dialog.smalltalk.push(val)
@@ -324,9 +315,9 @@ var self = module.exports = {
 
     console.log(updates)
 
-    //this means it is a new one, do not save, but add new in db
+    // this means it is a new one, do not save, but add new in db
     if (id < 0) {
-      //figure out id
+      // figure out id
       var max = 0
       $('.npc-save-button').each(function (i) {
         var id = parseInt($(this).data('id'), 10)
@@ -337,16 +328,15 @@ var self = module.exports = {
       max++
       updates.id = max
 
-      //TODO: update information on client
-      //.npc: level, npc
-      var levelClass = 'level' + updates.level,
-          npcClass = 'npc' + updates.id
+      // TODO: update information on client
+      var levelClass = 'level' + updates.level
+      var npcClass = 'npc' + updates.id
 
-      npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
+      $npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
 
-      //options buttons
-      var $saveButton = npc.find('.npc-create-button'),
-          $deleteButton = npc.find('.npc-cancel-button')
+      // options buttons
+      var $saveButton = $npc.find('.npc-create-button')
+      var $deleteButton = $npc.find('.npc-cancel-button')
 
       $saveButton.attr('data-id', updates.id)
       $deleteButton.attr('data-id', updates.id)
@@ -355,7 +345,7 @@ var self = module.exports = {
         if (err) {
           apprise(err)
         } else {
-          var $saveButton = npc.find('.npc-create-button')
+          var $saveButton = $npc.find('.npc-create-button')
 
           $saveButton.addClass('btn-success').addClass('npc-save-button').removeClass('npc-create-button').text('npc created!')
           $deleteButton.addClass('npc-delete-button').removeClass('npc-cancel-button').text('delete')
@@ -369,35 +359,36 @@ var self = module.exports = {
         if (err) {
           apprise(err)
         } else {
-          var $saveButton = npc.find('.npc-save-button'),
-              levelClass = 'level' + updates.level,
-              npcClass = 'npc' + updates.id
+          var $saveButton = $npc.find('.npc-save-button')
+          var levelClass = 'level' + updates.level
+          var npcClass = 'npc' + updates.id
 
-          npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
+          $npc.removeClass().addClass('npc').addClass(levelClass).addClass(npcClass)
           $saveButton.addClass('btn-success')
         }
       })
     }
-  },
+  }
 
-  createNpc: function (id) {
+  function createNpc (id) {
     // If the ID is negative, delegate this feature to .saveChanges()
     // TODO: Don't put everything into one large function!
     if (id < 0) {
-      self.saveChanges(id)
+      saveChanges(id)
     }
-  },
+  }
 
-  deleteNpc: function (id) {
+  function deleteNpc (id) {
+    /* eslint-disable no-alert */
     var confirm = prompt('Please type "delete" to permanently remove this NPC.')
     if (confirm === 'delete') {
       var npc = $('.npc' + id)
 
-      //this means it has never been saved, delete it from client
       if (id < 0) {
-        self.cancelNpc(id)
+        // A negative id means it has not been saved to back-end, delete it from client only
+        cancelNpc(id)
       } else {
-        ss.rpc('admin.npcs.deleteNpc', id, function (err,res) {
+        ss.rpc('admin.npcs.deleteNpc', id, function (err, res) {
           if (err) {
             console.log(err)
           } else {
@@ -408,32 +399,57 @@ var self = module.exports = {
         })
       }
     }
-  },
+  }
 
   // Cancel creation of a new NPC
-  cancelNpc: function (id) {
+  function cancelNpc (id) {
     var npc = $('.npc' + id)
 
     npc.slideUp(function() {
       this.remove()
     })
-  },
+  }
 
-  addNpc: function () {
+  function addNpc () {
     // TODO: Theoretically, we should be building the NPC page from templates
     // which would have made this the easiest thing to do. However, we don't do
     // that, and it's not a good idea to have multiple, repeated HTML code that
     // do the same thing. So, we're doing this:
-    var newId = self.newId--
+    var id = newId--
 
     // Create a clone of the NPC template
     var clone = $('.npc-template').last().clone()
-    $(clone).find('[data-id]').attr('data-id', newId)
+    $(clone).find('[data-id]').attr('data-id', id)
 
     // Add it in the beginning, near the 'Add NPC' button.
     $(clone).insertAfter('.npc-add-insert-here')
     $(clone).slideDown()
-    $(clone).addClass('npc' + newId)
+    $(clone).addClass('npc' + id)
   }
 
-}
+  function addSprites () {
+    var npc = $('.npc')
+    var url = 'url(' + CivicSeed.CLOUD_PATH + '/img/admin/npcs.png' + ')'
+
+    npc.each(function (i) {
+      var sprite = $(this).data('sprite')
+      var locY = sprite * -64
+      var pos = '0 ' + locY + 'px'
+      var info = $(this).find('.sprite')
+
+      info.css({
+        'background-image': url,
+        'background-position': pos
+      })
+    })
+  }
+
+  return {
+    init: function () {
+      setup()
+    },
+
+    // This is called in routes.admin.js, so it's public
+    addSprites: addSprites
+  }
+}())

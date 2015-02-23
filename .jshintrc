@@ -20,7 +20,6 @@
     "d3": true,
     "_": true,
     "Backbone": true,
-    "$WINDOW": true,
     "$HTML": true,
     "$BODY": true,
     "$CONTAINER": true,

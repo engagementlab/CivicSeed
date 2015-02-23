@@ -1,7 +1,6 @@
-'use strict';
+'use strict'
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
   var Botanist = ss.service.db.model('Botanist')
@@ -10,10 +9,13 @@ exports.actions = function (req, res, ss) {
 
     load: function () {
       Botanist.findOne(function (err, data) {
-        res(data)
+        if (err) {
+          // Placeholder for error handling
+        } else {
+          res(data)
+        }
       })
     }
 
   }
-
 }

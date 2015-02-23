@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
     config.js
@@ -21,11 +22,11 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir        = process.cwd(),
-    nconf          = require('nconf'),
-    env            = require('node-env-file'),
-    fs             = require('fs'),
-    winston        = require('winston')
+var rootDir = process.cwd()
+var nconf = require('nconf')
+var env = require('node-env-file')
+var fs = require('fs')
+var winston = require('winston')
 
 // Read environment variables from an optional .env, if present
 var envFile = rootDir + '/.env'
@@ -33,10 +34,10 @@ if (fs.existsSync(envFile)) {
   env(envFile, {verbose: false, overwrite: true})
 }
 
-var NODE_ENV       = process.env.NODE_ENV || 'development',
-    CONFIG_FILE    = process.env.CONFIG_FILE || rootDir + '/config/' + NODE_ENV + '.json'
+var NODE_ENV = process.env.NODE_ENV || 'development'
+var CONFIG_FILE = process.env.CONFIG_FILE || rootDir + '/config/' + NODE_ENV + '.json'
 
-var json           = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8'))
+var json = JSON.parse(fs.readFileSync(rootDir + '/package.json', 'utf8'))
 
 // Hierarchical configuration with nconf
 nconf.argv().env().file({
@@ -48,9 +49,9 @@ nconf.set('NODE_ENV', NODE_ENV)
 
 // Get authentication credentials stored as environment variables.
 nconf.set('EMAIL_USER', process.env.EMAIL_USER || '')
-nconf.set('EMAIL_PW',   process.env.EMAIL_PW   || '')
-nconf.set('EMAIL_TO',   process.env.EMAIL_TO   || '')
-nconf.set('REDIS_PW',   process.env.REDIS_PW   || '')
+nconf.set('EMAIL_PW', process.env.EMAIL_PW || '')
+nconf.set('EMAIL_TO', process.env.EMAIL_TO || '')
+nconf.set('REDIS_PW', process.env.REDIS_PW || '')
 
 // HEROKU ENVIRONMENT
 // Environment variables for Redis and Mongo are pre-set by Heroku add-ons.
@@ -62,7 +63,7 @@ if (NODE_ENV === 'heroku') {
 
   // Set up RedisToGo on Heroku environment
   // See: https://devcenter.heroku.com/articles/redistogo#using-with-node
-  var rtg   = require('url').parse(process.env.REDISTOGO_URL)
+  var rtg = require('url').parse(process.env.REDISTOGO_URL)
   nconf.set('REDIS_HOST', rtg.hostname)
   nconf.set('REDIS_PORT', rtg.port)
   nconf.set('REDIS_PW', rtg.auth.split(':')[1])

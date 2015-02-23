@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global ss, $, apprise */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -35,7 +36,7 @@ S3Uploader.prototype.createCORSRequest = function (method, url) {
   xhr = new XMLHttpRequest()
   if (xhr.withCredentials != null) {
     xhr.open(method, url, true)
-  } else if (typeof XDomainRequest !== "undefined") {
+  } else if (typeof XDomainRequest !== 'undefined') {
     xhr = new XDomainRequest()
     xhr.open(method, url)
   } else {
@@ -101,10 +102,9 @@ function checkDesiredCustomProfileURL (input) {
 
 // Share link box
 function saveCustomProfileURL () {
-
   var desiredURL = $('#customize-share-link-input').val()
-
   var check = checkDesiredCustomProfileURL(desiredURL)
+
   // Check must explicitly equal true to continue, or it is an error message
   if (check !== true) {
     $('#share-link-message').text(check).addClass('color-red').show()
@@ -135,9 +135,7 @@ function saveCustomProfileURL () {
       $('#share-link-message').text('Your profile link has been changed successfully!').addClass('color-darkgreen').show()
     }
   })
-
 }
-
 
 module.exports = (function () {
 
@@ -176,8 +174,8 @@ module.exports = (function () {
       var $body = $(document.body)
 
       $body.on('click', '.save-profile-button', function () {
-        var updates = [],
-            info = $('.resume-text-editable')
+        var updates = []
+        var info = $('.resume-text-editable')
 
         $.each(info, function (i, text) {
           var val = $(text).text()
@@ -208,8 +206,8 @@ module.exports = (function () {
           id: sessionStorage.getItem('userId'),
           changeTo: profilePublic
         }
-        ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
 
+        ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
           if (!res) {
             apprise('Error')
           }
@@ -222,14 +220,10 @@ module.exports = (function () {
           if (profilePublic) {
             $els.find('.profile-public').show()
             $els.find('.profile-private').hide()
-            // Is this a good UX?
-            //apprise('You have made your civic resume public! Share your page with your friends, colleagues and employers!')
           } else {
             $els.find('.profile-private').show()
             $els.find('.profile-public').hide()
-            //apprise('You have made your civic resume private! Your share link will no longer be accessible to anyone else.')
           }
-
         })
       })
 
@@ -255,8 +249,6 @@ module.exports = (function () {
       })
 
       $body.on('click', '#customize-share-link-button', function () {
-        var $el = $(this)
-
         // Toggle visibility state of form
         $('#copy-share-link-group').hide()
         $('#customize-share-link-group').css('display', 'table') // Restore display type to .input-group default
@@ -279,8 +271,7 @@ module.exports = (function () {
         // Reset
         $('#share-link-message').text('').removeClass('color-darkgreen color-red').hide()
       })
-
     }
-  }
 
+  }
 })()

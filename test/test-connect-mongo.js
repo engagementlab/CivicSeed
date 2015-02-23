@@ -1,8 +1,10 @@
-var colors              = require('colors'),
-    mongoose            = require('mongoose'),
-    envConnectionString = process.env.MONGO_CON,
-    connectionString    = envConnectionString ? envConnectionString : 'mongodb://ip-10-202-153-133.ec2.internal/civicseed_testing',
-    db                  = mongoose.createConnection(connectionString)
+'use strict'
+
+var colors = require('colors') // This alters String.prototype
+var mongoose = require('mongoose')
+var envConnectionString = process.env.MONGO_CON
+var connectionString = envConnectionString ? envConnectionString : 'mongodb://ip-10-202-153-133.ec2.internal/civicseed_testing'
+var db = mongoose.createConnection(connectionString)
 
 console.log('Testing mongo startup...')
 

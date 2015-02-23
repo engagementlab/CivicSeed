@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -9,7 +9,6 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 module.exports = (function () {
-
   return {
 
     // Generic prettification for string inputs from other humans.
@@ -32,5 +31,4 @@ module.exports = (function () {
     }
 
   }
-
 }())
