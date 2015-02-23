@@ -196,8 +196,7 @@ exports.actions = function (req, res, ss) {
             if (err) {
               console.log(error)
               res(true, false)
-            }
-            else {
+            } else {
               console.log('game instance has been created')
 
               //put a single color in the world so we don't get an error when it searches

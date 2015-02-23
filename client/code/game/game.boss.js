@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, Modernizr, $, $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -10,7 +11,7 @@
 
 var _ = require('underscore')
 
-var $boss = $game.$boss = {
+var $boss = $game.$boss = module.exports = {
 
   // Initialize boss mode
   init: function (callback) {
@@ -76,7 +77,7 @@ var $boss = $game.$boss = {
     if (tile.charger === 1) _boss.pickUpCharger()
     else if (tile.item) _boss.activateItem(tile)
   }
-};
+}
 
 /**
   *
@@ -86,21 +87,21 @@ var $boss = $game.$boss = {
 
 var _boss = {
 
-  grid:       [],
+  grid: [],
   totalScore: null,
-  modeScore:  null,
+  modeScore: null,
 
   numberOfChargers: 4,
   theCharger: {
-    x:        null,
-    y:        null,
+    x: null,
+    y: null,
     revealed: null
   },
   chargersCollected: 0,    // Stores the number of chargers picked up
-  seeds:      {            // Stores quantity of seeds and current seed mode
-    regular:  null,
-    draw:     null,        // Note: draw seeds are a legacy feature of boss mode?
-    current:  null         // To store the current seed mode
+  seeds: {            // Stores quantity of seeds and current seed mode
+    regular: null,
+    draw: null,        // Note: draw seeds are a legacy feature of boss mode?
+    current: null         // To store the current seed mode
   },
 
   // Set up all items for the boss game.
@@ -178,8 +179,7 @@ var _boss = {
 
   // Preload all cutscene videos
   preloadVideos: function () {
-    var numberVideos = 4,
-        videoEl      = null
+    var numberVideos = 4
 
     for (var i = 0; i < numberVideos; i++) {
       this.loadVideo(i)
@@ -188,13 +188,12 @@ var _boss = {
 
   // Load a cutscene video
   loadVideo: function (number) {
-    var videoEl      = document.createElement('video'),
-        path         = CivicSeed.CLOUD_PATH + '/audio/cutscenes/'
+    var videoEl = document.createElement('video')
+    var path = CivicSeed.CLOUD_PATH + '/audio/cutscenes/'
 
     if (CivicSeed.ENVIRONMENT === 'development') {
       videoEl.src = (Modernizr.video.h264) ? path + number + '.mp4' : path + number + '.webm?VERSION=' + Math.round(Math.random(1) * 1000000000)
-    }
-    else {
+    } else {
       videoEl.src = (Modernizr.video.h264) ? path + number + '.mp4?VERSION=' + CivicSeed.VERSION : path + number + '.webm?VERSION=' + CivicSeed.VERSION
     }
 
@@ -231,14 +230,13 @@ var _boss = {
 
   // Add content to the boss area overlay window
   addContent: function (section) {
-    var overlay   = document.getElementById('boss-area'),
-        speakerEl = overlay.querySelector('.dialog .speaker'),
-        messageEl = overlay.querySelector('.dialog .message'),
-        speaker   = $game.$botanist.name,
-        resumes   = null,
-        el        = null
-
-    var html = '';
+    var overlay = document.getElementById('boss-area')
+    var speakerEl = overlay.querySelector('.dialog .speaker')
+    var messageEl = overlay.querySelector('.dialog .message')
+    var speaker = $game.$botanist.name
+    var resumes = null
+    var el = null
+    var html = ''
 
     _boss.resetContent()
 
@@ -272,10 +270,10 @@ var _boss = {
 
           // If there are resumes to respond to, add them
           for (var i = 0; i < resumes.length; i++) {
-            var question = $game.$botanist.getLevelQuestion(resumes[i].level);
-            html += '<div class="resume-response">';
-            html += '<p class="resume-question">Q: ' + question + '</p>';
-            html += '<p class="resume-answer"><span>A random peer said:</span> ' + resumes[i].answer + '</p>';
+            var question = $game.$botanist.getLevelQuestion(resumes[i].level)
+            html += '<div class="resume-response">'
+            html += '<p class="resume-question">Q: ' + question + '</p>'
+            html += '<p class="resume-answer"><span>A random peer said:</span> ' + resumes[i].answer + '</p>'
             html += '<div class="resume-response-prompt">'
             html += '<p>Do you have any feedback for his or her response? Enter it below.</p>'
             html += '<textarea class="resume-feedback" placeholder="Type your feedback here..." maxlength="5000"></textarea>'
@@ -318,8 +316,7 @@ var _boss = {
             _boss.setButton(5, 'Unlock profile', function () {
               window.location.assign('/profiles/' + sessionStorage.profileLink + '')
             })
-          }
-          else {
+          } else {
             $game.debug('Error unlocking profile. Server returned this message: ' + err)
           }
         })
@@ -333,8 +330,8 @@ var _boss = {
 
   // There is only one button on the boss windows so this will do all the work
   setButton: function (section, display, callback) {
-    var button = document.getElementById('boss-area').querySelector('.boss-button'),
-        clone  = button.cloneNode(true)
+    var button = document.getElementById('boss-area').querySelector('.boss-button')
+    var clone = button.cloneNode(true)
 
     button = button.parentNode.replaceChild(clone, button)
     if (display) {
@@ -348,9 +345,9 @@ var _boss = {
 
   // Choose random resume responses from peers
   chooseResumeResponses: function (data) {
-    var numberToGet   = 4,
-        allResponses  = _removeCurrentPlayer(data),
-        theChosenOnes = []
+    var numberToGet = 4
+    var allResponses = _removeCurrentPlayer(data)
+    var theChosenOnes = []
 
     // Function to remove responses belonging to the current player.
     function _removeCurrentPlayer (data) {
@@ -386,8 +383,8 @@ var _boss = {
 
       if (response) {
         theChosenOnes.push({
-          id:     response._id,
-          level:  i,
+          id: response._id,
+          level: i,
           answer: response.game.resume[i]
         })
       }
@@ -404,7 +401,7 @@ var _boss = {
       var val = this.value
       info.push({
         comment: val,
-        id:      resumes[i].id
+        id: resumes[i].id
       })
     })
 
@@ -413,8 +410,8 @@ var _boss = {
 
   // Create the basic grid
   createGrid: function () {
-    var gridX = $game.VIEWPORT_WIDTH,
-        gridY = $game.VIEWPORT_HEIGHT
+    var gridX = $game.VIEWPORT_WIDTH
+    var gridY = $game.VIEWPORT_HEIGHT
 
     for (var x = 0; x < gridX; x++) {
       _boss.grid[x] = []
@@ -431,8 +428,8 @@ var _boss = {
   // Pass in a function as an argument to this method to act on each
   // tile. The function will be passed a reference to the tile
   forEachGridTile: function (func) {
-    var gridX = $game.VIEWPORT_WIDTH,
-        gridY = $game.VIEWPORT_HEIGHT
+    var gridX = $game.VIEWPORT_WIDTH
+    var gridY = $game.VIEWPORT_HEIGHT
 
     for (var x = 0; x < gridX; x++) {
       for (var y = 0; y < gridY; y++) {
@@ -489,15 +486,15 @@ var _boss = {
   createRandomItem: function () {
     var numberOfItems = _boss.items.length
     return {
-      id:       Math.floor(Math.random() * numberOfItems),
+      id: Math.floor(Math.random() * numberOfItems),
       revealed: false
     }
   },
 
   // Activate a special item
   activateItem: function (position) {
-    var tile = _boss.grid[position.x][position.y],
-        id   = null
+    var tile = _boss.grid[position.x][position.y]
+    var id = null
 
     if (!tile.item || !tile.item.revealed) return false
     else {
@@ -528,14 +525,14 @@ var _boss = {
     })
 
     // Choose a random tile.
-    var x    = Math.floor(Math.random() * $game.VIEWPORT_WIDTH),
-        y    = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT),
-        tile = _boss.grid[x][y]
+    var x = Math.floor(Math.random() * $game.VIEWPORT_WIDTH)
+    var y = Math.floor(Math.random() * $game.VIEWPORT_HEIGHT)
+    var tile = _boss.grid[x][y]
 
     _boss.theCharger = {
-      id:       _boss.chargersCollected + 1,
-      x:        x,
-      y:        y,
+      id: _boss.chargersCollected + 1,
+      x: x,
+      y: y,
       revealed: false
     }
 
@@ -566,22 +563,22 @@ var _boss = {
 
   // Figure out how to render tiles after dropping a seed
   renderTiles: function (position) {
-    var topLeftX = position.x - 1,
-        topLeftY = position.y - 1,
-        squares  = [],
-        min      = 100,
-        color    = '255, 0, 0'       // Red
+    var topLeftX = position.x - 1
+    var topLeftY = position.y - 1
+    var squares = []
+    var min = 100
+    var color = '255, 0, 0'       // Red
 
     for (var x = 0; x < 3; x++) {
       for (var y = 0; y < 3; y++) {
-        var curX = topLeftX + x,
-            curY = topLeftY + y;
+        var curX = topLeftX + x
+        var curY = topLeftY + y
 
-        //only add it if in the bounds of the game area
+        // only add it if in the bounds of the game area
         if (curX >= 0 && curX < $game.VIEWPORT_WIDTH && curY >= 0 && curY < $game.VIEWPORT_HEIGHT) {
-          var tile          = _boss.grid[curX][curY]
-          var distance      = tile.distance,
-              spriteIndex   = -1 // By default, if there is no item pass this digit to the renderer to make it ignore this.
+          var tile = _boss.grid[curX][curY]
+          var distance = tile.distance
+          var spriteIndex = -1 // By default, if there is no item pass this digit to the renderer to make it ignore this.
 
           // If player has revealed an item
           if (tile.item) {
@@ -603,10 +600,10 @@ var _boss = {
 
           if (distance < min) min = distance
           squares.push({
-            val:     distance,
-            x:       curX,
-            y:       curY,
-            item:    spriteIndex,
+            val: distance,
+            x: curX,
+            y: curY,
+            item: spriteIndex,
             charger: tile.charger
           })
         }
@@ -615,7 +612,7 @@ var _boss = {
 
     // Set color of the square
     for (var s = 0; s < squares.length; s++) {
-      var alpha        = 0.8 - (squares[s].val - min) * 0.2 + 0.1
+      var alpha = 0.8 - (squares[s].val - min) * 0.2 + 0.1
       squares[s].color = 'rgba(' + color + ', ' + alpha + ')'
     }
 
@@ -668,20 +665,10 @@ var _boss = {
     $game.$render.clearBossLevel()
 
     // Play the cutscene video
-    var cutsceneEl = document.getElementById('boss-cutscene'),
-        videoEl    = document.getElementById('boss-cutscene-' + (_boss.theCharger.id - 1))
-
+    var videoEl = document.getElementById('boss-cutscene-' + (_boss.theCharger.id - 1))
     $('#boss-cutscene').fadeIn('fast')
     $game.flags.set('playing-cutscene')
     videoEl.style.display = 'block'
-
-    /*
-    // Not used
-    videoEl.addEventListener('canplaythrough', _listenerFunction)
-    function _listenerFunction (e) {
-      videoEl.removeEventListener('canplaythrough', _listenerFunction)
-    }
-    */
 
     // Set up actions to perform after the video has finished
     videoEl.addEventListener('ended', _onVideoHasFinishedPlaying)
@@ -693,7 +680,7 @@ var _boss = {
     function _onVideoHasFinishedPlaying () {
       this.removeEventListener('ended', _onVideoHasFinishedPlaying)
       this.removeEventListener('error', _onVideoHasFinishedPlaying)
-      _boss.hideCutscene(function callback() {
+      _boss.hideCutscene(function callback () {
         _boss.nextCharger()
       })
     }
@@ -718,21 +705,19 @@ var _boss = {
     // Check if player wins, otherwise, keep going.
     if (_boss.checkWin() === true) {
       _boss.win()
-    }
-    else {
+    } else {
       // Generate new items
       _boss.placeRandomItems()
       // Place another charger
       _boss.placeCharger()
 
       // Tell the player how many chargers are left
-      var chargersLeft = (_boss.numberOfChargers - _boss.chargersCollected),
-          message      = ''
+      var chargersLeft = (_boss.numberOfChargers - _boss.chargersCollected)
+      var message = ''
 
       if (chargersLeft === 1) {
         message = 'Just one charger left!'
-      }
-      else {
+      } else {
         message = 'Only ' + chargersLeft + ' chargers left!'
       }
       $game.alert(message)
@@ -757,8 +742,9 @@ var _boss = {
     if (!_boss.theCharger.revealed || _boss.chargersCollected < _boss.numberOfChargers) {
       _boss.fail()
       return true
+    } else {
+      return false
     }
-    else return false
   },
 
   // Actions to perform if player wins
@@ -781,26 +767,27 @@ var _boss = {
   },
 
   // Functions and settings for the boss mode timer
+  // TODO: REFACTOR out of this object - should be a standalone class.
   clock: {
-    startTime:    null,
-    time:         null,
-    elapsed:      null,
-    target:       null,
-    isPaused:     null,
-    totalTime:    null,
-    speed:        null, // Speed of clock. 0 = paused; 1 = normal; 2 = 2x speed, etc.
+    startTime: null,
+    time: null,
+    elapsed: null,
+    target: null,
+    isPaused: null,
+    totalTime: null,
+    speed: null, // Speed of clock. 0 = paused; 1 = normal; 2 = 2x speed, etc.
     clockTimeout: null,
     tickInterval: null,
 
     // Set all the variables pertaining to starting a new clock
     reset: function () {
       this.startTime = new Date().getTime()
-      this.time      = 0
-      this.elapsed   = 0
-      this.isPaused  = false
+      this.time = 0
+      this.elapsed = 0
+      this.isPaused = false
       this.totalTime = 0
-      this.target    = 90
-      this.speed     = 1
+      this.target = 90
+      this.speed = 1
 
       clearTimeout(this.clockTimeout)
       clearInterval(this.tickInterval)
@@ -813,12 +800,12 @@ var _boss = {
 
     // Update at each tick of the clock
     update: function () {
-      var clockEl = document.querySelector('.hud-boss .clock'),
-          self    = _boss.clock
+      var clockEl = document.querySelector('.hud-boss .clock')
+      var self = _boss.clock
 
-      self.time      += 100
+      self.time += 100
       self.totalTime += 100 * self.speed
-      self.elapsed    = self.target - Math.floor(self.totalTime / 1000)
+      self.elapsed = self.target - Math.floor(self.totalTime / 1000)
 
       var diff = (new Date().getTime() - self.startTime) - self.time
 
@@ -831,14 +818,14 @@ var _boss = {
     // Pause the clock.
     // Do not use this to set clock rate to 0 if you still want to allow game action.
     pause: function () {
-      this.speed    = 0
+      this.speed = 0
       this.isPaused = true
       clearInterval(this.tickInterval)
     },
 
     // Unpause the clock.
     unpause: function () {
-      this.speed    = 1
+      this.speed = 1
       this.isPaused = false
       this.start()
     }
