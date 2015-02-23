@@ -249,7 +249,10 @@ var _boss = {
         el.innerHTML = '<iframe src="//player.vimeo.com/video/74144898" width="600" height="337" allowfullscreen></iframe>'
         overlay.querySelector('.dialog').style.display = 'none'
 
-        _boss.setButton(1)
+        _boss.setButton(1, null, function () {
+          // Remove the video
+          el.innerHTML = ''
+        })
         break
       // [SECTION 01] RESUMES AND RESPONSES.
       case 1:
@@ -329,6 +332,9 @@ var _boss = {
   },
 
   // There is only one button on the boss windows so this will do all the work
+  // param section - integer - the section to display for addContent()
+  // param display - string - text of the button, optional
+  // param callback - function - called after button is clicked
   setButton: function (section, display, callback) {
     var button = document.getElementById('boss-area').querySelector('.boss-button')
     var clone = button.cloneNode(true)
