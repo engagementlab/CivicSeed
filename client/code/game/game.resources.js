@@ -319,10 +319,6 @@ var _resources = {
     // Otherwise, go get that resource article and pre-load it!
     ss.rpc('game.resource.get', resource.url, function (html) {
       $('#resource-stage').empty().html(html)
-
-      // Look for links and attach _blank target
-      $('#resource-stage').find('a').attr('target', '_blank')
-
       callback()
     })
   },
@@ -759,6 +755,15 @@ var _resources = {
         // Load and show article content. Assuming already preloaded!
         var page = $article.get(slide).innerHTML
         $('.resource-article').html(page).show()
+
+        // Look for links and attach a handler to open them in a new window.
+        // This method is necessary for links on the same domain otherwise
+        // Davis will attempt to capture it for routing purposes, which we don't want
+        $('.resource-article').find('a').on('click', function (e) {
+          e.preventDefault()
+          e.stopImmediatePropagation()
+          window.open(e.target.href, '_blank')
+        })
 
         // Logic for adding buttons
         // Always add a next button if there is more article to show
