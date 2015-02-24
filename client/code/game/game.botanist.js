@@ -178,7 +178,7 @@ var $botanist = module.exports = {
     }
 
     // Determine interaction by looking at Botanist state
-    switch ($game.$botanist.getState()) {
+    switch ($botanist.getState()) {
       // 0 = Initial state. Player is beginning the current level.
       case 0:
         // Show instructions.
@@ -271,7 +271,7 @@ var $botanist = module.exports = {
       $game.flags.unset('botanist-chatting')  // Just in case it was accidentally not removed
 
       // If they just beat a level, then show progreess
-      if ($game.$botanist.getState() === 0 && $game.$player.currentLevel < 4) {
+      if ($botanist.getState() === 0 && $game.$player.currentLevel < 4) {
         $game.$input.highlightHUDButton('.hud-progress')
       }
 
@@ -504,7 +504,7 @@ var _botanist = {
 
   // Show a chat bubble prompt before displaying overlay content
   showPrompt: function (section) {
-    var dialogue = $game.$botanist.dialog[$game.$player.currentLevel].riddle.prompts[section]
+    var dialogue = $botanist.dialog[$game.$player.currentLevel].riddle.prompts[section]
     _botanist.chat(dialogue, function () {
       _botanist.showOverlay(section)
     })
@@ -606,7 +606,7 @@ var _botanist = {
         break
       // [SECTION 02] CORRECTLY SOLVED THE PUZZLE.
       case 2:
-        _botanist.say($game.$botanist.dialog[$game.$player.currentLevel].riddle.response)
+        _botanist.say($botanist.dialog[$game.$player.currentLevel].riddle.response)
         var imgPath = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png'
         content.innerHTML = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3><div class="seed-chips"><img src="' + imgPath + '"></div>'
         content.style.display = 'block'
@@ -1044,7 +1044,7 @@ var _botanist = {
     var allTangrams = $('.puzzle-svg > path')
     var correct = true
     var numRight = 0
-    var aLength = $game.$botanist.tangram[$game.$player.currentLevel].answer.length
+    var aLength = $botanist.tangram[$game.$player.currentLevel].answer.length
     var message = ''
     var wrongOne = false
     var nudge = false
@@ -1065,7 +1065,7 @@ var _botanist = {
       // in the right place
 
       while (--t > -1) {
-        var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t]
+        var answer = $botanist.tangram[$game.$player.currentLevel].answer[t]
         if (answer.id === tanId) {
           found = true
           // this is a hard check for snapping
@@ -1126,7 +1126,7 @@ var _botanist = {
     // When it returns correct = false, it may do so before removing or checking all the pieces.
     // As a result, the clearBoard() function is called to always make sure the board is clean after the check.
     // However, it may be preferable in some cases to allow the pieces to stay on the board.
-    $game.$botanist.clearBoard()
+    $botanist.clearBoard()
 
     // TODO: Is this necessary?
     // it is correct if none were WRONG

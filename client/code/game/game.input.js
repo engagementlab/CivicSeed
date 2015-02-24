@@ -684,7 +684,7 @@ var $input = module.exports = (function () {
       } else {
         // No seeds, cancel out of seed mode.
         $game.alert('You have no seeds!')
-        $game.$input.endSeedMode()
+        $input.endSeedMode()
       }
     },
 

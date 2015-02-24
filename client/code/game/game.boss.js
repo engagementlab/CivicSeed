@@ -11,7 +11,7 @@
 
 var _ = require('underscore')
 
-var $boss = module.exports = {
+module.exports = {
 
   // Initialize boss mode
   init: function (callback) {
@@ -54,7 +54,7 @@ var $boss = module.exports = {
       // Out of seeds!
       if (_boss.seeds.regular <= 0) {
         $game.alert('You are out of seeds!')
-        $boss.endSeedMode()
+        this.endSeedMode()
 
         // Check if player fails
         _boss.checkFail()
