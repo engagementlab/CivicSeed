@@ -272,7 +272,7 @@ var $game = module.exports = {
     var playerLevel = $game.$player.getLevel()
     var tilesColored = $game.$player.getTilesColored()
     var resourcesDiscovered = $game.$player.getResourcesDiscovered()
-    var totalResources = $game.$resources.getTotalResources()
+    var totalResources = $game.$resources.getTotalResourceCount()
     var allAnswers = $game.$player.compileAnswers()
     var percentString = _stats.percent + '%'
     var topPlayers = ''

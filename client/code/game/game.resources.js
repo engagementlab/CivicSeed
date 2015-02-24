@@ -142,7 +142,7 @@ var $resources = module.exports = {
   },
 
   // Returns the total number of obtainable resources
-  getTotalResources: function () {
+  getTotalResourceCount: function () {
     return _resources.data.reduce(function (a) { return a + 1 }, 0)
   },
 
