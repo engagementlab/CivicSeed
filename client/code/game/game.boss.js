@@ -11,7 +11,7 @@
 
 var _ = require('underscore')
 
-var $boss = $game.$boss = module.exports = {
+var $boss = module.exports = {
 
   // Initialize boss mode
   init: function (callback) {
@@ -46,7 +46,7 @@ var $boss = $game.$boss = module.exports = {
 
     // Regular seed action.
     if (_boss.seeds.current === 'regular') {
-      $game.$audio.playTriggerFx('seedDrop');
+      $game.$audio.playTriggerFx('seedDrop')
 
       _boss.addSeedCount('regular', -1)
       _boss.renderTiles(position)

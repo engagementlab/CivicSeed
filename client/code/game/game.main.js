@@ -5,26 +5,6 @@
 var _stepNumber = 0
 var _stats = null
 var _displayTimeout = null
-var $flags
-var $map
-var $minimap
-var $render
-var $npc
-var $resources
-var $inventory
-var $skins
-var $player
-var $others
-var $robot
-var $botanist
-var $mouse
-var $audio
-var $pathfinder
-var $events
-var $input
-var $chat
-var $log
-var $boss
 
 // PUBLIC EXPORTS
 var $game = module.exports = {
@@ -85,31 +65,35 @@ var $game = module.exports = {
   init: function (callback) {
     console.log('Initializing all modules')
 
-    // Instantiating code (if not already done)
-    $flags      = require('/game.flags')
-    $map        = require('/game.map')
-    $minimap    = require('/game.minimap')
-    $render     = require('/game.render')
-    $npc        = require('/game.npc')
-    $resources  = require('/game.resources')
-    $inventory  = require('/game.inventory')
-    $skins      = require('/game.skins')
-    $player     = require('/game.player')
-    $others     = require('/game.others')
-    $robot      = require('/game.robot')
-    $botanist   = require('/game.botanist')
-    $mouse      = require('/game.mouse')
-    $audio      = require('/game.audio')
-    $pathfinder = require('/game.pathfinder')
-    $events     = require('/game.events')
-    $input      = require('/game.input')
-    $chat       = require('/game.chat')
-    $log        = require('/game.log')
-    $boss       = require('/game.boss')
+    // Instantiating code
+    this.flags = require('/game.flags')
+    this.inventory = require('/game.inventory')
+    this.minimap = require('/game.minimap')
 
-    // events received by RPC
-    $events.init()
-    $input.init()
+    // TODO: Don't use $ as a prefix for stuff
+    // (because that usually means jQuery)
+    // So, steadily search-replace stuff
+    this.$map = require('/game.map')
+    this.$render = require('/game.render')
+    this.$npc = require('/game.npc')
+    this.$resources = require('/game.resources')
+    this.$skins = require('/game.skins')
+    this.$player = require('/game.player')
+    this.$others = require('/game.others')
+    this.$robot = require('/game.robot')
+    this.$botanist = require('/game.botanist')
+    this.$mouse = require('/game.mouse')
+    this.$audio = require('/game.audio')
+    this.$pathfinder = require('/game.pathfinder')
+    this.$events = require('/game.events')
+    this.$input = require('/game.input')
+    this.$chat = require('/game.chat')
+    this.$log = require('/game.log')
+    this.$boss = require('/game.boss')
+
+    // Initalize modules
+    this.$events.init()
+    this.$input.init()
 
     // TODO: there needs to be some other kind of mechanism to see if the user has retired from the game...
     $(window).on('beforeunload', function () {
@@ -118,24 +102,24 @@ var $game = module.exports = {
       }
     })
 
-    $game.instantiated = true
+    this.instantiated = true
   },
 
   // Must reset every module because init won't be called since the app was already loaded once (if they navigate to profile and back for example)
   // TODO: Refactor
   reInit: function () {
     console.log('Resetting all modules')
-    $game.resetInit()
-    $game.$map.resetInit()
-    $game.$render.resetInit()
-    $game.$npc.resetInit()
-    $game.$resources.resetInit()
-    $game.$player.resetInit()
-    $game.$others.resetInit()
-    $game.$robot.resetInit()
-    $game.$botanist.resetInit()
-    $game.$audio.resetInit()
-    $game.$log.resetInit()
+    this.resetInit()
+    this.$map.resetInit()
+    this.$render.resetInit()
+    this.$npc.resetInit()
+    this.$resources.resetInit()
+    this.$player.resetInit()
+    this.$others.resetInit()
+    this.$robot.resetInit()
+    this.$botanist.resetInit()
+    this.$audio.resetInit()
+    this.$log.resetInit()
   },
 
   // Resets the local game vars
@@ -145,14 +129,14 @@ var $game = module.exports = {
     _stats = null
     _displayTimeout = null
 
-    $game.currentTiles = []
-    $game.flags.unset('screen-transition')
-    $game.running = false
-    $game.ready = false
-    $game.graph = null
-    $game.masterX = null
-    $game.masterY = null
-    $game.bossModeUnlocked = null
+    this.currentTiles = []
+    this.flags.unset('screen-transition')
+    this.running = false
+    this.ready = false
+    this.graph = null
+    this.masterX = null
+    this.masterY = null
+    this.bossModeUnlocked = null
   },
 
   kickOffGame: function () {
@@ -400,8 +384,7 @@ var $game = module.exports = {
     // This can be overridden in the layout with a class of always-show, which will never hide.
     if (quantity > 0 || badge.classList.contains('always-show')) {
       badge.style.display = 'block'
-    }
-    else if (quantity <= 0 && !badge.classList.contains('always-show')) {
+    } else if (quantity <= 0 && !badge.classList.contains('always-show')) {
       badge.style.display = 'none'
     }
   },
@@ -476,7 +459,7 @@ var $game = module.exports = {
     $game.flags.unsetAll()
   },
 
-  //startup boss level if player finished game and boss level is unlocked
+  // startup boss level if player finished game and boss level is unlocked
   toBossLevel: function () {
     $game.$audio.pauseTrack()
     $game.$render.clearMap()

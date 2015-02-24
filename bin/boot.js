@@ -45,8 +45,23 @@ _db.once('open', function () {
   var model = require(rootDir + '/models/user')
   _userModel = _db.model(model.name, new mongoose.Schema(model.schema, { collection: model.collection }))
   _db.collections['users'].drop(function (error) {
+    if (error) {
+      winston.error('Error dropping user collections')
+      return false
+    }
+
     bcrypt.genSalt(10, function (err, salt) {
+      if (err) {
+        winston.error('Error generating salt')
+        return false
+      }
+
       bcrypt.hash('temp', salt, function (err, hash) {
+        if (err) {
+          winston.error('Error hashing')
+          return false
+        }
+
         _superAdminUser = new _userModel({
           firstName: 'Super',
           lastName: 'Admin',

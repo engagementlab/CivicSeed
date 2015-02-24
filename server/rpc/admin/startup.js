@@ -67,7 +67,6 @@ var _startup = {
 
   loadUsers: function (req, res, ss) {
     var userData = require(rootDir + '/data/users.json')
-    var colorData = require(rootDir + '/data/colors.json')
     var userDataCopy = _JSONClone(userData)
     var numDemoUsers = 16
     var demoUsers = []

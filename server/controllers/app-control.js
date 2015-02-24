@@ -17,6 +17,7 @@ module.exports = {
         'libs/apprise.js',
         'libs/howler.min.js',
         'routes',
+        'data',
         'admin',
         'shared',
         'game',

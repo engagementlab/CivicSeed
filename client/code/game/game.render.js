@@ -114,7 +114,7 @@ var _render = {
 
 }
 
-var $render = $game.$render = module.exports = {
+var $render = module.exports = {
 
   ready: false,
 
@@ -209,7 +209,7 @@ var $render = $game.$render = module.exports = {
     _prevMouseX = 0
     _prevMouseY = 0
 
-    $game.$render.ready = false
+    $render.ready = false
   },
 
   // Loads the specified tilesheet

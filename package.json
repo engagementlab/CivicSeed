@@ -54,6 +54,7 @@
   "standard": {
     "ignore": [
       "**/bower_components/**",
+      "**/client/code/data/**",
       "**/client/code/libs/**",
       "**/client/code/system/**",
       "**/client/static/**",

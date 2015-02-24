@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -9,25 +9,24 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir    = process.cwd(),
-    fs         = require('fs'),
-    Remarkable = require('remarkable'),
-    winston    = require('winston')
+var rootDir = process.cwd()
+var fs = require('fs')
+var Remarkable = require('remarkable')
+var winston = require('winston')
 
 exports.actions = function (req, res, ss) {
-
   req.use('session')
 
   // Set up Markdown parser
   var md = new Remarkable('full', {
-    html:         true,        // Enable HTML tags in source
-    xhtmlOut:     false,       // Use '/' to close single tags (<br />)
-    breaks:       true,        // Convert '\n' in paragraphs into <br>
-    langPrefix:   'language-', // CSS language prefix for fenced blocks
-    linkify:      true,        // autoconvert URL-like texts to links
+    html: true,               // Enable HTML tags in source
+    xhtmlOut: false,          // Use '/' to close single tags (<br />)
+    breaks: true,             // Convert '\n' in paragraphs into <br>
+    langPrefix: 'language-',  // CSS language prefix for fenced blocks
+    linkify: true,            // autoconvert URL-like texts to links
 
     // Enable some language-neutral replacements + quotes beautification
-    typographer:  true,
+    typographer: true,
 
     // Double + single quotes replacement pairs, when typographer enabled,
     // and smartquotes on. Set doubles to '«»' for Russian, '„“' for German.
@@ -63,7 +62,7 @@ exports.actions = function (req, res, ss) {
     },
 
     setPlayerTagline: function (data) {
-
+      // TODO: Placeholder for future stuff
     }
 
   }

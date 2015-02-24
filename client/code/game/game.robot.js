@@ -1,7 +1,7 @@
 'use strict'
 /* global ss, $game */
 
-$game.$robot = module.exports = (function () {
+module.exports = (function () {
   var _positions = [
     {x: 7, y: 20, d: -1, target: -3},
     {x: 137, y: 33, d: 1, target: 145},

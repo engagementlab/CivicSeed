@@ -1,5 +1,5 @@
 'use strict'
-/* global ss, $, $game */
+/* global ss, $, $game, $BODY */
 
 // TODO: Refactor
 
@@ -33,7 +33,7 @@ var _skinSuit = null
 var _drawSeeds = null
 var _drawSeedArea = {}
 
-var $player = $game.$player = module.exports = {
+var $player = module.exports = {
 
   firstName: null,
   id: null,
@@ -67,7 +67,7 @@ var $player = $game.$player = module.exports = {
       }
 
       // keeping this around because we then save to it on exit
-      $game.$player.game = playerInfo.game
+      $player.game = playerInfo.game
       _setPlayerInformation(playerInfo)
 
       // tell others you have joined
@@ -87,10 +87,10 @@ var $player = $game.$player = module.exports = {
 
       // set the render info
       _renderInfo = {
-        id: $game.$player.id,
+        id: $player.id,
         kind: 'player',
-        firstName: $game.$player.firstName,
-        level: $game.$player.currentLevel,
+        firstName: $player.firstName,
+        level: $player.currentLevel,
         colorIndex: playerInfo.game.playerColor,
         color: $player.getCSSColor(),
         srcX: 0,
@@ -105,7 +105,7 @@ var $player = $game.$player = module.exports = {
       _updateRenderInfo()
 
       // we are ready, let everyone know dat
-      $game.$player.ready = true
+      $player.ready = true
       callback()
     })
   },
@@ -137,18 +137,18 @@ var $player = $game.$player = module.exports = {
 
     _drawSeeds = null
 
-    $game.$player.firstName = null
-    $game.$player.id = null
-    $game.$player.game = null
-    $game.$player.instanceName = null
-    $game.$player.currentLevel = null
-    $game.$player.seenRobot = null
-    $game.$player.seriesOfMoves = []
-    $game.$player.currentStep = 0
-    $game.$player.seedPlanting = false
-    $game.$player.npcOnDeck = false
-    $game.$player.ready = false
-    $game.$player.seedMode = false
+    $player.firstName = null
+    $player.id = null
+    $player.game = null
+    $player.instanceName = null
+    $player.currentLevel = null
+    $player.seenRobot = null
+    $player.seriesOfMoves = []
+    $player.currentStep = 0
+    $player.seedPlanting = false
+    $player.npcOnDeck = false
+    $player.ready = false
+    $player.seedMode = false
   },
 
   // Calculate movements and what to render for every game tick
@@ -187,7 +187,7 @@ var $player = $game.$player = module.exports = {
     _info.offX = 0
     _info.offY = 0
 
-    if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+    if ($game.bossModeUnlocked && $player.currentLevel > 3) {
       path = $game.$pathfinder.findPath({x: _info.x, y: _info.y}, targetPosition)
 
       $game.flags.unset('pathfinding')
@@ -224,7 +224,7 @@ var $player = $game.$player = module.exports = {
         _sendMoveInfo(path)
 
         // Send update to server so everyone else gets your path
-        ss.rpc('game.player.movePlayer', path, $game.$player.id)
+        ss.rpc('game.player.movePlayer', path, $player.id)
       } else {
         _endMove()
       }
@@ -290,7 +290,7 @@ var $player = $game.$player = module.exports = {
     // Send move target position through beginMove()
     // beginMove() handles logic on what to do once the player
     // reaches that destination
-    $game.$player.beginMove(targetPosition)
+    $player.beginMove(targetPosition)
   },
 
   moveStop: function () {
@@ -444,7 +444,7 @@ var $player = $game.$player = module.exports = {
     if (_seeds.dropped - _previousSeedsDropped > 4 || force) {
       _colorMap = $game.$map.saveImage()
       var info = {
-        id: $game.$player.id,
+        id: $player.id,
         colorMap: _colorMap
       }
       ss.rpc('game.player.updateGameInfo', info)
@@ -469,36 +469,36 @@ var $player = $game.$player = module.exports = {
 
   // reset items and prepare other entities for fresh level
   nextLevel: function () {
-    $game.$player.currentLevel += 1
-    $game.$player.seenRobot = false
+    $player.currentLevel += 1
+    $player.seenRobot = false
     $game.$botanist.setState(0)
     $game.flags.unset('botanist-teleported')
     _pledges = 5
-    // $game.$render.loadTilesheet($game.$player.currentLevel, true)
+    // $game.$render.loadTilesheet($player.currentLevel, true)
 
     // save new information to DB
     ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
+      id: $player.id,
       botanistState: $game.$botanist.getState(),
-      seenRobot: $game.$player.seenRobot,
+      seenRobot: $player.seenRobot,
       pledges: _pledges,
-      currentLevel: $game.$player.currentLevel
+      currentLevel: $player.currentLevel
     })
 
-    $game.log('Congrats! You have completed level ' + $game.$player.currentLevel + '!')
+    $game.log('Congrats! You have completed level ' + $player.currentLevel + '!')
 
-    if ($game.$player.currentLevel < 4) {
+    if ($player.currentLevel < 4) {
       $game.$robot.setPosition()
-      _renderInfo.level = $game.$player.currentLevel
+      _renderInfo.level = $player.currentLevel
 
       // Clear inventory and redraw for next level
       $game.inventory.empty()
       $game.inventory.init()
 
       ss.rpc('game.player.levelChange', {
-        id: $game.$player.id,
-        level: $game.$player.currentLevel,
-        name: $game.$player.firstName
+        id: $player.id,
+        level: $player.currentLevel,
+        name: $player.firstName
       })
     } else if ($game.bossModeUnlocked) {
       $game.toBossLevel()
@@ -514,10 +514,10 @@ var $player = $game.$player = module.exports = {
 
   // remove the menu once they have selected a seed flash player and disable other actions
   startSeeding: function (choice) {
-    $game.$player.seedMode = choice
+    $player.seedMode = choice
     $('#seedventory').slideUp(function () {
       $game.flags.unset('visible-seedventory')
-      $game.$player.seedPlanting = true
+      $player.seedPlanting = true
     })
     var msg
     if (choice === 'regular') {
@@ -537,9 +537,9 @@ var $player = $game.$player = module.exports = {
     if (_resources[id]) {
       _resources[id].madePublic = true
       ss.rpc('game.npc.makeResponsePublic', {
-        playerId: $game.$player.id,
+        playerId: $player.id,
         resourceId: id,
-        instanceName: $game.$player.instanceName
+        instanceName: $player.instanceName
       })
       // This emits an 'ss-addAnswer' event
     }
@@ -550,9 +550,9 @@ var $player = $game.$player = module.exports = {
     if (_resources[id]) {
       _resources[id].madePublic = false
       ss.rpc('game.npc.makeResponsePrivate', {
-        playerId: $game.$player.id,
+        playerId: $player.id,
         resourceId: id,
-        instanceName: $game.$player.instanceName
+        instanceName: $player.instanceName
       })
       // This emits an 'ss-removeAnswer' event
     }
@@ -600,7 +600,7 @@ var $player = $game.$player = module.exports = {
 
     // Save to DB
     ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
+      id: $player.id,
       seeds: _seeds
     })
 
@@ -619,7 +619,7 @@ var $player = $game.$player = module.exports = {
   resumeAnswer: function (answer) {
     _resume.push(answer)
     var info = {
-      id: $game.$player.id,
+      id: $player.id,
       resume: _resume
     }
     ss.rpc('game.player.updateGameInfo', info)
@@ -629,7 +629,7 @@ var $player = $game.$player = module.exports = {
   updatePledges: function (quantity) {
     _pledges += quantity
     var info = {
-      id: $game.$player.id,
+      id: $player.id,
       pledges: _pledges
     }
     ss.rpc('game.player.updateGameInfo', info)
@@ -647,13 +647,13 @@ var $player = $game.$player = module.exports = {
 
   // Get the player's color index number
   getColorIndex: function () {
-    return $game.$player.playerColor
+    return $player.playerColor
   },
 
   // Get a color at a given index or use current player color index
   getColor: function (index) {
     if (!index) {
-      index = $game.$player.getColorIndex()
+      index = $player.getColorIndex()
     }
     // Returns an object {r, g, b}, values from 0 - 255
     return COLORS[index]
@@ -725,7 +725,7 @@ var $player = $game.$player = module.exports = {
 
     // Change skin on database
     ss.rpc('game.player.changeSkinSuit', {
-      id: $game.$player.id,
+      id: $player.id,
       skinSuit: _skinSuit
     })
   },
@@ -740,7 +740,7 @@ var $player = $game.$player = module.exports = {
   setSkinventory: function (skinventory) {
     _skinSuit.unlocked = skinventory
     ss.rpc('game.player.updateGameInfo', {
-      id: $game.$player.id,
+      id: $player.id,
       skinSuit: _skinSuit
     })
   },
@@ -836,7 +836,7 @@ var $player = $game.$player = module.exports = {
 
       // Publish beam status
       ss.rpc('game.player.beam', {
-        id: $game.$player.id,
+        id: $player.id,
         x: location.x,
         y: location.y
       })
@@ -884,7 +884,7 @@ var $player = $game.$player = module.exports = {
       _resourcesDiscovered += 1
 
       // Add seeds
-      $game.$player.addSeeds('regular', playerResource.seedsRewarded)
+      $player.addSeeds('regular', playerResource.seedsRewarded)
 
       // Unlock skinsuit
       if (playerResource.skinSuit) {
@@ -905,20 +905,20 @@ var $player = $game.$player = module.exports = {
     _player.saveResourceToDb(playerResource)
 
     // Hack to not include demo users
-    if ($game.$player.firstName !== 'Demo') {
+    if ($player.firstName !== 'Demo') {
       // Add this to the DB of resources for all player answers
       var newAnswer = {
         resourceId: resource.id,
-        playerId: $game.$player.id,
-        name: $game.$player.firstName,
+        playerId: $player.id,
+        name: $player.firstName,
         answer: playerResource.answers[playerResource.answers.length - 1],
         madePublic: false
       }
-      ss.rpc('game.npc.saveResponse', $game.$player.instanceName, newAnswer)
+      ss.rpc('game.npc.saveResponse', $player.instanceName, newAnswer)
     }
 
     // Display NPC bubble with number of comments & update minimap radar
-    $game.$player.displayNpcComments()
+    $player.displayNpcComments()
     $game.minimap.radar.update()
   },
 
@@ -1076,7 +1076,7 @@ var $player = $game.$player = module.exports = {
     var totalTime = parseInt(endTime - _startTime, 10)
     _playingTime += totalTime
     var info = {
-      id: $game.$player.id,
+      id: $player.id,
       playingTime: _playingTime
     }
     _startTime = endTime
@@ -1092,20 +1092,20 @@ var $player = $game.$player = module.exports = {
   drawSeed: function (pos) {
     if (_seeds.draw > 0) {
       var drawLocal = false
-      if ($game.$player.seedMode === 'draw') {
+      if ($player.seedMode === 'draw') {
         var currentTile = $game.$map.currentTiles[pos.x][pos.y]
         var index = currentTile.mapIndex
 
         // add to array and color if we haven't done it
         if (!_drawSeeds[index]) {
-          $game.$player.addSeeds('draw', -1)
+          $player.addSeeds('draw', -1)
           document.getElementById('graffiti').querySelector('.remaining').textContent = _seeds.draw
           drawLocal = true
           _drawSeeds[index] = {
             x: currentTile.x,
             y: currentTile.y,
             mapIndex: index,
-            instanceName: $game.$player.instanceName
+            instanceName: $player.instanceName
           }
           // keep track area positions
           if (pos.x < _drawSeedArea.minX) {
@@ -1133,11 +1133,11 @@ var $player = $game.$player = module.exports = {
         }
       }
     } else {
-      $game.$player.dropSeed({mode: 'draw'})
+      $player.dropSeed({mode: 'draw'})
       $game.flags.unset('draw-mode')
-      $game.$player.seedMode = false
+      $player.seedMode = false
       $BODY.off('mousedown touchstart', '#gameboard')
-      $game.$player.seedPlanting = false
+      $player.seedPlanting = false
       $game.alert('You are out of seeds!')
       _saveSeedsToDB()
     }
@@ -1153,12 +1153,12 @@ var $player = $game.$player = module.exports = {
       minY: 14,
       maxY: 0
     }
-    $game.$player.drawSeed(pos)
+    $player.drawSeed(pos)
   },
 
   // if boss mode then must change up pos info
   setPositionInfo: function () {
-    if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+    if ($game.bossModeUnlocked && $player.currentLevel > 3) {
       _info.x = 15
       _info.y = 8
     }
@@ -1206,7 +1206,7 @@ var _player = {
     // Add additional info
     for (var i in tiles) {
       tiles[i].mapIndex = tiles[i].y * $game.TOTAL_WIDTH + tiles[i].x
-      tiles[i].instanceName = $game.$player.instanceName
+      tiles[i].instanceName = $player.instanceName
     }
 
     // Utility function for getting an array of all points a radius from a particular X,Y
@@ -1277,14 +1277,14 @@ var _player = {
 
     // send the data to the rpc
     var info = {
-      id: $game.$player.id,
-      name: $game.$player.firstName,
+      id: $player.id,
+      name: $player.firstName,
       x1: data.x1,
       y1: data.y1,
       x2: data.x2,
       y2: data.y2,
       tilesColored: _tilesColored,
-      instanceName: $game.$player.instanceName,
+      instanceName: $player.instanceName,
       kind: data.kind
     }
 
@@ -1307,14 +1307,14 @@ var _player = {
         _tilesColored += result
 
         if (data.kind === 'regular') {
-          $game.$player.addSeeds('regular', -1)
+          $player.addSeeds('regular', -1)
 
           // If player is out of seeds, end it
           if (_seeds.regular === 0) {
             _player.endSeedMode()
           }
         } else {
-          $game.$player.addSeeds('draw', 0)
+          $player.addSeeds('draw', 0)
 
           if (_seeds.draw === 0) {
             _player.endSeedMode()
@@ -1331,11 +1331,11 @@ var _player = {
 
   // Generic end seed mode
   endSeedMode: function() {
-    $game.$player.seedMode = false
-    $game.$player.seedPlanting = false
+    $player.seedMode = false
+    $player.seedPlanting = false
     $game.alert('You are out of seeds!')
     $('.hud-seed').removeClass('hud-button-active')
-    $game.$player.saveMapImage(true)
+    $player.saveMapImage(true)
     // TODO: save seed values to DB
     _saveSeedsToDB()
   },
@@ -1366,7 +1366,7 @@ var _player = {
     // Location is an object with x and y properties
     // Update on server
     ss.rpc('game.player.savePosition', {
-      id: $game.$player.id,
+      id: $player.id,
       position: {
         x: position.x,
         y: position.y
@@ -1374,7 +1374,7 @@ var _player = {
     })
 
     // Update on minimap
-    $game.minimap.updatePlayer($game.$player.id, position)
+    $game.minimap.updatePlayer($player.id, position)
   }
 }
 
@@ -1403,13 +1403,13 @@ function _setPlayerInformation (info) {
   }
 
   // public
-  $game.$player.id = info.id
-  $game.$player.firstName = info.firstName
-  $game.$player.currentLevel = info.game.currentLevel
-  $game.$player.instanceName = info.game.instanceName
-  $game.$player.seenRobot = info.game.seenRobot
-  $game.$player.isMuted = info.game.isMuted
-  $game.$player.playerColor = info.game.playerColor
+  $player.id = info.id
+  $player.firstName = info.firstName
+  $player.currentLevel = info.game.currentLevel
+  $player.instanceName = info.game.instanceName
+  $player.seenRobot = info.game.seenRobot
+  $player.isMuted = info.game.isMuted
+  $player.playerColor = info.game.playerColor
 
   $game.$botanist.setState(info.game.botanistState)
 
@@ -1443,23 +1443,23 @@ function _move () {
 
   // First, check what step of animation we are on.
   // After one animation cycle, reset steps and moves
-  if ($game.$player.currentStep >= STEPS_PER_MOVE) {
-    $game.$player.currentStep = 0
+  if ($player.currentStep >= STEPS_PER_MOVE) {
+    $player.currentStep = 0
 
     // The next move becomes the current player's current position
-    _info.x = $game.$player.seriesOfMoves[0].masterX
-    _info.y = $game.$player.seriesOfMoves[0].masterY
+    _info.x = $player.seriesOfMoves[0].masterX
+    _info.y = $player.seriesOfMoves[0].masterY
 
     // Once set, remove the move from queue immediately
-    $game.$player.seriesOfMoves.shift()
+    $player.seriesOfMoves.shift()
 
     // Update player's location on the minimap
-    $game.minimap.updatePlayer($game.$player.id, _info)
+    $game.minimap.updatePlayer($player.id, _info)
   }
 
   // If there are no more moves, finish
-  if ($game.$player.seriesOfMoves.length <= 0) {
-    if ($game.bossModeUnlocked && $game.$player.currentLevel > 3) {
+  if ($player.seriesOfMoves.length <= 0) {
+    if ($game.bossModeUnlocked && $player.currentLevel > 3) {
       _info.offX = 0
       _info.offY = 0
       _info.srcX = 0
@@ -1476,9 +1476,9 @@ function _move () {
     var currentSpeed = $player.getMoveSpeed()
 
     // If it is the first step, then figure out which direction to face
-    if ($game.$player.currentStep === 0) {
-      _currentStepIncX = $game.$player.seriesOfMoves[0].masterX - _info.x
-      _currentStepIncY = $game.$player.seriesOfMoves[0].masterY - _info.y
+    if ($player.currentStep === 0) {
+      _currentStepIncX = $player.seriesOfMoves[0].masterX - _info.x
+      _currentStepIncY = $player.seriesOfMoves[0].masterY - _info.y
 
       // set the previous offsets to 0 because the last visit
       // was the actual rounded master
@@ -1503,13 +1503,13 @@ function _move () {
       _info.prevOffY = _info.offY
     }
 
-    _info.offX = $game.$player.currentStep * _currentStepIncX
-    _info.offY = $game.$player.currentStep * _currentStepIncY
+    _info.offX = $player.currentStep * _currentStepIncX
+    _info.offY = $player.currentStep * _currentStepIncY
 
     // Change the source frame every X frames
     // We need to get a number between 0 and whatever that is guanteed to be modulo'able by 8
     // and hit zero, so that the frame can increment
-    if ((Math.floor($game.$player.currentStep / currentSpeed) - 1) % 8 === 0) {
+    if ((Math.floor($player.currentStep / currentSpeed) - 1) % 8 === 0) {
       _curFrame += 1
       // Reset when we have hit the number of frames
       if (_curFrame >= 4) {
@@ -1520,7 +1520,7 @@ function _move () {
     _info.srcY = _direction * $game.TILE_SIZE * 2
 
     // Increment the current step
-    $game.$player.currentStep += 1 * currentSpeed
+    $player.currentStep += 1 * currentSpeed
   }
 }
 
@@ -1569,8 +1569,8 @@ function _endMove () {
 
   // Activate NPC
   // npcOnDeck can equal zero so be sure to check against boolean, rather than falsy
-  if ($game.$player.npcOnDeck !== false) {
-    $game.$npc.activate($game.$player.npcOnDeck)
+  if ($player.npcOnDeck !== false) {
+    $game.$npc.activate($player.npcOnDeck)
   }
 
   $game.flags.unset('is-moving')
@@ -1599,7 +1599,7 @@ function _idle () {
 // save current seed data to db
 function _saveSeedsToDB () {
   var info = {
-    id: $game.$player.id,
+    id: $player.id,
     seeds: _seeds,
     tilesColored: _tilesColored
   }

@@ -1,5 +1,4 @@
 'use strict'
-/* global $game */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -13,6 +12,6 @@
 var Flagger = require('/class.flagger')
 
 // Create an instance of the Flagger class for the main $game object.
-$game.flags = (function () {
+module.exports = (function () {
   return new Flagger()
 }())

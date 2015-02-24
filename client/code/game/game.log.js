@@ -25,7 +25,7 @@ Counter.prototype.isFull = function () {
   return this.numItems > this.maxItems
 }
 
-$game.$log = module.exports = (function () {
+module.exports = (function () {
   var logCounter = new Counter()
 
   return {

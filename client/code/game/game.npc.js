@@ -15,16 +15,16 @@ var _ = require('underscore')
 // Currently not a standalone thing because to many internal
 // functions are depending on other bits of game
 function Npc (data) {
-  this.name       = data.name
-  this.id         = data.id
-  this.sprite     = data.sprite
-  this.level      = data.level
-  this.dialog     = data.dialog
-  this.dependsOn  = data.dependsOn
-  this.isHolding  = data.isHolding
-  this.resource   = data.resource
-  this.skinSuit   = data.skinSuit
-  this.onScreen   = null
+  this.name = data.name
+  this.id = data.id
+  this.sprite = data.sprite
+  this.level = data.level
+  this.dialog = data.dialog
+  this.dependsOn = data.dependsOn
+  this.isHolding = data.isHolding
+  this.resource = data.resource
+  this.skinSuit = data.skinSuit
+  this.onScreen = null
 
   this.position = {
     x: data.position.x,
@@ -184,7 +184,7 @@ Npc.prototype.getSmalltalk = function () {
   return dialog
 }
 
-$game.$npc = module.exports = (function () {
+module.exports = (function () {
   var _npc = {
     data: {},
 

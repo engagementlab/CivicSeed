@@ -77,6 +77,112 @@ S3Uploader.prototype.uploadToS3 = function (file, url, public_url) {
   return xhr.send(file)
 }
 
+function init () {
+  // Display share link
+  showCurrentURIWithoutPrefix()
+
+  // Set up all event listeners
+  var $body = $(document.body)
+
+  $body.on('click', '.save-profile-button', function () {
+    var updates = []
+    var info = $('.resume-text-editable')
+
+    $.each(info, function (i, text) {
+      var val = $(text).text()
+      updates.push(val)
+    })
+    var updateInfo = {
+      id: sessionStorage.getItem('userId'),
+      resume: updates
+    }
+    ss.rpc('shared.profiles.updateResume', updateInfo, function (res) {
+      if (res) {
+        apprise('Changes saved.')
+      }
+    })
+  })
+
+  $body.on('click', '.profile-toggle', function () {
+    var profilePublic = $(this).attr('data-public')
+
+    if (profilePublic === 'false' || !profilePublic) {
+      profilePublic = true
+    } else {
+      profilePublic = false
+    }
+
+    // Save the change to user info
+    var updateInfo = {
+      id: sessionStorage.getItem('userId'),
+      changeTo: profilePublic
+    }
+
+    ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
+      if (!res) {
+        apprise('Error')
+      }
+
+      // Update DOM
+      // Catch all instances where the .profile-toggle element exists
+      var $els = $('.profile-toggle')
+      $els.attr('data-public', profilePublic)
+
+      if (profilePublic) {
+        $els.find('.profile-public').show()
+        $els.find('.profile-private').hide()
+      } else {
+        $els.find('.profile-private').show()
+        $els.find('.profile-public').hide()
+      }
+    })
+  })
+
+  $body.on('click', '.feedback button', function () {
+    var row = $(this).parent().find('.row')
+    $(row).toggle()
+  })
+
+  $body.on('change', '#mugshot-uploader', function () {
+    var file = this.files[0]
+
+    // Get a signed request to give the client temporary credentials to upload their file
+    ss.rpc('profile.mugshot.signS3Request', sessionStorage.getItem('userId'), file, function (res) {
+      uploadToS3(file, res.signedRequest, res.url, function () {
+        // TODO
+      })
+    })
+  })
+
+  $body.on('click', '#copy-share-link-input', function () {
+    $(this).select()
+  })
+
+  $body.on('click', '#customize-share-link-button', function () {
+    // Toggle visibility state of form
+    $('#copy-share-link-group').hide()
+    $('#customize-share-link-group').css('display', 'table') // Restore display type to .input-group default
+
+    // Fill in the blanks
+    $('#share-link-prefix').text(window.location.href.split('profiles/')[0] + 'profiles/')
+    $('#customize-share-link-input').val(window.location.href.split('profiles/')[1]).select()
+  })
+
+  $body.on('submit', '#share-link-form', function (e) {
+    e.preventDefault()
+    saveCustomProfileURL()
+  })
+
+  $body.on('click', '#save-share-link-button', function () {
+    saveCustomProfileURL()
+  })
+
+  $body.on('keyup', '#customize-share-link-input', function () {
+    // Reset
+    $('#share-link-message').text('').removeClass('color-darkgreen color-red').hide()
+  })
+}
+
 function showCurrentURIWithoutPrefix () {
   $('#copy-share-link-input').val(window.location.href.split('//')[1])
 }
@@ -122,7 +228,7 @@ function saveCustomProfileURL () {
       apprise('Error saving custom profile link.')
     } else {
       // Update location
-      //Davis.history.assign(desiredURL)
+      // Davis.history.assign(desiredURL)
 
       // Toggle visibility state of form
       $('#copy-share-link-group').show()
@@ -137,141 +243,32 @@ function saveCustomProfileURL () {
   })
 }
 
-module.exports = (function () {
-
-  var uploadToS3 = function (file, signedRequest, mugshotURL, callback) {
-    var s3upload = new S3Uploader({
-      onProgress: function (percent, message) {
-        console.log('Upload progress: ' + percent + '% ' + message)
-        //status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message
-      },
-      onFinishS3Put: function (public_url) {
-        console.log('Upload completed. Uploaded to: ' + public_url)
-        //status_elem.innerHTML = 'Upload completed. Uploaded to: '+ public_url
-        //url_elem.value = public_url
-        //preview_elem.innerHTML = '<img src="'+public_url+'" style="width:300px">'
-      },
-      onError: function (status) {
-        //status_elem.innerHTML = 'Upload error: ' + status
-      }
-    })
-    s3upload.uploadToS3(file, signedRequest, mugshotURL)
-
-    if (typeof callback === 'function') callback(signedRequest)
-  }
-
-  var saveMugshotURL = function (data) {
-    console.log('saveMugshotURL called')
-    ss.rpc('shared.profiles.updateProfileMugshotURL', sessionStorage.getItem('userId'), data)
-  }
-
-  return {
-    init: function () {
-      // Display share link
-      showCurrentURIWithoutPrefix()
-
-      // Set up all event listeners
-      var $body = $(document.body)
-
-      $body.on('click', '.save-profile-button', function () {
-        var updates = []
-        var info = $('.resume-text-editable')
-
-        $.each(info, function (i, text) {
-          var val = $(text).text()
-          updates.push(val)
-        })
-        var updateInfo = {
-          id: sessionStorage.getItem('userId'),
-          resume: updates
-        }
-        ss.rpc('shared.profiles.updateResume', updateInfo, function (res) {
-          if (res) {
-            apprise('Changes saved.')
-          }
-        })
-      })
-
-      $body.on('click', '.profile-toggle', function () {
-        var profilePublic = $(this).attr('data-public')
-
-        if (profilePublic === 'false' || !profilePublic) {
-          profilePublic = true
-        } else {
-          profilePublic = false
-        }
-
-        // Save the change to user info
-        var updateInfo = {
-          id: sessionStorage.getItem('userId'),
-          changeTo: profilePublic
-        }
-
-        ss.rpc('shared.profiles.setPublic', updateInfo, function (res) {
-          if (!res) {
-            apprise('Error')
-          }
-
-          // Update DOM
-          // Catch all instances where the .profile-toggle element exists
-          var $els = $('.profile-toggle')
-          $els.attr('data-public', profilePublic)
-
-          if (profilePublic) {
-            $els.find('.profile-public').show()
-            $els.find('.profile-private').hide()
-          } else {
-            $els.find('.profile-private').show()
-            $els.find('.profile-public').hide()
-          }
-        })
-      })
-
-      $body.on('click', '.feedback button', function () {
-        var row = $(this).parent().find('.row')
-        $(row).toggle()
-      })
-
-      $body.on('change', '#mugshot-uploader', function () {
-        var file = this.files[0]
-        var fileContents = ''
-
-        // Get a signed request to give the client temporary credentials to upload their file
-        ss.rpc('profile.mugshot.signS3Request', sessionStorage.getItem('userId'), file, function (res) {
-          uploadToS3(file, res.signedRequest, res.url, function () {
-
-          })
-        })
-      })
-
-      $body.on('click', '#copy-share-link-input', function () {
-        $(this).select()
-      })
-
-      $body.on('click', '#customize-share-link-button', function () {
-        // Toggle visibility state of form
-        $('#copy-share-link-group').hide()
-        $('#customize-share-link-group').css('display', 'table') // Restore display type to .input-group default
-
-        // Fill in the blanks
-        $('#share-link-prefix').text(window.location.href.split('profiles/')[0] + 'profiles/')
-        $('#customize-share-link-input').val(window.location.href.split('profiles/')[1]).select()
-      })
-
-      $body.on('submit', '#share-link-form', function (e) {
-        e.preventDefault()
-        saveCustomProfileURL()
-      })
-
-      $body.on('click', '#save-share-link-button', function () {
-        saveCustomProfileURL()
-      })
-
-      $body.on('keyup', '#customize-share-link-input', function () {
-        // Reset
-        $('#share-link-message').text('').removeClass('color-darkgreen color-red').hide()
-      })
+function uploadToS3 (file, signedRequest, mugshotURL, callback) {
+  var s3upload = new S3Uploader({
+    onProgress: function (percent, message) {
+      console.log('Upload progress: ' + percent + '% ' + message)
+      // status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message
+    },
+    onFinishS3Put: function (public_url) {
+      console.log('Upload completed. Uploaded to: ' + public_url)
+      // status_elem.innerHTML = 'Upload completed. Uploaded to: '+ public_url
+      // url_elem.value = public_url
+      // preview_elem.innerHTML = '<img src="'+public_url+'" style="width:300px">'
+    },
+    onError: function (status) {
+      // status_elem.innerHTML = 'Upload error: ' + status
     }
+  })
+  s3upload.uploadToS3(file, signedRequest, mugshotURL)
 
-  }
-})()
+  if (typeof callback === 'function') callback(signedRequest)
+}
+
+function saveMugshotURL (data) {
+  console.log('saveMugshotURL called')
+  ss.rpc('shared.profiles.updateProfileMugshotURL', sessionStorage.getItem('userId'), data)
+}
+
+module.exports = {
+  init: init
+}

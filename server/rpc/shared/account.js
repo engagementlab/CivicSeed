@@ -69,9 +69,13 @@ exports.actions = function (req, res, ss) {
     authenticate: function (email, password) {
       winston.info('Checking authentication for ', email)
       UserModel.findOne({ email: email }, function (err, user) {
-        if (user) {
+        if (err) {
+          // Placeholder for error handling
+        } else if (user) {
           bcrypt.compare(password, user.password, function (err, authenticated) {
-            if (authenticated) {
+            if (err) {
+              // Placeholder for error handling
+            } else if (authenticated) {
               res({ status: true, session: _setUserSession(user) })
             } else {
               res({ status: false, reason: 'Incorrect password.' })
@@ -92,7 +96,9 @@ exports.actions = function (req, res, ss) {
 
       // MONGO
       UserModel.findOne({ email: sessionEmail }, function (err, user) {
-        if (user && user.activeSessionID && user.activeSessionID === sessionId) {
+        if (err) {
+          // Placeholder for error handling
+        } else if (user && user.activeSessionID && user.activeSessionID === sessionId) {
           // req.session.activeSessionID = null;
           // req.session.save();
           user.set({ activeSessionID: null })
@@ -239,13 +245,17 @@ exports.actions = function (req, res, ss) {
             singleHtml = singleHtml.replace('#{password}', password)
 
             user.save(function (err) {
-              emailUtil.sendEmail('Password reset from Civic Seed', singleHtml, user.email, function (err, response) {
-                if (err) {
-                  res(false)
-                } else {
-                  res(true)
-                }
-              })
+              if (err) {
+                res(false)
+              } else {
+                emailUtil.sendEmail('Password reset from Civic Seed', singleHtml, user.email, function (err, response) {
+                  if (err) {
+                    res(false)
+                  } else {
+                    res(true)
+                  }
+                })
+              }
             })
           })
         } else {
@@ -255,9 +265,11 @@ exports.actions = function (req, res, ss) {
     },
 
     sendMessage: function (email, message) {
-      var messageHTML = '<h2>Civic Seed contact form submission</h2>\
-                          <p><strong>E-mail:</strong> ' + email + '</p>\
-                          <p><strong>Message:</strong> ' + message + '</p>'
+      var messageHTML = ''
+
+      messageHTML += '<h2>Civic Seed contact form submission</h2>'
+      messageHTML += '<p><strong>E-mail:</strong> ' + email + '</p>'
+      messageHTML += '<p><strong>Message:</strong> ' + message + '</p>'
 
       emailUtil.sendEmail('Civic Seed contact form submission', messageHTML, EMAIL_TO, function (err, response) {
         if (err) {
@@ -302,7 +314,11 @@ exports.actions = function (req, res, ss) {
             gameStarted: true
           })
           user.save(function (err, suc) {
-            res(true)
+            if (err) {
+              // Placeholder for error handling
+            } else {
+              res(true)
+            }
           })
         }
       })

@@ -9,7 +9,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.$events = module.exports = {
+module.exports = {
 
   init: function () {
     // When a new player has joined

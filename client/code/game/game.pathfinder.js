@@ -12,7 +12,7 @@
 
 var astar = require('astar')
 
-$game.$pathfinder = module.exports = (function () {
+module.exports = (function () {
   // Private - holder of graph tiles for current screen
   var _graph
 

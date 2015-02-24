@@ -65,7 +65,7 @@ Tangram.prototype.getCSSColor = function () {
   return fills[this.fill] || 'rgb(0,0,0)' // Fallback to black
 }
 
-var $resources = $game.$resources = {
+var $resources = module.exports = {
 
   ready: false,
 
@@ -587,7 +587,7 @@ var _resources = {
     var seedsRewarded = $game.$player.getResource(resource.id).seedsRewarded
 
     // Legacy stuff saved here, never used.
-    //_rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
+    // _rightOpenRandom = ['Very interesting. I\'ve never looked at it like that before.', 'That says a lot about you!', 'Thanks for sharing. Now get out there and spread some color!'],
 
     if (npc.level < playerLevel || resource.questionType === 'resume') {
       // This can happen because not all tangram pieces need to be obtained to
@@ -1087,7 +1087,7 @@ var _resources = {
     var npc = $game.$npc.findNpcByResourceId(resource.id)
     var message = resource.feedbackWrong
 
-    $resources.hideResource(function callback() {
+    $resources.hideResource(function callback () {
       $game.$audio.playTriggerFx('resourceWrong')
       $game.$npc.showSpeechBubble(npc.name, message)
     })

@@ -13,7 +13,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.minimap = module.exports = (function () {
+module.exports = (function () {
   var _minimap = {}
   var _minimapPlayerContext = null
   var _minimapRadarContext = null

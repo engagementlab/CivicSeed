@@ -20,8 +20,6 @@ exports.actions = function (req, res, ss) {
   var gameModel = ss.service.db.model('Game')
   var colorModel = ss.service.db.model('Color')
 
-  var colorData = require(rootDir + '/data/colors.json')
-
   var createUserAndSendInvite = function (email, instanceName, i) {
     // Note: All invites assume a NEW USER. This means if the user is
     // already in the system, this OVERWRITES their account.
@@ -33,75 +31,69 @@ exports.actions = function (req, res, ss) {
       if (err) {
         console.error('  Could not find \'actor\' user: %s'.red.inverse, err)
       } else {
-//        if (!user) {
-          var newColor = colorData[i]
-          var tilesheetNum = i + 1
+        var password = xkcd.generatePassword()
 
-          var password = xkcd.generatePassword()
-          accountHelpers.hashPassword(password, function (hashedPassword) {
-            nameParts = email.split('@')
-            user = new userModel()
+        accountHelpers.hashPassword(password, function (hashedPassword) {
+          nameParts = email.split('@')
+          user = new userModel()
 
-            user.firstName = nameParts[0]
-            user.lastName = nameParts[1]
-            user.school = 'university'
-            user.password = hashedPassword.hash
-            user.email = email
-            user.role = 'actor'
-            user.profilePublic = false
-            user.profileLink = nameParts[0] + Math.random().toString(36).slice(2)
-            user.profileSetup = false
-            user.profileUnlocked = false
-            user.gameStarted = false
-            user.game = {
-              instanceName: instanceName,
-              currentLevel: 0,
-              rank: 'nothing',
-              position: {
-                x: 64,
-                y: 77
-              },
-              resources: [],
-              resourcesDiscovered: 0,
-              inventory: [],
-              seeds: {
-                regular: 0,
-                draw: 0,
-                dropped: 0
-              },
-              botanistState: 0,
-              firstTime: true,
-              resume: [],
-              resumeFeedback: [],
-              seenRobot: false,
-              playingTime: 0,
-              tilesColored: 0,
-              pledges: 5,
-              collaborativeChallenge: false,
-              playerColor: generatePlayerColor(),
-              skinSuit: {
-                head: 'basic',
-                torso: 'basic',
-                legs: 'basic',
-                unlocked: {
-                  head: ['basic'],
-                  torso: ['basic'],
-                  legs: ['basic']
-                }
+          user.firstName = nameParts[0]
+          user.lastName = nameParts[1]
+          user.school = 'university'
+          user.password = hashedPassword.hash
+          user.email = email
+          user.role = 'actor'
+          user.profilePublic = false
+          user.profileLink = nameParts[0] + Math.random().toString(36).slice(2)
+          user.profileSetup = false
+          user.profileUnlocked = false
+          user.gameStarted = false
+          user.game = {
+            instanceName: instanceName,
+            currentLevel: 0,
+            rank: 'nothing',
+            position: {
+              x: 64,
+              y: 77
+            },
+            resources: [],
+            resourcesDiscovered: 0,
+            inventory: [],
+            seeds: {
+              regular: 0,
+              draw: 0,
+              dropped: 0
+            },
+            botanistState: 0,
+            firstTime: true,
+            resume: [],
+            resumeFeedback: [],
+            seenRobot: false,
+            playingTime: 0,
+            tilesColored: 0,
+            pledges: 5,
+            collaborativeChallenge: false,
+            playerColor: generatePlayerColor(),
+            skinSuit: {
+              head: 'basic',
+              torso: 'basic',
+              legs: 'basic',
+              unlocked: {
+                head: ['basic'],
+                torso: ['basic'],
+                legs: ['basic']
               }
             }
-            console.log('Created user: ' + user.email)
-            user.save(function (err) {
-              if (err) {
-                console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err)
-              } else {
-                sendInviteEmail(user.firstName, password, user.email)
-              }
-            })
+          }
+          console.log('Created user: ' + user.email)
+          user.save(function (err) {
+            if (err) {
+              console.error('  Could not save \'actor\' user: '.red.inverse + user.firstName.red.inverse, err)
+            } else {
+              sendInviteEmail(user.firstName, password, user.email)
+            }
           })
-//        } else {
-//          sendInviteEmail(user.firstName, password, user.email)
-//        }
+        })
       }
     })
   }
@@ -183,23 +175,24 @@ exports.actions = function (req, res, ss) {
 
           newGame.players = 0
           newGame.seedsDropped = 0
-          newGame.seedsDroppedGoal = info.numPlayers * 130 //130 is magic number (see calculation in trello)
+          newGame.seedsDroppedGoal = info.numPlayers * 130 // 130 is magic number (see calculation in trello)
           newGame.active = true
           newGame.bossModeUnlocked = false
           newGame.levelQuestion = ['What is your background?', 'Where do you like to work?', 'What time is it?', 'When are you done?']
           newGame.leaderboard = []
-          newGame.levelNames= ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked']
+          newGame.levelNames = ['Level 1: Looking Inward', 'Level 2: Expanding Outward', 'Level 3: Working Together', 'Level 4: Looking Forward', 'Game Over: Profile Unlocked']
           newGame.instanceName = info.instanceName
           newGame.resourceResponses = {}
 
           newGame.save(function (err) {
             if (err) {
-              console.log(error)
+              console.log(err)
+              // TODO: what??
               res(true, false)
             } else {
               console.log('game instance has been created')
 
-              //put a single color in the world so we don't get an error when it searches
+              // put a single color in the world so we don't get an error when it searches
               // This is why there is a single colored tile at 0,0!!
               // TODO: Work around this
               var color = new colorModel()
@@ -223,7 +216,7 @@ exports.actions = function (req, res, ss) {
                 }
               })
 
-              //add instance to creator / superadmin for monitor panels
+              // add instance to creator / superadmin for monitor panels
               userModel
                 .findById(info.id, function (err, user) {
                   if (err) {
@@ -272,5 +265,4 @@ exports.actions = function (req, res, ss) {
       })
     }
   }
-
 }

@@ -7,7 +7,7 @@ var _rightEdge = 0
 var _topEdge = 0
 var _bottomEdge = 0
 
-var $map = $game.$map = module.exports = {
+var $map = module.exports = {
 
   currentTiles: null,
   dataLoaded: false,
@@ -21,10 +21,10 @@ var $map = $game.$map = module.exports = {
     _topEdge = 0
     _bottomEdge = 0
 
-    $game.$map.currentTiles = null
-    $game.$map.dataLoaded = false
-    $game.$map.numberOfSteps = 0
-    $game.$map.stepDirection = null
+    this.currentTiles = null
+    this.dataLoaded = false
+    this.numberOfSteps = 0
+    this.stepDirection = null
   },
 
   // pull down current viewport tiles, create the pathfinding grid
@@ -60,24 +60,24 @@ var $map = $game.$map = module.exports = {
     var x = localPosition.x
     var y = localPosition.y
 
-    return $game.$map.currentTiles[x][y].tileState
+    return $map.currentTiles[x][y].tileState
   },
 
   // Return true if player is on the edge of the world
   isMapEdge: function (localPosition) {
-    return $game.$map.currentTiles[localPosition.x][localPosition.y].isMapEdge
+    return $map.currentTiles[localPosition.x][localPosition.y].isMapEdge
   },
 
   // put new color on the map
   newBomb: function (bombed, id) {
     for (var b = 0; b < bombed.length; b += 1) {
       // only add it to render list if it is on current screen
-      var loc = $game.$map.masterToLocal(bombed[b].x, bombed[b].y)
+      var loc = $map.masterToLocal(bombed[b].x, bombed[b].y)
       var curTile = null
 
       if (loc) {
         // if there IS a color
-        curTile = $game.$map.currentTiles[loc.x][loc.y]
+        curTile = $map.currentTiles[loc.x][loc.y]
         curTile.colored = true
         $game.$render.clearMapTile(loc)
         $game.$render.renderTile(loc.x, loc.y)
@@ -98,7 +98,7 @@ var $map = $game.$map = module.exports = {
   createCollectiveImage: function () {
     $('.color-map-everyone .color-map-image').remove()
     ss.rpc('game.player.getAllImages', $game.$player.id, function (data) {
-      var myImage = $game.$map.saveImage()
+      var myImage = $map.saveImage()
       var index = data.length
       // go thru each image create a new image using canvas?
       while (--index > -1) {
@@ -118,8 +118,8 @@ var $map = $game.$map = module.exports = {
 
     // left
     if (x === 0) {
-      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
-      $game.$map.stepDirection = 'left'
+      $map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
+      $map.stepDirection = 'left'
       getThisManyX = $game.VIEWPORT_WIDTH - 2
       getThisManyY = $game.VIEWPORT_HEIGHT
       getThisX = $game.masterX - ($game.VIEWPORT_WIDTH - 2)
@@ -127,8 +127,8 @@ var $map = $game.$map = module.exports = {
     }
     // right
     else if (x === $game.VIEWPORT_WIDTH - 1) {
-      $game.$map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
-      $game.$map.stepDirection = 'right'
+      $map.numberOfSteps = $game.VIEWPORT_WIDTH - 2
+      $map.stepDirection = 'right'
       getThisManyX = $game.VIEWPORT_WIDTH - 2
       getThisManyY = $game.VIEWPORT_HEIGHT
       getThisX = $game.masterX + $game.VIEWPORT_WIDTH
@@ -136,8 +136,8 @@ var $map = $game.$map = module.exports = {
     }
     // up
     else if (y === 0) {
-      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
-      $game.$map.stepDirection = 'up'
+      $map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
+      $map.stepDirection = 'up'
       getThisManyX = $game.VIEWPORT_WIDTH
       getThisManyY = $game.VIEWPORT_HEIGHT - 2
       getThisX = $game.masterX
@@ -145,8 +145,8 @@ var $map = $game.$map = module.exports = {
     }
     // down
     else if (y === $game.VIEWPORT_HEIGHT - 1) {
-      $game.$map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
-      $game.$map.stepDirection = 'down'
+      $map.numberOfSteps = $game.VIEWPORT_HEIGHT - 2
+      $map.stepDirection = 'down'
       getThisManyX = $game.VIEWPORT_WIDTH
       getThisManyY = $game.VIEWPORT_HEIGHT - 2
       getThisX = $game.masterX
@@ -166,18 +166,18 @@ var $map = $game.$map = module.exports = {
   transitionMap: function (stepNumber) {
     // --------RIGHT------------
     // go thru current array and shift everthing
-    if ($game.$map.stepDirection === 'right') {
+    if ($map.stepDirection === 'right') {
       // shift all except last column
       for (var i = 0; i < $game.VIEWPORT_WIDTH - 1; i++) {
         for (var j = 0; j < $game.VIEWPORT_HEIGHT; j++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i + 1 ][j]
+          $map.currentTiles[i][j] = $map.currentTiles[ i + 1 ][j]
         }
       }
 
       // shift a new column from the next array to the last spot
       var j = $game.VIEWPORT_HEIGHT
       while (--j >= 0) {
-        $game.$map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j]
+        $map.currentTiles[$game.VIEWPORT_WIDTH - 1][j] = _nextTiles[stepNumber - 1][j]
       }
       $game.masterX += 1
       $game.$player.slide(1, 0)
@@ -185,18 +185,18 @@ var $map = $game.$map = module.exports = {
     }
     // --------LEFT------------
     // go thru current array and shift everthing
-    if ($game.$map.stepDirection === 'left') {
+    if ($map.stepDirection === 'left') {
       // shift all except last column
       for (var i = $game.VIEWPORT_WIDTH - 1; i > 0; i--) {
         for (var j = 0; j < $game.VIEWPORT_HEIGHT; j++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[ i - 1 ][j]
+          $map.currentTiles[i][j] = $map.currentTiles[ i - 1 ][j]
         }
       }
 
       // shift a new column from the next array to the last spot
       var j = $game.VIEWPORT_HEIGHT
       while (--j >= 0) {
-        $game.$map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j]
+        $map.currentTiles[0][j] = _nextTiles[_nextTiles.length - stepNumber ][j]
       }
 
       $game.masterX -= 1
@@ -205,18 +205,18 @@ var $map = $game.$map = module.exports = {
     }
     // --------UP------------
     // go thru current array and shift everthing
-    if ($game.$map.stepDirection === 'up') {
+    if ($map.stepDirection === 'up') {
       // shift all except last column
       for (var j = $game.VIEWPORT_HEIGHT - 1; j > 0; j--) {
         for (var i = 0; i < $game.VIEWPORT_WIDTH; i++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j - 1]
+          $map.currentTiles[i][j] = $map.currentTiles[i][j - 1]
         }
       }
 
       // shift a new column from the next array to the last spot
       var i = $game.VIEWPORT_WIDTH
       while (--i >= 0) {
-        $game.$map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber]
+        $map.currentTiles[i][0] = _nextTiles[i][_nextTiles[0].length - stepNumber]
       }
       $game.masterY -= 1
       $game.$player.slide(0, -1)
@@ -224,19 +224,18 @@ var $map = $game.$map = module.exports = {
     }
     // --------DOWN------------
     // go thru current array and shift everthing
-    if ($game.$map.stepDirection === 'down') {
-
+    if ($map.stepDirection === 'down') {
       // shift all except last column
       for (var j = 0; j < $game.VIEWPORT_HEIGHT - 1; j++) {
         for (var i = 0; i < $game.VIEWPORT_WIDTH; i++) {
-          $game.$map.currentTiles[i][j] = $game.$map.currentTiles[i][j + 1]
+          $map.currentTiles[i][j] = $map.currentTiles[i][j + 1]
         }
       }
 
       // shift a new column from the next array to the last spot
       var k = $game.VIEWPORT_WIDTH
       while (--k >= 0) {
-        $game.$map.currentTiles[k][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[k][stepNumber - 1]
+        $map.currentTiles[k][$game.VIEWPORT_HEIGHT - 1] = _nextTiles[k][stepNumber - 1]
       }
       $game.masterY += 1
       $game.$player.slide(0, 1)
@@ -298,7 +297,7 @@ var _map = {
 
   // get new tiles from DB for new viewport
   getTiles: function (data, callback) {
-    $game.$map.dataLoaded = false
+    $map.dataLoaded = false
     var x1 = data.x
     var y1 = data.y
     var x2 = data.x + data.numX
@@ -349,7 +348,7 @@ var _map = {
         }
         c++
       }
-      $game.$map.dataLoaded = true
+      $map.dataLoaded = true
 
       if (typeof callback === 'function') callback()
     })
@@ -357,14 +356,14 @@ var _map = {
 
   // copy over new tiles to current tiles
   copyTileArray: function (callback) {
-    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH]
+    $map.currentTiles = [$game.VIEWPORT_WIDTH]
 
     var i = $game.VIEWPORT_WIDTH
     while (--i >= 0) {
-      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
+      $map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
       var j = $game.VIEWPORT_HEIGHT
       while (--j >= 0) {
-        $game.$map.currentTiles[i][j] = _nextTiles[i][j]
+        $map.currentTiles[i][j] = _nextTiles[i][j]
       }
     }
     // reset array
@@ -374,13 +373,13 @@ var _map = {
 
   // create the data for the boss map
   setupBossMap: function () {
-    $game.$map.currentTiles = [$game.VIEWPORT_WIDTH]
+    $map.currentTiles = [$game.VIEWPORT_WIDTH]
     var i = $game.VIEWPORT_WIDTH
     while (--i >= 0) {
-      $game.$map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
+      $map.currentTiles[i] = [$game.VIEWPORT_HEIGHT]
       var j = $game.VIEWPORT_HEIGHT
       while (--j >= 0) {
-        $game.$map.currentTiles[i][j] = {
+        $map.currentTiles[i][j] = {
           x: i,
           y: j,
           tileState: -1,

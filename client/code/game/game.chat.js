@@ -9,7 +9,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.$chat = module.exports = (function () {
+module.exports = (function () {
   // Placeholder for chat display time, after which a setTimeout is used to hide the chat bubble.
   var displayTimer = null
 

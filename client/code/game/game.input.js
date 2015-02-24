@@ -12,7 +12,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var $input = $game.$input = module.exports = (function () {
+var $input = module.exports = (function () {
   var $body
 
   // Remember if any keys are held down, to prevent

@@ -11,7 +11,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.inventory = module.exports = (function () {
+module.exports = (function () {
   var _inventory = {} // Holds each item in inventory.
 
   // Returns true if a resource is held in the player's inventory

@@ -19,12 +19,12 @@ exports.actions = function (req, res, ss) {
       var bIndex = bombed.length
       var insertTiles = []
 
-      //go thru each new tile (bombed)
+      // go thru each new tile (bombed)
       while (--bIndex > -1) {
-        //unoptimized version:
+        // unoptimized version:
         var oIndex = oldTiles.length
         var found = false
-        //stop when we find it
+        // stop when we find it
         while (--oIndex > -1) {
           if (oldTiles[oIndex].mapIndex === bombed[bIndex].mapIndex) {
             found = true
@@ -41,7 +41,11 @@ exports.actions = function (req, res, ss) {
     saveTiles: function (tiles, callback) {
       var save = function () {
         _colorModel.create(tiles, function (err, suc) {
-          callback()
+          if (err) {
+            // Placeholder for error handling
+          } else {
+            callback()
+          }
         })
       }
       if (tiles.length > 0) {
@@ -52,21 +56,21 @@ exports.actions = function (req, res, ss) {
     },
 
     gameColorUpdate: function (newInfo, instanceName, callback) {
-      //access our global game model for status updates
+      // access our global game model for status updates
       _gameModel
         .where('instanceName').equals(instanceName)
         .find(function (err, results) {
         if (err) {
           console.log('error finding instance')
         } else {
-          //add tile count to our progress
+          // add tile count to our progress
           var result = results[0]
           var oldCount = result.seedsDropped
           var newCount = oldCount + newInfo.numBombs
           var bossModeUnlocked = result.bossModeUnlocked
           var seedsDroppedGoal = result.seedsDroppedGoal
 
-          //update leadeboard
+          // update leadeboard
           var oldBoard = result.leaderboard
           var ob = oldBoard.length
           var found = false
@@ -76,12 +80,12 @@ exports.actions = function (req, res, ss) {
             count: newInfo.newCount
           }
 
-          //if this is the first player on the leadeboard, push em and update status
+          // if this is the first player on the leadeboard, push em and update status
           if (ob === 0) {
             oldBoard.push(newGuy)
             updateBoard = true
           } else {
-            //if new guy exists, update him
+            // if new guy exists, update him
             while (--ob > -1) {
               if (oldBoard[ob].name === newGuy.name) {
                 oldBoard[ob].count = newGuy.count
@@ -90,35 +94,35 @@ exports.actions = function (req, res, ss) {
                 continue
               }
             }
-            //add new guy
+            // add new guy
             if (!found) {
-              //onlly add him if he deserves to be on there!
-              if (oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length-1]) {
+              // only add him if he deserves to be on there!
+              if (oldBoard.length < 10 || newGuy.count > oldBoard[oldBoard.length - 1]) {
                 oldBoard.push(newGuy)
                 updateBoard = true
               }
             }
-            //sort them
+            // sort them
             oldBoard.sort(function (a, b) {
               return b.count - a.count
             })
-            //get rid of the last one if too many
+            // get rid of the last one if too many
             if (oldBoard.length > 10) {
               oldBoard.pop()
             }
           }
 
-          //check if the world is fully colored
+          // check if the world is fully colored
           var gameisover = false
           if (newCount >= seedsDroppedGoal && !bossModeUnlocked && instanceName !== 'demo') {
-            //change the game state
+            // change the game state
             result.set('bossModeUnlocked', true)
             console.log('game over!')
-            //send out emails
+            // send out emails
             gameisover = true
             colorHelpers.endGameEmails(instanceName)
           }
-          //save all changes
+          // save all changes
           result.set('seedsDropped', newCount)
           result.set('leaderboard', oldBoard)
           result.save()
@@ -134,9 +138,9 @@ exports.actions = function (req, res, ss) {
     },
 
     endGameEmails: function (instanceName) {
-      //set boss mode unlocked here for specific instance
+      // set boss mode unlocked here for specific instance
 
-      //send out emails to players who have completed game
+      // send out emails to players who have completed game
       _userModel
         .where('role').equals('actor')
         .where('game.instanceName').equals(instanceName)
@@ -150,17 +154,17 @@ exports.actions = function (req, res, ss) {
             var subject = null
 
             for (var i = 0; i < emailListLength; i++) {
-              //not done
+              // not done
               if (users[i].game.currentLevel < 4) {
                 html = '<h2 style="color:green;">Hey! You need to finish!</h2>'
-                html+= '<p>Most of your peers have finished and you need to get back in there and help them out.</p>'
+                html += '<p>Most of your peers have finished and you need to get back in there and help them out.</p>'
                 subject = 'Update!'
               } else {
                 html = '<h2 style="color:green;">The Color has Returned!</h2>'
-                html+= '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>'
+                html += '<p>Great job everybody. You have successfully restored all the color to the world. You must log back in now to unlock your profile.</p>'
                 subject = 'Breaking News!'
               }
-              //TODO remove this check (this is to not send out test player emails?)
+              // TODO remove this check (this is to not send out test player emails?)
               if (users[i].email.length > 6) {
                 emailUtil.sendEmail(subject, html, users[i].email)
               }
@@ -194,11 +198,15 @@ exports.actions = function (req, res, ss) {
           console.log(err)
         } else if (user) {
           user.game.resumeFeedback.push({comment: info[index].comment, resumeIndex: index})
-          user.save(function (err, okay) {
-            // keep savin til we aint got none
-            index++
-            if (index < info.length) {
-              dbHelpers.saveFeedback(info,index)
+          user.save(function (err, suc) {
+            if (err) {
+              // Placeholder for error handling
+            } else {
+              // keep savin til we aint got none
+              index++
+              if (index < info.length) {
+                dbHelpers.saveFeedback(info, index)
+              }
             }
           })
         }
@@ -237,7 +245,7 @@ exports.actions = function (req, res, ss) {
     },
 
     tellOthers: function (info) {
-      //send player info to all others
+      // send player info to all others
       ss.publish.channel(req.session.game.instanceName, 'ss-addPlayer', { info: info })
     },
 
@@ -250,9 +258,9 @@ exports.actions = function (req, res, ss) {
             if (user.activeSessionID && user.activeSessionID === req.sessionId) {
               user.set({ activeSessionID: null })
             }
-            ss.publish.channel(req.session.game.instanceName,'ss-removePlayer', player)
+            ss.publish.channel(req.session.game.instanceName, 'ss-removePlayer', player)
 
-            //if demo user reset all data
+            // if demo user reset all data
             if (player.name === 'Demo' && req.session.email.indexOf('demo') > -1) {
               user.game.currentLevel = 0
               user.game.position.x = 64
@@ -490,8 +498,12 @@ exports.actions = function (req, res, ss) {
           }
           if (found) {
             user.save(function (err, suc) {
-              res(true)
-              ss.publish.channel(req.session.game.instanceName, 'ss-seedPledged', info)
+              if (err) {
+                // Placeholder for error handling
+              } else {
+                res(true)
+                ss.publish.channel(req.session.game.instanceName, 'ss-seedPledged', info)
+              }
             })
           } else {
             res(false)

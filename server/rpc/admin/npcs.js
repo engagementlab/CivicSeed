@@ -1,5 +1,7 @@
 'use strict'
 
+var winston = require('winston')
+
 // Define actions which can be called from the client using ss.rpc('demo.ACTIONNAME', param1, param2...)
 exports.actions = function (req, res, ss) {
   req.use('session')
@@ -18,8 +20,9 @@ exports.actions = function (req, res, ss) {
         .where('y').equals(position.y)
         .find(function (err, tiles) {
           if (err) {
-            callback('could not find tile')
-          } else if (tiles) {
+            callback('There was an error finding the tile in the database. Please check server logs.')
+            winston.error('admin.npcs.addNpcTile: ' + err)
+          } else if (tiles && tiles.length > 0) {
             if (tiles[0].tileState === 0) {
               tiles[0].tileState = 2
               tiles[0].save(function (err, saved) {
@@ -30,6 +33,8 @@ exports.actions = function (req, res, ss) {
                 }
               })
             }
+          } else {
+            callback('Could not add NPC.<br>x, y coordinates are not valid.')
           }
         })
     },

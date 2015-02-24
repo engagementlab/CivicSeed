@@ -7,7 +7,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-$game.$mouse = module.exports = (function () {
+module.exports = (function () {
   var _prevX = 0
   var _prevY = 0
   var _curX = 0

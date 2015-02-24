@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-var rootDir = process.cwd(),
-    winston = require('winston'),
-    service = require(rootDir + '/app/service')
+var rootDir = process.cwd()
+var winston = require('winston')
+var service = require(rootDir + '/app/service')
 
 module.exports = {
 
@@ -10,7 +10,6 @@ module.exports = {
     var dbCollections = service.db.collections
 
     dbCollections[collection].drop(function (err) {
-
       if (err) {
         winston.warn('  Could not drop database collection: %s  '.yellow.inverse, err)
       } else {
@@ -109,8 +108,6 @@ module.exports = {
   },
 
   saveNpcTilestate: function (tileModel, npcData, callback) {
-    var tilesToSave = []
-
     for (var i = 0; i < npcData.length; i++) {
       var npc = npcData[i]
 
@@ -126,6 +123,9 @@ module.exports = {
             tiles[j].tileState = 2
             tiles[j].npcId = this.npc.id
             tiles[j].save(function (err, success) {
+              if (err) {
+                winston.error('database-actions.saveNpcTilestate: Error saving NPC tilestate')
+              }
             })
           }
         }.bind({npc: npc}))

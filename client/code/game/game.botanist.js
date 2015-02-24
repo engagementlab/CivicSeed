@@ -1,4 +1,5 @@
-'use strict';
+'use strict'
+/* global CivicSeed, ss, $, $game, d3 */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -15,29 +16,29 @@
 
 var _ = require('underscore')
 
-//private botanist vars
-var _counter = 0,
-    _dragOffX = 0,
-    _dragOffY = 0,
-    _paintbrushSeedFactor = 5
+// private botanist vars
+var _counter = 0
+var _dragOffX = 0
+var _dragOffY = 0
+var _paintbrushSeedFactor = 5
 
-var $botanist = $game.$botanist = {
+var $botanist = module.exports = {
 
-  index:   0,
-  dialog:  null,
+  index: 0,
+  dialog: null,
   tangram: null,
-  name:    null,
-  ready:   false,
+  name: null,
+  ready: false,
 
   init: function (callback) {
     ss.rpc('game.botanist.load', function (data) {
-      _botanist.data    = data
+      _botanist.data = data
 
-      $botanist.index   = _botanist.data.id
-      $botanist.dialog  = _botanist.data.dialog
+      $botanist.index = _botanist.data.id
+      $botanist.dialog = _botanist.data.dialog
       $botanist.tangram = _botanist.data.tangram
-      $botanist.name    = _botanist.data.name
-      $botanist.ready   = true
+      $botanist.name = _botanist.data.name
+      $botanist.ready = true
 
       callback()
     })
@@ -48,11 +49,11 @@ var $botanist = $game.$botanist = {
     _dragOffX = 0
     _dragOffY = 0
 
-    $botanist.index   = 0
-    $botanist.dialog  = null
+    $botanist.index = 0
+    $botanist.dialog = null
     $botanist.tangram = null
-    $botanist.name    = null
-    $botanist.ready   = false
+    $botanist.name = null
+    $botanist.ready = false
   },
 
   // Get current render data
@@ -77,7 +78,7 @@ var $botanist = $game.$botanist = {
 
     // Save to database
     ss.rpc('game.player.updateGameInfo', {
-      id:            $game.$player.id,
+      id: $game.$player.id,
       botanistState: state
     })
 
@@ -93,7 +94,6 @@ var $botanist = $game.$botanist = {
   // Check to see if player is holding all of the correct pieces necessary
   // to solve the puzzle. If so, set Botanist state to 3 (ready to solve).
   checkState: function () {
-
     // Prevent check from occurring if Botanist state is not at 2 or 3
     // (resource collecting mode)
     if ($botanist.getState() < 2) return false
@@ -112,13 +112,13 @@ var $botanist = $game.$botanist = {
     // Get an array containing all the correct tangram pieces for this level,
     // and an object containing all the resources player has obtained this
     // level (inventory)
-    var pieces    = $botanist.tangram[$game.$player.currentLevel].answer,
-        inventory = $game.inventory.get()
+    var pieces = $botanist.tangram[$game.$player.currentLevel].answer
+    var inventory = $game.inventory.get()
 
     // Look through player's inventory to see if it matches a correct piece
     for (var i = 0; i < pieces.length; i++) {
-      var piece = pieces[i].id,
-          found = false
+      var piece = pieces[i].id
+      var found = false
 
       for (var j = 0; j < inventory.length; j++) {
         if (inventory[j].name === piece) {
@@ -147,7 +147,7 @@ var $botanist = $game.$botanist = {
     }
   },
 
-  //determine what to show the player when they click on the botanist
+  // determine what to show the player when they click on the botanist
   show: function () {
     var level = $game.$player.currentLevel
 
@@ -205,6 +205,9 @@ var $botanist = $game.$botanist = {
       case 4:
         _botanist.showOverlay(3)
         break
+      default:
+        // No default case
+        break
     }
   },
 
@@ -218,10 +221,10 @@ var $botanist = $game.$botanist = {
 
   // Put the Botanist's tangram puzzle in the inventory
   putPuzzlePageInInventory: function () {
-    var el        = document.querySelector('#inventory .inventory-tangram'),
-        className = 'puzzle' + $game.$player.currentLevel,
-        imgPath   = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png',
-        imgEl     = document.createElement('img')
+    var el = document.querySelector('#inventory .inventory-tangram')
+    var className = 'puzzle' + $game.$player.currentLevel
+    var imgPath = CivicSeed.CLOUD_PATH + '/img/game/tangram/' + className + 'small.png'
+    var imgEl = document.createElement('img')
 
     // Format the puzzle item
     imgEl.src = imgPath
@@ -300,7 +303,7 @@ var $botanist = $game.$botanist = {
     // Send data about the tangram with the dragging event
     e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(e.data))
 
-    //set drag over and drop to receive
+    // set drag over and drop to receive
     $puzzleEl
       .on('dragover', _botanist.onTangramDragOver)
       .on('drop',     _botanist.onTangramDrop)
@@ -339,17 +342,17 @@ var _botanist = {
   nudgePlayerInterval: null,
   nudgePlayerTimeout: null,
   trashPosition: {
-    top:    null,
+    top: null,
     bottom: null,
-    left:   null,
-    right:  null
+    left: null,
+    right: null
   },
   renderInfo: {
-    kind:  'botanist',
-    srcX:  0,
-    srcY:  0,
-    curX:  null,
-    curY:  null,
+    kind: 'botanist',
+    srcX: 0,
+    srcY: 0,
+    curX: null,
+    curY: null,
     prevX: null,
     prevY: null
   },
@@ -366,10 +369,10 @@ var _botanist = {
     var loc = $game.$map.masterToLocal(_botanist.data.x, _botanist.data.y)
 
     if (loc) {
-      var prevX = loc.x * $game.TILE_SIZE,
-          prevY = loc.y * $game.TILE_SIZE,
-          curX  = loc.x * $game.TILE_SIZE,
-          curY  = loc.y * $game.TILE_SIZE
+      var prevX = loc.x * $game.TILE_SIZE
+      var prevY = loc.y * $game.TILE_SIZE
+      var curX = loc.x * $game.TILE_SIZE
+      var curY = loc.y * $game.TILE_SIZE
 
       _botanist.renderInfo.prevX = prevX
       _botanist.renderInfo.prevY = prevY
@@ -381,7 +384,7 @@ var _botanist = {
     } else return false
   },
 
-  //update data for idle cycle animation
+  // update data for idle cycle animation
   idle: function () {
     _counter += 1
 
@@ -389,11 +392,11 @@ var _botanist = {
       if (_counter >= 24) {
         _counter = 0
         _botanist.renderInfo.srcX = 0
-      } else if (_counter == 18) {
+      } else if (_counter === 18) {
         _botanist.renderInfo.srcX = 32 * 6
-      } else if (_counter == 12) {
+      } else if (_counter === 12) {
         _botanist.renderInfo.srcX = 32 * 12
-      } else if (_counter == 6) {
+      } else if (_counter === 6) {
         _botanist.renderInfo.srcX = 32 * 18
       }
     } else {
@@ -420,8 +423,8 @@ var _botanist = {
 
   // Run through various steps of the onboarding tutorial.
   doTutorial: function () {
-    var tutorialState = _botanist.tutorialState,
-        dialogue      = ''
+    var tutorialState = _botanist.tutorialState
+    var dialogue = ''
 
     switch (tutorialState) {
       // Seed instructions
@@ -443,8 +446,7 @@ var _botanist = {
           _botanist.chat(dialogue, null, function () {
             $game.alert('Plant a seed by clicking the seed icon')
           })
-        }
-        else {
+        } else {
           // Player has completed seed tutorial; start progress tutorial
           dialogue = $botanist.dialog[0].instructions2
 
@@ -466,8 +468,7 @@ var _botanist = {
         // If it's still highlighted, player has not clicked it.
         if ($('.hud-progress').hasClass('hud-button-highlight')) {
           _botanist.chat('Take a look at the progress window by clicking on the highlighted Progress button at the bottom of the screen!')
-        }
-        else {
+        } else {
           // Display start to level 1
           _botanist.showPrompt(0)
         }
@@ -478,6 +479,9 @@ var _botanist = {
       // flag to detect whether player is in tutorial mode. When complete, be sure to call the
       // _botanist.completeTutorial() function to remember that the player has completed the
       // tutorial session.
+      default:
+        // No default case
+        break
     }
   },
 
@@ -486,7 +490,7 @@ var _botanist = {
     // After removing this flag, doTutorial() will no longer be called.
     $game.flags.unset('first-time')
     ss.rpc('game.player.updateGameInfo', {
-      id:        $game.$player.id,
+      id: $game.$player.id,
       firstTime: false
     })
   },
@@ -514,8 +518,8 @@ var _botanist = {
   },
 
   addContent: function (section) {
-    var overlay = document.getElementById('botanist-area'),
-        content = overlay.querySelector('.botanist-content')
+    var overlay = document.getElementById('botanist-area')
+    var content = overlay.querySelector('.botanist-content')
 
     // Reset all resource slides and buttons to a hidden & clean state.
     _botanist.resetContent()
@@ -604,7 +608,7 @@ var _botanist = {
       case 2:
         _botanist.say($game.$botanist.dialog[$game.$player.currentLevel].riddle.response)
         var imgPath = CivicSeed.CLOUD_PATH + '/img/game/seed_chips.png'
-        content.innerHTML = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3><div class="seed-chips"><img src="' + imgPath +'"></div>'
+        content.innerHTML = '<h3>You earned a promotion to ' + $game.playerRanks[$game.$player.currentLevel + 1] + '!</h3><div class="seed-chips"><img src="' + imgPath + '"></div>'
         content.style.display = 'block'
 
         _addButton('next', 3)
@@ -669,13 +673,13 @@ var _botanist = {
     // Private add button function. Displays the button each slide asks for and binds actions to them.
     // Similar to _addButton() in resources.js - refer to that for notes
     function _addButton (button, section, callback) {
-      var buttons = overlay.querySelector('.buttons'),
-          back    = buttons.querySelector('.back-button'),
-          clear   = buttons.querySelector('.clear-button'),
-          next    = buttons.querySelector('.next-button'),
-          answer  = buttons.querySelector('.answer-button'),
-          save    = buttons.querySelector('.save-button'),
-          close   = buttons.querySelector('.close-button')
+      var buttons = overlay.querySelector('.buttons')
+      var back = buttons.querySelector('.back-button')
+      var clear = buttons.querySelector('.clear-button')
+      var next = buttons.querySelector('.next-button')
+      var answer = buttons.querySelector('.answer-button')
+      var save = buttons.querySelector('.save-button')
+      var close = buttons.querySelector('.close-button')
 
       // Show requested button and bind event listeners
       switch (button) {
@@ -727,15 +731,13 @@ var _botanist = {
       }
       return true
     }
-
   },
 
   // The following reset functions are similar to resource.js functionality, so be sure to
   // make sure code improvements occur on both
   resetContent: function () {
     // Similar to _resources.resetSlides()
-    var overlay = document.getElementById('botanist-area'),
-        content = overlay.querySelector('.botanist-content')
+    var overlay = document.getElementById('botanist-area')
 
     // Hides each slide
     _.each(overlay.querySelectorAll('.botanist-content, .botanist-puzzle'), function (el) {
@@ -766,7 +768,7 @@ var _botanist = {
   // Give the Botanist something to say in the botanist overlay.
   // Use the .chat() function if you want to use a speech bubble instead.
   say: function (message) {
-    var el        = document.getElementById('botanist-area')
+    var el = document.getElementById('botanist-area')
 
     el.querySelector('.speaker').textContent = $botanist.name
     el.querySelector('.message').textContent = message
@@ -785,8 +787,7 @@ var _botanist = {
     if ($botanist.getState() < 2) {
       // The Botanist gives the puzzle page to the player
       _botanist.say('Here is the page. You will be able to view it at any time in your inventory.')
-    }
-    else {
+    } else {
       // Reviewing the puzzle page
       _botanist.say('Here is the notebook page to view again.')
     }
@@ -798,8 +799,8 @@ var _botanist = {
 
   // Load the puzzle image for player's current level and adds it to DOM.
   loadPuzzleImage: function () {
-    var el       = document.querySelector('#botanist-area .botanist-puzzle'),
-        puzzleEl = document.createElement('img')
+    var el = document.querySelector('#botanist-area .botanist-puzzle')
+    var puzzleEl = document.createElement('img')
 
     // Put in the image.
     puzzleEl.src = CivicSeed.CLOUD_PATH + '/img/game/tangram/puzzle' + $game.$player.currentLevel + '.png'
@@ -829,14 +830,14 @@ var _botanist = {
 
   // Gets the position of the trash can and returns it
   getTrashPosition: function () {
-    var el  = document.getElementById('botanist-area').querySelector('.trash'),
-        $el = $(el)
+    var el = document.getElementById('botanist-area').querySelector('.trash')
+    var $el = $(el)
 
     var position = {
-      top:    $el.position().top,
-      bottom: $el.position().top  + $el.height(),
-      left:   $el.position().left,
-      right:  $el.position().left + $el.width()
+      top: $el.position().top,
+      bottom: $el.position().top + $el.height(),
+      left: $el.position().left,
+      right: $el.position().left + $el.width()
     }
 
     return position
@@ -851,8 +852,8 @@ var _botanist = {
 
   // Bind a tooltip to the trash can to provide some UI feedback for the user.
   setupPuzzleSolvingTrash: function () {
-    var el      = document.querySelector('#botanist-area .botanist-puzzle'),
-        trashEl = document.createElement('img')
+    var el = document.querySelector('#botanist-area .botanist-puzzle')
+    var trashEl = document.createElement('img')
 
     // Create & format the trash can element
     trashEl.classList.add('trash')
@@ -885,16 +886,16 @@ var _botanist = {
     e.stopPropagation()
 
     // Fetch tangram data from the data passed through the event data transfer
-    var data  = JSON.parse(e.originalEvent.dataTransfer.getData('text/plain')),
-        shape = $game.$resources.getTangram(data.id),
-        x     = e.originalEvent.layerX,
-        y     = e.originalEvent.layerY
+    var data = JSON.parse(e.originalEvent.dataTransfer.getData('text/plain'))
+    var shape = $game.$resources.getTangram(data.id)
+    var x = e.originalEvent.layerX
+    var y = e.originalEvent.layerY
 
     var drag = d3.behavior.drag()
-                .origin(Object)
-                .on('drag',      _botanist.onTangramDrag)
-                .on('dragstart', _botanist.onTangramDragStart)
-                .on('dragend',   _botanist.onTangramDragEnd)
+                 .origin(Object)
+                 .on('drag',      _botanist.onTangramDrag)
+                 .on('dragstart', _botanist.onTangramDragStart)
+                 .on('dragend',   _botanist.onTangramDragEnd)
 
     $('.r' + shape.name)
       .css('opacity', '.4')
@@ -912,7 +913,7 @@ var _botanist = {
       .attr('fill', shape.getCSSColor())
       .attr('stroke', 'rgb(255,255,255)')
       .attr('stroke-width', 0)
-      .attr('transform', 'translate('+x+','+y+')')
+      .attr('transform', 'translate(' + x + ',' + y + ')')
       .call(drag)
 
     $('.botanist-puzzle')
@@ -926,7 +927,6 @@ var _botanist = {
 
   // Event handler for starting to drag a puzzle piece on the puzzle area
   onTangramDragStart: function (d) {
-
     _dragOffX = d3.mouse(this)[0]
     _dragOffY = d3.mouse(this)[1]
 
@@ -943,7 +943,7 @@ var _botanist = {
     // Sorts the picked up piece so that it is above the others.
     // Taken from here: http://stackoverflow.com/questions/13595175/updating-svg-element-z-index-with-d3
     d3.selectAll('.puzzle-svg path').sort(function (a, b) { // select the parent and sort the path's
-      if (a.id != d.id) return -1                           // a is not the hovered element, send "a" to the back
+      if (a.id !== d.id) return -1                          // a is not the hovered element, send "a" to the back
       else return 1                                         // a is the hovered element, bring "a" to the front
     })
 
@@ -956,23 +956,22 @@ var _botanist = {
 
   // Event handler for dragging a puzzle piece on area and moving it around
   onTangramDrag: function (d) {
-
-    var x        = d3.event.sourceEvent.layerX,
-        y        = d3.event.sourceEvent.layerY,
-//        mX       = d3.event.x,
-//        mY       = d3.event.y,
-        mX       = x - _dragOffX,
-        mY       = y - _dragOffY,
-        width    = $('.puzzle-svg').width(),
-        height   = $('.puzzle-svg').height(),
-        trans    = 'translate(' + mX  + ', ' + mY + ')',
-        trashEl  = document.querySelector('#botanist-area .trash'),
-        trashing = false,
-        trash    = _botanist.trashPosition
+    var x = d3.event.sourceEvent.layerX
+    var y = d3.event.sourceEvent.layerY
+//        mX       = d3.event.x
+//        mY       = d3.event.y
+    var mX = x - _dragOffX
+    var mY = y - _dragOffY
+    var width = $('.puzzle-svg').width()
+    var height = $('.puzzle-svg').height()
+    var trans = 'translate(' + mX + ', ' + mY + ')'
+    var trashEl = document.querySelector('#botanist-area .trash')
+    var trashing = false
+    var trash = _botanist.trashPosition
 
     function _getCentroid (selection) {
       var bbox = selection.node().getBBox()
-      return [bbox.x + bbox.width/2, bbox.y + bbox.height/2]
+      return [bbox.x + bbox.width / 2, bbox.y + bbox.height / 2]
     }
 
     // Debug output
@@ -994,8 +993,7 @@ var _botanist = {
     if (x > trash.left && x < trash.right && y > trash.top && y < trash.bottom) {
       trashEl.classList.add('active')
       trashing = true
-    }
-    else {
+    } else {
       trashEl.classList.remove('active')
       trashing = false
     }
@@ -1008,14 +1006,14 @@ var _botanist = {
       })
   },
 
-  //move puzzle piece or trash it (return to inventory) on drop
+  // move puzzle piece or trash it (return to inventory) on drop
   onTangramDragEnd: function (d) {
-    var x     = d3.event.sourceEvent.layerX,
-        y     = d3.event.sourceEvent.layerY,
-        mX    = _botanist.snapTangramTo(x - _dragOffX),
-        mY    = _botanist.snapTangramTo(y - _dragOffY),
-        trans = 'translate(' + mX  + ', ' + mY + ')',
-        trash = _botanist.trashPosition
+    var x = d3.event.sourceEvent.layerX
+    var y = d3.event.sourceEvent.layerY
+    var mX = _botanist.snapTangramTo(x - _dragOffX)
+    var mY = _botanist.snapTangramTo(y - _dragOffY)
+    var trans = 'translate(' + mX + ', ' + mY + ')'
+    var trash = _botanist.trashPosition
 
     d3.select('.br' + d.id)
       .classed('dragging', false)
@@ -1043,35 +1041,34 @@ var _botanist = {
   },
 
   checkPuzzleAnswer: function () {
-    var allTangrams = $('.puzzle-svg > path'),
-        correct     = true,
-        numRight    = 0,
-        aLength     = $game.$botanist.tangram[$game.$player.currentLevel].answer.length,
-          // This is the number of pieces
-        message     = '',
-        wrongOne    = false,
-        nudge       = false
+    var allTangrams = $('.puzzle-svg > path')
+    var correct = true
+    var numRight = 0
+    var aLength = $game.$botanist.tangram[$game.$player.currentLevel].answer.length
+    var message = ''
+    var wrongOne = false
+    var nudge = false
 
     allTangrams.each(function (i, d) {
-      //pull the coordinates for each tangram
-      var tanIdD  = $(this).attr('class'),
-          tanId   = tanIdD.substring(2, tanIdD.length),
-          trans   = $(this).attr('transform'),
-          transD  = trans.substring(10, trans.length-1),
-          transD2 = transD.split(','),
-          transX  = parseInt(transD2[0], 10),
-          transY  = parseInt(transD2[1], 10),
-          t       = aLength,
-          found   = false,
-          correctPiece = false
-        //go through the answer sheet to see if the current tangram is there &&
-        //in the right place
+      // pull the coordinates for each tangram
+      var tanIdD = $(this).attr('class')
+      var tanId = tanIdD.substring(2, tanIdD.length)
+      var trans = $(this).attr('transform')
+      var transD = trans.substring(10, trans.length - 1)
+      var transD2 = transD.split(',')
+      var transX = parseInt(transD2[0], 10)
+      var transY = parseInt(transD2[1], 10)
+      var t = aLength
+      var found = false
+      var correctPiece = false
+      // go through the answer sheet to see if the current tangram is there &&
+      // in the right place
 
       while (--t > -1) {
         var answer = $game.$botanist.tangram[$game.$player.currentLevel].answer[t]
         if (answer.id === tanId) {
           found = true
-          //this is a hard check for snapping
+          // this is a hard check for snapping
           if (transX === answer.x && transY === answer.y) {
             numRight += 1
             correctPiece = true
@@ -1084,7 +1081,7 @@ var _botanist = {
       if (!found) {
         wrongOne = true
         correct = false
-        //remove it from the board
+        // remove it from the board
         $('.br' + tanId).remove()
         $('.r' + tanId)
           .css('opacity', 1)
@@ -1092,7 +1089,7 @@ var _botanist = {
       } else if (found && !correctPiece) {
         nudge = true
         correct = false
-        //remove it from the board
+        // remove it from the board
         $('.br' + tanId).remove()
         $('.r' + tanId)
           .css('opacity', 1)
@@ -1132,8 +1129,8 @@ var _botanist = {
     $game.$botanist.clearBoard()
 
     // TODO: Is this necessary?
-    //it is correct if none were WRONG
-    //make sure ALL were on the board
+    // it is correct if none were WRONG
+    // make sure ALL were on the board
     /*
     if (numRight === aLength) {
       correct = true
@@ -1147,12 +1144,13 @@ var _botanist = {
   submitPuzzleAnswer: function () {
     // Remove pieces from player's inventory
     // TODO: Should it happen here or in $player.nextLevel()?
-    //$game.inventory.empty()
+    // $game.inventory.empty()
 
     // Add number of seeds as a reward
-    var numSeeds   = _paintbrushSeedFactor < 0 ? 0: _paintbrushSeedFactor,
-        level      = $game.$player.currentLevel + 1,
-        totalSeeds = (30 + level * 4 ) + level * 4 * numSeeds
+    var numSeeds = _paintbrushSeedFactor < 0 ? 0 : _paintbrushSeedFactor
+    var level = $game.$player.currentLevel + 1
+    var totalSeeds = (30 + level * 4) + level * 4 * numSeeds
+
     $game.$player.addSeeds('draw', totalSeeds)
 
     // Reset inventory and puzzle mode
@@ -1169,16 +1167,18 @@ var _botanist = {
 
   // Called by portfolio answer submit function to validate whether the question was answered
   validatePortfolioResponse: function () {
-    var response    = this.getPortfolioResponseInput(),
-        _focusInput = function () {
-          document.querySelector('.botanist-content textarea').focus()
-        }
+    var response = this.getPortfolioResponseInput()
+
+    var _focusInput = function () {
+      document.querySelector('.botanist-content textarea').focus()
+    }
 
     if (response.length === 0) {
       this.feedback('Please answer the question!', _focusInput)
       return false
+    } else {
+      return true
     }
-    else return true
   },
 
   // Submits the portfolio response answer to the server
