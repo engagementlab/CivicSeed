@@ -10,7 +10,10 @@
       img(src='#{CivicSeed.CLOUD_PATH}/img/game/rank/3.png')
     .current-level-name Novice gardener
     .resources-collected-heading Resources collected:
-    .resources-collected 0
+    .resources-collected
+      span.resources-collected-amount 0
+      span.resources-collected-divider &nbsp;/&nbsp;
+      span.resources-collected-total 0
     button.btn.collected-button.btn-success(type='button') View Answers
   .color-map.tabbable
     .tabs

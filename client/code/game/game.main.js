@@ -301,7 +301,8 @@ var $game = module.exports = {
     $('.time-played-text').text(_formatDisplayTime())
     $('.top-seeders-ranking').html(topPlayers)
     $('.your-seeds').text('You (' + tilesColored + ')')
-    $('.resources-collected').text(resourcesDiscovered + ' / 42') // TODO: FIX
+    $('.resources-collected-amount').text(resourcesDiscovered)
+    $('.resources-collected-total').text($game.$resources.getTotalResources())
 
     // Calculates the playing time
     function _formatDisplayTime () {

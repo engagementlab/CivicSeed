@@ -245,6 +245,11 @@ var $resources = module.exports = {
 
   getTangrams: function () {
     return _tangrams
+  },
+
+  // Returns the total number of obtainable resources
+  getTotalResources: function () {
+    return _.reduce(this.inventorySlotsPerLevel, function (memo, num) { return memo + num }, 0)
   }
 
 }
