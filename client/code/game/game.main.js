@@ -272,6 +272,7 @@ var $game = module.exports = {
     var playerLevel = $game.$player.getLevel()
     var tilesColored = $game.$player.getTilesColored()
     var resourcesDiscovered = $game.$player.getResourcesDiscovered()
+    var totalResources = $game.$resources.getTotalResources()
     var allAnswers = $game.$player.compileAnswers()
     var percentString = _stats.percent + '%'
     var topPlayers = ''
@@ -302,7 +303,7 @@ var $game = module.exports = {
     $('.top-seeders-ranking').html(topPlayers)
     $('.your-seeds').text('You (' + tilesColored + ')')
     $('.resources-collected-amount').text(resourcesDiscovered)
-    $('.resources-collected-total').text($game.$resources.getTotalResources())
+    $('.resources-collected-total').text(totalResources)
 
     // Calculates the playing time
     function _formatDisplayTime () {

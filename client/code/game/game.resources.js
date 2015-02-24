@@ -72,14 +72,14 @@ var $resources = module.exports = {
   ready: false,
 
   inventorySlotsPerLevel: {},
+  totalResources: {},
 
   // load in all the resources and the corresponding answers
   init: function (callback) {
     // Get all resources
-    var response = $game.$npc.getNpcData()
-    var resourceCount = {}
+    var npcs = $game.$npc.getNpcData()
 
-    $.each(response, function (key, npc) {
+    $.each(npcs, function (key, npc) {
       if (npc.isHolding) {
         _resources.data[npc.resource.id] = new Resource(npc.resource, npc.skinSuit)
 
@@ -90,12 +90,10 @@ var $resources = module.exports = {
         // attached to a resume question)
         var resource = _resources.data[npc.resource.id]
         if (resource.shape !== '') {
-          resourceCount[npc.level] = resourceCount[npc.level] + 1 || 1
+          this.inventorySlotsPerLevel[npc.level] = this.inventorySlotsPerLevel[npc.level] + 1 || 1
         }
       }
-    })
-
-    this.inventorySlotsPerLevel = resourceCount
+    }.bind(this))
 
     // HACK
     // Update the URL of the Master NPC resource, if
@@ -137,6 +135,15 @@ var $resources = module.exports = {
 
   get: function (id) {
     return _resources.data[id]
+  },
+
+  getAll: function () {
+    return _resources.data
+  },
+
+  // Returns the total number of obtainable resources
+  getTotalResources: function () {
+    return _resources.data.reduce(function (a) { return a + 1 }, 0)
   },
 
   debug: function () { // TODO: REMOVE
@@ -245,11 +252,6 @@ var $resources = module.exports = {
 
   getTangrams: function () {
     return _tangrams
-  },
-
-  // Returns the total number of obtainable resources
-  getTotalResources: function () {
-    return _.reduce(this.inventorySlotsPerLevel, function (memo, num) { return memo + num }, 0)
   }
 
 }
