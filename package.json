@@ -20,7 +20,8 @@
     "url": "git://github.com/engagementgamelab/CivicSeed.git"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.10.x",
+    "npm": "2.6.x"
   },
   "dependencies": {
     "aws-sdk": "^2.1.4",

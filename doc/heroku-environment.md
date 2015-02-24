@@ -36,7 +36,7 @@ You should see two environment variables set, `MONGOHQ_URL` and `REDISTOGO_URL`.
   ```
 You should receive log messages from heroku stating that the superuser admin has been saved to MongoDB.
 
-8. Now you should be able to go to `http://civicseed-dev.herokuapp.com/` (or whatever the app name is), log in as superuser, and complete the rest of the data initialization.
+8. Now you should be able to go to `http://civicseed-testing.herokuapp.com/` (or whatever the app name is), log in as superuser, and complete the rest of the data initialization.
 
 ### Environment variables
 
@@ -53,7 +53,13 @@ You will need to obtain actual values for `EMAIL_USER`, `EMAIL_PW` and `EMAIL_TO
 
 It is not necessary to set other environment variables that are not included in the list above. For instance, the `REDIS_PW` environment variable does not need to be set on the Heroku environment since Civic Seed will parse those from the variables created by the Redis To Go add-on.
 
-
 ### Resetting everything
 
 To reset everything, push a fresh copy of the Civic Seed repository in step 6 if necessary, then re-do the boot process in steps 7 and 8.
+
+### Current servers
+
+Currently there are two Civic Seed instances on Heroku.
+
+* http://civicseed.herokuapp.com/ - This is intended as the main backup to http://civicseed.org/, although it's not run with production server resources.
+* http://civicseed-testing.herokuapp.com/ - This is the development server. It is set up to be automatically deployed from the `master` branch of this repository so that it always reflects the latest state of running code.
