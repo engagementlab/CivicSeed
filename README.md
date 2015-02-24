@@ -12,6 +12,11 @@ You can learn more about the game by visiting [the website](http://civicseed.org
 
 If you are looking for developer documentation, see [the `doc/` folder in this repository](doc/).
 
+### Contributing
+
+Please see [the issues page](https://github.com/engagementgamelab/CivicSeed/issues).
+
+We also track and visualize these issues in [Waffle.io](https://waffle.io/engagementgamelab/CivicSeed/).
 
 ### License
 
