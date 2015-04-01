@@ -6,3 +6,4 @@ dump.rdb
 *.log
 *.pem
 *.env
+*.sublime-*
