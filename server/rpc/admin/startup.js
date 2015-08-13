@@ -15,7 +15,7 @@ var npcModel = service.useModel('npc')
 var botanistModel = service.useModel('botanist')
 var gameModel = service.useModel('game')
 var chatModel = service.useModel('chat')
-var resourceModel = service.useModel('resource')
+// var resourceModel = service.useModel('resource')
 
 var _JSONClone = function (json) {
   return JSON.parse(JSON.stringify(json))
@@ -302,7 +302,7 @@ var _startup = {
 
   loadResources: function (req, res, ss) {
     // Re-implemented. TODO: Find out where this should be called from
-    var resourceData = require(rootDir + '/data/resources.json')
+    /*var resourceData = require(rootDir + '/data/resources.json')
 
     dbActions.dropCollection('resources', function () {
       dbActions.saveDocuments(resourceModel, resourceData, function (err) {
@@ -313,7 +313,7 @@ var _startup = {
           res('Data loaded: resources')
         }
       })
-    })
+    })*/
   },
 
   loadChat: function (req, res, ss) {
