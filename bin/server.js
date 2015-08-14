@@ -133,21 +133,17 @@ service.connectMongoose(app, function (databases) {
     // ~ - ~ - ~ --- >>>
     // ~ - ~ - ~ --- >>> START THE APP
     // ~ - ~ - ~ --- >>>
-    // server = app.listen(PORT, 'localhost', function () {
-    //   var local = server.address()
-    //   winston.info('Express server listening @ http://%s:%d/ in '.magenta + '%s'.yellow.inverse + ' mode'.magenta, local.address, local.port, app.settings.env)
+    server = app.listen(PORT, 'localhost', function () {
+      var local = server.address()
+      winston.info('Express server listening @ http://%s:%d/ in '.magenta + '%s'.yellow.inverse + ' mode'.magenta, local.address, local.port, app.settings.env)
 
-    // })
+      // Start SocketStream
+      ss.start(server)
 
-    var server = http.Server(ss.http.middleware)
+      // Append SocketStream middleware to the stack
+      app.stack = ss.http.middleware.stack.concat(app.stack)
 
-    // Start SocketStream
-    ss.start(server)
-
-    // Append SocketStream middleware to the stack
-    app.stack = ss.http.middleware.stack.concat(app.stack)
-
-    server.listen(3000);
+    })
 
   })
 })

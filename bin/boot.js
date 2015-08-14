@@ -46,19 +46,19 @@ _db.once('open', function () {
   _userModel = _db.model(model.name, new mongoose.Schema(model.schema, { collection: model.collection }))
   _db.collections['users'].drop(function (error) {
     if (error) {
-      winston.error('Error dropping user collections')
+      winston.error('Error dropping user collections: ' + error)
       return false
     }
 
     bcrypt.genSalt(10, function (err, salt) {
       if (err) {
-        winston.error('Error generating salt')
+        winston.error('Error generating salt: ' + err)
         return false
       }
 
       bcrypt.hash('temp', salt, function (err, hash) {
         if (err) {
-          winston.error('Error hashing')
+          winston.error('Error hashing: ' + err)
           return false
         }
 

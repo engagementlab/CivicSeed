@@ -6,7 +6,7 @@
   "REDIS_PORT": 6379,
   "MONGO_URL": "mongodb://127.0.0.1/civicseed",
   "EMAIL_SERVICE": "Mailgun",
-  "CLOUD_PATH": "http://s3.amazonaws.com/civicseed",
+  "CLOUD_PATH": "http://catan.dev.emerson.edu:3000",
   "MUGSHOTS_S3_BUCKET": "civicseeders",
   "SURVEY_PREGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j",
   "SURVEY_POSTGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l"
