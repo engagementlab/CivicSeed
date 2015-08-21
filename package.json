@@ -36,7 +36,7 @@
     "nodemailer-html-to-text": "^1.0.0",
     "redis": "~0.12.1",
     "remarkable": "^1.6.0",
-    "socketstream": "~0.3.11",
+    "socketstream": "0.3.11",
     "ss-clientjade": "~0.0.7",
     "ss-jade": "https://github.com/americanyak/ss-jade/tarball/master",
     "ss-stylus": "~0.1.9",

@@ -36,6 +36,8 @@ cd CivicSeed
 npm install
 ```
 
+WARNING: **Never** update the socketstream dependency to anything above 0.3.11. This breaks everything! I may try to resolve this someday but it's a low priority.
+
 **3.** Set up your [environment variables](configuration.md).
 
 **4.** Run MongoDB and REDIS in the background.
