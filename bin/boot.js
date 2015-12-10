@@ -44,8 +44,8 @@ _db.once('open', function () {
   winston.info('MongoDB connection opened ...'.blue)
   var model = require(rootDir + '/models/user')
   _userModel = _db.model(model.name, new mongoose.Schema(model.schema, { collection: model.collection }))
-  _db.collections['users'].drop(function (error) {
-    if (error) {
+  _db.collections['users'].drop(function(err) {
+    if (err && err.message != 'ns not found') {
       winston.error('Error dropping user collections: ' + error)
       return false
     }

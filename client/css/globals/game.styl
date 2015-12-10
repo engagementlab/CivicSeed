@@ -1,7 +1,7 @@
 @font-face
   font-family 'InconsolataMedium'
-  src $cloudUrl('fonts/Inconsolata-webfont.woff') format('woff'),
-    $cloudUrl('fonts/Inconsolata-webfont.ttf') format('truetype')
+  src '/fonts/Inconsolata-webfont.woff' format('woff'),
+    '/fonts/Inconsolata-webfont.ttf' format('truetype')
   font-weight normal
   font-style normal
 
@@ -87,7 +87,7 @@ canvas
   box-shadow $csUIDropShadow
   overflow hidden
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-    background-image $cloudUrl('img/bg/grey@2x.png')
+    background-image $cloudUrl('img/bg/grey_2x.png')
     background-size 397px
   h1, h2, h3, h4, h5, h6
     font-weight bold
@@ -106,7 +106,7 @@ canvas
   &.background-3
     background-image $cloudUrl('img/bg/tri.png')
     @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-      background-image $cloudUrl('img/bg/tri@2x.png')
+      background-image $cloudUrl('img/bg/tri_2x.png')
       background-size 188px
   .buttons
     position absolute
@@ -879,7 +879,7 @@ canvas
   box-shadow $csUIDropShadow
   background-image $cloudUrl('img/bg/grey.png')
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)
-    background-image $cloudUrl('img/bg/grey@2x.png')
+    background-image $cloudUrl('img/bg/grey_2x.png')
     background-size 397px
   .dialog
     margin 0
