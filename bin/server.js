@@ -133,7 +133,7 @@ service.connectMongoose(app, function (databases) {
     // ~ - ~ - ~ --- >>>
     // ~ - ~ - ~ --- >>> START THE APP
     // ~ - ~ - ~ --- >>>
-    server = app.listen(PORT, 'localhost', function () {
+    server = app.listen(PORT, '0.0.0.0', function () {
       var local = server.address()
       winston.info('Express server listening @ http://%s:%d/ in '.magenta + '%s'.yellow.inverse + ' mode'.magenta, local.address, local.port, app.settings.env)
 
