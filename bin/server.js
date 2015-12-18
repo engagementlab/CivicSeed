@@ -16,6 +16,7 @@ var config = require(rootDir + '/app/config')
 var PORT = config.get('PORT')
 var NODE_ENV = config.get('NODE_ENV')
 var CLOUD_PATH = config.get('CLOUD_PATH')
+var CLOUD_PATH_PATH = config.get('CLOUD_PATH_PATH')
 var USE_REDIS = config.get('USE_REDIS')
 
 var service = require(rootDir + '/app/service')
@@ -123,9 +124,9 @@ service.connectMongoose(app, function (databases) {
     if (NODE_ENV === 'testing' || NODE_ENV === 'production') {
       ss.client.packAssets({
         cdn: {
-          js: function (file) { return CLOUD_PATH + file.path },
-          css: function (file) { return CLOUD_PATH + file.path },
-          html: function (file) { return CLOUD_PATH + file.path }
+          js: function (file) { return CLOUD_PATH_PACK + file.path },
+          css: function (file) { return CLOUD_PATH_PACK + file.path },
+          html: function (file) { return CLOUD_PATH_PACK + file.path }
         }
       })
     }

@@ -8,6 +8,7 @@
   "EMAIL_SERVICE": "Mailgun",
   "CLOUD_PATH": "http://res.cloudinary.com/engagement-lab-home/image/upload/civicseed",
   "CLOUD_PATH_MEDIA": "http://res.cloudinary.com/engagement-lab-home/video/upload/civicseed",
+  "CLOUD_PATH_PACK": "http://res.cloudinary.com/engagement-lab-home/raw/upload/civicseed",
   "MUGSHOTS_S3_BUCKET": "civicseeders",
   "SURVEY_PREGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_0fhrpway6HnKT5j",
   "SURVEY_POSTGAME_LINK": "https://tufts.qualtrics.com/SE/?SID=SV_8e4f2B5477oF84l"
