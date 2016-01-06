@@ -1,6 +1,6 @@
 'use strict'
 
-var rootDir = process.cwd()
+var rootDir = require('app-root-path')
 var winston = require('winston')
 
 module.exports = {

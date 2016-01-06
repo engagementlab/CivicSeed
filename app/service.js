@@ -1,6 +1,6 @@
 'use strict'
 
-var rootDir = process.cwd()
+var rootDir = require('app-root-path')
 var config = require(rootDir + '/app/config')
 var serverHelpers = require(rootDir + '/server/utils/server-helpers')
 

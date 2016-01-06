@@ -22,7 +22,7 @@
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var rootDir = process.cwd()
+var rootDir = require('app-root-path')
 var nconf = require('nconf')
 var env = require('node-env-file')
 var fs = require('fs')
