@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var rootDir = process.cwd() || '.'
+var rootDir = require('app-root-path')
 
 var http = require('http')
 var express = require('express')

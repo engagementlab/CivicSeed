@@ -24,6 +24,7 @@
     "npm": "2.6.x"
   },
   "dependencies": {
+    "app-root-path": "^1.0.0",
     "aws-sdk": "^2.1.4",
     "bcrypt": "~0.8.0",
     "colors": "~1.0.3",
