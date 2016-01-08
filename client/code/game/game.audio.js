@@ -108,7 +108,7 @@ var $audio = module.exports = {
 
   loadTrack: function (num) {
     var mp3 = _musicPath + num + '.mp3?VERSION='
-    var ogg = _musicPath + num + '.ogg?VERSION='
+    var ogg = _musicPath + '/ogg/' + num + '.ogg?VERSION='
 
     if (_extension) {
       mp3 += _extension
@@ -139,7 +139,7 @@ var $audio = module.exports = {
   loadOtherTrack: function (track, num) {
     if (track !== num) {
       var mp3 = _musicPath + track + '.mp3?VERSION='
-      var ogg = _musicPath + track + '.ogg?VERSION='
+      var ogg = _musicPath + '/ogg/' + '.ogg?VERSION='
 
       if (_extension) {
         mp3 += _extension
@@ -169,7 +169,7 @@ var $audio = module.exports = {
 
   loadTriggerFx: function () {
     var mp3 = _musicPath + 'triggers.mp3?VERSION='
-    var ogg = _musicPath + 'triggers.ogg?VERSION='
+    var ogg = _musicPath + '/ogg/triggers.ogg?VERSION='
 
     if (_extension) {
       mp3 += _extension
@@ -207,7 +207,7 @@ var $audio = module.exports = {
 
   loadEnvironmentLoopFx: function () {
     var mp3 = _musicPath + 'environmentloop.mp3?VERSION='
-    var ogg = _musicPath + 'environmentloop.ogg?VERSION='
+    var ogg = _musicPath + '/ogg/environmentloop.ogg?VERSION='
 
     if (_extension) {
       mp3 += _extension
@@ -237,7 +237,7 @@ var $audio = module.exports = {
 
   loadEnvironmentOnceFx: function () {
     var mp3 = _musicPath + 'environmentonce.mp3?VERSION='
-    var ogg = _musicPath + 'environmentonce.ogg?VERSION='
+    var ogg = _musicPath + '/ogg/environmentonce.ogg?VERSION='
 
     if (_extension) {
       mp3 += _extension

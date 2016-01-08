@@ -1,0 +1,10 @@
+{
+  "apps" : [{
+    "name"        : "Civic Seed",
+    "script"      : "/srv/CivicSeed/bin/server.js",
+    "cwd"         : "/srv/CivicSeed/",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
