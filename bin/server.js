@@ -2,7 +2,7 @@
 
 // AppDynamics APM config
 require("appdynamics").profile({
-  controllerHostName: 'paid127.saas.appdynamics.com',
+  controllerHostName: 'engagementlab.saas.appdynamics.com',
   controllerPort: 443,
   accountName: 'EngagementLab',
   accountAccessKey: 'rxfibl2fbqga',
