@@ -14,7 +14,7 @@
     "production" : {
       "user": "node",
       "host": "199.94.80.32",
-      "repo": "git@github.com:engagementgamelab/Civic.git",
+      "repo": "git@github.com:engagementgamelab/CivicSeed.git",
       "ref": "origin/migration",
       "path": "/srv/CivicSeed",
       "pre-deploy-local" : "echo 'Cloning and running npm install. Be patient.'",
