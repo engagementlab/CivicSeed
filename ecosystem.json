@@ -2,9 +2,26 @@
   "apps" : [{
     "name"        : "Civic Seed",
     "script"      : "/srv/CivicSeed/bin/server.js",
+    "env_production": {
+      "NODE_ENV": "production"
+    },
     "cwd"         : "/srv/CivicSeed/",
     "env": {
       "NODE_ENV": "production"
     }
-  }]
+  }],
+  "deploy" : {
+    "production" : {
+      "user": "node",
+      "host": "199.94.80.32",
+      "repo": "git@github.com:engagementgamelab/Civic.git",
+      "ref": "origin/master",
+      "path": "/srv/CivicSeed",
+      "pre-deploy-local" : "echo 'Cloning and running npm install. Be patient.'",
+      "post-deploy" : "npm install ; pm2 startOrRestart ecosystem.json --env production",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
 }
