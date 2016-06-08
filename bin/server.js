@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // AppDynamics APM config
-require("appdynamics").profile({
+/*require("appdynamics").profile({
   controllerHostName: 'engagementlab.saas.appdynamics.com',
   controllerPort: 443,
   accountName: 'EngagementLab',
@@ -9,7 +9,7 @@ require("appdynamics").profile({
   applicationName: 'Civic Seed',
   tierName: 'Production',
   nodeName: 'process' // The controller will automatically append the node name with a unique number
-});
+});*/
 
 var rootDir = require('app-root-path')
 
